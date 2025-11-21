@@ -27,3 +27,6 @@ __pycache__/
 
 # Node modules
 node_modules/
+logs/ai/django.log
+logs/ai/gunicorn_access.log
+logs/ai/gunicorn_error.log

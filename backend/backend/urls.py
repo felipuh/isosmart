@@ -15,8 +15,36 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from django.http import JsonResponse
+from django.views.decorators.cache import never_cache
+import sys
+
+def health_check(request):
+    """Endpoint de health check"""
+    return JsonResponse({
+        'status': 'healthy',
+        'service': 'isosmart-backend',
+        'python_version': sys.version,
+    })
+
+@never_cache
+def api_root(request):
+    """Root de la API"""
+    return JsonResponse({
+        'message': 'ISO Smart API',
+        'version': '1.0.0',
+        'endpoints': {
+            'admin': '/admin/',
+            'api': '/api/',
+            'health': '/health',
+            'docs': '/api/docs/',
+        }
+    })
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('health', health_check, name='health'),
+    path('api/', api_root, name='api-root'),
+    # Aquí agregaremos las rutas de los módulos de IA
 ]

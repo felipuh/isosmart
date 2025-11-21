@@ -169,7 +169,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+# Archivos estáticos
+STATIC_URL = '/static/'
+STATIC_ROOT = '/home/aplicacion/projects/isosmart/backend/staticfiles'
+
+# Archivos media
+MEDIA_URL = '/media/'
+MEDIA_ROOT = '/home/aplicacion/projects/isosmart/backend/media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
