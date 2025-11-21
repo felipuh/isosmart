@@ -90,13 +90,37 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'isosmart_main',
-        'USER': 'isosmart',  # Cambia según tu usuario
-        'PASSWORD': '1s05M4rtNeuraxis',  # Cambia tu password
-        'HOST': '192.168.100.105',  # IP del servidor de base de datos
+        'USER': 'isosmart',
+        'PASSWORD': '1s05M4rtNeuraxis',  # Usa tu password
+        'HOST': '192.168.100.105',  # IP del servidor de BD
         'PORT': '3306',
         'OPTIONS': {
             'charset': 'utf8mb4',
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+            'connect_timeout': 10,
+        }
+    },
+    # Bases adicionales para IA y auditoría
+    'ai_db': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'isosmart_ai',
+        'USER': 'isosmart',
+        'PASSWORD': '1s05M4rtNeuraxis',
+        'HOST': '192.168.100.105',
+        'PORT': '3306',
+        'OPTIONS': {
+            'charset': 'utf8mb4',
+        }
+    },
+    'audit_db': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'isosmart_audit',
+        'USER': 'isosmart',
+        'PASSWORD': '1s05M4rtNeuraxis',
+        'HOST': '192.168.100.105',
+        'PORT': '3306',
+        'OPTIONS': {
+            'charset': 'utf8mb4',
         }
     }
 }
