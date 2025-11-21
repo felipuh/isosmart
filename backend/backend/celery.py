@@ -7,11 +7,11 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
 # Crear aplicación Celery
 app = Celery('isosmart')
 
-# Cargar configuración desde Django settings con prefijo CELERY_
+# Cargar configuración desde Django settings
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
-# Autodescubrir tareas en todas las apps
-app.autodiscover_tasks()
+# Autodescubrir tareas en múltiples ubicaciones
+app.autodiscover_tasks(['backend', 'tasks'])
 
 @app.task(bind=True, ignore_result=True)
 def debug_task(self):
