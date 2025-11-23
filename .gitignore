@@ -30,3 +30,5 @@ node_modules/
 logs/ai/django.log
 logs/ai/gunicorn_access.log
 logs/ai/gunicorn_error.log
+logs/ai/celery_worker1.log
+logs/ai/celery_beat.log

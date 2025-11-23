@@ -1,45 +1,52 @@
-# ai_modules/sca/tasks.py
 from celery import shared_task
 from .services.context_analyzer import ContextAnalyzer
-from backend.models import ContextAnalysis, RiskMatrix
+import logging
+
+logger = logging.getLogger(__name__)
 
 @shared_task(bind=True, max_retries=3)
 def analyze_context_periodic(self):
-    """Ejecuta análisis de contexto cada 24 horas"""
+    """
+    Tarea periódica para análisis de contexto
+    Se ejecuta diariamente a las 2 AM
+    """
+    try:
+        analyzer = ContextAnalyzer()
+        
+        # Por ahora, datos de prueba
+        # TODO: Obtener documentos reales de la base de datos
+        test_data = {
+            'documents': [
+                {
+                    'content': 'Logramos mejorar la eficiencia del proceso en un 20%',
+                    'source': 'Acta Gerencial Q4',
+                    'date': '2025-11-01'
+                },
+                {
+                    'content': 'Identificamos un riesgo en el proceso de compras',
+                    'source': 'Reporte de Auditoría',
+                    'date': '2025-11-15'
+                }
+            ],
+            'sources': []
+        }
+        
+        result = analyzer.process(test_data)
+        
+        logger.info(f"Context analysis completed: {result}")
+        
+        return result
+        
+    except Exception as e:
+        logger.error(f"Error in periodic context analysis: {e}", exc_info=True)
+        raise self.retry(exc=e, countdown=60)
+
+@shared_task
+def analyze_document(document_id: int):
+    """Analiza un documento específico"""
     analyzer = ContextAnalyzer()
     
-    # Obtener documentos recientes
-    from backend.models import Document
-    recent_docs = Document.objects.filter(
-        created_at__gte=datetime.now() - timedelta(days=7)
-    ).values('id', 'content', 'source', 'created_at')
+    # TODO: Obtener documento de la base de datos
+    logger.info(f"Analyzing document {document_id}")
     
-    # Análisis interno
-    internal = analyzer.analyze_internal_context(list(recent_docs))
-    
-    # Análisis externo
-    external_sources = [
-        {'url': 'https://www.iso.org/news'},
-        {'url': 'https://www.bccr.fi.cr/'},  # Banco Central Costa Rica
-    ]
-    external = analyzer.analyze_external_context(external_sources)
-    
-    # Guardar resultados
-    analysis = ContextAnalysis.objects.create(
-        internal_insights=internal,
-        external_insights=external,
-        status='completed'
-    )
-    
-    # Alimentar matriz de riesgos automáticamente
-    for riesgo in internal['riesgos_identificados']:
-        RiskMatrix.objects.create(
-            source_module='SCA',
-            risk_description=riesgo['texto'],
-            probability='media',  # Calcular con modelo predictivo
-            impact='alto',
-            mitigation_actions='Generado automáticamente',
-            iso_clause='4.1'
-        )
-    
-    return analysis.id
+    return {'status': 'completed', 'document_id': document_id}
