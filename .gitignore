@@ -34,3 +34,5 @@ logs/ai/celery_worker1.log
 logs/ai/celery_beat.log
 logs/nginx/access.log
 logs/nginx/error.log
+logs/ai/celery_worker.log
+logs/ai/celery_worker.log
