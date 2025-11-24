@@ -1,0 +1,226 @@
+import React, { useState, useEffect } from 'react';
+import { AlertTriangle, AlertCircle, Info, TrendingUp, Filter } from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { apiService } from '../../services/api';
+
+const RiskBadge = ({ level }) => {
+  const styles = {
+    critico: 'bg-red-100 text-red-800 border border-red-300',
+    alto: 'bg-orange-100 text-orange-800 border border-orange-300',
+    medio: 'bg-yellow-100 text-yellow-800 border border-yellow-300',
+    bajo: 'bg-green-100 text-green-800 border border-green-300',
+  };
+
+  const icons = {
+    critico: AlertTriangle,
+    alto: AlertCircle,
+    medio: Info,
+    bajo: TrendingUp,
+  };
+
+  const Icon = icons[level] || Info;
+
+  return (
+    <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${styles[level]}`}>
+      <Icon className="w-3 h-3 mr-1" />
+      {level.charAt(0).toUpperCase() + level.slice(1)}
+    </span>
+  );
+};
+
+const ModuleBadge = ({ module }) => {
+  const styles = {
+    SCA: 'bg-blue-100 text-blue-800',
+    SIE: 'bg-green-100 text-green-800',
+    SPM: 'bg-purple-100 text-purple-800',
+    ASB: 'bg-orange-100 text-orange-800',
+    MANUAL: 'bg-gray-100 text-gray-800',
+  };
+
+  return (
+    <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-semibold ${styles[module] || styles.MANUAL}`}>
+      {module}
+    </span>
+  );
+};
+
+const RiskMatrix = () => {
+  const [risks, setRisks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState('all');
+
+  useEffect(() => {
+    loadRisks();
+  }, []);
+
+  const loadRisks = async () => {
+    try {
+      setLoading(true);
+      const response = await apiService.getRiskMatrix();
+      setRisks(response.data.risks || []);
+    } catch (error) {
+      console.error('Error loading risks:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Datos para el gráfico
+  const chartData = [
+    {
+      module: 'SCA',
+      critico: risks.filter(r => r.source_module === 'SCA' && r.risk_level === 'critico').length,
+      alto: risks.filter(r => r.source_module === 'SCA' && r.risk_level === 'alto').length,
+      medio: risks.filter(r => r.source_module === 'SCA' && r.risk_level === 'medio').length,
+    },
+    {
+      module: 'SIE',
+      critico: risks.filter(r => r.source_module === 'SIE' && r.risk_level === 'critico').length,
+      alto: risks.filter(r => r.source_module === 'SIE' && r.risk_level === 'alto').length,
+      medio: risks.filter(r => r.source_module === 'SIE' && r.risk_level === 'medio').length,
+    },
+    {
+      module: 'SPM',
+      critico: risks.filter(r => r.source_module === 'SPM' && r.risk_level === 'critico').length,
+      alto: risks.filter(r => r.source_module === 'SPM' && r.risk_level === 'alto').length,
+      medio: risks.filter(r => r.source_module === 'SPM' && r.risk_level === 'medio').length,
+    },
+  ];
+
+  const filteredRisks = filter === 'all' 
+    ? risks 
+    : risks.filter(r => r.risk_level === filter);
+
+  if (loading) {
+    return (
+      <div className="card">
+        <div className="h-8 w-48 bg-gray-200 rounded animate-pulse mb-4"></div>
+        <div className="space-y-3">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="h-20 bg-gray-100 rounded animate-pulse"></div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Gráfico de barras */}
+      <div className="card">
+        <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+          <BarChart className="w-5 h-5 text-blue-600" />
+          Riesgos por Módulo
+        </h3>
+        <ResponsiveContainer width="100%" height={250}>
+          <BarChart data={chartData}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="module" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Bar dataKey="critico" fill="#ef4444" name="Críticos" />
+            <Bar dataKey="alto" fill="#f97316" name="Altos" />
+            <Bar dataKey="medio" fill="#eab308" name="Medios" />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+
+      {/* Lista de riesgos */}
+      <div className="card">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+            <AlertTriangle className="w-6 h-6 text-red-600" />
+            Matriz de Riesgos Consolidada (ISO 6.1)
+          </h2>
+          
+          {/* Filtros */}
+          <div className="flex gap-2 items-center">
+            <Filter className="w-4 h-4 text-gray-500" />
+            {['all', 'critico', 'alto', 'medio', 'bajo'].map((level) => (
+              <button
+                key={level}
+                onClick={() => setFilter(level)}
+                className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
+                  filter === level
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                }`}
+              >
+                {level === 'all' ? 'Todos' : level.charAt(0).toUpperCase() + level.slice(1)}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Lista de riesgos */}
+        <div className="space-y-4">
+          {filteredRisks.length === 0 ? (
+            <div className="text-center py-12 text-gray-500">
+              <AlertCircle className="w-12 h-12 mx-auto mb-3 text-gray-400" />
+              <p>No se encontraron riesgos</p>
+            </div>
+          ) : (
+            filteredRisks.slice(0, 10).map((risk) => (
+              <div
+                key={risk.id}
+                className="p-4 bg-gray-50 rounded-lg border-l-4 hover:bg-gray-100 transition-colors"
+                style={{
+                  borderLeftColor: 
+                    risk.risk_level === 'critico' ? '#ef4444' :
+                    risk.risk_level === 'alto' ? '#f97316' :
+                    risk.risk_level === 'medio' ? '#eab308' : '#22c55e'
+                }}
+              >
+                <div className="flex items-start justify-between mb-2">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-2">
+                      <ModuleBadge module={risk.source_module} />
+                      <RiskBadge level={risk.risk_level} />
+                      <span className="text-xs text-gray-500">
+                        {new Date(risk.detection_date).toLocaleDateString('es-ES')}
+                      </span>
+                    </div>
+                    <p className="text-gray-900 font-medium mb-2">
+                      {risk.description}
+                    </p>
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div>
+                        <span className="text-gray-500">Probabilidad:</span>
+                        <span className="ml-2 font-semibold">{risk.probability}</span>
+                      </div>
+                      <div>
+                        <span className="text-gray-500">Impacto:</span>
+                        <span className="ml-2 font-semibold">{risk.impact}</span>
+                      </div>
+                      <div className="col-span-2">
+                        <span className="text-gray-500">Responsable:</span>
+                        <span className="ml-2 font-semibold">{risk.responsible}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Acciones de mitigación */}
+                <div className="mt-3 pt-3 border-t border-gray-200">
+                  <p className="text-xs text-gray-500 mb-1">Acciones de Mitigación:</p>
+                  <p className="text-sm text-gray-700">{risk.mitigation_actions}</p>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        {filteredRisks.length > 10 && (
+          <div className="mt-6 text-center">
+            <button className="px-6 py-2 bg-white text-gray-700 rounded-lg font-semibold border-2 border-gray-300 hover:border-blue-500 hover:text-blue-600 transition-all">
+              Ver todos los riesgos ({filteredRisks.length})
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default RiskMatrix;

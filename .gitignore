@@ -39,3 +39,5 @@ logs/ai/celery_worker.log
 logs/ai/celery_worker.log
 logs/nginx/access.log
 logs/nginx/error.log
+logs/ai/celery_worker.log
+logs/nginx/access.log

@@ -1,12 +1,3 @@
-[2025-11-24 16:42:00,018: INFO/MainProcess] Task backend.tasks.test_task[405d8e37-024e-49b4-8a6b-51a1e6ad31bd] received
-[2025-11-24 16:42:00,019: INFO/ForkPoolWorker-1] ✓ Tarea de prueba ejecutada correctamente
-[2025-11-24 16:42:02,024: INFO/ForkPoolWorker-1] Task backend.tasks.test_task[405d8e37-024e-49b4-8a6b-51a1e6ad31bd] succeeded in 2.0045432569995683s: 'Celery funciona correctamente'
-[2025-11-24 16:43:00,019: INFO/MainProcess] Task backend.tasks.test_task[0227712e-b862-410a-84da-82a457ed7c22] received
-[2025-11-24 16:43:00,021: INFO/ForkPoolWorker-1] ✓ Tarea de prueba ejecutada correctamente
-[2025-11-24 16:43:02,026: INFO/ForkPoolWorker-1] Task backend.tasks.test_task[0227712e-b862-410a-84da-82a457ed7c22] succeeded in 2.0050297420002607s: 'Celery funciona correctamente'
-[2025-11-24 16:44:00,032: INFO/MainProcess] Task backend.tasks.test_task[a28eba68-5aa1-4208-9fb5-241c9526d5fb] received
-[2025-11-24 16:44:00,036: INFO/ForkPoolWorker-1] ✓ Tarea de prueba ejecutada correctamente
-[2025-11-24 16:44:02,041: INFO/ForkPoolWorker-1] Task backend.tasks.test_task[a28eba68-5aa1-4208-9fb5-241c9526d5fb] succeeded in 2.004882830000497s: 'Celery funciona correctamente'
-[2025-11-24 16:45:00,530: INFO/MainProcess] Task backend.tasks.test_task[ee0f2094-2eea-4615-a20f-1634dee83949] received
-[2025-11-24 16:45:00,532: INFO/ForkPoolWorker-1] ✓ Tarea de prueba ejecutada correctamente
-[2025-11-24 16:45:02,536: INFO/ForkPoolWorker-1] Task backend.tasks.test_task[ee0f2094-2eea-4615-a20f-1634dee83949] succeeded in 2.0038546819996554s: 'Celery funciona correctamente'
+[2025-11-24 20:27:00,025: INFO/MainProcess] Task backend.tasks.test_task[c4acd7d6-0649-4eeb-878d-1b3fc732c3b3] received
+[2025-11-24 20:27:00,027: INFO/ForkPoolWorker-6] ✓ Tarea de prueba ejecutada correctamente
+[2025-11-24 20:27:02,031: INFO/ForkPoolWorker-6] Task backend.tasks.test_task[c4acd7d6-0649-4eeb-878d-1b3fc732c3b3] succeeded in 2.0042959049969795s: 'Celery funciona correctamente'
