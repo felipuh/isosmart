@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',  # Django REST Framework
     'django_celery_beat',  # Para tareas programadas
+    'core',
 ]
 
 # Configuración de REST Framework

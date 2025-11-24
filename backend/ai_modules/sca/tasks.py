@@ -11,42 +11,58 @@ def analyze_context_periodic(self):
     Se ejecuta diariamente a las 2 AM
     """
     try:
-        analyzer = ContextAnalyzer()
+        logger.info("Iniciando análisis periódico de contexto...")
         
-        # Por ahora, datos de prueba
-        # TODO: Obtener documentos reales de la base de datos
-        test_data = {
-            'documents': [
-                {
-                    'content': 'Logramos mejorar la eficiencia del proceso en un 20%',
-                    'source': 'Acta Gerencial Q4',
-                    'date': '2025-11-01'
-                },
-                {
-                    'content': 'Identificamos un riesgo en el proceso de compras',
-                    'source': 'Reporte de Auditoría',
-                    'date': '2025-11-15'
-                }
-            ],
-            'sources': []
+        analyzer = ContextAnalyzer()
+        result = analyzer.process()
+        
+        logger.info(f"Análisis de contexto completado: Analysis ID {result.get('analysis_id')}")
+        
+        return {
+            'status': 'success',
+            'analysis_id': result.get('analysis_id'),
+            'documents_processed': result.get('internal_insights', {}).get('total_documents', 0),
+            'risks_identified': len(result.get('internal_insights', {}).get('riesgos_identificados', [])),
+            'execution_time': result.get('execution_time')
         }
         
-        result = analyzer.process(test_data)
-        
-        logger.info(f"Context analysis completed: {result}")
-        
-        return result
-        
     except Exception as e:
-        logger.error(f"Error in periodic context analysis: {e}", exc_info=True)
-        raise self.retry(exc=e, countdown=60)
+        logger.error(f"Error en análisis periódico de contexto: {e}", exc_info=True)
+        raise self.retry(exc=e, countdown=300)  # Reintentar en 5 minutos
 
 @shared_task
 def analyze_document(document_id: int):
     """Analiza un documento específico"""
-    analyzer = ContextAnalyzer()
+    from core.models import Document
     
-    # TODO: Obtener documento de la base de datos
-    logger.info(f"Analyzing document {document_id}")
-    
-    return {'status': 'completed', 'document_id': document_id}
+    try:
+        document = Document.objects.get(id=document_id)
+        logger.info(f"Analizando documento {document_id}: {document.title}")
+        
+        analyzer = ContextAnalyzer()
+        
+        # Procesar solo este documento
+        result = analyzer.analyze_internal_context([{
+            'id': document.id,
+            'content': document.content,
+            'source': document.source,
+            'date': document.created_at.isoformat(),
+            'type': document.document_type
+        }])
+        
+        document.is_processed = True
+        document.processed_at = timezone.now()
+        document.save()
+        
+        return {
+            'status': 'success',
+            'document_id': document_id,
+            'insights': result
+        }
+        
+    except Document.DoesNotExist:
+        logger.error(f"Document {document_id} not found")
+        return {'status': 'error', 'message': 'Document not found'}
+    except Exception as e:
+        logger.error(f"Error analyzing document {document_id}: {e}", exc_info=True)
+        return {'status': 'error', 'message': str(e)}
