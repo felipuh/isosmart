@@ -1,6 +1,8 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 from django.db.models import Count, Avg, Q
 from datetime import datetime, timedelta
 from .models import (
@@ -10,6 +12,7 @@ from .models import (
 #from ai_modules.sca.tasks import analyze_context_periodic, analyze_document
 
 @api_view(['GET'])
+@csrf_exempt
 def dashboard_summary(request):
     """Resumen ejecutivo del dashboard"""
     
@@ -77,6 +80,7 @@ def dashboard_summary(request):
     })
 
 @api_view(['GET'])
+@csrf_exempt
 def risk_matrix_list(request):
     """Lista consolidada de riesgos"""
     source = request.query_params.get('source', None)
@@ -111,6 +115,7 @@ def risk_matrix_list(request):
     })
 
 @api_view(['POST'])
+@csrf_exempt
 def trigger_context_analysis(request):
     """Dispara análisis de contexto manual"""
     try:
@@ -129,6 +134,7 @@ def trigger_context_analysis(request):
         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['GET'])
+@csrf_exempt
 def context_analysis_latest(request):
     """Obtiene el último análisis de contexto"""
     analysis = ContextAnalysis.objects.filter(
@@ -151,6 +157,7 @@ def context_analysis_latest(request):
     })
 
 @api_view(['GET'])
+@csrf_exempt
 def health_check(request):
     """Health check endpoint"""
     from django.db import connection

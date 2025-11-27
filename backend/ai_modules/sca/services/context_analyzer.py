@@ -2,6 +2,7 @@ from ai_modules.common.base import AIModuleBase
 from core.models import ContextAnalysis, Document, RiskMatrix
 from typing import Dict, Any, List
 from datetime import datetime
+from django.utils import timezone
 import logging
 
 logger = logging.getLogger(__name__)
@@ -28,16 +29,21 @@ class ContextAnalyzer(AIModuleBase):
         # Crear registro de análisis
         analysis = ContextAnalysis.objects.create(
             status='processing',
-            created_by=None  # TODO: Agregar usuario cuando tengamos autenticación
+            created_by=None
         )
         
         try:
-            # Obtener documentos no procesados de la base de datos
-            documents = Document.objects.filter(is_processed=False)
+            # Obtener documentos no procesados
+            unprocessed_docs = Document.objects.filter(is_processed=False)
             
-            if documents.count() == 0:
+            if unprocessed_docs.count() == 0:
                 # Si no hay documentos nuevos, usar los últimos 10
-                documents = Document.objects.all().order_by('-created_at')[:10]
+                documents_qs = Document.objects.all().order_by('-created_at')[:10]
+            else:
+                documents_qs = unprocessed_docs
+            
+            # Convertir a lista para evitar problemas con slicing
+            documents_list = list(documents_qs)
             
             # Convertir a formato esperado
             docs_data = [
@@ -48,7 +54,7 @@ class ContextAnalyzer(AIModuleBase):
                     'date': doc.created_at.isoformat(),
                     'type': doc.document_type
                 }
-                for doc in documents
+                for doc in documents_list
             ]
             
             # Análisis de contexto interno
@@ -67,8 +73,11 @@ class ContextAnalyzer(AIModuleBase):
             analysis.execution_time_seconds = execution_time
             analysis.save()
             
-            # Marcar documentos como procesados
-            documents.update(is_processed=True, processed_at=datetime.now())
+            # Marcar documentos como procesados (actualizar uno por uno)
+            for doc in documents_list:
+                doc.is_processed = True
+                doc.processed_at = timezone.now()
+                doc.save()
             
             # Alimentar matriz de riesgos automáticamente
             self.feed_risk_matrix(internal_insights, analysis.id)
@@ -110,9 +119,9 @@ class ContextAnalyzer(AIModuleBase):
         }
         
         # Palabras clave para análisis (versión simple)
-        keywords_fortalezas = ['éxito', 'logro', 'mejora', 'eficiente', 'aumentó', 'incremento', 'positivo']
-        keywords_debilidades = ['problema', 'falla', 'error', 'demora', 'disminuyó', 'reducción', 'negativo']
-        keywords_riesgos = ['riesgo', 'amenaza', 'peligro', 'vulnerabilidad', 'preocupación']
+        keywords_fortalezas = ['éxito', 'logro', 'mejora', 'eficiente', 'aumentó', 'incremento', 'positivo', 'excelente']
+        keywords_debilidades = ['problema', 'falla', 'error', 'demora', 'disminuyó', 'reducción', 'negativo', 'deficiente']
+        keywords_riesgos = ['riesgo', 'amenaza', 'peligro', 'vulnerabilidad', 'preocupación', 'crítico']
         
         for doc in documents:
             content = doc.get('content', '').lower()
@@ -121,9 +130,9 @@ class ContextAnalyzer(AIModuleBase):
             fortalezas_found = [word for word in keywords_fortalezas if word in content]
             if fortalezas_found:
                 insights['fortalezas'].append({
-                    'texto': doc.get('content', '')[:200] + '...',
+                    'texto': doc.get('content', '')[:200] + ('...' if len(doc.get('content', '')) > 200 else ''),
                     'fuente': doc.get('source', 'Desconocido'),
-                    'confianza': len(fortalezas_found) * 0.15,
+                    'confianza': min(len(fortalezas_found) * 0.2, 0.95),
                     'palabras_clave': fortalezas_found
                 })
             
@@ -131,7 +140,7 @@ class ContextAnalyzer(AIModuleBase):
             debilidades_found = [word for word in keywords_debilidades if word in content]
             if debilidades_found:
                 insights['debilidades'].append({
-                    'texto': doc.get('content', '')[:200] + '...',
+                    'texto': doc.get('content', '')[:200] + ('...' if len(doc.get('content', '')) > 200 else ''),
                     'fuente': doc.get('source', 'Desconocido'),
                     'severidad': 'media'
                 })
@@ -140,9 +149,9 @@ class ContextAnalyzer(AIModuleBase):
             riesgos_found = [word for word in keywords_riesgos if word in content]
             if riesgos_found:
                 insights['riesgos_identificados'].append({
-                    'texto': doc.get('content', '')[:200] + '...',
+                    'texto': doc.get('content', '')[:200] + ('...' if len(doc.get('content', '')) > 200 else ''),
                     'fuente': doc.get('source', 'Desconocido'),
-                    'severidad': 'media',
+                    'severidad': 'alta' if 'crítico' in content else 'media',
                     'document_id': doc.get('id')
                 })
         

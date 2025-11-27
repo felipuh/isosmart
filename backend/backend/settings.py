@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'rest_framework',  # Django REST Framework
     'django_celery_beat',  # Para tareas programadas
     'core',
@@ -55,8 +56,10 @@ REST_FRAMEWORK = {
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'backend.middleware.CsrfExemptAPIMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -165,6 +168,7 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+TIME_ZONE = 'America/Costa_Rica'
 
 
 # Static files (CSS, JavaScript, Images)
@@ -221,3 +225,58 @@ LOGGING = {
         'level': 'INFO',
     },
 }
+
+# CORS Configuration
+CORS_ALLOWED_ORIGINS = [
+    "http://192.168.100.100:3001",
+    "http://192.168.100.100",
+    "http://localhost:3001",
+    "http://localhost",
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
+
+# ==================================================
+# REST Framework Configuration
+# ==================================================
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',  # <-- Cambiar a AllowAny para API
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+}
+
+# ==================================================
+# CSRF Configuration para API
+# ==================================================
+CSRF_TRUSTED_ORIGINS = [
+    'http://192.168.100.100:3001',
+    'http://192.168.100.100',
+    'http://localhost:3001',
+]
+
+# Eximir API de CSRF (solo para endpoints /api/*)
+CSRF_EXEMPT_URLS = [r'^api/']
