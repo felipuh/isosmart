@@ -133,6 +133,11 @@ class StakeholderProfile(models.Model):
     
     # Metadata
     is_active = models.BooleanField(default=True)
+    is_critical = models.BooleanField(
+        default=False,
+        verbose_name="Stakeholder Crítico",
+        help_text="Marcado automáticamente por IA si influencia > 0.7"
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
     last_contact = models.DateTimeField(

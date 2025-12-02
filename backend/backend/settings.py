@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',  # Django REST Framework
     'django_celery_beat',  # Para tareas programadas
     'core',
-    'ai_modules.sie',
+    'ai_modules.sie.apps.SieConfig',
 ]
 
 # Configuración de REST Framework

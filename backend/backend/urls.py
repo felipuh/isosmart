@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from core import views
 
 urlpatterns = [
@@ -12,4 +12,5 @@ urlpatterns = [
     path('api/risks/', views.risk_matrix_list, name='risk-matrix-list'),
     path('api/context/latest/', views.context_analysis_latest, name='context-latest'),
     path('api/context/analyze/', views.trigger_context_analysis, name='trigger-analysis'),
+    path('api/sie/', include('ai_modules.sie.urls')),
 ]
