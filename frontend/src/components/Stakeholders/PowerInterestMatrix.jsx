@@ -1,0 +1,140 @@
+import React from 'react';
+import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+
+const PowerInterestMatrix = ({ matrixData, loading }) => {
+  if (loading) {
+    return (
+      <div className="bg-white rounded-lg shadow p-6">
+        <div className="animate-pulse">
+          <div className="h-6 bg-gray-200 rounded w-1/3 mb-4"></div>
+          <div className="h-80 bg-gray-200 rounded"></div>
+        </div>
+      </div>
+    );
+  }
+
+  // Convertir datos de matriz a formato para scatter plot
+  const scatterData = [];
+  
+  if (matrixData) {
+    const addToScatter = (items, quadrant) => {
+      items.forEach(item => {
+        const powerValue = item.power === 'alto' ? 3 : item.power === 'medio' ? 2 : 1;
+        const interestValue = item.interest === 'alto' ? 3 : item.interest === 'medio' ? 2 : 1;
+        
+        scatterData.push({
+          x: interestValue,
+          y: powerValue,
+          name: item.name,
+          type: item.type,
+          influence: item.influence_score,
+          quadrant: quadrant,
+          satisfaction: item.satisfaction_score
+        });
+      });
+    };
+
+    addToScatter(matrixData.manage_closely || [], 'Gestionar de Cerca');
+    addToScatter(matrixData.keep_satisfied || [], 'Mantener Satisfecho');
+    addToScatter(matrixData.keep_informed || [], 'Mantener Informado');
+    addToScatter(matrixData.monitor || [], 'Monitorear');
+  }
+
+  const getColor = (quadrant) => {
+    switch (quadrant) {
+      case 'Gestionar de Cerca': return '#ef4444'; // Rojo
+      case 'Mantener Satisfecho': return '#f59e0b'; // Naranja
+      case 'Mantener Informado': return '#3b82f6'; // Azul
+      case 'Monitorear': return '#10b981'; // Verde
+      default: return '#6b7280';
+    }
+  };
+
+  const CustomTooltip = ({ active, payload }) => {
+    if (active && payload && payload.length) {
+      const data = payload[0].payload;
+      return (
+        <div className="bg-white p-3 rounded-lg shadow-lg border border-gray-200">
+          <p className="font-semibold text-gray-900">{data.name}</p>
+          <p className="text-sm text-gray-600 capitalize">Tipo: {data.type}</p>
+          <p className="text-sm text-gray-600">Influencia: {(data.influence * 100).toFixed(0)}%</p>
+          <p className="text-sm text-gray-600">Satisfacción: {data.satisfaction?.toFixed(1)}/10</p>
+          <p className="text-sm font-medium mt-1" style={{ color: getColor(data.quadrant) }}>
+            {data.quadrant}
+          </p>
+        </div>
+      );
+    }
+    return null;
+  };
+
+  return (
+    <div className="bg-white rounded-lg shadow p-6">
+      <h3 className="text-lg font-semibold mb-4">Matriz Poder / Interés</h3>
+      
+      {scatterData.length === 0 ? (
+        <p className="text-gray-500 text-center py-8">No hay datos disponibles</p>
+      ) : (
+        <ResponsiveContainer width="100%" height={400}>
+          <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis
+              type="number"
+              dataKey="x"
+              name="Interés"
+              domain={[0.5, 3.5]}
+              ticks={[1, 2, 3]}
+              tickFormatter={(value) => {
+                if (value === 1) return 'Bajo';
+                if (value === 2) return 'Medio';
+                if (value === 3) return 'Alto';
+                return '';
+              }}
+            />
+            <YAxis
+              type="number"
+              dataKey="y"
+              name="Poder"
+              domain={[0.5, 3.5]}
+              ticks={[1, 2, 3]}
+              tickFormatter={(value) => {
+                if (value === 1) return 'Bajo';
+                if (value === 2) return 'Medio';
+                if (value === 3) return 'Alto';
+                return '';
+              }}
+            />
+            <Tooltip content={<CustomTooltip />} />
+            <Scatter data={scatterData} fill="#8884d8">
+              {scatterData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={getColor(entry.quadrant)} />
+              ))}
+            </Scatter>
+          </ScatterChart>
+        </ResponsiveContainer>
+      )}
+
+      {/* Leyenda de cuadrantes */}
+      <div className="grid grid-cols-2 gap-4 mt-6">
+        <div className="flex items-center">
+          <div className="w-4 h-4 bg-red-500 rounded mr-2"></div>
+          <span className="text-sm">Gestionar de Cerca (Alto/Alto)</span>
+        </div>
+        <div className="flex items-center">
+          <div className="w-4 h-4 bg-orange-500 rounded mr-2"></div>
+          <span className="text-sm">Mantener Satisfecho (Alto/Bajo)</span>
+        </div>
+        <div className="flex items-center">
+          <div className="w-4 h-4 bg-blue-500 rounded mr-2"></div>
+          <span className="text-sm">Mantener Informado (Bajo/Alto)</span>
+        </div>
+        <div className="flex items-center">
+          <div className="w-4 h-4 bg-green-500 rounded mr-2"></div>
+          <span className="text-sm">Monitorear (Bajo/Bajo)</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default PowerInterestMatrix;
