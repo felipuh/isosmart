@@ -37,11 +37,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    # Third party
+    'rest_framework',
     'corsheaders',
-    'rest_framework',  # Django REST Framework
-    'django_celery_beat',  # Para tareas programadas
+    
+    # Local apps
     'core',
-    'ai_modules.sie.apps.SieConfig',
+    'ai_modules.common',
+    'ai_modules.sca.apps.ScaConfig',      # Módulo SCA
+    'ai_modules.sie.apps.SieConfig',      # Módulo SIE
+    'ai_modules.asb.apps.AsbConfig',      # Módulo ASB
 ]
 
 # Configuración de REST Framework
@@ -281,3 +287,7 @@ CSRF_TRUSTED_ORIGINS = [
 
 # Eximir API de CSRF (solo para endpoints /api/*)
 CSRF_EXEMPT_URLS = [r'^api/']
+
+# Media files (uploads)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/uploads')

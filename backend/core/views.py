@@ -1,6 +1,9 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import viewsets, status
+from rest_framework.decorators import action
+from rest_framework.parsers import MultiPartParser, FormParser
+from django.http import FileResponse, Http404
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.db.models import Count, Avg, Q
@@ -9,7 +12,12 @@ from .models import (
     ContextAnalysis, RiskMatrix, QualityObjective, 
     StakeholderProfile, ProcessMap, Document
 )
+from .serializers import DocumentSerializer, DocumentUploadSerializer
+import logging
+import os
 #from ai_modules.sca.tasks import analyze_context_periodic, analyze_document
+
+logger = logging.getLogger(__name__)
 
 @api_view(['GET'])
 @csrf_exempt
@@ -185,3 +193,145 @@ def health_check(request):
             'status': 'unhealthy',
             'error': str(e)
         }, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+
+class DocumentViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet para gestión de documentos
+    """
+    queryset = Document.objects.all().order_by('-created_at')
+    serializer_class = DocumentSerializer
+    parser_classes = (MultiPartParser, FormParser)
+    
+    def get_queryset(self):
+        """Filtrar documentos activos por defecto"""
+        queryset = super().get_queryset()
+        
+        # Filtrar por tipo si se especifica
+        doc_type = self.request.query_params.get('type', None)
+        if doc_type:
+            queryset = queryset.filter(document_type=doc_type)
+        
+        # Filtrar por activos
+        is_active = self.request.query_params.get('active', 'true')
+        if is_active.lower() == 'true':
+            queryset = queryset.filter(is_active=True)
+        
+        return queryset
+    
+    def create(self, request, *args, **kwargs):
+        """Crear nuevo documento con archivo"""
+        serializer = DocumentUploadSerializer(data=request.data)
+        
+        if serializer.is_valid():
+            try:
+                # Extraer datos
+                title = serializer.validated_data['title']
+                description = serializer.validated_data.get('description', '')
+                doc_type = serializer.validated_data['document_type']
+                uploaded_file = serializer.validated_data['file']
+                uploaded_by = serializer.validated_data.get('uploaded_by', 'Sistema')
+                
+                # Crear documento
+                document = Document.objects.create(
+                    title=title,
+                    description=description,
+                    document_type=doc_type,
+                    file_path=uploaded_file,
+                    file_size=uploaded_file.size,
+                    uploaded_by=uploaded_by
+                )
+                
+                logger.info(f"Documento creado: {document.title} (ID: {document.id})")
+                
+                # Serializar respuesta
+                response_serializer = DocumentSerializer(document)
+                return Response(
+                    response_serializer.data,
+                    status=status.HTTP_201_CREATED
+                )
+                
+            except Exception as e:
+                logger.error(f"Error creando documento: {str(e)}", exc_info=True)
+                return Response(
+                    {'error': f'Error al crear documento: {str(e)}'},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def destroy(self, request, *args, **kwargs):
+        """Eliminar documento (soft delete)"""
+        try:
+            instance = self.get_object()
+            instance.is_active = False
+            instance.save()
+            
+            logger.info(f"Documento desactivado: {instance.title} (ID: {instance.id})")
+            
+            return Response(
+                {'message': 'Documento eliminado exitosamente'},
+                status=status.HTTP_200_OK
+            )
+        except Exception as e:
+            logger.error(f"Error eliminando documento: {str(e)}", exc_info=True)
+            return Response(
+                {'error': str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+    
+    @action(detail=True, methods=['get'])
+    def download(self, request, pk=None):
+        """Descargar archivo del documento"""
+        try:
+            document = self.get_object()
+            
+            if not document.file_path:
+                raise Http404("Archivo no encontrado")
+            
+            file_path = document.file_path.path
+            
+            if not os.path.exists(file_path):
+                raise Http404("Archivo no existe en el servidor")
+            
+            response = FileResponse(
+                open(file_path, 'rb'),
+                as_attachment=True,
+                filename=os.path.basename(file_path)
+            )
+            
+            logger.info(f"Descargando documento: {document.title}")
+            
+            return response
+            
+        except Http404:
+            raise
+        except Exception as e:
+            logger.error(f"Error descargando documento: {str(e)}", exc_info=True)
+            return Response(
+                {'error': str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+    
+    @action(detail=False, methods=['get'])
+    def stats(self, request):
+        """Obtener estadísticas de documentos"""
+        total = Document.objects.filter(is_active=True).count()
+        by_type = {}
+        
+        for doc_type, _ in Document.DOCUMENT_TYPES:
+            count = Document.objects.filter(
+                is_active=True,
+                document_type=doc_type
+            ).count()
+            by_type[doc_type] = count
+        
+        total_size = sum(
+            doc.file_size or 0 
+            for doc in Document.objects.filter(is_active=True)
+        )
+        
+        return Response({
+            'total_documents': total,
+            'by_type': by_type,
+            'total_size_mb': round(total_size / (1024 * 1024), 2)
+        })

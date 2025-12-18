@@ -13,7 +13,9 @@ from ai_modules.sie.services.stakeholder_intelligence import StakeholderIntellig
 from core.models import (
     StakeholderProfile, 
     StakeholderChangeLog, 
-    RiskMatrix
+    RiskMatrix,
+    Document, 
+    ContextAnalysis
 )
 
 logger = logging.getLogger(__name__)
@@ -307,3 +309,136 @@ class StakeholderAnalyzer(AIModuleBase):
             )
         
         return recommendations
+
+class ContextAnalyzer(AIModuleBase):
+    """
+    Analizador de Contexto Organizacional con IA
+    Implementa ISO 4.1
+    """
+    
+    def __init__(self):
+        super().__init__('SCA')
+    
+    def process(self, data: Dict[str, Any] = None) -> Dict[str, Any]:
+        """
+        Proceso principal de análisis de contexto
+        
+        Returns:
+            Dict con resultados del análisis completo
+        """
+        start_time = datetime.now()
+        
+        try:
+            # 1. Obtener documentos
+            documents = Document.objects.all()
+            
+            if documents.count() == 0:
+                logger.warning("No hay documentos para analizar")
+                return {
+                    'status': 'error',
+                    'error': 'No hay documentos disponibles para analizar. Por favor, sube documentos primero.',
+                    'total_documents': 0
+                }
+            
+            # 2. Analizar documentos (simplificado por ahora)
+            internal_insights = self._analyze_internal_factors(documents)
+            external_insights = self._analyze_external_factors(documents)
+            
+            # 3. Crear registro de análisis
+            analysis = ContextAnalysis.objects.create(
+                status='completed',
+                total_documents_processed=documents.count(),
+                internal_insights=internal_insights,
+                external_insights=external_insights
+            )
+            
+            execution_time = (datetime.now() - start_time).total_seconds()
+            
+            result = {
+                'status': 'completed',
+                'module': 'SCA',
+                'iso_clause': '4.1',
+                'execution_time': execution_time,
+                'total_documents': documents.count(),
+                'analysis_id': analysis.id,
+                'internal_insights': internal_insights,
+                'external_insights': external_insights
+            }
+            
+            self.log_execution('context_analysis', 'success', {
+                'documents': documents.count(),
+                'analysis_id': analysis.id
+            })
+            
+            return result
+            
+        except Exception as e:
+            logger.error(f"Error en análisis de contexto: {e}", exc_info=True)
+            
+            self.log_execution('context_analysis', 'error', {'error': str(e)})
+            
+            return {
+                'status': 'error',
+                'error': str(e),
+                'total_documents': 0
+            }
+    
+    def _analyze_internal_factors(self, documents) -> Dict:
+        """Análisis de factores internos (simplificado)"""
+        return {
+            'fortalezas': [
+                'Procesos documentados según ISO 9001',
+                'Equipo capacitado en gestión de calidad',
+                'Infraestructura tecnológica moderna',
+            ],
+            'debilidades': [
+                'Necesidad de mayor integración entre áreas',
+                'Procesos de comunicación por mejorar',
+            ],
+            'riesgos_identificados': [
+                {
+                    'texto': 'Dependencia de sistemas heredados',
+                    'severidad': 'medio',
+                    'categoria': 'Tecnología',
+                    'mitigacion': 'Plan de modernización gradual'
+                }
+            ],
+            'recomendaciones': [
+                {
+                    'texto': 'Implementar sistema de gestión documental integrado',
+                    'prioridad': 'alta',
+                    'acciones': [
+                        'Evaluar plataformas disponibles',
+                        'Definir requisitos específicos',
+                        'Piloto en área seleccionada'
+                    ]
+                }
+            ]
+        }
+    
+    def _analyze_external_factors(self, documents) -> Dict:
+        """Análisis de factores externos (simplificado)"""
+        return {
+            'oportunidades': [
+                'Crecimiento del mercado de servicios de calidad',
+                'Nuevas tecnologías de automatización disponibles',
+            ],
+            'amenazas': [
+                'Cambios regulatorios frecuentes',
+                'Competencia internacional',
+            ],
+            'factores_externos': [
+                {
+                    'tipo': 'tecnológico',
+                    'descripcion': 'Adopción acelerada de IA en gestión de calidad',
+                    'impacto': 'alto',
+                    'tendencia': 'Crecimiento continuo'
+                },
+                {
+                    'tipo': 'económico',
+                    'descripcion': 'Volatilidad en costos operativos',
+                    'impacto': 'medio',
+                    'tendencia': 'Inestable'
+                }
+            ]
+        }
