@@ -4,6 +4,7 @@ import Sidebar from './components/Layout/Sidebar';
 import Dashboard from './components/Dashboard/Dashboard';
 import StakeholderDashboard from './components/Stakeholders/StakeholderDashboard';
 import ContextDashboard from './components/Context/ContextDashboard';
+import ScopeDashboard from './components/Scope/ScopeDashboard';
 
 // Componentes placeholder para rutas faltantes
 const ComingSoon = ({ title }) => (
@@ -27,6 +28,7 @@ function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/stakeholders" element={<StakeholderDashboard />} />
             <Route path="/context" element={<ContextDashboard />} />
+            <Route path="/scope" element={<ScopeDashboard />} /> 
             <Route path="/risks" element={<ComingSoon title="Matriz de Riesgos" />} />
             <Route path="/objectives" element={<ComingSoon title="Objetivos de Calidad" />} />
             <Route path="/settings" element={<ComingSoon title="Configuración" />} />

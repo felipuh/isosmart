@@ -190,6 +190,7 @@ def get_latest_scope(request):
     Obtener la última definición de alcance
     """
     try:
+        # ⭐ CORREGIDO: usar created_at del modelo ScopeDefinition (que SÍ existe)
         latest = ScopeDefinition.objects.order_by('-created_at').first()
         
         if not latest:

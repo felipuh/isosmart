@@ -39,7 +39,7 @@ class ScopeAnalyzer(AIModuleBase):
             # 1. Obtener último análisis de contexto
             context_analysis = ContextAnalysis.objects.filter(
                 status='completed'
-            ).order_by('-created_at').first()
+            ).order_by('-timestamp').first()
             
             if not context_analysis:
                 return {

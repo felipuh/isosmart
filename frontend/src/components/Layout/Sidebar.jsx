@@ -9,6 +9,7 @@ const Sidebar = () => {
     { name: 'Dashboard', path: '/', icon: Home },
     { name: 'Stakeholders', path: '/stakeholders', icon: Network },
     { name: 'Contexto', path: '/context', icon: TrendingUp },
+    { name: 'Alcance SGC', path: '/scope', icon: Target },
     { name: 'Riesgos', path: '/risks', icon: FileText },
     { name: 'Objetivos', path: '/objectives', icon: Target },
     { name: 'Configuración', path: '/settings', icon: Settings },

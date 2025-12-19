@@ -60,25 +60,25 @@ const Dashboard = () => {
         </div>
 
         {/* ASB - Alcance */}
-        <div className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow p-6 opacity-75">
+        <div className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow p-6">
           <div className="flex items-center justify-between mb-4">
             <Target className="h-10 w-10 text-purple-400" />
-            <span className="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-semibold">
-              PRÓXIMO
+            <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold">
+              ACTIVO
             </span>
           </div>
           <h3 className="text-lg font-semibold mb-2">Alcance SGC</h3>
           <p className="text-sm text-gray-600 mb-4">ISO 4.3 - Módulo ASB</p>
           <div className="flex items-center text-sm text-gray-500 mb-4">
-            <AlertCircle className="h-4 w-4 mr-1" />
+            <CheckCircle className="h-4 w-4 mr-1 text-green-500" />
             AI Scope Builder
           </div>
-          <button 
-            disabled
-            className="block w-full text-center px-4 py-2 bg-gray-100 text-gray-400 rounded cursor-not-allowed font-medium"
+          <Link 
+            to="/scope" 
+            className="block w-full text-center px-4 py-2 bg-green-50 text-green-600 rounded hover:bg-green-100 transition-colors font-medium"
           >
-            En desarrollo
-          </button>
+            Ver Dashboard
+          </Link>
         </div>
 
         {/* SPM - Procesos */}
