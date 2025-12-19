@@ -49,3 +49,8 @@ logs/ai/frontend-out-0.log
 logs/nginx/access.log
 logs/ai/celery_worker.log
 logs/nginx/access.log
+logs/ai/celery_worker.log
+logs/ai/frontend-error-0.log
+logs/ai/frontend-out-0.log
+logs/nginx/access.log
+logs/nginx/error.log
