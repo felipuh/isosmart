@@ -1,0 +1,77 @@
+import React from 'react';
+import { Lightbulb, CheckCircle2, AlertTriangle, Info } from 'lucide-react';
+
+const ProcessRecommendations = ({ recommendations, loading }) => {
+  if (loading) {
+    return (
+      <div className="bg-white rounded-lg shadow p-6">
+        <div className="animate-pulse">
+          <div className="h-6 bg-gray-200 rounded w-1/3 mb-4"></div>
+          <div className="space-y-3">
+            <div className="h-16 bg-gray-200 rounded"></div>
+            <div className="h-16 bg-gray-200 rounded"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!recommendations || recommendations.length === 0) {
+    return (
+      <div className="bg-white rounded-lg shadow p-6">
+        <h3 className="text-xl font-semibold mb-4">Recomendaciones</h3>
+        <div className="flex items-center justify-center py-8 text-green-600">
+          <CheckCircle2 className="h-12 w-12 mr-3" />
+          <p className="text-lg">Todo está en orden. No hay recomendaciones pendientes.</p>
+        </div>
+      </div>
+    );
+  }
+
+  const getRecommendationIcon = (text) => {
+    if (text.includes('⚠️') || text.includes('URGENTE')) {
+      return <AlertTriangle className="h-5 w-5" />;
+    } else if (text.includes('✅')) {
+      return <CheckCircle2 className="h-5 w-5" />;
+    } else if (text.includes('💡') || text.includes('🎯')) {
+      return <Lightbulb className="h-5 w-5" />;
+    }
+    return <Info className="h-5 w-5" />;
+  };
+
+  const getRecommendationColor = (text) => {
+    if (text.includes('⚠️') || text.includes('URGENTE')) {
+      return 'bg-red-50 border-red-400 text-red-800';
+    } else if (text.includes('✅')) {
+      return 'bg-green-50 border-green-400 text-green-800';
+    } else if (text.includes('🔗') || text.includes('📊')) {
+      return 'bg-yellow-50 border-yellow-400 text-yellow-800';
+    }
+    return 'bg-blue-50 border-blue-400 text-blue-800';
+  };
+
+  return (
+    <div className="bg-white rounded-lg shadow p-6">
+      <div className="flex items-center mb-4">
+        <Lightbulb className="h-6 w-6 text-yellow-500 mr-2" />
+        <h3 className="text-xl font-semibold">Recomendaciones del Sistema</h3>
+      </div>
+
+      <div className="space-y-3">
+        {recommendations.map((recommendation, index) => (
+          <div
+            key={index}
+            className={`border-l-4 rounded-lg p-4 flex items-start ${getRecommendationColor(recommendation)}`}
+          >
+            <div className="mr-3 mt-0.5">
+              {getRecommendationIcon(recommendation)}
+            </div>
+            <p className="text-sm flex-1">{recommendation}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default ProcessRecommendations;

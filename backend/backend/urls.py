@@ -17,6 +17,7 @@ urlpatterns = [
     path('api/sie/', include('ai_modules.sie.urls')),
     path('api/context/', include('ai_modules.sca.urls')),
     path('api/scope/', include('ai_modules.asb.urls')),
+    path('api/processes/', include('ai_modules.spm.urls')),
 ]
 
 if settings.DEBUG:

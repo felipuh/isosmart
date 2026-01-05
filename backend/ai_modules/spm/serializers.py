@@ -1,0 +1,113 @@
+from rest_framework import serializers
+from .models import ProcessMap, Process, ProcessInteraction, ProcessActivity
+
+
+class ProcessActivitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProcessActivity
+        fields = [
+            'id',
+            'sequence_number',
+            'name',
+            'description',
+            'responsible',
+            'estimated_duration',
+            'tools_required',
+        ]
+
+
+class ProcessSerializer(serializers.ModelSerializer):
+    activities = ProcessActivitySerializer(many=True, read_only=True)
+    activities_count = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = Process
+        fields = [
+            'id',
+            'code',
+            'name',
+            'description',
+            'process_type',
+            'objective',
+            'owner',
+            'inputs',
+            'outputs',
+            'resources',
+            'kpis',
+            'risks',
+            'controls',
+            'criticality_score',
+            'is_critical',
+            'documented_in',
+            'is_active',
+            'activities',
+            'activities_count',
+            'created_at',
+            'updated_at',
+        ]
+    
+    def get_activities_count(self, obj):
+        return obj.activities.count()
+
+
+class ProcessInteractionSerializer(serializers.ModelSerializer):
+    source_process_name = serializers.CharField(
+        source='source_process.name',
+        read_only=True
+    )
+    target_process_name = serializers.CharField(
+        source='target_process.name',
+        read_only=True
+    )
+    
+    class Meta:
+        model = ProcessInteraction
+        fields = [
+            'id',
+            'source_process',
+            'source_process_name',
+            'target_process',
+            'target_process_name',
+            'interaction_type',
+            'description',
+            'exchanged_items',
+            'frequency',
+            'is_critical',
+        ]
+
+
+class ProcessMapSerializer(serializers.ModelSerializer):
+    processes = ProcessSerializer(many=True, read_only=True)
+    interactions = ProcessInteractionSerializer(many=True, read_only=True)
+    
+    class Meta:
+        model = ProcessMap
+        fields = [
+            'id',
+            'title',
+            'version',
+            'effective_date',
+            'total_processes',
+            'strategic_count',
+            'operational_count',
+            'support_count',
+            'interaction_analysis',
+            'critical_processes',
+            'recommendations',
+            'status',
+            'created_at',
+            'updated_at',
+            'created_by',
+            'processes',
+            'interactions',
+        ]
+        read_only_fields = ['id', 'created_at', 'updated_at']
+
+
+class ProcessMapCreateSerializer(serializers.Serializer):
+    """Serializer para crear nuevo mapa de procesos"""
+    created_by = serializers.CharField(
+        max_length=100,
+        required=False,
+        default="Sistema IA"
+    )

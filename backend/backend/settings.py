@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'ai_modules.sca.apps.ScaConfig',      # Módulo SCA
     'ai_modules.sie.apps.SieConfig',      # Módulo SIE
     'ai_modules.asb.apps.AsbConfig',      # Módulo ASB
+    'ai_modules.spm',                     # Módulo SPM  
 ]
 
 # Configuración de REST Framework

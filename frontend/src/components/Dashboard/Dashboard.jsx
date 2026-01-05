@@ -75,7 +75,7 @@ const Dashboard = () => {
           </div>
           <Link 
             to="/scope" 
-            className="block w-full text-center px-4 py-2 bg-green-50 text-green-600 rounded hover:bg-green-100 transition-colors font-medium"
+            className="block w-full text-center px-4 py-2 bg-green-50 text-purple-600 rounded hover:bg-purple-100 transition-colors font-medium"
           >
             Ver Dashboard
           </Link>

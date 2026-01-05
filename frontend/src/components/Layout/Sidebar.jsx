@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Users, Target, TrendingUp, FileText, Settings, Network } from 'lucide-react';
+import { Home, Network, TrendingUp, Target, GitBranch, FileText, Settings } from 'lucide-react';
 
 const Sidebar = () => {
   const location = useLocation();
@@ -10,6 +10,7 @@ const Sidebar = () => {
     { name: 'Stakeholders', path: '/stakeholders', icon: Network },
     { name: 'Contexto', path: '/context', icon: TrendingUp },
     { name: 'Alcance SGC', path: '/scope', icon: Target },
+    { name: 'Procesos', path: '/processes', icon: GitBranch },  
     { name: 'Riesgos', path: '/risks', icon: FileText },
     { name: 'Objetivos', path: '/objectives', icon: Target },
     { name: 'Configuración', path: '/settings', icon: Settings },
