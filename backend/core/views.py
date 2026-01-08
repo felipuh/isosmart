@@ -15,9 +15,9 @@ from .models import (
 from .serializers import DocumentSerializer, DocumentUploadSerializer
 import logging
 import os
-#from ai_modules.sca.tasks import analyze_context_periodic, analyze_document
 
 logger = logging.getLogger(__name__)
+
 
 @api_view(['GET'])
 @csrf_exempt
@@ -87,6 +87,7 @@ def dashboard_summary(request):
         'last_update': datetime.now().isoformat()
     })
 
+
 @api_view(['GET'])
 @csrf_exempt
 def risk_matrix_list(request):
@@ -122,24 +123,6 @@ def risk_matrix_list(request):
         'risks': risks_data
     })
 
-@api_view(['POST'])
-@csrf_exempt
-def trigger_context_analysis(request):
-    """Dispara análisis de contexto manual"""
-    try:
-        task = analyze_context_periodic.delay()
-        
-        return Response({
-            'status': 'success',
-            'message': 'Análisis de contexto iniciado',
-            'task_id': task.id
-        }, status=status.HTTP_202_ACCEPTED)
-    
-    except Exception as e:
-        return Response({
-            'status': 'error',
-            'message': str(e)
-        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['GET'])
 @csrf_exempt
@@ -164,6 +147,7 @@ def context_analysis_latest(request):
         'execution_time_seconds': analysis.execution_time_seconds
     })
 
+
 @api_view(['GET'])
 @csrf_exempt
 def health_check(request):
@@ -175,16 +159,10 @@ def health_check(request):
         with connection.cursor() as cursor:
             cursor.execute("SELECT 1")
         
-        # Verificar Celery
-        from backend.celery import app
-        inspect = app.control.inspect()
-        active_workers = inspect.active()
-        
         return Response({
             'status': 'healthy',
             'service': 'isosmart-backend',
             'database': 'connected',
-            'celery_workers': len(active_workers) if active_workers else 0,
             'timestamp': datetime.now().isoformat()
         })
     
@@ -193,6 +171,7 @@ def health_check(request):
             'status': 'unhealthy',
             'error': str(e)
         }, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+
 
 class DocumentViewSet(viewsets.ModelViewSet):
     """
@@ -203,18 +182,13 @@ class DocumentViewSet(viewsets.ModelViewSet):
     parser_classes = (MultiPartParser, FormParser)
     
     def get_queryset(self):
-        """Filtrar documentos activos por defecto"""
+        """Filtrar documentos por tipo si se especifica"""
         queryset = super().get_queryset()
         
         # Filtrar por tipo si se especifica
         doc_type = self.request.query_params.get('type', None)
         if doc_type:
             queryset = queryset.filter(document_type=doc_type)
-        
-        # Filtrar por activos
-        is_active = self.request.query_params.get('active', 'true')
-        if is_active.lower() == 'true':
-            queryset = queryset.filter(is_active=True)
         
         return queryset
     
@@ -226,18 +200,19 @@ class DocumentViewSet(viewsets.ModelViewSet):
             try:
                 # Extraer datos
                 title = serializer.validated_data['title']
-                description = serializer.validated_data.get('description', '')
+                content = serializer.validated_data.get('content', '')
                 doc_type = serializer.validated_data['document_type']
                 uploaded_file = serializer.validated_data['file']
-                uploaded_by = serializer.validated_data.get('uploaded_by', 'Sistema')
+                source = serializer.validated_data.get('source', 'Sistema')
+                uploaded_by = request.user if request.user.is_authenticated else None
                 
                 # Crear documento
                 document = Document.objects.create(
                     title=title,
-                    description=description,
+                    content=content,
                     document_type=doc_type,
                     file_path=uploaded_file,
-                    file_size=uploaded_file.size,
+                    source=source,
                     uploaded_by=uploaded_by
                 )
                 
@@ -257,16 +232,16 @@ class DocumentViewSet(viewsets.ModelViewSet):
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR
                 )
         
+        logger.error(f"Errores de serialización: {serializer.errors}")
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     def destroy(self, request, *args, **kwargs):
-        """Eliminar documento (soft delete)"""
+        """Eliminar documento"""
         try:
             instance = self.get_object()
-            instance.is_active = False
-            instance.save()
+            instance.delete()
             
-            logger.info(f"Documento desactivado: {instance.title} (ID: {instance.id})")
+            logger.info(f"Documento eliminado: {instance.title} (ID: {instance.id})")
             
             return Response(
                 {'message': 'Documento eliminado exitosamente'},
@@ -288,6 +263,7 @@ class DocumentViewSet(viewsets.ModelViewSet):
             if not document.file_path:
                 raise Http404("Archivo no encontrado")
             
+            # Obtener la ruta del archivo
             file_path = document.file_path.path
             
             if not os.path.exists(file_path):
@@ -296,7 +272,7 @@ class DocumentViewSet(viewsets.ModelViewSet):
             response = FileResponse(
                 open(file_path, 'rb'),
                 as_attachment=True,
-                filename=os.path.basename(file_path)
+                filename=os.path.basename(str(document.file_path.name))
             )
             
             logger.info(f"Descargando documento: {document.title}")
@@ -315,23 +291,16 @@ class DocumentViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def stats(self, request):
         """Obtener estadísticas de documentos"""
-        total = Document.objects.filter(is_active=True).count()
+        total = Document.objects.all().count()
         by_type = {}
         
-        for doc_type, _ in Document.DOCUMENT_TYPES:
+        for doc_type, _ in Document.TYPE_CHOICES:
             count = Document.objects.filter(
-                is_active=True,
                 document_type=doc_type
             ).count()
             by_type[doc_type] = count
         
-        total_size = sum(
-            doc.file_size or 0 
-            for doc in Document.objects.filter(is_active=True)
-        )
-        
         return Response({
             'total_documents': total,
-            'by_type': by_type,
-            'total_size_mb': round(total_size / (1024 * 1024), 2)
+            'by_type': by_type
         })

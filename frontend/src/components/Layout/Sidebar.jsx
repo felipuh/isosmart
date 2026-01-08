@@ -1,18 +1,19 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Network, TrendingUp, Target, GitBranch, FileText, Settings } from 'lucide-react';
+import { Home, Network, TrendingUp, Target, GitBranch, FileText, Settings, Award, FolderOpen } from 'lucide-react';
 
 const Sidebar = () => {
   const location = useLocation();
 
-  const menuItems = [
+   const menuItems = [
     { name: 'Dashboard', path: '/', icon: Home },
     { name: 'Stakeholders', path: '/stakeholders', icon: Network },
     { name: 'Contexto', path: '/context', icon: TrendingUp },
     { name: 'Alcance SGC', path: '/scope', icon: Target },
-    { name: 'Procesos', path: '/processes', icon: GitBranch },  
+    { name: 'Procesos', path: '/processes', icon: GitBranch  },
+    { name: 'Documentos', path: '/documents', icon: FolderOpen },  // ⭐ NUEVO
     { name: 'Riesgos', path: '/risks', icon: FileText },
-    { name: 'Objetivos', path: '/objectives', icon: Target },
+    { name: 'Objetivos', path: '/objectives', icon: Award },
     { name: 'Configuración', path: '/settings', icon: Settings },
   ];
 
@@ -25,7 +26,7 @@ const Sidebar = () => {
       </div>
 
       {/* Menu Items */}
-      <nav className="flex-1 p-4">
+      <nav className="flex-1 p-4 overflow-y-auto">
         <ul className="space-y-2">
           {menuItems.map((item) => {
             const Icon = item.icon;
