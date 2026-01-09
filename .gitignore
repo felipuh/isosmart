@@ -58,3 +58,5 @@ logs/ai/frontend-out-0.log
 logs/nginx/error.log
 backend/backend/__pycache__/settings.cpython-39.pyc
 backend/backend/__pycache__/urls.cpython-39.pyc
+backend/backend/__pycache__/settings.cpython-39.pyc
+
