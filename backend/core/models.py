@@ -53,7 +53,7 @@ class Document(models.Model):
     document_type = models.CharField(max_length=50, choices=TYPE_CHOICES)
     content = models.TextField()
     source = models.CharField(max_length=255)
-    file_path = models.CharField(max_length=500, blank=True, null=True)
+    file_path = models.FileField(upload_to='documents/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     uploaded_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)

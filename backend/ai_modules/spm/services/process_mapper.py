@@ -403,53 +403,52 @@ class ProcessMapperEngine:
         return processes
     
     def _analyze_potential_interaction(self, source: Dict, target: Dict) -> Optional[Dict]:
-    """Analiza si dos procesos interactúan"""
-    
-    # Lógica de interacciones típicas
-    interactions_rules = [
-        # Estratégicos → Operativos
-        ('EST-01', 'OPE-01', 'input_output', ['Objetivos de calidad', 'Políticas']),
-        ('EST-03', 'OPE-01', 'information', ['Controles de riesgos']),
-        
-        # Operativos entre sí
-        ('OPE-02', 'OPE-01', 'input_output', ['Pedidos de clientes', 'Requisitos']),
-        ('OPE-01', 'OPE-03', 'information', ['Quejas detectadas']),
-        
-        # Apoyo → Operativos
-        ('APO-01', 'OPE-01', 'resource_sharing', ['Personal capacitado']),
-        ('APO-02', 'OPE-01', 'resource_sharing', ['Equipos e infraestructura']),
-        ('APO-03', 'OPE-01', 'information', ['Procedimientos', 'Registros']),
-        
-        # Apoyo → Estratégicos
-        ('APO-04', 'EST-02', 'input_output', ['Informes de auditoría']),
-        ('APO-05', 'EST-02', 'input_output', ['Acciones de mejora']),
-    ]
-    
-    source_code = source['code']
-    target_code = target['code']
-    
-    for rule in interactions_rules:
-        if rule[0] == source_code and rule[1] == target_code:
-            # ⭐ CALCULAR is_critical CORRECTAMENTE
-            source_critical = source.get('is_critical', False)
-            target_critical = target.get('is_critical', False)
+        """Analiza si dos procesos interactúan"""
+        # Lógica de interacciones típicas
+        interactions_rules = [
+            # Estratégicos → Operativos
+            ('EST-01', 'OPE-01', 'input_output', ['Objetivos de calidad', 'Políticas']),
+            ('EST-03', 'OPE-01', 'information', ['Controles de riesgos']),
             
-            # Si source o target son None, usar False
-            if source_critical is None:
-                source_critical = False
-            if target_critical is None:
-                target_critical = False
+            # Operativos entre sí
+            ('OPE-02', 'OPE-01', 'input_output', ['Pedidos de clientes', 'Requisitos']),
+            ('OPE-01', 'OPE-03', 'information', ['Quejas detectadas']),
             
-            return {
-                'source_code': source_code,
-                'target_code': target_code,
-                'interaction_type': rule[2],
-                'exchanged_items': rule[3],
-                'frequency': 'continuous' if rule[2] == 'resource_sharing' else 'on_demand',
-                'is_critical': source_critical or target_critical  # ⭐ NUNCA None
-            }
-    
-    return None
+            # Apoyo → Operativos
+            ('APO-01', 'OPE-01', 'resource_sharing', ['Personal capacitado']),
+            ('APO-02', 'OPE-01', 'resource_sharing', ['Equipos e infraestructura']),
+            ('APO-03', 'OPE-01', 'information', ['Procedimientos', 'Registros']),
+            
+            # Apoyo → Estratégicos
+            ('APO-04', 'EST-02', 'input_output', ['Informes de auditoría']),
+            ('APO-05', 'EST-02', 'input_output', ['Acciones de mejora']),
+        ]
+        
+        source_code = source['code']
+        target_code = target['code']
+        
+        for rule in interactions_rules:
+            if rule[0] == source_code and rule[1] == target_code:
+                # Calcular is_critical correctamente
+                source_critical = source.get('is_critical', False)
+                target_critical = target.get('is_critical', False)
+                
+                # Si source o target son None, usar False
+                if source_critical is None:
+                    source_critical = False
+                if target_critical is None:
+                    target_critical = False
+                
+                return {
+                    'source_code': source_code,
+                    'target_code': target_code,
+                    'interaction_type': rule[2],
+                    'exchanged_items': rule[3],
+                    'frequency': 'continuous' if rule[2] == 'resource_sharing' else 'on_demand',
+                    'is_critical': source_critical or target_critical
+                }
+        
+        return None
     
     def _calculate_centrality(self, process_code: str) -> float:
         """Calcula centralidad del proceso en la red"""

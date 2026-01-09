@@ -189,10 +189,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Directorios adicionales de estáticos
 STATICFILES_DIRS = []
 
-# Configuración de archivos media
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
 # Finder de archivos estáticos
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
