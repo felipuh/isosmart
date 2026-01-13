@@ -52,7 +52,7 @@ const DocumentDashboard = () => {
     }
   };
 
-  const handleDelete = async (document) => {
+  const handleDelete = async (doc) => {
     if (!window.confirm(`¿Estás seguro de eliminar "${document.title}"?`)) {
       return;
     }
