@@ -5,6 +5,7 @@ import CriticalStakeholders from './CriticalStakeholders';
 import PowerInterestMatrix from './PowerInterestMatrix';
 import InfluenceMetrics from './InfluenceMetrics';
 import ChangeTimeline from './ChangeTimeline';
+import StakeholderForm from './StakeholderForm';
 
 const StakeholderDashboard = () => {
   const [stakeholders, setStakeholders] = useState([]);
@@ -14,8 +15,9 @@ const StakeholderDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [analyzing, setAnalyzing] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [showForm, setShowForm] = useState(false);
+  const [editingStakeholder, setEditingStakeholder] = useState(null);
 
-  // Cargar datos iniciales
   useEffect(() => {
     loadAllData();
   }, []);
@@ -46,20 +48,51 @@ const StakeholderDashboard = () => {
     try {
       const result = await stakeholderService.runAnalysis();
       console.log('Análisis completado:', result);
-      
-      // Recargar datos después del análisis
       await loadAllData();
-      
-      alert(`✅ Análisis completado!\n\n` +
-            `Stakeholders analizados: ${result.stakeholders_analyzed}\n` +
-            `Críticos detectados: ${result.critical_stakeholders?.length || 0}\n` +
-            `Cambios detectados: ${result.changes_detected?.length || 0}`);
+      alert('✅ Análisis completado!\n\n' +
+            'Stakeholders analizados: ' + result.stakeholders_analyzed + '\n' +
+            'Críticos detectados: ' + (result.critical_stakeholders?.length || 0) + '\n' +
+            'Cambios detectados: ' + (result.changes_detected?.length || 0));
     } catch (error) {
       console.error('Error ejecutando análisis:', error);
       alert('❌ Error al ejecutar el análisis');
     } finally {
       setAnalyzing(false);
     }
+  };
+
+  const handleNewStakeholder = () => {
+    setEditingStakeholder(null);
+    setShowForm(true);
+  };
+
+  const handleEditStakeholder = (stakeholder) => {
+    setEditingStakeholder(stakeholder);
+    setShowForm(true);
+  };
+
+  const handleSaveStakeholder = async (formData) => {
+    try {
+      if (editingStakeholder) {
+        await stakeholderService.update(editingStakeholder.id, formData);
+        alert('✅ Stakeholder actualizado exitosamente');
+      } else {
+        await stakeholderService.create(formData);
+        alert('✅ Stakeholder creado exitosamente');
+      }
+      setShowForm(false);
+      setEditingStakeholder(null);
+      await loadAllData();
+    } catch (error) {
+      console.error('Error guardando stakeholder:', error);
+      alert('❌ Error al guardar el stakeholder');
+      throw error;
+    }
+  };
+
+  const handleCloseForm = () => {
+    setShowForm(false);
+    setEditingStakeholder(null);
   };
 
   const filteredStakeholders = stakeholders.filter(sh =>
@@ -88,7 +121,7 @@ const StakeholderDashboard = () => {
               disabled={analyzing}
               className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-blue-300 transition-colors"
             >
-              <RefreshCw className={`mr-2 h-4 w-4 ${analyzing ? 'animate-spin' : ''}`} />
+              <RefreshCw className={'mr-2 h-4 w-4 ' + (analyzing ? 'animate-spin' : '')} />
               {analyzing ? 'Analizando...' : 'Ejecutar Análisis IA'}
             </button>
 
@@ -100,7 +133,10 @@ const StakeholderDashboard = () => {
               Actualizar
             </button>
 
-            <button className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+            <button 
+              onClick={handleNewStakeholder}
+              className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+            >
               <Plus className="mr-2 h-4 w-4" />
               Nuevo Stakeholder
             </button>
@@ -128,15 +164,14 @@ const StakeholderDashboard = () => {
 
       {/* Main Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-        {/* Left Column - Stakeholders Críticos */}
         <div className="lg:col-span-1">
           <CriticalStakeholders 
             stakeholders={criticalStakeholders} 
             loading={loading}
+            onEdit={handleEditStakeholder}
           />
         </div>
 
-        {/* Right Column - Matriz y Métricas */}
         <div className="lg:col-span-2 space-y-6">
           <PowerInterestMatrix 
             matrixData={matrixData} 
@@ -150,6 +185,7 @@ const StakeholderDashboard = () => {
         <InfluenceMetrics 
           stakeholders={filteredStakeholders} 
           loading={loading}
+          onEdit={handleEditStakeholder}
         />
         
         <ChangeTimeline 
@@ -157,6 +193,15 @@ const StakeholderDashboard = () => {
           loading={loading}
         />
       </div>
+
+      {/* Modal Form */}
+      {showForm && (
+        <StakeholderForm
+          stakeholder={editingStakeholder}
+          onSave={handleSaveStakeholder}
+          onClose={handleCloseForm}
+        />
+      )}
     </div>
   );
 };
