@@ -3,68 +3,103 @@ import axios from 'axios';
 const API_BASE_URL = 'http://192.168.100.100/api/scope';
 
 const scopeService = {
-  // Ejecutar análisis de alcance
   runAnalysis: async (data = {}) => {
-    const response = await axios.post(`${API_BASE_URL}/analyze/`, data);
+    const response = await axios.post(API_BASE_URL + '/analyze/', data);
     return response.data;
   },
 
-  // Obtener último alcance
   getLatest: async () => {
-    const response = await axios.get(`${API_BASE_URL}/latest/`);
+    const response = await axios.get(API_BASE_URL + '/latest/');
     return response.data;
   },
 
-  // Obtener todas las definiciones de alcance
   getAll: async (status = null) => {
     const params = status ? { status } : {};
-    const response = await axios.get(`${API_BASE_URL}/scopes/`, { params });
+    const response = await axios.get(API_BASE_URL + '/scopes/', { params });
     return response.data;
   },
 
-  // Obtener alcance por ID
   getById: async (id) => {
-    const response = await axios.get(`${API_BASE_URL}/scopes/${id}/`);
+    const response = await axios.get(API_BASE_URL + '/scopes/' + id + '/');
     return response.data;
   },
 
-  // Obtener alcance activo
+  create: async (data) => {
+    const response = await axios.post(API_BASE_URL + '/scopes/', data);
+    return response.data;
+  },
+
+  update: async (id, data) => {
+    const response = await axios.put(API_BASE_URL + '/scopes/' + id + '/', data);
+    return response.data;
+  },
+
+  delete: async (id) => {
+    const response = await axios.delete(API_BASE_URL + '/scopes/' + id + '/');
+    return response.data;
+  },
+
   getActive: async () => {
-    const response = await axios.get(`${API_BASE_URL}/scopes/active/`);
+    const response = await axios.get(API_BASE_URL + '/scopes/active/');
     return response.data;
   },
 
-  // Aprobar alcance
   approve: async (id) => {
-    const response = await axios.post(`${API_BASE_URL}/scopes/${id}/approve/`);
+    const response = await axios.post(API_BASE_URL + '/scopes/' + id + '/approve/');
     return response.data;
   },
 
-  // Activar alcance
   activate: async (id) => {
-    const response = await axios.post(`${API_BASE_URL}/scopes/${id}/activate/`);
+    const response = await axios.post(API_BASE_URL + '/scopes/' + id + '/activate/');
     return response.data;
   },
 
-  // Obtener estadísticas
   getStats: async () => {
-    const response = await axios.get(`${API_BASE_URL}/scopes/stats/`);
+    const response = await axios.get(API_BASE_URL + '/scopes/stats/');
     return response.data;
   },
 
-  // Obtener procesos de un alcance
+  // Procesos
   getProcesses: async (scopeId) => {
-    const response = await axios.get(`${API_BASE_URL}/processes/`, {
-      params: { scope_id: scopeId }
-    });
+    const params = scopeId ? { scope_definition: scopeId } : {};
+    const response = await axios.get(API_BASE_URL + '/processes/', { params });
     return response.data;
   },
 
-  // Obtener ubicaciones de un alcance
+  createProcess: async (data) => {
+    const response = await axios.post(API_BASE_URL + '/processes/', data);
+    return response.data;
+  },
+
+  updateProcess: async (id, data) => {
+    const response = await axios.put(API_BASE_URL + '/processes/' + id + '/', data);
+    return response.data;
+  },
+
+  deleteProcess: async (id) => {
+    const response = await axios.delete(API_BASE_URL + '/processes/' + id + '/');
+    return response.data;
+  },
+
+  // Ubicaciones
   getLocations: async (scopeId) => {
-    const response = await axios.get(`${API_BASE_URL}/locations/`, {
-      params: { scope_id: scopeId }
-    });
+    const params = scopeId ? { scope_definition: scopeId } : {};
+    const response = await axios.get(API_BASE_URL + '/locations/', { params });
+    return response.data;
+  },
+
+  createLocation: async (data) => {
+    const response = await axios.post(API_BASE_URL + '/locations/', data);
+    return response.data;
+  },
+
+  updateLocation: async (id, data) => {
+    const response = await axios.put(API_BASE_URL + '/locations/' + id + '/', data);
+    return response.data;
+  },
+
+  deleteLocation: async (id) => {
+    const response = await axios.delete(API_BASE_URL + '/locations/' + id + '/');
     return response.data;
   }
 };

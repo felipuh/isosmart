@@ -98,22 +98,46 @@ class ProcessAnalyzer(AIModuleBase):
                 interactions_data
             )
             
-            # 7. Crear mapa de procesos en BD
-            process_map = ProcessMap.objects.create(
-                title=f"Mapa de Procesos - {datetime.now().strftime('%Y-%m')}",
-                version="1.0",
-                total_processes=len(processes_data),
-                strategic_count=sum(1 for p in processes_data if p['process_type'] == 'strategic'),
-                operational_count=sum(1 for p in processes_data if p['process_type'] == 'operational'),
-                support_count=sum(1 for p in processes_data if p['process_type'] == 'support'),
-                interaction_analysis=diagram_data,
-                critical_processes=[
-                    p['code'] for p in processes_data if p.get('is_critical')
-                ],
-                recommendations=recommendations,
-                status='draft',
-                scope_definition=scope_definition
-            )
+            # 7. Crear o actualizar mapa de procesos en BD
+            existing_map = ProcessMap.objects.filter(
+                status__in=['draft', 'active']
+            ).order_by('-created_at').first()
+            
+            if existing_map:
+                # Actualizar mapa existente
+                existing_map.title = f"Mapa de Procesos - {datetime.now().strftime('%Y-%m')}"
+                existing_map.total_processes = len(processes_data)
+                existing_map.strategic_count = sum(1 for p in processes_data if p['process_type'] == 'strategic')
+                existing_map.operational_count = sum(1 for p in processes_data if p['process_type'] == 'operational')
+                existing_map.support_count = sum(1 for p in processes_data if p['process_type'] == 'support')
+                existing_map.interaction_analysis = diagram_data
+                existing_map.critical_processes = [p['code'] for p in processes_data if p.get('is_critical')]
+                existing_map.recommendations = recommendations
+                existing_map.scope_definition = scope_definition
+                existing_map.save()
+                
+                # Eliminar procesos e interacciones anteriores del mapa
+                Process.objects.filter(process_map=existing_map).delete()
+                ProcessInteraction.objects.filter(process_map=existing_map).delete()
+                
+                process_map = existing_map
+                self.logger.info(f"Mapa de procesos actualizado: ID {process_map.id}")
+            else:
+                # Crear nuevo mapa
+                process_map = ProcessMap.objects.create(
+                    title=f"Mapa de Procesos - {datetime.now().strftime('%Y-%m')}",
+                    version="1.0",
+                    total_processes=len(processes_data),
+                    strategic_count=sum(1 for p in processes_data if p['process_type'] == 'strategic'),
+                    operational_count=sum(1 for p in processes_data if p['process_type'] == 'operational'),
+                    support_count=sum(1 for p in processes_data if p['process_type'] == 'support'),
+                    interaction_analysis=diagram_data,
+                    critical_processes=[p['code'] for p in processes_data if p.get('is_critical')],
+                    recommendations=recommendations,
+                    status='draft',
+                    scope_definition=scope_definition
+                )
+                self.logger.info(f"Nuevo mapa de procesos creado: ID {process_map.id}")
             
             # 8. Crear procesos individuales
             created_processes = self._create_processes(process_map, processes_data)

@@ -7,6 +7,7 @@ class LocationScopeSerializer(serializers.ModelSerializer):
         model = LocationScope
         fields = [
             'id',
+            'scope_definition',
             'location_name',
             'address',
             'location_type',
@@ -15,7 +16,11 @@ class LocationScopeSerializer(serializers.ModelSerializer):
             'activities',
             'employee_count',
             'is_included',
+            'created_at',
         ]
+        extra_kwargs = {
+            'scope_definition': {'required': True}
+        }
 
 
 class ProcessScopeSerializer(serializers.ModelSerializer):
@@ -23,6 +28,7 @@ class ProcessScopeSerializer(serializers.ModelSerializer):
         model = ProcessScope
         fields = [
             'id',
+            'scope_definition',
             'process_name',
             'process_code',
             'process_type',
@@ -33,7 +39,12 @@ class ProcessScopeSerializer(serializers.ModelSerializer):
             'kpis',
             'is_included',
             'exclusion_reason',
+            'created_at',
+            'updated_at',
         ]
+        extra_kwargs = {
+            'scope_definition': {'required': True}
+        }
 
 
 class ScopeDefinitionSerializer(serializers.ModelSerializer):

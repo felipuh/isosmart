@@ -344,13 +344,28 @@ class ContextAnalyzer(AIModuleBase):
             internal_insights = self._analyze_internal_factors(documents)
             external_insights = self._analyze_external_factors(documents)
             
-            # 3. Crear registro de análisis
-            analysis = ContextAnalysis.objects.create(
-                status='completed',
-                total_documents_processed=documents.count(),
-                internal_insights=internal_insights,
-                external_insights=external_insights
-            )
+            # 3. Crear o actualizar registro de análisis
+            existing_analysis = ContextAnalysis.objects.filter(
+                status='completed'
+            ).order_by('-timestamp').first()
+            
+            if existing_analysis:
+                # Actualizar análisis existente
+                existing_analysis.total_documents_processed = documents.count()
+                existing_analysis.internal_insights = internal_insights
+                existing_analysis.external_insights = external_insights
+                existing_analysis.save()
+                analysis = existing_analysis
+                logger.info(f"Análisis de contexto actualizado: ID {analysis.id}")
+            else:
+                # Crear nuevo análisis
+                analysis = ContextAnalysis.objects.create(
+                    status='completed',
+                    total_documents_processed=documents.count(),
+                    internal_insights=internal_insights,
+                    external_insights=external_insights
+                )
+                logger.info(f"Nuevo análisis de contexto creado: ID {analysis.id}")
             
             execution_time = (datetime.now() - start_time).total_seconds()
             

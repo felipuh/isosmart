@@ -5,13 +5,22 @@ import ScopeStatement from './ScopeStatement';
 import OrganizationalBoundaries from './OrganizationalBoundaries';
 import ISORequirements from './ISORequirements';
 import CoverageAnalysis from './CoverageAnalysis';
+import ScopeProcessList from './ScopeProcessList';
+import ProcessScopeForm from './ProcessScopeForm';
+import LocationScopeForm from './LocationScopeForm';
 
 const ScopeDashboard = () => {
   const [scopeData, setScopeData] = useState(null);
   const [stats, setStats] = useState(null);
+  const [processes, setProcesses] = useState([]);
+  const [locations, setLocations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [analyzing, setAnalyzing] = useState(false);
   const [showConfig, setShowConfig] = useState(false);
+  const [showProcessForm, setShowProcessForm] = useState(false);
+  const [showLocationForm, setShowLocationForm] = useState(false);
+  const [editingProcess, setEditingProcess] = useState(null);
+  const [editingLocation, setEditingLocation] = useState(null);
   const [analysisConfig, setAnalysisConfig] = useState({
     products_services: [''],
     has_design: false
@@ -31,6 +40,15 @@ const ScopeDashboard = () => {
 
       if (latestResponse.status === 'success') {
         setScopeData(latestResponse.data);
+        // Cargar procesos y ubicaciones si hay un scope activo
+        if (latestResponse.data?.id) {
+          const [procs, locs] = await Promise.all([
+            scopeService.getProcesses(latestResponse.data.id),
+            scopeService.getLocations(latestResponse.data.id)
+          ]);
+          setProcesses(Array.isArray(procs) ? procs : procs.results || []);
+          setLocations(Array.isArray(locs) ? locs : locs.results || []);
+        }
       }
       setStats(statsResponse);
     } catch (error) {
@@ -41,11 +59,10 @@ const ScopeDashboard = () => {
   };
 
   const handleRunAnalysis = async () => {
-    // Limpiar campos vacíos
     const cleanProducts = analysisConfig.products_services.filter(p => p.trim() !== '');
     
     if (cleanProducts.length === 0) {
-      alert('⚠️ Debes agregar al menos un producto o servicio');
+      alert('Debes agregar al menos un producto o servicio');
       return;
     }
 
@@ -56,24 +73,109 @@ const ScopeDashboard = () => {
         has_design: analysisConfig.has_design
       });
 
-      console.log('Análisis completado:', result);
-
       if (result.status === 'success') {
         await loadData();
         setShowConfig(false);
-        
-        alert(`✅ Análisis de alcance completado!\n\n` +
-              `Productos/Servicios: ${result.products_count}\n` +
-              `Exclusiones: ${result.exclusions_count}\n` +
-              `Cobertura: ${result.coverage_score?.toFixed(1)}%`);
+        alert('Análisis de alcance completado!\n\n' +
+              'Productos/Servicios: ' + result.products_count + '\n' +
+              'Exclusiones: ' + result.exclusions_count + '\n' +
+              'Cobertura: ' + (result.coverage_score?.toFixed(1) || 0) + '%');
       } else {
-        alert(`⚠️ ${result.message}`);
+        alert(result.message);
       }
     } catch (error) {
       console.error('Error ejecutando análisis:', error);
-      alert('❌ Error al ejecutar el análisis de alcance');
+      alert('Error al ejecutar el análisis de alcance');
     } finally {
       setAnalyzing(false);
+    }
+  };
+
+  // Handlers para Procesos
+  const handleAddProcess = () => {
+    setEditingProcess(null);
+    setShowProcessForm(true);
+  };
+
+  const handleEditProcess = (process) => {
+    setEditingProcess(process);
+    setShowProcessForm(true);
+  };
+
+  const handleSaveProcess = async (formData) => {
+    try {
+      if (editingProcess) {
+        await scopeService.updateProcess(editingProcess.id, formData);
+        alert('Proceso actualizado exitosamente');
+      } else {
+        await scopeService.createProcess(formData);
+        alert('Proceso creado exitosamente');
+      }
+      setShowProcessForm(false);
+      setEditingProcess(null);
+      await loadData();
+    } catch (error) {
+      console.error('Error guardando proceso:', error);
+      alert('Error al guardar el proceso');
+      throw error;
+    }
+  };
+
+  const handleDeleteProcess = async (process) => {
+    if (!window.confirm('¿Estás seguro de eliminar el proceso "' + process.process_name + '"?')) {
+      return;
+    }
+    try {
+      await scopeService.deleteProcess(process.id);
+      alert('Proceso eliminado exitosamente');
+      await loadData();
+    } catch (error) {
+      console.error('Error eliminando proceso:', error);
+      alert('Error al eliminar el proceso');
+    }
+  };
+
+  // Handlers para Ubicaciones
+  const handleAddLocation = () => {
+    setEditingLocation(null);
+    setShowLocationForm(true);
+  };
+
+  const handleEditLocation = (location) => {
+    setEditingLocation(location);
+    setShowLocationForm(true);
+  };
+
+  const handleSaveLocation = async (formData) => {
+    try {
+      if (editingLocation) {
+        await scopeService.updateLocation(editingLocation.id, formData);
+        alert('Ubicación actualizada exitosamente');
+      } else {
+        await scopeService.createLocation(formData);
+        alert('Ubicación creada exitosamente');
+      }
+      setShowLocationForm(false);
+      setEditingLocation(null);
+      await loadData();
+    } catch (error) {
+      console.error('Error guardando ubicación:', error);
+      alert('Error al guardar la ubicación');
+      throw error;
+    }
+  };
+
+  const handleDeleteLocation = async (location) => {
+    if (!window.confirm('¿Estás seguro de eliminar la ubicación "' + location.location_name + '"?')) {
+      return;
+    }
+    try {
+      await scopeService.deleteLocation(location.id);
+      alert('Ubicación eliminada exitosamente');
+      await loadData();
+    } catch (error) {
+      console.error('Error eliminando ubicación:', error);
+      alert('Error al eliminar la ubicación');
     }
   };
 
@@ -136,9 +238,9 @@ const ScopeDashboard = () => {
         <div className="bg-white rounded-lg shadow p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Productos/Servicios</p>
+              <p className="text-sm text-gray-600">Procesos</p>
               <p className="text-3xl font-bold text-green-600">
-                {scopeData?.total_products_count || 0}
+                {processes.length}
               </p>
             </div>
             <PlayCircle className="h-10 w-10 text-green-400" />
@@ -148,9 +250,9 @@ const ScopeDashboard = () => {
         <div className="bg-white rounded-lg shadow p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Exclusiones</p>
+              <p className="text-sm text-gray-600">Ubicaciones</p>
               <p className="text-3xl font-bold text-orange-600">
-                {scopeData?.total_exclusions_count || 0}
+                {locations.length}
               </p>
             </div>
             <FileText className="h-10 w-10 text-orange-400" />
@@ -179,7 +281,7 @@ const ScopeDashboard = () => {
               disabled={analyzing}
               className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-blue-300 transition-colors"
             >
-              <PlayCircle className={`mr-2 h-4 w-4 ${analyzing ? 'animate-spin' : ''}`} />
+              <PlayCircle className={'mr-2 h-4 w-4 ' + (analyzing ? 'animate-spin' : '')} />
               {analyzing ? 'Analizando...' : 'Definir Alcance con IA'}
             </button>
 
@@ -277,15 +379,25 @@ const ScopeDashboard = () => {
         {/* Declaración de Alcance */}
         <ScopeStatement scopeData={scopeData} loading={loading} />
 
+        {/* Procesos y Ubicaciones */}
+        <ScopeProcessList
+          processes={processes}
+          locations={locations}
+          loading={loading}
+          onAddProcess={handleAddProcess}
+          onEditProcess={handleEditProcess}
+          onDeleteProcess={handleDeleteProcess}
+          onAddLocation={handleAddLocation}
+          onEditLocation={handleEditLocation}
+          onDeleteLocation={handleDeleteLocation}
+        />
+
         {/* Grid Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Límites Organizacionales */}
           <OrganizationalBoundaries 
             boundaries={scopeData?.organizational_boundaries} 
             loading={loading}
           />
-
-          {/* Análisis de Cobertura */}
           <CoverageAnalysis 
             coverageData={scopeData?.coverage_analysis} 
             loading={loading}
@@ -298,6 +410,25 @@ const ScopeDashboard = () => {
           loading={loading}
         />
       </div>
+
+      {/* Modales */}
+      {showProcessForm && (
+        <ProcessScopeForm
+          process={editingProcess}
+          scopeId={scopeData?.id}
+          onSave={handleSaveProcess}
+          onClose={() => { setShowProcessForm(false); setEditingProcess(null); }}
+        />
+      )}
+
+      {showLocationForm && (
+        <LocationScopeForm
+          location={editingLocation}
+          scopeId={scopeData?.id}
+          onSave={handleSaveLocation}
+          onClose={() => { setShowLocationForm(false); setEditingLocation(null); }}
+        />
+      )}
     </div>
   );
 };

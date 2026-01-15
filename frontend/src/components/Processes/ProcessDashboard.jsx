@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { RefreshCw, Download, PlayCircle, FileText, Network, Target } from 'lucide-react';
+import { RefreshCw, Download, PlayCircle, FileText, Network, Target, Plus } from 'lucide-react';
 import processService from '../../services/processService';
 import ProcessDiagram from './ProcessDiagram';
 import ProcessList from './ProcessList';
 import ProcessRecommendations from './ProcessRecommendations';
+import ProcessForm from './ProcessForm';
 
 const ProcessDashboard = () => {
   const [processMap, setProcessMap] = useState(null);
+  const [processes, setProcesses] = useState([]);
   const [processesByType, setProcessesByType] = useState(null);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [analyzing, setAnalyzing] = useState(false);
+  const [showForm, setShowForm] = useState(false);
+  const [editingProcess, setEditingProcess] = useState(null);
 
   useEffect(() => {
     loadData();
@@ -27,9 +31,15 @@ const ProcessDashboard = () => {
       if (latestResponse.status === 'success') {
         setProcessMap(latestResponse.data);
         
-        // Cargar procesos por tipo
-        const processesByTypeData = await processService.getProcessesByType(latestResponse.data.id);
-        setProcessesByType(processesByTypeData);
+        // Cargar procesos
+        if (latestResponse.data?.id) {
+          const [procs, processesByTypeData] = await Promise.all([
+            processService.getProcesses(latestResponse.data.id),
+            processService.getProcessesByType(latestResponse.data.id)
+          ]);
+          setProcesses(Array.isArray(procs) ? procs : procs.results || []);
+          setProcessesByType(processesByTypeData);
+        }
       }
       
       setStats(statsResponse);
@@ -48,27 +58,69 @@ const ProcessDashboard = () => {
     setAnalyzing(true);
     try {
       const result = await processService.runMapping({});
-
       console.log('Mapeo completado:', result);
 
       if (result.status === 'success') {
         await loadData();
         
-        alert(`✅ Mapeo de procesos completado!\n\n` +
-              `Total procesos: ${result.total_processes}\n` +
-              `Estratégicos: ${result.strategic_count}\n` +
-              `Operativos: ${result.operational_count}\n` +
-              `Apoyo: ${result.support_count}\n` +
-              `Interacciones: ${result.total_interactions}\n` +
-              `Procesos críticos: ${result.critical_processes_count}`);
+        alert('Mapeo de procesos completado!\n\n' +
+              'Total procesos: ' + result.total_processes + '\n' +
+              'Estratégicos: ' + result.strategic_count + '\n' +
+              'Operativos: ' + result.operational_count + '\n' +
+              'Apoyo: ' + result.support_count + '\n' +
+              'Interacciones: ' + result.total_interactions + '\n' +
+              'Procesos críticos: ' + result.critical_processes_count);
       } else {
-        alert(`⚠️ ${result.message}`);
+        alert(result.message);
       }
     } catch (error) {
       console.error('Error ejecutando mapeo:', error);
-      alert('❌ Error al ejecutar el mapeo de procesos');
+      alert('Error al ejecutar el mapeo de procesos');
     } finally {
       setAnalyzing(false);
+    }
+  };
+
+  const handleAddProcess = () => {
+    setEditingProcess(null);
+    setShowForm(true);
+  };
+
+  const handleEditProcess = (process) => {
+    setEditingProcess(process);
+    setShowForm(true);
+  };
+
+  const handleSaveProcess = async (formData) => {
+    try {
+      if (editingProcess) {
+        await processService.updateProcess(editingProcess.id, formData);
+        alert('Proceso actualizado exitosamente');
+      } else {
+        await processService.createProcess(formData);
+        alert('Proceso creado exitosamente');
+      }
+      setShowForm(false);
+      setEditingProcess(null);
+      await loadData();
+    } catch (error) {
+      console.error('Error guardando proceso:', error);
+      alert('Error al guardar el proceso');
+      throw error;
+    }
+  };
+
+  const handleDeleteProcess = async (process) => {
+    if (!window.confirm('¿Estás seguro de eliminar el proceso "' + process.name + '"?')) {
+      return;
+    }
+    try {
+      await processService.deleteProcess(process.id);
+      alert('Proceso eliminado exitosamente');
+      await loadData();
+    } catch (error) {
+      console.error('Error eliminando proceso:', error);
+      alert('Error al eliminar el proceso');
     }
   };
 
@@ -100,7 +152,7 @@ const ProcessDashboard = () => {
             <div>
               <p className="text-sm text-gray-600">Total Procesos</p>
               <p className="text-3xl font-bold text-blue-600">
-                {processMap?.total_processes || 0}
+                {processMap?.total_processes || processes.length || 0}
               </p>
             </div>
             <Network className="h-10 w-10 text-blue-400" />
@@ -153,8 +205,17 @@ const ProcessDashboard = () => {
               disabled={analyzing}
               className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-blue-300 transition-colors"
             >
-              <PlayCircle className={`mr-2 h-4 w-4 ${analyzing ? 'animate-spin' : ''}`} />
+              <PlayCircle className={'mr-2 h-4 w-4 ' + (analyzing ? 'animate-spin' : '')} />
               {analyzing ? 'Mapeando...' : 'Mapear Procesos con IA'}
+            </button>
+
+            <button
+              onClick={handleAddProcess}
+              disabled={!processMap}
+              className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-gray-300 transition-colors"
+            >
+              <Plus className="mr-2 h-4 w-4" />
+              Nuevo Proceso
             </button>
 
             <button
@@ -183,7 +244,8 @@ const ProcessDashboard = () => {
         <div className="space-y-6">
           {/* Mapa de Procesos */}
           <ProcessDiagram 
-            diagramData={processMap?.interaction_analysis} 
+            diagramData={processMap?.interaction_analysis}
+            processes={processes}
             loading={loading}
           />
 
@@ -195,8 +257,11 @@ const ProcessDashboard = () => {
 
           {/* Lista de Procesos */}
           <ProcessList 
-            processesByType={processesByType} 
+            processesByType={processesByType}
+            processes={processes}
             loading={loading}
+            onEdit={handleEditProcess}
+            onDelete={handleDeleteProcess}
           />
         </div>
       ) : (
@@ -213,10 +278,20 @@ const ProcessDashboard = () => {
             disabled={analyzing}
             className="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-blue-300 transition-colors"
           >
-            <PlayCircle className={`mr-2 h-5 w-5 ${analyzing ? 'animate-spin' : ''}`} />
+            <PlayCircle className={'mr-2 h-5 w-5 ' + (analyzing ? 'animate-spin' : '')} />
             {analyzing ? 'Mapeando...' : 'Mapear Procesos con IA'}
           </button>
         </div>
+      )}
+
+      {/* Modal Form */}
+      {showForm && (
+        <ProcessForm
+          process={editingProcess}
+          mapId={processMap?.id}
+          onSave={handleSaveProcess}
+          onClose={() => { setShowForm(false); setEditingProcess(null); }}
+        />
       )}
     </div>
   );

@@ -94,22 +94,49 @@ class ScopeAnalyzer(AIModuleBase):
             
             scope_statement = self.engine.generate_scope_statement(full_scope_data)
             
-            # 7. Crear definición de alcance en BD
-            scope_definition = ScopeDefinition.objects.create(
-                title=f"Alcance SGC - {datetime.now().strftime('%Y-%m')}",
-                version="1.0",
-                organizational_boundaries=boundaries,
-                products_services=products_services,
-                applicable_requirements={
+            # 7. Crear o actualizar definición de alcance en BD
+            existing_scope = ScopeDefinition.objects.filter(
+                status__in=['draft', 'active']
+            ).order_by('-created_at').first()
+            
+            if existing_scope:
+                # Actualizar alcance existente
+                existing_scope.title = f"Alcance SGC - {datetime.now().strftime('%Y-%m')}"
+                existing_scope.organizational_boundaries = boundaries
+                existing_scope.products_services = products_services
+                existing_scope.applicable_requirements = {
                     'requirements': requirements_eval['applicable_requirements'],
                     'coverage': requirements_eval['coverage_percentage']
-                },
-                exclusions=requirements_eval['exclusions'],
-                scope_statement=scope_statement,
-                coverage_analysis=coverage,
-                status='draft',
-                context_analysis=context_analysis
-            )
+                }
+                existing_scope.exclusions = requirements_eval['exclusions']
+                existing_scope.scope_statement = scope_statement
+                existing_scope.coverage_analysis = coverage
+                existing_scope.context_analysis = context_analysis
+                existing_scope.save()
+                
+                # Eliminar ubicaciones anteriores y recrear
+                LocationScope.objects.filter(scope_definition=existing_scope).delete()
+                
+                scope_definition = existing_scope
+                self.logger.info(f"Alcance actualizado: ID {scope_definition.id}")
+            else:
+                # Crear nuevo alcance
+                scope_definition = ScopeDefinition.objects.create(
+                    title=f"Alcance SGC - {datetime.now().strftime('%Y-%m')}",
+                    version="1.0",
+                    organizational_boundaries=boundaries,
+                    products_services=products_services,
+                    applicable_requirements={
+                        'requirements': requirements_eval['applicable_requirements'],
+                        'coverage': requirements_eval['coverage_percentage']
+                    },
+                    exclusions=requirements_eval['exclusions'],
+                    scope_statement=scope_statement,
+                    coverage_analysis=coverage,
+                    status='draft',
+                    context_analysis=context_analysis
+                )
+                self.logger.info(f"Nuevo alcance creado: ID {scope_definition.id}")
             
             # 8. Crear ubicaciones
             self._create_locations(scope_definition, boundaries)

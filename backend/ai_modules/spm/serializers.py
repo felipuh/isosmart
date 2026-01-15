@@ -7,13 +7,18 @@ class ProcessActivitySerializer(serializers.ModelSerializer):
         model = ProcessActivity
         fields = [
             'id',
+            'process',
             'sequence_number',
             'name',
             'description',
             'responsible',
             'estimated_duration',
             'tools_required',
+            'created_at',
         ]
+        extra_kwargs = {
+            'process': {'required': True}
+        }
 
 
 class ProcessSerializer(serializers.ModelSerializer):
@@ -24,6 +29,7 @@ class ProcessSerializer(serializers.ModelSerializer):
         model = Process
         fields = [
             'id',
+            'process_map',
             'code',
             'name',
             'description',
@@ -45,6 +51,9 @@ class ProcessSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at',
         ]
+        extra_kwargs = {
+            'process_map': {'required': True}
+        }
     
     def get_activities_count(self, obj):
         return obj.activities.count()
@@ -64,6 +73,7 @@ class ProcessInteractionSerializer(serializers.ModelSerializer):
         model = ProcessInteraction
         fields = [
             'id',
+            'process_map',
             'source_process',
             'source_process_name',
             'target_process',
@@ -73,7 +83,13 @@ class ProcessInteractionSerializer(serializers.ModelSerializer):
             'exchanged_items',
             'frequency',
             'is_critical',
+            'created_at',
         ]
+        extra_kwargs = {
+            'process_map': {'required': True},
+            'source_process': {'required': True},
+            'target_process': {'required': True}
+        }
 
 
 class ProcessMapSerializer(serializers.ModelSerializer):
@@ -98,6 +114,7 @@ class ProcessMapSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at',
             'created_by',
+            'scope_definition',
             'processes',
             'interactions',
         ]
