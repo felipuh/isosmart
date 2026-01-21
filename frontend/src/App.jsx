@@ -7,7 +7,7 @@ import ContextDashboard from './components/Context/ContextDashboard';
 import ScopeDashboard from './components/Scope/ScopeDashboard';
 import ProcessDashboard from './components/Processes/ProcessDashboard';
 import DocumentDashboard from './components/Documents/DocumentDashboard';
-import RiskDashboard  from './components/Risks/RiskDashboard';
+import RiskDashboard from './components/Risks/RiskDashboard';
 
 // Componentes placeholder para rutas faltantes
 const ComingSoon = ({ title }) => (
