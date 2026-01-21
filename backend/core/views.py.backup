@@ -458,3 +458,51 @@ def risk_stats(request):
         'by_status': {item['status']: item['count'] for item in by_status},
         'by_category': {item['risk_category']: item['count'] for item in by_category}
     })
+    @action(detail=False, methods=['get'])
+    def by_level(self, request):
+        """Obtener riesgos agrupados por nivel"""
+        levels = {}
+        level_choices = [('bajo', 'Bajo'), ('medio', 'Medio'), ('alto', 'Alto'), ('critico', 'Crítico')]
+        for level_code, level_name in level_choices:
+            risks = RiskMatrix.objects.filter(
+                risk_level=level_code,
+                status__in=['identified', 'under_analysis']
+            )
+            levels[level_code] = {
+                'name': level_name,
+                'count': risks.count(),
+                'risks': RiskMatrixSerializer(risks[:10], many=True).data
+            }
+        return Response(levels)
+
+    @action(detail=False, methods=['get'])
+    def matrix_data(self, request):
+        """Obtener datos para la matriz visual de riesgos"""
+        matrix = {}
+        prob_values = ['muy_baja', 'baja', 'media', 'alta', 'muy_alta']
+        impact_values = ['muy_bajo', 'bajo', 'medio', 'alto', 'muy_alto']
+        
+        for prob in prob_values:
+            matrix[prob] = {}
+            for impact in impact_values:
+                risks = RiskMatrix.objects.filter(
+                    probability=prob,
+                    impact=impact,
+                    status__in=['identified', 'under_analysis']
+                )
+                matrix[prob][impact] = {
+                    'count': risks.count(),
+                    'risks': [{'id': r.id, 'description': r.risk_description[:50]} for r in risks[:5]]
+                }
+        
+        return Response({
+            'matrix': matrix,
+            'probability_labels': dict([('muy_baja', 'Muy Baja'), ('baja', 'Baja'), ('media', 'Media'), ('alta', 'Alta'), ('muy_alta', 'Muy Alta')]),
+            'impact_labels': dict([('muy_bajo', 'Muy Bajo'), ('bajo', 'Bajo'), ('medio', 'Medio'), ('alto', 'Alto'), ('muy_alto', 'Muy Alto')])
+        })
+
+    @action(detail=False, methods=['get'])
+    def categories(self, request):
+        """Obtener lista de categorías únicas"""
+        categories = RiskMatrix.objects.values_list('risk_category', flat=True).distinct()
+        return Response(list(filter(None, categories)))
