@@ -16,7 +16,7 @@ function App() {
   return (
     <ThemeProvider>
       <Router>
-        <div className="flex h-screen bg-gray-100 dark:bg-slate-900 transition-colors duration-300">
+        <div className="flex h-screen bg-slate-100 dark:bg-slate-900 transition-colors duration-300">
           <Sidebar />
           <div className="flex-1 overflow-auto">
             <Routes>

@@ -78,14 +78,14 @@ const ObjectiveDashboard = () => {
     }
   };
 
-  const StatCard = ({ icon, iconBg, value, label, valueColor = 'text-gray-900', suffix = '' }) => (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+  const StatCard = ({ icon, iconBg, value, label, valueColor = 'text-slate-900 dark:text-white', suffix = '' }) => (
+    <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 border border-slate-200 dark:border-slate-700 p-6 transition-colors duration-300">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-gray-500">{label}</p>
+          <p className="text-sm font-medium text-slate-500 dark:text-slate-400">{label}</p>
           <p className={`text-3xl font-bold mt-1 ${valueColor}`}>{value}{suffix}</p>
         </div>
-        <div className={`p-3 rounded-xl ${iconBg}`}>
+        <div className={`p-3 rounded-xl ${iconBg} dark:bg-opacity-20`}>
           {icon}
         </div>
       </div>
@@ -93,11 +93,11 @@ const ObjectiveDashboard = () => {
   );
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
+    <div className="p-6 bg-slate-50 dark:bg-slate-900 min-h-screen transition-colors duration-300">
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Objetivos de Calidad</h1>
-        <p className="text-gray-500 mt-1">
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Objetivos de Calidad</h1>
+        <p className="text-slate-500 dark:text-slate-400 mt-1">
           Gestiona los objetivos de calidad del SGC según ISO 9001:2015 - Cláusula 6.2
         </p>
       </div>
@@ -137,7 +137,7 @@ const ObjectiveDashboard = () => {
       <div className="flex flex-wrap items-center gap-3 mb-6">
         <button
           onClick={handleCreate}
-          className="inline-flex items-center px-4 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
+          className="inline-flex items-center px-4 py-2.5 bg-blue-600 dark:bg-blue-700 text-white text-sm font-medium rounded-lg hover:bg-blue-700 dark:hover:bg-blue-800 transition-colors shadow-sm"
         >
           <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -146,7 +146,7 @@ const ObjectiveDashboard = () => {
         </button>
         <button
           onClick={loadData}
-          className="inline-flex items-center px-4 py-2.5 bg-white text-gray-700 text-sm font-medium rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors"
+          className="inline-flex items-center px-4 py-2.5 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm font-medium rounded-lg border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
         >
           <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -159,7 +159,7 @@ const ObjectiveDashboard = () => {
           <select
             value={filters.status}
             onChange={(e) => setFilters({...filters, status: e.target.value})}
-            className="px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+            className="px-4 py-2.5 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors"
           >
             <option value="">Todos los estados</option>
             <option value="active">Activo</option>
@@ -173,9 +173,9 @@ const ObjectiveDashboard = () => {
 
       {/* Error Alert */}
       {error && (
-        <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-center justify-between">
+        <div className="mb-6 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg flex items-center justify-between transition-colors">
           <span>{error}</span>
-          <button onClick={() => setError(null)} className="text-red-500 hover:text-red-700">
+          <button onClick={() => setError(null)} className="text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -186,7 +186,7 @@ const ObjectiveDashboard = () => {
       {/* Main Content */}
       {loading ? (
         <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 dark:border-blue-400"></div>
         </div>
       ) : (
         <ObjectiveList
@@ -198,16 +198,16 @@ const ObjectiveDashboard = () => {
       )}
 
       {/* Info Card */}
-      <div className="mt-6 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-5 border border-green-100">
+      <div className="mt-6 bg-gradient-to-r from-green-50 dark:from-green-900/30 to-emerald-50 dark:to-emerald-900/30 rounded-xl p-5 border border-green-100 dark:border-green-800 transition-colors">
         <div className="flex items-start space-x-3">
           <div className="flex-shrink-0">
-            <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
             </svg>
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-gray-900">Objetivos SMART</h3>
-            <p className="text-sm text-gray-600 mt-1">
+            <h3 className="text-sm font-semibold text-slate-900 dark:text-white">Objetivos SMART</h3>
+            <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
               Los objetivos de calidad deben ser medibles, coherentes con la política de calidad 
               y pertinentes para la conformidad de productos/servicios y el aumento de la satisfacción del cliente.
             </p>

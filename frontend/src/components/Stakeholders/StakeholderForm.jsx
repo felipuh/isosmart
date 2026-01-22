@@ -139,24 +139,24 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
-        <div className="sticky top-0 bg-white border-b px-6 py-4 flex items-center justify-between">
-          <h2 className="text-xl font-bold text-gray-900">
+    <div className="fixed inset-0 bg-black dark:bg-gray-900 bg-opacity-50 dark:bg-opacity-75 flex items-center justify-center z-50 p-4 transition-colors">
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow-xl dark:shadow-slate-900/50 w-full max-w-3xl max-h-[90vh] overflow-y-auto transition-colors">
+        <div className="sticky top-0 bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 px-6 py-4 flex items-center justify-between transition-colors">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">
             {stakeholder ? 'Editar Stakeholder' : 'Nuevo Stakeholder'}
           </h2>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+          <button onClick={onClose} className="text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-300 transition-colors">
             <X className="h-6 w-6" />
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
           {/* Información Básica */}
-          <div className="bg-gray-50 rounded-lg p-4">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Información Básica</h3>
+          <div className="bg-gray-50 dark:bg-slate-700/30 rounded-lg p-4 transition-colors">
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Información Básica</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
                   Nombre *
                 </label>
                 <input
@@ -165,20 +165,20 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
                   placeholder="Nombre del stakeholder"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
                   Tipo de Stakeholder *
                 </label>
                 <select
                   name="stakeholder_type"
                   value={formData.stakeholder_type}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
                 >
                   {STAKEHOLDER_TYPES.map(type => (
                     <option key={type.value} value={type.value}>{type.label}</option>
@@ -187,7 +187,7 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
                   Organización
                 </label>
                 <input
@@ -195,13 +195,13 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
                   name="organization"
                   value={formData.organization}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
                   placeholder="Empresa u organización"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
                   Persona de Contacto
                 </label>
                 <input
@@ -209,13 +209,13 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
                   name="contact_person"
                   value={formData.contact_person}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
                   placeholder="Nombre del contacto"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
                   Email
                 </label>
                 <input
@@ -223,13 +223,13 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
                   placeholder="correo@ejemplo.com"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
                   Teléfono
                 </label>
                 <input
@@ -237,7 +237,7 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
                   placeholder="+506 8888-8888"
                 />
               </div>
@@ -245,18 +245,18 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
           </div>
 
           {/* Análisis de Poder e Interés */}
-          <div className="bg-blue-50 rounded-lg p-4">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Análisis de Poder e Interés</h3>
+          <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 border border-blue-100 dark:border-blue-800 transition-colors">
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Análisis de Poder e Interés</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
                   Nivel de Poder
                 </label>
                 <select
                   name="power"
                   value={formData.power}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
                 >
                   {POWER_LEVELS.map(level => (
                     <option key={level.value} value={level.value}>{level.label}</option>
@@ -265,14 +265,14 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
                   Nivel de Interés
                 </label>
                 <select
                   name="interest"
                   value={formData.interest}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
                 >
                   {INTEREST_LEVELS.map(level => (
                     <option key={level.value} value={level.value}>{level.label}</option>
@@ -281,7 +281,7 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
                   Satisfacción (0-10)
                 </label>
                 <input
@@ -292,25 +292,25 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
                   min="0"
                   max="10"
                   step="0.5"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
                 />
               </div>
             </div>
           </div>
 
           {/* Comunicación */}
-          <div className="bg-green-50 rounded-lg p-4">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Estrategia de Comunicación</h3>
+          <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-4 border border-green-100 dark:border-green-800 transition-colors">
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Estrategia de Comunicación</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
                   Frecuencia de Comunicación
                 </label>
                 <select
                   name="communication_frequency"
                   value={formData.communication_frequency}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
                 >
                   {COMMUNICATION_FREQUENCY.map(freq => (
                     <option key={freq.value} value={freq.value}>{freq.label}</option>
@@ -319,7 +319,7 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
                   Canal Preferido
                 </label>
                 <input
@@ -327,7 +327,7 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
                   name="preferred_channel"
                   value={formData.preferred_channel}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
                   placeholder="Email, Teléfono, Reunión, etc."
                 />
               </div>
@@ -335,33 +335,33 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
           </div>
 
           {/* Expectativas */}
-          <div className="bg-yellow-50 rounded-lg p-4">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Expectativas</h3>
+          <div className="bg-yellow-50 dark:bg-yellow-900/20 rounded-lg p-4 border border-yellow-100 dark:border-yellow-800 transition-colors">
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Expectativas</h3>
             <div className="flex gap-2 mb-3">
               <input
                 type="text"
                 value={newExpectation}
                 onChange={(e) => setNewExpectation(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddExpectation())}
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="flex-1 px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
                 placeholder="Agregar expectativa..."
               />
               <button
                 type="button"
                 onClick={handleAddExpectation}
-                className="px-3 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600"
+                className="px-3 py-2 bg-yellow-500 dark:bg-yellow-600 text-white rounded-lg hover:bg-yellow-600 dark:hover:bg-yellow-700 transition-colors"
               >
                 <Plus className="h-5 w-5" />
               </button>
             </div>
             <div className="space-y-2">
               {formData.expectations.map((exp, index) => (
-                <div key={index} className="flex items-center justify-between bg-white p-2 rounded border">
-                  <span className="text-sm">{exp}</span>
+                <div key={index} className="flex items-center justify-between bg-white dark:bg-slate-700 p-2 rounded border border-gray-200 dark:border-slate-600 transition-colors">
+                  <span className="text-sm text-gray-900 dark:text-white">{exp}</span>
                   <button
                     type="button"
                     onClick={() => handleRemoveExpectation(index)}
-                    className="text-red-500 hover:text-red-700"
+                    className="text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors"
                   >
                     <Trash2 className="h-4 w-4" />
                   </button>
@@ -371,33 +371,33 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
           </div>
 
           {/* Requisitos */}
-          <div className="bg-purple-50 rounded-lg p-4">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Requisitos</h3>
+          <div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-4 border border-purple-100 dark:border-purple-800 transition-colors">
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Requisitos</h3>
             <div className="flex gap-2 mb-3">
               <input
                 type="text"
                 value={newRequirement}
                 onChange={(e) => setNewRequirement(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddRequirement())}
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="flex-1 px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
                 placeholder="Agregar requisito..."
               />
               <button
                 type="button"
                 onClick={handleAddRequirement}
-                className="px-3 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600"
+                className="px-3 py-2 bg-purple-500 dark:bg-purple-600 text-white rounded-lg hover:bg-purple-600 dark:hover:bg-purple-700 transition-colors"
               >
                 <Plus className="h-5 w-5" />
               </button>
             </div>
             <div className="space-y-2">
               {formData.requirements.map((req, index) => (
-                <div key={index} className="flex items-center justify-between bg-white p-2 rounded border">
-                  <span className="text-sm">{req}</span>
+                <div key={index} className="flex items-center justify-between bg-white dark:bg-slate-700 p-2 rounded border border-gray-200 dark:border-slate-600 transition-colors">
+                  <span className="text-sm text-gray-900 dark:text-white">{req}</span>
                   <button
                     type="button"
                     onClick={() => handleRemoveRequirement(index)}
-                    className="text-red-500 hover:text-red-700"
+                    className="text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors"
                   >
                     <Trash2 className="h-4 w-4" />
                   </button>
@@ -408,7 +408,7 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
 
           {/* Notas */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
               Notas Adicionales
             </label>
             <textarea
@@ -416,7 +416,7 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
               value={formData.notes}
               onChange={handleChange}
               rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
               placeholder="Observaciones o notas relevantes..."
             />
           </div>
@@ -428,26 +428,26 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
               name="is_active"
               checked={formData.is_active}
               onChange={handleChange}
-              className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              className="h-4 w-4 text-blue-600 dark:text-blue-500 border-gray-300 dark:border-slate-600 rounded dark:bg-slate-700 focus:ring-blue-500 dark:focus:ring-blue-400"
             />
-            <label className="ml-2 text-sm text-gray-700">
+            <label className="ml-2 text-sm text-gray-700 dark:text-slate-300">
               Stakeholder Activo
             </label>
           </div>
 
           {/* Botones */}
-          <div className="flex justify-end gap-3 pt-4 border-t">
+          <div className="flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-slate-700 transition-colors">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200"
+              className="px-4 py-2 text-gray-700 dark:text-slate-300 bg-gray-100 dark:bg-slate-700 rounded-lg hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={saving}
-              className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-blue-300"
+              className="flex items-center px-4 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-800 disabled:bg-blue-300 dark:disabled:bg-blue-900 transition-colors"
             >
               <Save className="mr-2 h-4 w-4" />
               {saving ? 'Guardando...' : 'Guardar'}

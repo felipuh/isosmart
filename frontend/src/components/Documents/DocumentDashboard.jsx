@@ -102,75 +102,75 @@ const DocumentDashboard = () => {
   ];
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
+    <div className="p-6 bg-slate-50 dark:bg-slate-900 min-h-screen transition-colors duration-300">
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">
           Gestión de Documentos
         </h1>
-        <p className="text-gray-600">
+        <p className="text-slate-600 dark:text-slate-400">
           Administra los documentos organizacionales para análisis del SGC
         </p>
       </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Total Documentos</p>
-              <p className="text-3xl font-bold text-blue-600">
+              <p className="text-sm text-slate-600 dark:text-slate-400">Total Documentos</p>
+              <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">
                 {stats?.total_documents || 0}
               </p>
             </div>
-            <FileText className="h-10 w-10 text-blue-400" />
+            <FileText className="h-10 w-10 text-blue-400 dark:text-blue-500" />
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Políticas</p>
-              <p className="text-3xl font-bold text-purple-600">
+              <p className="text-sm text-slate-600 dark:text-slate-400">Políticas</p>
+              <p className="text-3xl font-bold text-purple-600 dark:text-purple-400">
                 {stats?.by_type?.politica || 0}
               </p>
             </div>
-            <Folder className="h-10 w-10 text-purple-400" />
+            <Folder className="h-10 w-10 text-purple-400 dark:text-purple-500" />
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Procedimientos</p>
-              <p className="text-3xl font-bold text-green-600">
+              <p className="text-sm text-slate-600 dark:text-slate-400">Procedimientos</p>
+              <p className="text-3xl font-bold text-green-600 dark:text-green-400">
                 {stats?.by_type?.procedimiento || 0}
               </p>
             </div>
-            <Folder className="h-10 w-10 text-green-400" />
+            <Folder className="h-10 w-10 text-green-400 dark:text-green-500" />
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Reportes</p>
-              <p className="text-3xl font-bold text-orange-600">
+              <p className="text-sm text-slate-600 dark:text-slate-400">Reportes</p>
+              <p className="text-3xl font-bold text-orange-600 dark:text-orange-400">
                 {stats?.by_type?.reporte || 0}
               </p>
             </div>
-            <UploadIcon className="h-10 w-10 text-orange-400" />
+            <UploadIcon className="h-10 w-10 text-orange-400 dark:text-orange-500" />
           </div>
         </div>
       </div>
 
       {/* Actions Bar */}
-      <div className="bg-white rounded-lg shadow p-4 mb-6">
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-4 mb-6 transition-colors">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center space-x-3">
             <button
               onClick={() => setShowUploadForm(!showUploadForm)}
-              className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 transition-colors"
             >
               <Plus className="mr-2 h-4 w-4" />
               {showUploadForm ? 'Cancelar' : 'Subir Documento'}
@@ -178,7 +178,7 @@ const DocumentDashboard = () => {
 
             <button
               onClick={loadData}
-              className="flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+              className="flex items-center px-4 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
             >
               <RefreshCw className="mr-2 h-4 w-4" />
               Actualizar
@@ -186,11 +186,11 @@ const DocumentDashboard = () => {
           </div>
 
           <div className="flex items-center space-x-3">
-            <label className="text-sm text-gray-600">Filtrar por tipo:</label>
+            <label className="text-sm text-slate-600 dark:text-slate-400 transition-colors">Filtrar por tipo:</label>
             <select
               value={filterType}
               onChange={(e) => setFilterType(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="px-3 py-2 border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
             >
               {documentTypes.map(type => (
                 <option key={type.value} value={type.value}>
@@ -223,20 +223,20 @@ const DocumentDashboard = () => {
 
       {/* Info Box */}
       {documents.length > 0 && (
-        <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <div className="mt-6 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-lg p-4 transition-colors">
           <div className="flex items-start">
-            <FileText className="h-5 w-5 text-blue-500 mr-3 mt-0.5" />
+            <FileText className="h-5 w-5 text-blue-500 dark:text-blue-400 mr-3 mt-0.5" />
             <div>
-              <h4 className="text-sm font-semibold text-blue-900 mb-1">
+              <h4 className="text-sm font-semibold text-blue-900 dark:text-blue-300 mb-1">
                 Análisis Automático con IA
               </h4>
-              <p className="text-sm text-blue-700">
+              <p className="text-sm text-blue-700 dark:text-blue-200">
                 Los documentos subidos pueden ser analizados automáticamente por el módulo SCA 
                 (Smart Context Analyzer) para identificar fortalezas, debilidades, oportunidades 
                 y amenazas de tu organización.
               </p>
               <a href="/context"
-                className="text-sm text-blue-600 hover:text-blue-800 font-medium mt-2 inline-block">
+                className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium mt-2 inline-block transition-colors">
                 Ir a Análisis de Contexto →
               </a>
             </div>

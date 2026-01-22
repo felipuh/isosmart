@@ -6,8 +6,14 @@
    ISO SMART - ESTILOS GLOBALES
    ================================================ */
 
+/* Aplicar tema oscuro a nivel de documentos */
+html.dark {
+  color-scheme: dark;
+}
+
 /* Transiciones suaves para el cambio de tema */
-html {
+html,
+body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 

@@ -4,13 +4,13 @@ import { Clock, AlertCircle, TrendingDown, TrendingUp, Activity } from 'lucide-r
 const ChangeTimeline = ({ changes, loading }) => {
   if (loading) {
     return (
-      <div className="bg-white rounded-lg shadow p-6">
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
         <div className="animate-pulse">
-          <div className="h-6 bg-gray-200 rounded w-1/3 mb-4"></div>
+          <div className="h-6 bg-slate-200 dark:bg-slate-700 rounded w-1/3 mb-4"></div>
           <div className="space-y-3">
-            <div className="h-16 bg-gray-200 rounded"></div>
-            <div className="h-16 bg-gray-200 rounded"></div>
-            <div className="h-16 bg-gray-200 rounded"></div>
+            <div className="h-16 bg-slate-200 dark:bg-slate-700 rounded"></div>
+            <div className="h-16 bg-slate-200 dark:bg-slate-700 rounded"></div>
+            <div className="h-16 bg-slate-200 dark:bg-slate-700 rounded"></div>
           </div>
         </div>
       </div>
@@ -19,12 +19,12 @@ const ChangeTimeline = ({ changes, loading }) => {
 
   if (!changes || changes.length === 0) {
     return (
-      <div className="bg-white rounded-lg shadow p-6">
-        <h3 className="text-lg font-semibold mb-4 flex items-center">
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
+        <h3 className="text-lg font-semibold dark:text-white mb-4 flex items-center">
           <Clock className="mr-2 h-5 w-5" />
           Cambios Recientes
         </h3>
-        <p className="text-gray-500 text-center py-8">No hay cambios registrados</p>
+        <p className="text-slate-500 dark:text-slate-400 text-center py-8">No hay cambios registrados</p>
       </div>
     );
   }
@@ -38,10 +38,10 @@ const ChangeTimeline = ({ changes, loading }) => {
 
   const getSeverityColor = (severity) => {
     switch (severity) {
-      case 'alto': return 'bg-red-100 text-red-800 border-red-300';
-      case 'medio': return 'bg-yellow-100 text-yellow-800 border-yellow-300';
-      case 'bajo': return 'bg-blue-100 text-blue-800 border-blue-300';
-      default: return 'bg-gray-100 text-gray-800 border-gray-300';
+      case 'alto': return 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 border-red-300 dark:border-red-700';
+      case 'medio': return 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 border-yellow-300 dark:border-yellow-700';
+      case 'bajo': return 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 border-blue-300 dark:border-blue-700';
+      default: return 'bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-300 border-slate-300 dark:border-slate-600';
     }
   };
 
@@ -60,8 +60,8 @@ const ChangeTimeline = ({ changes, loading }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
-      <h3 className="text-lg font-semibold mb-4 flex items-center">
+    <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
+      <h3 className="text-lg font-semibold dark:text-white mb-4 flex items-center">
         <Clock className="mr-2 h-5 w-5 text-blue-500" />
         Cambios Recientes ({changes.length})
       </h3>
@@ -70,14 +70,14 @@ const ChangeTimeline = ({ changes, loading }) => {
         {changes.slice(0, 10).map((change, index) => (
           <div
             key={index}
-            className="border-l-4 border-gray-300 pl-4 py-3 hover:bg-gray-50 transition-colors"
+            className="border-l-4 border-slate-300 dark:border-slate-600 pl-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors rounded"
           >
             <div className="flex items-start justify-between">
               <div className="flex items-start space-x-3 flex-1">
                 <div className="mt-1">{getChangeIcon(change.change_type)}</div>
                 <div className="flex-1">
                   <div className="flex items-center space-x-2">
-                    <h4 className="font-semibold text-gray-900">{change.stakeholder_name}</h4>
+                    <h4 className="font-semibold dark:text-slate-100">{change.stakeholder_name}</h4>
                     {change.severity && (
                       <span className={`text-xs px-2 py-1 rounded border ${getSeverityColor(change.severity)}`}>
                         {change.severity.toUpperCase()}
@@ -87,8 +87,8 @@ const ChangeTimeline = ({ changes, loading }) => {
                   
                   {change.new_expectations && change.new_expectations.length > 0 && (
                     <div className="mt-2">
-                      <p className="text-sm text-gray-600">Nuevas expectativas:</p>
-                      <ul className="list-disc list-inside text-sm text-gray-700">
+                      <p className="text-sm dark:text-slate-300">Nuevas expectativas:</p>
+                      <ul className="list-disc list-inside text-sm dark:text-slate-400">
                         {change.new_expectations.map((exp, idx) => (
                           <li key={idx}>{exp}</li>
                         ))}
@@ -98,8 +98,8 @@ const ChangeTimeline = ({ changes, loading }) => {
 
                   {change.removed_expectations && change.removed_expectations.length > 0 && (
                     <div className="mt-2">
-                      <p className="text-sm text-gray-600">Expectativas removidas:</p>
-                      <ul className="list-disc list-inside text-sm text-gray-500 line-through">
+                      <p className="text-sm dark:text-slate-300">Expectativas removidas:</p>
+                      <ul className="list-disc list-inside text-sm dark:text-slate-500 line-through">
                         {change.removed_expectations.map((exp, idx) => (
                           <li key={idx}>{exp}</li>
                         ))}
@@ -108,14 +108,14 @@ const ChangeTimeline = ({ changes, loading }) => {
                   )}
 
                   {change.recommendation && (
-                    <div className="mt-2 p-2 bg-blue-50 rounded text-sm text-blue-800">
+                    <div className="mt-2 p-2 bg-blue-50 dark:bg-blue-900/30 rounded text-sm dark:text-blue-300">
                       💡 {change.recommendation}
                     </div>
                   )}
                 </div>
               </div>
               
-              <span className="text-xs text-gray-500 whitespace-nowrap ml-4">
+              <span className="text-xs dark:text-slate-400 whitespace-nowrap ml-4">
                 {formatDate(change.change_date)}
               </span>
             </div>

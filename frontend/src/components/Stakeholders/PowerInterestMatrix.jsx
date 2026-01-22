@@ -4,10 +4,10 @@ import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, Responsive
 const PowerInterestMatrix = ({ matrixData, loading }) => {
   if (loading) {
     return (
-      <div className="bg-white rounded-lg shadow p-6">
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
         <div className="animate-pulse">
-          <div className="h-6 bg-gray-200 rounded w-1/3 mb-4"></div>
-          <div className="h-80 bg-gray-200 rounded"></div>
+          <div className="h-6 bg-slate-200 dark:bg-slate-700 rounded w-1/3 mb-4"></div>
+          <div className="h-80 bg-slate-200 dark:bg-slate-700 rounded"></div>
         </div>
       </div>
     );
@@ -54,11 +54,11 @@ const PowerInterestMatrix = ({ matrixData, loading }) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       return (
-        <div className="bg-white p-3 rounded-lg shadow-lg border border-gray-200">
-          <p className="font-semibold text-gray-900">{data.name}</p>
-          <p className="text-sm text-gray-600 capitalize">Tipo: {data.type}</p>
-          <p className="text-sm text-gray-600">Influencia: {(data.influence * 100).toFixed(0)}%</p>
-          <p className="text-sm text-gray-600">Satisfacción: {data.satisfaction?.toFixed(1)}/10</p>
+        <div className="bg-white dark:bg-slate-800 p-3 rounded-lg shadow-lg border border-slate-200 dark:border-slate-600 transition-colors">
+          <p className="font-semibold dark:text-white">{data.name}</p>
+          <p className="text-sm dark:text-slate-400 capitalize">Tipo: {data.type}</p>
+          <p className="text-sm dark:text-slate-400">Influencia: {(data.influence * 100).toFixed(0)}%</p>
+          <p className="text-sm dark:text-slate-400">Satisfacción: {data.satisfaction?.toFixed(1)}/10</p>
           <p className="text-sm font-medium mt-1" style={{ color: getColor(data.quadrant) }}>
             {data.quadrant}
           </p>
@@ -69,15 +69,15 @@ const PowerInterestMatrix = ({ matrixData, loading }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
-      <h3 className="text-lg font-semibold mb-4">Matriz Poder / Interés</h3>
+    <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
+      <h3 className="text-lg font-semibold dark:text-white mb-4">Matriz Poder / Interés</h3>
       
       {scatterData.length === 0 ? (
-        <p className="text-gray-500 text-center py-8">No hay datos disponibles</p>
+        <p className="text-slate-500 dark:text-slate-400 text-center py-8">No hay datos disponibles</p>
       ) : (
         <ResponsiveContainer width="100%" height={400}>
           <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
-            <CartesianGrid strokeDasharray="3 3" />
+            <CartesianGrid strokeDasharray="3 3" stroke="#cbd5e1" />
             <XAxis
               type="number"
               dataKey="x"
@@ -90,6 +90,7 @@ const PowerInterestMatrix = ({ matrixData, loading }) => {
                 if (value === 3) return 'Alto';
                 return '';
               }}
+              stroke="#9ca3af"
             />
             <YAxis
               type="number"

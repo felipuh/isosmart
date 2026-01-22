@@ -100,13 +100,13 @@ const ObjectiveForm = ({ objective, onSubmit, onCancel }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl shadow-xl max-w-3xl w-full max-h-[90vh] overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-gray-50">
-          <h2 className="text-xl font-semibold text-gray-900">
+    <div className="fixed inset-0 bg-gray-500 dark:bg-gray-900 bg-opacity-75 dark:bg-opacity-75 flex items-center justify-center z-50 p-4 transition-colors">
+      <div className="bg-white dark:bg-slate-800 rounded-xl shadow-xl dark:shadow-slate-900/50 max-w-3xl w-full max-h-[90vh] overflow-hidden transition-colors">
+        <div className="px-6 py-4 border-b border-gray-200 dark:border-slate-700 flex justify-between items-center bg-gray-50 dark:bg-slate-700/50 transition-colors">
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
             {objective ? 'Editar Objetivo' : 'Nuevo Objetivo de Calidad'}
           </h2>
-          <button onClick={onCancel} className="text-gray-400 hover:text-gray-600">
+          <button onClick={onCancel} className="text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:hover:text-slate-400 transition-colors">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -116,12 +116,12 @@ const ObjectiveForm = ({ objective, onSubmit, onCancel }) => {
         <form onSubmit={handleSubmit} className="overflow-y-auto max-h-[calc(90vh-140px)]">
           <div className="px-6 py-4 space-y-6">
             {errors.submit && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">{errors.submit}</div>
+              <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg transition-colors">{errors.submit}</div>
             )}
 
             {/* Indicator Name */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
                 Nombre del Indicador <span className="text-red-500">*</span>
               </label>
               <input
@@ -129,15 +129,15 @@ const ObjectiveForm = ({ objective, onSubmit, onCancel }) => {
                 name="indicator_name"
                 value={formData.indicator_name}
                 onChange={handleChange}
-                className={`w-full rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 ${errors.indicator_name ? 'border-red-300' : 'border-gray-300'}`}
+                className={`w-full rounded-lg shadow-sm dark:bg-slate-700 dark:text-white dark:focus:ring-blue-400 focus:ring-blue-500 focus:border-blue-500 transition-colors ${errors.indicator_name ? 'border-red-300 dark:border-red-800' : 'border-gray-300 dark:border-slate-600'}`}
                 placeholder="Ej: Índice de Satisfacción del Cliente"
               />
-              {errors.indicator_name && <p className="mt-1 text-sm text-red-600">{errors.indicator_name}</p>}
+              {errors.indicator_name && <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.indicator_name}</p>}
             </div>
 
             {/* Description */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
                 Descripción del Objetivo <span className="text-red-500">*</span>
               </label>
               <textarea
@@ -145,16 +145,16 @@ const ObjectiveForm = ({ objective, onSubmit, onCancel }) => {
                 value={formData.objective_description}
                 onChange={handleChange}
                 rows={3}
-                className={`w-full rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 ${errors.objective_description ? 'border-red-300' : 'border-gray-300'}`}
+                className={`w-full rounded-lg shadow-sm dark:bg-slate-700 dark:text-white dark:focus:ring-blue-400 focus:ring-blue-500 focus:border-blue-500 transition-colors ${errors.objective_description ? 'border-red-300 dark:border-red-800' : 'border-gray-300 dark:border-slate-600'}`}
                 placeholder="Describa el objetivo de calidad..."
               />
-              {errors.objective_description && <p className="mt-1 text-sm text-red-600">{errors.objective_description}</p>}
+              {errors.objective_description && <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.objective_description}</p>}
             </div>
 
             {/* Measurement Values */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
                   Línea Base <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -163,13 +163,13 @@ const ObjectiveForm = ({ objective, onSubmit, onCancel }) => {
                   name="baseline_value"
                   value={formData.baseline_value}
                   onChange={handleChange}
-                  className={`w-full rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 ${errors.baseline_value ? 'border-red-300' : 'border-gray-300'}`}
+                  className={`w-full rounded-lg shadow-sm dark:bg-slate-700 dark:text-white dark:focus:ring-blue-400 focus:ring-blue-500 focus:border-blue-500 transition-colors ${errors.baseline_value ? 'border-red-300 dark:border-red-800' : 'border-gray-300 dark:border-slate-600'}`}
                   placeholder="0"
                 />
-                {errors.baseline_value && <p className="mt-1 text-sm text-red-600">{errors.baseline_value}</p>}
+                {errors.baseline_value && <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.baseline_value}</p>}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
                   Meta <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -178,25 +178,25 @@ const ObjectiveForm = ({ objective, onSubmit, onCancel }) => {
                   name="target_value"
                   value={formData.target_value}
                   onChange={handleChange}
-                  className={`w-full rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 ${errors.target_value ? 'border-red-300' : 'border-gray-300'}`}
+                  className={`w-full rounded-lg shadow-sm dark:bg-slate-700 dark:text-white dark:focus:ring-blue-400 focus:ring-blue-500 focus:border-blue-500 transition-colors ${errors.target_value ? 'border-red-300 dark:border-red-800' : 'border-gray-300 dark:border-slate-600'}`}
                   placeholder="100"
                 />
-                {errors.target_value && <p className="mt-1 text-sm text-red-600">{errors.target_value}</p>}
+                {errors.target_value && <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.target_value}</p>}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Valor Actual</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Valor Actual</label>
                 <input
                   type="number"
                   step="0.01"
                   name="current_value"
                   value={formData.current_value}
                   onChange={handleChange}
-                  className="w-full rounded-lg border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full rounded-lg border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white shadow-sm dark:focus:ring-blue-400 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                   placeholder="0"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
                   Unidad <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -205,31 +205,31 @@ const ObjectiveForm = ({ objective, onSubmit, onCancel }) => {
                   value={formData.measurement_unit}
                   onChange={handleChange}
                   list="unit-suggestions"
-                  className={`w-full rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 ${errors.measurement_unit ? 'border-red-300' : 'border-gray-300'}`}
+                  className={`w-full rounded-lg shadow-sm dark:bg-slate-700 dark:text-white dark:focus:ring-blue-400 focus:ring-blue-500 focus:border-blue-500 transition-colors ${errors.measurement_unit ? 'border-red-300 dark:border-red-800' : 'border-gray-300 dark:border-slate-600'}`}
                   placeholder="%"
                 />
                 <datalist id="unit-suggestions">
                   {unitSuggestions.map(unit => <option key={unit} value={unit} />)}
                 </datalist>
-                {errors.measurement_unit && <p className="mt-1 text-sm text-red-600">{errors.measurement_unit}</p>}
+                {errors.measurement_unit && <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.measurement_unit}</p>}
               </div>
             </div>
 
             {/* Frequency and Responsible */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Frecuencia de Medición</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Frecuencia de Medición</label>
                 <select
                   name="measurement_frequency"
                   value={formData.measurement_frequency}
                   onChange={handleChange}
-                  className="w-full rounded-lg border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full rounded-lg border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white shadow-sm dark:focus:ring-blue-400 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                 >
                   {frequencyOptions.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
                   Responsable <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -237,17 +237,17 @@ const ObjectiveForm = ({ objective, onSubmit, onCancel }) => {
                   name="responsible"
                   value={formData.responsible}
                   onChange={handleChange}
-                  className={`w-full rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 ${errors.responsible ? 'border-red-300' : 'border-gray-300'}`}
+                  className={`w-full rounded-lg shadow-sm dark:bg-slate-700 dark:text-white dark:focus:ring-blue-400 focus:ring-blue-500 focus:border-blue-500 transition-colors ${errors.responsible ? 'border-red-300 dark:border-red-800' : 'border-gray-300 dark:border-slate-600'}`}
                   placeholder="Nombre del responsable"
                 />
-                {errors.responsible && <p className="mt-1 text-sm text-red-600">{errors.responsible}</p>}
+                {errors.responsible && <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.responsible}</p>}
               </div>
             </div>
 
             {/* Deadline and Status */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
                   Fecha Límite <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -255,17 +255,17 @@ const ObjectiveForm = ({ objective, onSubmit, onCancel }) => {
                   name="deadline"
                   value={formData.deadline}
                   onChange={handleChange}
-                  className={`w-full rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 ${errors.deadline ? 'border-red-300' : 'border-gray-300'}`}
+                  className={`w-full rounded-lg shadow-sm dark:bg-slate-700 dark:text-white dark:focus:ring-blue-400 focus:ring-blue-500 focus:border-blue-500 transition-colors ${errors.deadline ? 'border-red-300 dark:border-red-800' : 'border-gray-300 dark:border-slate-600'}`}
                 />
-                {errors.deadline && <p className="mt-1 text-sm text-red-600">{errors.deadline}</p>}
+                {errors.deadline && <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.deadline}</p>}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Estado</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Estado</label>
                 <select
                   name="status"
                   value={formData.status}
                   onChange={handleChange}
-                  className="w-full rounded-lg border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full rounded-lg border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white shadow-sm dark:focus:ring-blue-400 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                 >
                   {statusOptions.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
                 </select>
@@ -274,30 +274,30 @@ const ObjectiveForm = ({ objective, onSubmit, onCancel }) => {
 
             {/* Process ID */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">ID de Proceso (opcional)</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">ID de Proceso (opcional)</label>
               <input
                 type="text"
                 name="process_id"
                 value={formData.process_id}
                 onChange={handleChange}
-                className="w-full rounded-lg border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                className="w-full rounded-lg border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white shadow-sm dark:focus:ring-blue-400 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                 placeholder="Ej: PROC-001"
               />
             </div>
           </div>
 
-          <div className="px-6 py-4 border-t border-gray-200 bg-gray-50 flex justify-end gap-3">
+          <div className="px-6 py-4 border-t border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-700/50 flex justify-end gap-3 transition-colors">
             <button
               type="button"
               onClick={onCancel}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+              className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-slate-300 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+              className="px-4 py-2 text-sm font-medium text-white bg-blue-600 dark:bg-blue-700 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-800 disabled:opacity-50 transition-colors"
             >
               {loading ? 'Guardando...' : (objective ? 'Actualizar' : 'Crear')} Objetivo
             </button>

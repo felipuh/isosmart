@@ -4,13 +4,13 @@ import { Globe, TrendingUp, Users, Briefcase, Scale, Zap } from 'lucide-react';
 const ExternalFactors = ({ factors, loading }) => {
   if (loading) {
     return (
-      <div className="bg-white rounded-lg shadow p-6">
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
         <div className="animate-pulse">
-          <div className="h-6 bg-gray-200 rounded w-1/3 mb-4"></div>
+          <div className="h-6 bg-slate-200 dark:bg-slate-700 rounded w-1/3 mb-4"></div>
           <div className="grid grid-cols-3 gap-4">
-            <div className="h-32 bg-gray-200 rounded"></div>
-            <div className="h-32 bg-gray-200 rounded"></div>
-            <div className="h-32 bg-gray-200 rounded"></div>
+            <div className="h-32 bg-slate-200 dark:bg-slate-700 rounded"></div>
+            <div className="h-32 bg-slate-200 dark:bg-slate-700 rounded"></div>
+            <div className="h-32 bg-slate-200 dark:bg-slate-700 rounded"></div>
           </div>
         </div>
       </div>
@@ -40,9 +40,9 @@ const ExternalFactors = ({ factors, loading }) => {
 
   const getColorClass = (impact) => {
     const normalizedImpact = (impact || '').toLowerCase();
-    if (normalizedImpact === 'alto') return 'bg-red-100 text-red-800 border-red-300';
-    if (normalizedImpact === 'medio') return 'bg-yellow-100 text-yellow-800 border-yellow-300';
-    return 'bg-blue-100 text-blue-800 border-blue-300';
+    if (normalizedImpact === 'alto') return 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 border-red-300 dark:border-red-700';
+    if (normalizedImpact === 'medio') return 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 border-yellow-300 dark:border-yellow-700';
+    return 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 border-blue-300 dark:border-blue-700';
   };
 
   const getText = (value) => {
@@ -54,16 +54,16 @@ const ExternalFactors = ({ factors, loading }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
-      <h3 className="text-xl font-semibold mb-6 flex items-center">
+    <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
+      <h3 className="text-xl font-semibold dark:text-white mb-6 flex items-center">
         <Globe className="mr-2 h-6 w-6 text-blue-500" />
         Factores Externos
       </h3>
 
       {!factors || factors.length === 0 ? (
-        <p className="text-gray-500 text-center py-8">No se identificaron factores externos</p>
+        <p className="text-slate-500 dark:text-slate-400 text-center py-8">No se identificaron factores externos</p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
           {factors.map((factor, idx) => (
             <div 
               key={idx}
@@ -72,16 +72,16 @@ const ExternalFactors = ({ factors, loading }) => {
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center">
                   {getIcon(factor.tipo)}
-                  <span className="ml-2 font-semibold capitalize">{getText(factor.tipo)}</span>
+                  <span className="ml-2 font-semibold dark:text-slate-100 capitalize">{getText(factor.tipo)}</span>
                 </div>
-                <span className="text-xs px-2 py-1 rounded bg-white bg-opacity-50 capitalize">
+                <span className="text-xs px-2 py-1 rounded dark:text-slate-100 capitalize">
                   {getText(factor.impacto)}
                 </span>
               </div>
-              <p className="text-sm text-gray-700">{getText(factor.descripcion)}</p>
+              <p className="text-sm text-gray-700 dark:text-slate-100">{getText(factor.descripcion)}</p>
               {factor.tendencia && (
                 <div className="mt-3 pt-3 border-t border-gray-200">
-                  <p className="text-xs text-gray-600">
+                  <p className="text-xs text-gray-600 dark:text-slate-400">
                     <span className="font-medium">Tendencia:</span> {getText(factor.tendencia)}
                   </p>
                 </div>

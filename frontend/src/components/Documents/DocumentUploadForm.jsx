@@ -65,13 +65,13 @@ const DocumentUploadForm = ({ onUpload, onCancel, uploading }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
+    <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-xl font-semibold text-gray-900">Subir Documento</h3>
+        <h3 className="text-xl font-semibold text-slate-900 dark:text-white">Subir Documento</h3>
         {onCancel && (
           <button
             onClick={onCancel}
-            className="text-gray-400 hover:text-gray-600"
+            className="text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-400 transition-colors"
           >
             <X className="h-6 w-6" />
           </button>
@@ -81,27 +81,27 @@ const DocumentUploadForm = ({ onUpload, onCancel, uploading }) => {
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Selector de archivo */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2 transition-colors">
             Archivo *
           </label>
           <div className="flex items-center justify-center w-full">
-            <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+            <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 dark:border-slate-600 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-slate-700/50 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors">
               <div className="flex flex-col items-center justify-center pt-5 pb-6">
                 {selectedFile ? (
                   <>
                     <File className="h-10 w-10 text-blue-500 mb-2" />
-                    <p className="text-sm text-gray-700 font-medium">{selectedFile.name}</p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-sm text-slate-700 dark:text-white font-medium">{selectedFile.name}</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">
                       {(selectedFile.size / 1024).toFixed(2)} KB
                     </p>
                   </>
                 ) : (
                   <>
-                    <Upload className="h-10 w-10 text-gray-400 mb-2" />
-                    <p className="text-sm text-gray-500">
+                    <Upload className="h-10 w-10 text-gray-400 dark:text-slate-500 mb-2" />
+                    <p className="text-sm text-gray-500 dark:text-slate-400">
                       <span className="font-semibold">Click para subir</span> o arrastra el archivo
                     </p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-gray-500 dark:text-slate-500">
                       PDF, DOCX, TXT, XLSX (máx. 10MB)
                     </p>
                   </>
@@ -119,14 +119,14 @@ const DocumentUploadForm = ({ onUpload, onCancel, uploading }) => {
 
         {/* Título */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2 transition-colors">
             Título *
           </label>
           <input
             type="text"
             value={formData.title}
             onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
             placeholder="Nombre del documento"
             required
           />
@@ -134,13 +134,13 @@ const DocumentUploadForm = ({ onUpload, onCancel, uploading }) => {
 
         {/* Descripción */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2 transition-colors">
             Contenido
           </label>
           <textarea
             value={formData.content}
             onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
             rows="3"
             placeholder="Descripción breve del documento (opcional)"
           />
@@ -148,13 +148,13 @@ const DocumentUploadForm = ({ onUpload, onCancel, uploading }) => {
 
         {/* Tipo de documento */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2 transition-colors">
             Tipo de Documento *
           </label>
           <select
             value={formData.document_type}
             onChange={(e) => setFormData({ ...formData, document_type: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
             required
           >
             <option value="acta">Acta</option>
@@ -167,23 +167,23 @@ const DocumentUploadForm = ({ onUpload, onCancel, uploading }) => {
 
         {/* Fuente/Origen */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2 transition-colors">
             Fuente/Origen
           </label>
           <input
             type="text"
             value={formData.source}
             onChange={(e) => setFormData({ ...formData, source: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
             placeholder="Origen del documento"
           />
         </div>
 
         {/* Error */}
         {error && (
-          <div className="flex items-center p-3 bg-red-50 border border-red-200 rounded-lg">
-            <AlertCircle className="h-5 w-5 text-red-500 mr-2" />
-            <span className="text-sm text-red-700">{error}</span>
+          <div className="flex items-center p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 rounded-lg transition-colors">
+            <AlertCircle className="h-5 w-5 text-red-500 dark:text-red-400 mr-2" />
+            <span className="text-sm text-red-700 dark:text-red-200">{error}</span>
           </div>
         )}
 
@@ -193,7 +193,7 @@ const DocumentUploadForm = ({ onUpload, onCancel, uploading }) => {
             <button
               type="button"
               onClick={onCancel}
-              className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
+              className="px-4 py-2 border border-gray-300 dark:border-slate-600 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors"
             >
               Cancelar
             </button>
@@ -201,7 +201,7 @@ const DocumentUploadForm = ({ onUpload, onCancel, uploading }) => {
           <button
             type="submit"
             disabled={uploading || !selectedFile}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-blue-300 disabled:cursor-not-allowed flex items-center"
+            className="px-4 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-800 disabled:bg-blue-300 dark:disabled:bg-blue-900/30 disabled:cursor-not-allowed flex items-center transition-colors"
           >
             {uploading ? (
               <>

@@ -4,13 +4,13 @@ import { FileText, Download, Trash2, Calendar, User } from 'lucide-react';
 const DocumentList = ({ documents, loading, onDelete, onDownload }) => {
   if (loading) {
     return (
-      <div className="bg-white rounded-lg shadow">
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 transition-colors">
         <div className="animate-pulse p-6">
-          <div className="h-6 bg-gray-200 rounded w-1/3 mb-4"></div>
+          <div className="h-6 bg-slate-200 dark:bg-slate-700 rounded w-1/3 mb-4"></div>
           <div className="space-y-3">
-            <div className="h-16 bg-gray-200 rounded"></div>
-            <div className="h-16 bg-gray-200 rounded"></div>
-            <div className="h-16 bg-gray-200 rounded"></div>
+            <div className="h-16 bg-slate-200 dark:bg-slate-700 rounded"></div>
+            <div className="h-16 bg-slate-200 dark:bg-slate-700 rounded"></div>
+            <div className="h-16 bg-slate-200 dark:bg-slate-700 rounded"></div>
           </div>
         </div>
       </div>
@@ -19,12 +19,12 @@ const DocumentList = ({ documents, loading, onDelete, onDownload }) => {
 
   if (!documents || documents.length === 0) {
     return (
-      <div className="bg-white rounded-lg shadow p-12 text-center">
-        <FileText className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-12 text-center transition-colors">
+        <FileText className="h-16 w-16 text-slate-400 dark:text-slate-600 mx-auto mb-4" />
+        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
           No hay documentos cargados
         </h3>
-        <p className="text-gray-600">
+        <p className="text-slate-600 dark:text-slate-400">
           Sube tu primer documento para comenzar el análisis
         </p>
       </div>
@@ -45,12 +45,12 @@ const DocumentList = ({ documents, loading, onDelete, onDownload }) => {
 
   const getDocumentTypeColor = (type) => {
     const colors = {
-      'policy': 'bg-purple-100 text-purple-700',
-      'procedure': 'bg-blue-100 text-blue-700',
-      'manual': 'bg-green-100 text-green-700',
-      'report': 'bg-yellow-100 text-yellow-700',
-      'plan': 'bg-orange-100 text-orange-700',
-      'other': 'bg-gray-100 text-gray-700'
+      'policy': 'bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300',
+      'procedure': 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300',
+      'manual': 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300',
+      'report': 'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300',
+      'plan': 'bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-300',
+      'other': 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300'
     };
     return colors[type] || colors['other'];
   };
@@ -64,45 +64,45 @@ const DocumentList = ({ documents, loading, onDelete, onDownload }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow overflow-hidden">
+    <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 overflow-hidden transition-colors">
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+        <table className="min-w-full divide-y divide-gray-200 dark:divide-slate-700">
+          <thead className="bg-gray-50 dark:bg-slate-700/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
                 Documento
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
                 Tipo
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
                 Subido por
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
                 Fecha
               </th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
                 Acciones
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-white dark:bg-slate-800 divide-y divide-gray-200 dark:divide-slate-700 transition-colors">
             {documents.map((doc) => (
-              <tr key={doc.id} className="hover:bg-gray-50">
+              <tr key={doc.id} className="hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors">
                 <td className="px-6 py-4">
                   <div className="flex items-center">
-                    <FileText className="h-5 w-5 text-gray-400 mr-3" />
+                    <FileText className="h-5 w-5 text-gray-400 dark:text-slate-500 mr-3" />
                     <div>
-                      <div className="text-sm font-medium text-gray-900">
+                      <div className="text-sm font-medium text-slate-900 dark:text-white">
                         {doc.title}
                       </div>
                       {doc.file_name && (
-                        <div className="text-xs text-gray-500">
+                        <div className="text-xs text-slate-500 dark:text-slate-400">
                           {doc.file_name}
                         </div>
                       )}
                       {doc.content && (
-                        <div className="text-xs text-gray-500 mt-1 line-clamp-1">
+                        <div className="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-1">
                           {doc.content}
                         </div>
                       )}
@@ -115,13 +115,13 @@ const DocumentList = ({ documents, loading, onDelete, onDownload }) => {
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="flex items-center text-sm text-gray-500">
+                  <div className="flex items-center text-sm text-slate-500 dark:text-slate-400">
                     <User className="h-4 w-4 mr-1" />
                     {doc.source || 'Sistema'}
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="flex items-center text-sm text-gray-500">
+                  <div className="flex items-center text-sm text-slate-500 dark:text-slate-400">
                     <Calendar className="h-4 w-4 mr-1" />
                     {formatDate(doc.created_at)}
                   </div>
@@ -129,14 +129,14 @@ const DocumentList = ({ documents, loading, onDelete, onDownload }) => {
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <button
                     onClick={() => onDownload(doc)}
-                    className="text-blue-600 hover:text-blue-900 mr-4"
+                    className="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300 mr-4 transition-colors"
                     title="Descargar"
                   >
                     <Download className="h-5 w-5" />
                   </button>
                   <button
                     onClick={() => onDelete(doc)}
-                    className="text-red-600 hover:text-red-900"
+                    className="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300 transition-colors"
                     title="Eliminar"
                   >
                     <Trash2 className="h-5 w-5" />

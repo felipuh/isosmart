@@ -36,18 +36,18 @@ const ScopeProcessList = ({ processes, locations, loading, onAddProcess, onEditP
   if (loading) {
     return (
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-lg shadow p-6 animate-pulse">
-          <div className="h-6 bg-gray-200 rounded w-1/3 mb-4"></div>
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 animate-pulse transition-colors">
+          <div className="h-6 bg-slate-200 dark:bg-slate-700 rounded w-1/3 mb-4"></div>
           <div className="space-y-3">
-            <div className="h-16 bg-gray-100 rounded"></div>
-            <div className="h-16 bg-gray-100 rounded"></div>
+            <div className="h-16 bg-slate-100 dark:bg-slate-700 rounded"></div>
+            <div className="h-16 bg-slate-100 dark:bg-slate-700 rounded"></div>
           </div>
         </div>
-        <div className="bg-white rounded-lg shadow p-6 animate-pulse">
-          <div className="h-6 bg-gray-200 rounded w-1/3 mb-4"></div>
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 animate-pulse transition-colors">
+          <div className="h-6 bg-slate-200 dark:bg-slate-700 rounded w-1/3 mb-4"></div>
           <div className="space-y-3">
-            <div className="h-16 bg-gray-100 rounded"></div>
-            <div className="h-16 bg-gray-100 rounded"></div>
+            <div className="h-16 bg-slate-100 dark:bg-slate-700 rounded"></div>
+            <div className="h-16 bg-slate-100 dark:bg-slate-700 rounded"></div>
           </div>
         </div>
       </div>
@@ -57,12 +57,12 @@ const ScopeProcessList = ({ processes, locations, loading, onAddProcess, onEditP
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       {/* Procesos */}
-      <div className="bg-white rounded-lg shadow">
-        <div className="p-4 border-b flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-gray-800">Procesos en Alcance</h3>
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 transition-colors">
+        <div className="p-4 border-b dark:border-slate-700 flex items-center justify-between">
+          <h3 className="text-lg font-semibold text-slate-800 dark:text-white">Procesos en Alcance</h3>
           <button
             onClick={onAddProcess}
-            className="flex items-center px-3 py-1.5 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700"
+            className="flex items-center px-3 py-1.5 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
           >
             <Plus className="h-4 w-4 mr-1" />
             Agregar
@@ -74,37 +74,37 @@ const ScopeProcessList = ({ processes, locations, loading, onAddProcess, onEditP
               {processes.map((process) => (
                 <div 
                   key={process.id} 
-                  className={'p-3 rounded-lg border ' + (process.is_included ? 'bg-gray-50' : 'bg-red-50 border-red-200')}
+                  className={'p-3 rounded-lg border transition-colors ' + (process.is_included ? 'bg-slate-50 dark:bg-slate-700 dark:border-slate-600 border-slate-200' : 'bg-red-50 dark:bg-red-900/30 border-red-200 dark:border-red-700')}
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex items-start space-x-3">
                       {getProcessTypeIcon(process.process_type)}
                       <div>
-                        <p className="font-medium text-gray-900">{process.process_name}</p>
-                        <p className="text-sm text-gray-500">
+                        <p className="font-medium text-slate-900 dark:text-white">{process.process_name}</p>
+                        <p className="text-sm text-slate-500 dark:text-slate-400">
                           {process.process_code && <span className="mr-2">{process.process_code}</span>}
-                          <span className="text-xs bg-gray-200 px-2 py-0.5 rounded">
+                          <span className="text-xs bg-slate-200 dark:bg-slate-600 dark:text-slate-300 px-2 py-0.5 rounded">
                             {getProcessTypeLabel(process.process_type)}
                           </span>
                         </p>
                         {process.owner && (
-                          <p className="text-xs text-gray-400 mt-1">Responsable: {process.owner}</p>
+                          <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">Responsable: {process.owner}</p>
                         )}
                         {!process.is_included && (
-                          <p className="text-xs text-red-600 mt-1">Excluido: {process.exclusion_reason}</p>
+                          <p className="text-xs text-red-600 dark:text-red-400 mt-1">Excluido: {process.exclusion_reason}</p>
                         )}
                       </div>
                     </div>
                     <div className="flex space-x-1">
                       <button
                         onClick={() => onEditProcess(process)}
-                        className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded"
+                        className="p-1.5 text-slate-400 dark:text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded transition-colors"
                       >
                         <Edit2 className="h-4 w-4" />
                       </button>
                       <button
                         onClick={() => onDeleteProcess(process)}
-                        className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded"
+                        className="p-1.5 text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded transition-colors"
                       >
                         <Trash2 className="h-4 w-4" />
                       </button>
@@ -114,12 +114,12 @@ const ScopeProcessList = ({ processes, locations, loading, onAddProcess, onEditP
               ))}
             </div>
           ) : (
-            <div className="text-center py-8 text-gray-500">
-              <Settings className="h-12 w-12 mx-auto mb-3 text-gray-300" />
+            <div className="text-center py-8 text-slate-500 dark:text-slate-400">
+              <Settings className="h-12 w-12 mx-auto mb-3 text-slate-300 dark:text-slate-600" />
               <p>No hay procesos definidos</p>
               <button
                 onClick={onAddProcess}
-                className="mt-2 text-blue-600 hover:text-blue-800 text-sm"
+                className="mt-2 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-sm transition-colors"
               >
                 Agregar primer proceso
               </button>
@@ -129,12 +129,12 @@ const ScopeProcessList = ({ processes, locations, loading, onAddProcess, onEditP
       </div>
 
       {/* Ubicaciones */}
-      <div className="bg-white rounded-lg shadow">
-        <div className="p-4 border-b flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-gray-800">Ubicaciones en Alcance</h3>
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 transition-colors">
+        <div className="p-4 border-b dark:border-slate-700 flex items-center justify-between">
+          <h3 className="text-lg font-semibold text-slate-800 dark:text-white">Ubicaciones en Alcance</h3>
           <button
             onClick={onAddLocation}
-            className="flex items-center px-3 py-1.5 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700"
+            className="flex items-center px-3 py-1.5 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 transition-colors"
           >
             <Plus className="h-4 w-4 mr-1" />
             Agregar
@@ -146,31 +146,31 @@ const ScopeProcessList = ({ processes, locations, loading, onAddProcess, onEditP
               {locations.map((location) => (
                 <div 
                   key={location.id} 
-                  className={'p-3 rounded-lg border ' + (location.is_included ? 'bg-gray-50' : 'bg-red-50 border-red-200')}
+                  className={'p-3 rounded-lg border transition-colors ' + (location.is_included ? 'bg-slate-50 dark:bg-slate-700 dark:border-slate-600 border-slate-200' : 'bg-red-50 dark:bg-red-900/30 border-red-200 dark:border-red-700')}
                 >
                   <div className="flex items-start justify-between">
                     <div>
-                      <p className="font-medium text-gray-900">{location.location_name}</p>
-                      <p className="text-sm text-gray-500">
+                      <p className="font-medium text-slate-900 dark:text-white">{location.location_name}</p>
+                      <p className="text-sm text-slate-500 dark:text-slate-400">
                         {location.city}, {location.country}
-                        <span className="ml-2 text-xs bg-gray-200 px-2 py-0.5 rounded">
+                        <span className="ml-2 text-xs bg-slate-200 dark:bg-slate-600 dark:text-slate-300 px-2 py-0.5 rounded">
                           {getLocationTypeLabel(location.location_type)}
                         </span>
                       </p>
                       {location.employee_count > 0 && (
-                        <p className="text-xs text-gray-400 mt-1">{location.employee_count} empleados</p>
+                        <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">{location.employee_count} empleados</p>
                       )}
                     </div>
                     <div className="flex space-x-1">
                       <button
                         onClick={() => onEditLocation(location)}
-                        className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded"
+                        className="p-1.5 text-slate-400 dark:text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded transition-colors"
                       >
                         <Edit2 className="h-4 w-4" />
                       </button>
                       <button
                         onClick={() => onDeleteLocation(location)}
-                        className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded"
+                        className="p-1.5 text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded transition-colors"
                       >
                         <Trash2 className="h-4 w-4" />
                       </button>
@@ -180,12 +180,12 @@ const ScopeProcessList = ({ processes, locations, loading, onAddProcess, onEditP
               ))}
             </div>
           ) : (
-            <div className="text-center py-8 text-gray-500">
-              <Truck className="h-12 w-12 mx-auto mb-3 text-gray-300" />
+            <div className="text-center py-8 text-slate-500 dark:text-slate-400">
+              <Truck className="h-12 w-12 mx-auto mb-3 text-slate-300 dark:text-slate-600" />
               <p>No hay ubicaciones definidas</p>
               <button
                 onClick={onAddLocation}
-                className="mt-2 text-green-600 hover:text-green-800 text-sm"
+                className="mt-2 text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300 text-sm transition-colors"
               >
                 Agregar primera ubicación
               </button>

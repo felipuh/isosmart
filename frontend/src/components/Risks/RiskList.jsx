@@ -12,18 +12,18 @@ const RiskList = ({ risks, filters, onFilterChange, onEdit, onDelete, onStatusCh
   };
 
   const statusColors = {
-    identified: 'bg-blue-100 text-blue-700',
-    under_analysis: 'bg-yellow-100 text-yellow-700',
-    mitigated: 'bg-green-100 text-green-700',
-    accepted: 'bg-purple-100 text-purple-700',
-    closed: 'bg-gray-100 text-gray-700',
+    identified: 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300',
+    under_analysis: 'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300',
+    mitigated: 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300',
+    accepted: 'bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300',
+    closed: 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300',
   };
 
   const levelColors = {
-    critico: 'bg-red-100 text-red-700',
-    alto: 'bg-orange-100 text-orange-700',
-    medio: 'bg-yellow-100 text-yellow-700',
-    bajo: 'bg-green-100 text-green-700',
+    critico: 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300',
+    alto: 'bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-300',
+    medio: 'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300',
+    bajo: 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300',
   };
 
   const sourceIcons = {
@@ -44,22 +44,22 @@ const RiskList = ({ risks, filters, onFilterChange, onEdit, onDelete, onStatusCh
 
   if (risks.length === 0) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
-        <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 border border-gray-100 dark:border-slate-700 p-12 text-center transition-colors">
+        <div className="w-16 h-16 bg-gray-100 dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg className="w-8 h-8 text-slate-400 dark:text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
         </div>
-        <h3 className="text-lg font-medium text-gray-900 mb-1">No hay riesgos registrados</h3>
-        <p className="text-gray-500">Comienza agregando un nuevo riesgo al sistema.</p>
+        <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-1">No hay riesgos registrados</h3>
+        <p className="text-slate-500 dark:text-slate-400">Comienza agregando un nuevo riesgo al sistema.</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+    <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 border border-gray-100 dark:border-slate-700 overflow-hidden transition-colors">
       {/* Table Header */}
-      <div className="grid grid-cols-12 gap-4 px-6 py-3 bg-gray-50 border-b border-gray-200 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+      <div className="grid grid-cols-12 gap-4 px-6 py-3 bg-gray-50 dark:bg-slate-700/50 border-b border-gray-200 dark:border-slate-700 text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase tracking-wider transition-colors">
         <div className="col-span-4">Riesgo</div>
         <div className="col-span-2">Nivel</div>
         <div className="col-span-2">Fuente</div>
@@ -68,9 +68,9 @@ const RiskList = ({ risks, filters, onFilterChange, onEdit, onDelete, onStatusCh
       </div>
 
       {/* Table Body */}
-      <div className="divide-y divide-gray-100">
+      <div className="divide-y divide-gray-100 dark:divide-slate-700 transition-colors">
         {risks.map((risk) => (
-          <div key={risk.id} className="hover:bg-gray-50 transition-colors">
+          <div key={risk.id} className="hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors">
             {/* Main Row */}
             <div 
               className="grid grid-cols-12 gap-4 px-6 py-4 items-center cursor-pointer"
@@ -79,16 +79,16 @@ const RiskList = ({ risks, filters, onFilterChange, onEdit, onDelete, onStatusCh
               {/* Risk Info */}
               <div className="col-span-4">
                 <div className="flex items-start space-x-3">
-                  <div className="flex-shrink-0 w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
-                    <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="flex-shrink-0 w-10 h-10 bg-gray-100 dark:bg-slate-700 rounded-lg flex items-center justify-center">
+                    <svg className="w-5 h-5 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                     </svg>
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-medium text-gray-900 truncate">
+                    <p className="text-sm font-medium text-slate-900 dark:text-white truncate">
                       {risk.risk_description?.substring(0, 60)}{risk.risk_description?.length > 60 ? '...' : ''}
                     </p>
-                    <p className="text-xs text-gray-500 mt-0.5">
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                       {risk.risk_category || 'Sin categoría'} • ISO {risk.iso_clause || '6.1'}
                     </p>
                   </div>
@@ -97,7 +97,7 @@ const RiskList = ({ risks, filters, onFilterChange, onEdit, onDelete, onStatusCh
 
               {/* Level */}
               <div className="col-span-2">
-                <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${levelColors[risk.risk_level] || 'bg-gray-100 text-gray-700'}`}>
+                <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${levelColors[risk.risk_level] || 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300'}`}>
                   {risk.risk_level?.charAt(0).toUpperCase() + risk.risk_level?.slice(1) || 'N/A'}
                 </span>
               </div>
@@ -106,14 +106,14 @@ const RiskList = ({ risks, filters, onFilterChange, onEdit, onDelete, onStatusCh
               <div className="col-span-2">
                 <div className="flex items-center space-x-2">
                   <span className="text-lg">{sourceIcons[risk.source_module]?.icon || '📋'}</span>
-                  <span className="text-sm text-gray-600">{sourceIcons[risk.source_module]?.label || risk.source_module}</span>
+                  <span className="text-sm text-slate-600 dark:text-slate-400">{sourceIcons[risk.source_module]?.label || risk.source_module}</span>
                 </div>
               </div>
 
               {/* Date */}
               <div className="col-span-2">
-                <div className="flex items-center text-sm text-gray-500">
-                  <svg className="w-4 h-4 mr-1.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="flex items-center text-sm text-slate-500 dark:text-slate-400">
+                  <svg className="w-4 h-4 mr-1.5 text-gray-400 dark:text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
                   {formatDate(risk.detection_date)}
@@ -124,7 +124,7 @@ const RiskList = ({ risks, filters, onFilterChange, onEdit, onDelete, onStatusCh
               <div className="col-span-2 flex items-center justify-end space-x-2">
                 <button
                   onClick={(e) => { e.stopPropagation(); onEdit(risk); }}
-                  className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                  className="p-2 text-slate-400 dark:text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
                   title="Editar"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -133,7 +133,7 @@ const RiskList = ({ risks, filters, onFilterChange, onEdit, onDelete, onStatusCh
                 </button>
                 <button
                   onClick={(e) => { e.stopPropagation(); onDelete(risk.id); }}
-                  className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                  className="p-2 text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
                   title="Eliminar"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -145,27 +145,27 @@ const RiskList = ({ risks, filters, onFilterChange, onEdit, onDelete, onStatusCh
 
             {/* Expanded Details */}
             {expandedRisk === risk.id && (
-              <div className="px-6 pb-4 bg-gray-50 border-t border-gray-100">
+              <div className="px-6 pb-4 bg-slate-50 dark:bg-slate-700/50 border-t border-gray-100 dark:border-slate-700 transition-colors">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-                  <div className="bg-white rounded-lg p-4 border border-gray-200">
-                    <h4 className="text-xs font-semibold text-gray-500 uppercase mb-2">Evaluación</h4>
+                  <div className="bg-white dark:bg-slate-800 rounded-lg p-4 border border-gray-200 dark:border-slate-600 transition-colors">
+                    <h4 className="text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase mb-2">Evaluación</h4>
                     <div className="space-y-2 text-sm">
                       <div className="flex justify-between">
-                        <span className="text-gray-500">Probabilidad:</span>
-                        <span className="font-medium">{risk.probability || 'N/A'}</span>
+                        <span className="text-slate-500 dark:text-slate-400">Probabilidad:</span>
+                        <span className="font-medium text-slate-900 dark:text-white">{risk.probability || 'N/A'}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-gray-500">Impacto:</span>
-                        <span className="font-medium">{risk.impact || 'N/A'}</span>
+                        <span className="text-slate-500 dark:text-slate-400">Impacto:</span>
+                        <span className="font-medium text-slate-900 dark:text-white">{risk.impact || 'N/A'}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-gray-500">Responsable:</span>
-                        <span className="font-medium">{risk.responsible || 'Sin asignar'}</span>
+                        <span className="text-slate-500 dark:text-slate-400">Responsable:</span>
+                        <span className="font-medium text-slate-900 dark:text-white">{risk.responsible || 'Sin asignar'}</span>
                       </div>
                     </div>
                   </div>
-                  <div className="bg-white rounded-lg p-4 border border-gray-200">
-                    <h4 className="text-xs font-semibold text-gray-500 uppercase mb-2">Estado</h4>
+                  <div className="bg-white dark:bg-slate-800 rounded-lg p-4 border border-gray-200 dark:border-slate-600 transition-colors">
+                    <h4 className="text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase mb-2">Estado</h4>
                     <div className="space-y-3">
                       <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${statusColors[risk.status]}`}>
                         {statusLabels[risk.status] || risk.status}
@@ -173,7 +173,7 @@ const RiskList = ({ risks, filters, onFilterChange, onEdit, onDelete, onStatusCh
                       <select
                         value=""
                         onChange={(e) => { if (e.target.value) onStatusChange(risk.id, e.target.value); }}
-                        className="w-full mt-2 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        className="w-full mt-2 px-3 py-2 text-sm border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 transition-colors"
                       >
                         <option value="">Cambiar estado...</option>
                         {Object.entries(statusLabels).filter(([key]) => key !== risk.status).map(([key, label]) => (
@@ -182,9 +182,9 @@ const RiskList = ({ risks, filters, onFilterChange, onEdit, onDelete, onStatusCh
                       </select>
                     </div>
                   </div>
-                  <div className="bg-white rounded-lg p-4 border border-gray-200">
-                    <h4 className="text-xs font-semibold text-gray-500 uppercase mb-2">Mitigación</h4>
-                    <p className="text-sm text-gray-600">
+                  <div className="bg-white dark:bg-slate-800 rounded-lg p-4 border border-gray-200 dark:border-slate-600 transition-colors">
+                    <h4 className="text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase mb-2">Mitigación</h4>
+                    <p className="text-sm text-slate-600 dark:text-slate-300">
                       {risk.mitigation_actions || 'No se han definido acciones de mitigación.'}
                     </p>
                   </div>

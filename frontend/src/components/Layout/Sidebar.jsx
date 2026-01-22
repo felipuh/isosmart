@@ -18,13 +18,13 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="w-64 bg-gray-900 dark:bg-slate-950 text-white flex flex-col transition-colors duration-300">
+    <div className="w-64 bg-slate-900 dark:bg-slate-950 text-white flex flex-col transition-colors duration-300">
       {/* Logo */}
-      <div className="p-6 border-b border-gray-800 dark:border-slate-800">
+      <div className="p-6 border-b border-slate-800 dark:border-slate-800">
         <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
           ISO Smart
         </h1>
-        <p className="text-sm text-gray-400 dark:text-slate-500">Sistema de Gobierno de Calidad</p>
+        <p className="text-sm text-slate-400 dark:text-slate-500">Sistema de Gobierno de Calidad</p>
       </div>
 
       {/* Menu Items */}
@@ -41,7 +41,7 @@ const Sidebar = () => {
                   className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 ${
                     isActive
                       ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/25'
-                      : 'text-gray-300 hover:bg-gray-800 dark:hover:bg-slate-800 hover:text-white'
+                      : 'text-slate-300 dark:text-slate-400 hover:bg-slate-800 dark:hover:bg-slate-800 hover:text-white'
                   }`}
                 >
                   <Icon className="h-5 w-5" />
@@ -54,8 +54,8 @@ const Sidebar = () => {
       </nav>
 
       {/* Footer */}
-      <div className="p-4 border-t border-gray-800 dark:border-slate-800">
-        <p className="text-xs text-gray-400 dark:text-slate-500 text-center">
+      <div className="p-4 border-t border-slate-800 dark:border-slate-800">
+        <p className="text-xs text-slate-400 dark:text-slate-500 text-center">
           ISO 9001:2015 | ISO/IEC 42001:2023
         </p>
       </div>

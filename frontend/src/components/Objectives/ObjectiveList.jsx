@@ -14,11 +14,11 @@ const ObjectiveList = ({ objectives, onEdit, onDelete, onUpdateProgress }) => {
   };
 
   const statusColors = {
-    active: 'bg-blue-100 text-blue-700',
-    in_progress: 'bg-yellow-100 text-yellow-700',
-    achieved: 'bg-green-100 text-green-700',
-    delayed: 'bg-red-100 text-red-700',
-    cancelled: 'bg-gray-100 text-gray-700',
+    active: 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700',
+    in_progress: 'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300 border border-yellow-200 dark:border-yellow-700',
+    achieved: 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-700',
+    delayed: 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-700',
+    cancelled: 'bg-slate-100 dark:bg-slate-700/40 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600',
   };
 
   const sourceIcons = {
@@ -54,22 +54,22 @@ const ObjectiveList = ({ objectives, onEdit, onDelete, onUpdateProgress }) => {
 
   if (objectives.length === 0) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
-        <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 border border-gray-100 dark:border-slate-700 p-12 text-center transition-colors">
+        <div className="w-16 h-16 bg-gray-100 dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg className="w-8 h-8 text-gray-400 dark:text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
           </svg>
         </div>
-        <h3 className="text-lg font-medium text-gray-900 mb-1">No hay objetivos registrados</h3>
-        <p className="text-gray-500">Comienza agregando un nuevo objetivo de calidad.</p>
+        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-1">No hay objetivos registrados</h3>
+        <p className="text-gray-500 dark:text-slate-400">Comienza agregando un nuevo objetivo de calidad.</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+    <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 border border-gray-100 dark:border-slate-700 overflow-hidden transition-colors">
       {/* Table Header */}
-      <div className="grid grid-cols-12 gap-4 px-6 py-3 bg-gray-50 border-b border-gray-200 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+      <div className="grid grid-cols-12 gap-4 px-6 py-3 bg-gray-50 dark:bg-slate-700/50 border-b border-gray-200 dark:border-slate-700 text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase tracking-wider transition-colors">
         <div className="col-span-4">Objetivo / Indicador</div>
         <div className="col-span-2">Progreso</div>
         <div className="col-span-2">Estado</div>
@@ -78,12 +78,12 @@ const ObjectiveList = ({ objectives, onEdit, onDelete, onUpdateProgress }) => {
       </div>
 
       {/* Table Body */}
-      <div className="divide-y divide-gray-100">
+      <div className="divide-y divide-gray-100 dark:divide-slate-700 transition-colors">
         {objectives.map((objective) => {
           const progress = objective.progress_percentage || 0;
           
           return (
-            <div key={objective.id} className="hover:bg-gray-50 transition-colors">
+            <div key={objective.id} className="hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors">
               {/* Main Row */}
               <div 
                 className="grid grid-cols-12 gap-4 px-6 py-4 items-center cursor-pointer"
@@ -92,16 +92,16 @@ const ObjectiveList = ({ objectives, onEdit, onDelete, onUpdateProgress }) => {
                 {/* Objective Info */}
                 <div className="col-span-4">
                   <div className="flex items-start space-x-3">
-                    <div className="flex-shrink-0 w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center">
-                      <svg className="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="flex-shrink-0 w-10 h-10 bg-indigo-100 dark:bg-indigo-900/40 rounded-lg flex items-center justify-center transition-colors">
+                      <svg className="w-5 h-5 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                       </svg>
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium text-gray-900">
+                      <p className="text-sm font-medium text-gray-900 dark:text-white">
                         {objective.indicator_name}
                       </p>
-                      <p className="text-xs text-gray-500 mt-0.5 truncate">
+                      <p className="text-xs text-gray-500 dark:text-slate-400 mt-0.5 truncate">
                         {objective.objective_description?.substring(0, 50)}{objective.objective_description?.length > 50 ? '...' : ''}
                       </p>
                     </div>
@@ -111,17 +111,17 @@ const ObjectiveList = ({ objectives, onEdit, onDelete, onUpdateProgress }) => {
                 {/* Progress */}
                 <div className="col-span-2">
                   <div className="flex items-center space-x-2">
-                    <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                    <div className="flex-1 h-2 bg-gray-200 dark:bg-slate-700 rounded-full overflow-hidden transition-colors">
                       <div 
                         className={`h-full ${getProgressColor(progress)} transition-all duration-300`}
                         style={{ width: `${Math.min(progress, 100)}%` }}
                       ></div>
                     </div>
-                    <span className="text-sm font-medium text-gray-700 w-12 text-right">
+                    <span className="text-sm font-medium text-gray-700 dark:text-slate-300 w-12 text-right">
                       {progress.toFixed(0)}%
                     </span>
                   </div>
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">
                     {objective.current_value || 0} / {objective.target_value} {objective.measurement_unit}
                   </p>
                 </div>
@@ -135,8 +135,8 @@ const ObjectiveList = ({ objectives, onEdit, onDelete, onUpdateProgress }) => {
 
                 {/* Deadline */}
                 <div className="col-span-2">
-                  <div className="flex items-center text-sm text-gray-500">
-                    <svg className="w-4 h-4 mr-1.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="flex items-center text-sm text-gray-500 dark:text-slate-400">
+                    <svg className="w-4 h-4 mr-1.5 text-gray-400 dark:text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
                     {formatDate(objective.deadline)}
@@ -147,7 +147,7 @@ const ObjectiveList = ({ objectives, onEdit, onDelete, onUpdateProgress }) => {
                 <div className="col-span-2 flex items-center justify-end space-x-2">
                   <button
                     onClick={(e) => { e.stopPropagation(); setEditingProgress(objective.id); setProgressValue(objective.current_value || ''); }}
-                    className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                    className="p-2 text-gray-400 dark:text-slate-500 hover:text-green-600 dark:hover:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/30 rounded-lg transition-colors"
                     title="Actualizar Progreso"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -156,7 +156,7 @@ const ObjectiveList = ({ objectives, onEdit, onDelete, onUpdateProgress }) => {
                   </button>
                   <button
                     onClick={(e) => { e.stopPropagation(); onEdit(objective); }}
-                    className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                    className="p-2 text-gray-400 dark:text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
                     title="Editar"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -165,7 +165,7 @@ const ObjectiveList = ({ objectives, onEdit, onDelete, onUpdateProgress }) => {
                   </button>
                   <button
                     onClick={(e) => { e.stopPropagation(); onDelete(objective.id); }}
-                    className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                    className="p-2 text-gray-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
                     title="Eliminar"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -177,27 +177,27 @@ const ObjectiveList = ({ objectives, onEdit, onDelete, onUpdateProgress }) => {
 
               {/* Progress Update Modal */}
               {editingProgress === objective.id && (
-                <div className="px-6 pb-4 bg-green-50 border-t border-green-100">
+                <div className="px-6 pb-4 bg-green-50 dark:bg-green-900/20 border-t border-green-100 dark:border-green-800 transition-colors">
                   <div className="flex items-center gap-4 mt-4">
-                    <label className="text-sm font-medium text-gray-700">Actualizar valor actual:</label>
+                    <label className="text-sm font-medium text-gray-700 dark:text-slate-300">Actualizar valor actual:</label>
                     <input
                       type="number"
                       step="0.01"
                       value={progressValue}
                       onChange={(e) => setProgressValue(e.target.value)}
-                      className="w-32 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500"
+                      className="w-32 px-3 py-2 border border-gray-300 dark:bg-slate-700 dark:text-white dark:border-slate-600 rounded-lg text-sm focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400 transition-colors"
                       placeholder={`Meta: ${objective.target_value}`}
                     />
-                    <span className="text-sm text-gray-500">{objective.measurement_unit}</span>
+                    <span className="text-sm text-gray-500 dark:text-slate-400">{objective.measurement_unit}</span>
                     <button
                       onClick={() => handleProgressSubmit(objective.id)}
-                      className="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700"
+                      className="px-4 py-2 bg-green-600 dark:bg-green-700 text-white text-sm font-medium rounded-lg hover:bg-green-700 dark:hover:bg-green-800 transition-colors"
                     >
                       Guardar
                     </button>
                     <button
                       onClick={() => { setEditingProgress(null); setProgressValue(''); }}
-                      className="px-4 py-2 bg-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-300"
+                      className="px-4 py-2 bg-gray-200 dark:bg-slate-700 text-gray-700 dark:text-slate-300 text-sm font-medium rounded-lg hover:bg-gray-300 dark:hover:bg-slate-600 transition-colors"
                     >
                       Cancelar
                     </button>
@@ -207,58 +207,58 @@ const ObjectiveList = ({ objectives, onEdit, onDelete, onUpdateProgress }) => {
 
               {/* Expanded Details */}
               {expandedId === objective.id && editingProgress !== objective.id && (
-                <div className="px-6 pb-4 bg-gray-50 border-t border-gray-100">
+                <div className="px-6 pb-4 bg-gray-50 dark:bg-slate-700/30 border-t border-gray-100 dark:border-slate-700 transition-colors">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-                    <div className="bg-white rounded-lg p-4 border border-gray-200">
-                      <h4 className="text-xs font-semibold text-gray-500 uppercase mb-2">Medición</h4>
+                    <div className="bg-white dark:bg-slate-800 rounded-lg p-4 border border-gray-200 dark:border-slate-700 transition-colors">
+                      <h4 className="text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase mb-2">Medición</h4>
                       <div className="space-y-2 text-sm">
                         <div className="flex justify-between">
-                          <span className="text-gray-500">Línea Base:</span>
-                          <span className="font-medium">{objective.baseline_value} {objective.measurement_unit}</span>
+                          <span className="text-gray-500 dark:text-slate-400">Línea Base:</span>
+                          <span className="font-medium text-gray-900 dark:text-white">{objective.baseline_value} {objective.measurement_unit}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-gray-500">Meta:</span>
-                          <span className="font-medium">{objective.target_value} {objective.measurement_unit}</span>
+                          <span className="text-gray-500 dark:text-slate-400">Meta:</span>
+                          <span className="font-medium text-gray-900 dark:text-white">{objective.target_value} {objective.measurement_unit}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-gray-500">Actual:</span>
-                          <span className="font-medium">{objective.current_value || 0} {objective.measurement_unit}</span>
+                          <span className="text-gray-500 dark:text-slate-400">Actual:</span>
+                          <span className="font-medium text-gray-900 dark:text-white">{objective.current_value || 0} {objective.measurement_unit}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-gray-500">Frecuencia:</span>
-                          <span className="font-medium">{objective.measurement_frequency}</span>
+                          <span className="text-gray-500 dark:text-slate-400">Frecuencia:</span>
+                          <span className="font-medium text-gray-900 dark:text-white">{objective.measurement_frequency}</span>
                         </div>
                       </div>
                     </div>
-                    <div className="bg-white rounded-lg p-4 border border-gray-200">
-                      <h4 className="text-xs font-semibold text-gray-500 uppercase mb-2">Responsable</h4>
+                    <div className="bg-white dark:bg-slate-800 rounded-lg p-4 border border-gray-200 dark:border-slate-700 transition-colors">
+                      <h4 className="text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase mb-2">Responsable</h4>
                       <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
-                          <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div className="w-10 h-10 bg-gray-200 dark:bg-slate-700 rounded-full flex items-center justify-center transition-colors">
+                          <svg className="w-5 h-5 text-gray-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                           </svg>
                         </div>
                         <div>
-                          <p className="text-sm font-medium text-gray-900">{objective.responsible || 'Sin asignar'}</p>
-                          <p className="text-xs text-gray-500">ISO {objective.iso_clause || '6.2'}</p>
+                          <p className="text-sm font-medium text-gray-900 dark:text-white">{objective.responsible || 'Sin asignar'}</p>
+                          <p className="text-xs text-gray-500 dark:text-slate-400">ISO {objective.iso_clause || '6.2'}</p>
                         </div>
                       </div>
                     </div>
-                    <div className="bg-white rounded-lg p-4 border border-gray-200">
-                      <h4 className="text-xs font-semibold text-gray-500 uppercase mb-2">Fuente</h4>
+                    <div className="bg-white dark:bg-slate-800 rounded-lg p-4 border border-gray-200 dark:border-slate-700 transition-colors">
+                      <h4 className="text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase mb-2">Fuente</h4>
                       <div className="flex items-center space-x-2">
                         <span className="text-2xl">{sourceIcons[objective.source_module]?.icon || '📋'}</span>
-                        <span className="text-sm text-gray-600">{sourceIcons[objective.source_module]?.label || objective.source_module}</span>
+                        <span className="text-sm text-gray-600 dark:text-slate-300">{sourceIcons[objective.source_module]?.label || objective.source_module}</span>
                       </div>
                       {objective.process_id && (
-                        <p className="text-xs text-gray-500 mt-2">Proceso: {objective.process_id}</p>
+                        <p className="text-xs text-gray-500 dark:text-slate-400 mt-2">Proceso: {objective.process_id}</p>
                       )}
                     </div>
                   </div>
                   {objective.objective_description && (
-                    <div className="mt-4 bg-white rounded-lg p-4 border border-gray-200">
-                      <h4 className="text-xs font-semibold text-gray-500 uppercase mb-2">Descripción del Objetivo</h4>
-                      <p className="text-sm text-gray-600">{objective.objective_description}</p>
+                    <div className="mt-4 bg-white dark:bg-slate-800 rounded-lg p-4 border border-gray-200 dark:border-slate-700 transition-colors">
+                      <h4 className="text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase mb-2">Descripción del Objetivo</h4>
+                      <p className="text-sm text-gray-600 dark:text-slate-300">{objective.objective_description}</p>
                     </div>
                   )}
                 </div>

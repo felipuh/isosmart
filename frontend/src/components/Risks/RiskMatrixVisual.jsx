@@ -73,41 +73,41 @@ const RiskMatrixVisual = ({ onRiskClick }) => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-96">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 dark:border-blue-400"></div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-center">
-        <p className="text-red-600">{error}</p>
-        <button onClick={loadMatrixData} className="mt-2 text-sm text-red-700 underline">Reintentar</button>
+      <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 rounded-lg p-4 text-center transition-colors">
+        <p className="text-red-600 dark:text-red-400">{error}</p>
+        <button onClick={loadMatrixData} className="mt-2 text-sm text-red-700 dark:text-red-300 underline hover:no-underline transition-colors">Reintentar</button>
       </div>
     );
   }
 
   return (
     <div className="space-y-6">
-      <div className="bg-white rounded-lg shadow p-4">
-        <h3 className="text-sm font-medium text-gray-700 mb-3">Leyenda de Niveles de Riesgo</h3>
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-4 transition-colors">
+        <h3 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Leyenda de Niveles de Riesgo</h3>
         <div className="flex flex-wrap gap-4">
-          <div className="flex items-center"><div className="w-4 h-4 bg-red-500 rounded mr-2"></div><span className="text-sm text-gray-600">Crítico</span></div>
-          <div className="flex items-center"><div className="w-4 h-4 bg-orange-500 rounded mr-2"></div><span className="text-sm text-gray-600">Alto</span></div>
-          <div className="flex items-center"><div className="w-4 h-4 bg-yellow-400 rounded mr-2"></div><span className="text-sm text-gray-600">Medio</span></div>
-          <div className="flex items-center"><div className="w-4 h-4 bg-green-500 rounded mr-2"></div><span className="text-sm text-gray-600">Bajo</span></div>
+          <div className="flex items-center"><div className="w-4 h-4 bg-red-500 rounded mr-2"></div><span className="text-sm text-slate-600 dark:text-slate-400">Crítico</span></div>
+          <div className="flex items-center"><div className="w-4 h-4 bg-orange-500 rounded mr-2"></div><span className="text-sm text-slate-600 dark:text-slate-400">Alto</span></div>
+          <div className="flex items-center"><div className="w-4 h-4 bg-yellow-400 rounded mr-2"></div><span className="text-sm text-slate-600 dark:text-slate-400">Medio</span></div>
+          <div className="flex items-center"><div className="w-4 h-4 bg-green-500 rounded mr-2"></div><span className="text-sm text-slate-600 dark:text-slate-400">Bajo</span></div>
         </div>
       </div>
 
-      <div className="bg-white rounded-lg shadow p-6 overflow-x-auto">
-        <h3 className="text-lg font-medium text-gray-900 mb-6 text-center">Matriz de Riesgos - Probabilidad vs Impacto</h3>
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 overflow-x-auto transition-colors">
+        <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-6 text-center">Matriz de Riesgos - Probabilidad vs Impacto</h3>
         
         <div className="min-w-[600px]">
           <div className="flex">
             <div className="w-28 flex-shrink-0"></div>
             <div className="flex-1 grid grid-cols-5 gap-1 mb-1">
               {impactOrder.map((impact) => (
-                <div key={impact} className="text-center text-xs font-medium text-gray-600 py-2">{impactLabels[impact]}</div>
+                <div key={impact} className="text-center text-xs font-medium text-slate-600 dark:text-slate-400 py-2">{impactLabels[impact]}</div>
               ))}
             </div>
           </div>
@@ -115,7 +115,7 @@ const RiskMatrixVisual = ({ onRiskClick }) => {
           <div className="flex">
             <div className="w-28 flex-shrink-0 flex flex-col gap-1">
               {probOrder.map((prob) => (
-                <div key={prob} className="h-16 flex items-center justify-end pr-3 text-xs font-medium text-gray-600">{probabilityLabels[prob]}</div>
+                <div key={prob} className="h-16 flex items-center justify-end pr-3 text-xs font-medium text-slate-600 dark:text-slate-400">{probabilityLabels[prob]}</div>
               ))}
             </div>
 
@@ -131,7 +131,7 @@ const RiskMatrixVisual = ({ onRiskClick }) => {
                       <div
                         key={`${prob}-${impact}`}
                         onClick={() => handleCellClick(prob, impact)}
-                        className={`h-16 rounded-lg flex flex-col items-center justify-center cursor-pointer transition-all duration-200 ${getCellColor(prob, impact)} ${count > 0 ? 'hover:scale-105' : 'opacity-70'} ${isSelected ? 'ring-4 ring-blue-600' : ''}`}
+                        className={`h-16 rounded-lg flex flex-col items-center justify-center cursor-pointer transition-all duration-200 ${getCellColor(prob, impact)} ${count > 0 ? 'hover:scale-105' : 'opacity-70'} ${isSelected ? 'ring-4 ring-blue-600 dark:ring-blue-400' : ''}`}
                       >
                         <span className="text-xl font-bold text-white">{count}</span>
                         <span className="text-xs text-white opacity-80">{count === 1 ? 'riesgo' : 'riesgos'}</span>
@@ -144,21 +144,21 @@ const RiskMatrixVisual = ({ onRiskClick }) => {
           </div>
 
           <div className="flex justify-center mt-4">
-            <span className="text-sm font-medium text-gray-600">→ IMPACTO</span>
+            <span className="text-sm font-medium text-slate-600 dark:text-slate-400">→ IMPACTO</span>
           </div>
         </div>
       </div>
 
       {selectedCell && matrixData?.matrix?.[selectedCell.prob]?.[selectedCell.impact]?.count > 0 && (
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex justify-between items-start mb-4">
             <div>
-              <h3 className="text-lg font-medium text-gray-900">
+              <h3 className="text-lg font-medium text-slate-900 dark:text-white">
                 Riesgos: {probabilityLabels[selectedCell.prob]} probabilidad, {impactLabels[selectedCell.impact]} impacto
               </h3>
-              <p className="text-sm text-gray-500">Nivel: <span className="font-medium">{getRiskLevelLabel(selectedCell.prob, selectedCell.impact)}</span></p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">Nivel: <span className="font-medium text-slate-700 dark:text-slate-300">{getRiskLevelLabel(selectedCell.prob, selectedCell.impact)}</span></p>
             </div>
-            <button onClick={() => setSelectedCell(null)} className="text-gray-400 hover:text-gray-600">
+            <button onClick={() => setSelectedCell(null)} className="text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
@@ -166,9 +166,9 @@ const RiskMatrixVisual = ({ onRiskClick }) => {
           </div>
           <div className="space-y-3">
             {matrixData.matrix[selectedCell.prob][selectedCell.impact].risks.map((risk) => (
-              <div key={risk.id} onClick={() => onRiskClick && onRiskClick(risk)} className="p-3 bg-gray-50 rounded-lg hover:bg-gray-100 cursor-pointer">
-                <span className="text-sm font-medium text-gray-900">#{risk.id}</span>
-                <p className="text-sm text-gray-600 mt-1">{risk.description}</p>
+              <div key={risk.id} onClick={() => onRiskClick && onRiskClick(risk)} className="p-3 bg-slate-50 dark:bg-slate-700/50 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition-colors">
+                <span className="text-sm font-medium text-slate-900 dark:text-white">#{risk.id}</span>
+                <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">{risk.description}</p>
               </div>
             ))}
           </div>

@@ -85,14 +85,14 @@ const RiskDashboard = () => {
     }
   };
 
-  const StatCard = ({ icon, iconBg, value, label, valueColor = 'text-gray-900' }) => (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+  const StatCard = ({ icon, iconBg, value, label, valueColor = 'text-slate-900 dark:text-white' }) => (
+    <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 border border-gray-100 dark:border-slate-700 p-6 transition-colors">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-gray-500">{label}</p>
+          <p className="text-sm font-medium text-slate-600 dark:text-slate-400">{label}</p>
           <p className={`text-3xl font-bold mt-1 ${valueColor}`}>{value}</p>
         </div>
-        <div className={`p-3 rounded-xl ${iconBg}`}>
+        <div className={`p-3 rounded-xl ${iconBg} dark:opacity-80`}>
           {icon}
         </div>
       </div>
@@ -100,11 +100,11 @@ const RiskDashboard = () => {
   );
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
+    <div className="p-6 bg-slate-50 dark:bg-slate-900 min-h-screen transition-colors duration-300">
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Gestión de Riesgos</h1>
-        <p className="text-gray-500 mt-1">
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Gestión de Riesgos</h1>
+        <p className="text-slate-500 dark:text-slate-400 mt-1">
           Administra los riesgos y oportunidades del SGC según ISO 9001:2015 - Cláusula 6.1
         </p>
       </div>
@@ -143,7 +143,7 @@ const RiskDashboard = () => {
       <div className="flex flex-wrap items-center gap-3 mb-6">
         <button
           onClick={handleCreateRisk}
-          className="inline-flex items-center px-4 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
+          className="inline-flex items-center px-4 py-2.5 bg-blue-600 dark:bg-blue-700 text-white text-sm font-medium rounded-lg hover:bg-blue-700 dark:hover:bg-blue-800 transition-colors shadow-sm"
         >
           <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -152,7 +152,7 @@ const RiskDashboard = () => {
         </button>
         <button
           onClick={loadData}
-          className="inline-flex items-center px-4 py-2.5 bg-white text-gray-700 text-sm font-medium rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors"
+          className="inline-flex items-center px-4 py-2.5 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm font-medium rounded-lg border border-gray-300 dark:border-slate-600 hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors"
         >
           <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -161,13 +161,13 @@ const RiskDashboard = () => {
         </button>
 
         {/* Tabs */}
-        <div className="ml-auto flex bg-white rounded-lg border border-gray-200 p-1">
+        <div className="ml-auto flex bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-700 p-1 transition-colors">
           <button
             onClick={() => setActiveTab('list')}
             className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
               activeTab === 'list' 
-                ? 'bg-blue-100 text-blue-700' 
-                : 'text-gray-500 hover:text-gray-700'
+                ? 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300' 
+                : 'text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-300'
             }`}
           >
             Lista
@@ -176,8 +176,8 @@ const RiskDashboard = () => {
             onClick={() => setActiveTab('matrix')}
             className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
               activeTab === 'matrix' 
-                ? 'bg-blue-100 text-blue-700' 
-                : 'text-gray-500 hover:text-gray-700'
+                ? 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300' 
+                : 'text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-300'
             }`}
           >
             Matriz Visual
@@ -188,7 +188,7 @@ const RiskDashboard = () => {
         <select
           value={filters.level}
           onChange={(e) => setFilters({...filters, level: e.target.value})}
-          className="px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="px-4 py-2.5 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
         >
           <option value="">Todos los niveles</option>
           <option value="critico">Crítico</option>
@@ -200,9 +200,9 @@ const RiskDashboard = () => {
 
       {/* Error Alert */}
       {error && (
-        <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-center justify-between">
+        <div className="mb-6 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 text-red-700 dark:text-red-200 px-4 py-3 rounded-lg flex items-center justify-between transition-colors">
           <span>{error}</span>
-          <button onClick={() => setError(null)} className="text-red-500 hover:text-red-700">
+          <button onClick={() => setError(null)} className="text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -235,20 +235,20 @@ const RiskDashboard = () => {
       )}
 
       {/* Info Card */}
-      <div className="mt-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-5 border border-blue-100">
+      <div className="mt-6 bg-gradient-to-r from-blue-50 dark:from-blue-900/30 to-indigo-50 dark:to-indigo-900/30 rounded-xl p-5 border border-blue-100 dark:border-blue-700 transition-colors">
         <div className="flex items-start space-x-3">
           <div className="flex-shrink-0">
-            <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-gray-900">Gestión de Riesgos con IA</h3>
-            <p className="text-sm text-gray-600 mt-1">
+            <h3 className="text-sm font-semibold text-slate-900 dark:text-white">Gestión de Riesgos con IA</h3>
+            <p className="text-sm text-slate-700 dark:text-slate-300 mt-1">
               Los riesgos pueden ser identificados automáticamente por los módulos SCA (Context Analyzer), 
               SIE (Stakeholder Intelligence) y SPM (Process Mapper) para un análisis integral del SGC.
             </p>
-            <a href="/context" className="inline-flex items-center text-sm text-blue-600 hover:text-blue-700 mt-2 font-medium">
+            <a href="/context" className="inline-flex items-center text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 mt-2 font-medium transition-colors">
               Ir a Análisis de Contexto
               <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

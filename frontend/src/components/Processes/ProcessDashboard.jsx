@@ -134,24 +134,24 @@ const ProcessDashboard = () => {
   };
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
+    <div className="p-6 bg-slate-50 dark:bg-slate-900 min-h-screen transition-colors duration-300">
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">
           Mapa de Procesos del SGC
         </h1>
-        <p className="text-gray-600">
+        <p className="text-slate-600 dark:text-slate-400">
           ISO 4.4 - Sistema de gestión de calidad y sus procesos
         </p>
       </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Total Procesos</p>
-              <p className="text-3xl font-bold text-blue-600">
+              <p className="text-sm text-slate-600 dark:text-slate-400">Total Procesos</p>
+              <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">
                 {processMap?.total_processes || processes.length || 0}
               </p>
             </div>
@@ -159,10 +159,10 @@ const ProcessDashboard = () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Estratégicos</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400">Estratégicos</p>
               <p className="text-3xl font-bold text-purple-600">
                 {processMap?.strategic_count || 0}
               </p>
@@ -171,10 +171,10 @@ const ProcessDashboard = () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Operativos</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400">Operativos</p>
               <p className="text-3xl font-bold text-blue-600">
                 {processMap?.operational_count || 0}
               </p>
@@ -183,10 +183,10 @@ const ProcessDashboard = () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Apoyo</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400">Apoyo</p>
               <p className="text-3xl font-bold text-green-600">
                 {processMap?.support_count || 0}
               </p>
@@ -197,7 +197,7 @@ const ProcessDashboard = () => {
       </div>
 
       {/* Actions Bar */}
-      <div className="bg-white rounded-lg shadow p-4 mb-6">
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-4 mb-6 transition-colors">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center space-x-3">
             <button
@@ -220,7 +220,7 @@ const ProcessDashboard = () => {
 
             <button
               onClick={loadData}
-              className="flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+              className="flex items-center px-4 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
             >
               <RefreshCw className="mr-2 h-4 w-4" />
               Actualizar
@@ -228,10 +228,10 @@ const ProcessDashboard = () => {
           </div>
 
           <div className="flex items-center space-x-4">
-            <span className="text-sm text-gray-600">
+            <span className="text-sm text-slate-600 dark:text-slate-400">
               Última actualización: {formatDate(processMap?.updated_at)}
             </span>
-            <button className="flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+            <button className="flex items-center px-4 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
               <Download className="mr-2 h-4 w-4" />
               Exportar
             </button>
@@ -265,12 +265,12 @@ const ProcessDashboard = () => {
           />
         </div>
       ) : (
-        <div className="bg-white rounded-lg shadow p-12 text-center">
-          <Network className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-12 text-center transition-colors">
+          <Network className="h-16 w-16 text-slate-400 dark:text-slate-600 mx-auto mb-4" />
+          <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-2">
             No hay mapa de procesos disponible
           </h3>
-          <p className="text-gray-600 mb-6">
+          <p className="text-slate-600 dark:text-slate-400 mb-6">
             Ejecuta el mapeo automático para crear tu mapa de procesos del SGC
           </p>
           <button

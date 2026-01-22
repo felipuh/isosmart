@@ -4,12 +4,12 @@ import { AlertTriangle, TrendingUp, Users, Activity } from 'lucide-react';
 const CriticalStakeholders = ({ stakeholders, loading }) => {
   if (loading) {
     return (
-      <div className="bg-white rounded-lg shadow p-6">
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
         <div className="animate-pulse">
-          <div className="h-6 bg-gray-200 rounded w-1/3 mb-4"></div>
+          <div className="h-6 bg-slate-200 dark:bg-slate-700 rounded w-1/3 mb-4"></div>
           <div className="space-y-3">
-            <div className="h-20 bg-gray-200 rounded"></div>
-            <div className="h-20 bg-gray-200 rounded"></div>
+            <div className="h-20 bg-slate-200 dark:bg-slate-700 rounded"></div>
+            <div className="h-20 bg-slate-200 dark:bg-slate-700 rounded"></div>
           </div>
         </div>
       </div>
@@ -18,12 +18,12 @@ const CriticalStakeholders = ({ stakeholders, loading }) => {
 
   if (!stakeholders || stakeholders.length === 0) {
     return (
-      <div className="bg-white rounded-lg shadow p-6">
-        <h3 className="text-lg font-semibold mb-4 flex items-center">
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
+        <h3 className="text-lg font-semibold dark:text-white mb-4 flex items-center">
           <Users className="mr-2 h-5 w-5" />
           Stakeholders Críticos
         </h3>
-        <p className="text-gray-500 text-center py-8">
+        <p className="text-slate-500 dark:text-slate-400 text-center py-8">
           No hay stakeholders críticos identificados
         </p>
       </div>
@@ -32,22 +32,22 @@ const CriticalStakeholders = ({ stakeholders, loading }) => {
 
   const getRiskColor = (riskLevel) => {
     switch (riskLevel) {
-      case 'CRÍTICO': return 'bg-red-100 text-red-800 border-red-300';
-      case 'ALTO': return 'bg-orange-100 text-orange-800 border-orange-300';
-      case 'MEDIO': return 'bg-yellow-100 text-yellow-800 border-yellow-300';
-      default: return 'bg-blue-100 text-blue-800 border-blue-300';
+      case 'CRÍTICO': return 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 border-red-300 dark:border-red-700';
+      case 'ALTO': return 'bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 border-orange-300 dark:border-orange-700';
+      case 'MEDIO': return 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 border-yellow-300 dark:border-yellow-700';
+      default: return 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 border-blue-300 dark:border-blue-700';
     }
   };
 
   const getInfluenceColor = (score) => {
-    if (score >= 0.8) return 'text-red-600';
-    if (score >= 0.6) return 'text-orange-600';
-    return 'text-yellow-600';
+    if (score >= 0.8) return 'text-red-600 dark:text-red-400';
+    if (score >= 0.6) return 'text-orange-600 dark:text-orange-400';
+    return 'text-yellow-600 dark:text-yellow-400';
   };
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
-      <h3 className="text-lg font-semibold mb-4 flex items-center">
+    <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
+      <h3 className="text-lg font-semibold dark:text-white mb-4 flex items-center">
         <AlertTriangle className="mr-2 h-5 w-5 text-red-500" />
         Stakeholders Críticos ({stakeholders.length})
       </h3>
@@ -60,22 +60,22 @@ const CriticalStakeholders = ({ stakeholders, loading }) => {
           >
             <div className="flex justify-between items-start mb-2">
               <div className="flex-1">
-                <h4 className="font-semibold text-gray-900">{sh.name}</h4>
-                <p className="text-sm text-gray-600 capitalize">{sh.type}</p>
+                <h4 className="font-semibold dark:text-slate-100">{sh.name}</h4>
+                <p className="text-sm dark:text-slate-400 capitalize">{sh.type}</p>
               </div>
               <div className="flex flex-col items-end">
                 <span className={`text-2xl font-bold ${getInfluenceColor(sh.composite_score)}`}>
                   {(sh.composite_score * 100).toFixed(0)}%
                 </span>
-                <span className="text-xs text-gray-500">Influencia</span>
+                <span className="text-xs dark:text-slate-400">Influencia</span>
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3 mt-3">
               <div className="flex items-center text-sm">
-                <TrendingUp className="h-4 w-4 mr-1 text-gray-500" />
-                <span className="text-gray-600">Poder:</span>
-                <span className="ml-1 font-medium capitalize">{sh.power}</span>
+                <TrendingUp className="h-4 w-4 mr-1 dark:text-slate-400" />
+                <span className="dark:text-slate-300">Poder:</span>
+                <span className="ml-1 font-medium capitalize dark:text-slate-200">{sh.power}</span>
               </div>
               <div className="flex items-center text-sm">
                 <Activity className="h-4 w-4 mr-1 text-gray-500" />

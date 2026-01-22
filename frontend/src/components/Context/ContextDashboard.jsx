@@ -93,20 +93,20 @@ const handleRunAnalysis = async () => {
   const externalInsights = contextData?.external_insights || {};
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
+    <div className="p-6 bg-slate-50 dark:bg-slate-900 min-h-screen transition-colors duration-300">
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">
           Análisis de Contexto Organizacional
         </h1>
-        <p className="text-gray-600">
+        <p className="text-slate-600 dark:text-slate-400">
           ISO 4.1 - Comprensión de la organización y su contexto
         </p>
       </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600">Documentos Analizados</p>
@@ -118,10 +118,10 @@ const handleRunAnalysis = async () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Fortalezas</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400">Fortalezas</p>
               <p className="text-3xl font-bold text-green-600">
                 {internalInsights.fortalezas?.length || 0}
               </p>
@@ -130,10 +130,10 @@ const handleRunAnalysis = async () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Riesgos</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400">Riesgos</p>
               <p className="text-3xl font-bold text-red-600">
                 {internalInsights.riesgos_identificados?.length || 0}
               </p>
@@ -142,10 +142,10 @@ const handleRunAnalysis = async () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Factores Externos</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400">Factores Externos</p>
               <p className="text-3xl font-bold text-purple-600">
                 {externalInsights.factores_externos?.length || 0}
               </p>
@@ -156,7 +156,7 @@ const handleRunAnalysis = async () => {
       </div>
 
       {/* Actions Bar */}
-      <div className="bg-white rounded-lg shadow p-4 mb-6">
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-4 mb-6 transition-colors">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center space-x-3">
             <button
@@ -170,7 +170,7 @@ const handleRunAnalysis = async () => {
 
             <button
               onClick={loadContextData}
-              className="flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+              className="flex items-center px-4 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
             >
               <RefreshCw className="mr-2 h-4 w-4" />
               Actualizar
@@ -178,10 +178,10 @@ const handleRunAnalysis = async () => {
           </div>
 
           <div className="flex items-center space-x-4">
-            <span className="text-sm text-gray-600">
+            <span className="text-sm text-slate-600 dark:text-slate-400">
               Última actualización: {formatDate(lastUpdate)}
             </span>
-            <button className="flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+            <button className="flex items-center px-4 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
               <Download className="mr-2 h-4 w-4" />
               Exportar
             </button>
