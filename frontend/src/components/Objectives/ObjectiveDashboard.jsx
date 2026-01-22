@@ -79,7 +79,7 @@ const ObjectiveDashboard = () => {
   };
 
   const StatCard = ({ icon, iconBg, value, label, valueColor = 'text-slate-900 dark:text-white', suffix = '' }) => (
-    <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 border border-slate-200 dark:border-slate-700 p-6 transition-colors duration-300">
+    <div className="bg-white/70 dark:bg-slate-800/70 backdrop-blur-md dark:backdrop-blur-md rounded-xl shadow-sm dark:shadow-slate-900/50 border border-white/20 dark:border-slate-700/50 p-6 transition-all duration-300 hover:shadow-md dark:hover:shadow-slate-900/70 hover:bg-white/80 dark:hover:bg-slate-800/80">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-medium text-slate-500 dark:text-slate-400">{label}</p>
@@ -198,7 +198,7 @@ const ObjectiveDashboard = () => {
       )}
 
       {/* Info Card */}
-      <div className="mt-6 bg-gradient-to-r from-green-50 dark:from-green-900/30 to-emerald-50 dark:to-emerald-900/30 rounded-xl p-5 border border-green-100 dark:border-green-800 transition-colors">
+      <div className="mt-6 bg-gradient-to-r from-green-50/80 dark:from-green-900/30 to-emerald-50/80 dark:to-emerald-900/30 backdrop-blur-md rounded-xl p-5 border border-green-100/50 dark:border-green-700/50 transition-all duration-300 hover:shadow-md dark:hover:shadow-green-900/50">
         <div className="flex items-start space-x-3">
           <div className="flex-shrink-0">
             <svg className="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

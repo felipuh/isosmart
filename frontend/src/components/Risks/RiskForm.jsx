@@ -126,9 +126,9 @@ const RiskForm = ({ risk, onSubmit, onCancel }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-gray-500 dark:bg-gray-900 bg-opacity-75 dark:bg-opacity-75 flex items-center justify-center z-50 p-4 transition-colors">
-      <div className="bg-white dark:bg-slate-800 rounded-lg shadow-xl dark:shadow-slate-900/50 max-w-3xl w-full max-h-[90vh] overflow-hidden transition-colors">
-        <div className="px-6 py-4 border-b border-gray-200 dark:border-slate-700 flex justify-between items-center bg-gray-50 dark:bg-slate-700/50 transition-colors">
+    <div className="fixed inset-0 bg-black/50 dark:bg-gray-900/75 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-all duration-300">
+      <div className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-md rounded-lg shadow-2xl dark:shadow-slate-900/70 max-w-3xl w-full max-h-[90vh] overflow-hidden border border-white/20 dark:border-slate-700/30 transition-all duration-300">
+        <div className="px-6 py-4 border-b border-slate-200/50 dark:border-slate-700/50 flex justify-between items-center bg-white/80 dark:bg-slate-800/80 backdrop-blur-md transition-all duration-300">
           <h2 className="text-xl font-semibold text-slate-900 dark:text-white">{risk ? 'Editar Riesgo' : 'Nuevo Riesgo'}</h2>
           <button onClick={onCancel} className="text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-400 transition-colors">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -141,7 +141,7 @@ const RiskForm = ({ risk, onSubmit, onCancel }) => {
           <div className="px-6 py-4 space-y-6">
             {errors.submit && <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 text-red-700 dark:text-red-200 px-4 py-3 rounded transition-colors">{errors.submit}</div>}
 
-            <div className="bg-gray-50 dark:bg-slate-700/50 rounded-lg p-4 transition-colors">
+            <div className="bg-gray-50/70 dark:bg-slate-700/70 backdrop-blur-md rounded-lg p-4 border border-gray-100/50 dark:border-slate-600/50 transition-all duration-300">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Nivel de Riesgo Calculado:</span>
                 <span className={`px-4 py-2 text-sm font-bold rounded-lg border ${getLevelColor(formData.risk_level)}`}>

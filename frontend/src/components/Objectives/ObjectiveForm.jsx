@@ -100,9 +100,9 @@ const ObjectiveForm = ({ objective, onSubmit, onCancel }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-gray-500 dark:bg-gray-900 bg-opacity-75 dark:bg-opacity-75 flex items-center justify-center z-50 p-4 transition-colors">
-      <div className="bg-white dark:bg-slate-800 rounded-xl shadow-xl dark:shadow-slate-900/50 max-w-3xl w-full max-h-[90vh] overflow-hidden transition-colors">
-        <div className="px-6 py-4 border-b border-gray-200 dark:border-slate-700 flex justify-between items-center bg-gray-50 dark:bg-slate-700/50 transition-colors">
+    <div className="fixed inset-0 bg-black/50 dark:bg-gray-900/75 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-all duration-300">
+      <div className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-md rounded-xl shadow-2xl dark:shadow-slate-900/70 max-w-3xl w-full max-h-[90vh] overflow-hidden border border-white/20 dark:border-slate-700/30 transition-all duration-300">
+        <div className="px-6 py-4 border-b border-slate-200/50 dark:border-slate-700/50 flex justify-between items-center bg-white/80 dark:bg-slate-800/80 backdrop-blur-md transition-all duration-300">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
             {objective ? 'Editar Objetivo' : 'Nuevo Objetivo de Calidad'}
           </h2>

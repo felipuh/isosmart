@@ -63,3 +63,4 @@ backend/backend/__pycache__/settings.cpython-39.pyc
 logs/ai/celery_worker.log
 logs/ai/frontend-error-0.log
 logs/ai/frontend-out-0.log
+frontend/src/components/Settings/SettingsDashboard.jsx.bak

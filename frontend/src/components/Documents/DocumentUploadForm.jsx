@@ -65,7 +65,7 @@ const DocumentUploadForm = ({ onUpload, onCancel, uploading }) => {
   };
 
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
+    <div className="bg-white/70 dark:bg-slate-800/70 backdrop-blur-md rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-all duration-300 border border-white/20 dark:border-slate-700/50 hover:shadow-md dark:hover:shadow-slate-900/70">
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-xl font-semibold text-slate-900 dark:text-white">Subir Documento</h3>
         {onCancel && (

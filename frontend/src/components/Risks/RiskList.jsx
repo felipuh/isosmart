@@ -57,7 +57,7 @@ const RiskList = ({ risks, filters, onFilterChange, onEdit, onDelete, onStatusCh
   }
 
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 border border-gray-100 dark:border-slate-700 overflow-hidden transition-colors">
+    <div className="bg-white/70 dark:bg-slate-800/70 backdrop-blur-md rounded-xl shadow-sm dark:shadow-slate-900/50 border border-white/20 dark:border-slate-700/50 overflow-hidden transition-all duration-300 hover:shadow-md dark:hover:shadow-slate-900/70">
       {/* Table Header */}
       <div className="grid grid-cols-12 gap-4 px-6 py-3 bg-gray-50 dark:bg-slate-700/50 border-b border-gray-200 dark:border-slate-700 text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase tracking-wider transition-colors">
         <div className="col-span-4">Riesgo</div>

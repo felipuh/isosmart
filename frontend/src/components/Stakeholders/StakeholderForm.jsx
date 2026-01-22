@@ -139,9 +139,9 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black dark:bg-gray-900 bg-opacity-50 dark:bg-opacity-75 flex items-center justify-center z-50 p-4 transition-colors">
-      <div className="bg-white dark:bg-slate-800 rounded-lg shadow-xl dark:shadow-slate-900/50 w-full max-w-3xl max-h-[90vh] overflow-y-auto transition-colors">
-        <div className="sticky top-0 bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 px-6 py-4 flex items-center justify-between transition-colors">
+    <div className="fixed inset-0 bg-black/50 dark:bg-gray-900/75 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-all duration-300">
+      <div className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-md rounded-lg shadow-2xl dark:shadow-slate-900/70 w-full max-w-3xl max-h-[90vh] overflow-hidden border border-white/20 dark:border-slate-700/30 transition-all duration-300">
+        <div className="sticky top-0 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md border-b border-slate-200/50 dark:border-slate-700/50 px-6 py-4 flex items-center justify-between transition-all duration-300">
           <h2 className="text-xl font-bold text-gray-900 dark:text-white">
             {stakeholder ? 'Editar Stakeholder' : 'Nuevo Stakeholder'}
           </h2>
@@ -152,7 +152,7 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
 
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
           {/* Información Básica */}
-          <div className="bg-gray-50 dark:bg-slate-700/30 rounded-lg p-4 transition-colors">
+          <div className="bg-gray-50/70 dark:bg-slate-700/70 backdrop-blur-md rounded-lg p-4 border border-gray-100/50 dark:border-slate-600/50 transition-all duration-300">
             <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Información Básica</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -245,7 +245,7 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
           </div>
 
           {/* Análisis de Poder e Interés */}
-          <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 border border-blue-100 dark:border-blue-800 transition-colors">
+          <div className="bg-blue-50/70 dark:bg-blue-900/20 backdrop-blur-md rounded-lg p-4 border border-blue-100/50 dark:border-blue-800/50 transition-all duration-300">
             <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Análisis de Poder e Interés</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
@@ -299,7 +299,7 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
           </div>
 
           {/* Comunicación */}
-          <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-4 border border-green-100 dark:border-green-800 transition-colors">
+          <div className="bg-green-50/70 dark:bg-green-900/20 backdrop-blur-md rounded-lg p-4 border border-green-100/50 dark:border-green-800/50 transition-all duration-300">
             <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Estrategia de Comunicación</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -335,7 +335,7 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
           </div>
 
           {/* Expectativas */}
-          <div className="bg-yellow-50 dark:bg-yellow-900/20 rounded-lg p-4 border border-yellow-100 dark:border-yellow-800 transition-colors">
+          <div className="bg-yellow-50/70 dark:bg-yellow-900/20 backdrop-blur-md rounded-lg p-4 border border-yellow-100/50 dark:border-yellow-800/50 transition-all duration-300">
             <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Expectativas</h3>
             <div className="flex gap-2 mb-3">
               <input
@@ -371,7 +371,7 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
           </div>
 
           {/* Requisitos */}
-          <div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-4 border border-purple-100 dark:border-purple-800 transition-colors">
+          <div className="bg-purple-50/70 dark:bg-purple-900/20 backdrop-blur-md rounded-lg p-4 border border-purple-100/50 dark:border-purple-800/50 transition-all duration-300">
             <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Requisitos</h3>
             <div className="flex gap-2 mb-3">
               <input

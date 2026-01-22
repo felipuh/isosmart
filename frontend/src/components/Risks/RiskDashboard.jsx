@@ -86,7 +86,7 @@ const RiskDashboard = () => {
   };
 
   const StatCard = ({ icon, iconBg, value, label, valueColor = 'text-slate-900 dark:text-white' }) => (
-    <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-900/50 border border-gray-100 dark:border-slate-700 p-6 transition-colors">
+    <div className="bg-white/70 dark:bg-slate-800/70 backdrop-blur-md dark:backdrop-blur-md rounded-xl shadow-sm dark:shadow-slate-900/50 border border-white/20 dark:border-slate-700/50 p-6 transition-all duration-300 hover:shadow-md dark:hover:shadow-slate-900/70 hover:bg-white/80 dark:hover:bg-slate-800/80">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-medium text-slate-600 dark:text-slate-400">{label}</p>
@@ -235,7 +235,7 @@ const RiskDashboard = () => {
       )}
 
       {/* Info Card */}
-      <div className="mt-6 bg-gradient-to-r from-blue-50 dark:from-blue-900/30 to-indigo-50 dark:to-indigo-900/30 rounded-xl p-5 border border-blue-100 dark:border-blue-700 transition-colors">
+      <div className="mt-6 bg-gradient-to-r from-blue-50/80 dark:from-blue-900/30 to-indigo-50/80 dark:to-indigo-900/30 backdrop-blur-md rounded-xl p-5 border border-blue-100/50 dark:border-blue-700/50 transition-all duration-300 hover:shadow-md dark:hover:shadow-blue-900/50">
         <div className="flex items-start space-x-3">
           <div className="flex-shrink-0">
             <svg className="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
