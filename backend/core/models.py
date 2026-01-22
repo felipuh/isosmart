@@ -461,3 +461,197 @@ class AIAuditLog(models.Model):
     
     def __str__(self):
         return f"Audit {self.id} - {self.model_name} ({self.timestamp})"
+
+
+# =====================================================
+# Modelos para Sistema Multicliente y Configuración
+# =====================================================
+
+class Organization(models.Model):
+    """Organización/Cliente del sistema multicliente"""
+    
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=255)
+    slug = models.SlugField(max_length=100, unique=True)
+    logo = models.ImageField(upload_to='organizations/logos/', blank=True, null=True)
+    
+    # Datos de contacto
+    email = models.EmailField(blank=True)
+    phone = models.CharField(max_length=50, blank=True)
+    address = models.TextField(blank=True)
+    website = models.URLField(blank=True)
+    
+    # Datos fiscales/legales
+    tax_id = models.CharField(max_length=50, blank=True, verbose_name='NIT/RUC/RFC')
+    legal_name = models.CharField(max_length=255, blank=True)
+    
+    # Estado
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    # Configuración de suscripción (para Admin Apps futuro)
+    plan_type = models.CharField(max_length=50, default='basic', choices=[
+        ('basic', 'Básico'),
+        ('professional', 'Profesional'),
+        ('enterprise', 'Empresarial'),
+    ])
+    max_users = models.IntegerField(default=5)
+    
+    class Meta:
+        db_table = 'organizations'
+        ordering = ['name']
+    
+    def __str__(self):
+        return self.name
+
+
+class UserProfile(models.Model):
+    """Perfil extendido del usuario con relación a organización"""
+    
+    ROLE_CHOICES = [
+        ('org_admin', 'Administrador'),
+        ('iso_manager', 'Gestor ISO'),
+        ('auditor', 'Auditor'),
+        ('user', 'Usuario'),
+        ('viewer', 'Solo Lectura'),
+    ]
+    
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name='users')
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='user')
+    
+    # Datos adicionales
+    job_title = models.CharField(max_length=100, blank=True)
+    department = models.CharField(max_length=100, blank=True)
+    phone = models.CharField(max_length=50, blank=True)
+    avatar = models.ImageField(upload_to='users/avatars/', blank=True, null=True)
+    
+    # Preferencias de usuario
+    theme = models.CharField(max_length=10, default='light', choices=[
+        ('light', 'Claro'),
+        ('dark', 'Oscuro'),
+        ('system', 'Sistema'),
+    ])
+    language = models.CharField(max_length=10, default='es')
+    notifications_enabled = models.BooleanField(default=True)
+    email_notifications = models.BooleanField(default=True)
+    
+    # Estado
+    is_active = models.BooleanField(default=True)
+    last_login_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        db_table = 'user_profiles'
+    
+    def __str__(self):
+        return f"{self.user.username} - {self.organization.name}"
+    
+    @property
+    def full_name(self):
+        return f"{self.user.first_name} {self.user.last_name}".strip() or self.user.username
+
+
+class OrganizationSettings(models.Model):
+    """Configuración general de la organización"""
+    
+    organization = models.OneToOneField(Organization, on_delete=models.CASCADE, related_name='settings')
+    
+    # Configuración de módulos de IA
+    ai_sca_enabled = models.BooleanField(default=True, verbose_name='Context Analyzer')
+    ai_sie_enabled = models.BooleanField(default=True, verbose_name='Stakeholder Intelligence')
+    ai_asb_enabled = models.BooleanField(default=True, verbose_name='Scope Builder')
+    ai_spm_enabled = models.BooleanField(default=True, verbose_name='Process Mapper')
+    
+    # Parámetros de IA
+    ai_auto_analysis = models.BooleanField(default=False, verbose_name='Análisis automático')
+    ai_analysis_frequency = models.CharField(max_length=20, default='weekly', choices=[
+        ('daily', 'Diario'),
+        ('weekly', 'Semanal'),
+        ('monthly', 'Mensual'),
+        ('manual', 'Manual'),
+    ])
+    
+    # Configuración de notificaciones
+    notify_risk_critical = models.BooleanField(default=True)
+    notify_risk_high = models.BooleanField(default=True)
+    notify_objective_deadline = models.BooleanField(default=True)
+    notify_document_upload = models.BooleanField(default=False)
+    notify_stakeholder_change = models.BooleanField(default=True)
+    notification_email = models.EmailField(blank=True)
+    
+    # Configuración ISO
+    iso_standard = models.CharField(max_length=50, default='ISO 9001:2015')
+    fiscal_year_start = models.IntegerField(default=1, choices=[(i, f'Mes {i}') for i in range(1, 13)])
+    
+    # Backup
+    auto_backup_enabled = models.BooleanField(default=False)
+    backup_frequency = models.CharField(max_length=20, default='weekly', choices=[
+        ('daily', 'Diario'),
+        ('weekly', 'Semanal'),
+        ('monthly', 'Mensual'),
+    ])
+    last_backup_at = models.DateTimeField(null=True, blank=True)
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        db_table = 'organization_settings'
+    
+    def __str__(self):
+        return f"Settings - {self.organization.name}"
+
+
+class ISOClauseConfig(models.Model):
+    """Configuración de cláusulas ISO por organización"""
+    
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name='iso_clauses')
+    clause_number = models.CharField(max_length=10)
+    clause_name = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    is_applicable = models.BooleanField(default=True)
+    exclusion_justification = models.TextField(blank=True)
+    responsible = models.CharField(max_length=255, blank=True)
+    
+    class Meta:
+        db_table = 'iso_clause_configs'
+        unique_together = ['organization', 'clause_number']
+        ordering = ['clause_number']
+    
+    def __str__(self):
+        return f"{self.clause_number} - {self.clause_name}"
+
+
+class AuditLog(models.Model):
+    """Log de auditoría para cambios en configuración"""
+    
+    ACTION_CHOICES = [
+        ('create', 'Creación'),
+        ('update', 'Actualización'),
+        ('delete', 'Eliminación'),
+        ('login', 'Inicio de sesión'),
+        ('logout', 'Cierre de sesión'),
+        ('export', 'Exportación'),
+        ('backup', 'Respaldo'),
+    ]
+    
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name='audit_logs')
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    action = models.CharField(max_length=20, choices=ACTION_CHOICES)
+    module = models.CharField(max_length=50)
+    description = models.TextField()
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+    user_agent = models.TextField(blank=True)
+    old_values = models.JSONField(default=dict, blank=True)
+    new_values = models.JSONField(default=dict, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        db_table = 'audit_logs'
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return f"{self.action} - {self.module} - {self.created_at}"

@@ -4,25 +4,27 @@ import { Home, Network, TrendingUp, Target, GitBranch, FileText, Settings, Award
 
 const Sidebar = () => {
   const location = useLocation();
-
-   const menuItems = [
+  
+  const menuItems = [
     { name: 'Dashboard', path: '/', icon: Home },
     { name: 'Stakeholders', path: '/stakeholders', icon: Network },
     { name: 'Contexto', path: '/context', icon: TrendingUp },
     { name: 'Alcance SGC', path: '/scope', icon: Target },
-    { name: 'Procesos', path: '/processes', icon: GitBranch  },
-    { name: 'Documentos', path: '/documents', icon: FolderOpen },  // ⭐ NUEVO
+    { name: 'Procesos', path: '/processes', icon: GitBranch },
+    { name: 'Documentos', path: '/documents', icon: FolderOpen },
     { name: 'Riesgos', path: '/risks', icon: AlertTriangle }, 
     { name: 'Objetivos', path: '/objectives', icon: Award },
     { name: 'Configuración', path: '/settings', icon: Settings },
   ];
 
   return (
-    <div className="w-64 bg-gray-900 text-white flex flex-col">
+    <div className="w-64 bg-gray-900 dark:bg-slate-950 text-white flex flex-col transition-colors duration-300">
       {/* Logo */}
-      <div className="p-6 border-b border-gray-800">
-        <h1 className="text-2xl font-bold">ISO Smart</h1>
-        <p className="text-sm text-gray-400">Sistema de Gobierno de Calidad</p>
+      <div className="p-6 border-b border-gray-800 dark:border-slate-800">
+        <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
+          ISO Smart
+        </h1>
+        <p className="text-sm text-gray-400 dark:text-slate-500">Sistema de Gobierno de Calidad</p>
       </div>
 
       {/* Menu Items */}
@@ -36,10 +38,10 @@ const Sidebar = () => {
               <li key={item.path}>
                 <Link
                   to={item.path}
-                  className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+                  className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 ${
                     isActive
-                      ? 'bg-blue-600 text-white'
-                      : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                      ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/25'
+                      : 'text-gray-300 hover:bg-gray-800 dark:hover:bg-slate-800 hover:text-white'
                   }`}
                 >
                   <Icon className="h-5 w-5" />
@@ -52,8 +54,8 @@ const Sidebar = () => {
       </nav>
 
       {/* Footer */}
-      <div className="p-4 border-t border-gray-800">
-        <p className="text-xs text-gray-400 text-center">
+      <div className="p-4 border-t border-gray-800 dark:border-slate-800">
+        <p className="text-xs text-gray-400 dark:text-slate-500 text-center">
           ISO 9001:2015 | ISO/IEC 42001:2023
         </p>
       </div>

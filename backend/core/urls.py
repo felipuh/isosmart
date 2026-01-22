@@ -6,6 +6,11 @@ router = DefaultRouter()
 router.register(r'documents', views.DocumentViewSet, basename='document')
 router.register(r'risks', views.RiskMatrixViewSet, basename='risk')
 router.register(r'objectives', views.QualityObjectiveViewSet, basename='objective')
+router.register(r'organizations', views.OrganizationViewSet, basename='organization')
+router.register(r'users', views.UserManagementViewSet, basename='user-management')
+router.register(r'settings', views.SettingsViewSet, basename='settings')
+router.register(r'iso-clauses', views.ISOClauseConfigViewSet, basename='iso-clause')
+router.register(r'audit-logs', views.AuditLogViewSet, basename='audit-log')
 
 urlpatterns = [
     path('dashboard/summary/', views.dashboard_summary, name='dashboard-summary'),
@@ -13,5 +18,6 @@ urlpatterns = [
     path('risks/stats/', views.risk_stats, name='risk-stats'),
     path('context/latest/', views.context_analysis_latest, name='context-latest'),
     path('health/', views.health_check, name='health-check'),
+    path('export/', views.export_data, name='export-data'),
     path('', include(router.urls)),
 ]

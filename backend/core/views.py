@@ -570,3 +570,369 @@ class QualityObjectiveViewSet(viewsets.ModelViewSet):
             })
         
         return Response(data)
+
+
+# =====================================================
+# ViewSets para Configuración y Multicliente
+# =====================================================
+
+from .models import Organization, UserProfile, OrganizationSettings, ISOClauseConfig, AuditLog
+from .serializers import (
+    OrganizationSerializer, UserProfileSerializer, UserCreateSerializer,
+    OrganizationSettingsSerializer, ISOClauseConfigSerializer, AuditLogSerializer,
+    UserSerializer
+)
+from django.contrib.auth.hashers import make_password
+import json
+
+
+class OrganizationViewSet(viewsets.ModelViewSet):
+    """ViewSet para gestión de la organización"""
+    queryset = Organization.objects.all()
+    serializer_class = OrganizationSerializer
+    
+    @action(detail=True, methods=['get'])
+    def dashboard(self, request, pk=None):
+        """Dashboard de la organización"""
+        org = self.get_object()
+        
+        return Response({
+            'organization': OrganizationSerializer(org).data,
+            'users_count': org.users.filter(is_active=True).count(),
+            'total_documents': Document.objects.count(),
+            'total_risks': RiskMatrix.objects.count(),
+            'total_objectives': QualityObjective.objects.count(),
+        })
+
+
+class UserManagementViewSet(viewsets.ModelViewSet):
+    """ViewSet para gestión de usuarios"""
+    queryset = UserProfile.objects.all()
+    serializer_class = UserProfileSerializer
+    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        # Filtrar por organización si se especifica
+        org_id = self.request.query_params.get('organization', None)
+        if org_id:
+            queryset = queryset.filter(organization_id=org_id)
+        return queryset.select_related('user', 'organization')
+    
+    @action(detail=False, methods=['post'])
+    def create_user(self, request):
+        """Crear nuevo usuario con perfil"""
+        serializer = UserCreateSerializer(data=request.data)
+        if serializer.is_valid():
+            data = serializer.validated_data
+            
+            # Crear usuario Django
+            user = User.objects.create(
+                username=data['username'],
+                email=data['email'],
+                password=make_password(data['password']),
+                first_name=data.get('first_name', ''),
+                last_name=data.get('last_name', ''),
+                is_active=True
+            )
+            
+            # Obtener o crear organización por defecto
+            org_id = request.data.get('organization_id')
+            if org_id:
+                org = Organization.objects.get(id=org_id)
+            else:
+                org, _ = Organization.objects.get_or_create(
+                    slug='default',
+                    defaults={'name': 'Organización Principal'}
+                )
+            
+            # Crear perfil
+            profile = UserProfile.objects.create(
+                user=user,
+                organization=org,
+                role=data.get('role', 'user'),
+                job_title=data.get('job_title', ''),
+                department=data.get('department', '')
+            )
+            
+            return Response(UserProfileSerializer(profile).data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    @action(detail=True, methods=['post'])
+    def change_role(self, request, pk=None):
+        """Cambiar rol de usuario"""
+        profile = self.get_object()
+        new_role = request.data.get('role')
+        
+        if new_role not in dict(UserProfile.ROLE_CHOICES):
+            return Response({'error': 'Rol inválido'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        profile.role = new_role
+        profile.save()
+        
+        return Response(UserProfileSerializer(profile).data)
+    
+    @action(detail=True, methods=['post'])
+    def toggle_active(self, request, pk=None):
+        """Activar/desactivar usuario"""
+        profile = self.get_object()
+        profile.is_active = not profile.is_active
+        profile.user.is_active = profile.is_active
+        profile.save()
+        profile.user.save()
+        
+        return Response(UserProfileSerializer(profile).data)
+    
+    @action(detail=True, methods=['post'])
+    def reset_password(self, request, pk=None):
+        """Resetear contraseña de usuario"""
+        profile = self.get_object()
+        new_password = request.data.get('password')
+        
+        if not new_password or len(new_password) < 8:
+            return Response({'error': 'La contraseña debe tener al menos 8 caracteres'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        profile.user.password = make_password(new_password)
+        profile.user.save()
+        
+        return Response({'message': 'Contraseña actualizada correctamente'})
+    
+    @action(detail=False, methods=['get'])
+    def stats(self, request):
+        """Estadísticas de usuarios"""
+        org_id = request.query_params.get('organization')
+        
+        queryset = UserProfile.objects.all()
+        if org_id:
+            queryset = queryset.filter(organization_id=org_id)
+        
+        total = queryset.count()
+        active = queryset.filter(is_active=True).count()
+        by_role = {}
+        for role_code, role_name in UserProfile.ROLE_CHOICES:
+            by_role[role_code] = queryset.filter(role=role_code).count()
+        
+        return Response({
+            'total_users': total,
+            'active_users': active,
+            'inactive_users': total - active,
+            'by_role': by_role
+        })
+
+
+class SettingsViewSet(viewsets.ModelViewSet):
+    """ViewSet para configuración de la organización"""
+    queryset = OrganizationSettings.objects.all()
+    serializer_class = OrganizationSettingsSerializer
+    
+    @action(detail=False, methods=['get'])
+    def current(self, request):
+        """Obtener configuración actual (o crear por defecto)"""
+        org_id = request.query_params.get('organization')
+        
+        if org_id:
+            org = Organization.objects.get(id=org_id)
+        else:
+            org, _ = Organization.objects.get_or_create(
+                slug='default',
+                defaults={'name': 'Organización Principal'}
+            )
+        
+        settings, created = OrganizationSettings.objects.get_or_create(organization=org)
+        
+        return Response(OrganizationSettingsSerializer(settings).data)
+    
+    @action(detail=False, methods=['post'])
+    def update_ai_modules(self, request):
+        """Actualizar configuración de módulos de IA"""
+        org_id = request.data.get('organization_id')
+        
+        if org_id:
+            org = Organization.objects.get(id=org_id)
+        else:
+            org = Organization.objects.get(slug='default')
+        
+        settings, _ = OrganizationSettings.objects.get_or_create(organization=org)
+        
+        # Actualizar módulos
+        if 'ai_sca_enabled' in request.data:
+            settings.ai_sca_enabled = request.data['ai_sca_enabled']
+        if 'ai_sie_enabled' in request.data:
+            settings.ai_sie_enabled = request.data['ai_sie_enabled']
+        if 'ai_asb_enabled' in request.data:
+            settings.ai_asb_enabled = request.data['ai_asb_enabled']
+        if 'ai_spm_enabled' in request.data:
+            settings.ai_spm_enabled = request.data['ai_spm_enabled']
+        if 'ai_auto_analysis' in request.data:
+            settings.ai_auto_analysis = request.data['ai_auto_analysis']
+        if 'ai_analysis_frequency' in request.data:
+            settings.ai_analysis_frequency = request.data['ai_analysis_frequency']
+        
+        settings.save()
+        return Response(OrganizationSettingsSerializer(settings).data)
+    
+    @action(detail=False, methods=['post'])
+    def update_notifications(self, request):
+        """Actualizar configuración de notificaciones"""
+        org_id = request.data.get('organization_id')
+        
+        if org_id:
+            org = Organization.objects.get(id=org_id)
+        else:
+            org = Organization.objects.get(slug='default')
+        
+        settings, _ = OrganizationSettings.objects.get_or_create(organization=org)
+        
+        fields = ['notify_risk_critical', 'notify_risk_high', 'notify_objective_deadline',
+                  'notify_document_upload', 'notify_stakeholder_change', 'notification_email']
+        
+        for field in fields:
+            if field in request.data:
+                setattr(settings, field, request.data[field])
+        
+        settings.save()
+        return Response(OrganizationSettingsSerializer(settings).data)
+    
+    @action(detail=False, methods=['post'])
+    def trigger_backup(self, request):
+        """Disparar backup manual"""
+        org_id = request.data.get('organization_id')
+        
+        if org_id:
+            org = Organization.objects.get(id=org_id)
+        else:
+            org = Organization.objects.get(slug='default')
+        
+        settings, _ = OrganizationSettings.objects.get_or_create(organization=org)
+        settings.last_backup_at = timezone.now()
+        settings.save()
+        
+        # Aquí iría la lógica real de backup
+        
+        return Response({
+            'message': 'Backup iniciado correctamente',
+            'last_backup_at': settings.last_backup_at
+        })
+
+
+class ISOClauseConfigViewSet(viewsets.ModelViewSet):
+    """ViewSet para configuración de cláusulas ISO"""
+    queryset = ISOClauseConfig.objects.all()
+    serializer_class = ISOClauseConfigSerializer
+    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        org_id = self.request.query_params.get('organization')
+        if org_id:
+            queryset = queryset.filter(organization_id=org_id)
+        return queryset
+    
+    @action(detail=False, methods=['post'])
+    def initialize_iso9001(self, request):
+        """Inicializar cláusulas ISO 9001:2015"""
+        org_id = request.data.get('organization_id')
+        
+        if org_id:
+            org = Organization.objects.get(id=org_id)
+        else:
+            org, _ = Organization.objects.get_or_create(
+                slug='default',
+                defaults={'name': 'Organización Principal'}
+            )
+        
+        clauses = [
+            ('4.1', 'Comprensión de la organización y su contexto'),
+            ('4.2', 'Comprensión de las necesidades y expectativas de las partes interesadas'),
+            ('4.3', 'Determinación del alcance del SGC'),
+            ('4.4', 'Sistema de gestión de la calidad y sus procesos'),
+            ('5.1', 'Liderazgo y compromiso'),
+            ('5.2', 'Política'),
+            ('5.3', 'Roles, responsabilidades y autoridades'),
+            ('6.1', 'Acciones para abordar riesgos y oportunidades'),
+            ('6.2', 'Objetivos de la calidad'),
+            ('6.3', 'Planificación de los cambios'),
+            ('7.1', 'Recursos'),
+            ('7.2', 'Competencia'),
+            ('7.3', 'Toma de conciencia'),
+            ('7.4', 'Comunicación'),
+            ('7.5', 'Información documentada'),
+            ('8.1', 'Planificación y control operacional'),
+            ('8.2', 'Requisitos para los productos y servicios'),
+            ('8.3', 'Diseño y desarrollo'),
+            ('8.4', 'Control de procesos, productos y servicios externos'),
+            ('8.5', 'Producción y provisión del servicio'),
+            ('8.6', 'Liberación de productos y servicios'),
+            ('8.7', 'Control de las salidas no conformes'),
+            ('9.1', 'Seguimiento, medición, análisis y evaluación'),
+            ('9.2', 'Auditoría interna'),
+            ('9.3', 'Revisión por la dirección'),
+            ('10.1', 'Generalidades'),
+            ('10.2', 'No conformidad y acción correctiva'),
+            ('10.3', 'Mejora continua'),
+        ]
+        
+        created_count = 0
+        for number, name in clauses:
+            _, created = ISOClauseConfig.objects.get_or_create(
+                organization=org,
+                clause_number=number,
+                defaults={'clause_name': name, 'is_applicable': True}
+            )
+            if created:
+                created_count += 1
+        
+        return Response({
+            'message': f'Se crearon {created_count} cláusulas ISO 9001:2015',
+            'total_clauses': len(clauses)
+        })
+
+
+class AuditLogViewSet(viewsets.ReadOnlyModelViewSet):
+    """ViewSet para logs de auditoría (solo lectura)"""
+    queryset = AuditLog.objects.all()
+    serializer_class = AuditLogSerializer
+    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        org_id = self.request.query_params.get('organization')
+        if org_id:
+            queryset = queryset.filter(organization_id=org_id)
+        
+        # Filtros adicionales
+        module = self.request.query_params.get('module')
+        if module:
+            queryset = queryset.filter(module=module)
+        
+        action = self.request.query_params.get('action')
+        if action:
+            queryset = queryset.filter(action=action)
+        
+        return queryset[:100]  # Limitar a últimos 100
+
+
+@api_view(['GET'])
+def export_data(request):
+    """Exportar datos del sistema"""
+    export_type = request.query_params.get('type', 'all')
+    
+    data = {}
+    
+    if export_type in ['all', 'risks']:
+        data['risks'] = list(RiskMatrix.objects.values())
+    
+    if export_type in ['all', 'objectives']:
+        data['objectives'] = list(QualityObjective.objects.values())
+    
+    if export_type in ['all', 'stakeholders']:
+        data['stakeholders'] = list(StakeholderProfile.objects.values())
+    
+    if export_type in ['all', 'documents']:
+        data['documents'] = list(Document.objects.values('id', 'title', 'document_type', 'source', 'created_at'))
+    
+    if export_type in ['all', 'processes']:
+        data['processes'] = list(ProcessMap.objects.values())
+    
+    return Response({
+        'export_date': timezone.now().isoformat(),
+        'export_type': export_type,
+        'data': data
+    })

@@ -61,3 +61,103 @@ setting. In Celery 5.1 it is set to False by default. The setting will be set to
 [2025-12-19 19:46:51,033: INFO/MainProcess] Connected to redis://localhost:6379/1
 [2025-12-19 19:46:51,419: INFO/MainProcess] mingle: searching for neighbors
 [2025-12-19 19:46:53,776: INFO/MainProcess] mingle: all alone
+[2026-01-22 08:25:49,716: CRITICAL/MainProcess] Unrecoverable error: LockFailed("[Errno 2] No such file or directory: '/var/run/celery/celery-worker.pid'")
+Traceback (most recent call last):
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/celery/platforms.py", line 138, in acquire
+    self.write_pid()
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/celery/platforms.py", line 207, in write_pid
+    pidfile_fd = os.open(self.path, PIDFILE_FLAGS, PIDFILE_MODE)
+FileNotFoundError: [Errno 2] No such file or directory: '/var/run/celery/celery-worker.pid'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/celery/worker/worker.py", line 202, in start
+    self.blueprint.start(self)
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/celery/bootsteps.py", line 112, in start
+    self.on_start()
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/celery/apps/worker.py", line 123, in on_start
+    super().on_start()
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/celery/worker/worker.py", line 151, in on_start
+    self.pidlock = create_pidlock(self.pidfile)
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/celery/platforms.py", line 249, in create_pidlock
+    pidlock = _create_pidlock(pidfile)
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/celery/platforms.py", line 259, in _create_pidlock
+    pidlock.acquire()
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/celery/platforms.py", line 140, in acquire
+    reraise(LockFailed, LockFailed(str(exc)), sys.exc_info()[2])
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/celery/exceptions.py", line 109, in reraise
+    raise value.with_traceback(tb)
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/celery/platforms.py", line 138, in acquire
+    self.write_pid()
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/celery/platforms.py", line 207, in write_pid
+    pidfile_fd = os.open(self.path, PIDFILE_FLAGS, PIDFILE_MODE)
+celery.platforms.LockFailed: [Errno 2] No such file or directory: '/var/run/celery/celery-worker.pid'
+[2026-01-22 08:26:04,431: CRITICAL/MainProcess] Unrecoverable error: LockFailed("[Errno 2] No such file or directory: '/var/run/celery/celery-worker.pid'")
+Traceback (most recent call last):
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/celery/platforms.py", line 138, in acquire
+    self.write_pid()
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/celery/platforms.py", line 207, in write_pid
+    pidfile_fd = os.open(self.path, PIDFILE_FLAGS, PIDFILE_MODE)
+FileNotFoundError: [Errno 2] No such file or directory: '/var/run/celery/celery-worker.pid'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/celery/worker/worker.py", line 202, in start
+    self.blueprint.start(self)
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/celery/bootsteps.py", line 112, in start
+    self.on_start()
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/celery/apps/worker.py", line 123, in on_start
+    super().on_start()
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/celery/worker/worker.py", line 151, in on_start
+    self.pidlock = create_pidlock(self.pidfile)
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/celery/platforms.py", line 249, in create_pidlock
+    pidlock = _create_pidlock(pidfile)
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/celery/platforms.py", line 259, in _create_pidlock
+    pidlock.acquire()
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/celery/platforms.py", line 140, in acquire
+    reraise(LockFailed, LockFailed(str(exc)), sys.exc_info()[2])
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/celery/exceptions.py", line 109, in reraise
+    raise value.with_traceback(tb)
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/celery/platforms.py", line 138, in acquire
+    self.write_pid()
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/celery/platforms.py", line 207, in write_pid
+    pidfile_fd = os.open(self.path, PIDFILE_FLAGS, PIDFILE_MODE)
+celery.platforms.LockFailed: [Errno 2] No such file or directory: '/var/run/celery/celery-worker.pid'
+[2026-01-22 08:26:19,088: CRITICAL/MainProcess] Unrecoverable error: LockFailed("[Errno 2] No such file or directory: '/var/run/celery/celery-worker.pid'")
+Traceback (most recent call last):
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/celery/platforms.py", line 138, in acquire
+    self.write_pid()
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/celery/platforms.py", line 207, in write_pid
+    pidfile_fd = os.open(self.path, PIDFILE_FLAGS, PIDFILE_MODE)
+FileNotFoundError: [Errno 2] No such file or directory: '/var/run/celery/celery-worker.pid'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/celery/worker/worker.py", line 202, in start
+    self.blueprint.start(self)
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/celery/bootsteps.py", line 112, in start
+    self.on_start()
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/celery/apps/worker.py", line 123, in on_start
+    super().on_start()
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/celery/worker/worker.py", line 151, in on_start
+    self.pidlock = create_pidlock(self.pidfile)
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/celery/platforms.py", line 249, in create_pidlock
+    pidlock = _create_pidlock(pidfile)
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/celery/platforms.py", line 259, in _create_pidlock
+    pidlock.acquire()
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/celery/platforms.py", line 140, in acquire
+    reraise(LockFailed, LockFailed(str(exc)), sys.exc_info()[2])
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/celery/exceptions.py", line 109, in reraise
+    raise value.with_traceback(tb)
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/celery/platforms.py", line 138, in acquire
+    self.write_pid()
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/celery/platforms.py", line 207, in write_pid
+    pidfile_fd = os.open(self.path, PIDFILE_FLAGS, PIDFILE_MODE)
+celery.platforms.LockFailed: [Errno 2] No such file or directory: '/var/run/celery/celery-worker.pid'
+[2026-01-22 08:26:33,021: INFO/MainProcess] Connected to redis://localhost:6379/1
+[2026-01-22 08:26:33,035: INFO/MainProcess] mingle: searching for neighbors
+[2026-01-22 08:26:34,053: INFO/MainProcess] mingle: all alone
+[2026-01-22 08:26:34,075: INFO/MainProcess] celery@localhost.localdomain ready.

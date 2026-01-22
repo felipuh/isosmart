@@ -1,0 +1,8 @@
+export { default as SettingsDashboard } from './SettingsDashboard';
+export { default as OrganizationSettings } from './OrganizationSettings';
+export { default as UsersManagement } from './UsersManagement';
+export { default as AIModulesSettings } from './AIModulesSettings';
+export { default as NotificationSettings } from './NotificationSettings';
+export { default as BackupExportSettings } from './BackupExportSettings';
+export { default as ISOClausesSettings } from './ISOClausesSettings';
+export { default as ThemeSettings } from './ThemeSettings';
