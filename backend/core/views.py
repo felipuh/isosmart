@@ -12,7 +12,7 @@ from .models import (
     ContextAnalysis, RiskMatrix, QualityObjective, 
     StakeholderProfile, ProcessMap, Document
 )
-from .serializers import DocumentSerializer, DocumentUploadSerializer, RiskMatrixSerializer
+from .serializers import DocumentSerializer, DocumentUploadSerializer, RiskMatrixSerializer, QualityObjectiveSerializer, QualityObjectiveSerializer
 import logging
 import os
 
@@ -458,3 +458,115 @@ def risk_stats(request):
         'by_status': {item['status']: item['count'] for item in by_status},
         'by_category': {item['risk_category']: item['count'] for item in by_category}
     })
+
+
+class QualityObjectiveViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet para gestión de objetivos de calidad
+    """
+    queryset = QualityObjective.objects.all().order_by('-created_at')
+    serializer_class = QualityObjectiveSerializer
+    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        
+        status_filter = self.request.query_params.get('status', None)
+        if status_filter:
+            queryset = queryset.filter(status=status_filter)
+        
+        source = self.request.query_params.get('source', None)
+        if source:
+            queryset = queryset.filter(source_module=source)
+        
+        return queryset
+    
+    def create(self, request, *args, **kwargs):
+        data = request.data.copy()
+        if 'source_module' not in data:
+            data['source_module'] = 'MANUAL'
+        
+        serializer = self.get_serializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    @action(detail=True, methods=['post'])
+    def update_progress(self, request, pk=None):
+        """Actualizar valor actual del objetivo"""
+        try:
+            objective = self.get_object()
+            new_value = request.data.get('current_value')
+            
+            if new_value is not None:
+                objective.current_value = float(new_value)
+                
+                # Auto-actualizar estado basado en progreso
+                progress = objective.progress_percentage
+                if progress >= 100:
+                    objective.status = 'achieved'
+                elif progress > 0:
+                    objective.status = 'in_progress'
+                
+                objective.save()
+            
+            serializer = self.get_serializer(objective)
+            return Response(serializer.data)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+    
+    @action(detail=False, methods=['get'])
+    def stats(self, request):
+        """Estadísticas de objetivos"""
+        total = QualityObjective.objects.count()
+        
+        by_status = {}
+        for status_code, status_name in QualityObjective.STATUS_CHOICES:
+            by_status[status_code] = QualityObjective.objects.filter(status=status_code).count()
+        
+        by_source = {}
+        for source_code, source_name in QualityObjective.SOURCE_CHOICES:
+            by_source[source_code] = QualityObjective.objects.filter(source_module=source_code).count()
+        
+        # Calcular progreso promedio
+        objectives = QualityObjective.objects.filter(status__in=['active', 'in_progress'])
+        avg_progress = 0
+        if objectives.exists():
+            total_progress = sum([obj.progress_percentage for obj in objectives])
+            avg_progress = total_progress / objectives.count()
+        
+        achieved = QualityObjective.objects.filter(status='achieved').count()
+        delayed = QualityObjective.objects.filter(status='delayed').count()
+        
+        return Response({
+            'total_objectives': total,
+            'by_status': by_status,
+            'by_source': by_source,
+            'average_progress': round(avg_progress, 1),
+            'achieved_count': achieved,
+            'delayed_count': delayed,
+            'active_count': by_status.get('active', 0) + by_status.get('in_progress', 0)
+        })
+    
+    @action(detail=False, methods=['get'])
+    def dashboard_data(self, request):
+        """Datos para el dashboard de objetivos"""
+        objectives = QualityObjective.objects.all()[:10]
+        
+        data = []
+        for obj in objectives:
+            data.append({
+                'id': obj.id,
+                'indicator_name': obj.indicator_name,
+                'objective_description': obj.objective_description,
+                'baseline_value': obj.baseline_value,
+                'target_value': obj.target_value,
+                'current_value': obj.current_value,
+                'progress': obj.progress_percentage,
+                'status': obj.status,
+                'responsible': obj.responsible,
+                'deadline': obj.deadline,
+                'measurement_unit': obj.measurement_unit
+            })
+        
+        return Response(data)

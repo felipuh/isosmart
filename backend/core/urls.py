@@ -5,6 +5,7 @@ from . import views
 router = DefaultRouter()
 router.register(r'documents', views.DocumentViewSet, basename='document')
 router.register(r'risks', views.RiskMatrixViewSet, basename='risk')
+router.register(r'objectives', views.QualityObjectiveViewSet, basename='objective')
 
 urlpatterns = [
     path('dashboard/summary/', views.dashboard_summary, name='dashboard-summary'),
