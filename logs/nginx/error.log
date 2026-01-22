@@ -1,1 +1,0 @@
-2025/12/19 21:05:04 [error] 18099#18099: *419 connect() failed (111: Connection refused) while connecting to upstream, client: 192.168.100.27, server: apps.isosmart.local, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:3001/", host: "192.168.100.100"
