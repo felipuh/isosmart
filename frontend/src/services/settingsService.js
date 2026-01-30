@@ -22,9 +22,26 @@ const settingsService = {
     return response.data;
   },
 
-  // Obtener organización actual
+  // Obtener organización actual (desde settings)
   getOrganization: async () => {
-    const response = await api.get('/organizations/1/');
+    try {
+      const response = await api.get('/settings/');
+      // Si es una lista, retorna el primer elemento o un objeto vacío
+      return response.data.results?.[0] || response.data || {};
+    } catch (e) {
+      return {};
+    }
+  },
+
+  // Obtener configuración (alias)
+  getSettings: async () => {
+    const response = await api.get('/settings/');
+    return response.data.results || response.data;
+  },
+
+  // Obtener dashboard de organización
+  getOrganizationDashboard: async () => {
+    const response = await api.get('/dashboard/');
     return response.data;
   },
 

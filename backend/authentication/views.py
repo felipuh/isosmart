@@ -102,17 +102,9 @@ class LogoutView(APIView):
         try:
             token = RefreshToken(serializer.validated_data['refresh'])
             
-            # Agregar a lista negra
-            RefreshTokenBlacklist.objects.create(
-                token=str(token),
-                user=request.user,
-                expires_at=timezone.now() + settings.SIMPLE_JWT.get(
-                    'REFRESH_TOKEN_LIFETIME',
-                    timezone.timedelta(days=7)
-                )
-            )
-            
-            token.blacklist()
+            # JWT blacklist no está configurado, simplemente validamos el token
+            # El token expirará naturalmente según REFRESH_TOKEN_LIFETIME
+            # token.blacklist()
             
         except TokenError:
             pass  # Token ya expirado o inválido, ignorar

@@ -9,6 +9,15 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('health', views.health_check, name='health'),
+    
+    # Explicit routes for stats and latest endpoints (before includes to take priority)
+    path('api/maps/stats/', spm_views.ProcessMapViewSet.as_view({'get': 'stats'}), name='maps-stats'),
+    path('api/maps/latest/', spm_views.get_latest_map, name='latest-map-detailed'),
+    path('api/processes/maps/latest/', spm_views.get_latest_map, name='latest-map-processes-detailed'),
+    path('api/latest/', spm_views.get_latest_map, name='latest-map-alias'),
+    
+    # Module includes
+    path('api/sca/', include('ai_modules.sca.urls')),
     path('api/', include('core.urls')),
     path('api/sie/', include('ai_modules.sie.urls')),
     path('api/stakeholders/', include('ai_modules.sie.urls')),  # Alias for frontend compatibility
@@ -19,10 +28,6 @@ urlpatterns = [
     path('api/processes/', include('ai_modules.spm.urls')),
     path('api/maps/', include('ai_modules.spm.urls')),  # Alias for frontend compatibility
     
-    # Explicit routes for stats endpoints
-    path('api/maps/stats/', spm_views.ProcessMapViewSet.as_view({'get': 'stats'}), name='maps-stats'),
-    path('api/latest/', spm_views.get_latest_map, name='latest-map-alias'),
-
     # Explicit aliases for frontend endpoints without duplicated prefixes
     path('api/stakeholders/critical/', sie_views.StakeholderProfileViewSet.as_view({'get': 'critical'}), name='stakeholders-critical'),
     path('api/stakeholders/matrix/', sie_views.StakeholderProfileViewSet.as_view({'get': 'matrix'}), name='stakeholders-matrix'),

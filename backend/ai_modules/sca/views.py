@@ -1,6 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+from django.core.paginator import Paginator, EmptyPage
 from ai_modules.sca.services.context_analyzer import ContextAnalyzer
 from core.models import ContextAnalysis
 import logging
@@ -55,7 +56,7 @@ def get_latest_analysis(request):
     try:
         latest = ContextAnalysis.objects.filter(
             status='completed'
-        ).order_by('-created_at').first()
+        ).order_by('-timestamp').first()
         
         if not latest:
             return Response({
@@ -77,7 +78,7 @@ def get_latest_analysis(request):
         return Response({
             'status': 'success',
             'analysis_id': latest.id,
-            'timestamp': latest.created_at,
+            'timestamp': latest.timestamp,
             'total_documents_processed': latest.total_documents_processed,
             'internal_insights': latest.internal_insights,
             'external_insights': latest.external_insights
@@ -85,6 +86,52 @@ def get_latest_analysis(request):
         
     except Exception as e:
         logger.error(f"Error en get_latest_analysis: {str(e)}", exc_info=True)
+        return Response({
+            'status': 'error',
+            'message': str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+def get_analysis_history(request):
+    """
+    Obtener historial de análisis de contexto (paginado)
+    """
+    try:
+        page = int(request.query_params.get('page', 1))
+        page_size = int(request.query_params.get('page_size', 10))
+
+        queryset = ContextAnalysis.objects.order_by('-timestamp')
+        paginator = Paginator(queryset, page_size)
+
+        try:
+            page_obj = paginator.page(page)
+        except EmptyPage:
+            return Response({
+                'count': paginator.count,
+                'next': None,
+                'previous': None,
+                'results': []
+            })
+
+        results = []
+        for item in page_obj.object_list:
+            results.append({
+                'id': item.id,
+                'timestamp': item.timestamp,
+                'status': item.status,
+                'total_documents_processed': item.total_documents_processed,
+                'execution_time_seconds': item.execution_time_seconds
+            })
+
+        return Response({
+            'count': paginator.count,
+            'next': page + 1 if page_obj.has_next() else None,
+            'previous': page - 1 if page_obj.has_previous() else None,
+            'results': results
+        })
+
+    except Exception as e:
+        logger.error(f"Error en get_analysis_history: {str(e)}", exc_info=True)
         return Response({
             'status': 'error',
             'message': str(e)

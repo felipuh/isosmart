@@ -10,6 +10,13 @@ const processService = {
     return response.data.results || response.data;
   },
 
+  // Obtener el último mapa de procesos
+  getLatest: async (organizationId = null) => {
+    const params = organizationId ? { organization: organizationId } : {};
+    const response = await api.get('/processes/maps/latest/', { params });
+    return response.data;
+  },
+
   // Obtener proceso por ID
   getById: async (id) => {
     const response = await api.get(`/processes/maps/${id}/`);

@@ -5,7 +5,8 @@ import api from './api';
 
 const stakeholderService = {
   // Obtener todos los stakeholders
-  getAll: async (params = {}) => {
+  getAll: async (organizationId = null) => {
+    const params = organizationId ? { organization: organizationId } : {};
     const response = await api.get('/sie/stakeholders/', { params });
     return response.data.results || response.data;
   },
@@ -40,21 +41,59 @@ const stakeholderService = {
     return response.data;
   },
 
+  // Ejecutar análisis de stakeholders con IA
+  runAnalysis: async () => {
+    const response = await api.post('/sie/stakeholders/run_analysis/');
+    return response.data;
+  },
+
+  // Obtener stakeholders críticos
+  getCritical: async (organizationId = null) => {
+    const params = organizationId ? { organization: organizationId } : {};
+    const response = await api.get('/stakeholders/critical/', { params });
+    return response.data;
+  },
+
+  // Obtener matriz poder/interés
+  getMatrix: async (organizationId = null) => {
+    const params = organizationId ? { organization: organizationId } : {};
+    const response = await api.get('/stakeholders/matrix/', { params });
+    return response.data;
+  },
+
+  // Obtener historial de cambios de un stakeholder
+  getChangeHistory: async (id) => {
+    const response = await api.get(`/sie/stakeholders/${id}/change_history/`);
+    return response.data;
+  },
+
+  // Actualizar satisfacción
+  updateSatisfaction: async (id, score) => {
+    const response = await api.post(
+      `/sie/stakeholders/${id}/update_satisfaction/`,
+      { satisfaction_score: score }
+    );
+    return response.data;
+  },
+
+  // Obtener logs de cambios
+  getChangeLogs: async (organizationId = null) => {
+    const params = organizationId ? { organization: organizationId } : {};
+    const response = await api.get('/sie/change-logs/', { params });
+    return response.data.results || response.data;
+  },
+
+  // Obtener cambios recientes
+  getRecentChanges: async (organizationId = null) => {
+    const params = organizationId ? { organization: organizationId } : {};
+    const response = await api.get('/change-logs/recent/', { params });
+    return response.data;
+  },
+
   // Obtener estadísticas
-  getStats: async () => {
-    const response = await api.get('/sie/stakeholders/stats/');
-    return response.data;
-  },
-
-  // Ejecutar análisis de stakeholders
-  analyze: async () => {
-    const response = await api.post('/sie/analyze/');
-    return response.data;
-  },
-
-  // Obtener matriz de poder/interés
-  getMatrix: async () => {
-    const response = await api.get('/sie/stakeholders/matrix/');
+  getStats: async (organizationId = null) => {
+    const params = organizationId ? { organization: organizationId } : {};
+    const response = await api.get('/sie/stakeholders/stats/', { params });
     return response.data;
   }
 };

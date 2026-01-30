@@ -10,6 +10,13 @@ const scopeService = {
     return response.data.results || response.data;
   },
 
+  // Obtener el último alcance definido
+  getLatest: async (organizationId = null) => {
+    const params = organizationId ? { organization: organizationId } : {};
+    const response = await api.get('/scope/latest/', { params });
+    return response.data;
+  },
+
   // Obtener elemento por ID
   getById: async (id) => {
     const response = await api.get(`/scope/scopes/${id}/`);

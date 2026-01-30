@@ -11,6 +11,9 @@ app_name = 'asb'
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('generate/', views.run_scope_analysis, name='generate-scope'),
+    path('statement/', views.get_scope_statement, name='scope-statement'),
+    path('audit/', views.run_scope_audit, name='scope-audit'),
     path('analyze/', views.run_scope_analysis, name='run-analysis'),
     path('latest/', views.get_latest_scope, name='latest-scope'),
 ]

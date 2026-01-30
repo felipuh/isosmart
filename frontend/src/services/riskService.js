@@ -10,6 +10,12 @@ const riskService = {
     return response.data.results || response.data;
   },
 
+  // Obtener riesgos (alias para compatibilidad)
+  getRisks: async (params = {}) => {
+    const response = await api.get('/risks/', { params });
+    return response.data.results || response.data;
+  },
+
   // Obtener riesgo por ID
   getById: async (id) => {
     const response = await api.get(`/risks/${id}/`);

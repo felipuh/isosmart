@@ -14,6 +14,7 @@ router.register(r'audit-logs', views.AuditLogViewSet, basename='audit-log')
 
 urlpatterns = [
     path('dashboard/summary/', views.dashboard_summary, name='dashboard-summary'),
+    path('dashboard/', views.dashboard_summary, name='dashboard-summary-alias'),
     path('risks/matrix/', views.risk_matrix_list, name='risk-matrix'),
     path('risks/stats/', views.risk_stats, name='risk-stats'),
     path('context/latest/', views.context_analysis_latest, name='context-latest'),

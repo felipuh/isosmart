@@ -10,6 +10,12 @@ const objectiveService = {
     return response.data.results || response.data;
   },
 
+  // Obtener objetivos (alias para compatibilidad)
+  getObjectives: async (params = {}) => {
+    const response = await api.get('/objectives/', { params });
+    return response.data.results || response.data;
+  },
+
   // Obtener objetivo por ID
   getById: async (id) => {
     const response = await api.get(`/objectives/${id}/`);

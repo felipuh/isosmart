@@ -8,6 +8,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.utils import timezone
+from django.db.models import Count
 from datetime import timedelta
 
 from ai_modules.sie.models.stakeholder import (
@@ -144,6 +145,36 @@ class StakeholderProfileViewSet(viewsets.ModelViewSet):
                 matrix_data['monitor'].append(sh_data)
         
         return Response(matrix_data)
+
+    @action(detail=False, methods=['get'])
+    def stats(self, request):
+        """
+        Estadísticas básicas de stakeholders
+        GET /api/sie/stakeholders/stats/
+        """
+        try:
+            total = StakeholderProfile.objects.count()
+            by_type = StakeholderProfile.objects.values('stakeholder_type').annotate(count=Count('id'))
+            by_power = StakeholderProfile.objects.values('power').annotate(count=Count('id'))
+            by_interest = StakeholderProfile.objects.values('interest').annotate(count=Count('id'))
+
+            critical_count = StakeholderProfile.objects.filter(is_critical=True).count()
+            active_count = StakeholderProfile.objects.filter(is_active=True).count()
+
+            return Response({
+                'total_stakeholders': total,
+                'active_count': active_count,
+                'critical_count': critical_count,
+                'by_type': {item['stakeholder_type']: item['count'] for item in by_type},
+                'by_power': {item['power']: item['count'] for item in by_power},
+                'by_interest': {item['interest']: item['count'] for item in by_interest}
+            })
+
+        except Exception as e:
+            return Response(
+                {'error': str(e), 'status': 'error'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
     
     @action(detail=True, methods=['get'])
     def change_history(self, request, pk=None):

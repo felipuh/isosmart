@@ -5,8 +5,9 @@ import api from './api';
 
 const documentService = {
   // Obtener todos los documentos
-  getAll: async (params = {}) => {
-    const response = await api.get('/documents/', { params });
+  getAll: async (organizationId = null, params = {}) => {
+    const allParams = organizationId ? { ...params, organization: organizationId } : params;
+    const response = await api.get('/documents/', { params: allParams });
     return response.data.results || response.data;
   },
 
@@ -59,8 +60,9 @@ const documentService = {
   },
 
   // Obtener estadísticas
-  getStats: async () => {
-    const response = await api.get('/documents/stats/');
+  getStats: async (organizationId = null) => {
+    const params = organizationId ? { organization: organizationId } : {};
+    const response = await api.get('/documents/stats/', { params });
     return response.data;
   },
 

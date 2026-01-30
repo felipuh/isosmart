@@ -213,6 +213,77 @@ def get_latest_scope(request):
         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+@api_view(['GET'])
+def get_scope_statement(request):
+    """
+    Obtener la declaración de alcance más reciente
+    """
+    try:
+        latest = ScopeDefinition.objects.order_by('-created_at').first()
+
+        if not latest:
+            return Response({
+                'status': 'no_data',
+                'message': 'No hay definiciones de alcance disponibles'
+            })
+
+        return Response({
+            'status': 'success',
+            'scope_id': latest.id,
+            'title': latest.title,
+            'version': latest.version,
+            'scope_statement': latest.scope_statement or ''
+        })
+
+    except Exception as e:
+        logger.error(f"Error obteniendo declaración de alcance: {str(e)}", exc_info=True)
+        return Response({
+            'status': 'error',
+            'message': str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+def run_scope_audit(request):
+    """
+    Ejecutar auditoría básica del alcance (validaciones mínimas)
+    """
+    try:
+        latest = ScopeDefinition.objects.order_by('-created_at').first()
+
+        if not latest:
+            return Response({
+                'status': 'no_data',
+                'message': 'No hay definiciones de alcance disponibles'
+            })
+
+        issues = []
+        if not latest.scope_statement:
+            issues.append('Falta la declaración de alcance.')
+        if not latest.products_services:
+            issues.append('No se han definido productos o servicios.')
+        if not latest.organizational_boundaries:
+            issues.append('No se han definido límites organizacionales.')
+        if not latest.applicable_requirements:
+            issues.append('No se han definido requisitos aplicables.')
+
+        score = max(0, 100 - (len(issues) * 20))
+
+        return Response({
+            'status': 'success',
+            'scope_id': latest.id,
+            'score': score,
+            'issues': issues
+        })
+
+    except Exception as e:
+        logger.error(f"Error en auditoría de alcance: {str(e)}", exc_info=True)
+        return Response({
+            'status': 'error',
+            'message': str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 class ProcessScopeViewSet(viewsets.ModelViewSet):
     """
     ViewSet para gestión de procesos en alcance
