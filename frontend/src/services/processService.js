@@ -10,7 +10,7 @@ const processService = {
   // Obtener último mapa
   getLatest: async (organizationId = null) => {
     const params = organizationId ? { organization: organizationId } : {};
-    const response = await api.get('/latest/', { params });
+    const response = await api.get('/maps/latest/', { params });
     return response.data;
   },
 

@@ -64,3 +64,8 @@ logs/ai/celery_worker.log
 logs/ai/frontend-error-0.log
 logs/ai/frontend-out-0.log
 frontend/src/components/Settings/SettingsDashboard.jsx.bak
+logs/frontend_vite.log
+logs/ai/frontend-error-0.log
+logs/ai/frontend-out-0.log
+logs/ai/runserver.log
+logs/nginx/access.log
