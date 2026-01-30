@@ -1,63 +1,62 @@
+/**
+ * Servicio de Riesgos - ISO 6.1
+ */
 import api from './api';
 
 const riskService = {
-  async getRisks(filters = {}) {
-    const params = new URLSearchParams();
-    if (filters.organization) params.append('organization', filters.organization);
-    if (filters.source) params.append('source', filters.source);
-    if (filters.level) params.append('level', filters.level);
-    if (filters.status) params.append('status', filters.status);
-    if (filters.category) params.append('category', filters.category);
-    
-    const response = await api.get(`/risks/?${params}`);
-    return response.data;
+  // Obtener todos los riesgos
+  getAll: async (params = {}) => {
+    const response = await api.get('/risks/', { params });
+    return response.data.results || response.data;
   },
 
-  async getRisk(id) {
+  // Obtener riesgo por ID
+  getById: async (id) => {
     const response = await api.get(`/risks/${id}/`);
     return response.data;
   },
 
-  async createRisk(riskData) {
-    const response = await api.post('/risks/', riskData);
+  // Crear nuevo riesgo
+  create: async (data) => {
+    const response = await api.post('/risks/', data);
     return response.data;
   },
 
-  async updateRisk(id, riskData) {
-    const response = await api.put(`/risks/${id}/`, riskData);
+  // Actualizar riesgo
+  update: async (id, data) => {
+    const response = await api.put(`/risks/${id}/`, data);
     return response.data;
   },
 
-  async deleteRisk(id) {
+  // Actualizar parcialmente
+  patch: async (id, data) => {
+    const response = await api.patch(`/risks/${id}/`, data);
+    return response.data;
+  },
+
+  // Eliminar riesgo
+  delete: async (id) => {
     const response = await api.delete(`/risks/${id}/`);
     return response.data;
   },
 
-  async changeStatus(id, newStatus) {
-    const response = await api.post(`/risks/${id}/change_status/`, { status: newStatus });
+  // Obtener estadísticas
+  getStats: async () => {
+    const response = await api.get('/risks/stats/');
     return response.data;
   },
 
-  async getStats(organizationId = null) {
-    const params = organizationId ? { organization: organizationId } : {};
-    const response = await api.get('/risks/stats/', { params });
+  // Obtener matriz de riesgos
+  getMatrix: async () => {
+    const response = await api.get('/risks/matrix/');
     return response.data;
   },
 
-  async getByLevel() {
-    const response = await api.get('/risks/by_level/');
+  // Evaluar riesgo
+  evaluate: async (id) => {
+    const response = await api.post(`/risks/${id}/evaluate/`);
     return response.data;
-  },
-
-  async getMatrixData() {
-    const response = await api.get('/risks/matrix_data/');
-    return response.data;
-  },
-
-  async getCategories() {
-    const response = await api.get('/risks/categories/');
-    return response.data;
-  },
+  }
 };
 
 export default riskService;

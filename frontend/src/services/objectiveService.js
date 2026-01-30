@@ -1,52 +1,65 @@
+/**
+ * Servicio de Objetivos de Calidad - ISO 6.2
+ */
 import api from './api';
 
 const objectiveService = {
-  async getObjectives(filters = {}) {
-    const params = new URLSearchParams();
-    if (filters.organization) params.append('organization', filters.organization);
-    if (filters.status) params.append('status', filters.status);
-    if (filters.source) params.append('source', filters.source);
-    
-    const response = await api.get(`/objectives/?${params}`);
-    return response.data;
+  // Obtener todos los objetivos
+  getAll: async (params = {}) => {
+    const response = await api.get('/objectives/', { params });
+    return response.data.results || response.data;
   },
 
-  async getObjective(id) {
+  // Obtener objetivo por ID
+  getById: async (id) => {
     const response = await api.get(`/objectives/${id}/`);
     return response.data;
   },
 
-  async createObjective(data) {
-    const response = await api.post(`/objectives/`, data);
+  // Crear nuevo objetivo
+  create: async (data) => {
+    const response = await api.post('/objectives/', data);
     return response.data;
   },
 
-  async updateObjective(id, data) {
+  // Actualizar objetivo
+  update: async (id, data) => {
     const response = await api.put(`/objectives/${id}/`, data);
     return response.data;
   },
 
-  async deleteObjective(id) {
+  // Actualizar parcialmente
+  patch: async (id, data) => {
+    const response = await api.patch(`/objectives/${id}/`, data);
+    return response.data;
+  },
+
+  // Eliminar objetivo
+  delete: async (id) => {
     const response = await api.delete(`/objectives/${id}/`);
     return response.data;
   },
 
-  async updateProgress(id, currentValue) {
-    const response = await api.post(`/objectives/${id}/update_progress/`, {
+  // Obtener estadísticas
+  getStats: async () => {
+    const response = await api.get('/objectives/stats/');
+    return response.data;
+  },
+
+  // Actualizar progreso
+  updateProgress: async (id, currentValue) => {
+    const response = await api.patch(`/objectives/${id}/`, {
       current_value: currentValue
     });
     return response.data;
   },
 
-  async getStats(organizationId = null) {
-    const params = organizationId ? { organization: organizationId } : {};
-    const response = await api.get(`/objectives/stats/`, { params });
-    return response.data;
-  },
-
-  async getDashboardData() {
-    const response = await api.get(`/objectives/dashboard_data/`);
-    return response.data;
+  // Obtener objetivos por proceso
+  getByProcess: async (processId) => {
+    const response = await api.get('/objectives/', {
+      params: { process_id: processId }
+    });
+    return response.data.results || response.data;
   }
 };
 

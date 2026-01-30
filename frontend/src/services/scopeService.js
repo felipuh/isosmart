@@ -1,105 +1,66 @@
+/**
+ * Servicio de Alcance (ASB) - ISO 4.3
+ */
 import api from './api';
 
 const scopeService = {
-  runAnalysis: async (data = {}) => {
-    const response = await api.post('/analyze/', data);
-    return response.data;
+  // Obtener todos los elementos del alcance
+  getAll: async (params = {}) => {
+    const response = await api.get('/scope/scopes/', { params });
+    return response.data.results || response.data;
   },
 
-  getLatest: async (organizationId = null) => {
-    const params = organizationId ? { organization: organizationId } : {};
-    const response = await api.get('/latest/', { params });
-    return response.data;
-  },
-
-  getAll: async (status = null) => {
-    const params = status ? { status } : {};
-    const response = await api.get('/scopes/', { params });
-    return response.data;
-  },
-
+  // Obtener elemento por ID
   getById: async (id) => {
-    const response = await api.get(`/scopes/${id}/`);
+    const response = await api.get(`/scope/scopes/${id}/`);
     return response.data;
   },
 
+  // Crear nuevo elemento
   create: async (data) => {
-    const response = await api.post('/scopes/', data);
+    const response = await api.post('/scope/scopes/', data);
     return response.data;
   },
 
+  // Actualizar elemento
   update: async (id, data) => {
-    const response = await api.put(`/scopes/${id}/`, data);
+    const response = await api.put(`/scope/scopes/${id}/`, data);
     return response.data;
   },
 
+  // Actualizar parcialmente
+  patch: async (id, data) => {
+    const response = await api.patch(`/scope/scopes/${id}/`, data);
+    return response.data;
+  },
+
+  // Eliminar elemento
   delete: async (id) => {
-    const response = await api.delete(`/scopes/${id}/`);
+    const response = await api.delete(`/scope/scopes/${id}/`);
     return response.data;
   },
 
-  getActive: async () => {
-    const response = await api.get('/scopes/active/');
+  // Obtener estadísticas
+  getStats: async () => {
+    const response = await api.get('/scope/scopes/stats/');
     return response.data;
   },
 
-  approve: async (id) => {
-    const response = await api.post(`/scopes/${id}/approve/`);
+  // Generar alcance automáticamente
+  generate: async () => {
+    const response = await api.post('/scope/generate/');
     return response.data;
   },
 
-  activate: async (id) => {
-    const response = await api.post(`/scopes/${id}/activate/`);
+  // Obtener declaración de alcance
+  getStatement: async () => {
+    const response = await api.get('/scope/statement/');
     return response.data;
   },
 
-  getStats: async (organizationId = null) => {
-    const params = organizationId ? { organization: organizationId } : {};
-    const response = await api.get('/scopes/stats/', { params });
-    return response.data;
-  },
-
-  // Procesos
-  getProcesses: async (scopeId) => {
-    const params = scopeId ? { scope_definition: scopeId } : {};
-    const response = await api.get('/processes/', { params });
-    return response.data;
-  },
-
-  createProcess: async (data) => {
-    const response = await api.post('/processes/', data);
-    return response.data;
-  },
-
-  updateProcess: async (id, data) => {
-    const response = await api.put(`/processes/${id}/`, data);
-    return response.data;
-  },
-
-  deleteProcess: async (id) => {
-    const response = await api.delete(`/processes/${id}/`);
-    return response.data;
-  },
-
-  // Ubicaciones
-  getLocations: async (scopeId) => {
-    const params = scopeId ? { scope_definition: scopeId } : {};
-    const response = await api.get('/locations/', { params });
-    return response.data;
-  },
-
-  createLocation: async (data) => {
-    const response = await api.post('/locations/', data);
-    return response.data;
-  },
-
-  updateLocation: async (id, data) => {
-    const response = await api.put(`/locations/${id}/`, data);
-    return response.data;
-  },
-
-  deleteLocation: async (id) => {
-    const response = await api.delete(`/locations/${id}/`);
+  // Auditar alcance
+  audit: async () => {
+    const response = await api.post('/scope/audit/');
     return response.data;
   }
 };

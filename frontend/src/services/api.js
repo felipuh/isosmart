@@ -5,9 +5,9 @@
 
 import axios from 'axios';
 
-// Crear instancia de API
+// Crear instancia de API - USAR RUTA RELATIVA para evitar problemas de CORS
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://isosmart.local/api',
+  baseURL: '/api',  // Ruta relativa - el proxy de Vite/Nginx maneja el backend
   headers: {
     'Content-Type': 'application/json',
   },
@@ -71,7 +71,6 @@ api.interceptors.response.use(
     const refreshToken = localStorage.getItem('refresh_token');
 
     if (!refreshToken) {
-      // No hay refresh token, redirigir a login
       isRefreshing = false;
       redirectToLogin();
       return Promise.reject(error);
@@ -84,30 +83,22 @@ api.interceptors.response.use(
 
       const { access, refresh: newRefresh } = response.data;
 
-      // Guardar nuevos tokens
       localStorage.setItem('access_token', access);
       if (newRefresh) {
         localStorage.setItem('refresh_token', newRefresh);
       }
 
-      // Actualizar header por defecto
       api.defaults.headers.common['Authorization'] = `Bearer ${access}`;
-
-      // Procesar cola de requests fallidos
       processQueue(null, access);
 
-      // Reintentar request original
       originalRequest.headers.Authorization = `Bearer ${access}`;
       return api(originalRequest);
 
     } catch (refreshError) {
       processQueue(refreshError, null);
-      
-      // Limpiar tokens y redirigir a login
       localStorage.removeItem('access_token');
       localStorage.removeItem('refresh_token');
       delete api.defaults.headers.common['Authorization'];
-      
       redirectToLogin();
       return Promise.reject(refreshError);
     } finally {
@@ -116,9 +107,7 @@ api.interceptors.response.use(
   }
 );
 
-// Función para redirigir a login
 const redirectToLogin = () => {
-  // Solo redirigir si no estamos ya en login
   if (window.location.pathname !== '/login') {
     window.location.href = '/login';
   }

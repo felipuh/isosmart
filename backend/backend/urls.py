@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from core import views
 from ai_modules.spm import views as spm_views
+from ai_modules.sie import views as sie_views
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -21,6 +22,11 @@ urlpatterns = [
     # Explicit routes for stats endpoints
     path('api/maps/stats/', spm_views.ProcessMapViewSet.as_view({'get': 'stats'}), name='maps-stats'),
     path('api/latest/', spm_views.get_latest_map, name='latest-map-alias'),
+
+    # Explicit aliases for frontend endpoints without duplicated prefixes
+    path('api/stakeholders/critical/', sie_views.StakeholderProfileViewSet.as_view({'get': 'critical'}), name='stakeholders-critical'),
+    path('api/stakeholders/matrix/', sie_views.StakeholderProfileViewSet.as_view({'get': 'matrix'}), name='stakeholders-matrix'),
+    path('api/change-logs/recent/', sie_views.StakeholderChangeLogViewSet.as_view({'get': 'recent'}), name='change-logs-recent'),
     
     path('api/auth/', include('authentication.urls')),
 ]

@@ -1,11 +1,13 @@
+/**
+ * Servicio de Documentos - ISO 7.5
+ */
 import api from './api';
 
 const documentService = {
   // Obtener todos los documentos
-  getAll: async (organizationId = null, params = {}) => {
-    const finalParams = organizationId ? { ...params, organization: organizationId } : params;
-    const response = await api.get(`/documents/`, { params: finalParams });
-    return response.data;
+  getAll: async (params = {}) => {
+    const response = await api.get('/documents/', { params });
+    return response.data.results || response.data;
   },
 
   // Obtener documento por ID
@@ -16,11 +18,29 @@ const documentService = {
 
   // Subir nuevo documento
   upload: async (formData) => {
-    const response = await api.post(`/documents/`, formData, {
+    const response = await api.post('/documents/upload/', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
     });
+    return response.data;
+  },
+
+  // Crear documento
+  create: async (data) => {
+    const response = await api.post('/documents/', data);
+    return response.data;
+  },
+
+  // Actualizar documento
+  update: async (id, data) => {
+    const response = await api.put(`/documents/${id}/`, data);
+    return response.data;
+  },
+
+  // Actualizar parcialmente
+  patch: async (id, data) => {
+    const response = await api.patch(`/documents/${id}/`, data);
     return response.data;
   },
 
@@ -39,11 +59,16 @@ const documentService = {
   },
 
   // Obtener estadísticas
-  getStats: async (organizationId = null) => {
-    const params = organizationId ? { organization: organizationId } : {};
-    const response = await api.get(`/documents/stats/`, { params });
+  getStats: async () => {
+    const response = await api.get('/documents/stats/');
     return response.data;
   },
+
+  // Procesar documento con IA
+  process: async (id) => {
+    const response = await api.post(`/documents/${id}/process/`);
+    return response.data;
+  }
 };
 
 export default documentService;
