@@ -17,10 +17,9 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             'id', 'email', 'first_name', 'last_name', 'full_name',
-            'phone', 'avatar', 'is_active', 'email_verified',
-            'created_at', 'last_login'
+            'is_active', 'last_login', 'date_joined'
         ]
-        read_only_fields = ['id', 'created_at', 'last_login', 'email_verified']
+        read_only_fields = ['id', 'date_joined', 'last_login']
     
     def get_full_name(self, obj):
         return obj.get_full_name()
@@ -32,24 +31,15 @@ class UserProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     organization_name = serializers.CharField(source='organization.name', read_only=True)
     role_display = serializers.CharField(source='get_role_display', read_only=True)
-    permissions = serializers.SerializerMethodField()
     
     class Meta:
         model = UserProfile
         fields = [
             'id', 'user', 'organization', 'organization_name',
             'role', 'role_display', 'job_title', 'department',
-            'is_primary', 'is_active', 'joined_at', 'permissions'
+            'is_active', 'created_at', 'updated_at'
         ]
-        read_only_fields = ['id', 'joined_at']
-    
-    def get_permissions(self, obj):
-        return {
-            'is_admin': obj.is_admin(),
-            'is_manager': obj.is_manager(),
-            'can_edit': obj.can_edit(),
-            'can_view': obj.can_view(),
-        }
+        read_only_fields = ['id', 'created_at', 'updated_at']
 
 
 class LoginSerializer(serializers.Serializer):
@@ -101,8 +91,8 @@ class LoginSerializer(serializers.Serializer):
                         code='authorization'
                     )
             else:
-                # Usar organización primaria o primera disponible
-                profile = profiles.filter(is_primary=True).first() or profiles.first()
+                # Usar primera organización disponible (ordenada por ID)
+                profile = profiles.first()
             
             attrs['user'] = user
             attrs['profile'] = profile

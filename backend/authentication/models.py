@@ -11,16 +11,19 @@ from django.utils.translation import gettext_lazy as _
 class UserManager(BaseUserManager):
     """Manager personalizado para el modelo User"""
     
-    def create_user(self, email, password=None, **extra_fields):
+    def create_user(self, email=None, password=None, username=None, **extra_fields):
         if not email:
             raise ValueError(_('El email es obligatorio'))
         email = self.normalize_email(email)
-        user = self.model(email=email, **extra_fields)
+        # Si no se proporciona username, usar una versión del email
+        if not username:
+            username = email.split('@')[0]
+        user = self.model(email=email, username=username, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
     
-    def create_superuser(self, email, password=None, **extra_fields):
+    def create_superuser(self, email=None, password=None, username=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('is_active', True)
@@ -30,7 +33,7 @@ class UserManager(BaseUserManager):
         if extra_fields.get('is_superuser') is not True:
             raise ValueError(_('Superuser debe tener is_superuser=True.'))
         
-        return self.create_user(email, password, **extra_fields)
+        return self.create_user(email, password, username, **extra_fields)
 
 
 class User(AbstractUser):
@@ -39,19 +42,7 @@ class User(AbstractUser):
     Usa email como identificador principal en lugar de username
     """
     
-    username = None  # Removemos username
     email = models.EmailField(_('email'), unique=True)
-    first_name = models.CharField(_('nombre'), max_length=150)
-    last_name = models.CharField(_('apellido'), max_length=150)
-    phone = models.CharField(_('teléfono'), max_length=20, blank=True, null=True)
-    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
-    
-    # Campos de control
-    is_active = models.BooleanField(_('activo'), default=True)
-    email_verified = models.BooleanField(_('email verificado'), default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    last_login_ip = models.GenericIPAddressField(blank=True, null=True)
     
     objects = UserManager()
     

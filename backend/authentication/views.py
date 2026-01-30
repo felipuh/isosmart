@@ -57,8 +57,7 @@ class LoginView(APIView):
         
         # Actualizar último login
         user.last_login = timezone.now()
-        user.last_login_ip = self.get_client_ip(request)
-        user.save(update_fields=['last_login', 'last_login_ip'])
+        user.save(update_fields=['last_login'])
         
         # Obtener todas las organizaciones del usuario
         all_profiles = UserProfile.objects.filter(
@@ -85,14 +84,6 @@ class LoginView(APIView):
         }
         
         return Response(response_data, status=status.HTTP_200_OK)
-    
-    def get_client_ip(self, request):
-        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-        if x_forwarded_for:
-            ip = x_forwarded_for.split(',')[0]
-        else:
-            ip = request.META.get('REMOTE_ADDR')
-        return ip
 
 
 class LogoutView(APIView):

@@ -3,7 +3,15 @@
  * Incluye interceptores para manejo automático de tokens JWT
  */
 
-import api from './api';
+import axios from 'axios';
+
+// Crear instancia de API
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_URL || 'http://isosmart.local/api',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
 
 // Flag para evitar múltiples refreshes simultáneos
 let isRefreshing = false;
@@ -70,7 +78,7 @@ api.interceptors.response.use(
     }
 
     try {
-      const response = await axios.post('/api/auth/refresh/', {
+      const response = await api.post('/auth/refresh/', {
         refresh: refreshToken,
       });
 

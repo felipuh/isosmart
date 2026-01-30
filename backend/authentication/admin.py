@@ -13,20 +13,20 @@ class UserAdmin(BaseUserAdmin):
     """Admin personalizado para el modelo User"""
     
     list_display = ('email', 'first_name', 'last_name', 'is_active', 'is_staff', 'last_login')
-    list_filter = ('is_active', 'is_staff', 'is_superuser', 'email_verified')
+    list_filter = ('is_active', 'is_staff', 'is_superuser')
     search_fields = ('email', 'first_name', 'last_name')
     ordering = ('email',)
     
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         (_('Información Personal'), {
-            'fields': ('first_name', 'last_name', 'phone', 'avatar')
+            'fields': ('first_name', 'last_name')
         }),
         (_('Permisos'), {
-            'fields': ('is_active', 'is_staff', 'is_superuser', 'email_verified', 'groups', 'user_permissions'),
+            'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions'),
         }),
         (_('Fechas'), {
-            'fields': ('last_login', 'date_joined', 'last_login_ip'),
+            'fields': ('last_login', 'date_joined'),
             'classes': ('collapse',)
         }),
     )
@@ -38,7 +38,7 @@ class UserAdmin(BaseUserAdmin):
         }),
     )
     
-    readonly_fields = ('last_login', 'date_joined', 'last_login_ip')
+    readonly_fields = ('last_login', 'date_joined')
 
 
 @admin.register(UserProfile)
@@ -54,15 +54,16 @@ class UserProfileAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {'fields': ('user', 'organization', 'role')}),
         (_('Información Adicional'), {
-            'fields': ('job_title', 'department', 'phone')
+            'fields': ('job_title', 'department', 'phone', 'avatar', 'theme', 'language')
         }),
-        (_('Preferencias'), {
-            'fields': ('theme', 'language', 'notifications_enabled', 'email_notifications')
+        (_('Notificaciones'), {
+            'fields': ('notifications_enabled', 'email_notifications')
         }),
         (_('Estado'), {
             'fields': ('is_active',)
         }),
     )
+    readonly_fields = ('created_at', 'updated_at')
 
 
 @admin.register(RefreshTokenBlacklist)

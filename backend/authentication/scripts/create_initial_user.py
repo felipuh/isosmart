@@ -20,13 +20,13 @@ else:
         id=1,
         defaults={
             'name': 'Organización Demo',
+            'slug': 'organizacion-demo',
             'legal_name': 'Organización Demo S.A.',
             'tax_id': '0000000000',
             'email': 'demo@isosmart.local',
             'phone': '0000000000',
             'address': 'Dirección Demo',
-            'city': 'Ciudad',
-            'country': 'País',
+            'website': 'https://demo.isosmart.local',
         }
     )
     
@@ -37,12 +37,12 @@ else:
     
     # Crear usuario administrador
     user = User.objects.create_user(
+        username='admin_isosmart',  # Username requerido por la tabla auth_user
         email='admin@isosmart.local',
         password='Admin123!',  # ⚠️ Cambiar después del primer login
         first_name='Administrador',
         last_name='Sistema',
         is_active=True,
-        email_verified=True,
     )
     
     print(f"✅ Usuario creado: {user.email}")
@@ -53,7 +53,6 @@ else:
         organization=org,
         role='org_admin',
         job_title='Administrador del Sistema',
-        is_primary=True,
         is_active=True,
     )
     
