@@ -4,9 +4,12 @@ import {
   Phone, Building, Edit2, Trash2, Key, UserCheck, UserX,
   ChevronDown, X, Loader2, Check, AlertCircle
 } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 import settingsService from '../../services/settingsService';
 
-const UsersManagement = ({ organizationId }) => {
+const UsersManagement = () => {
+  const { currentOrganization } = useAuth();
+  const organizationId = currentOrganization?.id;
   const [users, setUsers] = useState([]);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -27,7 +30,9 @@ const UsersManagement = ({ organizationId }) => {
   };
 
   useEffect(() => {
-    loadUsers();
+    if (organizationId) {
+      loadUsers();
+    }
   }, [organizationId]);
 
   const loadUsers = async () => {
@@ -68,6 +73,11 @@ const UsersManagement = ({ organizationId }) => {
   };
 
   const handleDeleteUser = async (userId) => {
+    if (!canManageUsers) {
+      alert('❌ No tienes permisos para eliminar usuarios');
+      return;
+    }
+    
     if (!confirm('¿Estás seguro de eliminar este usuario?')) return;
     
     try {
@@ -99,7 +109,9 @@ const UsersManagement = ({ organizationId }) => {
         
         <button
           onClick={() => setShowCreateModal(true)}
-          className="px-4 py-2.5 bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:from-violet-600 hover:to-fuchsia-600 text-white rounded-xl font-medium shadow-lg shadow-violet-500/25 transition-all flex items-center gap-2"
+          disabled={!canManageUsers}
+          className="px-4 py-2.5 bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:from-violet-600 hover:to-fuchsia-600 text-white rounded-xl font-medium shadow-lg shadow-violet-500/25 transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          title={!canManageUsers ? 'No tienes permisos para crear usuarios' : ''}
         >
           <UserPlus className="w-5 h-5" />
           Nuevo Usuario

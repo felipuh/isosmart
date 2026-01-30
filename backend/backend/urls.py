@@ -12,6 +12,7 @@ urlpatterns = [
     path('api/context/', include('ai_modules.sca.urls')),
     path('api/scope/', include('ai_modules.asb.urls')),
     path('api/processes/', include('ai_modules.spm.urls')),
+    path('api/auth/', include('authentication.urls')),
 ]
 
 if settings.DEBUG:

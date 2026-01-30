@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { RefreshCw, Download, TrendingUp, AlertCircle, CheckCircle, FileText } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 import contextService from '../../services/contextService';
 import FODAAnalysis from './FODAAnalysis';
 import ExternalFactors from './ExternalFactors';
@@ -8,19 +9,22 @@ import IdentifiedRisks from './IdentifiedRisks';
 import Recommendations from './Recommendations';
 
 const ContextDashboard = () => {
+  const { currentOrganization } = useAuth();
   const [contextData, setContextData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [analyzing, setAnalyzing] = useState(false);
   const [lastUpdate, setLastUpdate] = useState(null);
 
   useEffect(() => {
-    loadContextData();
-  }, []);
+    if (currentOrganization?.id) {
+      loadContextData();
+    }
+  }, [currentOrganization?.id]);
 
   const loadContextData = async () => {
     setLoading(true);
     try {
-      const data = await contextService.getLatest();
+      const data = await contextService.getLatest(currentOrganization.id);
       setContextData(data);
       if (data.timestamp) {
         setLastUpdate(new Date(data.timestamp));
@@ -48,7 +52,7 @@ const handleRunAnalysis = async () => {
 
   setAnalyzing(true);
   try {
-    const result = await contextService.triggerAnalysis();
+    const result = await contextService.triggerAnalysis(currentOrganization.id);
     console.log('Análisis completado:', result);
     
     await loadContextData();

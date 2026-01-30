@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, RefreshCw, FileText, Upload as UploadIcon, Folder } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 import documentService from '../../services/documentService';
 import DocumentList from './DocumentList';
 import DocumentUploadForm from './DocumentUploadForm';
 
 const DocumentDashboard = () => {
+  const { currentOrganization } = useAuth();
   const [documents, setDocuments] = useState([]);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -13,16 +15,18 @@ const DocumentDashboard = () => {
   const [filterType, setFilterType] = useState('all');
 
   useEffect(() => {
-    loadData();
-  }, [filterType]);
+    if (currentOrganization?.id) {
+      loadData();
+    }
+  }, [currentOrganization?.id, filterType]);
 
   const loadData = async () => {
     setLoading(true);
     try {
       const params = filterType !== 'all' ? { type: filterType } : {};
       const [docsResponse, statsResponse] = await Promise.all([
-        documentService.getAll(params),
-        documentService.getStats()
+        documentService.getAll(currentOrganization.id, params),
+        documentService.getStats(currentOrganization.id)
       ]);
 
       setDocuments(docsResponse);

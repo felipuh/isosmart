@@ -4,6 +4,7 @@ import {
   FileCheck, Palette, ChevronRight, Shield, Activity,
   Server, BarChart3
 } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 import OrganizationSettings from './OrganizationSettings';
 import UsersManagement from './UsersManagement';
 import AIModulesSettings from './AIModulesSettings';
@@ -14,6 +15,7 @@ import ThemeSettings from './ThemeSettings';
 import settingsService from '../../services/settingsService';
 
 const SettingsDashboard = () => {
+  const { currentOrganization } = useAuth();
   const [activeTab, setActiveTab] = useState('organization');
   const [loading, setLoading] = useState(true);
   const [organization, setOrganization] = useState(null);
@@ -117,7 +119,7 @@ const SettingsDashboard = () => {
           />
         );
       case 'users':
-        return <UsersManagement organizationId={organization?.id} />;
+        return <UsersManagement />;
       case 'ai-modules':
         return (
           <AIModulesSettings 
@@ -140,7 +142,7 @@ const SettingsDashboard = () => {
           />
         );
       case 'iso':
-        return <ISOClausesSettings organizationId={organization?.id} />;
+        return <ISOClausesSettings />;
       case 'theme':
         return <ThemeSettings />;
       default:

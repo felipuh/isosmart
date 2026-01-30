@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { RefreshCw, Download, PlayCircle, FileText, Network, Target, Plus } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 import processService from '../../services/processService';
 import ProcessDiagram from './ProcessDiagram';
 import ProcessList from './ProcessList';
@@ -7,6 +8,7 @@ import ProcessRecommendations from './ProcessRecommendations';
 import ProcessForm from './ProcessForm';
 
 const ProcessDashboard = () => {
+  const { currentOrganization } = useAuth();
   const [processMap, setProcessMap] = useState(null);
   const [processes, setProcesses] = useState([]);
   const [processesByType, setProcessesByType] = useState(null);
@@ -17,15 +19,19 @@ const ProcessDashboard = () => {
   const [editingProcess, setEditingProcess] = useState(null);
 
   useEffect(() => {
-    loadData();
-  }, []);
+    if (currentOrganization?.id) {
+      loadData();
+    }
+  }, [currentOrganization?.id]);
 
   const loadData = async () => {
+    if (!currentOrganization?.id) return;
+    
     setLoading(true);
     try {
       const [latestResponse, statsResponse] = await Promise.all([
-        processService.getLatest(),
-        processService.getStats()
+        processService.getLatest(currentOrganization.id),
+        processService.getStats(currentOrganization.id)
       ]);
 
       if (latestResponse.status === 'success') {

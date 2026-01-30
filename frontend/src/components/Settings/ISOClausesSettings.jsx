@@ -3,9 +3,12 @@ import {
   FileCheck, Check, X, Edit2, Save, Loader2, AlertCircle,
   ChevronDown, ChevronRight, Info, RefreshCw, Shield
 } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 import settingsService from '../../services/settingsService';
 
-const ISOClausesSettings = ({ organizationId }) => {
+const ISOClausesSettings = () => {
+  const { currentOrganization } = useAuth();
+  const organizationId = currentOrganization?.id;
   const [clauses, setClauses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);

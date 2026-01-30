@@ -576,7 +576,8 @@ class QualityObjectiveViewSet(viewsets.ModelViewSet):
 # ViewSets para Configuración y Multicliente
 # =====================================================
 
-from .models import Organization, UserProfile, OrganizationSettings, ISOClauseConfig, AuditLog
+from .models import Organization, OrganizationSettings, ISOClauseConfig, AuditLog
+from authentication.models import UserProfile
 from .serializers import (
     OrganizationSerializer, UserProfileSerializer, UserCreateSerializer,
     OrganizationSettingsSerializer, ISOClauseConfigSerializer, AuditLogSerializer,

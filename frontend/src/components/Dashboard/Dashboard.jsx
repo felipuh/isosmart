@@ -12,8 +12,10 @@ import {
   FileText,
   BarChart3
 } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 
 const Dashboard = () => {
+  const { currentOrganization, user } = useAuth();
   const [stats, setStats] = useState({
     modulesActive: 4,
     totalModules: 4,
@@ -145,11 +147,23 @@ const Dashboard = () => {
     <div className="p-6 bg-slate-50 dark:bg-slate-900 min-h-screen transition-colors duration-300">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-          Sistema Inteligente de Gestión de Calidad
-        </h1>
+        <div className="flex items-center justify-between mb-2">
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+            Sistema Inteligente de Gestión de Calidad
+          </h1>
+          {user && (
+            <div className="text-right">
+              <p className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                {user.first_name} {user.last_name}
+              </p>
+              <p className="text-xs text-slate-500">
+                Último acceso: {new Date().toLocaleDateString('es-ES')}
+              </p>
+            </div>
+          )}
+        </div>
         <p className="text-slate-600 dark:text-slate-400">
-          ISO 9001:2015 | ISO/IEC 42001:2023
+          {currentOrganization?.name || 'Cargando organización...'} | ISO 9001:2015 | ISO/IEC 42001:2023
         </p>
       </div>
 

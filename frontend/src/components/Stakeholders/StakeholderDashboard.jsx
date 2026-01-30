@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { RefreshCw, Download, Plus, Search } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 import stakeholderService from '../../services/stakeholderService';
 import CriticalStakeholders from './CriticalStakeholders';
 import PowerInterestMatrix from './PowerInterestMatrix';
@@ -8,6 +9,7 @@ import ChangeTimeline from './ChangeTimeline';
 import StakeholderForm from './StakeholderForm';
 
 const StakeholderDashboard = () => {
+  const { currentOrganization } = useAuth();
   const [stakeholders, setStakeholders] = useState([]);
   const [criticalStakeholders, setCriticalStakeholders] = useState([]);
   const [matrixData, setMatrixData] = useState(null);
@@ -19,17 +21,21 @@ const StakeholderDashboard = () => {
   const [editingStakeholder, setEditingStakeholder] = useState(null);
 
   useEffect(() => {
-    loadAllData();
-  }, []);
+    if (currentOrganization?.id) {
+      loadAllData();
+    }
+  }, [currentOrganization?.id]);
 
   const loadAllData = async () => {
+    if (!currentOrganization?.id) return;
+    
     setLoading(true);
     try {
       const [shData, criticalData, matrix, changes] = await Promise.all([
-        stakeholderService.getAll(),
-        stakeholderService.getCritical(),
-        stakeholderService.getMatrix(),
-        stakeholderService.getRecentChanges()
+        stakeholderService.getAll(currentOrganization.id),
+        stakeholderService.getCritical(currentOrganization.id),
+        stakeholderService.getMatrix(currentOrganization.id),
+        stakeholderService.getRecentChanges(currentOrganization.id)
       ]);
 
       setStakeholders(shData);
@@ -108,7 +114,7 @@ const StakeholderDashboard = () => {
           Dashboard de Stakeholders
         </h1>
         <p className="text-slate-600 dark:text-slate-400">
-          Análisis inteligente de partes interesadas - ISO 4.2
+          {currentOrganization?.name} | Análisis inteligente de partes interesadas - ISO 4.2
         </p>
       </div>
 

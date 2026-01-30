@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     # Third party
     'rest_framework',
     'corsheaders',
-    
+    'authentication',
     # Local apps
     'core',
     'ai_modules.common',
@@ -63,6 +63,7 @@ REST_FRAMEWORK = {
 }
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -70,6 +71,7 @@ MIDDLEWARE = [
     'backend.middleware.CsrfExemptAPIMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'authentication.middleware.OrganizationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -135,6 +137,29 @@ DATABASES = {
             'charset': 'utf8mb4',
         }
     }
+}
+
+#Configurar modelo de usuario
+AUTH_USER_MODEL = 'authentication.User'
+
+#Configurar backends de autenticación
+AUTHENTICATION_BACKENDS = [
+    'authentication.backends.EmailBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+#Configurar JWT
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'UPDATE_LAST_LOGIN': True,
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
 # Configuración de Celery
@@ -232,12 +257,10 @@ LOGGING = {
 
 # CORS Configuration
 CORS_ALLOWED_ORIGINS = [
-    "http://192.168.100.100:3001",
-    "http://192.168.100.100",
     "http://localhost:3001",
-    "http://localhost",
+    "http://127.0.0.1:3001",
+    "http://isosmart.local",
 ]
-
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOW_METHODS = [
@@ -265,11 +288,11 @@ CORS_ALLOW_HEADERS = [
 # REST Framework Configuration
 # ==================================================
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',  # <-- Cambiar a AllowAny para API
-    ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
     ],
 }
 

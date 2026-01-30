@@ -1,20 +1,38 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { 
   Building2, Upload, Save, Mail, Phone, MapPin, Globe, 
   FileText, Camera, Check, AlertCircle, Loader2
 } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 import settingsService from '../../services/settingsService';
 
-const OrganizationSettings = ({ organization, onUpdate }) => {
+const OrganizationSettings = ({ organization: propOrganization, onUpdate }) => {
+  const { currentOrganization } = useAuth();
+  const organization = propOrganization || currentOrganization;
+  
   const [formData, setFormData] = useState({
-    name: organization?.name || '',
-    email: organization?.email || '',
-    phone: organization?.phone || '',
-    address: organization?.address || '',
-    website: organization?.website || '',
-    tax_id: organization?.tax_id || '',
-    legal_name: organization?.legal_name || '',
+    name: '',
+    email: '',
+    phone: '',
+    address: '',
+    website: '',
+    tax_id: '',
+    legal_name: '',
   });
+  
+  useEffect(() => {
+    if (organization) {
+      setFormData({
+        name: organization.name || '',
+        email: organization.email || '',
+        phone: organization.phone || '',
+        address: organization.address || '',
+        website: organization.website || '',
+        tax_id: organization.tax_id || '',
+        legal_name: organization.legal_name || '',
+      });
+    }
+  }, [organization]);
   const [saving, setSaving] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(null);

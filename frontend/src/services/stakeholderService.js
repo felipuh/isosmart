@@ -1,68 +1,71 @@
-import axios from 'axios';
-
-const API_BASE_URL = 'http://192.168.100.100/api/sie';
+import api from './api';
 
 const stakeholderService = {
-  getAll: async () => {
-    const response = await axios.get(API_BASE_URL + '/stakeholders/');
+  getAll: async (organizationId = null) => {
+    const params = organizationId ? { organization: organizationId } : {};
+    const response = await api.get('/stakeholders/', { params });
     return response.data;
   },
 
   getById: async (id) => {
-    const response = await axios.get(API_BASE_URL + '/stakeholders/' + id + '/');
+    const response = await api.get(`/stakeholders/${id}/`);
     return response.data;
   },
 
   create: async (data) => {
-    const response = await axios.post(API_BASE_URL + '/stakeholders/', data);
+    const response = await api.post('/stakeholders/', data);
     return response.data;
   },
 
   update: async (id, data) => {
-    const response = await axios.put(API_BASE_URL + '/stakeholders/' + id + '/', data);
+    const response = await api.put(`/stakeholders/${id}/`, data);
     return response.data;
   },
 
   delete: async (id) => {
-    const response = await axios.delete(API_BASE_URL + '/stakeholders/' + id + '/');
+    const response = await api.delete(`/stakeholders/${id}/`);
     return response.data;
   },
 
   runAnalysis: async () => {
-    const response = await axios.post(API_BASE_URL + '/stakeholders/run_analysis/');
+    const response = await api.post('/stakeholders/run_analysis/');
     return response.data;
   },
 
-  getCritical: async () => {
-    const response = await axios.get(API_BASE_URL + '/stakeholders/critical/');
+  getCritical: async (organizationId = null) => {
+    const params = organizationId ? { organization: organizationId } : {};
+    const response = await api.get('/stakeholders/critical/', { params });
     return response.data;
   },
 
-  getMatrix: async () => {
-    const response = await axios.get(API_BASE_URL + '/stakeholders/matrix/');
+  getMatrix: async (organizationId = null) => {
+    const params = organizationId ? { organization: organizationId } : {};
+    const response = await api.get('/stakeholders/matrix/', { params });
     return response.data;
   },
 
   getChangeHistory: async (id) => {
-    const response = await axios.get(API_BASE_URL + '/stakeholders/' + id + '/change_history/');
+    const response = await api.get(`/stakeholders/${id}/change_history/`);
     return response.data;
   },
 
   updateSatisfaction: async (id, score) => {
-    const response = await axios.post(
-      API_BASE_URL + '/stakeholders/' + id + '/update_satisfaction/',
+    const response = await api.post(
+      `/stakeholders/${id}/update_satisfaction/`,
       { satisfaction_score: score }
     );
     return response.data;
   },
 
-  getChangeLogs: async () => {
-    const response = await axios.get(API_BASE_URL + '/change-logs/');
+  getChangeLogs: async (organizationId = null) => {
+    const params = organizationId ? { organization: organizationId } : {};
+    const response = await api.get('/change-logs/', { params });
     return response.data;
   },
 
-  getRecentChanges: async () => {
-    const response = await axios.get(API_BASE_URL + '/change-logs/recent/');
+  getRecentChanges: async (organizationId = null) => {
+    const params = organizationId ? { organization: organizationId } : {};
+    const response = await api.get('/change-logs/recent/', { params });
     return response.data;
   }
 };

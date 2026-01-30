@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings  # Cambiado de: from django.contrib.auth.models import User
 from django.utils import timezone
 import json
 
@@ -24,7 +24,7 @@ class ContextAnalysis(models.Model):
     external_insights = models.JSONField(default=dict, blank=True)
     total_documents_processed = models.IntegerField(default=0)
     execution_time_seconds = models.FloatField(null=True, blank=True)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
     error_message = models.TextField(blank=True, null=True)
     
     class Meta:
@@ -56,7 +56,7 @@ class Document(models.Model):
     file_path = models.FileField(upload_to='documents/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    uploaded_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    uploaded_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     is_processed = models.BooleanField(default=False)
     processed_at = models.DateTimeField(null=True, blank=True)
     
@@ -394,7 +394,7 @@ class ChangeLog(models.Model):
     detection_date = models.DateTimeField(auto_now_add=True)
     approval_date = models.DateTimeField(null=True, blank=True)
     implementation_date = models.DateTimeField(null=True, blank=True)
-    approved_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    approved_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
     
     class Meta:
         db_table = 'change_logs'
@@ -506,52 +506,12 @@ class Organization(models.Model):
         return self.name
 
 
-class UserProfile(models.Model):
-    """Perfil extendido del usuario con relación a organización"""
-    
-    ROLE_CHOICES = [
-        ('org_admin', 'Administrador'),
-        ('iso_manager', 'Gestor ISO'),
-        ('auditor', 'Auditor'),
-        ('user', 'Usuario'),
-        ('viewer', 'Solo Lectura'),
-    ]
-    
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name='users')
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='user')
-    
-    # Datos adicionales
-    job_title = models.CharField(max_length=100, blank=True)
-    department = models.CharField(max_length=100, blank=True)
-    phone = models.CharField(max_length=50, blank=True)
-    avatar = models.ImageField(upload_to='users/avatars/', blank=True, null=True)
-    
-    # Preferencias de usuario
-    theme = models.CharField(max_length=10, default='light', choices=[
-        ('light', 'Claro'),
-        ('dark', 'Oscuro'),
-        ('system', 'Sistema'),
-    ])
-    language = models.CharField(max_length=10, default='es')
-    notifications_enabled = models.BooleanField(default=True)
-    email_notifications = models.BooleanField(default=True)
-    
-    # Estado
-    is_active = models.BooleanField(default=True)
-    last_login_at = models.DateTimeField(null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    
-    class Meta:
-        db_table = 'user_profiles'
-    
-    def __str__(self):
-        return f"{self.user.username} - {self.organization.name}"
-    
-    @property
-    def full_name(self):
-        return f"{self.user.first_name} {self.user.last_name}".strip() or self.user.username
+# =====================================================
+# NOTA IMPORTANTE:
+# El modelo UserProfile se ha MOVIDO a authentication/models.py
+# para evitar conflictos con el nuevo sistema de autenticación.
+# El modelo en authentication soporta múltiples organizaciones por usuario.
+# =====================================================
 
 
 class OrganizationSettings(models.Model):
@@ -639,7 +599,7 @@ class AuditLog(models.Model):
     ]
     
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name='audit_logs')
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     action = models.CharField(max_length=20, choices=ACTION_CHOICES)
     module = models.CharField(max_length=50)
     description = models.TextField()

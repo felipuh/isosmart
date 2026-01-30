@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth } from '../../context/AuthContext';
 import riskService from '../../services/riskService';
 import RiskMatrixVisual from './RiskMatrixVisual';
 import RiskList from './RiskList';
 import RiskForm from './RiskForm';
 
 const RiskDashboard = () => {
+  const { currentOrganization } = useAuth();
   const [activeTab, setActiveTab] = useState('list');
   const [stats, setStats] = useState(null);
   const [risks, setRisks] = useState([]);
@@ -20,16 +22,20 @@ const RiskDashboard = () => {
   });
 
   useEffect(() => {
-    loadData();
-  }, [filters]);
+    if (currentOrganization?.id) {
+      loadData();
+    }
+  }, [currentOrganization?.id, filters]);
 
   const loadData = async () => {
+    if (!currentOrganization?.id) return;
+    
     setLoading(true);
     setError(null);
     try {
       const [statsData, risksData] = await Promise.all([
-        riskService.getStats(),
-        riskService.getRisks(filters)
+        riskService.getStats(currentOrganization.id),
+        riskService.getRisks({ ...filters, organization: currentOrganization.id })
       ]);
       setStats(statsData);
       setRisks(Array.isArray(risksData) ? risksData : (risksData.results || []));

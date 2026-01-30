@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import { RefreshCw, Download, Shield } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 import { apiService } from '../../services/api';
 import MetricsGrid from './MetricsGrid';
 import RiskMatrix from './RiskMatrix';
 import QualityObjectives from './QualityObjectives';
 import ContextAnalysis from './ContextAnalysis';
-import { RefreshCw, Download, Shield } from 'lucide-react';
 
 const ExecutiveDashboard = () => {
+  const { currentOrganization } = useAuth();
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState(null);

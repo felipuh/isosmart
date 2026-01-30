@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth } from '../../context/AuthContext';
 import objectiveService from '../../services/objectiveService';
 import ObjectiveList from './ObjectiveList';
 import ObjectiveForm from './ObjectiveForm';
 
 const ObjectiveDashboard = () => {
+  const { currentOrganization } = useAuth();
   const [stats, setStats] = useState(null);
   const [objectives, setObjectives] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -13,16 +15,20 @@ const ObjectiveDashboard = () => {
   const [filters, setFilters] = useState({ status: '', source: '' });
 
   useEffect(() => {
-    loadData();
-  }, [filters]);
+    if (currentOrganization?.id) {
+      loadData();
+    }
+  }, [currentOrganization?.id, filters]);
 
   const loadData = async () => {
+    if (!currentOrganization?.id) return;
+    
     setLoading(true);
     setError(null);
     try {
       const [statsData, objectivesData] = await Promise.all([
-        objectiveService.getStats(),
-        objectiveService.getObjectives(filters)
+        objectiveService.getStats(currentOrganization.id),
+        objectiveService.getObjectives({ ...filters, organization: currentOrganization.id })
       ]);
       setStats(statsData);
       setObjectives(Array.isArray(objectivesData) ? objectivesData : (objectivesData.results || []));

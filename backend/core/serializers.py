@@ -1,6 +1,8 @@
 from rest_framework import serializers
+from django.contrib.auth import get_user_model
 from .models import RiskMatrix, QualityObjective, Document
 
+User = get_user_model()
 
 class RiskMatrixSerializer(serializers.ModelSerializer):
     source_module_display = serializers.CharField(source='get_source_module_display', read_only=True)
@@ -64,8 +66,9 @@ class DocumentUploadSerializer(serializers.Serializer):
 # Serializers para Configuración y Multicliente
 # =====================================================
 
-from .models import Organization, UserProfile, OrganizationSettings, ISOClauseConfig, AuditLog
-from django.contrib.auth.models import User
+from .models import Organization, OrganizationSettings, ISOClauseConfig, AuditLog
+from authentication.models import UserProfile
+from django.contrib.auth import get_user_model
 
 
 class UserSerializer(serializers.ModelSerializer):

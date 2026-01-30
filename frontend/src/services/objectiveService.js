@@ -1,51 +1,51 @@
-import axios from 'axios';
-
-const API_BASE = 'http://192.168.100.100/api';
+import api from './api';
 
 const objectiveService = {
   async getObjectives(filters = {}) {
     const params = new URLSearchParams();
+    if (filters.organization) params.append('organization', filters.organization);
     if (filters.status) params.append('status', filters.status);
     if (filters.source) params.append('source', filters.source);
     
-    const response = await axios.get(`${API_BASE}/objectives/?${params}`);
+    const response = await api.get(`/objectives/?${params}`);
     return response.data;
   },
 
   async getObjective(id) {
-    const response = await axios.get(`${API_BASE}/objectives/${id}/`);
+    const response = await api.get(`/objectives/${id}/`);
     return response.data;
   },
 
   async createObjective(data) {
-    const response = await axios.post(`${API_BASE}/objectives/`, data);
+    const response = await api.post(`/objectives/`, data);
     return response.data;
   },
 
   async updateObjective(id, data) {
-    const response = await axios.put(`${API_BASE}/objectives/${id}/`, data);
+    const response = await api.put(`/objectives/${id}/`, data);
     return response.data;
   },
 
   async deleteObjective(id) {
-    const response = await axios.delete(`${API_BASE}/objectives/${id}/`);
+    const response = await api.delete(`/objectives/${id}/`);
     return response.data;
   },
 
   async updateProgress(id, currentValue) {
-    const response = await axios.post(`${API_BASE}/objectives/${id}/update_progress/`, {
+    const response = await api.post(`/objectives/${id}/update_progress/`, {
       current_value: currentValue
     });
     return response.data;
   },
 
-  async getStats() {
-    const response = await axios.get(`${API_BASE}/objectives/stats/`);
+  async getStats(organizationId = null) {
+    const params = organizationId ? { organization: organizationId } : {};
+    const response = await api.get(`/objectives/stats/`, { params });
     return response.data;
   },
 
   async getDashboardData() {
-    const response = await axios.get(`${API_BASE}/objectives/dashboard_data/`);
+    const response = await api.get(`/objectives/dashboard_data/`);
     return response.data;
   }
 };
