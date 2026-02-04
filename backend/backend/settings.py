@@ -48,8 +48,29 @@ INSTALLED_APPS = [
     'ai_modules.sca.apps.ScaConfig',      # Módulo SCA
     'ai_modules.sie.apps.SieConfig',      # Módulo SIE
     'ai_modules.asb.apps.AsbConfig',      # Módulo ASB
-    'ai_modules.spm',                     # Módulo SPM  
+    'ai_modules.spm',                     # Módulo SPM 
+    'integration',
 ]
+
+# Configuración de integración
+ADMIN_APPS_INTEGRATION = {
+    'BASE_URL': 'http://127.0.0.1:8000/api/integration',
+    'API_KEY': 'isosmart-integration-key-2025',
+    'TIMEOUT': 10,
+    'CACHE_TTL': 300,
+    'SYNC_USERS': True,
+}
+
+# Patrones de URL por módulo
+MODULE_URL_PATTERNS = {
+    'SCA': [r'^/api/sca/'],
+    'SIE': [r'^/api/sie/', r'^/api/stakeholders/'],
+    'ASB': [r'^/api/scope/'],
+    'SPM': [r'^/api/processes/'],
+    'DOC': [r'^/api/documents/'],
+    'RISK': [r'^/api/risks/'],
+    'OBJ': [r'^/api/objectives/'],
+}
 
 # Configuración de REST Framework
 REST_FRAMEWORK = {
