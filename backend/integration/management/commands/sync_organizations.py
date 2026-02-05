@@ -21,8 +21,8 @@ class Command(BaseCommand):
         )
         parser.add_argument(
             '--org-id',
-            type=int,
-            help='Sincronizar solo una organización específica',
+            type=str,
+            help='Sincronizar solo una organización específica (UUID)',
         )
     
     def handle(self, *args, **options):
@@ -66,7 +66,7 @@ class Command(BaseCommand):
         
         for org_data in organizations:
             org, was_created = Organization.objects.update_or_create(
-                id=org_data['id'],
+                external_id=org_data['id'],
                 defaults={
                     'name': org_data['name'],
                     'slug': org_data['slug'],
@@ -95,7 +95,7 @@ class Command(BaseCommand):
             raise CommandError(f"Error obteniendo organización {org_id}: {result['error']}")
         
         org, created = Organization.objects.update_or_create(
-            id=result['id'],
+            external_id=result['id'],
             defaults={
                 'name': result['name'],
                 'slug': result['slug'],
@@ -129,7 +129,7 @@ class Command(BaseCommand):
         self.stdout.write(f"  Sincronizando {len(users)} usuarios...")
         
         try:
-            organization = Organization.objects.get(pk=org_id)
+            organization = Organization.objects.get(external_id=org_id)
         except Organization.DoesNotExist:
             self.stdout.write(self.style.ERROR(
                 f"Organización {org_id} no existe localmente"

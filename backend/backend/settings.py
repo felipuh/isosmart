@@ -167,6 +167,7 @@ AUTH_USER_MODEL = 'authentication.User'
 
 #Configurar backends de autenticación
 AUTHENTICATION_BACKENDS = [
+    'integration.backends.AdminAppsAuthBackend',  # AdminApps integration auth
     'authentication.backends.EmailBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]

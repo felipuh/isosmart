@@ -121,9 +121,9 @@ class AdminAppsAuthBackend(BaseBackend):
         
         # Sincronizar organización si existe
         if org_data:
-            org_id = org_data.get('id')
+            org_id = org_data.get('id')  # UUID from Admin Apps
             try:
-                organization = Organization.objects.get(pk=org_id)
+                organization = Organization.objects.get(external_id=org_id)
                 
                 # Crear o actualizar perfil
                 UserProfile.objects.update_or_create(

@@ -471,6 +471,7 @@ class Organization(models.Model):
     """Organización/Cliente del sistema multicliente"""
     
     id = models.AutoField(primary_key=True)
+    external_id = models.CharField(max_length=36, unique=True, null=True, blank=True, help_text='UUID desde Admin Apps')
     name = models.CharField(max_length=255)
     slug = models.SlugField(max_length=100, unique=True)
     logo = models.ImageField(upload_to='organizations/logos/', blank=True, null=True)
