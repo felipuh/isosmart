@@ -57,12 +57,12 @@ const DocumentDashboard = () => {
   };
 
   const handleDelete = async (doc) => {
-    if (!window.confirm(`¿Estás seguro de eliminar "${document.title}"?`)) {
+    if (!window.confirm(`¿Estás seguro de eliminar "${doc.title}"?`)) {
       return;
     }
 
     try {
-      await documentService.delete(document.id);
+      await documentService.delete(doc.id);
       
       alert('✅ Documento eliminado exitosamente');
       
@@ -73,20 +73,20 @@ const DocumentDashboard = () => {
     }
   };
 
-  const handleDownload = async (document) => {
+  const handleDownload = async (doc) => {
     try {
-      const blob = await documentService.download(document.id);
-      
+      const blob = await documentService.download(doc.id);
+
       // Crear URL para el blob
       const url = window.URL.createObjectURL(blob);
-      
+
       // Crear elemento de descarga temporal
       const link = document.createElement('a');
       link.href = url;
-      link.download = document.file_name || document.title;
+      link.download = doc.file_name || doc.title;
       document.body.appendChild(link);
       link.click();
-      
+
       // Limpiar
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);

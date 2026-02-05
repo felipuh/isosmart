@@ -160,7 +160,7 @@ const ContextAnalysis = () => {
             {contextData.total_documents_processed || 0} documentos procesados
           </span>
           <span>
-            Última actualización: {new Date(contextData.timestamp).toLocaleString('es-ES')}
+            Última actualización: {contextData.timestamp ? new Date(contextData.timestamp).toLocaleString('es-ES') : 'No disponible'}
           </span>
         </div>
       </div>

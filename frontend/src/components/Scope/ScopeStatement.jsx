@@ -54,7 +54,7 @@ const ScopeStatement = ({ scopeData, loading }) => {
         <div>
           <p className="text-sm text-slate-600 dark:text-slate-400">Fecha Vigencia</p>
           <p className="text-lg font-semibold dark:text-white">
-            {new Date(scopeData.effective_date).toLocaleDateString('es-ES')}
+            {scopeData.effective_date ? new Date(scopeData.effective_date).toLocaleDateString('es-ES') : 'No disponible'}
           </p>
         </div>
         <div>

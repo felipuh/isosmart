@@ -178,7 +178,7 @@ const RiskMatrix = () => {
                       <ModuleBadge module={risk.source_module} />
                       <RiskBadge level={risk.risk_level} />
                       <span className="text-xs text-gray-500">
-                        {new Date(risk.detection_date).toLocaleDateString('es-ES')}
+                        {risk.detection_date ? new Date(risk.detection_date).toLocaleDateString('es-ES') : '-'}
                       </span>
                     </div>
                     <p className="text-gray-900 font-medium mb-2">
