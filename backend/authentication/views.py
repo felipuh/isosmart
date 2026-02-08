@@ -10,8 +10,12 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import TokenError
 from django.utils import timezone
 from django.conf import settings
+import logging
 
 from .models import User, UserProfile, RefreshTokenBlacklist
+from core.models import Organization
+from integration.client import admin_apps_client
+from integration.backends import ROLE_MAP
 from .serializers import (
     LoginSerializer,
     TokenResponseSerializer,
@@ -24,6 +28,8 @@ from .serializers import (
     UserRegistrationSerializer,
 )
 from .permissions import IsOrgAdmin
+
+logger = logging.getLogger(__name__)
 
 
 class LoginView(APIView):
@@ -308,10 +314,62 @@ class UserListView(generics.ListCreateAPIView):
     def get_queryset(self):
         organization_id = getattr(self.request, 'organization_id', None)
         if organization_id:
+            self._sync_adminapps_users(organization_id)
             return UserProfile.objects.filter(
                 organization_id=organization_id
             ).select_related('user', 'organization')
         return UserProfile.objects.none()
+
+    def _sync_adminapps_users(self, organization_id):
+        if not settings.ADMIN_APPS_INTEGRATION.get('SYNC_USERS', True):
+            return
+
+        try:
+            organization = Organization.objects.get(id=organization_id)
+        except Organization.DoesNotExist:
+            return
+
+        if not organization.external_id:
+            return
+
+        result = admin_apps_client.get_organization_users(
+            organization.external_id,
+            use_cache=False
+        )
+
+        if 'error' in result:
+            logger.warning(
+                "Error sincronizando usuarios desde Admin Apps: %s",
+                result.get('error')
+            )
+            return
+
+        users = result.get('users', [])
+        for user_data in users:
+            user, created = User.objects.update_or_create(
+                email=user_data['email'],
+                defaults={
+                    'first_name': user_data.get('first_name', ''),
+                    'last_name': user_data.get('last_name', ''),
+                    'is_active': user_data.get('is_active', True),
+                }
+            )
+
+            if created:
+                user.set_unusable_password()
+                user.save()
+
+            mapped_role = ROLE_MAP.get(user_data.get('role', 'user'), 'user')
+            UserProfile.objects.update_or_create(
+                user=user,
+                organization=organization,
+                defaults={
+                    'role': mapped_role,
+                    'job_title': user_data.get('job_title', ''),
+                    'department': user_data.get('department', ''),
+                    'is_active': user_data.get('is_active', True),
+                }
+            )
     
     def create(self, request, *args, **kwargs):
         # Usar serializer de registro

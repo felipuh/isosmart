@@ -6,6 +6,7 @@ from rest_framework import serializers
 from django.contrib.auth import authenticate
 from django.contrib.auth.password_validation import validate_password
 from .models import User, UserProfile
+from core.models import Organization
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -47,18 +48,28 @@ class LoginSerializer(serializers.Serializer):
     
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
-    organization_id = serializers.IntegerField(required=False, allow_null=True)
+    organization_id = serializers.CharField(required=False, allow_null=True)
     
     def validate(self, attrs):
         email = attrs.get('email')
         password = attrs.get('password')
         organization_id = attrs.get('organization_id')
+        organization = None
         
         if email and password:
+            if organization_id:
+                try:
+                    organization = Organization.objects.get(id=int(organization_id))
+                except (ValueError, Organization.DoesNotExist):
+                    organization = Organization.objects.filter(external_id=organization_id).first()
+
+            external_org_id = organization.external_id if organization else organization_id
+
             user = authenticate(
                 request=self.context.get('request'),
                 email=email,
-                password=password
+                password=password,
+                organization_id=external_org_id
             )
             
             if not user:
@@ -84,7 +95,14 @@ class LoginSerializer(serializers.Serializer):
             
             # Si se especifica organización, verificar acceso
             if organization_id:
-                profile = profiles.filter(organization_id=organization_id).first()
+                if not organization:
+                    organization = Organization.objects.filter(external_id=organization_id).first()
+
+                if organization:
+                    profile = profiles.filter(organization_id=organization.id).first()
+                else:
+                    profile = None
+
                 if not profile:
                     raise serializers.ValidationError(
                         'No tienes acceso a esta organización.',

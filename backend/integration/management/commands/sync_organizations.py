@@ -4,10 +4,21 @@ python manage.py sync_organizations
 """
 from django.core.management.base import BaseCommand, CommandError
 from django.utils import timezone
+from django.utils.text import slugify
 from integration.client import admin_apps_client
 import logging
 
 logger = logging.getLogger(__name__)
+
+ROLE_MAP = {
+    'superadmin': 'org_admin',
+    'admin': 'org_admin',
+    'org_admin': 'org_admin',
+    'iso_manager': 'iso_manager',
+    'auditor': 'auditor',
+    'user': 'user',
+    'viewer': 'viewer',
+}
 
 
 class Command(BaseCommand):
@@ -65,12 +76,17 @@ class Command(BaseCommand):
         updated = 0
         
         for org_data in organizations:
+            code = org_data.get('code')
+            name = org_data.get('name', '')
+            slug_source = code or name
+            slug = slugify(slug_source) if slug_source else None
+            is_active = org_data.get('is_active', True)
             org, was_created = Organization.objects.update_or_create(
                 external_id=org_data['id'],
                 defaults={
-                    'name': org_data['name'],
-                    'slug': org_data['slug'],
-                    'is_active': org_data['status'] == 'active',
+                    'name': name,
+                    'slug': slug or f"org-{org_data['id']}",
+                    'is_active': is_active,
                 }
             )
             
@@ -80,6 +96,8 @@ class Command(BaseCommand):
             else:
                 updated += 1
                 self.stdout.write(f"  ~ Actualizada: {org.name}")
+
+            self._sync_organization_users(org_data['id'], force)
         
         self.stdout.write(self.style.SUCCESS(
             f"Resumen: {created} creadas, {updated} actualizadas"
@@ -94,12 +112,17 @@ class Command(BaseCommand):
         if 'error' in result:
             raise CommandError(f"Error obteniendo organización {org_id}: {result['error']}")
         
+        code = result.get('code')
+        name = result.get('name', '')
+        slug_source = code or name
+        slug = slugify(slug_source) if slug_source else None
+        is_active = result.get('is_active', True)
         org, created = Organization.objects.update_or_create(
             external_id=result['id'],
             defaults={
-                'name': result['name'],
-                'slug': result['slug'],
-                'is_active': result['status'] == 'active',
+                'name': name,
+                'slug': slug or f"org-{result['id']}",
+                'is_active': is_active,
             }
         )
         
@@ -150,11 +173,12 @@ class Command(BaseCommand):
                 user.set_unusable_password()
                 user.save()
             
+            mapped_role = ROLE_MAP.get(user_data.get('role', 'user'), 'user')
             profile, profile_created = UserProfile.objects.update_or_create(
                 user=user,
                 organization=organization,
                 defaults={
-                    'role': user_data['role'],
+                    'role': mapped_role,
                     'job_title': user_data.get('job_title', ''),
                     'department': user_data.get('department', ''),
                     'is_active': True,

@@ -4,11 +4,22 @@ Valida credenciales contra Admin Apps
 """
 from django.contrib.auth.backends import BaseBackend
 from django.contrib.auth import get_user_model
+from django.utils.text import slugify
 from .client import admin_apps_client
 import logging
 
 logger = logging.getLogger(__name__)
 User = get_user_model()
+
+ROLE_MAP = {
+    'superadmin': 'org_admin',
+    'admin': 'org_admin',
+    'org_admin': 'org_admin',
+    'iso_manager': 'iso_manager',
+    'auditor': 'auditor',
+    'user': 'user',
+    'viewer': 'viewer',
+}
 
 
 class AdminAppsAuthBackend(BaseBackend):
@@ -124,18 +135,29 @@ class AdminAppsAuthBackend(BaseBackend):
             org_id = org_data.get('id')  # UUID from Admin Apps
             try:
                 organization = Organization.objects.get(external_id=org_id)
-                
-                # Crear o actualizar perfil
-                UserProfile.objects.update_or_create(
-                    user=user,
-                    organization=organization,
-                    defaults={
-                        'role': role,
-                        'is_active': True,
-                    }
-                )
             except Organization.DoesNotExist:
-                logger.warning(f"Organización {org_id} no existe en ISO Smart")
+                code = org_data.get('code')
+                name = org_data.get('name', '')
+                slug_source = code or name
+                slug = slugify(slug_source) if slug_source else None
+                organization = Organization.objects.create(
+                    external_id=org_id,
+                    name=name or f"Org {org_id}",
+                    slug=slug or f"org-{org_id}",
+                    is_active=org_data.get('is_active', True),
+                )
+                logger.info(f"Organizacion creada desde Admin Apps: {organization.name}")
+
+                # Crear o actualizar perfil
+            mapped_role = ROLE_MAP.get(role, 'user')
+            UserProfile.objects.update_or_create(
+                user=user,
+                organization=organization,
+                defaults={
+                    'role': mapped_role,
+                    'is_active': True,
+                }
+            )
         
         return user
     
