@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Network, TrendingUp, Target, GitBranch, FileText, Settings, Award, FolderOpen, AlertTriangle } from 'lucide-react';
+import { Home, Network, TrendingUp, Target, GitBranch, FileText, Settings, Award, FolderOpen, AlertTriangle, Users } from 'lucide-react';
 
 const Sidebar = ({ isOpen = true, setIsOpen }) => {
   const location = useLocation();
@@ -14,6 +14,7 @@ const Sidebar = ({ isOpen = true, setIsOpen }) => {
     { name: 'Documentos', path: '/documents', icon: FolderOpen },
     { name: 'Riesgos', path: '/risks', icon: AlertTriangle }, 
     { name: 'Objetivos', path: '/objectives', icon: Award },
+    { name: 'Liderazgo', path: '/leadership', icon: Users },
     { name: 'Configuración', path: '/settings', icon: Settings },
   ];
 

@@ -14,6 +14,14 @@ import DocumentDashboard from './components/Documents/DocumentDashboard';
 import RiskDashboard from './components/Risks/RiskDashboard';
 import ObjectiveDashboard from './components/Objectives/ObjectiveDashboard';
 import { SettingsDashboard } from './components/Settings';
+import LeadershipDashboard from './features/leadership/pages/LeadershipDashboard';
+import PoliciesPage from './features/leadership/pages/PoliciesPage';
+import RolesPage from './features/leadership/pages/RolesPage';
+import RoleAssignmentsPage from './features/leadership/pages/RoleAssignmentsPage';
+import RACIMatricesPage from './features/leadership/pages/RACIMatricesPage';
+import RACIEntriesPage from './features/leadership/pages/RACIEntriesPage';
+import CommitmentsPage from './features/leadership/pages/CommitmentsPage';
+import CustomerFocusPage from './features/leadership/pages/CustomerFocusPage';
 
 function App() {
   return (
@@ -43,6 +51,17 @@ function App() {
                 <Route path="/documents" element={<DocumentDashboard />} />
                 <Route path="/objectives" element={<ObjectiveDashboard />} />
                 <Route path="/risks" element={<RiskDashboard />} />
+                <Route path="/leadership" element={<LeadershipDashboard />} />
+                <Route path="/leadership/policies" element={<PoliciesPage />} />
+                <Route path="/leadership/policies/new" element={<PoliciesPage />} />
+                <Route path="/leadership/roles" element={<RolesPage />} />
+                <Route path="/leadership/roles/new" element={<RolesPage />} />
+                <Route path="/leadership/role-assignments" element={<RoleAssignmentsPage />} />
+                <Route path="/leadership/commitments" element={<CommitmentsPage />} />
+                <Route path="/leadership/customer-focus" element={<CustomerFocusPage />} />
+                <Route path="/leadership/raci" element={<RACIMatricesPage />} />
+                <Route path="/leadership/raci/new" element={<RACIMatricesPage />} />
+                <Route path="/leadership/raci/:matrixId" element={<RACIEntriesPage />} />
                 
                 {/* Settings - solo para admin */}
                 <Route

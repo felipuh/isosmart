@@ -1,0 +1,271 @@
+import React, { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { getRACIEntries, createRACIEntry, updateRACIEntry, deleteRACIEntry, getRoles } from '../api/leadershipApi';
+
+const normalizeList = (data) => (Array.isArray(data) ? data : data?.results || []);
+
+const initialForm = {
+  activity: '',
+  description: '',
+  order: 0,
+  responsible_roles: [],
+  accountable_roles: [],
+  consulted_roles: [],
+  informed_roles: []
+};
+
+const toggleItem = (list, value) => {
+  if (list.includes(value)) {
+    return list.filter((item) => item !== value);
+  }
+  return [...list, value];
+};
+
+const RACIEntriesPage = () => {
+  const { matrixId } = useParams();
+  const [entries, setEntries] = useState([]);
+  const [roles, setRoles] = useState([]);
+  const [form, setForm] = useState(initialForm);
+  const [editingId, setEditingId] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState('');
+
+  const loadData = async () => {
+    try {
+      setLoading(true);
+      const [entriesData, rolesData] = await Promise.all([
+        getRACIEntries({ matrix: matrixId }),
+        getRoles()
+      ]);
+      setEntries(normalizeList(entriesData));
+      setRoles(normalizeList(rolesData));
+    } catch (err) {
+      setError('No se pudieron cargar las entradas RACI.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadData();
+  }, [matrixId]);
+
+  const resetForm = () => {
+    setForm(initialForm);
+    setEditingId(null);
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setError('');
+    setSaving(true);
+
+    try {
+      const payload = {
+        matrix: matrixId,
+        activity: form.activity,
+        description: form.description,
+        order: Number(form.order || 0),
+        responsible_roles: form.responsible_roles,
+        accountable_roles: form.accountable_roles,
+        consulted_roles: form.consulted_roles,
+        informed_roles: form.informed_roles
+      };
+
+      if (editingId) {
+        await updateRACIEntry(editingId, payload);
+      } else {
+        await createRACIEntry(payload);
+      }
+
+      resetForm();
+      await loadData();
+    } catch (err) {
+      setError('No se pudo guardar la entrada.');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleEdit = (entry) => {
+    setEditingId(entry.id);
+    setForm({
+      activity: entry.activity || '',
+      description: entry.description || '',
+      order: entry.order || 0,
+      responsible_roles: entry.responsible_roles || [],
+      accountable_roles: entry.accountable_roles || [],
+      consulted_roles: entry.consulted_roles || [],
+      informed_roles: entry.informed_roles || []
+    });
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm('Eliminar esta entrada?')) {
+      return;
+    }
+
+    try {
+      await deleteRACIEntry(id);
+      await loadData();
+    } catch (err) {
+      setError('No se pudo eliminar la entrada.');
+    }
+  };
+
+  const renderRoleChecklist = (label, valueKey) => (
+    <div className="space-y-2">
+      <p className="text-xs uppercase text-slate-400">{label}</p>
+      <div className="grid gap-2 sm:grid-cols-2">
+        {roles.map((role) => (
+          <label key={`${valueKey}-${role.id}`} className="flex items-center gap-2 text-xs text-slate-300">
+            <input
+              type="checkbox"
+              checked={form[valueKey].includes(role.id)}
+              onChange={() => setForm({
+                ...form,
+                [valueKey]: toggleItem(form[valueKey], role.id)
+              })}
+              className="h-4 w-4 rounded border-slate-600"
+            />
+            {role.name}
+          </label>
+        ))}
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="space-y-6" style={{ fontFamily: '"Sora", "Work Sans", sans-serif' }}>
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-semibold text-white">Entradas RACI</h1>
+          <p className="text-sm text-slate-400">Matriz: {matrixId}</p>
+        </div>
+        <Link
+          to="/leadership/raci"
+          className="rounded-lg border border-slate-700 px-3 py-2 text-sm text-slate-200 hover:border-slate-500"
+        >
+          Volver a matrices
+        </Link>
+      </div>
+
+      {error && (
+        <div className="rounded-lg border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+          {error}
+        </div>
+      )}
+
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+        <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-4">
+          {loading ? (
+            <div className="py-10 text-center text-slate-400">Cargando entradas...</div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="min-w-full text-left text-sm text-slate-200">
+                <thead className="text-xs uppercase text-slate-400">
+                  <tr>
+                    <th className="px-3 py-2">Orden</th>
+                    <th className="px-3 py-2">Actividad</th>
+                    <th className="px-3 py-2 text-right">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-800">
+                  {entries.map((entry) => (
+                    <tr key={entry.id} className="hover:bg-slate-800/40">
+                      <td className="px-3 py-2">{entry.order}</td>
+                      <td className="px-3 py-2 font-medium text-slate-100">{entry.activity}</td>
+                      <td className="px-3 py-2 text-right">
+                        <div className="flex justify-end gap-2">
+                          <button
+                            type="button"
+                            onClick={() => handleEdit(entry)}
+                            className="rounded-md border border-slate-700 px-2 py-1 text-xs text-slate-200"
+                          >
+                            Editar
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleDelete(entry.id)}
+                            className="rounded-md border border-red-500/50 px-2 py-1 text-xs text-red-200"
+                          >
+                            Eliminar
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+
+        <form onSubmit={handleSubmit} className="rounded-xl border border-slate-800 bg-slate-900/70 p-4 space-y-4">
+          <div>
+            <h2 className="text-lg font-semibold text-white">
+              {editingId ? 'Editar entrada' : 'Nueva entrada'}
+            </h2>
+          </div>
+
+          <div className="grid gap-3">
+            <label className="text-xs text-slate-400">
+              Actividad
+              <input
+                type="text"
+                value={form.activity}
+                onChange={(event) => setForm({ ...form, activity: event.target.value })}
+                className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
+                required
+              />
+            </label>
+
+            <label className="text-xs text-slate-400">
+              Descripcion
+              <textarea
+                value={form.description}
+                onChange={(event) => setForm({ ...form, description: event.target.value })}
+                className="mt-1 h-20 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
+              />
+            </label>
+
+            <label className="text-xs text-slate-400">
+              Orden
+              <input
+                type="number"
+                value={form.order}
+                onChange={(event) => setForm({ ...form, order: event.target.value })}
+                className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
+              />
+            </label>
+
+            {renderRoleChecklist('Responsable', 'responsible_roles')}
+            {renderRoleChecklist('Aprobador', 'accountable_roles')}
+            {renderRoleChecklist('Consultado', 'consulted_roles')}
+            {renderRoleChecklist('Informado', 'informed_roles')}
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="submit"
+              disabled={saving}
+              className="rounded-lg bg-emerald-500/80 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-500 disabled:opacity-50"
+            >
+              {saving ? 'Guardando...' : editingId ? 'Actualizar' : 'Crear'}
+            </button>
+            <button
+              type="button"
+              onClick={resetForm}
+              className="rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-200"
+            >
+              Limpiar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default RACIEntriesPage;

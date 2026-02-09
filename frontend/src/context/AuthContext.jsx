@@ -6,6 +6,26 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import api from '../services/api';
 
+const getTokenPayload = (token) => {
+  if (!token) return null;
+  const parts = token.split('.');
+  if (parts.length !== 3) return null;
+  try {
+    const payload = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+    const decoded = atob(payload);
+    return JSON.parse(decoded);
+  } catch (error) {
+    return null;
+  }
+};
+
+const isTokenExpired = (token) => {
+  const payload = getTokenPayload(token);
+  if (!payload || !payload.exp) return true;
+  const nowSeconds = Math.floor(Date.now() / 1000);
+  return payload.exp <= nowSeconds;
+};
+
 const AuthContext = createContext(null);
 
 export const useAuth = () => {
@@ -29,36 +49,54 @@ export const AuthProvider = ({ children }) => {
     checkAuth();
   }, []);
 
+  const loadCurrentUser = async () => {
+    const response = await api.get('/auth/me/');
+
+    setUser(response.data.user);
+    setProfile(response.data.profile);
+    setOrganizations(response.data.organizations || []);
+
+    const current = response.data.organizations?.find(org => org.is_current);
+    setCurrentOrganization(current || response.data.organizations?.[0]);
+
+    setIsAuthenticated(true);
+  };
+
   // Verificar token existente
   const checkAuth = async () => {
+    if (window.location.pathname === '/login') {
+      setLoading(false);
+      return;
+    }
+
     const token = localStorage.getItem('access_token');
+    const refreshTokenValue = localStorage.getItem('refresh_token');
     
     if (!token) {
       setLoading(false);
       return;
     }
 
+    if (!refreshTokenValue || isTokenExpired(refreshTokenValue)) {
+      clearAuth();
+      setLoading(false);
+      return;
+    }
+
     try {
-      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      const response = await api.get('/auth/me/');
-      
-      setUser(response.data.user);
-      setProfile(response.data.profile);
-      setOrganizations(response.data.organizations || []);
-      
-      // Encontrar organización actual
-      const current = response.data.organizations?.find(org => org.is_current);
-      setCurrentOrganization(current || response.data.organizations?.[0]);
-      
-      setIsAuthenticated(true);
-    } catch (error) {
-      console.error('Error verificando autenticación:', error);
-      
-      // Intentar refresh del token
-      const refreshed = await refreshToken();
+      if (token && isTokenExpired(token)) {
+        localStorage.removeItem('access_token');
+      } else if (token) {
+        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      }
+
+      const refreshed = await refreshToken({ reloadUser: true });
       if (!refreshed) {
         clearAuth();
       }
+    } catch (error) {
+      console.error('Error verificando autenticación:', error);
+      clearAuth();
     } finally {
       setLoading(false);
     }
@@ -129,10 +167,15 @@ export const AuthProvider = ({ children }) => {
   };
 
   // Refresh token
-  const refreshToken = async () => {
+  const refreshToken = async ({ reloadUser = true } = {}) => {
     const refresh = localStorage.getItem('refresh_token');
     
     if (!refresh) {
+      return false;
+    }
+
+    if (isTokenExpired(refresh)) {
+      clearAuth();
       return false;
     }
 
@@ -146,8 +189,9 @@ export const AuthProvider = ({ children }) => {
       }
       api.defaults.headers.common['Authorization'] = `Bearer ${access}`;
 
-      // Recargar datos del usuario
-      await checkAuth();
+      if (reloadUser) {
+        await loadCurrentUser();
+      }
       return true;
     } catch (error) {
       console.error('Error refrescando token:', error);

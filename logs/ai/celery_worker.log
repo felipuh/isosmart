@@ -1,0 +1,4 @@
+[2026-02-09 09:09:02,779: INFO/MainProcess] Connected to redis://localhost:6379/1
+[2026-02-09 09:09:02,877: INFO/MainProcess] mingle: searching for neighbors
+[2026-02-09 09:09:03,938: INFO/MainProcess] mingle: all alone
+[2026-02-09 09:09:04,144: INFO/MainProcess] celery@localhost.localdomain ready.

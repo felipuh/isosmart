@@ -32,7 +32,7 @@ urlpatterns = [
     path('api/stakeholders/critical/', sie_views.StakeholderProfileViewSet.as_view({'get': 'critical'}), name='stakeholders-critical'),
     path('api/stakeholders/matrix/', sie_views.StakeholderProfileViewSet.as_view({'get': 'matrix'}), name='stakeholders-matrix'),
     path('api/change-logs/recent/', sie_views.StakeholderChangeLogViewSet.as_view({'get': 'recent'}), name='change-logs-recent'),
-    
+    path('api/leadership/', include('leadership.urls')),
     path('api/auth/', include('authentication.urls')),
 ]
 

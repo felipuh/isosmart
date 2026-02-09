@@ -5,6 +5,26 @@
 
 import axios from 'axios';
 
+const getTokenPayload = (token) => {
+  if (!token) return null;
+  const parts = token.split('.');
+  if (parts.length !== 3) return null;
+  try {
+    const payload = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+    const decoded = atob(payload);
+    return JSON.parse(decoded);
+  } catch (error) {
+    return null;
+  }
+};
+
+const isTokenExpired = (token) => {
+  const payload = getTokenPayload(token);
+  if (!payload || !payload.exp) return true;
+  const nowSeconds = Math.floor(Date.now() / 1000);
+  return payload.exp <= nowSeconds;
+};
+
 // Crear instancia de API - USAR RUTA RELATIVA para evitar problemas de CORS
 const api = axios.create({
   baseURL: '/api',  // Ruta relativa - el proxy de Vite/Nginx maneja el backend
@@ -70,8 +90,11 @@ api.interceptors.response.use(
 
     const refreshToken = localStorage.getItem('refresh_token');
 
-    if (!refreshToken) {
+    if (!refreshToken || isTokenExpired(refreshToken)) {
       isRefreshing = false;
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
+      delete api.defaults.headers.common['Authorization'];
       redirectToLogin();
       return Promise.reject(error);
     }
