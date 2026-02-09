@@ -27,6 +27,7 @@ urlpatterns = [
     path('api/scopes/', include('ai_modules.asb.urls')),  # Alias for frontend compatibility
     path('api/processes/', include('ai_modules.spm.urls')),
     path('api/maps/', include('ai_modules.spm.urls')),  # Alias for frontend compatibility
+    path('api/resources/', include('resources.urls')),
     
     # Explicit aliases for frontend endpoints without duplicated prefixes
     path('api/stakeholders/critical/', sie_views.StakeholderProfileViewSet.as_view({'get': 'critical'}), name='stakeholders-critical'),

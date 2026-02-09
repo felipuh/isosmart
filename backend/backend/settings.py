@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     
     # Third party
     'rest_framework',
+    'django_filters',
     'corsheaders',
     'authentication',
     'leadership',
@@ -51,6 +52,7 @@ INSTALLED_APPS = [
     'ai_modules.asb.apps.AsbConfig',      # Módulo ASB
     'ai_modules.spm',                     # Módulo SPM 
     'integration',
+    'resources',
 ]
 
 # Configuración de integración

@@ -22,14 +22,6 @@ import RACIMatricesPage from './features/leadership/pages/RACIMatricesPage';
 import RACIEntriesPage from './features/leadership/pages/RACIEntriesPage';
 import CommitmentsPage from './features/leadership/pages/CommitmentsPage';
 import CustomerFocusPage from './features/leadership/pages/CustomerFocusPage';
-import ResourcesDashboard from './features/resources/pages/ResourcesDashboard';
-import ResourcesPage from './features/resources/pages/ResourcesPage';
-import InfrastructurePage from './features/resources/pages/InfrastructurePage';
-import WorkEnvironmentPage from './features/resources/pages/WorkEnvironmentPage';
-import CompetencesPage from './features/resources/pages/CompetencesPage';
-import TrainingsPage from './features/resources/pages/TrainingsPage';
-import AwarenessPage from './features/resources/pages/AwarenessPage';
-import CommunicationsPage from './features/resources/pages/CommunicationsPage';
 
 function App() {
   return (
@@ -70,16 +62,6 @@ function App() {
                 <Route path="/leadership/raci" element={<RACIMatricesPage />} />
                 <Route path="/leadership/raci/new" element={<RACIMatricesPage />} />
                 <Route path="/leadership/raci/:matrixId" element={<RACIEntriesPage />} />
-                
-                {/* Resources Module */}
-                <Route path="/resources" element={<ResourcesDashboard />} />
-                <Route path="/resources/resources" element={<ResourcesPage />} />
-                <Route path="/resources/infrastructure" element={<InfrastructurePage />} />
-                <Route path="/resources/work-environment" element={<WorkEnvironmentPage />} />
-                <Route path="/resources/competences" element={<CompetencesPage />} />
-                <Route path="/resources/trainings" element={<TrainingsPage />} />
-                <Route path="/resources/awareness" element={<AwarenessPage />} />
-                <Route path="/resources/communications" element={<CommunicationsPage />} />
                 
                 {/* Settings - solo para admin */}
                 <Route
