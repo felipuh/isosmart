@@ -53,6 +53,8 @@ INSTALLED_APPS = [
     'ai_modules.spm',                     # Módulo SPM 
     'integration',
     'resources',
+    'planning',
+    'operations',
 ]
 
 # Configuración de integración

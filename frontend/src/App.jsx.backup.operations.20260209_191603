@@ -35,13 +35,6 @@ import RisksOpportunitiesPage from './features/planning/pages/RisksOpportunities
 import QualityObjectivesPage from './features/planning/pages/QualityObjectivesPage';
 import ObjectiveActionsPage from './features/planning/pages/ObjectiveActionsPage';
 import ChangeControlPage from './features/planning/pages/ChangeControlPage';
-import OperationsDashboard from './features/operations/pages/OperationsDashboard';
-import CustomerRequirementsPage from './features/operations/pages/CustomerRequirementsPage';
-import DesignProjectsPage from './features/operations/pages/DesignProjectsPage';
-import ExternalProvidersPage from './features/operations/pages/ExternalProvidersPage';
-import NonconformitiesPage from './features/operations/pages/NonconformitiesPage';
-import ProductReleasesPage from './features/operations/pages/ProductReleasesPage';
-import ProductionControlsPage from './features/operations/pages/ProductionControlsPage';
 
 function App() {
   return (
@@ -99,15 +92,6 @@ function App() {
                 <Route path="/planning/objectives" element={<QualityObjectivesPage />} />
                 <Route path="/planning/actions" element={<ObjectiveActionsPage />} />
                 <Route path="/planning/changes" element={<ChangeControlPage />} />
-                
-                {/* Operations Module */}
-                <Route path="/operations" element={<OperationsDashboard />} />
-                <Route path="/operations/requirements" element={<CustomerRequirementsPage />} />
-                <Route path="/operations/design-projects" element={<DesignProjectsPage />} />
-                <Route path="/operations/providers" element={<ExternalProvidersPage />} />
-                <Route path="/operations/nonconformities" element={<NonconformitiesPage />} />
-                <Route path="/operations/releases" element={<ProductReleasesPage />} />
-                <Route path="/operations/production" element={<ProductionControlsPage />} />
                 
                 {/* Settings - solo para admin */}
                 <Route
