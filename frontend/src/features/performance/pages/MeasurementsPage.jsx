@@ -11,10 +11,10 @@ import {
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
 
 const statusLabels = {
-  on_target: 'On Target',
-  below_target: 'Below Target',
-  above_target: 'Above Target',
-  needs_attention: 'Needs Attention'
+  on_target: 'En Objetivo',
+  below_target: 'Bajo Objetivo',
+  above_target: 'Sobre Objetivo',
+  needs_attention: 'Requiere Atencion'
 };
 
 const MeasurementsPage = () => {
@@ -140,21 +140,21 @@ const MeasurementsPage = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-white">Measurements</h1>
+      <h1 className="text-3xl font-bold text-white">Mediciones</h1>
 
       <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg p-6">
-        <h2 className="text-xl font-bold text-white mb-4">{editingId ? 'Edit' : 'New'} Measurement</h2>
+        <h2 className="text-xl font-bold text-white mb-4">{editingId ? 'Editar' : 'Nueva'} Medicion</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Indicator *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Indicador *</label>
               <select
                 value={form.indicator}
                 onChange={(event) => handleIndicatorChange(event.target.value)}
                 className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
                 required
               >
-                <option value="">Select indicator</option>
+                <option value="">Selecciona indicador</option>
                 {indicators.map((indicator) => (
                   <option key={indicator.id} value={indicator.id}>
                     {indicator.code} - {indicator.name}
@@ -163,7 +163,7 @@ const MeasurementsPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Measurement Date *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Fecha de Medicion *</label>
               <input
                 type="date"
                 value={form.measurement_date}
@@ -173,7 +173,7 @@ const MeasurementsPage = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Status *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Estado *</label>
               <select
                 value={form.status}
                 onChange={(event) => setForm({ ...form, status: event.target.value })}
@@ -186,7 +186,7 @@ const MeasurementsPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Actual Value *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Valor Real *</label>
               <input
                 type="number"
                 step="0.01"
@@ -197,7 +197,7 @@ const MeasurementsPage = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Target Value *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Valor Objetivo *</label>
               <input
                 type="number"
                 step="0.01"
@@ -208,7 +208,7 @@ const MeasurementsPage = () => {
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Comments</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Comentarios</label>
               <textarea
                 value={form.comments}
                 onChange={(event) => setForm({ ...form, comments: event.target.value })}
@@ -219,10 +219,10 @@ const MeasurementsPage = () => {
           </div>
           <div className="flex space-x-3">
             <button type="submit" disabled={saving} className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
-              {saving ? 'Saving...' : editingId ? 'Update' : 'Create'}
+              {saving ? 'Guardando...' : editingId ? 'Actualizar' : 'Crear'}
             </button>
             {editingId && (
-              <button type="button" onClick={resetForm} className="px-6 py-2 bg-gray-600 text-white rounded-lg">Cancel</button>
+              <button type="button" onClick={resetForm} className="px-6 py-2 bg-gray-600 text-white rounded-lg">Cancelar</button>
             )}
           </div>
         </form>
@@ -232,12 +232,12 @@ const MeasurementsPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Date</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Indicator</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Actual</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Target</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Status</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Actions</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Fecha</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Indicador</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Real</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Objetivo</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Estado</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Acciones</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -251,14 +251,14 @@ const MeasurementsPage = () => {
                 <td className="px-6 py-4 text-sm text-gray-300">{item.target_value}</td>
                 <td className="px-6 py-4 text-sm text-gray-300">{statusLabels[item.status] || item.status}</td>
                 <td className="px-6 py-4 text-sm space-x-2">
-                  <button onClick={() => handleEdit(item)} className="text-blue-400 hover:text-blue-300">Edit</button>
-                  <button onClick={() => handleDelete(item.id)} className="text-red-400 hover:text-red-300">Delete</button>
+                  <button onClick={() => handleEdit(item)} className="text-blue-400 hover:text-blue-300">Editar</button>
+                  <button onClick={() => handleDelete(item.id)} className="text-red-400 hover:text-red-300">Eliminar</button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">No measurements yet</div>}
+        {items.length === 0 && <div className="text-center py-8 text-gray-400">No hay mediciones</div>}
       </div>
     </div>
   );

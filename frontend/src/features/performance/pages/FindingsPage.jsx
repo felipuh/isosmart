@@ -11,19 +11,19 @@ import {
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
 
 const findingTypeLabels = {
-  nc_major: 'Major Nonconformity',
-  nc_minor: 'Minor Nonconformity',
-  observation: 'Observation',
-  opportunity: 'Opportunity',
-  conformity: 'Conformity'
+  nc_major: 'No Conformidad Mayor',
+  nc_minor: 'No Conformidad Menor',
+  observation: 'Observacion',
+  opportunity: 'Oportunidad',
+  conformity: 'Conformidad'
 };
 
 const statusLabels = {
-  open: 'Open',
-  in_progress: 'In Progress',
-  resolved: 'Resolved',
-  verified: 'Verified',
-  closed: 'Closed'
+  open: 'Abierto',
+  in_progress: 'En Proceso',
+  resolved: 'Resuelto',
+  verified: 'Verificado',
+  closed: 'Cerrado'
 };
 
 const FindingsPage = () => {
@@ -144,21 +144,21 @@ const FindingsPage = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-white">Audit Findings</h1>
+      <h1 className="text-3xl font-bold text-white">Hallazgos de Auditoria</h1>
 
       <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg p-6">
-        <h2 className="text-xl font-bold text-white mb-4">{editingId ? 'Edit' : 'New'} Finding</h2>
+        <h2 className="text-xl font-bold text-white mb-4">{editingId ? 'Editar' : 'Nuevo'} Hallazgo</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Audit *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Auditoria *</label>
               <select
                 value={form.audit}
                 onChange={(event) => setForm({ ...form, audit: event.target.value })}
                 className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
                 required
               >
-                <option value="">Select audit</option>
+                <option value="">Selecciona auditoria</option>
                 {audits.map((audit) => (
                   <option key={audit.id} value={audit.id}>
                     {audit.audit_code} - {audit.title}
@@ -167,7 +167,7 @@ const FindingsPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Finding Number *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Numero de Hallazgo *</label>
               <input
                 type="text"
                 value={form.finding_number}
@@ -177,7 +177,7 @@ const FindingsPage = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Type *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Tipo *</label>
               <select
                 value={form.finding_type}
                 onChange={(event) => setForm({ ...form, finding_type: event.target.value })}
@@ -190,7 +190,7 @@ const FindingsPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Clause Reference *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Referencia de Clausula *</label>
               <input
                 type="text"
                 value={form.clause_reference}
@@ -200,7 +200,7 @@ const FindingsPage = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Due Date</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Fecha Compromiso</label>
               <input
                 type="date"
                 value={form.due_date}
@@ -209,7 +209,7 @@ const FindingsPage = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Status</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Estado</label>
               <select
                 value={form.status}
                 onChange={(event) => setForm({ ...form, status: event.target.value })}
@@ -221,7 +221,7 @@ const FindingsPage = () => {
               </select>
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Description *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Descripcion *</label>
               <textarea
                 value={form.description}
                 onChange={(event) => setForm({ ...form, description: event.target.value })}
@@ -231,7 +231,7 @@ const FindingsPage = () => {
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Evidence *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Evidencia *</label>
               <textarea
                 value={form.evidence}
                 onChange={(event) => setForm({ ...form, evidence: event.target.value })}
@@ -243,10 +243,10 @@ const FindingsPage = () => {
           </div>
           <div className="flex space-x-3">
             <button type="submit" disabled={saving} className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
-              {saving ? 'Saving...' : editingId ? 'Update' : 'Create'}
+              {saving ? 'Guardando...' : editingId ? 'Actualizar' : 'Crear'}
             </button>
             {editingId && (
-              <button type="button" onClick={resetForm} className="px-6 py-2 bg-gray-600 text-white rounded-lg">Cancel</button>
+              <button type="button" onClick={resetForm} className="px-6 py-2 bg-gray-600 text-white rounded-lg">Cancelar</button>
             )}
           </div>
         </form>
@@ -256,11 +256,11 @@ const FindingsPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Finding</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Audit</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Type</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Status</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Actions</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Hallazgo</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Auditoria</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Tipo</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Estado</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Acciones</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -273,14 +273,14 @@ const FindingsPage = () => {
                 <td className="px-6 py-4 text-sm text-gray-300">{findingTypeLabels[item.finding_type] || item.finding_type}</td>
                 <td className="px-6 py-4 text-sm text-gray-300">{statusLabels[item.status] || item.status}</td>
                 <td className="px-6 py-4 text-sm space-x-2">
-                  <button onClick={() => handleEdit(item)} className="text-blue-400 hover:text-blue-300">Edit</button>
-                  <button onClick={() => handleDelete(item.id)} className="text-red-400 hover:text-red-300">Delete</button>
+                  <button onClick={() => handleEdit(item)} className="text-blue-400 hover:text-blue-300">Editar</button>
+                  <button onClick={() => handleDelete(item.id)} className="text-red-400 hover:text-red-300">Eliminar</button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">No findings yet</div>}
+        {items.length === 0 && <div className="text-center py-8 text-gray-400">No hay hallazgos</div>}
       </div>
     </div>
   );

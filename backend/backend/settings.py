@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'planning',
     'operations',
     'performance',
+    'improvement',
 ]
 
 # Configuración de integración

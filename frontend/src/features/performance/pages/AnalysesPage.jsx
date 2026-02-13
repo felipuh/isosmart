@@ -10,18 +10,18 @@ import {
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
 
 const analysisTypeLabels = {
-  trend: 'Trend',
-  comparative: 'Comparative',
-  root_cause: 'Root Cause',
-  predictive: 'Predictive',
-  statistical: 'Statistical'
+  trend: 'Tendencia',
+  comparative: 'Comparativo',
+  root_cause: 'Causa Raiz',
+  predictive: 'Predictivo',
+  statistical: 'Estadistico'
 };
 
 const statusLabels = {
-  draft: 'Draft',
-  in_review: 'In Review',
-  completed: 'Completed',
-  archived: 'Archived'
+  draft: 'Borrador',
+  in_review: 'En Revision',
+  completed: 'Completado',
+  archived: 'Archivado'
 };
 
 const AnalysesPage = () => {
@@ -132,14 +132,14 @@ const AnalysesPage = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-white">Data Analyses</h1>
+      <h1 className="text-3xl font-bold text-white">Analisis de Datos</h1>
 
       <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg p-6">
-        <h2 className="text-xl font-bold text-white mb-4">{editingId ? 'Edit' : 'New'} Analysis</h2>
+        <h2 className="text-xl font-bold text-white mb-4">{editingId ? 'Editar' : 'Nuevo'} Analisis</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Title *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Titulo *</label>
               <input
                 type="text"
                 value={form.title}
@@ -149,7 +149,7 @@ const AnalysesPage = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Type *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Tipo *</label>
               <select
                 value={form.analysis_type}
                 onChange={(event) => setForm({ ...form, analysis_type: event.target.value })}
@@ -162,7 +162,7 @@ const AnalysesPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Period Start *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Inicio del Periodo *</label>
               <input
                 type="date"
                 value={form.period_start}
@@ -172,7 +172,7 @@ const AnalysesPage = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Period End *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Fin del Periodo *</label>
               <input
                 type="date"
                 value={form.period_end}
@@ -182,7 +182,7 @@ const AnalysesPage = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Status</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Estado</label>
               <select
                 value={form.status}
                 onChange={(event) => setForm({ ...form, status: event.target.value })}
@@ -194,7 +194,7 @@ const AnalysesPage = () => {
               </select>
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Objectives *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Objetivos *</label>
               <textarea
                 value={form.objectives}
                 onChange={(event) => setForm({ ...form, objectives: event.target.value })}
@@ -204,7 +204,7 @@ const AnalysesPage = () => {
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Methodology *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Metodologia *</label>
               <textarea
                 value={form.methodology}
                 onChange={(event) => setForm({ ...form, methodology: event.target.value })}
@@ -214,7 +214,7 @@ const AnalysesPage = () => {
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Findings *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Hallazgos *</label>
               <textarea
                 value={form.findings}
                 onChange={(event) => setForm({ ...form, findings: event.target.value })}
@@ -224,7 +224,7 @@ const AnalysesPage = () => {
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Conclusions *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Conclusiones *</label>
               <textarea
                 value={form.conclusions}
                 onChange={(event) => setForm({ ...form, conclusions: event.target.value })}
@@ -234,7 +234,7 @@ const AnalysesPage = () => {
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Recommendations *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Recomendaciones *</label>
               <textarea
                 value={form.recommendations}
                 onChange={(event) => setForm({ ...form, recommendations: event.target.value })}
@@ -246,10 +246,10 @@ const AnalysesPage = () => {
           </div>
           <div className="flex space-x-3">
             <button type="submit" disabled={saving} className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
-              {saving ? 'Saving...' : editingId ? 'Update' : 'Create'}
+              {saving ? 'Guardando...' : editingId ? 'Actualizar' : 'Crear'}
             </button>
             {editingId && (
-              <button type="button" onClick={resetForm} className="px-6 py-2 bg-gray-600 text-white rounded-lg">Cancel</button>
+              <button type="button" onClick={resetForm} className="px-6 py-2 bg-gray-600 text-white rounded-lg">Cancelar</button>
             )}
           </div>
         </form>
@@ -259,11 +259,11 @@ const AnalysesPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Title</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Type</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Period</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Status</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Actions</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Titulo</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Tipo</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Periodo</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Estado</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Acciones</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -274,14 +274,14 @@ const AnalysesPage = () => {
                 <td className="px-6 py-4 text-sm text-gray-300">{item.period_start} - {item.period_end}</td>
                 <td className="px-6 py-4 text-sm text-gray-300">{statusLabels[item.status] || item.status}</td>
                 <td className="px-6 py-4 text-sm space-x-2">
-                  <button onClick={() => handleEdit(item)} className="text-blue-400 hover:text-blue-300">Edit</button>
-                  <button onClick={() => handleDelete(item.id)} className="text-red-400 hover:text-red-300">Delete</button>
+                  <button onClick={() => handleEdit(item)} className="text-blue-400 hover:text-blue-300">Editar</button>
+                  <button onClick={() => handleDelete(item.id)} className="text-red-400 hover:text-red-300">Eliminar</button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">No analyses yet</div>}
+        {items.length === 0 && <div className="text-center py-8 text-gray-400">No hay analisis</div>}
       </div>
     </div>
   );

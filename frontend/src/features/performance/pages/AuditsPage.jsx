@@ -10,18 +10,18 @@ import {
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
 
 const auditTypeLabels = {
-  system: 'QMS System',
-  process: 'Process',
-  product: 'Product',
-  compliance: 'Compliance',
-  management: 'Management'
+  system: 'Sistema SGC',
+  process: 'Proceso',
+  product: 'Producto',
+  compliance: 'Cumplimiento',
+  management: 'Direccion'
 };
 
 const statusLabels = {
-  planned: 'Planned',
-  in_progress: 'In Progress',
-  completed: 'Completed',
-  cancelled: 'Cancelled'
+  planned: 'Planificada',
+  in_progress: 'En Proceso',
+  completed: 'Completada',
+  cancelled: 'Cancelada'
 };
 
 const AuditsPage = () => {
@@ -127,14 +127,14 @@ const AuditsPage = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-white">Internal Audits</h1>
+      <h1 className="text-3xl font-bold text-white">Auditorias Internas</h1>
 
       <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg p-6">
-        <h2 className="text-xl font-bold text-white mb-4">{editingId ? 'Edit' : 'New'} Audit</h2>
+        <h2 className="text-xl font-bold text-white mb-4">{editingId ? 'Editar' : 'Nueva'} Auditoria</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Audit Code *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Codigo de Auditoria *</label>
               <input
                 type="text"
                 value={form.audit_code}
@@ -144,7 +144,7 @@ const AuditsPage = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Type *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Tipo *</label>
               <select
                 value={form.audit_type}
                 onChange={(event) => setForm({ ...form, audit_type: event.target.value })}
@@ -157,7 +157,7 @@ const AuditsPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Planned Date *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Fecha Planificada *</label>
               <input
                 type="date"
                 value={form.planned_date}
@@ -167,7 +167,7 @@ const AuditsPage = () => {
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Title *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Titulo *</label>
               <input
                 type="text"
                 value={form.title}
@@ -177,7 +177,7 @@ const AuditsPage = () => {
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Objectives *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Objetivos *</label>
               <textarea
                 value={form.objectives}
                 onChange={(event) => setForm({ ...form, objectives: event.target.value })}
@@ -187,7 +187,7 @@ const AuditsPage = () => {
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Scope *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Alcance *</label>
               <textarea
                 value={form.scope}
                 onChange={(event) => setForm({ ...form, scope: event.target.value })}
@@ -197,7 +197,7 @@ const AuditsPage = () => {
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Criteria *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Criterios *</label>
               <textarea
                 value={form.criteria}
                 onChange={(event) => setForm({ ...form, criteria: event.target.value })}
@@ -207,7 +207,7 @@ const AuditsPage = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Status</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Estado</label>
               <select
                 value={form.status}
                 onChange={(event) => setForm({ ...form, status: event.target.value })}
@@ -221,10 +221,10 @@ const AuditsPage = () => {
           </div>
           <div className="flex space-x-3">
             <button type="submit" disabled={saving} className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
-              {saving ? 'Saving...' : editingId ? 'Update' : 'Create'}
+              {saving ? 'Guardando...' : editingId ? 'Actualizar' : 'Crear'}
             </button>
             {editingId && (
-              <button type="button" onClick={resetForm} className="px-6 py-2 bg-gray-600 text-white rounded-lg">Cancel</button>
+              <button type="button" onClick={resetForm} className="px-6 py-2 bg-gray-600 text-white rounded-lg">Cancelar</button>
             )}
           </div>
         </form>
@@ -234,12 +234,12 @@ const AuditsPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Code</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Title</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Type</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Planned</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Status</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Actions</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Codigo</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Titulo</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Tipo</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Planificada</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Estado</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Acciones</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -251,14 +251,14 @@ const AuditsPage = () => {
                 <td className="px-6 py-4 text-sm text-gray-300">{item.planned_date}</td>
                 <td className="px-6 py-4 text-sm text-gray-300">{statusLabels[item.status] || item.status}</td>
                 <td className="px-6 py-4 text-sm space-x-2">
-                  <button onClick={() => handleEdit(item)} className="text-blue-400 hover:text-blue-300">Edit</button>
-                  <button onClick={() => handleDelete(item.id)} className="text-red-400 hover:text-red-300">Delete</button>
+                  <button onClick={() => handleEdit(item)} className="text-blue-400 hover:text-blue-300">Editar</button>
+                  <button onClick={() => handleDelete(item.id)} className="text-red-400 hover:text-red-300">Eliminar</button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">No audits yet</div>}
+        {items.length === 0 && <div className="text-center py-8 text-gray-400">No hay auditorias</div>}
       </div>
     </div>
   );

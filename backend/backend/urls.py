@@ -3,6 +3,8 @@ from django.urls import path, include
 from core import views
 from ai_modules.spm import views as spm_views
 from ai_modules.sie import views as sie_views
+from resources import views as resources_views
+from operations import views as operations_views
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -31,6 +33,40 @@ urlpatterns = [
     path('api/planning/', include('planning.urls')),
     path('api/operations/', include('operations.urls')),
     path('api/performance/', include('performance.urls')),
+    path('api/improvement/', include('improvement.urls')),
+    path('api/integration/', include('integration.urls')),
+
+    # Aliases for expected legacy endpoints
+    path(
+        'api/resources/human-resources/',
+        resources_views.ResourceViewSet.as_view({'get': 'list', 'post': 'create'}),
+        name='resources-human-resources'
+    ),
+    path(
+        'api/resources/human-resources/<int:pk>/',
+        resources_views.ResourceViewSet.as_view({
+            'get': 'retrieve',
+            'put': 'update',
+            'patch': 'partial_update',
+            'delete': 'destroy'
+        }),
+        name='resources-human-resources-detail'
+    ),
+    path(
+        'api/operations/operational-controls/',
+        operations_views.OperationalControlViewSet.as_view({'get': 'list', 'post': 'create'}),
+        name='operations-operational-controls'
+    ),
+    path(
+        'api/operations/operational-controls/<int:pk>/',
+        operations_views.OperationalControlViewSet.as_view({
+            'get': 'retrieve',
+            'put': 'update',
+            'patch': 'partial_update',
+            'delete': 'destroy'
+        }),
+        name='operations-operational-controls-detail'
+    ),
     
     # Explicit aliases for frontend endpoints without duplicated prefixes
     path('api/stakeholders/critical/', sie_views.StakeholderProfileViewSet.as_view({'get': 'critical'}), name='stakeholders-critical'),

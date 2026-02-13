@@ -16,7 +16,7 @@ const Sidebar = ({ isOpen = true, setIsOpen }) => {
     { name: 'Objetivos', path: '/objectives', icon: Award },
     { name: 'Planificacion', path: '/planning', icon: ClipboardList },
     { name: 'Operaciones', path: '/operations', icon: Activity },
-    { name: 'Performance', path: '/performance', icon: LineChart },
+    { name: 'Desempeno', path: '/performance', icon: LineChart },
     { name: 'Liderazgo', path: '/leadership', icon: Users },
     { name: 'Recursos', path: '/resources', icon: Package },
     { name: 'Configuración', path: '/settings', icon: Settings },

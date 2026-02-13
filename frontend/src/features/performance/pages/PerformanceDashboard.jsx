@@ -134,43 +134,43 @@ const PerformanceDashboard = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white">Performance</h1>
-          <p className="text-gray-400 mt-1">ISO 9001:2015 - Clause 9</p>
+          <h1 className="text-3xl font-bold text-white">Evaluacion del Desempeno</h1>
+          <p className="text-gray-400 mt-1">ISO 9001:2015 - Clausula 9</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard
-          title="Indicators"
+          title="Indicadores"
           value={stats.indicators.total}
-          subtitle={`${stats.indicators.active} active`}
+          subtitle={`${stats.indicators.active} activos`}
           icon="🎯"
           link="/performance/indicators"
           color="blue"
         />
 
         <StatCard
-          title="Measurements"
+          title="Mediciones"
           value={stats.measurements.total}
-          subtitle={`${stats.measurements.on_target} on target, ${stats.measurements.needs_attention} needs attention`}
+          subtitle={`${stats.measurements.on_target} en objetivo, ${stats.measurements.needs_attention} requieren atencion`}
           icon="📈"
           link="/performance/measurements"
           color="green"
         />
 
         <StatCard
-          title="Audits"
+          title="Auditorias"
           value={stats.audits.total}
-          subtitle={`${stats.audits.planned} planned`}
+          subtitle={`${stats.audits.planned} planificadas`}
           icon="🧾"
           link="/performance/audits"
           color="orange"
         />
 
         <StatCard
-          title="Findings"
+          title="Hallazgos"
           value={stats.findings.total}
-          subtitle={`${stats.findings.open} open`}
+          subtitle={`${stats.findings.open} abiertos`}
           icon="🔎"
           link="/performance/findings"
           color="red"
@@ -178,7 +178,7 @@ const PerformanceDashboard = () => {
       </div>
 
       <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg p-6">
-        <h2 className="text-xl font-bold text-white mb-4">Quick Actions</h2>
+        <h2 className="text-xl font-bold text-white mb-4">Acciones Rapidas</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Link
             to="/performance/indicators"
@@ -186,8 +186,8 @@ const PerformanceDashboard = () => {
           >
             <span className="text-2xl">🎯</span>
             <div>
-              <p className="font-medium text-white">New Indicator</p>
-              <p className="text-xs text-gray-400">Define KPI and targets</p>
+              <p className="font-medium text-white">Nuevo Indicador</p>
+              <p className="text-xs text-gray-400">Define KPI y objetivos</p>
             </div>
           </Link>
 
@@ -197,8 +197,8 @@ const PerformanceDashboard = () => {
           >
             <span className="text-2xl">📈</span>
             <div>
-              <p className="font-medium text-white">Record Measurement</p>
-              <p className="text-xs text-gray-400">Capture results</p>
+              <p className="font-medium text-white">Registrar Medicion</p>
+              <p className="text-xs text-gray-400">Capturar resultados</p>
             </div>
           </Link>
 
@@ -208,8 +208,8 @@ const PerformanceDashboard = () => {
           >
             <span className="text-2xl">🧾</span>
             <div>
-              <p className="font-medium text-white">Plan Audit</p>
-              <p className="text-xs text-gray-400">Schedule and track</p>
+              <p className="font-medium text-white">Planificar Auditoria</p>
+              <p className="text-xs text-gray-400">Programar y dar seguimiento</p>
             </div>
           </Link>
         </div>
@@ -222,9 +222,9 @@ const PerformanceDashboard = () => {
         >
           <div className="flex items-center space-x-3 mb-2">
             <span className="text-2xl">🧠</span>
-            <h3 className="text-lg font-bold text-white">Analyses</h3>
+            <h3 className="text-lg font-bold text-white">Analisis</h3>
           </div>
-          <p className="text-sm text-gray-400">Trend and root cause reviews</p>
+          <p className="text-sm text-gray-400">Tendencias y causas raiz</p>
         </Link>
 
         <Link
@@ -233,9 +233,9 @@ const PerformanceDashboard = () => {
         >
           <div className="flex items-center space-x-3 mb-2">
             <span className="text-2xl">📋</span>
-            <h3 className="text-lg font-bold text-white">Management Reviews</h3>
+            <h3 className="text-lg font-bold text-white">Revision por la Direccion</h3>
           </div>
-          <p className="text-sm text-gray-400">Leadership review meetings</p>
+          <p className="text-sm text-gray-400">Reuniones de revision gerencial</p>
         </Link>
 
         <Link
@@ -244,9 +244,9 @@ const PerformanceDashboard = () => {
         >
           <div className="flex items-center space-x-3 mb-2">
             <span className="text-2xl">🔎</span>
-            <h3 className="text-lg font-bold text-white">Audit Findings</h3>
+            <h3 className="text-lg font-bold text-white">Hallazgos de Auditoria</h3>
           </div>
-          <p className="text-sm text-gray-400">Follow up on findings</p>
+          <p className="text-sm text-gray-400">Seguimiento de hallazgos</p>
         </Link>
       </div>
     </div>

@@ -10,10 +10,10 @@ import {
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
 
 const statusLabels = {
-  scheduled: 'Scheduled',
-  in_progress: 'In Progress',
-  completed: 'Completed',
-  cancelled: 'Cancelled'
+  scheduled: 'Programada',
+  in_progress: 'En Proceso',
+  completed: 'Completada',
+  cancelled: 'Cancelada'
 };
 
 const ReviewsPage = () => {
@@ -113,14 +113,14 @@ const ReviewsPage = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-white">Management Reviews</h1>
+      <h1 className="text-3xl font-bold text-white">Revision por la Direccion</h1>
 
       <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg p-6">
-        <h2 className="text-xl font-bold text-white mb-4">{editingId ? 'Edit' : 'New'} Review</h2>
+        <h2 className="text-xl font-bold text-white mb-4">{editingId ? 'Editar' : 'Nueva'} Revision</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Review Code *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Codigo de Revision *</label>
               <input
                 type="text"
                 value={form.review_code}
@@ -130,7 +130,7 @@ const ReviewsPage = () => {
               />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Title *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Titulo *</label>
               <input
                 type="text"
                 value={form.title}
@@ -140,7 +140,7 @@ const ReviewsPage = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Scheduled Date *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Fecha Programada *</label>
               <input
                 type="date"
                 value={form.scheduled_date}
@@ -150,7 +150,7 @@ const ReviewsPage = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Status</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Estado</label>
               <select
                 value={form.status}
                 onChange={(event) => setForm({ ...form, status: event.target.value })}
@@ -162,7 +162,7 @@ const ReviewsPage = () => {
               </select>
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Performance Results *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Resultados de Desempeno *</label>
               <textarea
                 value={form.performance_results}
                 onChange={(event) => setForm({ ...form, performance_results: event.target.value })}
@@ -172,7 +172,7 @@ const ReviewsPage = () => {
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Customer Feedback</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Retroalimentacion del Cliente</label>
               <textarea
                 value={form.customer_feedback}
                 onChange={(event) => setForm({ ...form, customer_feedback: event.target.value })}
@@ -183,10 +183,10 @@ const ReviewsPage = () => {
           </div>
           <div className="flex space-x-3">
             <button type="submit" disabled={saving} className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
-              {saving ? 'Saving...' : editingId ? 'Update' : 'Create'}
+              {saving ? 'Guardando...' : editingId ? 'Actualizar' : 'Crear'}
             </button>
             {editingId && (
-              <button type="button" onClick={resetForm} className="px-6 py-2 bg-gray-600 text-white rounded-lg">Cancel</button>
+              <button type="button" onClick={resetForm} className="px-6 py-2 bg-gray-600 text-white rounded-lg">Cancelar</button>
             )}
           </div>
         </form>
@@ -196,11 +196,11 @@ const ReviewsPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Code</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Title</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Scheduled</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Status</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Actions</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Codigo</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Titulo</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Programada</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Estado</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Acciones</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -211,14 +211,14 @@ const ReviewsPage = () => {
                 <td className="px-6 py-4 text-sm text-gray-300">{item.scheduled_date}</td>
                 <td className="px-6 py-4 text-sm text-gray-300">{statusLabels[item.status] || item.status}</td>
                 <td className="px-6 py-4 text-sm space-x-2">
-                  <button onClick={() => handleEdit(item)} className="text-blue-400 hover:text-blue-300">Edit</button>
-                  <button onClick={() => handleDelete(item.id)} className="text-red-400 hover:text-red-300">Delete</button>
+                  <button onClick={() => handleEdit(item)} className="text-blue-400 hover:text-blue-300">Editar</button>
+                  <button onClick={() => handleDelete(item.id)} className="text-red-400 hover:text-red-300">Eliminar</button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">No reviews yet</div>}
+        {items.length === 0 && <div className="text-center py-8 text-gray-400">No hay revisiones</div>}
       </div>
     </div>
   );
