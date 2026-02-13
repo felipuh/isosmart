@@ -214,7 +214,7 @@ const PlanningDashboard = () => {
         <h2 className="text-xl font-bold text-white mb-4">Acciones Rápidas</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Link
-            to="/planning/risks-opportunities"
+            to="/planning/risks-opportunities/new"
             className="flex items-center space-x-3 p-4 bg-red-500/10 border border-red-500/20 rounded-lg hover:bg-red-500/20 transition-all"
           >
             <span className="text-2xl">⚠️</span>
@@ -225,7 +225,7 @@ const PlanningDashboard = () => {
           </Link>
 
           <Link
-            to="/planning/objectives"
+            to="/planning/objectives/new"
             className="flex items-center space-x-3 p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg hover:bg-blue-500/20 transition-all"
           >
             <span className="text-2xl">🎯</span>
@@ -236,7 +236,7 @@ const PlanningDashboard = () => {
           </Link>
 
           <Link
-            to="/planning/changes"
+            to="/planning/changes/new"
             className="flex items-center space-x-3 p-4 bg-orange-500/10 border border-orange-500/20 rounded-lg hover:bg-orange-500/20 transition-all"
           >
             <span className="text-2xl">🔄</span>

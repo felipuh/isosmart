@@ -1,0 +1,30 @@
+import React from 'react';
+
+const Modal = ({ title, isOpen, onClose, children, maxWidth = 'max-w-4xl' }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+      <div className={`w-full ${maxWidth} rounded-xl border border-slate-700/50 bg-slate-900/95 shadow-2xl`}>
+        <div className="flex items-center justify-between border-b border-slate-700/50 px-6 py-4">
+          <h2 className="text-lg font-semibold text-white">{title}</h2>
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-slate-300 hover:text-white transition-colors"
+            aria-label="Close"
+          >
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <div className="max-h-[85vh] overflow-y-auto px-6 py-4">
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Modal;

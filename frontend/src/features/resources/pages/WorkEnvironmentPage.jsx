@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
+import Modal from '../../../components/Common/Modal';
 import { getWorkEnvironments, createWorkEnvironment, updateWorkEnvironment, deleteWorkEnvironment } from '../api/resourcesApi';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
@@ -8,6 +10,8 @@ const WorkEnvironmentPage = () => {
   const { currentOrganization } = useAuth();
   const orgId = currentOrganization?.id || null;
   const orgName = currentOrganization?.name || '';
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const [items, setItems] = useState([]);
   const [form, setForm] = useState({
@@ -19,10 +23,22 @@ const WorkEnvironmentPage = () => {
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
-    if (orgId) loadData();
+    if (orgId) {
+      loadData();
+    } else {
+      setLoading(false);
+    }
   }, [orgId]);
+
+  useEffect(() => {
+    if (location.pathname.endsWith('/new')) {
+      resetForm();
+      setShowForm(true);
+    }
+  }, [location.pathname]);
 
   const loadData = async () => {
     try {
@@ -38,6 +54,10 @@ const WorkEnvironmentPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!orgId) {
+      alert('Selecciona una organizacion antes de crear registros.');
+      return;
+    }
     try {
       setSaving(true);
       const payload = { ...form, organization_id: orgId, organization_name: orgName };
@@ -48,6 +68,10 @@ const WorkEnvironmentPage = () => {
       }
       resetForm();
       loadData();
+      setShowForm(false);
+      if (location.pathname.endsWith('/new')) {
+        navigate(location.pathname.replace(/\/new$/, ''), { replace: true });
+      }
     } catch (error) {
       console.error('Error:', error);
     } finally {
@@ -63,6 +87,7 @@ const WorkEnvironmentPage = () => {
       overall_condition: item.overall_condition
     });
     setEditingId(item.id);
+    setShowForm(true);
   };
 
   const handleDelete = async (id) => {
@@ -85,36 +110,32 @@ const WorkEnvironmentPage = () => {
     setEditingId(null);
   };
 
+  const openForm = () => {
+    resetForm();
+    setShowForm(true);
+  };
+
+  const closeForm = () => {
+    resetForm();
+    setShowForm(false);
+    if (location.pathname.endsWith('/new')) {
+      navigate(location.pathname.replace(/\/new$/, ''), { replace: true });
+    }
+  };
+
   if (loading) return <div className="flex justify-center p-8"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div></div>;
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-white">Ambiente de Trabajo</h1>
-      
-      <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg p-6">
-        <h2 className="text-xl font-bold text-white mb-4">{editingId ? 'Editar' : 'Nuevo'} Ambiente</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Área *</label>
-              <input type="text" value={form.area_name} onChange={(e) => setForm({...form, area_name: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Ubicación *</label>
-              <input type="text" value={form.location} onChange={(e) => setForm({...form, location: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
-            </div>
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Descripción</label>
-              <textarea value={form.description} onChange={(e) => setForm({...form, description: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="3" required />
-            </div>
-          </div>
-          <div className="flex space-x-3">
-            <button type="submit" disabled={saving} className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
-              {saving ? 'Guardando...' : editingId ? 'Actualizar' : 'Crear'}
-            </button>
-            {editingId && <button type="button" onClick={resetForm} className="px-6 py-2 bg-gray-600 text-white rounded-lg">Cancelar</button>}
-          </div>
-        </form>
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <h1 className="text-3xl font-bold text-white">Ambiente de Trabajo</h1>
+        <button
+          type="button"
+          onClick={openForm}
+          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
+        >
+          Nuevo ambiente
+        </button>
       </div>
 
       <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg overflow-hidden">
@@ -143,6 +164,35 @@ const WorkEnvironmentPage = () => {
         </table>
         {items.length === 0 && <div className="text-center py-8 text-gray-400">No hay ambientes</div>}
       </div>
+
+      <Modal
+        title={editingId ? 'Editar ambiente' : 'Nuevo ambiente'}
+        isOpen={showForm}
+        onClose={closeForm}
+      >
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Área *</label>
+              <input type="text" value={form.area_name} onChange={(e) => setForm({...form, area_name: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Ubicación *</label>
+              <input type="text" value={form.location} onChange={(e) => setForm({...form, location: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
+            </div>
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-gray-300 mb-2">Descripción</label>
+              <textarea value={form.description} onChange={(e) => setForm({...form, description: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="3" required />
+            </div>
+          </div>
+          <div className="flex space-x-3">
+            <button type="submit" disabled={saving} className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
+              {saving ? 'Guardando...' : editingId ? 'Actualizar' : 'Crear'}
+            </button>
+            {editingId && <button type="button" onClick={closeForm} className="px-6 py-2 bg-gray-600 text-white rounded-lg">Cancelar</button>}
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 };

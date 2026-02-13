@@ -40,7 +40,11 @@ class MeasurementViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def dashboard_stats(self, request):
         """Get dashboard statistics"""
-        measurements = self.get_queryset()
+        organization_id = request.query_params.get('organization_id')
+        if not organization_id:
+            return Response({'error': 'organization_id required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        measurements = self.get_queryset().filter(organization_id=organization_id)
         
         stats = {
             'total_measurements': measurements.count(),

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
+import Modal from '../../../components/Common/Modal';
 import { getResources, createResource, updateResource, deleteResource } from '../api/resourcesApi';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
@@ -8,6 +10,8 @@ const ResourcesPage = () => {
   const { currentOrganization } = useAuth();
   const orgId = currentOrganization?.id || null;
   const orgName = currentOrganization?.name || '';
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const [resources, setResources] = useState([]);
   const [form, setForm] = useState({
@@ -23,10 +27,22 @@ const ResourcesPage = () => {
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
-    if (orgId) loadResources();
+    if (orgId) {
+      loadResources();
+    } else {
+      setLoading(false);
+    }
   }, [orgId]);
+
+  useEffect(() => {
+    if (location.pathname.endsWith('/new')) {
+      resetForm();
+      setShowForm(true);
+    }
+  }, [location.pathname]);
 
   const loadResources = async () => {
     try {
@@ -42,6 +58,10 @@ const ResourcesPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!orgId) {
+      alert('Selecciona una organizacion antes de crear registros.');
+      return;
+    }
     try {
       setSaving(true);
       const payload = { ...form, organization_id: orgId, organization_name: orgName };
@@ -52,6 +72,10 @@ const ResourcesPage = () => {
       }
       resetForm();
       loadResources();
+      setShowForm(false);
+      if (location.pathname.endsWith('/new')) {
+        navigate(location.pathname.replace(/\/new$/, ''), { replace: true });
+      }
     } catch (error) {
       console.error('Error:', error);
     } finally {
@@ -71,6 +95,7 @@ const ResourcesPage = () => {
       status: resource.status
     });
     setEditingId(resource.id);
+    setShowForm(true);
   };
 
   const handleDelete = async (id) => {
@@ -97,41 +122,32 @@ const ResourcesPage = () => {
     setEditingId(null);
   };
 
+  const openForm = () => {
+    resetForm();
+    setShowForm(true);
+  };
+
+  const closeForm = () => {
+    resetForm();
+    setShowForm(false);
+    if (location.pathname.endsWith('/new')) {
+      navigate(location.pathname.replace(/\/new$/, ''), { replace: true });
+    }
+  };
+
   if (loading) return <div className="flex justify-center p-8"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div></div>;
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-white">Recursos</h1>
-      
-      <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg p-6">
-        <h2 className="text-xl font-bold text-white mb-4">{editingId ? 'Editar' : 'Nuevo'} Recurso</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Tipo</label>
-              <select value={form.resource_type} onChange={(e) => setForm({...form, resource_type: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required>
-                <option value="human">Recurso Humano</option>
-                <option value="infrastructure">Infraestructura</option>
-                <option value="technology">Tecnología</option>
-                <option value="material">Material</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Nombre *</label>
-              <input type="text" value={form.name} onChange={(e) => setForm({...form, name: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Código *</label>
-              <input type="text" value={form.code} onChange={(e) => setForm({...form, code: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
-            </div>
-          </div>
-          <div className="flex space-x-3">
-            <button type="submit" disabled={saving} className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
-              {saving ? 'Guardando...' : editingId ? 'Actualizar' : 'Crear'}
-            </button>
-            {editingId && <button type="button" onClick={resetForm} className="px-6 py-2 bg-gray-600 text-white rounded-lg">Cancelar</button>}
-          </div>
-        </form>
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <h1 className="text-3xl font-bold text-white">Recursos</h1>
+        <button
+          type="button"
+          onClick={openForm}
+          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
+        >
+          Nuevo recurso
+        </button>
       </div>
 
       <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg overflow-hidden">
@@ -160,6 +176,40 @@ const ResourcesPage = () => {
         </table>
         {resources.length === 0 && <div className="text-center py-8 text-gray-400">No hay recursos</div>}
       </div>
+
+      <Modal
+        title={editingId ? 'Editar recurso' : 'Nuevo recurso'}
+        isOpen={showForm}
+        onClose={closeForm}
+      >
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Tipo</label>
+              <select value={form.resource_type} onChange={(e) => setForm({...form, resource_type: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required>
+                <option value="human">Recurso Humano</option>
+                <option value="infrastructure">Infraestructura</option>
+                <option value="technology">Tecnología</option>
+                <option value="material">Material</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Nombre *</label>
+              <input type="text" value={form.name} onChange={(e) => setForm({...form, name: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Código *</label>
+              <input type="text" value={form.code} onChange={(e) => setForm({...form, code: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
+            </div>
+          </div>
+          <div className="flex space-x-3">
+            <button type="submit" disabled={saving} className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
+              {saving ? 'Guardando...' : editingId ? 'Actualizar' : 'Crear'}
+            </button>
+            {editingId && <button type="button" onClick={closeForm} className="px-6 py-2 bg-gray-600 text-white rounded-lg">Cancelar</button>}
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 };

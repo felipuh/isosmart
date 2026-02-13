@@ -45,6 +45,8 @@ const ResourcesDashboard = () => {
   useEffect(() => {
     if (orgId) {
       loadDashboardData();
+    } else {
+      setLoading(false);
     }
   }, [orgId]);
 

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
+import Modal from '../../../components/Common/Modal';
 import { getObjectives, createObjective, updateObjective, deleteObjective, getUsers } from '../api/planningApi';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
@@ -8,6 +10,8 @@ const QualityObjectivesPage = () => {
   const { currentOrganization, user } = useAuth();
   const orgId = currentOrganization?.id || null;
   const orgName = currentOrganization?.name || '';
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const [items, setItems] = useState([]);
   const [users, setUsers] = useState([]);
@@ -37,6 +41,7 @@ const QualityObjectivesPage = () => {
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
     if (orgId) {
@@ -44,6 +49,13 @@ const QualityObjectivesPage = () => {
       loadUsers();
     }
   }, [orgId]);
+
+  useEffect(() => {
+    if (location.pathname.endsWith('/new')) {
+      resetForm();
+      setShowForm(true);
+    }
+  }, [location.pathname]);
 
   useEffect(() => {
     if (user?.id) {
@@ -93,6 +105,10 @@ const QualityObjectivesPage = () => {
       }
       resetForm();
       loadData();
+      setShowForm(false);
+      if (location.pathname.endsWith('/new')) {
+        navigate(location.pathname.replace(/\/new$/, ''), { replace: true });
+      }
     } catch (error) {
       console.error('Error:', error);
     } finally {
@@ -125,6 +141,7 @@ const QualityObjectivesPage = () => {
       budget: item.budget ?? ''
     });
     setEditingId(item.id);
+    setShowForm(true);
   };
 
   const handleDelete = async (id) => {
@@ -164,14 +181,72 @@ const QualityObjectivesPage = () => {
     setEditingId(null);
   };
 
+  const openForm = () => {
+    resetForm();
+    setShowForm(true);
+  };
+
+  const closeForm = () => {
+    resetForm();
+    setShowForm(false);
+    if (location.pathname.endsWith('/new')) {
+      navigate(location.pathname.replace(/\/new$/, ''), { replace: true });
+    }
+  };
+
   if (loading) return <div className="flex justify-center p-8"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div></div>;
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-white">Objetivos de Calidad</h1>
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <h1 className="text-3xl font-bold text-white">Objetivos de Calidad</h1>
+        <button
+          type="button"
+          onClick={openForm}
+          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
+        >
+          Nuevo objetivo
+        </button>
+      </div>
 
-      <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg p-6">
-        <h2 className="text-xl font-bold text-white mb-4">{editingId ? 'Editar' : 'Nuevo'} Objetivo</h2>
+      <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg overflow-hidden">
+        <table className="w-full">
+          <thead className="bg-gray-800/50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Código</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Título</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Estado</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Meta</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">% Avance</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Responsable</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Acciones</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-700">
+            {items.map(i => (
+              <tr key={i.id} className="hover:bg-gray-700/30">
+                <td className="px-6 py-4 text-sm text-gray-300">{i.code}</td>
+                <td className="px-6 py-4 text-sm text-white">{i.title}</td>
+                <td className="px-6 py-4 text-sm text-gray-300">{i.status_display}</td>
+                <td className="px-6 py-4 text-sm text-gray-300">{i.target_date}</td>
+                <td className="px-6 py-4 text-sm text-gray-300">{i.progress_percentage}%</td>
+                <td className="px-6 py-4 text-sm text-gray-300">{i.owner_name || '-'}</td>
+                <td className="px-6 py-4 text-sm space-x-2">
+                  <button onClick={() => handleEdit(i)} className="text-blue-400 hover:text-blue-300">Editar</button>
+                  <button onClick={() => handleDelete(i.id)} className="text-red-400 hover:text-red-300">Eliminar</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {items.length === 0 && <div className="text-center py-8 text-gray-400">No hay objetivos</div>}
+      </div>
+
+      <Modal
+        title={editingId ? 'Editar objetivo' : 'Nuevo objetivo'}
+        isOpen={showForm}
+        onClose={closeForm}
+      >
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
@@ -259,26 +334,26 @@ const QualityObjectivesPage = () => {
             </div>
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-gray-300 mb-2">Criterios SMART</label>
-              <div className="grid grid-cols-2 gap-2">
-                <label className="flex items-center space-x-2 text-sm text-gray-300">
-                  <input type="checkbox" checked={form.is_specific} onChange={(e) => setForm({...form, is_specific: e.target.checked})} />
-                  <span>Específico</span>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <label className="flex items-center space-x-2">
+                  <input type="checkbox" checked={form.is_specific} onChange={(e) => setForm({...form, is_specific: e.target.checked})} className="rounded" />
+                  <span className="text-sm text-gray-300">Específico</span>
                 </label>
-                <label className="flex items-center space-x-2 text-sm text-gray-300">
-                  <input type="checkbox" checked={form.is_measurable} onChange={(e) => setForm({...form, is_measurable: e.target.checked})} />
-                  <span>Medible</span>
+                <label className="flex items-center space-x-2">
+                  <input type="checkbox" checked={form.is_measurable} onChange={(e) => setForm({...form, is_measurable: e.target.checked})} className="rounded" />
+                  <span className="text-sm text-gray-300">Medible</span>
                 </label>
-                <label className="flex items-center space-x-2 text-sm text-gray-300">
-                  <input type="checkbox" checked={form.is_achievable} onChange={(e) => setForm({...form, is_achievable: e.target.checked})} />
-                  <span>Alcanzable</span>
+                <label className="flex items-center space-x-2">
+                  <input type="checkbox" checked={form.is_achievable} onChange={(e) => setForm({...form, is_achievable: e.target.checked})} className="rounded" />
+                  <span className="text-sm text-gray-300">Alcanzable</span>
                 </label>
-                <label className="flex items-center space-x-2 text-sm text-gray-300">
-                  <input type="checkbox" checked={form.is_relevant} onChange={(e) => setForm({...form, is_relevant: e.target.checked})} />
-                  <span>Relevante</span>
+                <label className="flex items-center space-x-2">
+                  <input type="checkbox" checked={form.is_relevant} onChange={(e) => setForm({...form, is_relevant: e.target.checked})} className="rounded" />
+                  <span className="text-sm text-gray-300">Relevante</span>
                 </label>
-                <label className="flex items-center space-x-2 text-sm text-gray-300">
-                  <input type="checkbox" checked={form.is_time_bound} onChange={(e) => setForm({...form, is_time_bound: e.target.checked})} />
-                  <span>Con Plazo</span>
+                <label className="flex items-center space-x-2">
+                  <input type="checkbox" checked={form.is_time_bound} onChange={(e) => setForm({...form, is_time_bound: e.target.checked})} className="rounded" />
+                  <span className="text-sm text-gray-300">Temporal</span>
                 </label>
               </div>
             </div>
@@ -287,43 +362,10 @@ const QualityObjectivesPage = () => {
             <button type="submit" disabled={saving} className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
               {saving ? 'Guardando...' : editingId ? 'Actualizar' : 'Crear'}
             </button>
-            {editingId && <button type="button" onClick={resetForm} className="px-6 py-2 bg-gray-600 text-white rounded-lg">Cancelar</button>}
+            {editingId && <button type="button" onClick={closeForm} className="px-6 py-2 bg-gray-600 text-white rounded-lg">Cancelar</button>}
           </div>
         </form>
-      </div>
-
-      <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-gray-800/50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Código</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Título</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Estado</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Meta</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">% Avance</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Responsable</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Acciones</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-700">
-            {items.map(i => (
-              <tr key={i.id} className="hover:bg-gray-700/30">
-                <td className="px-6 py-4 text-sm text-gray-300">{i.code}</td>
-                <td className="px-6 py-4 text-sm text-white">{i.title}</td>
-                <td className="px-6 py-4 text-sm text-gray-300">{i.status_display}</td>
-                <td className="px-6 py-4 text-sm text-gray-300">{i.target_date}</td>
-                <td className="px-6 py-4 text-sm text-gray-300">{i.progress_percentage}%</td>
-                <td className="px-6 py-4 text-sm text-gray-300">{i.owner_name || '-'}</td>
-                <td className="px-6 py-4 text-sm space-x-2">
-                  <button onClick={() => handleEdit(i)} className="text-blue-400 hover:text-blue-300">Editar</button>
-                  <button onClick={() => handleDelete(i.id)} className="text-red-400 hover:text-red-300">Eliminar</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">No hay objetivos</div>}
-      </div>
+      </Modal>
     </div>
   );
 };

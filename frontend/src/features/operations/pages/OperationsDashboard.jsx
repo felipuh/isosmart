@@ -209,7 +209,7 @@ const OperationsDashboard = () => {
         <h2 className="text-xl font-bold text-white mb-4">Acciones Rápidas</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Link
-            to="/operations/requirements"
+            to="/operations/requirements/new"
             className="flex items-center space-x-3 p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg hover:bg-blue-500/20 transition-all"
           >
             <span className="text-2xl">📋</span>
@@ -220,7 +220,7 @@ const OperationsDashboard = () => {
           </Link>
 
           <Link
-            to="/operations/nonconformities"
+            to="/operations/nonconformities/new"
             className="flex items-center space-x-3 p-4 bg-red-500/10 border border-red-500/20 rounded-lg hover:bg-red-500/20 transition-all"
           >
             <span className="text-2xl">⚠️</span>
@@ -231,7 +231,7 @@ const OperationsDashboard = () => {
           </Link>
 
           <Link
-            to="/operations/releases"
+            to="/operations/releases/new"
             className="flex items-center space-x-3 p-4 bg-green-500/10 border border-green-500/20 rounded-lg hover:bg-green-500/20 transition-all"
           >
             <span className="text-2xl">✅</span>

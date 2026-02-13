@@ -1,6 +1,8 @@
 // features/planning/pages/RisksOpportunitiesPage.jsx
 import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
+import Modal from '../../../components/Common/Modal';
 import { getRisksOpportunities, createRiskOpportunity, updateRiskOpportunity, deleteRiskOpportunity } from '../api/planningApi';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
@@ -9,6 +11,8 @@ const RisksOpportunitiesPage = () => {
   const { currentOrganization } = useAuth();
   const orgId = currentOrganization?.id || null;
   const orgName = currentOrganization?.name || '';
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const toNumberOrNull = (value) => {
     if (value === '' || value === null || value === undefined) return null;
@@ -35,10 +39,18 @@ const RisksOpportunitiesPage = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [filterType, setFilterType] = useState('all');
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
     if (orgId) loadData();
   }, [orgId]);
+
+  useEffect(() => {
+    if (location.pathname.endsWith('/new')) {
+      resetForm();
+      setShowForm(true);
+    }
+  }, [location.pathname]);
 
   const loadData = async () => {
     try {
@@ -72,6 +84,10 @@ const RisksOpportunitiesPage = () => {
       }
       resetForm();
       loadData();
+      setShowForm(false);
+      if (location.pathname.endsWith('/new')) {
+        navigate(location.pathname.replace(/\/new$/, ''), { replace: true });
+      }
     } catch (error) {
       console.error('Error:', error);
     } finally {
@@ -95,6 +111,7 @@ const RisksOpportunitiesPage = () => {
       treatment_description: item.treatment_description || ''
     });
     setEditingId(item.id);
+    setShowForm(true);
   };
 
   const handleDelete = async (id) => {
@@ -125,6 +142,19 @@ const RisksOpportunitiesPage = () => {
     setEditingId(null);
   };
 
+  const openForm = () => {
+    resetForm();
+    setShowForm(true);
+  };
+
+  const closeForm = () => {
+    resetForm();
+    setShowForm(false);
+    if (location.pathname.endsWith('/new')) {
+      navigate(location.pathname.replace(/\/new$/, ''), { replace: true });
+    }
+  };
+
   const filteredItems = filterType === 'all' 
     ? items 
     : items.filter(i => i.item_type === filterType);
@@ -133,10 +163,83 @@ const RisksOpportunitiesPage = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-white">Riesgos y Oportunidades</h1>
-      
-      <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg p-6">
-        <h2 className="text-xl font-bold text-white mb-4">{editingId ? 'Editar' : 'Nuevo'}</h2>
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <h1 className="text-3xl font-bold text-white">Riesgos y Oportunidades</h1>
+        <button
+          type="button"
+          onClick={openForm}
+          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
+        >
+          Nuevo riesgo u oportunidad
+        </button>
+      </div>
+
+      <div className="flex space-x-2">
+        {['all', 'risk', 'opportunity'].map(type => (
+          <button
+            key={type}
+            onClick={() => setFilterType(type)}
+            className={`px-4 py-2 rounded-lg ${filterType === type ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
+          >
+            {type === 'all' ? 'Todos' : type === 'risk' ? 'Riesgos' : 'Oportunidades'}
+          </button>
+        ))}
+      </div>
+
+      <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg overflow-hidden">
+        <table className="w-full">
+          <thead className="bg-gray-800/50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Código</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Título</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Tipo</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Categoría</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Nivel</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Acciones</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-700">
+            {filteredItems.map(item => (
+              <tr key={item.id} className="hover:bg-gray-700/30">
+                <td className="px-6 py-4 text-sm text-gray-300">{item.code}</td>
+                <td className="px-6 py-4 text-sm text-white">{item.title}</td>
+                <td className="px-6 py-4 text-sm">
+                  <span className={`px-2 py-1 text-xs rounded ${item.item_type === 'risk' ? 'bg-red-500/20 text-red-400' : 'bg-green-500/20 text-green-400'}`}>
+                    {item.item_type_display}
+                  </span>
+                </td>
+                <td className="px-6 py-4 text-sm text-gray-300">{item.category_display}</td>
+                <td className="px-6 py-4 text-sm">
+                  {item.item_type === 'risk' ? (
+                    <span className={`px-2 py-1 text-xs rounded ${
+                      item.risk_level >= 15 ? 'bg-red-500/20 text-red-400' :
+                      item.risk_level >= 10 ? 'bg-yellow-500/20 text-yellow-400' :
+                      'bg-green-500/20 text-green-400'
+                    }`}>
+                      {item.risk_level}
+                    </span>
+                  ) : (
+                    <span className="px-2 py-1 text-xs rounded bg-blue-500/20 text-blue-400">
+                      {item.opportunity_score}
+                    </span>
+                  )}
+                </td>
+                <td className="px-6 py-4 text-sm space-x-2">
+                  <button onClick={() => handleEdit(item)} className="text-blue-400 hover:text-blue-300">Editar</button>
+                  <button onClick={() => handleDelete(item.id)} className="text-red-400 hover:text-red-300">Eliminar</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {filteredItems.length === 0 && <div className="text-center py-8 text-gray-400">No hay elementos</div>}
+      </div>
+
+      <Modal
+        title={editingId ? 'Editar riesgo u oportunidad' : 'Nuevo riesgo u oportunidad'}
+        isOpen={showForm}
+        onClose={closeForm}
+      >
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
@@ -223,71 +326,10 @@ const RisksOpportunitiesPage = () => {
             <button type="submit" disabled={saving} className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
               {saving ? 'Guardando...' : editingId ? 'Actualizar' : 'Crear'}
             </button>
-            {editingId && <button type="button" onClick={resetForm} className="px-6 py-2 bg-gray-600 text-white rounded-lg">Cancelar</button>}
+            {editingId && <button type="button" onClick={closeForm} className="px-6 py-2 bg-gray-600 text-white rounded-lg">Cancelar</button>}
           </div>
         </form>
-      </div>
-
-      <div className="flex space-x-2">
-        {['all', 'risk', 'opportunity'].map(type => (
-          <button
-            key={type}
-            onClick={() => setFilterType(type)}
-            className={`px-4 py-2 rounded-lg ${filterType === type ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
-          >
-            {type === 'all' ? 'Todos' : type === 'risk' ? 'Riesgos' : 'Oportunidades'}
-          </button>
-        ))}
-      </div>
-
-      <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-gray-800/50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Código</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Título</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Tipo</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Categoría</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Nivel</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Acciones</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-700">
-            {filteredItems.map(item => (
-              <tr key={item.id} className="hover:bg-gray-700/30">
-                <td className="px-6 py-4 text-sm text-gray-300">{item.code}</td>
-                <td className="px-6 py-4 text-sm text-white">{item.title}</td>
-                <td className="px-6 py-4 text-sm">
-                  <span className={`px-2 py-1 text-xs rounded ${item.item_type === 'risk' ? 'bg-red-500/20 text-red-400' : 'bg-green-500/20 text-green-400'}`}>
-                    {item.item_type_display}
-                  </span>
-                </td>
-                <td className="px-6 py-4 text-sm text-gray-300">{item.category_display}</td>
-                <td className="px-6 py-4 text-sm">
-                  {item.item_type === 'risk' ? (
-                    <span className={`px-2 py-1 text-xs rounded ${
-                      item.risk_level >= 15 ? 'bg-red-500/20 text-red-400' :
-                      item.risk_level >= 10 ? 'bg-yellow-500/20 text-yellow-400' :
-                      'bg-green-500/20 text-green-400'
-                    }`}>
-                      {item.risk_level}
-                    </span>
-                  ) : (
-                    <span className="px-2 py-1 text-xs rounded bg-blue-500/20 text-blue-400">
-                      {item.opportunity_score}
-                    </span>
-                  )}
-                </td>
-                <td className="px-6 py-4 text-sm space-x-2">
-                  <button onClick={() => handleEdit(item)} className="text-blue-400 hover:text-blue-300">Editar</button>
-                  <button onClick={() => handleDelete(item.id)} className="text-red-400 hover:text-red-300">Eliminar</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        {filteredItems.length === 0 && <div className="text-center py-8 text-gray-400">No hay elementos</div>}
-      </div>
+      </Modal>
     </div>
   );
 };

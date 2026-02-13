@@ -65,80 +65,94 @@ function App() {
 
       {/* Rutas protegidas */}
       <Route
-        path="/*"
         element={
           <ProtectedRoute>
-            <Layout>
-              <Routes>
-                <Route path="/" element={<Dashboard />} />
-                <Route path="/context" element={<ContextDashboard />} />
-                <Route path="/stakeholders" element={<StakeholderDashboard />} />
-                <Route path="/scope" element={<ScopeDashboard />} />
-                <Route path="/processes" element={<ProcessDashboard />} />
-                <Route path="/documents" element={<DocumentDashboard />} />
-                <Route path="/objectives" element={<ObjectiveDashboard />} />
-                <Route path="/risks" element={<RiskDashboard />} />
-                <Route path="/leadership" element={<LeadershipDashboard />} />
-                <Route path="/leadership/policies" element={<PoliciesPage />} />
-                <Route path="/leadership/policies/new" element={<PoliciesPage />} />
-                <Route path="/leadership/roles" element={<RolesPage />} />
-                <Route path="/leadership/roles/new" element={<RolesPage />} />
-                <Route path="/leadership/role-assignments" element={<RoleAssignmentsPage />} />
-                <Route path="/leadership/commitments" element={<CommitmentsPage />} />
-                <Route path="/leadership/customer-focus" element={<CustomerFocusPage />} />
-                <Route path="/leadership/raci" element={<RACIMatricesPage />} />
-                <Route path="/leadership/raci/new" element={<RACIMatricesPage />} />
-                <Route path="/leadership/raci/:matrixId" element={<RACIEntriesPage />} />
-                
-                {/* Resources Module */}
-                <Route path="/resources" element={<ResourcesDashboard />} />
-                <Route path="/resources/resources" element={<ResourcesPage />} />
-                <Route path="/resources/infrastructure" element={<InfrastructurePage />} />
-                <Route path="/resources/work-environment" element={<WorkEnvironmentPage />} />
-                <Route path="/resources/competences" element={<CompetencesPage />} />
-                <Route path="/resources/trainings" element={<TrainingsPage />} />
-                <Route path="/resources/awareness" element={<AwarenessPage />} />
-                <Route path="/resources/communications" element={<CommunicationsPage />} />
-                
-                {/* Planning Module */}
-                <Route path="/planning" element={<PlanningDashboard />} />
-                <Route path="/planning/risks-opportunities" element={<RisksOpportunitiesPage />} />
-                <Route path="/planning/objectives" element={<QualityObjectivesPage />} />
-                <Route path="/planning/actions" element={<ObjectiveActionsPage />} />
-                <Route path="/planning/changes" element={<ChangeControlPage />} />
-                
-                {/* Operations Module */}
-                <Route path="/operations" element={<OperationsDashboard />} />
-                <Route path="/operations/requirements" element={<CustomerRequirementsPage />} />
-                <Route path="/operations/design-projects" element={<DesignProjectsPage />} />
-                <Route path="/operations/providers" element={<ExternalProvidersPage />} />
-                <Route path="/operations/nonconformities" element={<NonconformitiesPage />} />
-                <Route path="/operations/releases" element={<ProductReleasesPage />} />
-                <Route path="/operations/production" element={<ProductionControlsPage />} />
-
-                {/* Performance Module */}
-                <Route path="/performance" element={<PerformanceDashboard />} />
-                <Route path="/performance/indicators" element={<IndicatorsPage />} />
-                <Route path="/performance/measurements" element={<MeasurementsPage />} />
-                <Route path="/performance/analyses" element={<AnalysesPage />} />
-                <Route path="/performance/audits" element={<AuditsPage />} />
-                <Route path="/performance/findings" element={<FindingsPage />} />
-                <Route path="/performance/reviews" element={<ReviewsPage />} />
-                
-                {/* Settings - solo para admin */}
-                <Route
-                  path="/settings"
-                  element={
-                    <ProtectedRoute allowedRoles={['org_admin', 'iso_manager']}>
-                      <SettingsDashboard />
-                    </ProtectedRoute>
-                  }
-                />
-              </Routes>
-            </Layout>
+            <Layout />
           </ProtectedRoute>
         }
-      />
+      >
+        <Route index element={<Dashboard />} />
+        <Route path="context" element={<ContextDashboard />} />
+        <Route path="stakeholders" element={<StakeholderDashboard />} />
+        <Route path="scope" element={<ScopeDashboard />} />
+        <Route path="processes" element={<ProcessDashboard />} />
+        <Route path="documents" element={<DocumentDashboard />} />
+        <Route path="objectives" element={<ObjectiveDashboard />} />
+        <Route path="risks" element={<RiskDashboard />} />
+        <Route path="leadership" element={<LeadershipDashboard />} />
+        <Route path="leadership/policies" element={<PoliciesPage />} />
+        <Route path="leadership/policies/new" element={<PoliciesPage />} />
+        <Route path="leadership/roles" element={<RolesPage />} />
+        <Route path="leadership/roles/new" element={<RolesPage />} />
+        <Route path="leadership/role-assignments" element={<RoleAssignmentsPage />} />
+        <Route path="leadership/commitments" element={<CommitmentsPage />} />
+        <Route path="leadership/customer-focus" element={<CustomerFocusPage />} />
+        <Route path="leadership/raci" element={<RACIMatricesPage />} />
+        <Route path="leadership/raci/new" element={<RACIMatricesPage />} />
+        <Route path="leadership/raci/:matrixId" element={<RACIEntriesPage />} />
+        
+        {/* Resources Module */}
+        <Route path="resources" element={<ResourcesDashboard />} />
+        <Route path="resources/resources" element={<ResourcesPage />} />
+        <Route path="resources/resources/new" element={<ResourcesPage />} />
+        <Route path="resources/infrastructure" element={<InfrastructurePage />} />
+        <Route path="resources/infrastructure/new" element={<InfrastructurePage />} />
+        <Route path="resources/work-environment" element={<WorkEnvironmentPage />} />
+        <Route path="resources/work-environment/new" element={<WorkEnvironmentPage />} />
+        <Route path="resources/competences" element={<CompetencesPage />} />
+        <Route path="resources/competences/new" element={<CompetencesPage />} />
+        <Route path="resources/trainings" element={<TrainingsPage />} />
+        <Route path="resources/trainings/new" element={<TrainingsPage />} />
+        <Route path="resources/awareness" element={<AwarenessPage />} />
+        <Route path="resources/awareness/new" element={<AwarenessPage />} />
+        <Route path="resources/communications" element={<CommunicationsPage />} />
+        <Route path="resources/communications/new" element={<CommunicationsPage />} />
+        
+        {/* Planning Module */}
+        <Route path="planning" element={<PlanningDashboard />} />
+        <Route path="planning/risks-opportunities" element={<RisksOpportunitiesPage />} />
+        <Route path="planning/risks-opportunities/new" element={<RisksOpportunitiesPage />} />
+        <Route path="planning/objectives" element={<QualityObjectivesPage />} />
+        <Route path="planning/objectives/new" element={<QualityObjectivesPage />} />
+        <Route path="planning/actions" element={<ObjectiveActionsPage />} />
+        <Route path="planning/actions/new" element={<ObjectiveActionsPage />} />
+        <Route path="planning/changes" element={<ChangeControlPage />} />
+        <Route path="planning/changes/new" element={<ChangeControlPage />} />
+        
+        {/* Operations Module */}
+        <Route path="operations" element={<OperationsDashboard />} />
+        <Route path="operations/requirements" element={<CustomerRequirementsPage />} />
+        <Route path="operations/requirements/new" element={<CustomerRequirementsPage />} />
+        <Route path="operations/design-projects" element={<DesignProjectsPage />} />
+        <Route path="operations/design-projects/new" element={<DesignProjectsPage />} />
+        <Route path="operations/providers" element={<ExternalProvidersPage />} />
+        <Route path="operations/providers/new" element={<ExternalProvidersPage />} />
+        <Route path="operations/nonconformities" element={<NonconformitiesPage />} />
+        <Route path="operations/nonconformities/new" element={<NonconformitiesPage />} />
+        <Route path="operations/releases" element={<ProductReleasesPage />} />
+        <Route path="operations/releases/new" element={<ProductReleasesPage />} />
+        <Route path="operations/production" element={<ProductionControlsPage />} />
+        <Route path="operations/production/new" element={<ProductionControlsPage />} />
+
+        {/* Performance Module */}
+        <Route path="performance" element={<PerformanceDashboard />} />
+        <Route path="performance/indicators" element={<IndicatorsPage />} />
+        <Route path="performance/measurements" element={<MeasurementsPage />} />
+        <Route path="performance/analyses" element={<AnalysesPage />} />
+        <Route path="performance/audits" element={<AuditsPage />} />
+        <Route path="performance/findings" element={<FindingsPage />} />
+        <Route path="performance/reviews" element={<ReviewsPage />} />
+        
+        {/* Settings - solo para admin */}
+        <Route
+          path="settings"
+          element={
+            <ProtectedRoute allowedRoles={['org_admin', 'iso_manager']}>
+              <SettingsDashboard />
+            </ProtectedRoute>
+          }
+        />
+      </Route>
     </Routes>
   )
 }
