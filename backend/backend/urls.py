@@ -30,6 +30,7 @@ urlpatterns = [
     path('api/resources/', include('resources.urls')),
     path('api/planning/', include('planning.urls')),
     path('api/operations/', include('operations.urls')),
+    path('api/performance/', include('performance.urls')),
     
     # Explicit aliases for frontend endpoints without duplicated prefixes
     path('api/stakeholders/critical/', sie_views.StakeholderProfileViewSet.as_view({'get': 'critical'}), name='stakeholders-critical'),

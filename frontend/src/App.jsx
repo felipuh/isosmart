@@ -42,6 +42,13 @@ import ExternalProvidersPage from './features/operations/pages/ExternalProviders
 import NonconformitiesPage from './features/operations/pages/NonconformitiesPage';
 import ProductReleasesPage from './features/operations/pages/ProductReleasesPage';
 import ProductionControlsPage from './features/operations/pages/ProductionControlsPage';
+import PerformanceDashboard from './features/performance/pages/PerformanceDashboard';
+import IndicatorsPage from './features/performance/pages/IndicatorsPage';
+import MeasurementsPage from './features/performance/pages/MeasurementsPage';
+import AnalysesPage from './features/performance/pages/AnalysesPage';
+import AuditsPage from './features/performance/pages/AuditsPage';
+import FindingsPage from './features/performance/pages/FindingsPage';
+import ReviewsPage from './features/performance/pages/ReviewsPage';
 
 function App() {
   return (
@@ -108,6 +115,15 @@ function App() {
                 <Route path="/operations/nonconformities" element={<NonconformitiesPage />} />
                 <Route path="/operations/releases" element={<ProductReleasesPage />} />
                 <Route path="/operations/production" element={<ProductionControlsPage />} />
+
+                {/* Performance Module */}
+                <Route path="/performance" element={<PerformanceDashboard />} />
+                <Route path="/performance/indicators" element={<IndicatorsPage />} />
+                <Route path="/performance/measurements" element={<MeasurementsPage />} />
+                <Route path="/performance/analyses" element={<AnalysesPage />} />
+                <Route path="/performance/audits" element={<AuditsPage />} />
+                <Route path="/performance/findings" element={<FindingsPage />} />
+                <Route path="/performance/reviews" element={<ReviewsPage />} />
                 
                 {/* Settings - solo para admin */}
                 <Route

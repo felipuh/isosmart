@@ -1,0 +1,227 @@
+import React, { useEffect, useState } from 'react';
+import { useAuth } from '../../../context/AuthContext';
+import {
+  getReviews,
+  createReview,
+  updateReview,
+  deleteReview
+} from '../api/performanceApi';
+
+const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
+
+const statusLabels = {
+  scheduled: 'Scheduled',
+  in_progress: 'In Progress',
+  completed: 'Completed',
+  cancelled: 'Cancelled'
+};
+
+const ReviewsPage = () => {
+  const { currentOrganization } = useAuth();
+  const orgId = currentOrganization?.id || null;
+  const orgName = currentOrganization?.name || '';
+
+  const [items, setItems] = useState([]);
+  const [form, setForm] = useState({
+    review_code: '',
+    title: '',
+    scheduled_date: '',
+    performance_results: '',
+    customer_feedback: '',
+    status: 'scheduled'
+  });
+  const [editingId, setEditingId] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    if (orgId) loadReviews();
+  }, [orgId]);
+
+  const loadReviews = async () => {
+    try {
+      setLoading(true);
+      const data = await getReviews({ organization_id: orgId });
+      setItems(normalizeList(data));
+    } catch (error) {
+      console.error('Error loading reviews:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      setSaving(true);
+      const payload = { ...form, organization_id: orgId, organization_name: orgName };
+      if (editingId) {
+        await updateReview(editingId, payload);
+      } else {
+        await createReview(payload);
+      }
+      resetForm();
+      loadReviews();
+    } catch (error) {
+      console.error('Error saving review:', error);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleEdit = (item) => {
+    setForm({
+      review_code: item.review_code || '',
+      title: item.title || '',
+      scheduled_date: item.scheduled_date || '',
+      performance_results: item.performance_results || '',
+      customer_feedback: item.customer_feedback || '',
+      status: item.status || 'scheduled'
+    });
+    setEditingId(item.id);
+  };
+
+  const handleDelete = async (id) => {
+    if (!confirm('Delete review?')) return;
+    try {
+      await deleteReview(id);
+      loadReviews();
+    } catch (error) {
+      console.error('Error deleting review:', error);
+    }
+  };
+
+  const resetForm = () => {
+    setForm({
+      review_code: '',
+      title: '',
+      scheduled_date: '',
+      performance_results: '',
+      customer_feedback: '',
+      status: 'scheduled'
+    });
+    setEditingId(null);
+  };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center p-8">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      <h1 className="text-3xl font-bold text-white">Management Reviews</h1>
+
+      <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg p-6">
+        <h2 className="text-xl font-bold text-white mb-4">{editingId ? 'Edit' : 'New'} Review</h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Review Code *</label>
+              <input
+                type="text"
+                value={form.review_code}
+                onChange={(event) => setForm({ ...form, review_code: event.target.value })}
+                className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
+                required
+              />
+            </div>
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-gray-300 mb-2">Title *</label>
+              <input
+                type="text"
+                value={form.title}
+                onChange={(event) => setForm({ ...form, title: event.target.value })}
+                className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Scheduled Date *</label>
+              <input
+                type="date"
+                value={form.scheduled_date}
+                onChange={(event) => setForm({ ...form, scheduled_date: event.target.value })}
+                className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Status</label>
+              <select
+                value={form.status}
+                onChange={(event) => setForm({ ...form, status: event.target.value })}
+                className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
+              >
+                {Object.entries(statusLabels).map(([value, label]) => (
+                  <option key={value} value={value}>{label}</option>
+                ))}
+              </select>
+            </div>
+            <div className="md:col-span-3">
+              <label className="block text-sm font-medium text-gray-300 mb-2">Performance Results *</label>
+              <textarea
+                value={form.performance_results}
+                onChange={(event) => setForm({ ...form, performance_results: event.target.value })}
+                className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
+                rows="2"
+                required
+              />
+            </div>
+            <div className="md:col-span-3">
+              <label className="block text-sm font-medium text-gray-300 mb-2">Customer Feedback</label>
+              <textarea
+                value={form.customer_feedback}
+                onChange={(event) => setForm({ ...form, customer_feedback: event.target.value })}
+                className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
+                rows="2"
+              />
+            </div>
+          </div>
+          <div className="flex space-x-3">
+            <button type="submit" disabled={saving} className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
+              {saving ? 'Saving...' : editingId ? 'Update' : 'Create'}
+            </button>
+            {editingId && (
+              <button type="button" onClick={resetForm} className="px-6 py-2 bg-gray-600 text-white rounded-lg">Cancel</button>
+            )}
+          </div>
+        </form>
+      </div>
+
+      <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg overflow-hidden">
+        <table className="w-full">
+          <thead className="bg-gray-800/50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Code</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Title</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Scheduled</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Status</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Actions</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-700">
+            {items.map((item) => (
+              <tr key={item.id} className="hover:bg-gray-700/30">
+                <td className="px-6 py-4 text-sm text-gray-300">{item.review_code}</td>
+                <td className="px-6 py-4 text-sm text-white">{item.title}</td>
+                <td className="px-6 py-4 text-sm text-gray-300">{item.scheduled_date}</td>
+                <td className="px-6 py-4 text-sm text-gray-300">{statusLabels[item.status] || item.status}</td>
+                <td className="px-6 py-4 text-sm space-x-2">
+                  <button onClick={() => handleEdit(item)} className="text-blue-400 hover:text-blue-300">Edit</button>
+                  <button onClick={() => handleDelete(item.id)} className="text-red-400 hover:text-red-300">Delete</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {items.length === 0 && <div className="text-center py-8 text-gray-400">No reviews yet</div>}
+      </div>
+    </div>
+  );
+};
+
+export default ReviewsPage;
