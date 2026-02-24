@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import Modal from '../../../components/Common/Modal';
 import {
@@ -46,11 +46,7 @@ const AuditsPage = () => {
   const [saving, setSaving] = useState(false);
   const [showForm, setShowForm] = useState(false);
 
-  useEffect(() => {
-    if (orgId) loadAudits();
-  }, [orgId]);
-
-  const loadAudits = async () => {
+  const loadAudits = useCallback(async () => {
     try {
       setLoading(true);
       const data = await getAudits({ organization_id: orgId });
@@ -60,7 +56,13 @@ const AuditsPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [orgId]);
+
+  useEffect(() => {
+    if (orgId) {
+      loadAudits();
+    }
+  }, [orgId, loadAudits]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -73,7 +75,7 @@ const AuditsPage = () => {
         await createAudit(payload);
       }
       resetForm();
-      loadAudits();
+      await loadAudits();
       setShowForm(false);
     } catch (error) {
       console.error('Error saving audit:', error);
@@ -101,7 +103,7 @@ const AuditsPage = () => {
     if (!confirm('Delete audit?')) return;
     try {
       await deleteAudit(id);
-      loadAudits();
+      await loadAudits();
     } catch (error) {
       console.error('Error deleting audit:', error);
     }
@@ -157,7 +159,7 @@ const AuditsPage = () => {
           <thead className="bg-gray-800/50">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Codigo</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Titulo</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Título</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Tipo</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Planificada</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Estado</th>
@@ -224,7 +226,7 @@ const AuditsPage = () => {
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Titulo *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Título *</label>
               <input
                 type="text"
                 value={form.title}

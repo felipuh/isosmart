@@ -28,7 +28,7 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
     { value: 'cliente', label: 'Cliente' },
     { value: 'proveedor', label: 'Proveedor' },
     { value: 'empleado', label: 'Empleado' },
-    { value: 'accionista', label: 'Accionista' },
+    { value: 'acciónista', label: 'Acciónista' },
     { value: 'regulador', label: 'Entidad Reguladora' },
     { value: 'comunidad', label: 'Comunidad Local' },
     { value: 'socio', label: 'Socio Estratégico' },

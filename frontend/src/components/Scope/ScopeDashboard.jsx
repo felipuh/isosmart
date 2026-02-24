@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { RefreshCw, Download, PlayCircle, FileText } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import scopeService from '../../services/scopeService';
@@ -28,13 +28,7 @@ const ScopeDashboard = () => {
     has_design: false
   });
 
-  useEffect(() => {
-    if (currentOrganization?.id) {
-      loadData();
-    }
-  }, [currentOrganization?.id]);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     if (!currentOrganization?.id) return;
     setLoading(true);
     try {
@@ -61,7 +55,13 @@ const ScopeDashboard = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentOrganization?.id]);
+
+  useEffect(() => {
+    if (currentOrganization?.id) {
+      loadData();
+    }
+  }, [currentOrganization?.id, loadData]);
 
   const handleRunAnalysis = async () => {
     const cleanProducts = analysisConfig.products_services.filter(p => p.trim() !== '');

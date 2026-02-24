@@ -100,17 +100,4 @@ export const PublicRoute = ({ children, redirectTo = '/' }) => {
   return children;
 };
 
-/**
- * HOC para proteger componentes con roles específicos
- */
-export const withRoleProtection = (Component, allowedRoles) => {
-  return function ProtectedComponent(props) {
-    return (
-      <ProtectedRoute allowedRoles={allowedRoles}>
-        <Component {...props} />
-      </ProtectedRoute>
-    );
-  };
-};
-
 export default ProtectedRoute;

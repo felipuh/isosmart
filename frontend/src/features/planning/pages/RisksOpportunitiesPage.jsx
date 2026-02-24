@@ -1,5 +1,5 @@
 // features/planning/pages/RisksOpportunitiesPage.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import Modal from '../../../components/Common/Modal';
@@ -41,18 +41,7 @@ const RisksOpportunitiesPage = () => {
   const [filterType, setFilterType] = useState('all');
   const [showForm, setShowForm] = useState(false);
 
-  useEffect(() => {
-    if (orgId) loadData();
-  }, [orgId]);
-
-  useEffect(() => {
-    if (location.pathname.endsWith('/new')) {
-      resetForm();
-      setShowForm(true);
-    }
-  }, [location.pathname]);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       setLoading(true);
       const data = await getRisksOpportunities({ organization_id: orgId });
@@ -62,7 +51,18 @@ const RisksOpportunitiesPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [orgId]);
+
+  useEffect(() => {
+    if (orgId) loadData();
+  }, [orgId, loadData]);
+
+  useEffect(() => {
+    if (location.pathname.endsWith('/new')) {
+      resetForm();
+      setShowForm(true);
+    }
+  }, [location.pathname]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -83,7 +83,7 @@ const RisksOpportunitiesPage = () => {
         await createRiskOpportunity(payload);
       }
       resetForm();
-      loadData();
+      await loadData();
       setShowForm(false);
       if (location.pathname.endsWith('/new')) {
         navigate(location.pathname.replace(/\/new$/, ''), { replace: true });
@@ -118,7 +118,7 @@ const RisksOpportunitiesPage = () => {
     if (!confirm('¿Eliminar?')) return;
     try {
       await deleteRiskOpportunity(id);
-      loadData();
+      await loadData();
     } catch (error) {
       console.error('Error:', error);
     }

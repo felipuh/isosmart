@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Home, Network, TrendingUp, Target, GitBranch, FileText, Settings, Award, FolderOpen, AlertTriangle, Users, Package, ClipboardList, Activity, LineChart, Zap } from 'lucide-react';
 
-const Sidebar = ({ isOpen = true, setIsOpen }) => {
+const Sidebar = ({ isOpen = true }) => {
   const location = useLocation();
   
   const menuItems = [

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import Modal from '../../../components/Common/Modal';
@@ -38,27 +38,29 @@ const DesignProjectsPage = () => {
   const [saving, setSaving] = useState(false);
   const [showForm, setShowForm] = useState(false);
 
-  useEffect(() => {
-    if (orgId) {
-      loadData();
-      loadUsers();
-    }
-  }, [orgId]);
+  const resetForm = useCallback(() => {
+    setForm({
+      project_code: '',
+      project_name: '',
+      description: '',
+      project_type: 'product',
+      current_stage: 'planning',
+      status: 'active',
+      design_inputs: '',
+      design_outputs: '',
+      design_controls: '',
+      verification_method: '',
+      is_verified: false,
+      validation_method: '',
+      is_validated: false,
+      project_leader: user?.id || '',
+      start_date: '',
+      target_completion_date: ''
+    });
+    setEditingId(null);
+  }, [user?.id]);
 
-  useEffect(() => {
-    if (location.pathname.endsWith('/new')) {
-      resetForm();
-      setShowForm(true);
-    }
-  }, [location.pathname]);
-
-  useEffect(() => {
-    if (user?.id) {
-      setForm(prev => ({ ...prev, project_leader: prev.project_leader || user.id }));
-    }
-  }, [user]);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       setLoading(true);
       const data = await getDesignProjects({ organization_id: orgId });
@@ -68,16 +70,36 @@ const DesignProjectsPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [orgId]);
 
-  const loadUsers = async () => {
+  const loadUsers = useCallback(async () => {
     try {
       const data = await getUsers({ organization_id: orgId });
       setUsers(normalizeList(data));
     } catch (error) {
       console.error('Error loading users:', error);
     }
-  };
+  }, [orgId]);
+
+  useEffect(() => {
+    if (orgId) {
+      loadData();
+      loadUsers();
+    }
+  }, [orgId, loadData, loadUsers]);
+
+  useEffect(() => {
+    if (location.pathname.endsWith('/new')) {
+      resetForm();
+      setShowForm(true);
+    }
+  }, [location.pathname, resetForm]);
+
+  useEffect(() => {
+    if (user?.id) {
+      setForm(prev => ({ ...prev, project_leader: prev.project_leader || user.id }));
+    }
+  }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -95,7 +117,7 @@ const DesignProjectsPage = () => {
         await createDesignProject(payload);
       }
       resetForm();
-      loadData();
+      await loadData();
       setShowForm(false);
       if (location.pathname.endsWith('/new')) {
         navigate(location.pathname.replace(/\/new$/, ''), { replace: true });
@@ -134,32 +156,10 @@ const DesignProjectsPage = () => {
     if (!confirm('¿Eliminar?')) return;
     try {
       await deleteDesignProject(id);
-      loadData();
+      await loadData();
     } catch (error) {
       console.error('Error:', error);
     }
-  };
-
-  const resetForm = () => {
-    setForm({
-      project_code: '',
-      project_name: '',
-      description: '',
-      project_type: 'product',
-      current_stage: 'planning',
-      status: 'active',
-      design_inputs: '',
-      design_outputs: '',
-      design_controls: '',
-      verification_method: '',
-      is_verified: false,
-      validation_method: '',
-      is_validated: false,
-      project_leader: user?.id || '',
-      start_date: '',
-      target_completion_date: ''
-    });
-    setEditingId(null);
   };
 
   const openForm = () => {

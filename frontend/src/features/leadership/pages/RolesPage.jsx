@@ -40,7 +40,7 @@ const RolesPage = () => {
       setLoading(true);
       const data = await getRoles();
       setRoles(normalizeList(data));
-    } catch (err) {
+    } catch {
       setError('No se pudieron cargar los roles.');
     } finally {
       setLoading(false);
@@ -85,7 +85,7 @@ const RolesPage = () => {
       }
       resetForm();
       await loadRoles();
-    } catch (err) {
+    } catch {
       setError('No se pudo guardar el rol.');
     } finally {
       setSaving(false);
@@ -116,7 +116,7 @@ const RolesPage = () => {
     try {
       await deleteRole(id);
       await loadRoles();
-    } catch (err) {
+    } catch {
       setError('No se pudo eliminar el rol.');
     }
   };
@@ -253,7 +253,7 @@ const RolesPage = () => {
             </label>
 
             <label className="text-xs text-slate-400">
-              Descripcion
+              Descripción
               <textarea
                 value={form.description}
                 onChange={(event) => setForm({ ...form, description: event.target.value })}

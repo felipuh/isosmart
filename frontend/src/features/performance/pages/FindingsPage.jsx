@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import Modal from '../../../components/Common/Modal';
 import {
@@ -55,11 +55,7 @@ const FindingsPage = () => {
     }, {});
   }, [audits]);
 
-  useEffect(() => {
-    if (orgId) loadData();
-  }, [orgId]);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       setLoading(true);
       const [auditsData, findingsData] = await Promise.all([
@@ -73,7 +69,13 @@ const FindingsPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [orgId]);
+
+  useEffect(() => {
+    if (orgId) {
+      loadData();
+    }
+  }, [orgId, loadData]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -118,7 +120,7 @@ const FindingsPage = () => {
     if (!confirm('Delete finding?')) return;
     try {
       await deleteFinding(id);
-      loadData();
+      await loadData();
     } catch (error) {
       console.error('Error deleting finding:', error);
     }
@@ -224,7 +226,7 @@ const FindingsPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Numero de Hallazgo *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Número de Hallazgo *</label>
               <input
                 type="text"
                 value={form.finding_number}
@@ -247,7 +249,7 @@ const FindingsPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Referencia de Clausula *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Referencia de Cláusula *</label>
               <input
                 type="text"
                 value={form.clause_reference}
@@ -278,7 +280,7 @@ const FindingsPage = () => {
               </select>
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Descripcion *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Descripción *</label>
               <textarea
                 value={form.description}
                 onChange={(event) => setForm({ ...form, description: event.target.value })}

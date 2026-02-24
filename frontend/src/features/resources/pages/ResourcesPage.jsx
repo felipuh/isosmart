@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import Modal from '../../../components/Common/Modal';
@@ -29,22 +29,7 @@ const ResourcesPage = () => {
   const [saving, setSaving] = useState(false);
   const [showForm, setShowForm] = useState(false);
 
-  useEffect(() => {
-    if (orgId) {
-      loadResources();
-    } else {
-      setLoading(false);
-    }
-  }, [orgId]);
-
-  useEffect(() => {
-    if (location.pathname.endsWith('/new')) {
-      resetForm();
-      setShowForm(true);
-    }
-  }, [location.pathname]);
-
-  const loadResources = async () => {
+  const loadResources = useCallback(async () => {
     try {
       setLoading(true);
       const data = await getResources({ organization_id: orgId });
@@ -54,7 +39,22 @@ const ResourcesPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [orgId]);
+
+  useEffect(() => {
+    if (orgId) {
+      loadResources();
+    } else {
+      setLoading(false);
+    }
+  }, [orgId, loadResources]);
+
+  useEffect(() => {
+    if (location.pathname.endsWith('/new')) {
+      resetForm();
+      setShowForm(true);
+    }
+  }, [location.pathname]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -71,7 +71,7 @@ const ResourcesPage = () => {
         await createResource(payload);
       }
       resetForm();
-      loadResources();
+      await loadResources();
       setShowForm(false);
       if (location.pathname.endsWith('/new')) {
         navigate(location.pathname.replace(/\/new$/, ''), { replace: true });
@@ -102,7 +102,7 @@ const ResourcesPage = () => {
     if (!confirm('¿Eliminar?')) return;
     try {
       await deleteResource(id);
-      loadResources();
+      await loadResources();
     } catch (error) {
       console.error('Error:', error);
     }

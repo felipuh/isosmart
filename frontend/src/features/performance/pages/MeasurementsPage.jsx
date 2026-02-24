@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import Modal from '../../../components/Common/Modal';
 import {
@@ -44,11 +44,7 @@ const MeasurementsPage = () => {
     }, {});
   }, [indicators]);
 
-  useEffect(() => {
-    if (orgId) loadData();
-  }, [orgId]);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       setLoading(true);
       const [indicatorsData, measurementsData] = await Promise.all([
@@ -62,7 +58,13 @@ const MeasurementsPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [orgId]);
+
+  useEffect(() => {
+    if (orgId) {
+      loadData();
+    }
+  }, [orgId, loadData]);
 
   const handleIndicatorChange = (value) => {
     const selected = indicatorMap[value];
@@ -90,7 +92,7 @@ const MeasurementsPage = () => {
         await createMeasurement(payload);
       }
       resetForm();
-      loadData();
+      await loadData();
       setShowForm(false);
     } catch (error) {
       console.error('Error saving measurement:', error);
@@ -116,7 +118,7 @@ const MeasurementsPage = () => {
     if (!confirm('Delete measurement?')) return;
     try {
       await deleteMeasurement(id);
-      loadData();
+      await loadData();
     } catch (error) {
       console.error('Error deleting measurement:', error);
     }

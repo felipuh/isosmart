@@ -159,7 +159,7 @@ const DocumentUploadForm = ({ onUpload, onCancel, uploading }) => {
           >
             <option value="acta">Acta</option>
             <option value="reporte">Reporte</option>
-            <option value="politica">Política</option>
+            <option value="política">Política</option>
             <option value="procedimiento">Procedimiento</option>
             <option value="otro">Otro</option>
           </select>

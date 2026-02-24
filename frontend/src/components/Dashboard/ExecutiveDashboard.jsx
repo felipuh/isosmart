@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { RefreshCw, Download, Shield } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
 import { apiService } from '../../services/api';
 import MetricsGrid from './MetricsGrid';
 import RiskMatrix from './RiskMatrix';
@@ -8,20 +7,11 @@ import QualityObjectives from './QualityObjectives';
 import ContextAnalysis from './ContextAnalysis';
 
 const ExecutiveDashboard = () => {
-  const { currentOrganization } = useAuth();
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState(null);
 
-  useEffect(() => {
-    loadDashboardData();
-    
-    // Actualizar cada 2 minutos
-    const interval = setInterval(loadDashboardData, 120000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const loadDashboardData = async () => {
+  const loadDashboardData = useCallback(async () => {
     try {
       const response = await apiService.getDashboardSummary();
       setDashboardData(response.data);
@@ -31,7 +21,19 @@ const ExecutiveDashboard = () => {
       console.error('Error loading dashboard:', error);
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    queueMicrotask(() => {
+      void loadDashboardData();
+    });
+    
+    // Actualizar cada 2 minutos
+    const interval = setInterval(() => {
+      void loadDashboardData();
+    }, 120000);
+    return () => clearInterval(interval);
+  }, [loadDashboardData]);
 
   const handleRefresh = () => {
     setLoading(true);

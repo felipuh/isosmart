@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import Modal from '../../../components/Common/Modal';
@@ -33,28 +33,24 @@ const ObjectiveActionsPage = () => {
   const [saving, setSaving] = useState(false);
   const [showForm, setShowForm] = useState(false);
 
-  useEffect(() => {
-    if (orgId) {
-      loadData();
-      loadObjectives();
-      loadUsers();
-    }
-  }, [orgId]);
+  const resetForm = useCallback(() => {
+    setForm({
+      objective: '',
+      action_number: 1,
+      description: '',
+      what_will_be_done: '',
+      how_will_be_done: '',
+      responsible: user?.id || '',
+      due_date: '',
+      status: 'planned',
+      progress_percentage: 0,
+      resources_needed: '',
+      estimated_cost: ''
+    });
+    setEditingId(null);
+  }, [user?.id]);
 
-  useEffect(() => {
-    if (location.pathname.endsWith('/new')) {
-      resetForm();
-      setShowForm(true);
-    }
-  }, [location.pathname]);
-
-  useEffect(() => {
-    if (user?.id) {
-      setForm(prev => ({ ...prev, responsible: prev.responsible || user.id }));
-    }
-  }, [user]);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       setLoading(true);
       const data = await getActions({ organization_id: orgId });
@@ -64,25 +60,46 @@ const ObjectiveActionsPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [orgId]);
 
-  const loadObjectives = async () => {
+  const loadObjectives = useCallback(async () => {
     try {
       const data = await getObjectives({ organization_id: orgId });
       setObjectives(normalizeList(data));
     } catch (error) {
       console.error('Error loading objectives:', error);
     }
-  };
+  }, [orgId]);
 
-  const loadUsers = async () => {
+  const loadUsers = useCallback(async () => {
     try {
       const data = await getUsers({ organization_id: orgId });
       setUsers(normalizeList(data));
     } catch (error) {
       console.error('Error loading users:', error);
     }
-  };
+  }, [orgId]);
+
+  useEffect(() => {
+    if (orgId) {
+      loadData();
+      loadObjectives();
+      loadUsers();
+    }
+  }, [orgId, loadData, loadObjectives, loadUsers]);
+
+  useEffect(() => {
+    if (location.pathname.endsWith('/new')) {
+      resetForm();
+      setShowForm(true);
+    }
+  }, [location.pathname, resetForm]);
+
+  useEffect(() => {
+    if (user?.id) {
+      setForm(prev => ({ ...prev, responsible: prev.responsible || user.id }));
+    }
+  }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -100,7 +117,7 @@ const ObjectiveActionsPage = () => {
         await createAction(payload);
       }
       resetForm();
-      loadData();
+      await loadData();
       setShowForm(false);
       if (location.pathname.endsWith('/new')) {
         navigate(location.pathname.replace(/\/new$/, ''), { replace: true });
@@ -134,27 +151,10 @@ const ObjectiveActionsPage = () => {
     if (!confirm('¿Eliminar?')) return;
     try {
       await deleteAction(id);
-      loadData();
+      await loadData();
     } catch (error) {
       console.error('Error:', error);
     }
-  };
-
-  const resetForm = () => {
-    setForm({
-      objective: '',
-      action_number: 1,
-      description: '',
-      what_will_be_done: '',
-      how_will_be_done: '',
-      responsible: user?.id || '',
-      due_date: '',
-      status: 'planned',
-      progress_percentage: 0,
-      resources_needed: '',
-      estimated_cost: ''
-    });
-    setEditingId(null);
   };
 
   const openForm = () => {
@@ -190,7 +190,7 @@ const ObjectiveActionsPage = () => {
           <thead className="bg-gray-800/50">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Objetivo</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Numero</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Número</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Estado</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Fecha Límite</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">% Avance</th>

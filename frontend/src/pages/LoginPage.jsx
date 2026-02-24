@@ -33,7 +33,7 @@ const LoginPage = () => {
       } else {
         setError(result.error);
       }
-    } catch (err) {
+    } catch {
       setError('Error de conexión. Intenta nuevamente.');
     } finally {
       setLoading(false);

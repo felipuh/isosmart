@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import {
@@ -26,9 +26,7 @@ const ImprovementDashboard = () => {
     improvements: { total: 0, active: 0, successful: 0 }
   });
 
-  useEffect(() => { if (orgId) loadDashboard(); }, [orgId]);
-
-  const loadDashboard = async () => {
+  const loadDashboard = useCallback(async () => {
     try {
       setLoading(true);
       const [ncsData, ncStats, actionsData, overdueData, improvementsData, activeData] = await Promise.all([
@@ -69,7 +67,9 @@ const ImprovementDashboard = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [orgId]);
+
+  useEffect(() => { if (orgId) loadDashboard(); }, [orgId, loadDashboard]);
 
   const StatCard = ({ title, value, subtitle, icon, link, color = 'blue' }) => {
     const palette = statColors[color] || statColors.blue;
@@ -115,7 +115,7 @@ const ImprovementDashboard = () => {
           subtitle={`${stats.improvements.active} activas, ${stats.improvements.successful} exitosas`}
           icon="📈" link="/improvement/continual" color="green" />
         <StatCard title="Efectividad"
-          value={stats.corrective_actions.total > 0 ? `${Math.round((stats.corrective_actions.effective / stats.corrective_actions.total) * 100)}%` : 'N/D'}
+          value={stats.corrective_actions.total > 0 ? `${Math.round((stats.corrective_actions.effective / stats.corrective_actions.total) * 100)}%` : 'N/A'}
           subtitle="Tasa de acciones efectivas" icon="✅" link="/improvement/corrective-actions" color="blue" />
       </div>
 
@@ -158,7 +158,7 @@ const ImprovementDashboard = () => {
           </Link>
           <Link to="/improvement/continual/new" className="flex items-center space-x-3 p-4 bg-green-500/10 border border-green-500/20 rounded-lg hover:bg-green-500/20 transition-all">
             <span className="text-2xl">📈</span>
-            <div><p className="font-medium text-white">Iniciativa de Mejora</p><p className="text-xs text-gray-400">Proponer mejora continua</p></div>
+            <div><p className="font-medium text-white">Iniciativa de mejora</p><p className="text-xs text-gray-400">Proponer mejora continua</p></div>
           </Link>
         </div>
       </div>

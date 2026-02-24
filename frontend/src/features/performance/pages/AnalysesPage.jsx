@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import Modal from '../../../components/Common/Modal';
 import {
@@ -47,11 +47,7 @@ const AnalysesPage = () => {
   const [saving, setSaving] = useState(false);
   const [showForm, setShowForm] = useState(false);
 
-  useEffect(() => {
-    if (orgId) loadAnalyses();
-  }, [orgId]);
-
-  const loadAnalyses = async () => {
+  const loadAnalyses = useCallback(async () => {
     try {
       setLoading(true);
       const data = await getAnalyses({ organization_id: orgId });
@@ -61,7 +57,13 @@ const AnalysesPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [orgId]);
+
+  useEffect(() => {
+    if (orgId) {
+      loadAnalyses();
+    }
+  }, [orgId, loadAnalyses]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -74,7 +76,7 @@ const AnalysesPage = () => {
         await createAnalysis(payload);
       }
       resetForm();
-      loadAnalyses();
+      await loadAnalyses();
       setShowForm(false);
     } catch (error) {
       console.error('Error saving analysis:', error);
@@ -104,7 +106,7 @@ const AnalysesPage = () => {
     if (!confirm('Delete analysis?')) return;
     try {
       await deleteAnalysis(id);
-      loadAnalyses();
+      await loadAnalyses();
     } catch (error) {
       console.error('Error deleting analysis:', error);
     }
@@ -147,13 +149,13 @@ const AnalysesPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">Analisis de Datos</h1>
+        <h1 className="text-3xl font-bold text-white">Análisis de Datos</h1>
         <button
           type="button"
           onClick={openForm}
           className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
         >
-          Nuevo analisis
+          Nuevo análisis
         </button>
       </div>
 
@@ -161,7 +163,7 @@ const AnalysesPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Titulo</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Título</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Tipo</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Periodo</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Estado</th>
@@ -183,18 +185,18 @@ const AnalysesPage = () => {
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">No hay analisis</div>}
+        {items.length === 0 && <div className="text-center py-8 text-gray-400">No hay análisis</div>}
       </div>
 
       <Modal
-        title={editingId ? 'Editar analisis' : 'Nuevo analisis'}
+        title={editingId ? 'Editar análisis' : 'Nuevo análisis'}
         isOpen={showForm}
         onClose={closeForm}
       >
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Titulo *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Título *</label>
               <input
                 type="text"
                 value={form.title}

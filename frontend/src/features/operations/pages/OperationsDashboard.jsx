@@ -1,5 +1,5 @@
 // features/operations/pages/OperationsDashboard.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import {
@@ -47,11 +47,7 @@ const OperationsDashboard = () => {
   });
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (orgId) loadDashboardData();
-  }, [orgId]);
-
-  const loadDashboardData = async () => {
+  const loadDashboardData = useCallback(async () => {
     try {
       setLoading(true);
 
@@ -109,7 +105,11 @@ const OperationsDashboard = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [orgId]);
+
+  useEffect(() => {
+    if (orgId) loadDashboardData();
+  }, [orgId, loadDashboardData]);
 
   const StatCard = ({ title, value, subtitle, icon, link, color = 'blue' }) => {
     const palette = statColors[color] || statColors.blue;

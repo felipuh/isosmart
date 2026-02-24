@@ -1,5 +1,5 @@
 // features/performance/pages/PerformanceDashboard.jsx
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import {
@@ -12,6 +12,24 @@ import {
 } from '../api/performanceApi';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
+
+const StatCard = ({ title, value, subtitle, icon, link, color = 'blue', statColors }) => {
+  const palette = statColors[color] || statColors.blue;
+  return (
+    <Link to={link} className="block">
+      <div className={`bg-gradient-to-br ${palette.card} backdrop-blur-sm border rounded-lg p-6 hover:shadow-lg transition-all duration-300`}>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-sm font-medium text-gray-400">{title}</h3>
+          <span className="text-2xl">{icon}</span>
+        </div>
+        <div className="flex items-baseline">
+          <p className={`text-3xl font-bold ${palette.value}`}>{value}</p>
+        </div>
+        {subtitle && <p className="text-xs text-gray-500 mt-2">{subtitle}</p>}
+      </div>
+    </Link>
+  );
+};
 
 const PerformanceDashboard = () => {
   const { currentOrganization } = useAuth();
@@ -45,11 +63,7 @@ const PerformanceDashboard = () => {
   });
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (orgId) loadDashboardData();
-  }, [orgId]);
-
-  const loadDashboardData = async () => {
+  const loadDashboardData = useCallback(async () => {
     try {
       setLoading(true);
       const [
@@ -102,25 +116,13 @@ const PerformanceDashboard = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [orgId]);
 
-  const StatCard = ({ title, value, subtitle, icon, link, color = 'blue' }) => {
-    const palette = statColors[color] || statColors.blue;
-    return (
-      <Link to={link} className="block">
-        <div className={`bg-gradient-to-br ${palette.card} backdrop-blur-sm border rounded-lg p-6 hover:shadow-lg transition-all duration-300`}>
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-medium text-gray-400">{title}</h3>
-            <span className="text-2xl">{icon}</span>
-          </div>
-          <div className="flex items-baseline">
-            <p className={`text-3xl font-bold ${palette.value}`}>{value}</p>
-          </div>
-          {subtitle && <p className="text-xs text-gray-500 mt-2">{subtitle}</p>}
-        </div>
-      </Link>
-    );
-  };
+  useEffect(() => {
+    if (orgId) {
+      loadDashboardData();
+    }
+  }, [orgId, loadDashboardData]);
 
   if (loading) {
     return (
@@ -135,7 +137,7 @@ const PerformanceDashboard = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-white">Evaluacion del Desempeno</h1>
-          <p className="text-gray-400 mt-1">ISO 9001:2015 - Clausula 9</p>
+          <p className="text-gray-400 mt-1">ISO 9001:2015 - Cláusula 9</p>
         </div>
       </div>
 
@@ -147,15 +149,17 @@ const PerformanceDashboard = () => {
           icon="🎯"
           link="/performance/indicators"
           color="blue"
+          statColors={statColors}
         />
 
         <StatCard
           title="Mediciones"
           value={stats.measurements.total}
-          subtitle={`${stats.measurements.on_target} en objetivo, ${stats.measurements.needs_attention} requieren atencion`}
+          subtitle={`${stats.measurements.on_target} en objetivo, ${stats.measurements.needs_attention} requieren atención`}
           icon="📈"
           link="/performance/measurements"
           color="green"
+          statColors={statColors}
         />
 
         <StatCard
@@ -165,6 +169,7 @@ const PerformanceDashboard = () => {
           icon="🧾"
           link="/performance/audits"
           color="orange"
+          statColors={statColors}
         />
 
         <StatCard
@@ -174,11 +179,12 @@ const PerformanceDashboard = () => {
           icon="🔎"
           link="/performance/findings"
           color="red"
+          statColors={statColors}
         />
       </div>
 
       <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg p-6">
-        <h2 className="text-xl font-bold text-white mb-4">Acciones Rapidas</h2>
+        <h2 className="text-xl font-bold text-white mb-4">Acciones Rápidas</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Link
             to="/performance/indicators"
@@ -222,9 +228,9 @@ const PerformanceDashboard = () => {
         >
           <div className="flex items-center space-x-3 mb-2">
             <span className="text-2xl">🧠</span>
-            <h3 className="text-lg font-bold text-white">Analisis</h3>
+            <h3 className="text-lg font-bold text-white">Análisis</h3>
           </div>
-          <p className="text-sm text-gray-400">Tendencias y causas raiz</p>
+          <p className="text-sm text-gray-400">Tendencias y causas raíz</p>
         </Link>
 
         <Link

@@ -44,8 +44,8 @@ const RoleAssignmentsPage = () => {
       ]);
       setAssignments(normalizeList(assignmentsData));
       setRoles(normalizeList(rolesData));
-    } catch (err) {
-      setError('No se pudieron cargar las asignaciones.');
+    } catch {
+      setError('No se pudieron cargar las asignaciónes.');
     } finally {
       setLoading(false);
     }
@@ -56,7 +56,7 @@ const RoleAssignmentsPage = () => {
       const data = await getUsers();
       setUsers(normalizeList(data));
       setUserError('');
-    } catch (err) {
+    } catch {
       setUserError('No se pudieron cargar usuarios (requiere rol admin).');
     }
   };
@@ -96,8 +96,8 @@ const RoleAssignmentsPage = () => {
 
       resetForm();
       await loadData();
-    } catch (err) {
-      setError('No se pudo guardar la asignacion.');
+    } catch {
+      setError('No se pudo guardar la asignación.');
     } finally {
       setSaving(false);
     }
@@ -117,15 +117,15 @@ const RoleAssignmentsPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Eliminar esta asignacion?')) {
+    if (!window.confirm('Eliminar esta asignación?')) {
       return;
     }
 
     try {
       await deleteRoleAssignment(id);
       await loadData();
-    } catch (err) {
-      setError('No se pudo eliminar la asignacion.');
+    } catch {
+      setError('No se pudo eliminar la asignación.');
     }
   };
 
@@ -141,7 +141,7 @@ const RoleAssignmentsPage = () => {
           onClick={resetForm}
           className="rounded-lg border border-slate-700 px-3 py-2 text-sm text-slate-200 hover:border-slate-500"
         >
-          Nueva asignacion
+          Nueva asignación
         </button>
       </div>
 
@@ -160,7 +160,7 @@ const RoleAssignmentsPage = () => {
       <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
         <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-4">
           {loading ? (
-            <div className="py-10 text-center text-slate-400">Cargando asignaciones...</div>
+            <div className="py-10 text-center text-slate-400">Cargando asignaciónes...</div>
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full text-left text-sm text-slate-200">
@@ -209,7 +209,7 @@ const RoleAssignmentsPage = () => {
         <form onSubmit={handleSubmit} className="rounded-xl border border-slate-800 bg-slate-900/70 p-4 space-y-4">
           <div>
             <h2 className="text-lg font-semibold text-white">
-              {editingId ? 'Editar asignacion' : 'Nueva asignacion'}
+              {editingId ? 'Editar asignación' : 'Nueva asignación'}
             </h2>
             <p className="text-xs text-slate-400">Organizacion activa: {currentOrganization?.name || 'Sin seleccionar'}</p>
           </div>

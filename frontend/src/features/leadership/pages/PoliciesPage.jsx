@@ -44,8 +44,8 @@ const PoliciesPage = () => {
       setLoading(true);
       const data = await getPolicies();
       setPolicies(normalizeList(data));
-    } catch (err) {
-      setError('No se pudieron cargar las politicas.');
+    } catch {
+      setError('No se pudieron cargar las políticas.');
     } finally {
       setLoading(false);
     }
@@ -96,8 +96,8 @@ const PoliciesPage = () => {
       }
       resetForm();
       await loadPolicies();
-    } catch (err) {
-      setError('No se pudo guardar la politica.');
+    } catch {
+      setError('No se pudo guardar la política.');
     } finally {
       setSaving(false);
     }
@@ -122,15 +122,15 @@ const PoliciesPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Eliminar esta politica?')) {
+    if (!window.confirm('Eliminar esta política?')) {
       return;
     }
 
     try {
       await deletePolicy(id);
       await loadPolicies();
-    } catch (err) {
-      setError('No se pudo eliminar la politica.');
+    } catch {
+      setError('No se pudo eliminar la política.');
     }
   };
 
@@ -146,7 +146,7 @@ const PoliciesPage = () => {
         await makeObsoletePolicy(id);
       }
       await loadPolicies();
-    } catch (err) {
+    } catch {
       setError('No se pudo actualizar el estado.');
     }
   };
@@ -156,14 +156,14 @@ const PoliciesPage = () => {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold text-white">Politicas de Calidad</h1>
-          <p className="text-sm text-slate-400">Gestion y aprobacion de politicas ISO 9001.</p>
+          <p className="text-sm text-slate-400">Gestion y aprobación de políticas ISO 9001.</p>
         </div>
         <button
           type="button"
           onClick={resetForm}
           className="rounded-lg border border-slate-700 px-3 py-2 text-sm text-slate-200 hover:border-slate-500"
         >
-          Nueva politica
+          Nueva política
         </button>
       </div>
 
@@ -176,14 +176,14 @@ const PoliciesPage = () => {
       <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
         <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-4">
           {loading ? (
-            <div className="py-10 text-center text-slate-400">Cargando politicas...</div>
+            <div className="py-10 text-center text-slate-400">Cargando políticas...</div>
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full text-left text-sm text-slate-200">
                 <thead className="text-xs uppercase text-slate-400">
                   <tr>
                     <th className="px-3 py-2">Version</th>
-                    <th className="px-3 py-2">Titulo</th>
+                    <th className="px-3 py-2">Título</th>
                     <th className="px-3 py-2">Estado</th>
                     <th className="px-3 py-2">Vigencia</th>
                     <th className="px-3 py-2 text-right">Acciones</th>
@@ -246,7 +246,7 @@ const PoliciesPage = () => {
         <form onSubmit={handleSubmit} className="rounded-xl border border-slate-800 bg-slate-900/70 p-4 space-y-4">
           <div>
             <h2 className="text-lg font-semibold text-white">
-              {editingId ? 'Editar politica' : 'Nueva politica'}
+              {editingId ? 'Editar política' : 'Nueva política'}
             </h2>
             <p className="text-xs text-slate-400">Organizacion: {orgName || 'Sin seleccionar'}</p>
           </div>
@@ -264,7 +264,7 @@ const PoliciesPage = () => {
             </label>
 
             <label className="text-xs text-slate-400">
-              Titulo
+              Título
               <input
                 type="text"
                 value={form.title}
@@ -356,7 +356,7 @@ const PoliciesPage = () => {
               </label>
 
               <label className="text-xs text-slate-400">
-                Comentarios de aprobacion
+                Comentarios de aprobación
                 <input
                   type="text"
                   value={form.approval_comments}

@@ -13,7 +13,7 @@ const commitmentTypes = [
   { value: 'results', label: 'Logro de resultados' },
   { value: 'engagement', label: 'Participacion de personal' },
   { value: 'improvement', label: 'Promocion de mejora' },
-  { value: 'management', label: 'Apoyo a gestion' }
+  { value: 'management', label: 'Apoyo a gestión' }
 ];
 
 const evidenceTypes = [
@@ -22,7 +22,7 @@ const evidenceTypes = [
   { value: 'decision', label: 'Decision documentada' },
   { value: 'resource_allocation', label: 'Asignacion de recursos' },
   { value: 'review', label: 'Revision por la direccion' },
-  { value: 'policy_update', label: 'Actualizacion de politica' },
+  { value: 'policy_update', label: 'Actualizacion de política' },
   { value: 'other', label: 'Otro' }
 ];
 
@@ -61,7 +61,7 @@ const CommitmentsPage = () => {
       setLoading(true);
       const data = await getCommitments();
       setCommitments(normalizeList(data));
-    } catch (err) {
+    } catch {
       setError('No se pudieron cargar los compromisos.');
     } finally {
       setLoading(false);
@@ -119,7 +119,7 @@ const CommitmentsPage = () => {
       }
       resetForm();
       await loadCommitments();
-    } catch (err) {
+    } catch {
       setError('No se pudo guardar el compromiso.');
     } finally {
       setSaving(false);
@@ -148,7 +148,7 @@ const CommitmentsPage = () => {
     try {
       await deleteCommitment(id);
       await loadCommitments();
-    } catch (err) {
+    } catch {
       setError('No se pudo eliminar el compromiso.');
     }
   };
@@ -184,7 +184,7 @@ const CommitmentsPage = () => {
               <table className="min-w-full text-left text-sm text-slate-200">
                 <thead className="text-xs uppercase text-slate-400">
                   <tr>
-                    <th className="px-3 py-2">Titulo</th>
+                    <th className="px-3 py-2">Título</th>
                     <th className="px-3 py-2">Tipo</th>
                     <th className="px-3 py-2">Fecha</th>
                     <th className="px-3 py-2">Estado</th>
@@ -249,7 +249,7 @@ const CommitmentsPage = () => {
             </label>
 
             <label className="text-xs text-slate-400">
-              Titulo
+              Título
               <input
                 type="text"
                 value={form.title}
@@ -260,7 +260,7 @@ const CommitmentsPage = () => {
             </label>
 
             <label className="text-xs text-slate-400">
-              Descripcion
+              Descripción
               <textarea
                 value={form.description}
                 onChange={(event) => setForm({ ...form, description: event.target.value })}

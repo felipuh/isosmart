@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { RefreshCw, Download, TrendingUp, AlertCircle, CheckCircle, FileText } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import contextService from '../../services/contextService';
@@ -15,13 +15,7 @@ const ContextDashboard = () => {
   const [analyzing, setAnalyzing] = useState(false);
   const [lastUpdate, setLastUpdate] = useState(null);
 
-  useEffect(() => {
-    if (currentOrganization?.id) {
-      loadContextData();
-    }
-  }, [currentOrganization?.id]);
-
-  const loadContextData = async () => {
+  const loadContextData = useCallback(async () => {
     setLoading(true);
     try {
       const data = await contextService.getLatest(currentOrganization.id);
@@ -34,7 +28,13 @@ const ContextDashboard = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentOrganization?.id]);
+
+  useEffect(() => {
+    if (currentOrganization?.id) {
+      loadContextData();
+    }
+  }, [currentOrganization?.id, loadContextData]);
 
 const handleRunAnalysis = async () => {
   // Verificar si hay documentos

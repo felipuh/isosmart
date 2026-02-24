@@ -1,12 +1,12 @@
 import React from 'react';
 import { TrendingUp, AlertTriangle, Target, Users, Activity } from 'lucide-react';
 
-const MetricCard = ({ title, value, subtitle, icon: Icon, trend, color, borderColor }) => {
+const MetricCard = ({ title, value, subtitle, icon, trend, color, borderColor }) => {
   return (
     <div className={`metric-card ${borderColor}`}>
       <div className="flex items-start justify-between mb-4">
         <div className={`p-3 ${color} rounded-lg shadow-md`}>
-          <Icon className="w-6 h-6 text-white" />
+          {React.createElement(icon, { className: 'w-6 h-6 text-white' })}
         </div>
         {trend && (
           <span className={`flex items-center text-sm font-semibold ${

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import Modal from '../../../components/Common/Modal';
 import {
@@ -14,7 +14,7 @@ const indicatorTypeLabels = {
   quality: 'Calidad',
   efficiency: 'Eficiencia',
   effectiveness: 'Efectividad',
-  customer_satisfaction: 'Satisfaccion del Cliente',
+  customer_satisfaction: 'Satisfacción del Cliente',
   process: 'Desempeno de Procesos',
   financial: 'Financiero',
   operational: 'Operacional'
@@ -57,11 +57,7 @@ const IndicatorsPage = () => {
   const [saving, setSaving] = useState(false);
   const [showForm, setShowForm] = useState(false);
 
-  useEffect(() => {
-    if (orgId) loadIndicators();
-  }, [orgId]);
-
-  const loadIndicators = async () => {
+  const loadIndicators = useCallback(async () => {
     try {
       setLoading(true);
       const data = await getIndicators({ organization_id: orgId });
@@ -71,7 +67,13 @@ const IndicatorsPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [orgId]);
+
+  useEffect(() => {
+    if (orgId) {
+      loadIndicators();
+    }
+  }, [orgId, loadIndicators]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -119,7 +121,7 @@ const IndicatorsPage = () => {
     if (!confirm('Delete indicator?')) return;
     try {
       await deleteIndicator(id);
-      loadIndicators();
+      await loadIndicators();
     } catch (error) {
       console.error('Error deleting indicator:', error);
     }
@@ -297,7 +299,7 @@ const IndicatorsPage = () => {
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Descripcion *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Descripción *</label>
               <textarea
                 value={form.description}
                 onChange={(event) => setForm({ ...form, description: event.target.value })}

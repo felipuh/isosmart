@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import Modal from '../../../components/Common/Modal';
@@ -29,29 +29,20 @@ const CompetencesPage = () => {
   const [saving, setSaving] = useState(false);
   const [showForm, setShowForm] = useState(false);
 
-  useEffect(() => {
-    if (orgId) {
-      loadData();
-      loadUsers();
-    } else {
-      setLoading(false);
-    }
-  }, [orgId]);
+  const resetForm = useCallback(() => {
+    setForm({
+      user: user?.id || '',
+      competence_name: '',
+      position: '',
+      description: '',
+      required_level: 'intermediate',
+      current_level: 'basic',
+      acquisition_method: 'training'
+    });
+    setEditingId(null);
+  }, [user?.id]);
 
-  useEffect(() => {
-    if (location.pathname.endsWith('/new')) {
-      resetForm();
-      setShowForm(true);
-    }
-  }, [location.pathname]);
-
-  useEffect(() => {
-    if (user?.id) {
-      setForm(prev => ({ ...prev, user: prev.user || user.id }));
-    }
-  }, [user]);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       setLoading(true);
       const data = await getCompetences({ organization_id: orgId });
@@ -61,16 +52,38 @@ const CompetencesPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [orgId]);
 
-  const loadUsers = async () => {
+  const loadUsers = useCallback(async () => {
     try {
       const data = await getUsers({ organization_id: orgId });
       setUsers(normalizeList(data));
     } catch (error) {
       console.error('Error loading users:', error);
     }
-  };
+  }, [orgId]);
+
+  useEffect(() => {
+    if (orgId) {
+      loadData();
+      loadUsers();
+    } else {
+      setLoading(false);
+    }
+  }, [orgId, loadData, loadUsers]);
+
+  useEffect(() => {
+    if (location.pathname.endsWith('/new')) {
+      resetForm();
+      setShowForm(true);
+    }
+  }, [location.pathname, resetForm]);
+
+  useEffect(() => {
+    if (user?.id) {
+      setForm(prev => ({ ...prev, user: prev.user || user.id }));
+    }
+  }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -87,7 +100,7 @@ const CompetencesPage = () => {
         await createCompetence(payload);
       }
       resetForm();
-      loadData();
+      await loadData();
       setShowForm(false);
       if (location.pathname.endsWith('/new')) {
         navigate(location.pathname.replace(/\/new$/, ''), { replace: true });
@@ -117,23 +130,10 @@ const CompetencesPage = () => {
     if (!confirm('¿Eliminar?')) return;
     try {
       await deleteCompetence(id);
-      loadData();
+      await loadData();
     } catch (error) {
       console.error('Error:', error);
     }
-  };
-
-  const resetForm = () => {
-    setForm({
-      user: user?.id || '',
-      competence_name: '',
-      position: '',
-      description: '',
-      required_level: 'intermediate',
-      current_level: 'basic',
-      acquisition_method: 'training'
-    });
-    setEditingId(null);
   };
 
   const openForm = () => {

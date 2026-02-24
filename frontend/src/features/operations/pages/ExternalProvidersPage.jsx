@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import Modal from '../../../components/Common/Modal';
@@ -38,27 +38,29 @@ const ExternalProvidersPage = () => {
   const [saving, setSaving] = useState(false);
   const [showForm, setShowForm] = useState(false);
 
-  useEffect(() => {
-    if (orgId) {
-      loadData();
-      loadUsers();
-    }
-  }, [orgId]);
+  const resetForm = useCallback(() => {
+    setForm({
+      provider_code: '',
+      provider_name: '',
+      contact_person: '',
+      email: '',
+      phone: '',
+      address: '',
+      provision_type: 'product',
+      products_services: '',
+      evaluation_criteria: '',
+      last_evaluation_date: '',
+      evaluation_score: '',
+      evaluation_notes: '',
+      classification: 'conditional',
+      performance_rating: '',
+      controls_applied: '',
+      responsible: user?.id || ''
+    });
+    setEditingId(null);
+  }, [user?.id]);
 
-  useEffect(() => {
-    if (location.pathname.endsWith('/new')) {
-      resetForm();
-      setShowForm(true);
-    }
-  }, [location.pathname]);
-
-  useEffect(() => {
-    if (user?.id) {
-      setForm(prev => ({ ...prev, responsible: prev.responsible || user.id }));
-    }
-  }, [user]);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       setLoading(true);
       const data = await getExternalProviders({ organization_id: orgId });
@@ -68,16 +70,36 @@ const ExternalProvidersPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [orgId]);
 
-  const loadUsers = async () => {
+  const loadUsers = useCallback(async () => {
     try {
       const data = await getUsers({ organization_id: orgId });
       setUsers(normalizeList(data));
     } catch (error) {
       console.error('Error loading users:', error);
     }
-  };
+  }, [orgId]);
+
+  useEffect(() => {
+    if (orgId) {
+      loadData();
+      loadUsers();
+    }
+  }, [orgId, loadData, loadUsers]);
+
+  useEffect(() => {
+    if (location.pathname.endsWith('/new')) {
+      resetForm();
+      setShowForm(true);
+    }
+  }, [location.pathname, resetForm]);
+
+  useEffect(() => {
+    if (user?.id) {
+      setForm(prev => ({ ...prev, responsible: prev.responsible || user.id }));
+    }
+  }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -97,7 +119,7 @@ const ExternalProvidersPage = () => {
         await createExternalProvider(payload);
       }
       resetForm();
-      loadData();
+      await loadData();
       setShowForm(false);
       if (location.pathname.endsWith('/new')) {
         navigate(location.pathname.replace(/\/new$/, ''), { replace: true });
@@ -136,32 +158,10 @@ const ExternalProvidersPage = () => {
     if (!confirm('¿Eliminar?')) return;
     try {
       await deleteExternalProvider(id);
-      loadData();
+      await loadData();
     } catch (error) {
       console.error('Error:', error);
     }
-  };
-
-  const resetForm = () => {
-    setForm({
-      provider_code: '',
-      provider_name: '',
-      contact_person: '',
-      email: '',
-      phone: '',
-      address: '',
-      provision_type: 'product',
-      products_services: '',
-      evaluation_criteria: '',
-      last_evaluation_date: '',
-      evaluation_score: '',
-      evaluation_notes: '',
-      classification: 'conditional',
-      performance_rating: '',
-      controls_applied: '',
-      responsible: user?.id || ''
-    });
-    setEditingId(null);
   };
 
   const openForm = () => {

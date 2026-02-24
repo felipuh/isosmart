@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { RefreshCw, Download, PlayCircle, FileText, Network, Target, Plus } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import processService from '../../services/processService';
@@ -12,24 +12,17 @@ const ProcessDashboard = () => {
   const [processMap, setProcessMap] = useState(null);
   const [processes, setProcesses] = useState([]);
   const [processesByType, setProcessesByType] = useState(null);
-  const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [analyzing, setAnalyzing] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [editingProcess, setEditingProcess] = useState(null);
 
-  useEffect(() => {
-    if (currentOrganization?.id) {
-      loadData();
-    }
-  }, [currentOrganization?.id]);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     if (!currentOrganization?.id) return;
     
     setLoading(true);
     try {
-      const [latestResponse, statsResponse] = await Promise.all([
+      const [latestResponse] = await Promise.all([
         processService.getLatest(currentOrganization.id),
         processService.getStats(currentOrganization.id)
       ]);
@@ -48,13 +41,18 @@ const ProcessDashboard = () => {
         }
       }
       
-      setStats(statsResponse);
     } catch (error) {
       console.error('Error cargando datos:', error);
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentOrganization?.id]);
+
+  useEffect(() => {
+    if (currentOrganization?.id) {
+      loadData();
+    }
+  }, [currentOrganization?.id, loadData]);
 
   const handleRunMapping = async () => {
     if (!window.confirm('¿Ejecutar mapeo automático de procesos?\n\nEsto creará un nuevo mapa basado en el contexto y alcance del sistema.')) {

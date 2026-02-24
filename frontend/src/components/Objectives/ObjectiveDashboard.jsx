@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import objectiveService from '../../services/objectiveService';
 import ObjectiveList from './ObjectiveList';
@@ -14,13 +14,7 @@ const ObjectiveDashboard = () => {
   const [editingObjective, setEditingObjective] = useState(null);
   const [filters, setFilters] = useState({ status: '', source: '' });
 
-  useEffect(() => {
-    if (currentOrganization?.id) {
-      loadData();
-    }
-  }, [currentOrganization?.id, filters]);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     if (!currentOrganization?.id) return;
     
     setLoading(true);
@@ -37,7 +31,13 @@ const ObjectiveDashboard = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentOrganization?.id, filters]);
+
+  useEffect(() => {
+    if (currentOrganization?.id) {
+      loadData();
+    }
+  }, [currentOrganization?.id, filters, loadData]);
 
   const handleCreate = () => {
     setEditingObjective(null);
@@ -50,25 +50,21 @@ const ObjectiveDashboard = () => {
   };
 
   const handleFormSubmit = async (data) => {
-    try {
-      if (editingObjective) {
-        await objectiveService.updateObjective(editingObjective.id, data);
-      } else {
-        await objectiveService.createObjective(data);
-      }
-      setShowForm(false);
-      setEditingObjective(null);
-      loadData();
-    } catch (err) {
-      throw err;
+    if (editingObjective) {
+      await objectiveService.updateObjective(editingObjective.id, data);
+    } else {
+      await objectiveService.createObjective(data);
     }
+    setShowForm(false);
+    setEditingObjective(null);
+    await loadData();
   };
 
   const handleDelete = async (id) => {
     if (window.confirm('¿Está seguro de eliminar este objetivo?')) {
       try {
         await objectiveService.deleteObjective(id);
-        loadData();
+        await loadData();
       } catch (err) {
         setError(err.message);
       }
@@ -78,7 +74,7 @@ const ObjectiveDashboard = () => {
   const handleUpdateProgress = async (id, value) => {
     try {
       await objectiveService.updateProgress(id, value);
-      loadData();
+      await loadData();
     } catch (err) {
       setError(err.message);
     }

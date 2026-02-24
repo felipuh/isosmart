@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import Modal from '../../../components/Common/Modal';
@@ -34,18 +34,7 @@ const ChangeControlPage = () => {
   const [saving, setSaving] = useState(false);
   const [showForm, setShowForm] = useState(false);
 
-  useEffect(() => {
-    if (orgId) loadData();
-  }, [orgId]);
-
-  useEffect(() => {
-    if (location.pathname.endsWith('/new')) {
-      resetForm();
-      setShowForm(true);
-    }
-  }, [location.pathname]);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       setLoading(true);
       const data = await getChanges({ organization_id: orgId });
@@ -55,7 +44,18 @@ const ChangeControlPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [orgId]);
+
+  useEffect(() => {
+    if (orgId) loadData();
+  }, [orgId, loadData]);
+
+  useEffect(() => {
+    if (location.pathname.endsWith('/new')) {
+      resetForm();
+      setShowForm(true);
+    }
+  }, [location.pathname]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -73,7 +73,7 @@ const ChangeControlPage = () => {
         await createChange(payload);
       }
       resetForm();
-      loadData();
+      await loadData();
       setShowForm(false);
       if (location.pathname.endsWith('/new')) {
         navigate(location.pathname.replace(/\/new$/, ''), { replace: true });
@@ -109,7 +109,7 @@ const ChangeControlPage = () => {
     if (!confirm('¿Eliminar?')) return;
     try {
       await deleteChange(id);
-      loadData();
+      await loadData();
     } catch (error) {
       console.error('Error:', error);
     }
@@ -166,8 +166,8 @@ const ChangeControlPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Numero</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Titulo</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Número</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Título</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Tipo</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Urgencia</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Estado</th>

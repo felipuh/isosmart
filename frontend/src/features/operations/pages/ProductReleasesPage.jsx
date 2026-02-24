@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import Modal from '../../../components/Common/Modal';
@@ -37,27 +37,28 @@ const ProductReleasesPage = () => {
   const [saving, setSaving] = useState(false);
   const [showForm, setShowForm] = useState(false);
 
-  useEffect(() => {
-    if (orgId) {
-      loadData();
-      loadUsers();
-    }
-  }, [orgId]);
+  const resetForm = useCallback(() => {
+    setForm({
+      release_code: '',
+      product_service_name: '',
+      batch_lot_number: '',
+      release_date: '',
+      quantity_released: '',
+      unit: '',
+      verification_performed: false,
+      verification_results: '',
+      acceptance_criteria_met: false,
+      criteria_details: '',
+      authorized_by: user?.id || '',
+      status: 'pending',
+      customer_name: '',
+      delivery_date: '',
+      notes: ''
+    });
+    setEditingId(null);
+  }, [user?.id]);
 
-  useEffect(() => {
-    if (location.pathname.endsWith('/new')) {
-      resetForm();
-      setShowForm(true);
-    }
-  }, [location.pathname]);
-
-  useEffect(() => {
-    if (user?.id) {
-      setForm(prev => ({ ...prev, authorized_by: prev.authorized_by || user.id }));
-    }
-  }, [user]);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       setLoading(true);
       const data = await getProductReleases({ organization_id: orgId });
@@ -67,16 +68,36 @@ const ProductReleasesPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [orgId]);
 
-  const loadUsers = async () => {
+  const loadUsers = useCallback(async () => {
     try {
       const data = await getUsers({ organization_id: orgId });
       setUsers(normalizeList(data));
     } catch (error) {
       console.error('Error loading users:', error);
     }
-  };
+  }, [orgId]);
+
+  useEffect(() => {
+    if (orgId) {
+      loadData();
+      loadUsers();
+    }
+  }, [orgId, loadData, loadUsers]);
+
+  useEffect(() => {
+    if (location.pathname.endsWith('/new')) {
+      resetForm();
+      setShowForm(true);
+    }
+  }, [location.pathname, resetForm]);
+
+  useEffect(() => {
+    if (user?.id) {
+      setForm(prev => ({ ...prev, authorized_by: prev.authorized_by || user.id }));
+    }
+  }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -95,7 +116,7 @@ const ProductReleasesPage = () => {
         await createProductRelease(payload);
       }
       resetForm();
-      loadData();
+      await loadData();
       setShowForm(false);
       if (location.pathname.endsWith('/new')) {
         navigate(location.pathname.replace(/\/new$/, ''), { replace: true });
@@ -133,31 +154,10 @@ const ProductReleasesPage = () => {
     if (!confirm('¿Eliminar?')) return;
     try {
       await deleteProductRelease(id);
-      loadData();
+      await loadData();
     } catch (error) {
       console.error('Error:', error);
     }
-  };
-
-  const resetForm = () => {
-    setForm({
-      release_code: '',
-      product_service_name: '',
-      batch_lot_number: '',
-      release_date: '',
-      quantity_released: '',
-      unit: '',
-      verification_performed: false,
-      verification_results: '',
-      acceptance_criteria_met: false,
-      criteria_details: '',
-      authorized_by: user?.id || '',
-      status: 'pending',
-      customer_name: '',
-      delivery_date: '',
-      notes: ''
-    });
-    setEditingId(null);
   };
 
   const openForm = () => {

@@ -28,7 +28,7 @@ const settingsService = {
       const response = await api.get('/settings/');
       // Si es una lista, retorna el primer elemento o un objeto vacío
       return response.data.results?.[0] || response.data || {};
-    } catch (e) {
+    } catch {
       return {};
     }
   },

@@ -1,5 +1,21 @@
 import React, { useState, useEffect } from 'react';
 
+const probabilityOptions = [
+  { value: 'muy_baja', label: 'Muy Baja', score: 1 },
+  { value: 'baja', label: 'Baja', score: 2 },
+  { value: 'media', label: 'Media', score: 3 },
+  { value: 'alta', label: 'Alta', score: 4 },
+  { value: 'muy_alta', label: 'Muy Alta', score: 5 },
+];
+
+const impactOptions = [
+  { value: 'muy_bajo', label: 'Muy Bajo', score: 1 },
+  { value: 'bajo', label: 'Bajo', score: 2 },
+  { value: 'medio', label: 'Medio', score: 3 },
+  { value: 'alto', label: 'Alto', score: 4 },
+  { value: 'muy_alto', label: 'Muy Alto', score: 5 },
+];
+
 const RiskForm = ({ risk, onSubmit, onCancel }) => {
   const [formData, setFormData] = useState({
     risk_description: '',
@@ -17,22 +33,6 @@ const RiskForm = ({ risk, onSubmit, onCancel }) => {
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-
-  const probabilityOptions = [
-    { value: 'muy_baja', label: 'Muy Baja', score: 1 },
-    { value: 'baja', label: 'Baja', score: 2 },
-    { value: 'media', label: 'Media', score: 3 },
-    { value: 'alta', label: 'Alta', score: 4 },
-    { value: 'muy_alta', label: 'Muy Alta', score: 5 },
-  ];
-
-  const impactOptions = [
-    { value: 'muy_bajo', label: 'Muy Bajo', score: 1 },
-    { value: 'bajo', label: 'Bajo', score: 2 },
-    { value: 'medio', label: 'Medio', score: 3 },
-    { value: 'alto', label: 'Alto', score: 4 },
-    { value: 'muy_alto', label: 'Muy Alto', score: 5 },
-  ];
 
   const statusOptions = [
     { value: 'identified', label: 'Identificado' },

@@ -4,7 +4,6 @@ import {
   FileCheck, Palette, ChevronRight, Shield, Activity,
   Server, BarChart3
 } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
 import OrganizationSettings from './OrganizationSettings';
 import UsersManagement from './UsersManagement';
 import AIModulesSettings from './AIModulesSettings';
@@ -15,7 +14,6 @@ import ThemeSettings from './ThemeSettings';
 import settingsService from '../../services/settingsService';
 
 const SettingsDashboard = () => {
-  const { currentOrganization } = useAuth();
   const [activeTab, setActiveTab] = useState('organization');
   const [loading, setLoading] = useState(true);
   const [organization, setOrganization] = useState(null);
@@ -89,7 +87,7 @@ const SettingsDashboard = () => {
       try {
         const dashboardData = await settingsService.getOrganizationDashboard(1);
         setStats(dashboardData);
-      } catch (e) {
+      } catch {
         console.log('Dashboard stats not available');
       }
       

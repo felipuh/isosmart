@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import Modal from '../../../components/Common/Modal';
 import {
@@ -36,11 +36,7 @@ const ReviewsPage = () => {
   const [saving, setSaving] = useState(false);
   const [showForm, setShowForm] = useState(false);
 
-  useEffect(() => {
-    if (orgId) loadReviews();
-  }, [orgId]);
-
-  const loadReviews = async () => {
+  const loadReviews = useCallback(async () => {
     try {
       setLoading(true);
       const data = await getReviews({ organization_id: orgId });
@@ -50,7 +46,13 @@ const ReviewsPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [orgId]);
+
+  useEffect(() => {
+    if (orgId) {
+      loadReviews();
+    }
+  }, [orgId, loadReviews]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -63,7 +65,7 @@ const ReviewsPage = () => {
         await createReview(payload);
       }
       resetForm();
-      loadReviews();
+      await loadReviews();
       setShowForm(false);
     } catch (error) {
       console.error('Error saving review:', error);
@@ -89,7 +91,7 @@ const ReviewsPage = () => {
     if (!confirm('Delete review?')) return;
     try {
       await deleteReview(id);
-      loadReviews();
+      await loadReviews();
     } catch (error) {
       console.error('Error deleting review:', error);
     }
@@ -143,7 +145,7 @@ const ReviewsPage = () => {
           <thead className="bg-gray-800/50">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Codigo</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Titulo</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Título</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Programada</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Estado</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Acciones</th>
@@ -185,7 +187,7 @@ const ReviewsPage = () => {
               />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Titulo *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Título *</label>
               <input
                 type="text"
                 value={form.title}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Modal from '../../../components/Common/Modal';
@@ -25,17 +25,17 @@ const ImprovementCorrectiveActionsPage = () => {
   const [saving, setSaving] = useState(false);
   const [showForm, setShowForm] = useState(false);
 
-  useEffect(() => { if (orgId) loadData(); }, [orgId]);
-  useEffect(() => { if (location.pathname.endsWith('/new')) { resetForm(); setShowForm(true); } }, [location.pathname]);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       setLoading(true);
       const [actionsData, ncsData] = await Promise.all([getCorrectiveActions({ organization_id: orgId }), getNonconformities({ organization_id: orgId })]);
       setItems(normalizeList(actionsData));
       setNcs(normalizeList(ncsData));
     } catch (error) { console.error('Error:', error); } finally { setLoading(false); }
-  };
+  }, [orgId]);
+
+  useEffect(() => { if (orgId) loadData(); }, [orgId, loadData]);
+  useEffect(() => { if (location.pathname.endsWith('/new')) { resetForm(); setShowForm(true); } }, [location.pathname]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -43,7 +43,7 @@ const ImprovementCorrectiveActionsPage = () => {
       setSaving(true);
       const payload = { ...form, organization_id: orgId, responsible: user?.id || null, completion_percentage: Number(form.completion_percentage), nonconformity: form.nonconformity || null };
       if (editingId) { await updateCorrectiveAction(editingId, payload); } else { await createCorrectiveAction(payload); }
-      resetForm(); loadData(); setShowForm(false);
+      resetForm(); await loadData(); setShowForm(false);
       if (location.pathname.endsWith('/new')) navigate(location.pathname.replace(/\/new$/, ''), { replace: true });
     } catch (error) { console.error('Error:', error); } finally { setSaving(false); }
   };
@@ -53,7 +53,7 @@ const ImprovementCorrectiveActionsPage = () => {
     setEditingId(item.id); setShowForm(true);
   };
 
-  const handleDelete = async (id) => { if (!confirm('¿Eliminar?')) return; try { await deleteCorrectiveAction(id); loadData(); } catch (error) { console.error('Error:', error); } };
+  const handleDelete = async (id) => { if (!confirm('¿Eliminar esta acción correctiva?')) return; try { await deleteCorrectiveAction(id); await loadData(); } catch (error) { console.error('Error:', error); } };
   const resetForm = () => { setForm(initialForm); setEditingId(null); };
   const openForm = () => { resetForm(); setShowForm(true); };
   const closeForm = () => { resetForm(); setShowForm(false); if (location.pathname.endsWith('/new')) navigate(location.pathname.replace(/\/new$/, ''), { replace: true }); };
@@ -63,7 +63,7 @@ const ImprovementCorrectiveActionsPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <div><h1 className="text-3xl font-bold text-white">Acciones correctivas</h1><p className="text-gray-400 mt-1">ISO 9001:2015 - Cláusula 10.2</p></div>
+        <div><h1 className="text-3xl font-bold text-white">Acciones Correctivas</h1><p className="text-gray-400 mt-1">ISO 9001:2015 - Cláusula 10.2</p></div>
         <button type="button" onClick={openForm} className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">Nueva acción correctiva</button>
       </div>
 

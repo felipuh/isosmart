@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   FileCheck, Check, X, Edit2, Save, Loader2, AlertCircle,
   ChevronDown, ChevronRight, Info, RefreshCw, Shield
@@ -37,11 +37,7 @@ const ISOClausesSettings = () => {
     '10': 'Mejora',
   };
 
-  useEffect(() => {
-    loadClauses();
-  }, [organizationId]);
-
-  const loadClauses = async () => {
+  const loadClauses = useCallback(async () => {
     try {
       setLoading(true);
       const data = await settingsService.getISOClauses(organizationId);
@@ -52,7 +48,11 @@ const ISOClausesSettings = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [organizationId]);
+
+  useEffect(() => {
+    loadClauses();
+  }, [loadClauses]);
 
   const handleInitialize = async () => {
     try {
@@ -62,7 +62,8 @@ const ISOClausesSettings = () => {
       await loadClauses();
       setSuccess('Cláusulas ISO 9001:2015 inicializadas correctamente');
       setTimeout(() => setSuccess(null), 3000);
-    } catch (err) {
+    } catch (error) {
+      console.error('Error al inicializar cláusulas:', error);
       setError('Error al inicializar las cláusulas');
     } finally {
       setSaving(false);
@@ -77,7 +78,8 @@ const ISOClausesSettings = () => {
       setEditingClause(null);
       setSuccess('Cláusula actualizada correctamente');
       setTimeout(() => setSuccess(null), 3000);
-    } catch (err) {
+    } catch (error) {
+      console.error('Error al actualizar cláusula:', error);
       setError('Error al actualizar la cláusula');
     } finally {
       setSaving(false);

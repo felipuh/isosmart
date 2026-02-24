@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import riskService from '../../services/riskService';
 import RiskMatrixVisual from './RiskMatrixVisual';
@@ -21,13 +21,7 @@ const RiskDashboard = () => {
     category: ''
   });
 
-  useEffect(() => {
-    if (currentOrganization?.id) {
-      loadData();
-    }
-  }, [currentOrganization?.id, filters]);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     if (!currentOrganization?.id) return;
     
     setLoading(true);
@@ -44,7 +38,13 @@ const RiskDashboard = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentOrganization?.id, filters]);
+
+  useEffect(() => {
+    if (currentOrganization?.id) {
+      loadData();
+    }
+  }, [currentOrganization?.id, filters, loadData]);
 
   const handleCreateRisk = () => {
     setEditingRisk(null);
@@ -57,25 +57,21 @@ const RiskDashboard = () => {
   };
 
   const handleFormSubmit = async (riskData) => {
-    try {
-      if (editingRisk) {
-        await riskService.updateRisk(editingRisk.id, riskData);
-      } else {
-        await riskService.createRisk(riskData);
-      }
-      setShowForm(false);
-      setEditingRisk(null);
-      loadData();
-    } catch (err) {
-      throw err;
+    if (editingRisk) {
+      await riskService.updateRisk(editingRisk.id, riskData);
+    } else {
+      await riskService.createRisk(riskData);
     }
+    setShowForm(false);
+    setEditingRisk(null);
+    await loadData();
   };
 
   const handleDeleteRisk = async (id) => {
     if (window.confirm('¿Está seguro de eliminar este riesgo?')) {
       try {
         await riskService.deleteRisk(id);
-        loadData();
+        await loadData();
       } catch (err) {
         setError(err.message);
       }
@@ -85,7 +81,7 @@ const RiskDashboard = () => {
   const handleStatusChange = async (id, newStatus) => {
     try {
       await riskService.changeStatus(id, newStatus);
-      loadData();
+      await loadData();
     } catch (err) {
       setError(err.message);
     }

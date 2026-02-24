@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import Modal from '../../../components/Common/Modal';
@@ -35,27 +35,26 @@ const ProductionControlsPage = () => {
   const [saving, setSaving] = useState(false);
   const [showForm, setShowForm] = useState(false);
 
-  useEffect(() => {
-    if (orgId) {
-      loadData();
-      loadUsers();
-    }
-  }, [orgId]);
+  const resetForm = useCallback(() => {
+    setForm({
+      control_code: '',
+      product_service_name: '',
+      description: '',
+      control_type: 'production',
+      control_method: '',
+      requires_traceability: false,
+      traceability_method: '',
+      handles_customer_property: false,
+      customer_property_controls: '',
+      preservation_requirements: '',
+      post_delivery_activities: '',
+      change_control_process: '',
+      responsible: user?.id || ''
+    });
+    setEditingId(null);
+  }, [user?.id]);
 
-  useEffect(() => {
-    if (location.pathname.endsWith('/new')) {
-      resetForm();
-      setShowForm(true);
-    }
-  }, [location.pathname]);
-
-  useEffect(() => {
-    if (user?.id) {
-      setForm(prev => ({ ...prev, responsible: prev.responsible || user.id }));
-    }
-  }, [user]);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       setLoading(true);
       const data = await getProductionControls({ organization_id: orgId });
@@ -65,16 +64,36 @@ const ProductionControlsPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [orgId]);
 
-  const loadUsers = async () => {
+  const loadUsers = useCallback(async () => {
     try {
       const data = await getUsers({ organization_id: orgId });
       setUsers(normalizeList(data));
     } catch (error) {
       console.error('Error loading users:', error);
     }
-  };
+  }, [orgId]);
+
+  useEffect(() => {
+    if (orgId) {
+      loadData();
+      loadUsers();
+    }
+  }, [orgId, loadData, loadUsers]);
+
+  useEffect(() => {
+    if (location.pathname.endsWith('/new')) {
+      resetForm();
+      setShowForm(true);
+    }
+  }, [location.pathname, resetForm]);
+
+  useEffect(() => {
+    if (user?.id) {
+      setForm(prev => ({ ...prev, responsible: prev.responsible || user.id }));
+    }
+  }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -92,7 +111,7 @@ const ProductionControlsPage = () => {
         await createProductionControl(payload);
       }
       resetForm();
-      loadData();
+      await loadData();
       setShowForm(false);
       if (location.pathname.endsWith('/new')) {
         navigate(location.pathname.replace(/\/new$/, ''), { replace: true });
@@ -128,29 +147,10 @@ const ProductionControlsPage = () => {
     if (!confirm('¿Eliminar?')) return;
     try {
       await deleteProductionControl(id);
-      loadData();
+      await loadData();
     } catch (error) {
       console.error('Error:', error);
     }
-  };
-
-  const resetForm = () => {
-    setForm({
-      control_code: '',
-      product_service_name: '',
-      description: '',
-      control_type: 'production',
-      control_method: '',
-      requires_traceability: false,
-      traceability_method: '',
-      handles_customer_property: false,
-      customer_property_controls: '',
-      preservation_requirements: '',
-      post_delivery_activities: '',
-      change_control_process: '',
-      responsible: user?.id || ''
-    });
-    setEditingId(null);
   };
 
   const openForm = () => {

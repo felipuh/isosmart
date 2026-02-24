@@ -84,10 +84,10 @@ const Recommendations = ({ recomendaciones, loading }) => {
                 <div className="mt-3 pt-3 border-t dark:border-slate-700">
                   <p className="text-xs font-medium text-slate-600 dark:text-slate-400 mb-2">Acciones sugeridas:</p>
                   <ul className="space-y-1">
-                    {rec.acciones.map((accion, actionIdx) => (
+                    {rec.acciones.map((acción, actionIdx) => (
                       <li key={actionIdx} className="flex items-start text-sm text-slate-700 dark:text-slate-300">
                         <ArrowRight className="h-4 w-4 text-slate-400 dark:text-slate-600 mr-2 mt-0.5 flex-shrink-0" />
-                        <span>{accion}</span>
+                        <span>{acción}</span>
                       </li>
                     ))}
                   </ul>

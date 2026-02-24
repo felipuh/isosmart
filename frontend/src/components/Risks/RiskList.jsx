@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const RiskList = ({ risks, filters, onFilterChange, onEdit, onDelete, onStatusChange, onRefresh }) => {
+const RiskList = ({ risks, onEdit, onDelete, onStatusChange }) => {
   const [expandedRisk, setExpandedRisk] = useState(null);
 
   const statusLabels = {

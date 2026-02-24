@@ -1,62 +1,62 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import ProtectedRoute, { PublicRoute } from './components/Auth/ProtectedRoute'
-import LoginPage from './pages/LoginPage'
+const LoginPage = lazy(() => import('./pages/LoginPage'));
 import Layout from './components/Layout/Layout'
 
-// Dashboards existentes
-import Dashboard from './components/Dashboard/Dashboard';
-import StakeholderDashboard from './components/Stakeholders/StakeholderDashboard';
-import ContextDashboard from './components/Context/ContextDashboard';
-import ScopeDashboard from './components/Scope/ScopeDashboard';
-import ProcessDashboard from './components/Processes/ProcessDashboard';
-import DocumentDashboard from './components/Documents/DocumentDashboard';
-import RiskDashboard from './components/Risks/RiskDashboard';
-import ObjectiveDashboard from './components/Objectives/ObjectiveDashboard';
-import { SettingsDashboard } from './components/Settings';
-import LeadershipDashboard from './features/leadership/pages/LeadershipDashboard';
-import PoliciesPage from './features/leadership/pages/PoliciesPage';
-import RolesPage from './features/leadership/pages/RolesPage';
-import RoleAssignmentsPage from './features/leadership/pages/RoleAssignmentsPage';
-import RACIMatricesPage from './features/leadership/pages/RACIMatricesPage';
-import RACIEntriesPage from './features/leadership/pages/RACIEntriesPage';
-import CommitmentsPage from './features/leadership/pages/CommitmentsPage';
-import CustomerFocusPage from './features/leadership/pages/CustomerFocusPage';
-import ResourcesDashboard from './features/resources/pages/ResourcesDashboard';
-import ResourcesPage from './features/resources/pages/ResourcesPage';
-import InfrastructurePage from './features/resources/pages/InfrastructurePage';
-import WorkEnvironmentPage from './features/resources/pages/WorkEnvironmentPage';
-import CompetencesPage from './features/resources/pages/CompetencesPage';
-import TrainingsPage from './features/resources/pages/TrainingsPage';
-import AwarenessPage from './features/resources/pages/AwarenessPage';
-import CommunicationsPage from './features/resources/pages/CommunicationsPage';
-import PlanningDashboard from './features/planning/pages/PlanningDashboard';
-import RisksOpportunitiesPage from './features/planning/pages/RisksOpportunitiesPage';
-import QualityObjectivesPage from './features/planning/pages/QualityObjectivesPage';
-import ObjectiveActionsPage from './features/planning/pages/ObjectiveActionsPage';
-import ChangeControlPage from './features/planning/pages/ChangeControlPage';
-import OperationsDashboard from './features/operations/pages/OperationsDashboard';
-import CustomerRequirementsPage from './features/operations/pages/CustomerRequirementsPage';
-import DesignProjectsPage from './features/operations/pages/DesignProjectsPage';
-import ExternalProvidersPage from './features/operations/pages/ExternalProvidersPage';
-import NonconformitiesPage from './features/operations/pages/NonconformitiesPage';
-import ProductReleasesPage from './features/operations/pages/ProductReleasesPage';
-import ProductionControlsPage from './features/operations/pages/ProductionControlsPage';
-import PerformanceDashboard from './features/performance/pages/PerformanceDashboard';
-import IndicatorsPage from './features/performance/pages/IndicatorsPage';
-import MeasurementsPage from './features/performance/pages/MeasurementsPage';
-import AnalysesPage from './features/performance/pages/AnalysesPage';
-import AuditsPage from './features/performance/pages/AuditsPage';
-import FindingsPage from './features/performance/pages/FindingsPage';
-import ReviewsPage from './features/performance/pages/ReviewsPage';
-import ImprovementDashboard from './features/improvement/pages/ImprovementDashboard';
-import ImprovementNonconformitiesPage from './features/improvement/pages/ImprovementNonconformitiesPage';
-import ImprovementCorrectiveActionsPage from './features/improvement/pages/ImprovementCorrectiveActionsPage';
-import ImprovementContinualPage from './features/improvement/pages/ImprovementContinualPage';
+const Dashboard = lazy(() => import('./components/Dashboard/Dashboard'));
+const StakeholderDashboard = lazy(() => import('./components/Stakeholders/StakeholderDashboard'));
+const ContextDashboard = lazy(() => import('./components/Context/ContextDashboard'));
+const ScopeDashboard = lazy(() => import('./components/Scope/ScopeDashboard'));
+const ProcessDashboard = lazy(() => import('./components/Processes/ProcessDashboard'));
+const DocumentDashboard = lazy(() => import('./components/Documents/DocumentDashboard'));
+const RiskDashboard = lazy(() => import('./components/Risks/RiskDashboard'));
+const ObjectiveDashboard = lazy(() => import('./components/Objectives/ObjectiveDashboard'));
+const SettingsDashboard = lazy(() => import('./components/Settings').then((module) => ({ default: module.SettingsDashboard })));
+const LeadershipDashboard = lazy(() => import('./features/leadership/pages/LeadershipDashboard'));
+const PoliciesPage = lazy(() => import('./features/leadership/pages/PoliciesPage'));
+const RolesPage = lazy(() => import('./features/leadership/pages/RolesPage'));
+const RoleAssignmentsPage = lazy(() => import('./features/leadership/pages/RoleAssignmentsPage'));
+const RACIMatricesPage = lazy(() => import('./features/leadership/pages/RACIMatricesPage'));
+const RACIEntriesPage = lazy(() => import('./features/leadership/pages/RACIEntriesPage'));
+const CommitmentsPage = lazy(() => import('./features/leadership/pages/CommitmentsPage'));
+const CustomerFocusPage = lazy(() => import('./features/leadership/pages/CustomerFocusPage'));
+const ResourcesDashboard = lazy(() => import('./features/resources/pages/ResourcesDashboard'));
+const ResourcesPage = lazy(() => import('./features/resources/pages/ResourcesPage'));
+const InfrastructurePage = lazy(() => import('./features/resources/pages/InfrastructurePage'));
+const WorkEnvironmentPage = lazy(() => import('./features/resources/pages/WorkEnvironmentPage'));
+const CompetencesPage = lazy(() => import('./features/resources/pages/CompetencesPage'));
+const TrainingsPage = lazy(() => import('./features/resources/pages/TrainingsPage'));
+const AwarenessPage = lazy(() => import('./features/resources/pages/AwarenessPage'));
+const CommunicationsPage = lazy(() => import('./features/resources/pages/CommunicationsPage'));
+const PlanningDashboard = lazy(() => import('./features/planning/pages/PlanningDashboard'));
+const RisksOpportunitiesPage = lazy(() => import('./features/planning/pages/RisksOpportunitiesPage'));
+const QualityObjectivesPage = lazy(() => import('./features/planning/pages/QualityObjectivesPage'));
+const ObjectiveActionsPage = lazy(() => import('./features/planning/pages/ObjectiveActionsPage'));
+const ChangeControlPage = lazy(() => import('./features/planning/pages/ChangeControlPage'));
+const OperationsDashboard = lazy(() => import('./features/operations/pages/OperationsDashboard'));
+const CustomerRequirementsPage = lazy(() => import('./features/operations/pages/CustomerRequirementsPage'));
+const DesignProjectsPage = lazy(() => import('./features/operations/pages/DesignProjectsPage'));
+const ExternalProvidersPage = lazy(() => import('./features/operations/pages/ExternalProvidersPage'));
+const NonconformitiesPage = lazy(() => import('./features/operations/pages/NonconformitiesPage'));
+const ProductReleasesPage = lazy(() => import('./features/operations/pages/ProductReleasesPage'));
+const ProductionControlsPage = lazy(() => import('./features/operations/pages/ProductionControlsPage'));
+const PerformanceDashboard = lazy(() => import('./features/performance/pages/PerformanceDashboard'));
+const IndicatorsPage = lazy(() => import('./features/performance/pages/IndicatorsPage'));
+const MeasurementsPage = lazy(() => import('./features/performance/pages/MeasurementsPage'));
+const AnalysesPage = lazy(() => import('./features/performance/pages/AnalysesPage'));
+const AuditsPage = lazy(() => import('./features/performance/pages/AuditsPage'));
+const FindingsPage = lazy(() => import('./features/performance/pages/FindingsPage'));
+const ReviewsPage = lazy(() => import('./features/performance/pages/ReviewsPage'));
+const ImprovementDashboard = lazy(() => import('./features/improvement/pages/ImprovementDashboard'));
+const ImprovementNonconformitiesPage = lazy(() => import('./features/improvement/pages/ImprovementNonconformitiesPage'));
+const ImprovementCorrectiveActionsPage = lazy(() => import('./features/improvement/pages/ImprovementCorrectiveActionsPage'));
+const ImprovementContinualPage = lazy(() => import('./features/improvement/pages/ImprovementContinualPage'));
 
 function App() {
   return (
-    <Routes>
+    <Suspense fallback={<div className="flex items-center justify-center h-screen text-slate-300">Cargando...</div>}>
+      <Routes>
       {/* Rutas públicas */}
       <Route
         path="/login"
@@ -166,7 +166,8 @@ function App() {
           }
         />
       </Route>
-    </Routes>
+      </Routes>
+    </Suspense>
   )
 }
 

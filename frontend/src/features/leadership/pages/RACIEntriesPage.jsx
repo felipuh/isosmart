@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { getRACIEntries, createRACIEntry, updateRACIEntry, deleteRACIEntry, getRoles } from '../api/leadershipApi';
 
@@ -31,7 +31,7 @@ const RACIEntriesPage = () => {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       setLoading(true);
       const [entriesData, rolesData] = await Promise.all([
@@ -40,16 +40,16 @@ const RACIEntriesPage = () => {
       ]);
       setEntries(normalizeList(entriesData));
       setRoles(normalizeList(rolesData));
-    } catch (err) {
+    } catch {
       setError('No se pudieron cargar las entradas RACI.');
     } finally {
       setLoading(false);
     }
-  };
+  }, [matrixId]);
 
   useEffect(() => {
     loadData();
-  }, [matrixId]);
+  }, [loadData]);
 
   const resetForm = () => {
     setForm(initialForm);
@@ -81,7 +81,7 @@ const RACIEntriesPage = () => {
 
       resetForm();
       await loadData();
-    } catch (err) {
+    } catch {
       setError('No se pudo guardar la entrada.');
     } finally {
       setSaving(false);
@@ -109,7 +109,7 @@ const RACIEntriesPage = () => {
     try {
       await deleteRACIEntry(id);
       await loadData();
-    } catch (err) {
+    } catch {
       setError('No se pudo eliminar la entrada.');
     }
   };
@@ -222,7 +222,7 @@ const RACIEntriesPage = () => {
             </label>
 
             <label className="text-xs text-slate-400">
-              Descripcion
+              Descripción
               <textarea
                 value={form.description}
                 onChange={(event) => setForm({ ...form, description: event.target.value })}

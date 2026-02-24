@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import Modal from '../../../components/Common/Modal';
@@ -43,27 +43,34 @@ const QualityObjectivesPage = () => {
   const [saving, setSaving] = useState(false);
   const [showForm, setShowForm] = useState(false);
 
-  useEffect(() => {
-    if (orgId) {
-      loadData();
-      loadUsers();
-    }
-  }, [orgId]);
+  const resetForm = useCallback(() => {
+    setForm({
+      code: '',
+      title: '',
+      description: '',
+      alignment: 'policy',
+      metric: '',
+      baseline: '',
+      target: '',
+      current_value: '',
+      unit: '',
+      owner: user?.id || '',
+      start_date: '',
+      target_date: '',
+      status: 'draft',
+      progress_percentage: 0,
+      is_specific: false,
+      is_measurable: false,
+      is_achievable: false,
+      is_relevant: false,
+      is_time_bound: false,
+      required_resources: '',
+      budget: ''
+    });
+    setEditingId(null);
+  }, [user?.id]);
 
-  useEffect(() => {
-    if (location.pathname.endsWith('/new')) {
-      resetForm();
-      setShowForm(true);
-    }
-  }, [location.pathname]);
-
-  useEffect(() => {
-    if (user?.id) {
-      setForm(prev => ({ ...prev, owner: prev.owner || user.id }));
-    }
-  }, [user]);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       setLoading(true);
       const data = await getObjectives({ organization_id: orgId });
@@ -73,16 +80,36 @@ const QualityObjectivesPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [orgId]);
 
-  const loadUsers = async () => {
+  const loadUsers = useCallback(async () => {
     try {
       const data = await getUsers({ organization_id: orgId });
       setUsers(normalizeList(data));
     } catch (error) {
       console.error('Error loading users:', error);
     }
-  };
+  }, [orgId]);
+
+  useEffect(() => {
+    if (orgId) {
+      loadData();
+      loadUsers();
+    }
+  }, [orgId, loadData, loadUsers]);
+
+  useEffect(() => {
+    if (location.pathname.endsWith('/new')) {
+      resetForm();
+      setShowForm(true);
+    }
+  }, [location.pathname, resetForm]);
+
+  useEffect(() => {
+    if (user?.id) {
+      setForm(prev => ({ ...prev, owner: prev.owner || user.id }));
+    }
+  }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -104,7 +131,7 @@ const QualityObjectivesPage = () => {
         await createObjective(payload);
       }
       resetForm();
-      loadData();
+      await loadData();
       setShowForm(false);
       if (location.pathname.endsWith('/new')) {
         navigate(location.pathname.replace(/\/new$/, ''), { replace: true });
@@ -148,37 +175,10 @@ const QualityObjectivesPage = () => {
     if (!confirm('¿Eliminar?')) return;
     try {
       await deleteObjective(id);
-      loadData();
+      await loadData();
     } catch (error) {
       console.error('Error:', error);
     }
-  };
-
-  const resetForm = () => {
-    setForm({
-      code: '',
-      title: '',
-      description: '',
-      alignment: 'policy',
-      metric: '',
-      baseline: '',
-      target: '',
-      current_value: '',
-      unit: '',
-      owner: user?.id || '',
-      start_date: '',
-      target_date: '',
-      status: 'draft',
-      progress_percentage: 0,
-      is_specific: false,
-      is_measurable: false,
-      is_achievable: false,
-      is_relevant: false,
-      is_time_bound: false,
-      required_resources: '',
-      budget: ''
-    });
-    setEditingId(null);
   };
 
   const openForm = () => {

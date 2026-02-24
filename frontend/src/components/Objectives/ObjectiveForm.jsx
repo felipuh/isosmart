@@ -38,7 +38,7 @@ const ObjectiveForm = ({ objective, onSubmit, onCancel }) => {
     { value: 'cancelled', label: 'Cancelado' },
   ];
 
-  const unitSuggestions = ['%', 'unidades', 'horas', 'días', 'puntos', 'USD', 'clientes', 'productos', 'defectos'];
+  const unitSuggestións = ['%', 'unidades', 'horas', 'días', 'puntos', 'USD', 'clientes', 'productos', 'defectos'];
 
   useEffect(() => {
     if (objective) {
@@ -204,12 +204,12 @@ const ObjectiveForm = ({ objective, onSubmit, onCancel }) => {
                   name="measurement_unit"
                   value={formData.measurement_unit}
                   onChange={handleChange}
-                  list="unit-suggestions"
+                  list="unit-suggestións"
                   className={`w-full rounded-lg shadow-sm dark:bg-slate-700 dark:text-white dark:focus:ring-blue-400 focus:ring-blue-500 focus:border-blue-500 transition-colors ${errors.measurement_unit ? 'border-red-300 dark:border-red-800' : 'border-gray-300 dark:border-slate-600'}`}
                   placeholder="%"
                 />
-                <datalist id="unit-suggestions">
-                  {unitSuggestions.map(unit => <option key={unit} value={unit} />)}
+                <datalist id="unit-suggestións">
+                  {unitSuggestións.map(unit => <option key={unit} value={unit} />)}
                 </datalist>
                 {errors.measurement_unit && <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.measurement_unit}</p>}
               </div>

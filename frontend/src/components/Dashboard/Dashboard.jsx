@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   Network, 
@@ -16,38 +16,15 @@ import { useAuth } from '../../context/AuthContext';
 
 const Dashboard = () => {
   const { currentOrganization, user } = useAuth();
-  const [stats, setStats] = useState({
+  const [stats] = useState({
     modulesActive: 4,
     totalModules: 4,
     clause4Progress: 100,
     iso9001Progress: 100,
-    totalProcesses: 0,
+    totalProcesses: 11,
     totalStakeholders: 0,
     lastUpdate: new Date().toISOString()
   });
-
-  useEffect(() => {
-    // Aquí podrías cargar stats reales desde la API
-    loadStats();
-  }, []);
-
-  const loadStats = async () => {
-    try {
-      // Por ahora usamos datos estáticos
-      // Podrías hacer llamadas a las APIs de cada módulo
-      setStats({
-        modulesActive: 4,
-        totalModules: 4,
-        clause4Progress: 100,
-        iso9001Progress: 100,
-        totalProcesses: 11,
-        totalStakeholders: 0,
-        lastUpdate: new Date().toISOString()
-      });
-    } catch (error) {
-      console.error('Error cargando estadísticas:', error);
-    }
-  };
 
   const modules = [
     {

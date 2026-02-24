@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { Plus, RefreshCw, FileText, Upload as UploadIcon, Folder } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import documentService from '../../services/documentService';
@@ -14,13 +14,7 @@ const DocumentDashboard = () => {
   const [showUploadForm, setShowUploadForm] = useState(false);
   const [filterType, setFilterType] = useState('all');
 
-  useEffect(() => {
-    if (currentOrganization?.id) {
-      loadData();
-    }
-  }, [currentOrganization?.id, filterType]);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     setLoading(true);
     try {
       const params = filterType !== 'all' ? { type: filterType } : {};
@@ -37,7 +31,13 @@ const DocumentDashboard = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentOrganization?.id, filterType]);
+
+  useEffect(() => {
+    if (currentOrganization?.id) {
+      loadData();
+    }
+  }, [currentOrganization?.id, filterType, loadData]);
 
   const handleUpload = async (formData) => {
     setUploading(true);
@@ -100,7 +100,7 @@ const DocumentDashboard = () => {
     { value: 'all', label: 'Todos' },
     { value: 'acta', label: 'Actas' },
     { value: 'reporte', label: 'Reportes' },
-    { value: 'politica', label: 'Políticas' },
+    { value: 'política', label: 'Políticas' },
     { value: 'procedimiento', label: 'Procedimientos' },
     { value: 'otro', label: 'Otros' }
   ];
@@ -136,7 +136,7 @@ const DocumentDashboard = () => {
             <div>
               <p className="text-sm text-slate-600 dark:text-slate-400">Políticas</p>
               <p className="text-3xl font-bold text-purple-600 dark:text-purple-400">
-                {stats?.by_type?.politica || 0}
+                {stats?.by_type?.política || 0}
               </p>
             </div>
             <Folder className="h-10 w-10 text-purple-400 dark:text-purple-500" />

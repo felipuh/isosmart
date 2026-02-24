@@ -3,6 +3,8 @@
  * Maneja el estado de autenticación, tokens JWT y usuario actual
  */
 
+/* eslint-disable react-refresh/only-export-components */
+
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import api from '../services/api';
 
@@ -14,7 +16,7 @@ const getTokenPayload = (token) => {
     const payload = parts[1].replace(/-/g, '+').replace(/_/g, '/');
     const decoded = atob(payload);
     return JSON.parse(decoded);
-  } catch (error) {
+  } catch {
     return null;
   }
 };
@@ -47,6 +49,7 @@ export const AuthProvider = ({ children }) => {
   // Verificar autenticación al cargar
   useEffect(() => {
     checkAuth();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadCurrentUser = async () => {

@@ -7,7 +7,7 @@ const normalizeList = (data) => (Array.isArray(data) ? data : data?.results || [
 const focusTypes = [
   { value: 'requirements', label: 'Determinacion de requisitos' },
   { value: 'risks', label: 'Determinacion de riesgos' },
-  { value: 'satisfaction', label: 'Enfoque en satisfaccion' },
+  { value: 'satisfaction', label: 'Enfoque en satisfacción' },
   { value: 'compliance', label: 'Cumplimiento legal' }
 ];
 
@@ -38,7 +38,7 @@ const CustomerFocusPage = () => {
       setLoading(true);
       const data = await getCustomerFocus();
       setItems(normalizeList(data));
-    } catch (err) {
+    } catch {
       setError('No se pudieron cargar las evidencias.');
     } finally {
       setLoading(false);
@@ -95,7 +95,7 @@ const CustomerFocusPage = () => {
       }
       resetForm();
       await loadItems();
-    } catch (err) {
+    } catch {
       setError('No se pudo guardar la evidencia.');
     } finally {
       setSaving(false);
@@ -123,7 +123,7 @@ const CustomerFocusPage = () => {
     try {
       await deleteCustomerFocus(id);
       await loadItems();
-    } catch (err) {
+    } catch {
       setError('No se pudo eliminar la evidencia.');
     }
   };
@@ -159,7 +159,7 @@ const CustomerFocusPage = () => {
               <table className="min-w-full text-left text-sm text-slate-200">
                 <thead className="text-xs uppercase text-slate-400">
                   <tr>
-                    <th className="px-3 py-2">Titulo</th>
+                    <th className="px-3 py-2">Título</th>
                     <th className="px-3 py-2">Tipo</th>
                     <th className="px-3 py-2">Fecha</th>
                     <th className="px-3 py-2 text-right">Acciones</th>
@@ -222,7 +222,7 @@ const CustomerFocusPage = () => {
             </label>
 
             <label className="text-xs text-slate-400">
-              Titulo
+              Título
               <input
                 type="text"
                 value={form.title}
@@ -233,7 +233,7 @@ const CustomerFocusPage = () => {
             </label>
 
             <label className="text-xs text-slate-400">
-              Descripcion
+              Descripción
               <textarea
                 value={form.description}
                 onChange={(event) => setForm({ ...form, description: event.target.value })}
@@ -243,7 +243,7 @@ const CustomerFocusPage = () => {
             </label>
 
             <label className="text-xs text-slate-400">
-              Accion tomada
+              Acción tomada
               <textarea
                 value={form.action_taken}
                 onChange={(event) => setForm({ ...form, action_taken: event.target.value })}
@@ -262,7 +262,7 @@ const CustomerFocusPage = () => {
             </label>
 
             <label className="text-xs text-slate-400">
-              Fecha de accion
+              Fecha de acción
               <input
                 type="date"
                 value={form.action_date}

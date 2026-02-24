@@ -1,6 +1,34 @@
 import React from 'react';
 import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
+const getQuadrantColor = (quadrant) => {
+  switch (quadrant) {
+    case 'Gestionar de Cerca': return '#ef4444';
+    case 'Mantener Satisfecho': return '#f59e0b';
+    case 'Mantener Informado': return '#3b82f6';
+    case 'Monitorear': return '#10b981';
+    default: return '#6b7280';
+  }
+};
+
+const PowerInterestTooltip = ({ active, payload }) => {
+  if (active && payload && payload.length) {
+    const data = payload[0].payload;
+    return (
+      <div className="bg-white dark:bg-slate-800 p-3 rounded-lg shadow-lg border border-slate-200 dark:border-slate-600 transition-colors">
+        <p className="font-semibold dark:text-white">{data.name}</p>
+        <p className="text-sm dark:text-slate-400 capitalize">Tipo: {data.type}</p>
+        <p className="text-sm dark:text-slate-400">Influencia: {(data.influence * 100).toFixed(0)}%</p>
+        <p className="text-sm dark:text-slate-400">Satisfacción: {data.satisfaction?.toFixed(1)}/10</p>
+        <p className="text-sm font-medium mt-1" style={{ color: getQuadrantColor(data.quadrant) }}>
+          {data.quadrant}
+        </p>
+      </div>
+    );
+  }
+  return null;
+};
+
 const PowerInterestMatrix = ({ matrixData, loading }) => {
   if (loading) {
     return (
@@ -40,33 +68,7 @@ const PowerInterestMatrix = ({ matrixData, loading }) => {
     addToScatter(matrixData.monitor || [], 'Monitorear');
   }
 
-  const getColor = (quadrant) => {
-    switch (quadrant) {
-      case 'Gestionar de Cerca': return '#ef4444'; // Rojo
-      case 'Mantener Satisfecho': return '#f59e0b'; // Naranja
-      case 'Mantener Informado': return '#3b82f6'; // Azul
-      case 'Monitorear': return '#10b981'; // Verde
-      default: return '#6b7280';
-    }
-  };
-
-  const CustomTooltip = ({ active, payload }) => {
-    if (active && payload && payload.length) {
-      const data = payload[0].payload;
-      return (
-        <div className="bg-white dark:bg-slate-800 p-3 rounded-lg shadow-lg border border-slate-200 dark:border-slate-600 transition-colors">
-          <p className="font-semibold dark:text-white">{data.name}</p>
-          <p className="text-sm dark:text-slate-400 capitalize">Tipo: {data.type}</p>
-          <p className="text-sm dark:text-slate-400">Influencia: {(data.influence * 100).toFixed(0)}%</p>
-          <p className="text-sm dark:text-slate-400">Satisfacción: {data.satisfaction?.toFixed(1)}/10</p>
-          <p className="text-sm font-medium mt-1" style={{ color: getColor(data.quadrant) }}>
-            {data.quadrant}
-          </p>
-        </div>
-      );
-    }
-    return null;
-  };
+  const getColor = getQuadrantColor;
 
   return (
     <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
@@ -105,7 +107,7 @@ const PowerInterestMatrix = ({ matrixData, loading }) => {
                 return '';
               }}
             />
-            <Tooltip content={<CustomTooltip />} />
+            <Tooltip content={<PowerInterestTooltip />} />
             <Scatter data={scatterData} fill="#8884d8">
               {scatterData.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={getColor(entry.quadrant)} />

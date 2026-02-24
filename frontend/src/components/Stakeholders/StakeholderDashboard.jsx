@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { RefreshCw, Download, Plus, Search } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import stakeholderService from '../../services/stakeholderService';
@@ -20,13 +20,7 @@ const StakeholderDashboard = () => {
   const [showForm, setShowForm] = useState(false);
   const [editingStakeholder, setEditingStakeholder] = useState(null);
 
-  useEffect(() => {
-    if (currentOrganization?.id) {
-      loadAllData();
-    }
-  }, [currentOrganization?.id]);
-
-  const loadAllData = async () => {
+  const loadAllData = useCallback(async () => {
     if (!currentOrganization?.id) return;
     
     setLoading(true);
@@ -47,7 +41,13 @@ const StakeholderDashboard = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentOrganization?.id]);
+
+  useEffect(() => {
+    if (currentOrganization?.id) {
+      loadAllData();
+    }
+  }, [currentOrganization?.id, loadAllData]);
 
   const handleRunAnalysis = async () => {
     setAnalyzing(true);

@@ -33,7 +33,7 @@ const RACIMatricesPage = () => {
       setLoading(true);
       const data = await getRACIMatrices();
       setMatrices(normalizeList(data));
-    } catch (err) {
+    } catch {
       setError('No se pudieron cargar las matrices.');
     } finally {
       setLoading(false);
@@ -71,7 +71,7 @@ const RACIMatricesPage = () => {
 
       resetForm();
       await loadMatrices();
-    } catch (err) {
+    } catch {
       setError('No se pudo guardar la matriz.');
     } finally {
       setSaving(false);
@@ -95,7 +95,7 @@ const RACIMatricesPage = () => {
     try {
       await deleteRACIMatrix(id);
       await loadMatrices();
-    } catch (err) {
+    } catch {
       setError('No se pudo eliminar la matriz.');
     }
   };
@@ -132,7 +132,7 @@ const RACIMatricesPage = () => {
                 <thead className="text-xs uppercase text-slate-400">
                   <tr>
                     <th className="px-3 py-2">Nombre</th>
-                    <th className="px-3 py-2">Descripcion</th>
+                    <th className="px-3 py-2">Descripción</th>
                     <th className="px-3 py-2">Activa</th>
                     <th className="px-3 py-2 text-right">Acciones</th>
                   </tr>
@@ -197,7 +197,7 @@ const RACIMatricesPage = () => {
             </label>
 
             <label className="text-xs text-slate-400">
-              Descripcion
+              Descripción
               <textarea
                 value={form.description}
                 onChange={(event) => setForm({ ...form, description: event.target.value })}

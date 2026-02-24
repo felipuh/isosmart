@@ -5,7 +5,7 @@ import { useAuth } from '../../context/AuthContext';
 import UserMenu from '../Auth/UserMenu';
 
 const Header = () => {
-  const { user, profile, currentOrganization } = useAuth();
+  const { currentOrganization } = useAuth();
 
   return (
     <header className="bg-white dark:bg-slate-800 shadow-md dark:shadow-slate-900 border-b border-slate-200 dark:border-slate-700 transition-colors duration-300 fixed top-0 left-0 right-0 z-50">

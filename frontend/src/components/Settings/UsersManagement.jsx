@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   Users, UserPlus, Search, MoreVertical, Shield, Mail, 
   Phone, Building, Edit2, Trash2, Key, UserCheck, UserX,
@@ -8,7 +8,7 @@ import { useAuth } from '../../context/AuthContext';
 import settingsService from '../../services/settingsService';
 
 const UsersManagement = () => {
-  const { currentOrganization } = useAuth();
+  const { currentOrganization, hasRole } = useAuth();
   const organizationId = currentOrganization?.id;
   const [users, setUsers] = useState([]);
   const [stats, setStats] = useState(null);
@@ -20,6 +20,7 @@ const UsersManagement = () => {
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [actionMenu, setActionMenu] = useState(null);
+  const canManageUsers = hasRole(['org_admin', 'iso_manager']);
 
   const roleLabels = {
     org_admin: { label: 'Administrador', color: 'bg-purple-100 text-purple-700 dark:bg-purple-900/50 dark:text-purple-300' },
@@ -29,13 +30,7 @@ const UsersManagement = () => {
     viewer: { label: 'Solo Lectura', color: 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400' },
   };
 
-  useEffect(() => {
-    if (organizationId) {
-      loadUsers();
-    }
-  }, [organizationId]);
-
-  const loadUsers = async () => {
+  const loadUsers = useCallback(async () => {
     try {
       setLoading(true);
       const [usersData, statsData] = await Promise.all([
@@ -49,7 +44,13 @@ const UsersManagement = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [organizationId]);
+
+  useEffect(() => {
+    if (organizationId) {
+      loadUsers();
+    }
+  }, [organizationId, loadUsers]);
 
   const filteredUsers = users.filter(user => {
     const matchesSearch = 
@@ -637,7 +638,8 @@ const PasswordResetModal = ({ user, onClose, onSuccess }) => {
       setError(null);
       await settingsService.resetPassword(user.id, password);
       onSuccess();
-    } catch (err) {
+    } catch (error) {
+      console.error('Error al cambiar contraseña:', error);
       setError('Error al cambiar contraseña');
     } finally {
       setSaving(false);

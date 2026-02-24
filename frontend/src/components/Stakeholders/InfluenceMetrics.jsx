@@ -2,6 +2,22 @@ import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { TrendingUp, Users, Network } from 'lucide-react';
 
+const InfluenceTooltip = ({ active, payload }) => {
+  if (active && payload && payload.length) {
+    const data = payload[0].payload;
+    return (
+      <div className="bg-white dark:bg-slate-800 p-3 rounded-lg shadow-lg border border-slate-200 dark:border-slate-600 transition-colors">
+        <p className="font-semibold dark:text-white">{data.fullName}</p>
+        <p className="text-sm dark:text-slate-400 capitalize">Tipo: {data.type}</p>
+        <p className="text-sm dark:text-slate-400">Influencia: {data.influence}%</p>
+        <p className="text-sm dark:text-slate-400 capitalize">Poder: {data.power}</p>
+        <p className="text-sm dark:text-slate-400 capitalize">Interés: {data.interest}</p>
+      </div>
+    );
+  }
+  return null;
+};
+
 const InfluenceMetrics = ({ stakeholders, loading }) => {
   if (loading) {
     return (
@@ -40,22 +56,6 @@ const InfluenceMetrics = ({ stakeholders, loading }) => {
     if (value >= 70) return '#ef4444'; // Rojo - Alto
     if (value >= 50) return '#f59e0b'; // Naranja - Medio
     return '#3b82f6'; // Azul - Bajo
-  };
-
-  const CustomTooltip = ({ active, payload }) => {
-    if (active && payload && payload.length) {
-      const data = payload[0].payload;
-      return (
-        <div className="bg-white dark:bg-slate-800 p-3 rounded-lg shadow-lg border border-slate-200 dark:border-slate-600 transition-colors">
-          <p className="font-semibold dark:text-white">{data.fullName}</p>
-          <p className="text-sm dark:text-slate-400 capitalize">Tipo: {data.type}</p>
-          <p className="text-sm dark:text-slate-400">Influencia: {data.influence}%</p>
-          <p className="text-sm dark:text-slate-400 capitalize">Poder: {data.power}</p>
-          <p className="text-sm dark:text-slate-400 capitalize">Interés: {data.interest}</p>
-        </div>
-      );
-    }
-    return null;
   };
 
   // Calcular estadísticas generales
@@ -124,7 +124,7 @@ const InfluenceMetrics = ({ stakeholders, loading }) => {
             <CartesianGrid strokeDasharray="3 3" stroke="#cbd5e1" />
             <XAxis type="number" domain={[0, 100]} tick={{ fill: '#9ca3af' }} />
             <YAxis type="category" dataKey="name" width={100} tick={{ fill: '#9ca3af', fontSize: 12 }} />
-            <Tooltip content={<CustomTooltip />} />
+            <Tooltip content={<InfluenceTooltip />} />
             <Bar dataKey="influence" radius={[0, 8, 8, 0]}>
               {chartData.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={getBarColor(entry.influence)} />
