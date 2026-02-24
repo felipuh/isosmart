@@ -21,14 +21,14 @@ urlpatterns = [
     # Module includes
     path('api/sca/', include('ai_modules.sca.urls')),
     path('api/', include('core.urls')),
-    path('api/sie/', include('ai_modules.sie.urls')),
-    path('api/stakeholders/', include('ai_modules.sie.urls')),  # Alias for frontend compatibility
-    path('api/change-logs/', include('ai_modules.sie.urls')),  # Alias for change-logs endpoints
+    path('api/sie/', include(('ai_modules.sie.urls', 'sie'), namespace='sie')),
+    path('api/stakeholders/', include(('ai_modules.sie.urls', 'sie'), namespace='stakeholders_alias')),  # Alias for frontend compatibility
+    path('api/change-logs/', include(('ai_modules.sie.urls', 'sie'), namespace='change_logs_alias')),  # Alias for change-logs endpoints
     path('api/context/', include('ai_modules.sca.urls')),
-    path('api/scope/', include('ai_modules.asb.urls')),
-    path('api/scopes/', include('ai_modules.asb.urls')),  # Alias for frontend compatibility
-    path('api/processes/', include('ai_modules.spm.urls')),
-    path('api/maps/', include('ai_modules.spm.urls')),  # Alias for frontend compatibility
+    path('api/scope/', include(('ai_modules.asb.urls', 'asb'), namespace='asb')),
+    path('api/scopes/', include(('ai_modules.asb.urls', 'asb'), namespace='scopes_alias')),  # Alias for frontend compatibility
+    path('api/processes/', include(('ai_modules.spm.urls', 'spm'), namespace='spm')),
+    path('api/maps/', include(('ai_modules.spm.urls', 'spm'), namespace='maps_alias')),  # Alias for frontend compatibility
     path('api/resources/', include('resources.urls')),
     path('api/planning/', include('planning.urls')),
     path('api/operations/', include('operations.urls')),

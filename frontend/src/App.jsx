@@ -49,6 +49,10 @@ import AnalysesPage from './features/performance/pages/AnalysesPage';
 import AuditsPage from './features/performance/pages/AuditsPage';
 import FindingsPage from './features/performance/pages/FindingsPage';
 import ReviewsPage from './features/performance/pages/ReviewsPage';
+import ImprovementDashboard from './features/improvement/pages/ImprovementDashboard';
+import ImprovementNonconformitiesPage from './features/improvement/pages/ImprovementNonconformitiesPage';
+import ImprovementCorrectiveActionsPage from './features/improvement/pages/ImprovementCorrectiveActionsPage';
+import ImprovementContinualPage from './features/improvement/pages/ImprovementContinualPage';
 
 function App() {
   return (
@@ -142,6 +146,15 @@ function App() {
         <Route path="performance/audits" element={<AuditsPage />} />
         <Route path="performance/findings" element={<FindingsPage />} />
         <Route path="performance/reviews" element={<ReviewsPage />} />
+
+        {/* Improvement Module */}
+        <Route path="improvement" element={<ImprovementDashboard />} />
+        <Route path="improvement/nonconformities" element={<ImprovementNonconformitiesPage />} />
+        <Route path="improvement/nonconformities/new" element={<ImprovementNonconformitiesPage />} />
+        <Route path="improvement/corrective-actions" element={<ImprovementCorrectiveActionsPage />} />
+        <Route path="improvement/corrective-actions/new" element={<ImprovementCorrectiveActionsPage />} />
+        <Route path="improvement/continual" element={<ImprovementContinualPage />} />
+        <Route path="improvement/continual/new" element={<ImprovementContinualPage />} />
         
         {/* Settings - solo para admin */}
         <Route
