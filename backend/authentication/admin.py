@@ -70,10 +70,10 @@ class UserProfileAdmin(admin.ModelAdmin):
 class RefreshTokenBlacklistAdmin(admin.ModelAdmin):
     """Admin para tokens en lista negra"""
     
-    list_display = ('user', 'blacklisted_at', 'token_preview')
+    list_display = ('user', 'blacklisted_at', 'token_preview', 'token_hash')
     list_filter = ('blacklisted_at',)
-    search_fields = ('user__email', 'token')
-    readonly_fields = ('blacklisted_at', 'token', 'user')
+    search_fields = ('user__email', 'token', 'token_hash')
+    readonly_fields = ('blacklisted_at', 'token', 'token_hash', 'user')
     ordering = ('-blacklisted_at',)
     
     def token_preview(self, obj):

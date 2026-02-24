@@ -5,8 +5,10 @@ import {
   ToggleLeft, ToggleRight, Settings2
 } from 'lucide-react';
 import settingsService from '../../services/settingsService';
+import { useI18n } from '../../context/I18nContext';
 
-const AIModulesSettings = ({ settings, onUpdate }) => {
+const AIModulesSettings = ({ settings, onUpdate, organizationId }) => {
+  const { t } = useI18n();
   const [formData, setFormData] = useState({
     ai_sca_enabled: settings?.ai_sca_enabled ?? true,
     ai_sie_enabled: settings?.ai_sie_enabled ?? true,
@@ -75,7 +77,7 @@ const AIModulesSettings = ({ settings, onUpdate }) => {
       setSaving(true);
       setError(null);
       
-      const result = await settingsService.updateAIModules(formData);
+      const result = await settingsService.updateAIModules(formData, organizationId);
       onUpdate(result);
       setSuccess(true);
       

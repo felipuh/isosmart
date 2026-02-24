@@ -106,11 +106,17 @@ class LogoutView(APIView):
         serializer.is_valid(raise_exception=True)
         
         try:
-            token = RefreshToken(serializer.validated_data['refresh'])
-            
-            # JWT blacklist no está configurado, simplemente validamos el token
-            # El token expirará naturalmente según REFRESH_TOKEN_LIFETIME
-            # token.blacklist()
+            refresh_token_str = serializer.validated_data['refresh']
+            RefreshToken(refresh_token_str)
+
+            token_hash = RefreshTokenBlacklist.hash_token(refresh_token_str)
+            RefreshTokenBlacklist.objects.get_or_create(
+                token_hash=token_hash,
+                defaults={
+                    'token': refresh_token_str,
+                    'user': request.user,
+                }
+            )
             
         except TokenError:
             pass  # Token ya expirado o inválido, ignorar
@@ -136,7 +142,8 @@ class RefreshTokenView(APIView):
             refresh = RefreshToken(serializer.validated_data['refresh'])
             
             # Verificar que no esté en lista negra
-            if RefreshTokenBlacklist.objects.filter(token=str(refresh)).exists():
+            refresh_token_str = str(refresh)
+            if RefreshTokenBlacklist.objects.filter(token_hash=RefreshTokenBlacklist.hash_token(refresh_token_str)).exists():
                 return Response(
                     {'detail': 'Token inválido o expirado.'},
                     status=status.HTTP_401_UNAUTHORIZED

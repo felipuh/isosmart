@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import riskService from '../../services/riskService';
+import { useI18n } from '../../context/I18nContext';
 
 const RiskMatrixVisual = ({ onRiskClick }) => {
+  const { t } = useI18n();
   const [matrixData, setMatrixData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -92,10 +94,10 @@ const RiskMatrixVisual = ({ onRiskClick }) => {
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-4 transition-colors">
         <h3 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Leyenda de Niveles de Riesgo</h3>
         <div className="flex flex-wrap gap-4">
-          <div className="flex items-center"><div className="w-4 h-4 bg-red-500 rounded mr-2"></div><span className="text-sm text-slate-600 dark:text-slate-400">Crítico</span></div>
-          <div className="flex items-center"><div className="w-4 h-4 bg-orange-500 rounded mr-2"></div><span className="text-sm text-slate-600 dark:text-slate-400">Alto</span></div>
-          <div className="flex items-center"><div className="w-4 h-4 bg-yellow-400 rounded mr-2"></div><span className="text-sm text-slate-600 dark:text-slate-400">Medio</span></div>
-          <div className="flex items-center"><div className="w-4 h-4 bg-green-500 rounded mr-2"></div><span className="text-sm text-slate-600 dark:text-slate-400">Bajo</span></div>
+          <div className="flex items-center"><div className="w-4 h-4 bg-red-500 rounded mr-2"></div><span className="text-sm text-slate-600 dark:text-slate-400">{t('literals.Crítico')}</span></div>
+          <div className="flex items-center"><div className="w-4 h-4 bg-orange-500 rounded mr-2"></div><span className="text-sm text-slate-600 dark:text-slate-400">{t('literals.Alto')}</span></div>
+          <div className="flex items-center"><div className="w-4 h-4 bg-yellow-400 rounded mr-2"></div><span className="text-sm text-slate-600 dark:text-slate-400">{t('literals.Medio')}</span></div>
+          <div className="flex items-center"><div className="w-4 h-4 bg-green-500 rounded mr-2"></div><span className="text-sm text-slate-600 dark:text-slate-400">{t('literals.Bajo')}</span></div>
         </div>
       </div>
 

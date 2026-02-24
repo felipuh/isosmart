@@ -1,11 +1,13 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { Plus, RefreshCw, FileText, Upload as UploadIcon, Folder } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { useI18n } from '../../context/I18nContext';
 import documentService from '../../services/documentService';
 import DocumentList from './DocumentList';
 import DocumentUploadForm from './DocumentUploadForm';
 
 const DocumentDashboard = () => {
+  const { t } = useI18n();
   const { currentOrganization } = useAuth();
   const [documents, setDocuments] = useState([]);
   const [stats, setStats] = useState(null);
@@ -177,7 +179,7 @@ const DocumentDashboard = () => {
               className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 transition-colors"
             >
               <Plus className="mr-2 h-4 w-4" />
-              {showUploadForm ? 'Cancelar' : 'Subir Documento'}
+              {showUploadForm ? t('common.buttons.cancel') : 'Subir Documento'}
             </button>
 
             <button

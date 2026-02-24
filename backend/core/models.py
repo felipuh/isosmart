@@ -545,7 +545,24 @@ class OrganizationSettings(models.Model):
     
     # Configuración ISO
     iso_standard = models.CharField(max_length=50, default='ISO 9001:2015')
+    enabled_standards = models.JSONField(default=list, blank=True)
+    preferred_language = models.CharField(max_length=20, default='es-LATAM', choices=[
+        ('es-LATAM', 'Español (LATAM)'),
+        ('en', 'English'),
+        ('pt', 'Português'),
+    ])
     fiscal_year_start = models.IntegerField(default=1, choices=[(i, f'Mes {i}') for i in range(1, 13)])
+
+    # Onboarding
+    onboarding_completed = models.BooleanField(default=False)
+    onboarding_completed_at = models.DateTimeField(null=True, blank=True)
+    onboarding_completed_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='completed_onboardings'
+    )
     
     # Backup
     auto_backup_enabled = models.BooleanField(default=False)
@@ -569,7 +586,16 @@ class OrganizationSettings(models.Model):
 class ISOClauseConfig(models.Model):
     """Configuración de cláusulas ISO por organización"""
     
+    STANDARD_CHOICES = [
+        ('ISO9001_2015', 'ISO 9001:2015'),
+        ('ISO42001_2023', 'ISO/IEC 42001:2023'),
+        ('ISO27001_2022', 'ISO/IEC 27001:2022'),
+        ('ISO14001_2015', 'ISO 14001:2015'),
+        ('ISO45001_2018', 'ISO 45001:2018'),
+    ]
+
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name='iso_clauses')
+    standard_code = models.CharField(max_length=20, choices=STANDARD_CHOICES, default='ISO9001_2015')
     clause_number = models.CharField(max_length=10)
     clause_name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
@@ -579,11 +605,11 @@ class ISOClauseConfig(models.Model):
     
     class Meta:
         db_table = 'iso_clause_configs'
-        unique_together = ['organization', 'clause_number']
-        ordering = ['clause_number']
+        unique_together = ['organization', 'standard_code', 'clause_number']
+        ordering = ['standard_code', 'clause_number']
     
     def __str__(self):
-        return f"{self.clause_number} - {self.clause_name}"
+        return f"{self.standard_code} {self.clause_number} - {self.clause_name}"
 
 
 class AuditLog(models.Model):

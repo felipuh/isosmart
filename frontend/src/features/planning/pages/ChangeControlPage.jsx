@@ -1,12 +1,14 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
+import { useI18n } from '../../../context/I18nContext';
 import Modal from '../../../components/Common/Modal';
 import { getChanges, createChange, updateChange, deleteChange } from '../api/planningApi';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
 
 const ChangeControlPage = () => {
+  const { t } = useI18n();
   const { currentOrganization, user } = useAuth();
   const orgId = currentOrganization?.id || null;
   const orgName = currentOrganization?.name || '';
@@ -152,7 +154,7 @@ const ChangeControlPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">Control de Cambios</h1>
+        <h1 className="text-3xl font-bold text-white">{t('literals.Control de Cambios')}</h1>
         <button
           type="button"
           onClick={openForm}
@@ -170,7 +172,7 @@ const ChangeControlPage = () => {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Título</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Tipo</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Urgencia</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Estado</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.status')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Acciones</th>
             </tr>
           </thead>
@@ -183,8 +185,8 @@ const ChangeControlPage = () => {
                 <td className="px-6 py-4 text-sm text-gray-300">{i.urgency_display}</td>
                 <td className="px-6 py-4 text-sm text-gray-300">{i.status_display}</td>
                 <td className="px-6 py-4 text-sm space-x-2">
-                  <button onClick={() => handleEdit(i)} className="text-blue-400 hover:text-blue-300">Editar</button>
-                  <button onClick={() => handleDelete(i.id)} className="text-red-400 hover:text-red-300">Eliminar</button>
+                  <button onClick={() => handleEdit(i)} className="text-blue-400 hover:text-blue-300">{t('common.buttons.edit')}</button>
+                  <button onClick={() => handleDelete(i.id)} className="text-red-400 hover:text-red-300">{t('common.buttons.delete')}</button>
                 </td>
               </tr>
             ))}
@@ -209,40 +211,40 @@ const ChangeControlPage = () => {
               <input type="text" value={form.title} onChange={(e) => setForm({...form, title: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Descripción</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('common.forms.description')}</label>
               <textarea value={form.description} onChange={(e) => setForm({...form, description: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" required />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">Tipo</label>
               <select value={form.change_type} onChange={(e) => setForm({...form, change_type: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="process">Proceso</option>
-                <option value="procedure">Procedimiento</option>
-                <option value="resource">Recurso</option>
-                <option value="technology">Tecnología</option>
-                <option value="structure">Estructura Organizacional</option>
-                <option value="scope">Alcance del SGC</option>
-                <option value="policy">Política</option>
-                <option value="other">Otro</option>
+                <option value="process">{t('literals.Proceso')}</option>
+                <option value="procedure">{t('literals.Procedimiento')}</option>
+                <option value="resource">{t('literals.Recurso')}</option>
+                <option value="technology">{t('literals.Tecnología')}</option>
+                <option value="structure">{t('literals.Estructura Organizacional')}</option>
+                <option value="scope">{t('literals.Alcance del SGC')}</option>
+                <option value="policy">{t('literals.Política')}</option>
+                <option value="other">{t('literals.Otro')}</option>
               </select>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">Razón</label>
               <select value={form.reason} onChange={(e) => setForm({...form, reason: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="improvement">Mejora</option>
-                <option value="correction">Corrección</option>
-                <option value="compliance">Cumplimiento</option>
-                <option value="risk_mitigation">Mitigación de Riesgo</option>
-                <option value="opportunity">Oportunidad</option>
-                <option value="external_requirement">Requisito Externo</option>
+                <option value="improvement">{t('literals.Mejora')}</option>
+                <option value="correction">{t('literals.Corrección')}</option>
+                <option value="compliance">{t('literals.Cumplimiento')}</option>
+                <option value="risk_mitigation">{t('literals.Mitigación de Riesgo')}</option>
+                <option value="opportunity">{t('literals.Oportunidad')}</option>
+                <option value="external_requirement">{t('literals.Requisito Externo')}</option>
               </select>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">Urgencia</label>
               <select value={form.urgency} onChange={(e) => setForm({...form, urgency: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="low">Baja</option>
-                <option value="medium">Media</option>
-                <option value="high">Alta</option>
-                <option value="critical">Crítica</option>
+                <option value="low">{t('literals.Baja')}</option>
+                <option value="medium">{t('literals.Media')}</option>
+                <option value="high">{t('literals.Alta')}</option>
+                <option value="critical">{t('literals.Crítica')}</option>
               </select>
             </div>
             <div>
@@ -250,17 +252,17 @@ const ChangeControlPage = () => {
               <input type="date" value={form.planned_date} onChange={(e) => setForm({...form, planned_date: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Estado</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('common.forms.status')}</label>
               <select value={form.status} onChange={(e) => setForm({...form, status: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="draft">Borrador</option>
-                <option value="submitted">Enviado</option>
-                <option value="under_review">En Revisión</option>
-                <option value="approved">Aprobado</option>
-                <option value="rejected">Rechazado</option>
-                <option value="in_implementation">En Implementación</option>
-                <option value="implemented">Implementado</option>
-                <option value="verified">Verificado</option>
-                <option value="closed">Cerrado</option>
+                <option value="draft">{t('literals.Borrador')}</option>
+                <option value="submitted">{t('literals.Enviado')}</option>
+                <option value="under_review">{t('literals.En Revisión')}</option>
+                <option value="approved">{t('literals.Aprobado')}</option>
+                <option value="rejected">{t('literals.Rechazado')}</option>
+                <option value="in_implementation">{t('literals.En Implementación')}</option>
+                <option value="implemented">{t('literals.Implementado')}</option>
+                <option value="verified">{t('literals.Verificado')}</option>
+                <option value="closed">{t('literals.Cerrado')}</option>
               </select>
             </div>
             <div className="md:col-span-3">
@@ -286,9 +288,9 @@ const ChangeControlPage = () => {
           </div>
           <div className="flex space-x-3">
             <button type="submit" disabled={saving} className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
-              {saving ? 'Guardando...' : editingId ? 'Actualizar' : 'Crear'}
+              {saving ? t('common.messages.saving') : editingId ? t('common.buttons.update') : t('common.buttons.create')}
             </button>
-            {editingId && <button type="button" onClick={closeForm} className="px-6 py-2 bg-gray-600 text-white rounded-lg">Cancelar</button>}
+            {editingId && <button type="button" onClick={closeForm} className="px-6 py-2 bg-gray-600 text-white rounded-lg">{t('common.buttons.cancel')}</button>}
           </div>
         </form>
       </Modal>

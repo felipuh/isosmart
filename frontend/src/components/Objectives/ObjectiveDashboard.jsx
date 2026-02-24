@@ -1,10 +1,12 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { useI18n } from '../../context/I18nContext';
 import objectiveService from '../../services/objectiveService';
 import ObjectiveList from './ObjectiveList';
 import ObjectiveForm from './ObjectiveForm';
 
 const ObjectiveDashboard = () => {
+  const { t } = useI18n();
   const { currentOrganization } = useAuth();
   const [stats, setStats] = useState(null);
   const [objectives, setObjectives] = useState([]);
@@ -98,7 +100,7 @@ const ObjectiveDashboard = () => {
     <div className="p-6 bg-slate-50 dark:bg-slate-900 min-h-screen transition-colors duration-300">
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Objetivos de Calidad</h1>
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">{t('literals.Objetivos de Calidad')}</h1>
         <p className="text-slate-500 dark:text-slate-400 mt-1">
           Gestiona los objetivos de calidad del SGC según ISO 9001:2015 - Cláusula 6.2
         </p>
@@ -163,12 +165,12 @@ const ObjectiveDashboard = () => {
             onChange={(e) => setFilters({...filters, status: e.target.value})}
             className="px-4 py-2.5 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors"
           >
-            <option value="">Todos los estados</option>
-            <option value="active">Activo</option>
-            <option value="in_progress">En Progreso</option>
-            <option value="achieved">Logrado</option>
-            <option value="delayed">Retrasado</option>
-            <option value="cancelled">Cancelado</option>
+            <option value="">{t('literals.Todos los estados')}</option>
+            <option value="active">{t('literals.Activo')}</option>
+            <option value="in_progress">{t('literals.En Progreso')}</option>
+            <option value="achieved">{t('literals.Logrado')}</option>
+            <option value="delayed">{t('literals.Retrasado')}</option>
+            <option value="cancelled">{t('literals.Cancelado')}</option>
           </select>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   Settings, Building2, Users, Brain, Bell, Database, 
   FileCheck, Palette, ChevronRight, Shield, Activity,
@@ -12,8 +12,13 @@ import BackupExportSettings from './BackupExportSettings';
 import ISOClausesSettings from './ISOClausesSettings';
 import ThemeSettings from './ThemeSettings';
 import settingsService from '../../services/settingsService';
+import { useAuth } from '../../context/AuthContext';
+import { useI18n } from '../../context/I18nContext';
 
 const SettingsDashboard = () => {
+  const { t } = useI18n();
+  const { currentOrganization } = useAuth();
+  const organizationId = currentOrganization?.id;
   const [activeTab, setActiveTab] = useState('organization');
   const [loading, setLoading] = useState(true);
   const [organization, setOrganization] = useState(null);
@@ -66,18 +71,14 @@ const SettingsDashboard = () => {
     },
   ];
 
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
       
       const [orgData, settingsData] = await Promise.all([
-        settingsService.getOrganization(1),
-        settingsService.getSettings(1)
+        settingsService.getOrganization(organizationId),
+        settingsService.getSettings(organizationId)
       ]);
       
       setOrganization(orgData);
@@ -85,7 +86,7 @@ const SettingsDashboard = () => {
       
       // Cargar stats del dashboard
       try {
-        const dashboardData = await settingsService.getOrganizationDashboard(1);
+        const dashboardData = await settingsService.getOrganizationDashboard(organizationId);
         setStats(dashboardData);
       } catch {
         console.log('Dashboard stats not available');
@@ -97,7 +98,13 @@ const SettingsDashboard = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [organizationId]);
+
+  useEffect(() => {
+    if (organizationId) {
+      loadData();
+    }
+  }, [organizationId, loadData]);
 
   const handleSettingsUpdate = (newSettings) => {
     setSettings(prev => ({ ...prev, ...newSettings }));
@@ -121,6 +128,7 @@ const SettingsDashboard = () => {
       case 'ai-modules':
         return (
           <AIModulesSettings 
+            organizationId={organizationId}
             settings={settings} 
             onUpdate={handleSettingsUpdate}
           />
@@ -128,6 +136,7 @@ const SettingsDashboard = () => {
       case 'notifications':
         return (
           <NotificationSettings 
+            organizationId={organizationId}
             settings={settings} 
             onUpdate={handleSettingsUpdate}
           />
@@ -135,6 +144,7 @@ const SettingsDashboard = () => {
       case 'backup':
         return (
           <BackupExportSettings 
+            organizationId={organizationId}
             settings={settings}
             onUpdate={handleSettingsUpdate}
           />
@@ -176,7 +186,7 @@ const SettingsDashboard = () => {
               </div>
               <div>
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">
-                  Configuración
+                  {t('literals.Configuración')}
                 </h1>
                 <p className="text-sm text-slate-500 dark:text-slate-400">
                   Gestiona tu organización y sistema ISO Smart

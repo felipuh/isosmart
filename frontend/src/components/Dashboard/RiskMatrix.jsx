@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { AlertTriangle, AlertCircle, Info, TrendingUp, Filter } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { apiService } from '../../services/api';
+import { useI18n } from '../../context/I18nContext';
 
 const RiskBadge = ({ level }) => {
   const styles = {
@@ -45,6 +46,7 @@ const ModuleBadge = ({ module }) => {
 };
 
 const RiskMatrix = () => {
+  const { t } = useI18n();
   const [risks, setRisks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
@@ -91,6 +93,13 @@ const RiskMatrix = () => {
     ? risks 
     : risks.filter(r => r.risk_level === filter);
 
+  const levelLabels = {
+    critico: 'Crítico',
+    alto: 'Alto',
+    medio: 'Medio',
+    bajo: 'Bajo',
+  };
+
   if (loading) {
     return (
       <div className="card">
@@ -110,7 +119,7 @@ const RiskMatrix = () => {
       <div className="card">
         <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
           <BarChart className="w-5 h-5 text-blue-600" />
-          Riesgos por Módulo
+          {t('literals.Riesgos por Módulo')}
         </h3>
         <ResponsiveContainer width="100%" height={250}>
           <BarChart data={chartData}>
@@ -119,9 +128,9 @@ const RiskMatrix = () => {
             <YAxis />
             <Tooltip />
             <Legend />
-            <Bar dataKey="critico" fill="#ef4444" name="Críticos" />
-            <Bar dataKey="alto" fill="#f97316" name="Altos" />
-            <Bar dataKey="medio" fill="#eab308" name="Medios" />
+            <Bar dataKey="critico" fill="#ef4444" name={t('literals.Críticos')} />
+            <Bar dataKey="alto" fill="#f97316" name={t('literals.Altos')} />
+            <Bar dataKey="medio" fill="#eab308" name={t('literals.Medios')} />
           </BarChart>
         </ResponsiveContainer>
       </div>
@@ -131,7 +140,7 @@ const RiskMatrix = () => {
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
             <AlertTriangle className="w-6 h-6 text-red-600" />
-            Matriz de Riesgos Consolidada (ISO 6.1)
+            {t('literals.Matriz de Riesgos Consolidada (ISO 6.1)')}
           </h2>
           
           {/* Filtros */}
@@ -147,7 +156,7 @@ const RiskMatrix = () => {
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >
-                {level === 'all' ? 'Todos' : level.charAt(0).toUpperCase() + level.slice(1)}
+                {level === 'all' ? t('literals.Todos') : t(`literals.${levelLabels[level] || level}`)}
               </button>
             ))}
           </div>
@@ -158,7 +167,7 @@ const RiskMatrix = () => {
           {filteredRisks.length === 0 ? (
             <div className="text-center py-12 text-gray-500">
               <AlertCircle className="w-12 h-12 mx-auto mb-3 text-gray-400" />
-              <p>No se encontraron riesgos</p>
+              <p>{t('literals.No se encontraron riesgos')}</p>
             </div>
           ) : (
             filteredRisks.slice(0, 10).map((risk) => (
@@ -186,15 +195,15 @@ const RiskMatrix = () => {
                     </p>
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
-                        <span className="text-gray-500">Probabilidad:</span>
+                        <span className="text-gray-500">{t('literals.Probabilidad')}:</span>
                         <span className="ml-2 font-semibold">{risk.probability}</span>
                       </div>
                       <div>
-                        <span className="text-gray-500">Impacto:</span>
+                        <span className="text-gray-500">{t('literals.Impacto')}:</span>
                         <span className="ml-2 font-semibold">{risk.impact}</span>
                       </div>
                       <div className="col-span-2">
-                        <span className="text-gray-500">Responsable:</span>
+                        <span className="text-gray-500">{t('literals.Responsable')}:</span>
                         <span className="ml-2 font-semibold">{risk.responsible}</span>
                       </div>
                     </div>
@@ -203,7 +212,7 @@ const RiskMatrix = () => {
                 
                 {/* Acciones de mitigación */}
                 <div className="mt-3 pt-3 border-t border-gray-200">
-                  <p className="text-xs text-gray-500 mb-1">Acciones de Mitigación:</p>
+                  <p className="text-xs text-gray-500 mb-1">{t('literals.Acciones de Mitigación')}:</p>
                   <p className="text-sm text-gray-700">{risk.mitigation_actions}</p>
                 </div>
               </div>
@@ -214,7 +223,7 @@ const RiskMatrix = () => {
         {filteredRisks.length > 10 && (
           <div className="mt-6 text-center">
             <button className="px-6 py-2 bg-white text-gray-700 rounded-lg font-semibold border-2 border-gray-300 hover:border-blue-500 hover:text-blue-600 transition-all">
-              Ver todos los riesgos ({filteredRisks.length})
+              {t('literals.Ver todos los riesgos')} ({filteredRisks.length})
             </button>
           </div>
         )}

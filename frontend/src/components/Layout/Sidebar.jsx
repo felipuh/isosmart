@@ -1,26 +1,27 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Home, Network, TrendingUp, Target, GitBranch, FileText, Settings, Award, FolderOpen, AlertTriangle, Users, Package, ClipboardList, Activity, LineChart, Zap } from 'lucide-react';
+import { useI18n } from '../../context/I18nContext';
 
 const Sidebar = ({ isOpen = true }) => {
   const location = useLocation();
+  const { t } = useI18n();
   
   const menuItems = [
-    { name: 'Dashboard', path: '/', icon: Home },
-    { name: 'Stakeholders', path: '/stakeholders', icon: Network },
-    { name: 'Contexto', path: '/context', icon: TrendingUp },
-    { name: 'Alcance SGC', path: '/scope', icon: Target },
-    { name: 'Procesos', path: '/processes', icon: GitBranch },
-    { name: 'Documentos', path: '/documents', icon: FolderOpen },
-    { name: 'Riesgos', path: '/risks', icon: AlertTriangle }, 
-    { name: 'Objetivos', path: '/objectives', icon: Award },
-    { name: 'Planificacion', path: '/planning', icon: ClipboardList },
-    { name: 'Operaciones', path: '/operations', icon: Activity },
-    { name: 'Desempeno', path: '/performance', icon: LineChart },
-    { name: 'Mejora', path: '/improvement', icon: Zap },
-    { name: 'Liderazgo', path: '/leadership', icon: Users },
-    { name: 'Recursos', path: '/resources', icon: Package },
-    { name: 'Configuración', path: '/settings', icon: Settings },
+    { name: t('navigation.dashboard'), path: '/', icon: Home },
+    { name: t('navigation.stakeholders'), path: '/stakeholders', icon: Network },
+    { name: t('navigation.context'), path: '/context', icon: TrendingUp },
+    { name: t('navigation.scope'), path: '/scope', icon: Target },
+    { name: t('navigation.processes'), path: '/processes', icon: GitBranch },
+    { name: t('navigation.documents'), path: '/documents', icon: FolderOpen },
+    { name: t('navigation.risks'), path: '/risks', icon: AlertTriangle }, 
+    { name: t('navigation.objectives'), path: '/objectives', icon: Award },
+    { name: t('navigation.planning'), path: '/planning', icon: ClipboardList },
+    { name: t('navigation.resources'), path: '/resources', icon: Package },
+    { name: t('navigation.improvement'), path: '/improvement', icon: Zap },
+    { name: t('navigation.performance'), path: '/performance', icon: LineChart },
+    { name: t('navigation.leadership'), path: '/leadership', icon: Users },
+    { name: t('navigation.settings'), path: '/settings', icon: Settings },
   ];
 
   return (

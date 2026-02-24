@@ -20,3 +20,9 @@ Este directorio centraliza documentación técnica interna del sistema.
 - Todas las APIs se exponen bajo prefijo `/api`.
 - Todas las consultas de datos multitenant deben incluir `organization_id` o venir respaldadas por JWT con claim de organización.
 - Las automatizaciones entre módulos se describen como **sync** y son idempotentes (`update_or_create`).
+
+## Asistente IA (entorno)
+
+- Para activar proveedor real del asistente IA, crear `backend/.env` desde `backend/.env.example`.
+- Definir `AI_ASSISTANT_API_URL`, `AI_ASSISTANT_API_KEY` y `AI_ASSISTANT_MODEL`.
+- Si `AI_ASSISTANT_API_KEY` no está definida, el panel usa fallback local automáticamente.

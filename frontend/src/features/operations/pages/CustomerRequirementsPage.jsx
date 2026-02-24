@@ -1,12 +1,14 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
+import { useI18n } from '../../../context/I18nContext';
 import Modal from '../../../components/Common/Modal';
 import { getCustomerRequirements, createCustomerRequirement, updateCustomerRequirement, deleteCustomerRequirement } from '../api/operationsApi';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
 
 const CustomerRequirementsPage = () => {
+  const { t } = useI18n();
   const { currentOrganization } = useAuth();
   const orgId = currentOrganization?.id || null;
   const orgName = currentOrganization?.name || '';
@@ -138,7 +140,7 @@ const CustomerRequirementsPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">Requisitos del Cliente</h1>
+        <h1 className="text-3xl font-bold text-white">{t('literals.Requisitos del Cliente')}</h1>
         <button
           type="button"
           onClick={openForm}
@@ -156,7 +158,7 @@ const CustomerRequirementsPage = () => {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Cliente</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Título</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Tipo</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Estado</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.status')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Acciones</th>
             </tr>
           </thead>
@@ -177,8 +179,8 @@ const CustomerRequirementsPage = () => {
                   </span>
                 </td>
                 <td className="px-6 py-4 text-sm space-x-2">
-                  <button onClick={() => handleEdit(item)} className="text-blue-400 hover:text-blue-300">Editar</button>
-                  <button onClick={() => handleDelete(item.id)} className="text-red-400 hover:text-red-300">Eliminar</button>
+                  <button onClick={() => handleEdit(item)} className="text-blue-400 hover:text-blue-300">{t('common.buttons.edit')}</button>
+                  <button onClick={() => handleDelete(item.id)} className="text-red-400 hover:text-red-300">{t('common.buttons.delete')}</button>
                 </td>
               </tr>
             ))}
@@ -213,12 +215,12 @@ const CustomerRequirementsPage = () => {
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">Tipo</label>
               <select value={form.requirement_type} onChange={(e) => setForm({...form, requirement_type: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="product">Producto</option>
-                <option value="service">Servicio</option>
-                <option value="delivery">Entrega</option>
-                <option value="quality">Calidad</option>
-                <option value="regulatory">Regulatorio</option>
-                <option value="other">Otro</option>
+                <option value="product">{t('literals.Producto')}</option>
+                <option value="service">{t('literals.Servicio')}</option>
+                <option value="delivery">{t('literals.Entrega')}</option>
+                <option value="quality">{t('literals.Calidad')}</option>
+                <option value="regulatory">{t('literals.Regulatorio')}</option>
+                <option value="other">{t('literals.Otro')}</option>
               </select>
             </div>
             <div className="md:col-span-2">
@@ -240,15 +242,15 @@ const CustomerRequirementsPage = () => {
               </label>
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Descripción</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('common.forms.description')}</label>
               <textarea value={form.description} onChange={(e) => setForm({...form, description: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="3" required />
             </div>
           </div>
           <div className="flex space-x-3">
             <button type="submit" disabled={saving} className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
-              {saving ? 'Guardando...' : editingId ? 'Actualizar' : 'Crear'}
+              {saving ? t('common.messages.saving') : editingId ? t('common.buttons.update') : t('common.buttons.create')}
             </button>
-            {editingId && <button type="button" onClick={closeForm} className="px-6 py-2 bg-gray-600 text-white rounded-lg">Cancelar</button>}
+            {editingId && <button type="button" onClick={closeForm} className="px-6 py-2 bg-gray-600 text-white rounded-lg">{t('common.buttons.cancel')}</button>}
           </div>
         </form>
       </Modal>

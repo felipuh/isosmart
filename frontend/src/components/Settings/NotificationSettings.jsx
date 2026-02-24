@@ -4,8 +4,10 @@ import {
   Save, Loader2, Check, AlertCircle, Info, ToggleLeft, ToggleRight
 } from 'lucide-react';
 import settingsService from '../../services/settingsService';
+import { useI18n } from '../../context/I18nContext';
 
-const NotificationSettings = ({ settings, onUpdate }) => {
+const NotificationSettings = ({ settings, onUpdate, organizationId }) => {
+  const { t } = useI18n();
   const [formData, setFormData] = useState({
     notify_risk_critical: settings?.notify_risk_critical ?? true,
     notify_risk_high: settings?.notify_risk_high ?? true,
@@ -76,7 +78,7 @@ const NotificationSettings = ({ settings, onUpdate }) => {
       setSaving(true);
       setError(null);
       
-      const result = await settingsService.updateNotifications(formData);
+      const result = await settingsService.updateNotifications(formData, organizationId);
       onUpdate(result);
       setSuccess(true);
       

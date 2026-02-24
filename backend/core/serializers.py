@@ -128,7 +128,7 @@ class OrganizationSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'slug', 'created_at', 'updated_at']
     
     def get_users_count(self, obj):
-        return obj.users.count()
+        return obj.members.count()
 
 
 class OrganizationSettingsSerializer(serializers.ModelSerializer):
@@ -140,18 +140,19 @@ class OrganizationSettingsSerializer(serializers.ModelSerializer):
             'ai_auto_analysis', 'ai_analysis_frequency',
             'notify_risk_critical', 'notify_risk_high', 'notify_objective_deadline',
             'notify_document_upload', 'notify_stakeholder_change', 'notification_email',
-            'iso_standard', 'fiscal_year_start',
+            'iso_standard', 'enabled_standards', 'fiscal_year_start',
+            'onboarding_completed', 'onboarding_completed_at', 'onboarding_completed_by',
             'auto_backup_enabled', 'backup_frequency', 'last_backup_at',
             'created_at', 'updated_at'
         ]
-        read_only_fields = ['id', 'organization', 'last_backup_at', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'organization', 'last_backup_at', 'created_at', 'updated_at', 'onboarding_completed_at', 'onboarding_completed_by']
 
 
 class ISOClauseConfigSerializer(serializers.ModelSerializer):
     class Meta:
         model = ISOClauseConfig
         fields = [
-            'id', 'organization', 'clause_number', 'clause_name',
+            'id', 'organization', 'standard_code', 'clause_number', 'clause_name',
             'description', 'is_applicable', 'exclusion_justification', 'responsible'
         ]
         read_only_fields = ['id', 'organization']

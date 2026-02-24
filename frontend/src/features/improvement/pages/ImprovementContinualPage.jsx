@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
+import { useI18n } from '../../../context/I18nContext';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Modal from '../../../components/Common/Modal';
 import { getContinualImprovements, createContinualImprovement, updateContinualImprovement, deleteContinualImprovement } from '../api/improvementApi';
@@ -14,6 +15,7 @@ const priorityColors = { critical: 'bg-red-500/20 text-red-400', high: 'bg-orang
 const initialForm = { initiative_number: '', title: '', description: '', improvement_type: 'process', current_situation: '', proposed_improvement: '', expected_benefits: '', alignment_with_objectives: '', estimated_investment: '', estimated_savings: '', expected_roi: '', priority: 'medium', proposed_date: '', status: 'proposed', completion_percentage: 0 };
 
 const ImprovementContinualPage = () => {
+  const { t } = useI18n();
   const { currentOrganization, user } = useAuth();
   const orgId = currentOrganization?.id || null;
   const orgName = currentOrganization?.name || '';
@@ -61,7 +63,7 @@ const ImprovementContinualPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <div><h1 className="text-3xl font-bold text-white">Mejora Continua</h1><p className="text-gray-400 mt-1">ISO 9001:2015 - Cláusula 10.3</p></div>
+        <div><h1 className="text-3xl font-bold text-white">{t('literals.Mejora Continua')}</h1><p className="text-gray-400 mt-1">ISO 9001:2015 - Cláusula 10.3</p></div>
         <button type="button" onClick={openForm} className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">Nueva iniciativa</button>
       </div>
 
@@ -110,8 +112,8 @@ const ImprovementContinualPage = () => {
               <label className="text-xs text-slate-400">% Completado<input type="number" min="0" max="100" value={form.completion_percentage} onChange={e => setForm({ ...form, completion_percentage: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100" /></label>
             </div>
             <div className="flex flex-wrap gap-2">
-              <button type="submit" disabled={saving || !orgId} className="rounded-lg bg-emerald-500/80 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-500 disabled:opacity-50">{saving ? 'Guardando...' : editingId ? 'Actualizar' : 'Crear'}</button>
-              <button type="button" onClick={closeForm} className="rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-200">Cancelar</button>
+              <button type="submit" disabled={saving || !orgId} className="rounded-lg bg-emerald-500/80 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-500 disabled:opacity-50">{saving ? t('common.messages.saving') : editingId ? t('common.buttons.update') : t('common.buttons.create')}</button>
+              <button type="button" onClick={closeForm} className="rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-200">{t('common.buttons.cancel')}</button>
             </div>
         </form>
       </Modal>
@@ -125,7 +127,7 @@ const ImprovementContinualPage = () => {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Tipo</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Prioridad</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Progreso</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Estado</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.status')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Acciones</th>
             </tr>
           </thead>
@@ -141,8 +143,8 @@ const ImprovementContinualPage = () => {
                 <td className="px-6 py-4"><div className="flex items-center gap-2"><div className="w-20 bg-gray-700 rounded-full h-2"><div className="bg-green-500 h-2 rounded-full" style={{ width: `${item.completion_percentage || 0}%` }}></div></div><span className="text-xs text-gray-400">{item.completion_percentage || 0}%</span></div></td>
                 <td className="px-6 py-4"><span className={`px-2 py-1 rounded text-xs ${statusColors[item.status] || ''}`}>{statusLabels[item.status] || item.status}</span></td>
                 <td className="px-6 py-4 space-x-2">
-                  <button onClick={() => handleEdit(item)} className="text-blue-400 hover:text-blue-300 text-sm">Editar</button>
-                  <button onClick={() => handleDelete(item.id)} className="text-red-400 hover:text-red-300 text-sm">Eliminar</button>
+                  <button onClick={() => handleEdit(item)} className="text-blue-400 hover:text-blue-300 text-sm">{t('common.buttons.edit')}</button>
+                  <button onClick={() => handleDelete(item.id)} className="text-red-400 hover:text-red-300 text-sm">{t('common.buttons.delete')}</button>
                 </td>
               </tr>
             ))}

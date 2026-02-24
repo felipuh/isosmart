@@ -1,7 +1,9 @@
 import React from 'react';
 import { Plus, Edit2, Trash2, Settings, Truck, BarChart3 } from 'lucide-react';
+import { useI18n } from '../../context/I18nContext';
 
 const ScopeProcessList = ({ processes, locations, loading, onAddProcess, onEditProcess, onDeleteProcess, onAddLocation, onEditLocation, onDeleteLocation }) => {
+  const { t } = useI18n();
   
   const getProcessTypeIcon = (type) => {
     switch(type) {

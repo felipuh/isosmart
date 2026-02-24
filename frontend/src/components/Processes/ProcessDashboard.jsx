@@ -1,6 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { RefreshCw, Download, PlayCircle, FileText, Network, Target, Plus } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { useI18n } from '../../context/I18nContext';
 import processService from '../../services/processService';
 import ProcessDiagram from './ProcessDiagram';
 import ProcessList from './ProcessList';
@@ -8,6 +9,7 @@ import ProcessRecommendations from './ProcessRecommendations';
 import ProcessForm from './ProcessForm';
 
 const ProcessDashboard = () => {
+  const { t } = useI18n();
   const { currentOrganization } = useAuth();
   const [processMap, setProcessMap] = useState(null);
   const [processes, setProcesses] = useState([]);

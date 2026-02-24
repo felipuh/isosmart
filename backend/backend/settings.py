@@ -11,9 +11,13 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
 from pathlib import Path
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Cargar variables de entorno desde backend/.env si existe
+load_dotenv(BASE_DIR / '.env')
 
 
 # Quick-start development settings - unsuitable for production
@@ -195,6 +199,11 @@ SIMPLE_JWT = {
     'SIGNING_KEY': SECRET_KEY,
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
+
+# Configuración de asistente IA (streaming endpoint)
+AI_ASSISTANT_API_URL = os.getenv('AI_ASSISTANT_API_URL', 'https://api.openai.com/v1/chat/completions')
+AI_ASSISTANT_API_KEY = os.getenv('AI_ASSISTANT_API_KEY', '')
+AI_ASSISTANT_MODEL = os.getenv('AI_ASSISTANT_MODEL', 'gpt-4o-mini')
 
 # Configuración de Celery
 CELERY_BROKER_URL = 'redis://localhost:6379/1'

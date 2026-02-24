@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { RefreshCw, Download, Shield } from 'lucide-react';
 import { apiService } from '../../services/api';
+import { useI18n } from '../../context/I18nContext';
 import MetricsGrid from './MetricsGrid';
 import RiskMatrix from './RiskMatrix';
 import QualityObjectives from './QualityObjectives';
 import ContextAnalysis from './ContextAnalysis';
 
 const ExecutiveDashboard = () => {
+  const { t } = useI18n();
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState(null);
@@ -102,7 +104,7 @@ const ExecutiveDashboard = () => {
             <div className="flex items-center gap-4">
               <Shield className="w-12 h-12" />
               <div>
-                <h3 className="text-xl font-bold mb-2">Estado de Cumplimiento ISO 9001:2015</h3>
+                <h3 className="text-xl font-bold mb-2">{t('literals.Estado de Cumplimiento ISO 9001:2015')}</h3>
                 <p className="text-blue-100">
                   Cláusulas 4.1-4.4, 6.1-6.3 • Cumplimiento ISO/IEC 42001:2023 (IA Responsable)
                 </p>
@@ -110,7 +112,7 @@ const ExecutiveDashboard = () => {
             </div>
             <div className="text-right">
               <div className="text-5xl font-bold">95%</div>
-              <div className="text-blue-100 text-lg">Cumplimiento Global</div>
+              <div className="text-blue-100 text-lg">{t('literals.Cumplimiento Global')}</div>
             </div>
           </div>
         </div>

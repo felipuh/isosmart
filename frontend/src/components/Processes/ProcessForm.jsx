@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { X, Save, Plus } from 'lucide-react';
+import { useI18n } from '../../context/I18nContext';
 
 const ProcessForm = ({ process, mapId, onSave, onClose }) => {
+  const { t } = useI18n();
   const [formData, setFormData] = useState({
     process_map: mapId,
     code: '',
@@ -237,7 +239,7 @@ const ProcessForm = ({ process, mapId, onSave, onClose }) => {
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1 transition-colors">Descripción</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1 transition-colors">{t('common.forms.description')}</label>
                 <textarea
                   name="description"
                   value={formData.description}
@@ -289,7 +291,7 @@ const ProcessForm = ({ process, mapId, onSave, onClose }) => {
               className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 disabled:bg-blue-300 dark:disabled:bg-blue-900/30 transition-colors"
             >
               <Save className="mr-2 h-4 w-4" />
-              {saving ? 'Guardando...' : 'Guardar'}
+              {saving ? t('common.messages.saving') : t('common.buttons.save')}
             </button>
           </div>
         </form>

@@ -1,6 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { RefreshCw, Download, Plus, Search } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { useI18n } from '../../context/I18nContext';
 import stakeholderService from '../../services/stakeholderService';
 import CriticalStakeholders from './CriticalStakeholders';
 import PowerInterestMatrix from './PowerInterestMatrix';
@@ -9,6 +10,7 @@ import ChangeTimeline from './ChangeTimeline';
 import StakeholderForm from './StakeholderForm';
 
 const StakeholderDashboard = () => {
+  const { t } = useI18n();
   const { currentOrganization } = useAuth();
   const [stakeholders, setStakeholders] = useState([]);
   const [criticalStakeholders, setCriticalStakeholders] = useState([]);

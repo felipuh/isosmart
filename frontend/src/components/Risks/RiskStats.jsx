@@ -1,6 +1,8 @@
 import React from 'react';
+import { useI18n } from '../../context/I18nContext';
 
 const RiskStats = ({ stats, onRefresh }) => {
+  const { t } = useI18n();
   if (!stats) return null;
 
   const levelColors = {

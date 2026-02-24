@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
+import { useI18n } from '../../../context/I18nContext';
 import {
   getRoleAssignments,
   createRoleAssignment,
@@ -22,6 +23,7 @@ const initialForm = {
 };
 
 const RoleAssignmentsPage = () => {
+  const { t } = useI18n();
   const { currentOrganization } = useAuth();
   const orgId = currentOrganization?.id || null;
 
@@ -167,7 +169,7 @@ const RoleAssignmentsPage = () => {
                 <thead className="text-xs uppercase text-slate-400">
                   <tr>
                     <th className="px-3 py-2">Rol</th>
-                    <th className="px-3 py-2">Usuario</th>
+                    <th className="px-3 py-2">{t('literals.Usuario')}</th>
                     <th className="px-3 py-2">Inicio</th>
                     <th className="px-3 py-2">Tipo</th>
                     <th className="px-3 py-2 text-right">Acciones</th>
@@ -223,7 +225,7 @@ const RoleAssignmentsPage = () => {
                 className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
                 required
               >
-                <option value="">Selecciona un rol</option>
+                <option value="">{t('literals.Selecciona un rol')}</option>
                 {roles.map((role) => (
                   <option key={role.id} value={role.id}>
                     {role.name}
@@ -241,7 +243,7 @@ const RoleAssignmentsPage = () => {
                   className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
                   required
                 >
-                  <option value="">Selecciona un usuario</option>
+                  <option value="">{t('literals.Selecciona un usuario')}</option>
                   {users.map((user) => (
                     <option key={user.id} value={user.id}>
                       {user.full_name || user.email}
@@ -288,9 +290,9 @@ const RoleAssignmentsPage = () => {
                 onChange={(event) => setForm({ ...form, assignment_type: event.target.value })}
                 className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
               >
-                <option value="permanent">Permanente</option>
-                <option value="temporary">Temporal</option>
-                <option value="acting">Interino</option>
+                <option value="permanent">{t('literals.Permanente')}</option>
+                <option value="temporary">{t('literals.Temporal')}</option>
+                <option value="acting">{t('literals.Interino')}</option>
               </select>
             </label>
 
@@ -310,7 +312,7 @@ const RoleAssignmentsPage = () => {
                 onChange={(event) => setForm({ ...form, is_active: event.target.checked })}
                 className="h-4 w-4 rounded border-slate-600"
               />
-              Activo
+              {t('literals.Activo')}
             </label>
           </div>
 
@@ -320,7 +322,7 @@ const RoleAssignmentsPage = () => {
               disabled={saving || !orgId}
               className="rounded-lg bg-emerald-500/80 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-500 disabled:opacity-50"
             >
-              {saving ? 'Guardando...' : editingId ? 'Actualizar' : 'Crear'}
+              {saving ? t('common.messages.saving') : editingId ? t('common.buttons.update') : t('common.buttons.create')}
             </button>
             <button
               type="button"

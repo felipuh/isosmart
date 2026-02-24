@@ -2,12 +2,14 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
+import { useI18n } from '../../../context/I18nContext';
 import Modal from '../../../components/Common/Modal';
 import { getRisksOpportunities, createRiskOpportunity, updateRiskOpportunity, deleteRiskOpportunity } from '../api/planningApi';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
 
 const RisksOpportunitiesPage = () => {
+  const { t } = useI18n();
   const { currentOrganization } = useAuth();
   const orgId = currentOrganization?.id || null;
   const orgName = currentOrganization?.name || '';
@@ -225,8 +227,8 @@ const RisksOpportunitiesPage = () => {
                   )}
                 </td>
                 <td className="px-6 py-4 text-sm space-x-2">
-                  <button onClick={() => handleEdit(item)} className="text-blue-400 hover:text-blue-300">Editar</button>
-                  <button onClick={() => handleDelete(item.id)} className="text-red-400 hover:text-red-300">Eliminar</button>
+                  <button onClick={() => handleEdit(item)} className="text-blue-400 hover:text-blue-300">{t('common.buttons.edit')}</button>
+                  <button onClick={() => handleDelete(item.id)} className="text-red-400 hover:text-red-300">{t('common.buttons.delete')}</button>
                 </td>
               </tr>
             ))}
@@ -245,8 +247,8 @@ const RisksOpportunitiesPage = () => {
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">Tipo *</label>
               <select value={form.item_type} onChange={(e) => setForm({...form, item_type: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required>
-                <option value="risk">Riesgo</option>
-                <option value="opportunity">Oportunidad</option>
+                <option value="risk">{t('literals.Riesgo')}</option>
+                <option value="opportunity">{t('literals.Oportunidad')}</option>
               </select>
             </div>
             <div>
@@ -256,22 +258,22 @@ const RisksOpportunitiesPage = () => {
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">Categoría</label>
               <select value={form.category} onChange={(e) => setForm({...form, category: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="strategic">Estratégico</option>
-                <option value="operational">Operacional</option>
-                <option value="financial">Financiero</option>
-                <option value="compliance">Cumplimiento</option>
-                <option value="reputation">Reputacional</option>
-                <option value="technology">Tecnológico</option>
-                <option value="market">Mercado</option>
-                <option value="other">Otro</option>
+                <option value="strategic">{t('literals.Estratégico')}</option>
+                <option value="operational">{t('literals.Operacional')}</option>
+                <option value="financial">{t('literals.Financiero')}</option>
+                <option value="compliance">{t('literals.Cumplimiento')}</option>
+                <option value="reputation">{t('literals.Reputacional')}</option>
+                <option value="technology">{t('literals.Tecnológico')}</option>
+                <option value="market">{t('literals.Mercado')}</option>
+                <option value="other">{t('literals.Otro')}</option>
               </select>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">Contexto</label>
               <select value={form.context} onChange={(e) => setForm({...form, context: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="internal">Interno</option>
-                <option value="external">Externo</option>
-                <option value="both">Interno y Externo</option>
+                <option value="internal">{t('literals.Interno')}</option>
+                <option value="external">{t('literals.Externo')}</option>
+                <option value="both">{t('literals.Interno y Externo')}</option>
               </select>
             </div>
             <div className="md:col-span-3">
@@ -279,7 +281,7 @@ const RisksOpportunitiesPage = () => {
               <input type="text" value={form.title} onChange={(e) => setForm({...form, title: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Descripción</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('common.forms.description')}</label>
               <textarea value={form.description} onChange={(e) => setForm({...form, description: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="3" required />
             </div>
             {form.item_type === 'risk' && (
@@ -309,12 +311,12 @@ const RisksOpportunitiesPage = () => {
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">Tratamiento</label>
               <select value={form.treatment} onChange={(e) => setForm({...form, treatment: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="avoid">Evitar</option>
-                <option value="mitigate">Mitigar</option>
-                <option value="transfer">Transferir</option>
-                <option value="accept">Aceptar</option>
-                <option value="exploit">Explotar (Oportunidad)</option>
-                <option value="enhance">Mejorar (Oportunidad)</option>
+                <option value="avoid">{t('literals.Evitar')}</option>
+                <option value="mitigate">{t('literals.Mitigar')}</option>
+                <option value="transfer">{t('literals.Transferir')}</option>
+                <option value="accept">{t('literals.Aceptar')}</option>
+                <option value="exploit">{t('literals.Explotar (Oportunidad)')}</option>
+                <option value="enhance">{t('literals.Mejorar (Oportunidad)')}</option>
               </select>
             </div>
             <div className="md:col-span-3">
@@ -324,9 +326,9 @@ const RisksOpportunitiesPage = () => {
           </div>
           <div className="flex space-x-3">
             <button type="submit" disabled={saving} className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
-              {saving ? 'Guardando...' : editingId ? 'Actualizar' : 'Crear'}
+              {saving ? t('common.messages.saving') : editingId ? t('common.buttons.update') : t('common.buttons.create')}
             </button>
-            {editingId && <button type="button" onClick={closeForm} className="px-6 py-2 bg-gray-600 text-white rounded-lg">Cancelar</button>}
+            {editingId && <button type="button" onClick={closeForm} className="px-6 py-2 bg-gray-600 text-white rounded-lg">{t('common.buttons.cancel')}</button>}
           </div>
         </form>
       </Modal>

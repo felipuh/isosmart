@@ -3,9 +3,11 @@ from rest_framework.response import Response
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.permissions import IsAuthenticated
 from django.http import FileResponse, Http404
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
+from django.utils import timezone
 from django.db.models import Count, Avg, Q
 from datetime import datetime, timedelta
 from .models import (
@@ -591,6 +593,7 @@ class OrganizationViewSet(viewsets.ModelViewSet):
     """ViewSet para gestión de la organización"""
     queryset = Organization.objects.all()
     serializer_class = OrganizationSerializer
+    permission_classes = [IsAuthenticated]
     
     @action(detail=True, methods=['get'])
     def dashboard(self, request, pk=None):
@@ -599,7 +602,7 @@ class OrganizationViewSet(viewsets.ModelViewSet):
         
         return Response({
             'organization': OrganizationSerializer(org).data,
-            'users_count': org.users.filter(is_active=True).count(),
+            'users_count': org.members.filter(is_active=True).count(),
             'total_documents': Document.objects.count(),
             'total_risks': RiskMatrix.objects.count(),
             'total_objectives': QualityObjective.objects.count(),
@@ -610,13 +613,15 @@ class UserManagementViewSet(viewsets.ModelViewSet):
     """ViewSet para gestión de usuarios"""
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
+    permission_classes = [IsAuthenticated]
     
     def get_queryset(self):
         queryset = super().get_queryset()
-        # Filtrar por organización si se especifica
-        org_id = self.request.query_params.get('organization', None)
+        org_id = self.request.query_params.get('organization', None) or getattr(self.request, 'organization_id', None)
         if org_id:
             queryset = queryset.filter(organization_id=org_id)
+        else:
+            queryset = queryset.none()
         return queryset.select_related('user', 'organization')
     
     @action(detail=False, methods=['post'])
@@ -724,33 +729,49 @@ class SettingsViewSet(viewsets.ModelViewSet):
     """ViewSet para configuración de la organización"""
     queryset = OrganizationSettings.objects.all()
     serializer_class = OrganizationSettingsSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        org_id = self.request.query_params.get('organization') or getattr(self.request, 'organization_id', None)
+        if org_id:
+            return queryset.filter(organization_id=org_id)
+        return queryset.none()
+
+    def _resolve_org(self, request, key='organization'):
+        org_id = (
+            request.query_params.get(key)
+            or request.query_params.get(f'{key}_id')
+            or request.data.get(f'{key}_id')
+            or request.data.get(key)
+            or getattr(request, 'organization_id', None)
+        )
+        if org_id:
+            return Organization.objects.get(id=org_id)
+        profile = UserProfile.objects.filter(user=request.user, is_active=True).select_related('organization').first()
+        if profile:
+            return profile.organization
+        raise Organization.DoesNotExist('No hay organización activa')
     
     @action(detail=False, methods=['get'])
     def current(self, request):
         """Obtener configuración actual (o crear por defecto)"""
-        org_id = request.query_params.get('organization')
+        org = self._resolve_org(request)
         
-        if org_id:
-            org = Organization.objects.get(id=org_id)
-        else:
-            org, _ = Organization.objects.get_or_create(
-                slug='default',
-                defaults={'name': 'Organización Principal'}
+        settings = OrganizationSettings.objects.filter(organization=org).first()
+        if settings is None:
+            settings = OrganizationSettings(
+                organization=org,
+                enabled_standards=['ISO9001_2015'],
+                onboarding_completed=False,
             )
-        
-        settings, created = OrganizationSettings.objects.get_or_create(organization=org)
         
         return Response(OrganizationSettingsSerializer(settings).data)
     
     @action(detail=False, methods=['post'])
     def update_ai_modules(self, request):
         """Actualizar configuración de módulos de IA"""
-        org_id = request.data.get('organization_id')
-        
-        if org_id:
-            org = Organization.objects.get(id=org_id)
-        else:
-            org = Organization.objects.get(slug='default')
+        org = self._resolve_org(request)
         
         settings, _ = OrganizationSettings.objects.get_or_create(organization=org)
         
@@ -774,12 +795,7 @@ class SettingsViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['post'])
     def update_notifications(self, request):
         """Actualizar configuración de notificaciones"""
-        org_id = request.data.get('organization_id')
-        
-        if org_id:
-            org = Organization.objects.get(id=org_id)
-        else:
-            org = Organization.objects.get(slug='default')
+        org = self._resolve_org(request)
         
         settings, _ = OrganizationSettings.objects.get_or_create(organization=org)
         
@@ -796,12 +812,7 @@ class SettingsViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['post'])
     def trigger_backup(self, request):
         """Disparar backup manual"""
-        org_id = request.data.get('organization_id')
-        
-        if org_id:
-            org = Organization.objects.get(id=org_id)
-        else:
-            org = Organization.objects.get(slug='default')
+        org = self._resolve_org(request)
         
         settings, _ = OrganizationSettings.objects.get_or_create(organization=org)
         settings.last_backup_at = timezone.now()
@@ -813,68 +824,241 @@ class SettingsViewSet(viewsets.ModelViewSet):
             'message': 'Backup iniciado correctamente',
             'last_backup_at': settings.last_backup_at
         })
+    
+    @action(detail=False, methods=['post'])
+    def update_standards(self, request):
+        """Actualizar estándares ISO habilitados"""
+        org = self._resolve_org(request)
+        
+        settings, _ = OrganizationSettings.objects.get_or_create(organization=org)
+        
+        # Obtener estándares del request
+        enabled_standards = request.data.get('enabled_standards')
+        if enabled_standards is None:
+            return Response(
+                {'error': 'Se requiere el campo enabled_standards'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Asegurar que ISO 9001 siempre esté incluido
+        if 'ISO9001_2015' not in enabled_standards:
+            enabled_standards = ['ISO9001_2015'] + list(enabled_standards)
+        
+        settings.enabled_standards = enabled_standards
+        settings.save()
+        
+        return Response({
+            'message': 'Estándares actualizados correctamente',
+            'enabled_standards': settings.enabled_standards,
+        })
+    
+    @action(detail=False, methods=['post'])
+    def update_language(self, request):
+        """Actualizar idioma preferido de la organización"""
+        org = self._resolve_org(request)
+        
+        settings, _ = OrganizationSettings.objects.get_or_create(organization=org)
+        
+        # Obtener idioma del request
+        preferred_language = request.data.get('preferred_language')
+        if preferred_language is None:
+            return Response(
+                {'error': 'Se requiere el campo preferred_language'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Validar que sea un idioma válido
+        valid_languages = ['es-LATAM', 'en', 'pt']
+        if preferred_language not in valid_languages:
+            return Response(
+                {'error': f'Idioma no válido. Debe ser uno de: {", ".join(valid_languages)}'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        settings.preferred_language = preferred_language
+        settings.save()
+        
+        # También actualizar el idioma del usuario actual
+        user_profile = UserProfile.objects.filter(user=request.user, organization=org).first()
+        if user_profile:
+            # Mapear el formato de idioma
+            language_map = {
+                'es-LATAM': 'es',
+                'en': 'en',
+                'pt': 'pt',
+            }
+            user_profile.language = language_map.get(preferred_language, 'es')
+            user_profile.save(update_fields=['language'])
+        
+        return Response({
+            'message': 'Idioma actualizado correctamente',
+            'preferred_language': settings.preferred_language,
+        })
+
+    @action(detail=False, methods=['get'])
+    def onboarding_status(self, request):
+        org = self._resolve_org(request)
+        settings = OrganizationSettings.objects.filter(organization=org).first()
+        if settings is None:
+            return Response({
+                'organization_id': org.id,
+                'organization_name': org.name,
+                'onboarding_completed': False,
+                'enabled_standards': ['ISO9001_2015'],
+            })
+        return Response({
+            'organization_id': org.id,
+            'organization_name': org.name,
+            'onboarding_completed': settings.onboarding_completed,
+            'enabled_standards': settings.enabled_standards or ['ISO9001_2015'],
+        })
+
+    @action(detail=False, methods=['post'])
+    def complete_onboarding(self, request):
+        """Completar onboarding y guardar preferencias"""
+        org = self._resolve_org(request)
+        settings, _ = OrganizationSettings.objects.get_or_create(organization=org)
+
+        # Obtener y guardar estándares ISO habilitados
+        enabled_standards = request.data.get('enabled_standards') or settings.enabled_standards or ['ISO9001_2015']
+        settings.enabled_standards = enabled_standards
+        
+        # Obtener y guardar idioma preferido
+        preferred_language = request.data.get('preferred_language')
+        if preferred_language:
+            settings.preferred_language = preferred_language
+            # También actualizar el idioma del usuario actual
+            user_profile = UserProfile.objects.filter(user=request.user, organization=org).first()
+            if user_profile:
+                # Mapear el formato de idioma
+                language_map = {
+                    'es-LATAM': 'es',
+                    'en': 'en',
+                    'pt': 'pt',
+                }
+                user_profile.language = language_map.get(preferred_language, 'es')
+                user_profile.save(update_fields=['language'])
+        
+        # Marcar onboarding como completado
+        settings.onboarding_completed = True
+        settings.onboarding_completed_at = timezone.now()
+        settings.onboarding_completed_by = request.user
+        settings.save()
+
+        return Response({
+            'message': 'Onboarding completado correctamente',
+            'organization_id': org.id,
+            'enabled_standards': settings.enabled_standards,
+            'preferred_language': settings.preferred_language,
+        })
 
 
 class ISOClauseConfigViewSet(viewsets.ModelViewSet):
     """ViewSet para configuración de cláusulas ISO"""
     queryset = ISOClauseConfig.objects.all()
     serializer_class = ISOClauseConfigSerializer
+    permission_classes = [IsAuthenticated]
     
     def get_queryset(self):
         queryset = super().get_queryset()
-        org_id = self.request.query_params.get('organization')
+        org_id = self.request.query_params.get('organization') or getattr(self.request, 'organization_id', None)
         if org_id:
             queryset = queryset.filter(organization_id=org_id)
+        standard_code = self.request.query_params.get('standard_code') or self.request.query_params.get('standard')
+        if standard_code:
+            queryset = queryset.filter(standard_code=standard_code)
         return queryset
+
+    @staticmethod
+    def _standard_clauses_map():
+        return {
+            'ISO9001_2015': [
+                ('4.1', 'Comprensión de la organización y su contexto'),
+                ('4.2', 'Necesidades y expectativas de partes interesadas'),
+                ('4.3', 'Determinación del alcance del SGC'),
+                ('4.4', 'Sistema de gestión de la calidad y procesos'),
+                ('5.1', 'Liderazgo y compromiso'),
+                ('5.2', 'Política'),
+                ('5.3', 'Roles, responsabilidades y autoridades'),
+                ('6.1', 'Acciones para abordar riesgos y oportunidades'),
+                ('6.2', 'Objetivos de la calidad'),
+                ('6.3', 'Planificación de los cambios'),
+                ('7.1', 'Recursos'),
+                ('7.2', 'Competencia'),
+                ('7.3', 'Toma de conciencia'),
+                ('7.4', 'Comunicación'),
+                ('7.5', 'Información documentada'),
+                ('8.1', 'Planificación y control operacional'),
+                ('8.2', 'Requisitos para productos y servicios'),
+                ('8.3', 'Diseño y desarrollo'),
+                ('8.4', 'Control de procesos, productos y servicios externos'),
+                ('8.5', 'Producción y provisión del servicio'),
+                ('8.6', 'Liberación de productos y servicios'),
+                ('8.7', 'Control de salidas no conformes'),
+                ('9.1', 'Seguimiento, medición, análisis y evaluación'),
+                ('9.2', 'Auditoría interna'),
+                ('9.3', 'Revisión por la dirección'),
+                ('10.1', 'Generalidades'),
+                ('10.2', 'No conformidad y acción correctiva'),
+                ('10.3', 'Mejora continua'),
+            ],
+            'ISO42001_2023': [
+                ('4', 'Contexto de la organización IA'),
+                ('5', 'Liderazgo para SGIA'),
+                ('6', 'Planificación del SGIA'),
+                ('7', 'Soporte y recursos IA'),
+                ('8', 'Operación del SGIA'),
+                ('9', 'Evaluación del desempeño del SGIA'),
+                ('10', 'Mejora del SGIA'),
+            ],
+            'ISO27001_2022': [
+                ('4', 'Contexto de la organización'),
+                ('5', 'Liderazgo'),
+                ('6', 'Planificación'),
+                ('7', 'Soporte'),
+                ('8', 'Operación'),
+                ('9', 'Evaluación del desempeño'),
+                ('10', 'Mejora'),
+            ],
+            'ISO14001_2015': [
+                ('4', 'Contexto de la organización'),
+                ('5', 'Liderazgo'),
+                ('6', 'Planificación ambiental'),
+                ('7', 'Soporte'),
+                ('8', 'Operación'),
+                ('9', 'Evaluación del desempeño'),
+                ('10', 'Mejora'),
+            ],
+            'ISO45001_2018': [
+                ('4', 'Contexto de la organización'),
+                ('5', 'Liderazgo y participación de trabajadores'),
+                ('6', 'Planificación SST'),
+                ('7', 'Apoyo'),
+                ('8', 'Operación'),
+                ('9', 'Evaluación del desempeño'),
+                ('10', 'Mejora'),
+            ],
+        }
+
+    def _resolve_org(self, request):
+        org_id = request.data.get('organization_id') or request.query_params.get('organization') or getattr(request, 'organization_id', None)
+        if org_id:
+            return Organization.objects.get(id=org_id)
+        profile = UserProfile.objects.filter(user=request.user, is_active=True).select_related('organization').first()
+        if profile:
+            return profile.organization
+        raise Organization.DoesNotExist('No hay organización activa')
     
     @action(detail=False, methods=['post'])
     def initialize_iso9001(self, request):
         """Inicializar cláusulas ISO 9001:2015"""
-        org_id = request.data.get('organization_id')
-        
-        if org_id:
-            org = Organization.objects.get(id=org_id)
-        else:
-            org, _ = Organization.objects.get_or_create(
-                slug='default',
-                defaults={'name': 'Organización Principal'}
-            )
-        
-        clauses = [
-            ('4.1', 'Comprensión de la organización y su contexto'),
-            ('4.2', 'Comprensión de las necesidades y expectativas de las partes interesadas'),
-            ('4.3', 'Determinación del alcance del SGC'),
-            ('4.4', 'Sistema de gestión de la calidad y sus procesos'),
-            ('5.1', 'Liderazgo y compromiso'),
-            ('5.2', 'Política'),
-            ('5.3', 'Roles, responsabilidades y autoridades'),
-            ('6.1', 'Acciones para abordar riesgos y oportunidades'),
-            ('6.2', 'Objetivos de la calidad'),
-            ('6.3', 'Planificación de los cambios'),
-            ('7.1', 'Recursos'),
-            ('7.2', 'Competencia'),
-            ('7.3', 'Toma de conciencia'),
-            ('7.4', 'Comunicación'),
-            ('7.5', 'Información documentada'),
-            ('8.1', 'Planificación y control operacional'),
-            ('8.2', 'Requisitos para los productos y servicios'),
-            ('8.3', 'Diseño y desarrollo'),
-            ('8.4', 'Control de procesos, productos y servicios externos'),
-            ('8.5', 'Producción y provisión del servicio'),
-            ('8.6', 'Liberación de productos y servicios'),
-            ('8.7', 'Control de las salidas no conformes'),
-            ('9.1', 'Seguimiento, medición, análisis y evaluación'),
-            ('9.2', 'Auditoría interna'),
-            ('9.3', 'Revisión por la dirección'),
-            ('10.1', 'Generalidades'),
-            ('10.2', 'No conformidad y acción correctiva'),
-            ('10.3', 'Mejora continua'),
-        ]
-        
+        org = self._resolve_org(request)
+        clauses = self._standard_clauses_map()['ISO9001_2015']
         created_count = 0
         for number, name in clauses:
             _, created = ISOClauseConfig.objects.get_or_create(
                 organization=org,
+                standard_code='ISO9001_2015',
                 clause_number=number,
                 defaults={'clause_name': name, 'is_applicable': True}
             )
@@ -884,6 +1068,38 @@ class ISOClauseConfigViewSet(viewsets.ModelViewSet):
         return Response({
             'message': f'Se crearon {created_count} cláusulas ISO 9001:2015',
             'total_clauses': len(clauses)
+        })
+
+    @action(detail=False, methods=['post'])
+    def initialize_standards(self, request):
+        org = self._resolve_org(request)
+        standard_codes = request.data.get('standards') or ['ISO9001_2015']
+        clause_map = self._standard_clauses_map()
+
+        created_count = 0
+        touched_standards = []
+        for code in standard_codes:
+            if code not in clause_map:
+                continue
+            touched_standards.append(code)
+            for number, name in clause_map[code]:
+                _, created = ISOClauseConfig.objects.get_or_create(
+                    organization=org,
+                    standard_code=code,
+                    clause_number=number,
+                    defaults={'clause_name': name, 'is_applicable': True}
+                )
+                if created:
+                    created_count += 1
+
+        settings, _ = OrganizationSettings.objects.get_or_create(organization=org)
+        settings.enabled_standards = touched_standards or settings.enabled_standards or ['ISO9001_2015']
+        settings.save(update_fields=['enabled_standards'])
+
+        return Response({
+            'message': 'Estándares inicializados correctamente',
+            'standards': touched_standards,
+            'created_clauses': created_count,
         })
 
 

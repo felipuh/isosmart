@@ -2,6 +2,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
+import { useI18n } from '../../../context/I18nContext';
 import {
   getResources,
   getInfrastructure,
@@ -12,6 +13,7 @@ import {
 } from '../api/resourcesApi';
 
 const ResourcesDashboard = () => {
+  const { t } = useI18n();
   const { currentOrganization } = useAuth();
   const orgId = currentOrganization?.id || null;
 
@@ -130,8 +132,8 @@ const ResourcesDashboard = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white">Recursos y Apoyo</h1>
-          <p className="text-gray-400 mt-1">ISO 9001:2015 - Cláusula 7</p>
+          <h1 className="text-3xl font-bold text-white">{t('literals.Recursos y Apoyo')}</h1>
+          <p className="text-gray-400 mt-1">{t('literals.ISO 9001:2015 - Cláusula 7')}</p>
         </div>
       </div>
 
@@ -176,7 +178,7 @@ const ResourcesDashboard = () => {
 
       {/* Quick Actions */}
       <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg p-6">
-        <h2 className="text-xl font-bold text-white mb-4">Acciones Rápidas</h2>
+        <h2 className="text-xl font-bold text-white mb-4">{t('literals.Acciones Rápidas')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Link
             to="/resources/resources/new"
@@ -184,8 +186,8 @@ const ResourcesDashboard = () => {
           >
             <span className="text-2xl">📦</span>
             <div>
-              <p className="font-medium text-white">Nuevo Recurso</p>
-              <p className="text-xs text-gray-400">Registrar recurso</p>
+              <p className="font-medium text-white">{t('literals.Nuevo Recurso')}</p>
+              <p className="text-xs text-gray-400">{t('literals.Registrar recurso')}</p>
             </div>
           </Link>
 
@@ -195,8 +197,8 @@ const ResourcesDashboard = () => {
           >
             <span className="text-2xl">📚</span>
             <div>
-              <p className="font-medium text-white">Nueva Capacitación</p>
-              <p className="text-xs text-gray-400">Planificar capacitación</p>
+              <p className="font-medium text-white">{t('literals.Nueva Capacitación')}</p>
+              <p className="text-xs text-gray-400">{t('literals.Planificar capacitación')}</p>
             </div>
           </Link>
 
@@ -206,8 +208,8 @@ const ResourcesDashboard = () => {
           >
             <span className="text-2xl">🎓</span>
             <div>
-              <p className="font-medium text-white">Nueva Competencia</p>
-              <p className="text-xs text-gray-400">Registrar competencia</p>
+              <p className="font-medium text-white">{t('literals.Nueva Competencia')}</p>
+              <p className="text-xs text-gray-400">{t('literals.Registrar competencia')}</p>
             </div>
           </Link>
         </div>
@@ -221,9 +223,9 @@ const ResourcesDashboard = () => {
         >
           <div className="flex items-center space-x-3 mb-2">
             <span className="text-2xl">🏢</span>
-            <h3 className="text-lg font-bold text-white">Ambiente de Trabajo</h3>
+            <h3 className="text-lg font-bold text-white">{t('literals.Ambiente de Trabajo')}</h3>
           </div>
-          <p className="text-sm text-gray-400">Gestión de ambientes laborales</p>
+          <p className="text-sm text-gray-400">{t('literals.Gestión de ambientes laborales')}</p>
         </Link>
 
         <Link
@@ -232,9 +234,9 @@ const ResourcesDashboard = () => {
         >
           <div className="flex items-center space-x-3 mb-2">
             <span className="text-2xl">💡</span>
-            <h3 className="text-lg font-bold text-white">Toma de Conciencia</h3>
+            <h3 className="text-lg font-bold text-white">{t('literals.Toma de Conciencia')}</h3>
           </div>
-          <p className="text-sm text-gray-400">Actividades de sensibilización</p>
+          <p className="text-sm text-gray-400">{t('literals.Actividades de sensibilización')}</p>
         </Link>
 
         <Link
@@ -243,9 +245,9 @@ const ResourcesDashboard = () => {
         >
           <div className="flex items-center space-x-3 mb-2">
             <span className="text-2xl">📢</span>
-            <h3 className="text-lg font-bold text-white">Comunicaciones</h3>
+            <h3 className="text-lg font-bold text-white">{t('literals.Comunicaciones')}</h3>
           </div>
-          <p className="text-sm text-gray-400">Plan de comunicación</p>
+          <p className="text-sm text-gray-400">{t('literals.Plan de comunicación')}</p>
         </Link>
       </div>
     </div>

@@ -6,6 +6,7 @@ Sistema multitenancy con roles por organización
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.utils.translation import gettext_lazy as _
+import hashlib
 
 
 class UserManager(BaseUserManager):
@@ -148,7 +149,8 @@ class RefreshTokenBlacklist(models.Model):
     Útil para logout y revocación de sesiones
     """
     
-    token = models.CharField(max_length=500, unique=True)
+    token = models.TextField()
+    token_hash = models.CharField(max_length=64, unique=True, db_index=True)
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -160,9 +162,15 @@ class RefreshTokenBlacklist(models.Model):
     class Meta:
         db_table = 'refresh_token_blacklist'
         ordering = ['-blacklisted_at']
+
+    @staticmethod
+    def hash_token(token):
+        return hashlib.sha256(token.encode('utf-8')).hexdigest()
+
+    def save(self, *args, **kwargs):
+        if self.token and not self.token_hash:
+            self.token_hash = self.hash_token(self.token)
+        super().save(*args, **kwargs)
     
     def __str__(self):
         return f"Blacklisted token for {self.user.email if self.user else 'unknown'} at {self.blacklisted_at}"
-
-    def __str__(self):
-        return f"Blacklisted token for {self.user.email}"

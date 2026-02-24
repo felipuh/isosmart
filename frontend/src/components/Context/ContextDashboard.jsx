@@ -1,6 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { RefreshCw, Download, TrendingUp, AlertCircle, CheckCircle, FileText } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { useI18n } from '../../context/I18nContext';
 import contextService from '../../services/contextService';
 import FODAAnalysis from './FODAAnalysis';
 import ExternalFactors from './ExternalFactors';
@@ -9,6 +10,7 @@ import IdentifiedRisks from './IdentifiedRisks';
 import Recommendations from './Recommendations';
 
 const ContextDashboard = () => {
+  const { t } = useI18n();
   const { currentOrganization } = useAuth();
   const [contextData, setContextData] = useState(null);
   const [loading, setLoading] = useState(true);

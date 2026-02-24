@@ -1,7 +1,9 @@
 import React from 'react';
 import { Lightbulb, CheckCircle2, AlertTriangle, Info } from 'lucide-react';
+import { useI18n } from '../../context/I18nContext';
 
 const ProcessRecommendations = ({ recommendations, loading }) => {
+  const { t } = useI18n();
   if (loading) {
     return (
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">

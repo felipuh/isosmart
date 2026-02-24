@@ -2,6 +2,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
+import { useI18n } from '../../../context/I18nContext';
 import {
   getCustomerRequirements,
   getDesignProjects,
@@ -16,6 +17,7 @@ import {
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
 
 const OperationsDashboard = () => {
+  const { t } = useI18n();
   const { currentOrganization } = useAuth();
   const orgId = currentOrganization?.id || null;
 
@@ -141,8 +143,8 @@ const OperationsDashboard = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white">Operación</h1>
-          <p className="text-gray-400 mt-1">ISO 9001:2015 - Cláusula 8</p>
+          <h1 className="text-3xl font-bold text-white">{t('literals.Operación')}</h1>
+          <p className="text-gray-400 mt-1">{t('literals.ISO 9001:2015 - Cláusula 8')}</p>
         </div>
       </div>
 
@@ -190,7 +192,7 @@ const OperationsDashboard = () => {
         <div className="bg-gradient-to-br from-red-500/10 to-red-600/5 backdrop-blur-sm border border-red-500/20 rounded-lg p-6">
           <div className="flex items-center space-x-3 mb-2">
             <span className="text-2xl">🚨</span>
-            <h2 className="text-xl font-bold text-white">Atención Requerida</h2>
+            <h2 className="text-xl font-bold text-white">{t('literals.Atención Requerida')}</h2>
           </div>
           <p className="text-gray-300">
             Hay {stats.nonconformities.critical} no conformidad(es) crítica(s) que requieren atención inmediata.
@@ -206,7 +208,7 @@ const OperationsDashboard = () => {
 
       {/* Quick Actions */}
       <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg p-6">
-        <h2 className="text-xl font-bold text-white mb-4">Acciones Rápidas</h2>
+        <h2 className="text-xl font-bold text-white mb-4">{t('literals.Acciones Rápidas')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Link
             to="/operations/requirements/new"
@@ -214,8 +216,8 @@ const OperationsDashboard = () => {
           >
             <span className="text-2xl">📋</span>
             <div>
-              <p className="font-medium text-white">Nuevo Requisito</p>
-              <p className="text-xs text-gray-400">Registrar requisito del cliente</p>
+              <p className="font-medium text-white">{t('literals.Nuevo Requisito')}</p>
+              <p className="text-xs text-gray-400">{t('literals.Registrar requisito del cliente')}</p>
             </div>
           </Link>
 
@@ -225,8 +227,8 @@ const OperationsDashboard = () => {
           >
             <span className="text-2xl">⚠️</span>
             <div>
-              <p className="font-medium text-white">Reportar NC</p>
-              <p className="text-xs text-gray-400">Registrar no conformidad</p>
+              <p className="font-medium text-white">{t('literals.Reportar NC')}</p>
+              <p className="text-xs text-gray-400">{t('literals.Registrar no conformidad')}</p>
             </div>
           </Link>
 
@@ -236,8 +238,8 @@ const OperationsDashboard = () => {
           >
             <span className="text-2xl">✅</span>
             <div>
-              <p className="font-medium text-white">Liberar Producto</p>
-              <p className="text-xs text-gray-400">Autorizar liberación</p>
+              <p className="font-medium text-white">{t('literals.Liberar Producto')}</p>
+              <p className="text-xs text-gray-400">{t('literals.Autorizar liberación')}</p>
             </div>
           </Link>
         </div>
@@ -251,7 +253,7 @@ const OperationsDashboard = () => {
         >
           <div className="flex items-center space-x-3 mb-2">
             <span className="text-2xl">📦</span>
-            <h3 className="text-lg font-bold text-white">Liberación de Productos</h3>
+            <h3 className="text-lg font-bold text-white">{t('literals.Liberación de Productos')}</h3>
           </div>
           <p className="text-sm text-gray-400">
             {stats.releases.pending} liberaciones pendientes de aprobación
@@ -264,9 +266,9 @@ const OperationsDashboard = () => {
         >
           <div className="flex items-center space-x-3 mb-2">
             <span className="text-2xl">⚙️</span>
-            <h3 className="text-lg font-bold text-white">Control de Producción</h3>
+            <h3 className="text-lg font-bold text-white">{t('literals.Control de Producción')}</h3>
           </div>
-          <p className="text-sm text-gray-400">Controles operacionales de producción</p>
+          <p className="text-sm text-gray-400">{t('literals.Controles operacionales de producción')}</p>
         </Link>
       </div>
     </div>

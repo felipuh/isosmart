@@ -1,12 +1,14 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
+import { useI18n } from '../../../context/I18nContext';
 import Modal from '../../../components/Common/Modal';
 import { getNonconformities, createNonconformity, updateNonconformity, deleteNonconformity, getUsers } from '../api/operationsApi';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
 
 const NonconformitiesPage = () => {
+  const { t } = useI18n();
   const { currentOrganization } = useAuth();
   const orgId = currentOrganization?.id || null;
   const orgName = currentOrganization?.name || '';
@@ -195,7 +197,7 @@ const NonconformitiesPage = () => {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Título</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Tipo</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Severidad</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Estado</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.status')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Acciones</th>
             </tr>
           </thead>
@@ -216,8 +218,8 @@ const NonconformitiesPage = () => {
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-300">{item.status_display}</td>
                 <td className="px-6 py-4 text-sm space-x-2">
-                  <button onClick={() => handleEdit(item)} className="text-blue-400 hover:text-blue-300">Editar</button>
-                  <button onClick={() => handleDelete(item.id)} className="text-red-400 hover:text-red-300">Eliminar</button>
+                  <button onClick={() => handleEdit(item)} className="text-blue-400 hover:text-blue-300">{t('common.buttons.edit')}</button>
+                  <button onClick={() => handleDelete(item.id)} className="text-red-400 hover:text-red-300">{t('common.buttons.delete')}</button>
                 </td>
               </tr>
             ))}
@@ -240,18 +242,18 @@ const NonconformitiesPage = () => {
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">Tipo</label>
               <select value={form.nc_type} onChange={(e) => setForm({...form, nc_type: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="product">Producto</option>
-                <option value="service">Servicio</option>
-                <option value="process">Proceso</option>
-                <option value="documentation">Documentación</option>
+                <option value="product">{t('literals.Producto')}</option>
+                <option value="service">{t('literals.Servicio')}</option>
+                <option value="process">{t('literals.Proceso')}</option>
+                <option value="documentation">{t('literals.Documentación')}</option>
               </select>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">Severidad</label>
               <select value={form.severity} onChange={(e) => setForm({...form, severity: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="minor">Menor</option>
-                <option value="major">Mayor</option>
-                <option value="critical">Crítica</option>
+                <option value="minor">{t('literals.Menor')}</option>
+                <option value="major">{t('literals.Mayor')}</option>
+                <option value="critical">{t('literals.Crítica')}</option>
               </select>
             </div>
             <div className="md:col-span-2">
@@ -265,16 +267,16 @@ const NonconformitiesPage = () => {
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">Etapa de Detección</label>
               <select value={form.detection_stage} onChange={(e) => setForm({...form, detection_stage: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="production">Durante Producción</option>
-                <option value="pre_delivery">Antes de Entrega</option>
-                <option value="post_delivery">Después de Entrega</option>
-                <option value="in_use">Durante Uso</option>
+                <option value="production">{t('literals.Durante Producción')}</option>
+                <option value="pre_delivery">{t('literals.Antes de Entrega')}</option>
+                <option value="post_delivery">{t('literals.Después de Entrega')}</option>
+                <option value="in_use">{t('literals.Durante Uso')}</option>
               </select>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">Detectado por</label>
               <select value={form.detected_by} onChange={(e) => setForm({...form, detected_by: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="">Sin asignar</option>
+                <option value="">{t('literals.Sin asignar')}</option>
                 {users.map(u => (
                   <option key={u.id} value={u.id}>{u.full_name || u.username || u.email}</option>
                 ))}
@@ -319,22 +321,22 @@ const NonconformitiesPage = () => {
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">Responsable</label>
               <select value={form.responsible} onChange={(e) => setForm({...form, responsible: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="">Sin asignar</option>
+                <option value="">{t('literals.Sin asignar')}</option>
                 {users.map(u => (
                   <option key={u.id} value={u.id}>{u.full_name || u.username || u.email}</option>
                 ))}
               </select>
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Descripción</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('common.forms.description')}</label>
               <textarea value={form.description} onChange={(e) => setForm({...form, description: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="3" required />
             </div>
           </div>
           <div className="flex space-x-3">
             <button type="submit" disabled={saving} className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
-              {saving ? 'Guardando...' : editingId ? 'Actualizar' : 'Crear'}
+              {saving ? t('common.messages.saving') : editingId ? t('common.buttons.update') : t('common.buttons.create')}
             </button>
-            {editingId && <button type="button" onClick={closeForm} className="px-6 py-2 bg-gray-600 text-white rounded-lg">Cancelar</button>}
+            {editingId && <button type="button" onClick={closeForm} className="px-6 py-2 bg-gray-600 text-white rounded-lg">{t('common.buttons.cancel')}</button>}
           </div>
         </form>
       </Modal>

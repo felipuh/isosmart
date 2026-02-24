@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
+import { useI18n } from '../../../context/I18nContext';
 import {
   getRACIMatrices,
   createRACIMatrix,
@@ -17,6 +18,7 @@ const initialForm = {
 };
 
 const RACIMatricesPage = () => {
+  const { t } = useI18n();
   const { currentOrganization } = useAuth();
   const orgId = currentOrganization?.id || null;
   const orgName = currentOrganization?.name || '';
@@ -131,9 +133,9 @@ const RACIMatricesPage = () => {
               <table className="min-w-full text-left text-sm text-slate-200">
                 <thead className="text-xs uppercase text-slate-400">
                   <tr>
-                    <th className="px-3 py-2">Nombre</th>
-                    <th className="px-3 py-2">Descripción</th>
-                    <th className="px-3 py-2">Activa</th>
+                    <th className="px-3 py-2">{t('common.forms.name')}</th>
+                    <th className="px-3 py-2">{t('common.forms.description')}</th>
+                    <th className="px-3 py-2">{t('literals.Activa')}</th>
                     <th className="px-3 py-2 text-right">Acciones</th>
                   </tr>
                 </thead>
@@ -212,7 +214,7 @@ const RACIMatricesPage = () => {
                 onChange={(event) => setForm({ ...form, is_active: event.target.checked })}
                 className="h-4 w-4 rounded border-slate-600"
               />
-              Activa
+              {t('literals.Activa')}
             </label>
           </div>
 
@@ -222,7 +224,7 @@ const RACIMatricesPage = () => {
               disabled={saving || !orgId}
               className="rounded-lg bg-emerald-500/80 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-500 disabled:opacity-50"
             >
-              {saving ? 'Guardando...' : editingId ? 'Actualizar' : 'Crear'}
+              {saving ? t('common.messages.saving') : editingId ? t('common.buttons.update') : t('common.buttons.create')}
             </button>
             <button
               type="button"

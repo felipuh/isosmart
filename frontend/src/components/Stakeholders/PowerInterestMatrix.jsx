@@ -1,7 +1,9 @@
 import React from 'react';
 import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import { useI18n } from '../../context/I18nContext';
 
 const getQuadrantColor = (quadrant) => {
+  const { t } = useI18n();
   switch (quadrant) {
     case 'Gestionar de Cerca': return '#ef4444';
     case 'Mantener Satisfecho': return '#f59e0b';

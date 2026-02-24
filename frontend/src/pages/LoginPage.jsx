@@ -6,8 +6,10 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useI18n } from '../context/I18nContext';
 
 const LoginPage = () => {
+  const { t } = useI18n();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -145,7 +147,7 @@ const LoginPage = () => {
                   type="checkbox"
                   className="w-4 h-4 rounded border-slate-600 bg-slate-700 text-cyan-500 focus:ring-cyan-500/50"
                 />
-                <span>Recordarme</span>
+                <span>{t('literals.Recordarme')}</span>
               </label>
               <a href="#" className="text-cyan-400 hover:text-cyan-300 transition-colors">
                 ¿Olvidaste tu contraseña?
@@ -164,11 +166,11 @@ const LoginPage = () => {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  <span>Iniciando sesión...</span>
+                  <span>{t('literals.Iniciando sesión...')}</span>
                 </>
               ) : (
                 <>
-                  <span>Iniciar Sesión</span>
+                  <span>{t('literals.Iniciar Sesión')}</span>
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                   </svg>

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Brain, TrendingUp, AlertCircle, FileText, RefreshCw } from 'lucide-react';
 import { apiService } from '../../services/api';
+import { useI18n } from '../../context/I18nContext';
 
 const ContextAnalysis = () => {
+  const { t } = useI18n();
   const [contextData, setContextData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [triggering, setTriggering] = useState(false);
@@ -60,7 +62,7 @@ const ContextAnalysis = () => {
         </h2>
         <div className="text-center py-12">
           <Brain className="w-16 h-16 mx-auto mb-4 text-gray-300" />
-          <p className="text-gray-500 mb-4">No hay análisis de contexto disponible</p>
+          <p className="text-gray-500 mb-4">{t('literals.No hay análisis de contexto disponible')}</p>
           <button
             onClick={triggerAnalysis}
             disabled={triggering}
@@ -121,7 +123,7 @@ const ContextAnalysis = () => {
                 </div>
               ))
             ) : (
-              <p className="text-sm text-gray-500">No se identificaron fortalezas</p>
+              <p className="text-sm text-gray-500">{t('literals.No se identificaron fortalezas')}</p>
             )}
           </div>
         </div>
@@ -146,7 +148,7 @@ const ContextAnalysis = () => {
                 </div>
               ))
             ) : (
-              <p className="text-sm text-gray-500">No se identificaron riesgos</p>
+              <p className="text-sm text-gray-500">{t('literals.No se identificaron riesgos')}</p>
             )}
           </div>
         </div>

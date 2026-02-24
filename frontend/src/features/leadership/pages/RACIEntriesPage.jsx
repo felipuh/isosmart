@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { getRACIEntries, createRACIEntry, updateRACIEntry, deleteRACIEntry, getRoles } from '../api/leadershipApi';
+import { useI18n } from '../../../context/I18nContext';
 
 const normalizeList = (data) => (Array.isArray(data) ? data : data?.results || []);
 
@@ -22,6 +23,7 @@ const toggleItem = (list, value) => {
 };
 
 const RACIEntriesPage = () => {
+  const { t } = useI18n();
   const { matrixId } = useParams();
   const [entries, setEntries] = useState([]);
   const [roles, setRoles] = useState([]);
@@ -252,7 +254,7 @@ const RACIEntriesPage = () => {
               disabled={saving}
               className="rounded-lg bg-emerald-500/80 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-500 disabled:opacity-50"
             >
-              {saving ? 'Guardando...' : editingId ? 'Actualizar' : 'Crear'}
+              {saving ? t('common.messages.saving') : editingId ? t('common.buttons.update') : t('common.buttons.create')}
             </button>
             <button
               type="button"

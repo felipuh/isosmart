@@ -1,7 +1,9 @@
 import React from 'react';
 import { Target, TrendingUp, Calendar, User } from 'lucide-react';
+import { useI18n } from '../../context/I18nContext';
 
 const QualityObjectives = ({ objectives }) => {
+  const { t } = useI18n();
   if (!objectives || objectives.length === 0) {
     return (
       <div className="card">
@@ -11,7 +13,7 @@ const QualityObjectives = ({ objectives }) => {
         </h2>
         <div className="text-center py-12 text-gray-500">
           <Target className="w-12 h-12 mx-auto mb-3 text-gray-400" />
-          <p>No hay objetivos configurados</p>
+          <p>{t('literals.No hay objetivos configurados')}</p>
         </div>
       </div>
     );
@@ -50,15 +52,15 @@ const QualityObjectives = ({ objectives }) => {
               {/* Métricas */}
               <div className="grid grid-cols-3 gap-3 mb-4 text-sm">
                 <div className="text-center p-2 bg-blue-50 rounded">
-                  <p className="text-xs text-gray-600">Línea Base</p>
+                  <p className="text-xs text-gray-600">{t('literals.Línea Base')}</p>
                   <p className="font-bold text-blue-900">{obj.baseline}</p>
                 </div>
                 <div className="text-center p-2 bg-purple-50 rounded">
-                  <p className="text-xs text-gray-600">Actual</p>
+                  <p className="text-xs text-gray-600">{t('literals.Actual')}</p>
                   <p className="font-bold text-purple-900">{obj.current || '-'}</p>
                 </div>
                 <div className="text-center p-2 bg-green-50 rounded">
-                  <p className="text-xs text-gray-600">Meta</p>
+                  <p className="text-xs text-gray-600">{t('literals.Meta')}</p>
                   <p className="font-bold text-green-900">{obj.target}</p>
                 </div>
               </div>

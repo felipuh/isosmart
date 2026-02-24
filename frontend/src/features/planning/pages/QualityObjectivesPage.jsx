@@ -1,12 +1,14 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
+import { useI18n } from '../../../context/I18nContext';
 import Modal from '../../../components/Common/Modal';
 import { getObjectives, createObjective, updateObjective, deleteObjective, getUsers } from '../api/planningApi';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
 
 const QualityObjectivesPage = () => {
+  const { t } = useI18n();
   const { currentOrganization, user } = useAuth();
   const orgId = currentOrganization?.id || null;
   const orgName = currentOrganization?.name || '';
@@ -199,7 +201,7 @@ const QualityObjectivesPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">Objetivos de Calidad</h1>
+        <h1 className="text-3xl font-bold text-white">{t('literals.Objetivos de Calidad')}</h1>
         <button
           type="button"
           onClick={openForm}
@@ -215,7 +217,7 @@ const QualityObjectivesPage = () => {
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Código</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Título</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Estado</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.status')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Meta</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">% Avance</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Responsable</th>
@@ -232,8 +234,8 @@ const QualityObjectivesPage = () => {
                 <td className="px-6 py-4 text-sm text-gray-300">{i.progress_percentage}%</td>
                 <td className="px-6 py-4 text-sm text-gray-300">{i.owner_name || '-'}</td>
                 <td className="px-6 py-4 text-sm space-x-2">
-                  <button onClick={() => handleEdit(i)} className="text-blue-400 hover:text-blue-300">Editar</button>
-                  <button onClick={() => handleDelete(i.id)} className="text-red-400 hover:text-red-300">Eliminar</button>
+                  <button onClick={() => handleEdit(i)} className="text-blue-400 hover:text-blue-300">{t('common.buttons.edit')}</button>
+                  <button onClick={() => handleDelete(i.id)} className="text-red-400 hover:text-red-300">{t('common.buttons.delete')}</button>
                 </td>
               </tr>
             ))}
@@ -258,17 +260,17 @@ const QualityObjectivesPage = () => {
               <input type="text" value={form.title} onChange={(e) => setForm({...form, title: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Descripción</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('common.forms.description')}</label>
               <textarea value={form.description} onChange={(e) => setForm({...form, description: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="3" required />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">Alineación</label>
               <select value={form.alignment} onChange={(e) => setForm({...form, alignment: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="policy">Política de Calidad</option>
-                <option value="strategic">Estrategia Organizacional</option>
-                <option value="customer">Requisitos del Cliente</option>
-                <option value="compliance">Cumplimiento Legal</option>
-                <option value="improvement">Mejora Continua</option>
+                <option value="policy">{t('literals.Política de Calidad')}</option>
+                <option value="strategic">{t('literals.Estrategia Organizacional')}</option>
+                <option value="customer">{t('literals.Requisitos del Cliente')}</option>
+                <option value="compliance">{t('literals.Cumplimiento Legal')}</option>
+                <option value="improvement">{t('literals.Mejora Continua')}</option>
               </select>
             </div>
             <div>
@@ -294,7 +296,7 @@ const QualityObjectivesPage = () => {
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">Responsable</label>
               <select value={form.owner} onChange={(e) => setForm({...form, owner: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="">Sin asignar</option>
+                <option value="">{t('literals.Sin asignar')}</option>
                 {users.map(u => (
                   <option key={u.id} value={u.id}>{u.full_name || u.username || u.email}</option>
                 ))}
@@ -309,15 +311,15 @@ const QualityObjectivesPage = () => {
               <input type="date" value={form.target_date} onChange={(e) => setForm({...form, target_date: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Estado</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('common.forms.status')}</label>
               <select value={form.status} onChange={(e) => setForm({...form, status: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="draft">Borrador</option>
-                <option value="approved">Aprobado</option>
-                <option value="in_progress">En Progreso</option>
-                <option value="achieved">Logrado</option>
-                <option value="partially_achieved">Parcialmente Logrado</option>
-                <option value="not_achieved">No Logrado</option>
-                <option value="cancelled">Cancelado</option>
+                <option value="draft">{t('literals.Borrador')}</option>
+                <option value="approved">{t('literals.Aprobado')}</option>
+                <option value="in_progress">{t('literals.En Progreso')}</option>
+                <option value="achieved">{t('literals.Logrado')}</option>
+                <option value="partially_achieved">{t('literals.Parcialmente Logrado')}</option>
+                <option value="not_achieved">{t('literals.No Logrado')}</option>
+                <option value="cancelled">{t('literals.Cancelado')}</option>
               </select>
             </div>
             <div>
@@ -353,16 +355,16 @@ const QualityObjectivesPage = () => {
                 </label>
                 <label className="flex items-center space-x-2">
                   <input type="checkbox" checked={form.is_time_bound} onChange={(e) => setForm({...form, is_time_bound: e.target.checked})} className="rounded" />
-                  <span className="text-sm text-gray-300">Temporal</span>
+                  <span className="text-sm text-gray-300">{t('literals.Temporal')}</span>
                 </label>
               </div>
             </div>
           </div>
           <div className="flex space-x-3">
             <button type="submit" disabled={saving} className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
-              {saving ? 'Guardando...' : editingId ? 'Actualizar' : 'Crear'}
+              {saving ? t('common.messages.saving') : editingId ? t('common.buttons.update') : t('common.buttons.create')}
             </button>
-            {editingId && <button type="button" onClick={closeForm} className="px-6 py-2 bg-gray-600 text-white rounded-lg">Cancelar</button>}
+            {editingId && <button type="button" onClick={closeForm} className="px-6 py-2 bg-gray-600 text-white rounded-lg">{t('common.buttons.cancel')}</button>}
           </div>
         </form>
       </Modal>

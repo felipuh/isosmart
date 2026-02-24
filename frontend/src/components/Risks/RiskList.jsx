@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useI18n } from '../../context/I18nContext';
 
 const RiskList = ({ risks, onEdit, onDelete, onStatusChange }) => {
+  const { t } = useI18n();
   const [expandedRisk, setExpandedRisk] = useState(null);
 
   const statusLabels = {
@@ -60,10 +62,10 @@ const RiskList = ({ risks, onEdit, onDelete, onStatusChange }) => {
     <div className="bg-white/70 dark:bg-slate-800/70 backdrop-blur-md rounded-xl shadow-sm dark:shadow-slate-900/50 border border-white/20 dark:border-slate-700/50 overflow-hidden transition-all duration-300 hover:shadow-md dark:hover:shadow-slate-900/70">
       {/* Table Header */}
       <div className="grid grid-cols-12 gap-4 px-6 py-3 bg-gray-50 dark:bg-slate-700/50 border-b border-gray-200 dark:border-slate-700 text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase tracking-wider transition-colors">
-        <div className="col-span-4">Riesgo</div>
+        <div className="col-span-4">{t('literals.Riesgo')}</div>
         <div className="col-span-2">Nivel</div>
         <div className="col-span-2">Fuente</div>
-        <div className="col-span-2">Fecha</div>
+        <div className="col-span-2">{t('common.forms.date')}</div>
         <div className="col-span-2 text-right">Acciones</div>
       </div>
 
@@ -125,7 +127,7 @@ const RiskList = ({ risks, onEdit, onDelete, onStatusChange }) => {
                 <button
                   onClick={(e) => { e.stopPropagation(); onEdit(risk); }}
                   className="p-2 text-slate-400 dark:text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
-                  title="Editar"
+                  title={t('common.buttons.edit')}
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -134,7 +136,7 @@ const RiskList = ({ risks, onEdit, onDelete, onStatusChange }) => {
                 <button
                   onClick={(e) => { e.stopPropagation(); onDelete(risk.id); }}
                   className="p-2 text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
-                  title="Eliminar"
+                  title={t('common.buttons.delete')}
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -165,7 +167,7 @@ const RiskList = ({ risks, onEdit, onDelete, onStatusChange }) => {
                     </div>
                   </div>
                   <div className="bg-white dark:bg-slate-800 rounded-lg p-4 border border-gray-200 dark:border-slate-600 transition-colors">
-                    <h4 className="text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase mb-2">Estado</h4>
+                    <h4 className="text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase mb-2">{t('common.forms.status')}</h4>
                     <div className="space-y-3">
                       <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${statusColors[risk.status]}`}>
                         {statusLabels[risk.status] || risk.status}
@@ -175,7 +177,7 @@ const RiskList = ({ risks, onEdit, onDelete, onStatusChange }) => {
                         onChange={(e) => { if (e.target.value) onStatusChange(risk.id, e.target.value); }}
                         className="w-full mt-2 px-3 py-2 text-sm border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 transition-colors"
                       >
-                        <option value="">Cambiar estado...</option>
+                        <option value="">{t('literals.Cambiar estado...')}</option>
                         {Object.entries(statusLabels).filter(([key]) => key !== risk.status).map(([key, label]) => (
                           <option key={key} value={key}>{label}</option>
                         ))}

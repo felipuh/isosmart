@@ -2,6 +2,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
+import { useI18n } from '../../../context/I18nContext';
 import {
   getRisksOpportunities,
   getObjectives,
@@ -16,6 +17,7 @@ import {
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
 
 const PlanningDashboard = () => {
+  const { t } = useI18n();
   const { currentOrganization } = useAuth();
   const orgId = currentOrganization?.id || null;
 
@@ -139,8 +141,8 @@ const PlanningDashboard = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white">Planificación</h1>
-          <p className="text-gray-400 mt-1">ISO 9001:2015 - Cláusula 6</p>
+          <h1 className="text-3xl font-bold text-white">{t('literals.Planificación')}</h1>
+          <p className="text-gray-400 mt-1">{t('literals.ISO 9001:2015 - Cláusula 6')}</p>
         </div>
       </div>
 
@@ -187,8 +189,8 @@ const PlanningDashboard = () => {
       <div className="bg-gradient-to-br from-orange-500/10 to-orange-600/5 backdrop-blur-sm border border-orange-500/20 rounded-lg p-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-xl font-bold text-white">Control de Cambios</h2>
-            <p className="text-sm text-gray-400">Gestión de cambios al SGC</p>
+            <h2 className="text-xl font-bold text-white">{t('literals.Control de Cambios')}</h2>
+            <p className="text-sm text-gray-400">{t('literals.Gestión de cambios al SGC')}</p>
           </div>
           <Link
             to="/planning/changes"
@@ -200,18 +202,18 @@ const PlanningDashboard = () => {
         <div className="grid grid-cols-2 gap-4">
           <div className="bg-gray-800/30 rounded-lg p-4">
             <p className="text-2xl font-bold text-orange-400">{stats.changes.total}</p>
-            <p className="text-sm text-gray-400">Total de cambios</p>
+            <p className="text-sm text-gray-400">{t('literals.Total de cambios')}</p>
           </div>
           <div className="bg-gray-800/30 rounded-lg p-4">
             <p className="text-2xl font-bold text-yellow-400">{stats.changes.pending}</p>
-            <p className="text-sm text-gray-400">Pendientes de aprobación</p>
+            <p className="text-sm text-gray-400">{t('literals.Pendientes de aprobación')}</p>
           </div>
         </div>
       </div>
 
       {/* Quick Actions */}
       <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg p-6">
-        <h2 className="text-xl font-bold text-white mb-4">Acciones Rápidas</h2>
+        <h2 className="text-xl font-bold text-white mb-4">{t('literals.Acciones Rápidas')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Link
             to="/planning/risks-opportunities/new"
@@ -219,8 +221,8 @@ const PlanningDashboard = () => {
           >
             <span className="text-2xl">⚠️</span>
             <div>
-              <p className="font-medium text-white">Nuevo Riesgo/Oportunidad</p>
-              <p className="text-xs text-gray-400">Identificar y evaluar</p>
+              <p className="font-medium text-white">{t('literals.Nuevo Riesgo/Oportunidad')}</p>
+              <p className="text-xs text-gray-400">{t('literals.Identificar y evaluar')}</p>
             </div>
           </Link>
 
@@ -230,8 +232,8 @@ const PlanningDashboard = () => {
           >
             <span className="text-2xl">🎯</span>
             <div>
-              <p className="font-medium text-white">Nuevo Objetivo</p>
-              <p className="text-xs text-gray-400">Crear objetivo SMART</p>
+              <p className="font-medium text-white">{t('literals.Nuevo Objetivo')}</p>
+              <p className="text-xs text-gray-400">{t('literals.Crear objetivo SMART')}</p>
             </div>
           </Link>
 
@@ -241,8 +243,8 @@ const PlanningDashboard = () => {
           >
             <span className="text-2xl">🔄</span>
             <div>
-              <p className="font-medium text-white">Solicitar Cambio</p>
-              <p className="text-xs text-gray-400">Control de cambios SGC</p>
+              <p className="font-medium text-white">{t('literals.Solicitar Cambio')}</p>
+              <p className="text-xs text-gray-400">{t('literals.Control de cambios SGC')}</p>
             </div>
           </Link>
         </div>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
+import { useI18n } from '../../../context/I18nContext';
 import { getCommitments, createCommitment, updateCommitment, deleteCommitment } from '../api/leadershipApi';
 
 const normalizeList = (data) => (Array.isArray(data) ? data : data?.results || []);
@@ -44,6 +45,7 @@ const initialForm = {
 };
 
 const CommitmentsPage = () => {
+  const { t } = useI18n();
   const { currentOrganization } = useAuth();
   const orgId = currentOrganization?.id || null;
   const orgName = currentOrganization?.name || '';
@@ -186,8 +188,8 @@ const CommitmentsPage = () => {
                   <tr>
                     <th className="px-3 py-2">Título</th>
                     <th className="px-3 py-2">Tipo</th>
-                    <th className="px-3 py-2">Fecha</th>
-                    <th className="px-3 py-2">Estado</th>
+                    <th className="px-3 py-2">{t('common.forms.date')}</th>
+                    <th className="px-3 py-2">{t('common.forms.status')}</th>
                     <th className="px-3 py-2 text-right">Acciones</th>
                   </tr>
                 </thead>
@@ -336,7 +338,7 @@ const CommitmentsPage = () => {
               disabled={saving || !orgId}
               className="rounded-lg bg-emerald-500/80 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-500 disabled:opacity-50"
             >
-              {saving ? 'Guardando...' : editingId ? 'Actualizar' : 'Crear'}
+              {saving ? t('common.messages.saving') : editingId ? t('common.buttons.update') : t('common.buttons.create')}
             </button>
             <button
               type="button"

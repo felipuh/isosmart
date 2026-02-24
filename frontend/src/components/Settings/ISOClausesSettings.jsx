@@ -4,11 +4,14 @@ import {
   ChevronDown, ChevronRight, Info, RefreshCw, Shield
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { useI18n } from '../../context/I18nContext';
 import settingsService from '../../services/settingsService';
 
 const ISOClausesSettings = () => {
+  const { t } = useI18n();
   const { currentOrganization } = useAuth();
   const organizationId = currentOrganization?.id;
+  const [selectedStandard, setSelectedStandard] = useState('ISO9001_2015');
   const [clauses, setClauses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -39,8 +42,13 @@ const ISOClausesSettings = () => {
 
   const loadClauses = useCallback(async () => {
     try {
+      if (!organizationId) {
+        setClauses([]);
+        setLoading(false);
+        return;
+      }
       setLoading(true);
-      const data = await settingsService.getISOClauses(organizationId);
+      const data = await settingsService.getISOClauses(organizationId, selectedStandard);
       setClauses(data);
     } catch (err) {
       console.error('Error cargando cláusulas:', err);
@@ -48,7 +56,7 @@ const ISOClausesSettings = () => {
     } finally {
       setLoading(false);
     }
-  }, [organizationId]);
+  }, [organizationId, selectedStandard]);
 
   useEffect(() => {
     loadClauses();
@@ -58,9 +66,13 @@ const ISOClausesSettings = () => {
     try {
       setSaving(true);
       setError(null);
-      await settingsService.initializeISOClauses(organizationId);
+      await settingsService.initializeStandards(organizationId, [selectedStandard]);
+      
+      // Guardar el estándar en la configuración de la organización
+      await settingsService.updateStandards(organizationId, [selectedStandard]);
+      
       await loadClauses();
-      setSuccess('Cláusulas ISO 9001:2015 inicializadas correctamente');
+      setSuccess(`Cláusulas ${selectedStandard} inicializadas correctamente`);
       setTimeout(() => setSuccess(null), 3000);
     } catch (error) {
       console.error('Error al inicializar cláusulas:', error);
@@ -122,21 +134,35 @@ const ISOClausesSettings = () => {
             </p>
           </div>
         </div>
-        
-        {clauses.length === 0 && (
-          <button
-            onClick={handleInitialize}
-            disabled={saving}
-            className="px-4 py-2 bg-teal-500 hover:bg-teal-600 text-white rounded-lg font-medium flex items-center gap-2 transition-colors disabled:opacity-50"
+
+        <div className="flex items-center gap-3">
+          <select
+            value={selectedStandard}
+            onChange={(event) => setSelectedStandard(event.target.value)}
+            className="px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100"
           >
-            {saving ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
-            ) : (
-              <RefreshCw className="w-4 h-4" />
-            )}
-            Inicializar Cláusulas
-          </button>
-        )}
+            <option value="ISO9001_2015">{t('literals.ISO 9001:2015')}</option>
+            <option value="ISO42001_2023">{t('literals.ISO/IEC 42001:2023')}</option>
+            <option value="ISO27001_2022">{t('literals.ISO 27001:2022')}</option>
+            <option value="ISO14001_2015">{t('literals.ISO 14001:2015')}</option>
+            <option value="ISO45001_2018">{t('literals.ISO 45001:2018')}</option>
+          </select>
+        
+          {clauses.length === 0 && (
+            <button
+              onClick={handleInitialize}
+              disabled={saving}
+              className="px-4 py-2 bg-teal-500 hover:bg-teal-600 text-white rounded-lg font-medium flex items-center gap-2 transition-colors disabled:opacity-50"
+            >
+              {saving ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <RefreshCw className="w-4 h-4" />
+              )}
+              Inicializar Cláusulas
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Alerts */}

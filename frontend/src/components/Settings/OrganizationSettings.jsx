@@ -4,9 +4,11 @@ import {
   FileText, Camera, Check, AlertCircle, Loader2
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { useI18n } from '../../context/I18nContext';
 import settingsService from '../../services/settingsService';
 
 const OrganizationSettings = ({ organization: propOrganization, onUpdate }) => {
+  const { t } = useI18n();
   const { currentOrganization } = useAuth();
   const organization = propOrganization || currentOrganization;
   

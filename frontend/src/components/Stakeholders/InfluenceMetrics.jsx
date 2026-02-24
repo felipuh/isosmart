@@ -1,8 +1,10 @@
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { TrendingUp, Users, Network } from 'lucide-react';
+import { useI18n } from '../../context/I18nContext';
 
 const InfluenceTooltip = ({ active, payload }) => {
+  const { t } = useI18n();
   if (active && payload && payload.length) {
     const data = payload[0].payload;
     return (

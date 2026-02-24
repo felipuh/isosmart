@@ -1,12 +1,14 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
+import { useI18n } from '../../../context/I18nContext';
 import Modal from '../../../components/Common/Modal';
 import { getActions, createAction, updateAction, deleteAction, getObjectives, getUsers } from '../api/planningApi';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
 
 const ObjectiveActionsPage = () => {
+  const { t } = useI18n();
   const { currentOrganization, user } = useAuth();
   const orgId = currentOrganization?.id || null;
   const location = useLocation();
@@ -191,7 +193,7 @@ const ObjectiveActionsPage = () => {
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Objetivo</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Número</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Estado</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.status')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Fecha Límite</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">% Avance</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Acciones</th>
@@ -206,8 +208,8 @@ const ObjectiveActionsPage = () => {
                 <td className="px-6 py-4 text-sm text-gray-300">{i.due_date}</td>
                 <td className="px-6 py-4 text-sm text-gray-300">{i.progress_percentage}%</td>
                 <td className="px-6 py-4 text-sm space-x-2">
-                  <button onClick={() => handleEdit(i)} className="text-blue-400 hover:text-blue-300">Editar</button>
-                  <button onClick={() => handleDelete(i.id)} className="text-red-400 hover:text-red-300">Eliminar</button>
+                  <button onClick={() => handleEdit(i)} className="text-blue-400 hover:text-blue-300">{t('common.buttons.edit')}</button>
+                  <button onClick={() => handleDelete(i.id)} className="text-red-400 hover:text-red-300">{t('common.buttons.delete')}</button>
                 </td>
               </tr>
             ))}
@@ -226,7 +228,7 @@ const ObjectiveActionsPage = () => {
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">Objetivo *</label>
               <select value={form.objective} onChange={(e) => setForm({...form, objective: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required>
-                <option value="">Seleccionar</option>
+                <option value="">{t('literals.Seleccionar')}</option>
                 {objectives.map(o => (
                   <option key={o.id} value={o.id}>{o.code} - {o.title}</option>
                 ))}
@@ -239,7 +241,7 @@ const ObjectiveActionsPage = () => {
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">Responsable</label>
               <select value={form.responsible} onChange={(e) => setForm({...form, responsible: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="">Sin asignar</option>
+                <option value="">{t('literals.Sin asignar')}</option>
                 {users.map(u => (
                   <option key={u.id} value={u.id}>{u.full_name || u.username || u.email}</option>
                 ))}
@@ -262,13 +264,13 @@ const ObjectiveActionsPage = () => {
               <input type="date" value={form.due_date} onChange={(e) => setForm({...form, due_date: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Estado</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('common.forms.status')}</label>
               <select value={form.status} onChange={(e) => setForm({...form, status: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="planned">Planificada</option>
-                <option value="in_progress">En Progreso</option>
-                <option value="completed">Completada</option>
-                <option value="cancelled">Cancelada</option>
-                <option value="delayed">Retrasada</option>
+                <option value="planned">{t('literals.Planificada')}</option>
+                <option value="in_progress">{t('literals.En Progreso')}</option>
+                <option value="completed">{t('literals.Completada')}</option>
+                <option value="cancelled">{t('literals.Cancelada')}</option>
+                <option value="delayed">{t('literals.Retrasada')}</option>
               </select>
             </div>
             <div>
@@ -286,9 +288,9 @@ const ObjectiveActionsPage = () => {
           </div>
           <div className="flex space-x-3">
             <button type="submit" disabled={saving} className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
-              {saving ? 'Guardando...' : editingId ? 'Actualizar' : 'Crear'}
+              {saving ? t('common.messages.saving') : editingId ? t('common.buttons.update') : t('common.buttons.create')}
             </button>
-            {editingId && <button type="button" onClick={closeForm} className="px-6 py-2 bg-gray-600 text-white rounded-lg">Cancelar</button>}
+            {editingId && <button type="button" onClick={closeForm} className="px-6 py-2 bg-gray-600 text-white rounded-lg">{t('common.buttons.cancel')}</button>}
           </div>
         </form>
       </Modal>

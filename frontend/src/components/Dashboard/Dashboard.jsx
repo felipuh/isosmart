@@ -13,10 +13,12 @@ import {
   BarChart3
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { useI18n } from '../../context/I18nContext';
 import api from '../../services/api';
 
 const Dashboard = () => {
   const { currentOrganization, user } = useAuth();
+  const { t } = useI18n();
   const orgId = currentOrganization?.id || null;
   const [stats, setStats] = useState({
     modulesActive: 0,
@@ -97,10 +99,11 @@ const Dashboard = () => {
   const modules = [
     {
       id: 'sca',
-      name: 'Smart Context Analyzer',
+      name: t('modules.leadership.title'),
+      nameKey: 'modules.leadership.title',
       code: 'SCA',
       iso: 'ISO 4.1',
-      description: 'Análisis automático del contexto organizacional',
+      descriptionKey: 'modules.leadership.subtitle',
       icon: TrendingUp,
       color: 'bg-blue-500',
       bgColor: 'bg-blue-50',
@@ -108,7 +111,7 @@ const Dashboard = () => {
       textColor: 'text-blue-700',
       route: '/context',
       status: 'active',
-      features: ['Análisis FODA', 'Factores internos/externos', 'Riesgos identificados']
+      featuresKey: ['modules.context.title', 'modules.context.externalFactors', 'modules.context.internalFactors']
     },
     {
       id: 'sie',
@@ -217,7 +220,7 @@ const Dashboard = () => {
           <div>
             <div className="flex items-center mb-2">
               <Award className="h-8 w-8 mr-3" />
-              <h2 className="text-2xl font-bold">Estado global de cumplimiento ISO 9001</h2>
+              <h2 className="text-2xl font-bold">{t('literals.Estado global de cumplimiento ISO 9001')}</h2>
             </div>
             <p className="text-blue-100">
               Progreso dinámico por cláusula según datos reales de cada módulo.
@@ -225,7 +228,7 @@ const Dashboard = () => {
           </div>
           <div className="text-right">
             <div className="text-6xl font-bold">{stats.iso9001Progress}%</div>
-            <div className="text-sm text-blue-100">Promedio cláusulas 4-10</div>
+            <div className="text-sm text-blue-100">{t('literals.Promedio cláusulas 4-10')}</div>
           </div>
         </div>
       </div>
@@ -235,7 +238,7 @@ const Dashboard = () => {
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-slate-600 dark:text-slate-400 mb-1">Cláusulas con avance</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400 mb-1">{t('literals.Cláusulas con avance')}</p>
               <p className="text-3xl font-bold text-green-600 dark:text-green-400">
                 {stats.modulesActive}/{stats.totalModules}
               </p>
@@ -255,7 +258,7 @@ const Dashboard = () => {
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-slate-600 dark:text-slate-400 mb-1">Cláusula 4 ISO</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400 mb-1">{t('literals.Cláusula 4 ISO')}</p>
               <p className="text-3xl font-bold text-blue-600">{stats.clause4Progress}%</p>
             </div>
             <Target className="h-12 w-12 text-blue-400" />
@@ -273,36 +276,43 @@ const Dashboard = () => {
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-slate-600 dark:text-slate-400 mb-1">Procesos Mapeados</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400 mb-1">{t('literals.Procesos Mapeados')}</p>
               <p className="text-3xl font-bold text-purple-600 dark:text-purple-400">{stats.totalProcesses}</p>
             </div>
             <Workflow className="h-12 w-12 text-purple-400" />
           </div>
           <div className="mt-2">
-            <p className="text-xs text-gray-500">3 Estratégicos • 3 Operativos • 5 Apoyo</p>
+            <p className="text-xs text-gray-500">{t('literals.3 Estratégicos • 3 Operativos • 5 Apoyo')}</p>
           </div>
         </div>
 
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600 dark:text-slate-400 mb-1">Partes Interesadas</p>
+              <p className="text-sm text-gray-600 dark:text-slate-400 mb-1">{t('literals.Partes Interesadas')}</p>
               <p className="text-3xl font-bold text-orange-600 dark:text-orange-400">{stats.totalStakeholders}</p>
             </div>
             <Activity className="h-12 w-12 text-orange-400" />
           </div>
           <div className="mt-2">
-            <p className="text-xs text-gray-500">Registros activos de stakeholders</p>
+            <p className="text-xs text-gray-500">{t('literals.Registros activos de stakeholders')}</p>
           </div>
         </div>
       </div>
 
       {/* Módulos Grid */}
       <div className="mb-8">
-        <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">Módulos del Sistema</h2>
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">{t('literals.Módulos del Sistema')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {modules.map((module) => {
             const Icon = module.icon;
+            const moduleName = module.nameKey ? t(module.nameKey) : module.name;
+            const moduleDescription = module.descriptionKey ? t(module.descriptionKey) : module.description;
+            const moduleFeatures = Array.isArray(module.features)
+              ? module.features
+              : Array.isArray(module.featuresKey)
+                ? module.featuresKey.map((key) => t(key))
+                : [];
             return (
               <Link
                 key={module.id}
@@ -315,7 +325,7 @@ const Dashboard = () => {
                       <Icon className="h-6 w-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-slate-900 dark:text-white">{module.name}</h3>
+                      <h3 className="text-lg font-bold text-slate-900 dark:text-white">{moduleName}</h3>
                       <p className="text-sm text-slate-600 dark:text-slate-400">{module.code} • {module.iso}</p>
                     </div>
                   </div>
@@ -325,10 +335,10 @@ const Dashboard = () => {
                   </span>
                 </div>
                 
-                <p className="text-sm text-slate-700 dark:text-slate-300 mb-4">{module.description}</p>
+                <p className="text-sm text-slate-700 dark:text-slate-300 mb-4">{moduleDescription}</p>
                 
                 <div className="space-y-2">
-                  {module.features.map((feature, idx) => (
+                  {moduleFeatures.map((feature, idx) => (
                     <div key={idx} className="flex items-center text-sm text-slate-600 dark:text-slate-400">
                       <CheckCircle2 className="h-4 w-4 text-green-500 dark:text-green-400 mr-2" />
                       {feature}
@@ -350,7 +360,7 @@ const Dashboard = () => {
 
       {/* Quick Actions */}
       <div className="mb-8">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Acciones Rápidas</h2>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{t('literals.Acciones Rápidas')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-4 dark:text-white gap-4">
           {quickActions.map((action, idx) => {
             const Icon = action.icon;
@@ -400,24 +410,24 @@ const Dashboard = () => {
           </h3>
           <div className="space-y-3">
             <div className="flex items-center justify-between py-2 border-b border-slate-100 dark:border-slate-700">
-              <span className="text-sm text-slate-600 dark:text-slate-400">Módulos de IA Activos</span>
+              <span className="text-sm text-slate-600 dark:text-slate-400">{t('literals.Módulos de IA Activos')}</span>
               <span className="text-sm font-bold text-gray-900 dark:text-slate-500">{stats.modulesActive}/{stats.totalModules}</span>
             </div>
             <div className="flex items-center justify-between py-2 border-b border-gray-100">
-              <span className="text-sm text-gray-600 dark:text-slate-400">Requisitos ISO Cubiertos</span>
-              <span className="text-sm font-bold text-gray-900 dark:text-slate-500">4 - 10 (progreso dinámico)</span>
+              <span className="text-sm text-gray-600 dark:text-slate-400">{t('literals.Requisitos ISO Cubiertos')}</span>
+              <span className="text-sm font-bold text-gray-900 dark:text-slate-500">{t('literals.4 - 10 (progreso dinámico)')}</span>
             </div>
             <div className="flex items-center justify-between py-2 border-b border-gray-100">
-              <span className="text-sm text-gray-600 dark:text-slate-400">Procesos Mapeados</span>
+              <span className="text-sm text-gray-600 dark:text-slate-400">{t('literals.Procesos Mapeados')}</span>
               <span className="text-sm font-bold text-gray-900 dark:text-slate-500">{stats.totalProcesses} procesos</span>
             </div>
             <div className="flex items-center justify-between py-2 border-b border-gray-100">
-              <span className="text-sm text-gray-600 dark:text-slate-400">Cumplimiento ISO 9001</span>
+              <span className="text-sm text-gray-600 dark:text-slate-400">{t('literals.Cumplimiento ISO 9001')}</span>
               <span className="text-sm font-bold text-gray-900 dark:text-slate-500">{stats.iso9001Progress}%</span>
             </div>
             <div className="flex items-center justify-between py-2">
-              <span className="text-sm text-gray-600 dark:text-slate-400">Estado del Sistema</span>
-              <span className="text-sm font-bold text-green-600">✓ Operacional</span>
+              <span className="text-sm text-gray-600 dark:text-slate-400">{t('literals.Estado del Sistema')}</span>
+              <span className="text-sm font-bold text-green-600">{t('literals.✓ Operacional')}</span>
             </div>
           </div>
         </div>
@@ -427,13 +437,13 @@ const Dashboard = () => {
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="font-semibold text-gray-900 dark:text-white mb-1">ISO Smart v1.0</h3>
+            <h3 className="font-semibold text-gray-900 dark:text-white mb-1">{t('literals.ISO Smart v1.0')}</h3>
             <p className="text-sm text-gray-600 dark:text-slate-400">
               Sistema Inteligente de Gestión de Calidad con IA
             </p>
           </div>
           <div className="text-right">
-            <p className="text-sm text-gray-600 dark:text-slate-400">Última actualización</p>
+            <p className="text-sm text-gray-600 dark:text-slate-400">{t('literals.Última actualización')}</p>
             <p className="text-sm font-medium text-gray-900 dark:text-slate-500">
               {new Date(stats.lastUpdate).toLocaleDateString('es-ES', {
                 day: '2-digit',

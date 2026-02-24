@@ -1,7 +1,9 @@
 import React from 'react';
 import { FileText, Download, Trash2, Calendar, User } from 'lucide-react';
+import { useI18n } from '../../context/I18nContext';
 
 const DocumentList = ({ documents, loading, onDelete, onDownload }) => {
+  const { t } = useI18n();
   if (loading) {
     return (
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 transition-colors">
@@ -138,7 +140,7 @@ const DocumentList = ({ documents, loading, onDelete, onDownload }) => {
                   <button
                     onClick={() => onDelete(doc)}
                     className="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300 transition-colors"
-                    title="Eliminar"
+                    title={t('common.buttons.delete')}
                   >
                     <Trash2 className="h-5 w-5" />
                   </button>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
+import { useI18n } from '../../../context/I18nContext';
 import { getCustomerFocus, createCustomerFocus, updateCustomerFocus, deleteCustomerFocus } from '../api/leadershipApi';
 
 const normalizeList = (data) => (Array.isArray(data) ? data : data?.results || []);
@@ -21,6 +22,7 @@ const initialForm = {
 };
 
 const CustomerFocusPage = () => {
+  const { t } = useI18n();
   const { currentOrganization } = useAuth();
   const orgId = currentOrganization?.id || null;
   const orgName = currentOrganization?.name || '';
@@ -161,7 +163,7 @@ const CustomerFocusPage = () => {
                   <tr>
                     <th className="px-3 py-2">Título</th>
                     <th className="px-3 py-2">Tipo</th>
-                    <th className="px-3 py-2">Fecha</th>
+                    <th className="px-3 py-2">{t('common.forms.date')}</th>
                     <th className="px-3 py-2 text-right">Acciones</th>
                   </tr>
                 </thead>
@@ -253,7 +255,7 @@ const CustomerFocusPage = () => {
             </label>
 
             <label className="text-xs text-slate-400">
-              Resultados
+              {t('literals.Resultados')}
               <textarea
                 value={form.results}
                 onChange={(event) => setForm({ ...form, results: event.target.value })}
@@ -288,7 +290,7 @@ const CustomerFocusPage = () => {
               disabled={saving || !orgId}
               className="rounded-lg bg-emerald-500/80 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-500 disabled:opacity-50"
             >
-              {saving ? 'Guardando...' : editingId ? 'Actualizar' : 'Crear'}
+              {saving ? t('common.messages.saving') : editingId ? t('common.buttons.update') : t('common.buttons.create')}
             </button>
             <button
               type="button"

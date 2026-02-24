@@ -5,9 +5,11 @@ import {
   ChevronDown, X, Loader2, Check, AlertCircle
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { useI18n } from '../../context/I18nContext';
 import settingsService from '../../services/settingsService';
 
 const UsersManagement = () => {
+  const { t } = useI18n();
   const { currentOrganization, hasRole } = useAuth();
   const organizationId = currentOrganization?.id;
   const [users, setUsers] = useState([]);
@@ -160,7 +162,7 @@ const UsersManagement = () => {
             onChange={(e) => setRoleFilter(e.target.value)}
             className="appearance-none pl-4 pr-10 py-3 bg-white dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all text-slate-800 dark:text-white cursor-pointer min-w-[180px]"
           >
-            <option value="all">Todos los roles</option>
+            <option value="all">{t('literals.Todos los roles')}</option>
             {Object.entries(roleLabels).map(([value, { label }]) => (
               <option key={value} value={value}>{label}</option>
             ))}
@@ -184,10 +186,10 @@ const UsersManagement = () => {
           <table className="w-full">
             <thead>
               <tr className="border-b border-slate-200 dark:border-slate-700">
-                <th className="text-left py-4 px-4 text-sm font-semibold text-slate-600 dark:text-slate-300">Usuario</th>
+                <th className="text-left py-4 px-4 text-sm font-semibold text-slate-600 dark:text-slate-300">{t('literals.Usuario')}</th>
                 <th className="text-left py-4 px-4 text-sm font-semibold text-slate-600 dark:text-slate-300">Rol</th>
                 <th className="text-left py-4 px-4 text-sm font-semibold text-slate-600 dark:text-slate-300 hidden md:table-cell">Departamento</th>
-                <th className="text-left py-4 px-4 text-sm font-semibold text-slate-600 dark:text-slate-300">Estado</th>
+                <th className="text-left py-4 px-4 text-sm font-semibold text-slate-600 dark:text-slate-300">{t('common.forms.status')}</th>
                 <th className="text-right py-4 px-4 text-sm font-semibold text-slate-600 dark:text-slate-300">Acciones</th>
               </tr>
             </thead>
@@ -234,7 +236,7 @@ const UsersManagement = () => {
                     {user.is_active ? (
                       <span className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
                         <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
-                        Activo
+                        {t('literals.Activo')}
                       </span>
                     ) : (
                       <span className="flex items-center gap-1.5 text-slate-400">
@@ -413,7 +415,7 @@ const CreateUserModal = ({ organizationId, onClose, onSuccess }) => {
           
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nombre</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('common.forms.name')}</label>
               <input
                 type="text"
                 value={formData.first_name}
@@ -474,11 +476,11 @@ const CreateUserModal = ({ organizationId, onClose, onSuccess }) => {
               onChange={(e) => setFormData({...formData, role: e.target.value})}
               className="w-full px-4 py-2.5 bg-white dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-violet-500 text-slate-800 dark:text-white"
             >
-              <option value="user">Usuario</option>
-              <option value="viewer">Solo Lectura</option>
-              <option value="auditor">Auditor</option>
-              <option value="iso_manager">Gestor ISO</option>
-              <option value="org_admin">Administrador</option>
+              <option value="user">{t('literals.Usuario')}</option>
+              <option value="viewer">{t('literals.Solo Lectura')}</option>
+              <option value="auditor">{t('literals.Auditor')}</option>
+              <option value="iso_manager">{t('literals.Gestor ISO')}</option>
+              <option value="org_admin">{t('literals.Administrador')}</option>
             </select>
           </div>
           
@@ -575,11 +577,11 @@ const EditUserModal = ({ user, onClose, onSuccess }) => {
               onChange={(e) => setFormData({...formData, role: e.target.value})}
               className="w-full px-4 py-2.5 bg-white dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl text-slate-800 dark:text-white"
             >
-              <option value="user">Usuario</option>
-              <option value="viewer">Solo Lectura</option>
-              <option value="auditor">Auditor</option>
-              <option value="iso_manager">Gestor ISO</option>
-              <option value="org_admin">Administrador</option>
+              <option value="user">{t('literals.Usuario')}</option>
+              <option value="viewer">{t('literals.Solo Lectura')}</option>
+              <option value="auditor">{t('literals.Auditor')}</option>
+              <option value="iso_manager">{t('literals.Gestor ISO')}</option>
+              <option value="org_admin">{t('literals.Administrador')}</option>
             </select>
           </div>
           

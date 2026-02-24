@@ -1,11 +1,13 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { useI18n } from '../../context/I18nContext';
 import riskService from '../../services/riskService';
 import RiskMatrixVisual from './RiskMatrixVisual';
 import RiskList from './RiskList';
 import RiskForm from './RiskForm';
 
 const RiskDashboard = () => {
+  const { t } = useI18n();
   const { currentOrganization } = useAuth();
   const [activeTab, setActiveTab] = useState('list');
   const [stats, setStats] = useState(null);
@@ -192,11 +194,11 @@ const RiskDashboard = () => {
           onChange={(e) => setFilters({...filters, level: e.target.value})}
           className="px-4 py-2.5 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
         >
-          <option value="">Todos los niveles</option>
-          <option value="critico">Crítico</option>
-          <option value="alto">Alto</option>
-          <option value="medio">Medio</option>
-          <option value="bajo">Bajo</option>
+          <option value="">{t('literals.Todos los niveles')}</option>
+          <option value="critico">{t('literals.Crítico')}</option>
+          <option value="alto">{t('literals.Alto')}</option>
+          <option value="medio">{t('literals.Medio')}</option>
+          <option value="bajo">{t('literals.Bajo')}</option>
         </select>
       </div>
 

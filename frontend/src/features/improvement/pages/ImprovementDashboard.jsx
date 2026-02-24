@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
+import { useI18n } from '../../../context/I18nContext';
 import {
   getNonconformities, getNonconformityStats,
   getCorrectiveActions, getOverdueActions,
@@ -17,6 +18,7 @@ const statColors = {
 };
 
 const ImprovementDashboard = () => {
+  const { t } = useI18n();
   const { currentOrganization } = useAuth();
   const orgId = currentOrganization?.id || null;
   const [loading, setLoading] = useState(true);
@@ -99,8 +101,8 @@ const ImprovementDashboard = () => {
     <div className="space-y-6" style={{ fontFamily: '"Sora", "Work Sans", sans-serif' }}>
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white">Mejora</h1>
-          <p className="text-gray-400 mt-1">ISO 9001:2015 - Cláusula 10</p>
+          <h1 className="text-3xl font-bold text-white">{t('literals.Mejora')}</h1>
+          <p className="text-gray-400 mt-1">{t('literals.ISO 9001:2015 - Cláusula 10')}</p>
         </div>
       </div>
 
@@ -123,9 +125,9 @@ const ImprovementDashboard = () => {
         <div className="bg-gradient-to-br from-red-500/10 to-red-600/5 backdrop-blur-sm border border-red-500/20 rounded-lg p-6">
           <div className="flex items-center space-x-3 mb-2">
             <span className="text-2xl">🚨</span>
-            <h2 className="text-xl font-bold text-white">Atención requerida</h2>
+            <h2 className="text-xl font-bold text-white">{t('literals.Atención requerida')}</h2>
           </div>
-          <p className="text-gray-300">Hay {stats.nonconformities.critical} no conformidad(es) crítica(s) que requieren acción inmediata.</p>
+          <p className="text-gray-300">{t('literals.Hay {stats.nonconformities.critical} no conformidad(es) crítica(s) que requieren acción inmediata.')}</p>
           <Link to="/improvement/nonconformities" className="inline-block mt-4 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-all">
             Ver no conformidades críticas
           </Link>
@@ -136,9 +138,9 @@ const ImprovementDashboard = () => {
         <div className="bg-gradient-to-br from-orange-500/10 to-orange-600/5 backdrop-blur-sm border border-orange-500/20 rounded-lg p-6">
           <div className="flex items-center space-x-3 mb-2">
             <span className="text-2xl">⏰</span>
-            <h2 className="text-xl font-bold text-white">Acciones Vencidas</h2>
+            <h2 className="text-xl font-bold text-white">{t('literals.Acciones Vencidas')}</h2>
           </div>
-          <p className="text-gray-300">Hay {stats.corrective_actions.overdue} acción(es) correctiva(s) que han superado su fecha de cumplimiento.</p>
+          <p className="text-gray-300">{t('literals.Hay {stats.corrective_actions.overdue} acción(es) correctiva(s) que han superado su fecha de cumplimiento.')}</p>
           <Link to="/improvement/corrective-actions" className="inline-block mt-4 px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition-all">
             Ver Acciones Vencidas
           </Link>
@@ -146,19 +148,19 @@ const ImprovementDashboard = () => {
       )}
 
       <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg p-6">
-        <h2 className="text-xl font-bold text-white mb-4">Acciones rápidas</h2>
+        <h2 className="text-xl font-bold text-white mb-4">{t('literals.Acciones rápidas')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Link to="/improvement/nonconformities/new" className="flex items-center space-x-3 p-4 bg-red-500/10 border border-red-500/20 rounded-lg hover:bg-red-500/20 transition-all">
             <span className="text-2xl">🚨</span>
-            <div><p className="font-medium text-white">Reportar NC</p><p className="text-xs text-gray-400">Registrar no conformidad</p></div>
+            <div><p className="font-medium text-white">{t('literals.Reportar NC')}</p><p className="text-xs text-gray-400">{t('literals.Registrar no conformidad')}</p></div>
           </Link>
           <Link to="/improvement/corrective-actions/new" className="flex items-center space-x-3 p-4 bg-orange-500/10 border border-orange-500/20 rounded-lg hover:bg-orange-500/20 transition-all">
             <span className="text-2xl">🔧</span>
-            <div><p className="font-medium text-white">Nueva acción correctiva</p><p className="text-xs text-gray-400">Crear plan de acción</p></div>
+            <div><p className="font-medium text-white">{t('literals.Nueva acción correctiva')}</p><p className="text-xs text-gray-400">{t('literals.Crear plan de acción')}</p></div>
           </Link>
           <Link to="/improvement/continual/new" className="flex items-center space-x-3 p-4 bg-green-500/10 border border-green-500/20 rounded-lg hover:bg-green-500/20 transition-all">
             <span className="text-2xl">📈</span>
-            <div><p className="font-medium text-white">Iniciativa de mejora</p><p className="text-xs text-gray-400">Proponer mejora continua</p></div>
+            <div><p className="font-medium text-white">{t('literals.Iniciativa de mejora')}</p><p className="text-xs text-gray-400">{t('literals.Proponer mejora continua')}</p></div>
           </Link>
         </div>
       </div>
@@ -167,16 +169,16 @@ const ImprovementDashboard = () => {
         <Link to="/improvement/nonconformities" className="p-6 bg-gradient-to-br from-red-500/10 to-red-600/5 border border-red-500/20 rounded-lg hover:shadow-lg transition-all">
           <div className="flex items-center space-x-3 mb-2">
             <span className="text-2xl">📋</span>
-            <h3 className="text-lg font-bold text-white">No Conformidades y Acciones Correctivas</h3>
+            <h3 className="text-lg font-bold text-white">{t('literals.No Conformidades y Acciones Correctivas')}</h3>
           </div>
-          <p className="text-sm text-gray-400">ISO 9001:2015 Cláusula 10.2 - Gestión de no conformidades, análisis de causa raíz y acciones correctivas</p>
+          <p className="text-sm text-gray-400">{t('literals.ISO 9001:2015 Cláusula 10.2 - Gestión de no conformidades, análisis de causa raíz y acciones correctivas')}</p>
         </Link>
         <Link to="/improvement/continual" className="p-6 bg-gradient-to-br from-green-500/10 to-green-600/5 border border-green-500/20 rounded-lg hover:shadow-lg transition-all">
           <div className="flex items-center space-x-3 mb-2">
             <span className="text-2xl">🚀</span>
-            <h3 className="text-lg font-bold text-white">Mejora Continua</h3>
+            <h3 className="text-lg font-bold text-white">{t('literals.Mejora Continua')}</h3>
           </div>
-          <p className="text-sm text-gray-400">ISO 9001:2015 Cláusula 10.3 - Iniciativas de mejora, análisis de ROI y seguimiento de resultados</p>
+          <p className="text-sm text-gray-400">{t('literals.ISO 9001:2015 Cláusula 10.3 - Iniciativas de mejora, análisis de ROI y seguimiento de resultados')}</p>
         </Link>
       </div>
     </div>

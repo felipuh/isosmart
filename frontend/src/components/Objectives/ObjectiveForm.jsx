@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { useI18n } from '../../context/I18nContext';
 
 const ObjectiveForm = ({ objective, onSubmit, onCancel }) => {
+  const { t } = useI18n();
   const [formData, setFormData] = useState({
     objective_description: '',
     indicator_name: '',
@@ -260,7 +262,7 @@ const ObjectiveForm = ({ objective, onSubmit, onCancel }) => {
                 {errors.deadline && <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.deadline}</p>}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Estado</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">{t('common.forms.status')}</label>
                 <select
                   name="status"
                   value={formData.status}
@@ -299,7 +301,7 @@ const ObjectiveForm = ({ objective, onSubmit, onCancel }) => {
               disabled={loading}
               className="px-4 py-2 text-sm font-medium text-white bg-blue-600 dark:bg-blue-700 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-800 disabled:opacity-50 transition-colors"
             >
-              {loading ? 'Guardando...' : (objective ? 'Actualizar' : 'Crear')} Objetivo
+              {loading ? t('common.messages.saving') : (objective ? t('common.buttons.update') : t('common.buttons.create'))} Objetivo
             </button>
           </div>
         </form>

@@ -1,6 +1,8 @@
 import React from 'react';
+import { useI18n } from '../../context/I18nContext';
 
 const Modal = ({ title, isOpen, onClose, children, maxWidth = 'max-w-4xl' }) => {
+  const { t } = useI18n();
   if (!isOpen) return null;
 
   return (

@@ -6,8 +6,10 @@ import {
   RefreshCw, Shield, Archive
 } from 'lucide-react';
 import settingsService from '../../services/settingsService';
+import { useI18n } from '../../context/I18nContext';
 
-const BackupExportSettings = ({ settings, onUpdate }) => {
+const BackupExportSettings = ({ settings, onUpdate, organizationId }) => {
+  const { t } = useI18n();
   const [autoBackup, setAutoBackup] = useState(settings?.auto_backup_enabled ?? false);
   const [backupFrequency, setBackupFrequency] = useState(settings?.backup_frequency ?? 'weekly');
   const [exporting, setExporting] = useState(null);
@@ -81,7 +83,7 @@ const BackupExportSettings = ({ settings, onUpdate }) => {
       setBackingUp(true);
       setError(null);
       
-      const result = await settingsService.triggerBackup(1);
+      const result = await settingsService.triggerBackup(organizationId);
       onUpdate({ last_backup_at: result.last_backup_at });
       
       setSuccess('Backup realizado correctamente');

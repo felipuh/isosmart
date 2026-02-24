@@ -1,7 +1,9 @@
 import React from 'react';
 import { TrendingUp, AlertTriangle, Target, Users, Activity } from 'lucide-react';
+import { useI18n } from '../../context/I18nContext';
 
 const MetricCard = ({ title, value, subtitle, icon, trend, color, borderColor }) => {
+  const { t } = useI18n();
   return (
     <div className={`metric-card ${borderColor}`}>
       <div className="flex items-start justify-between mb-4">

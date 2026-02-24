@@ -1,6 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { RefreshCw, Download, PlayCircle, FileText } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { useI18n } from '../../context/I18nContext';
 import scopeService from '../../services/scopeService';
 import ScopeStatement from './ScopeStatement';
 import OrganizationalBoundaries from './OrganizationalBoundaries';
@@ -11,6 +12,7 @@ import ProcessScopeForm from './ProcessScopeForm';
 import LocationScopeForm from './LocationScopeForm';
 
 const ScopeDashboard = () => {
+  const { t } = useI18n();
   const { currentOrganization } = useAuth();
   const [scopeData, setScopeData] = useState(null);
   const [stats, setStats] = useState(null);

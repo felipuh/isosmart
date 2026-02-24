@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { X, Save, Plus, Trash2 } from 'lucide-react';
+import { useI18n } from '../../context/I18nContext';
 
 const ProcessScopeForm = ({ process, scopeId, onSave, onClose }) => {
+  const { t } = useI18n();
   const [formData, setFormData] = useState({
     scope_definition: scopeId,
     process_name: '',
@@ -320,7 +322,7 @@ const ProcessScopeForm = ({ process, scopeId, onSave, onClose }) => {
               className="flex items-center px-4 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-800 disabled:bg-blue-300 dark:disabled:bg-blue-900/30 transition-colors"
             >
               <Save className="mr-2 h-4 w-4" />
-              {saving ? 'Guardando...' : 'Guardar'}
+              {saving ? t('common.messages.saving') : t('common.buttons.save')}
             </button>
           </div>
         </form>

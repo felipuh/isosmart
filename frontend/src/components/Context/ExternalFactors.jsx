@@ -1,7 +1,9 @@
 import React from 'react';
 import { Globe, TrendingUp, Users, Briefcase, Scale, Zap } from 'lucide-react';
+import { useI18n } from '../../context/I18nContext';
 
 const ExternalFactors = ({ factors, loading }) => {
+  const { t } = useI18n();
   if (loading) {
     return (
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">

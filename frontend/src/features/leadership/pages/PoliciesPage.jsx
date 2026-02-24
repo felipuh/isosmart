@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
+import { useI18n } from '../../../context/I18nContext';
 import {
   getPolicies,
   createPolicy,
@@ -27,6 +28,7 @@ const initialForm = {
 };
 
 const PoliciesPage = () => {
+  const { t } = useI18n();
   const { currentOrganization } = useAuth();
   const orgId = currentOrganization?.id || null;
   const orgName = currentOrganization?.name || '';
@@ -184,7 +186,7 @@ const PoliciesPage = () => {
                   <tr>
                     <th className="px-3 py-2">Version</th>
                     <th className="px-3 py-2">Título</th>
-                    <th className="px-3 py-2">Estado</th>
+                    <th className="px-3 py-2">{t('common.forms.status')}</th>
                     <th className="px-3 py-2">Vigencia</th>
                     <th className="px-3 py-2 text-right">Acciones</th>
                   </tr>
@@ -224,7 +226,7 @@ const PoliciesPage = () => {
                             onClick={() => handleStatusAction(policy.id, 'obsolete')}
                             className="rounded-md border border-amber-500/50 px-2 py-1 text-xs text-amber-200"
                           >
-                            Obsoleta
+                            {t('literals.Obsoleta')}
                           </button>
                           <button
                             type="button"
@@ -327,11 +329,11 @@ const PoliciesPage = () => {
                   onChange={(event) => setForm({ ...form, status: event.target.value })}
                   className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
                 >
-                  <option value="draft">Borrador</option>
-                  <option value="review">Revision</option>
-                  <option value="approved">Aprobada</option>
-                  <option value="active">Activa</option>
-                  <option value="obsolete">Obsoleta</option>
+                  <option value="draft">{t('literals.Borrador')}</option>
+                  <option value="review">{t('literals.Revision')}</option>
+                  <option value="approved">{t('literals.Aprobada')}</option>
+                  <option value="active">{t('literals.Activa')}</option>
+                  <option value="obsolete">{t('literals.Obsoleta')}</option>
                 </select>
               </label>
 
@@ -382,7 +384,7 @@ const PoliciesPage = () => {
               disabled={saving || !orgId}
               className="rounded-lg bg-emerald-500/80 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-500 disabled:opacity-50"
             >
-              {saving ? 'Guardando...' : editingId ? 'Actualizar' : 'Crear'}
+              {saving ? t('common.messages.saving') : editingId ? t('common.buttons.update') : t('common.buttons.create')}
             </button>
             <button
               type="button"

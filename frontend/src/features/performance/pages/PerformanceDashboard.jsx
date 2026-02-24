@@ -2,6 +2,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
+import { useI18n } from '../../../context/I18nContext';
 import {
   getIndicators,
   getMeasurements,
@@ -32,6 +33,7 @@ const StatCard = ({ title, value, subtitle, icon, link, color = 'blue', statColo
 };
 
 const PerformanceDashboard = () => {
+  const { t } = useI18n();
   const { currentOrganization } = useAuth();
   const orgId = currentOrganization?.id || null;
 
@@ -136,8 +138,8 @@ const PerformanceDashboard = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white">Evaluacion del Desempeno</h1>
-          <p className="text-gray-400 mt-1">ISO 9001:2015 - Cláusula 9</p>
+          <h1 className="text-3xl font-bold text-white">{t('literals.Evaluacion del Desempeno')}</h1>
+          <p className="text-gray-400 mt-1">{t('literals.ISO 9001:2015 - Cláusula 9')}</p>
         </div>
       </div>
 
@@ -184,7 +186,7 @@ const PerformanceDashboard = () => {
       </div>
 
       <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg p-6">
-        <h2 className="text-xl font-bold text-white mb-4">Acciones Rápidas</h2>
+        <h2 className="text-xl font-bold text-white mb-4">{t('literals.Acciones Rápidas')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Link
             to="/performance/indicators"
@@ -192,8 +194,8 @@ const PerformanceDashboard = () => {
           >
             <span className="text-2xl">🎯</span>
             <div>
-              <p className="font-medium text-white">Nuevo Indicador</p>
-              <p className="text-xs text-gray-400">Define KPI y objetivos</p>
+              <p className="font-medium text-white">{t('literals.Nuevo Indicador')}</p>
+              <p className="text-xs text-gray-400">{t('literals.Define KPI y objetivos')}</p>
             </div>
           </Link>
 
@@ -203,8 +205,8 @@ const PerformanceDashboard = () => {
           >
             <span className="text-2xl">📈</span>
             <div>
-              <p className="font-medium text-white">Registrar Medicion</p>
-              <p className="text-xs text-gray-400">Capturar resultados</p>
+              <p className="font-medium text-white">{t('literals.Registrar Medicion')}</p>
+              <p className="text-xs text-gray-400">{t('literals.Capturar resultados')}</p>
             </div>
           </Link>
 
@@ -214,8 +216,8 @@ const PerformanceDashboard = () => {
           >
             <span className="text-2xl">🧾</span>
             <div>
-              <p className="font-medium text-white">Planificar Auditoria</p>
-              <p className="text-xs text-gray-400">Programar y dar seguimiento</p>
+              <p className="font-medium text-white">{t('literals.Planificar Auditoria')}</p>
+              <p className="text-xs text-gray-400">{t('literals.Programar y dar seguimiento')}</p>
             </div>
           </Link>
         </div>
@@ -228,9 +230,9 @@ const PerformanceDashboard = () => {
         >
           <div className="flex items-center space-x-3 mb-2">
             <span className="text-2xl">🧠</span>
-            <h3 className="text-lg font-bold text-white">Análisis</h3>
+            <h3 className="text-lg font-bold text-white">{t('literals.Análisis')}</h3>
           </div>
-          <p className="text-sm text-gray-400">Tendencias y causas raíz</p>
+          <p className="text-sm text-gray-400">{t('literals.Tendencias y causas raíz')}</p>
         </Link>
 
         <Link
@@ -239,9 +241,9 @@ const PerformanceDashboard = () => {
         >
           <div className="flex items-center space-x-3 mb-2">
             <span className="text-2xl">📋</span>
-            <h3 className="text-lg font-bold text-white">Revision por la Direccion</h3>
+            <h3 className="text-lg font-bold text-white">{t('literals.Revision por la Direccion')}</h3>
           </div>
-          <p className="text-sm text-gray-400">Reuniones de revision gerencial</p>
+          <p className="text-sm text-gray-400">{t('literals.Reuniones de revision gerencial')}</p>
         </Link>
 
         <Link
@@ -250,9 +252,9 @@ const PerformanceDashboard = () => {
         >
           <div className="flex items-center space-x-3 mb-2">
             <span className="text-2xl">🔎</span>
-            <h3 className="text-lg font-bold text-white">Hallazgos de Auditoria</h3>
+            <h3 className="text-lg font-bold text-white">{t('literals.Hallazgos de Auditoria')}</h3>
           </div>
-          <p className="text-sm text-gray-400">Seguimiento de hallazgos</p>
+          <p className="text-sm text-gray-400">{t('literals.Seguimiento de hallazgos')}</p>
         </Link>
       </div>
     </div>

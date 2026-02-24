@@ -1,0 +1,167 @@
+import { useMemo, useState } from 'react';
+import { Bot, MessageCircle, X, Send } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
+import assistantService from '../../services/assistantService';
+import { useI18n } from '../../context/I18nContext';
+
+const KNOWLEDGE_BASE = [
+  {
+    match: ['riesgo', 'risk'],
+    answer: 'Para gestionar riesgos ve a Planificación > Riesgos y Oportunidades. Registra probabilidad, impacto y tratamiento.',
+  },
+  {
+    match: ['auditor', 'audit', '9.2'],
+    answer: 'Las auditorías internas están en Desempeño > Auditorías. Desde allí puedes crear hallazgos y dar seguimiento.',
+  },
+  {
+    match: ['no conform', '10.2', 'incidencia'],
+    answer: 'Las no conformidades operativas se registran en Operación y se sincronizan con Mejora para acciones correctivas.',
+  },
+  {
+    match: ['onboarding', 'configuración inicial'],
+    answer: 'El onboarding se completa una vez por organización y permite definir idioma y estándares aplicables.',
+  },
+  {
+    match: ['iso 42001', 'ia'],
+    answer: 'ISO/IEC 42001 está disponible en configuración de estándares. Inicializa sus cláusulas desde Ajustes > Parámetros ISO.',
+  },
+];
+
+const defaultAnswer = 'Puedo ayudarte con navegación ISO Smart (riesgos, auditorías, no conformidades, estándares, onboarding). Formula tu pregunta con el módulo o cláusula.';
+
+const VirtualAssistantPanel = () => {
+  const { t } = useI18n();
+  const location = useLocation();
+  const [open, setOpen] = useState(false);
+  const [input, setInput] = useState('');
+  const [sending, setSending] = useState(false);
+  const [messages, setMessages] = useState([
+    {
+      role: 'assistant',
+      content: 'Soy tu asistente virtual de ISO Smart. Te ayudo a ubicar flujos y módulos clave.',
+    },
+  ]);
+
+  const suggestions = useMemo(
+    () => ['¿Dónde registro auditorías?', '¿Cómo inicializo ISO 27001?', '¿Dónde cargo riesgos?'],
+    []
+  );
+
+  const resolveAnswer = (question) => {
+    const normalized = question.toLowerCase();
+    const hit = KNOWLEDGE_BASE.find((entry) => entry.match.some((key) => normalized.includes(key)));
+    return hit?.answer || defaultAnswer;
+  };
+
+  const sendQuestion = (questionText) => {
+    const question = questionText.trim();
+    if (!question || sending) return;
+
+    const nextMessages = [...messages, { role: 'user', content: question }, { role: 'assistant', content: '' }];
+    setMessages(nextMessages);
+    setInput('');
+    setSending(true);
+
+    const assistantIndex = nextMessages.length - 1;
+    const appendChunk = (chunk) => {
+      setMessages((prev) => {
+        const updated = [...prev];
+        const current = updated[assistantIndex] || { role: 'assistant', content: '' };
+        updated[assistantIndex] = { ...current, content: `${current.content || ''}${chunk}` };
+        return updated;
+      });
+    };
+
+    const finish = () => setSending(false);
+
+    assistantService
+      .streamAssistantResponse({
+        question,
+        route: location.pathname,
+        conversation: messages,
+        onChunk: appendChunk,
+        onDone: finish,
+      })
+      .catch(() => {
+        const fallback = resolveAnswer(question);
+        setMessages((prev) => {
+          const updated = [...prev];
+          updated[assistantIndex] = { role: 'assistant', content: fallback };
+          return updated;
+        });
+      })
+      .finally(() => setSending(false));
+  };
+
+  return (
+    <>
+      <button
+        onClick={() => setOpen((prev) => !prev)}
+        className="fixed bottom-6 right-6 z-50 h-12 w-12 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg flex items-center justify-center"
+        aria-label="Abrir asistente virtual"
+      >
+        {open ? <X className="w-5 h-5" /> : <MessageCircle className="w-5 h-5" />}
+      </button>
+
+      {open && (
+        <div className="fixed bottom-20 right-6 z-50 w-[360px] max-w-[calc(100vw-2rem)] bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl overflow-hidden">
+          <div className="px-4 py-3 bg-indigo-600 text-white flex items-center gap-2">
+            <Bot className="w-4 h-4" />
+            <p className="font-medium text-sm">Asistente Virtual ISO Smart (MVP)</p>
+          </div>
+
+          <div className="p-4 h-72 overflow-y-auto space-y-3 bg-slate-50 dark:bg-slate-900">
+            {messages.map((message, index) => (
+              <div
+                key={index}
+                className={`max-w-[90%] px-3 py-2 rounded-lg text-sm ${
+                  message.role === 'assistant'
+                    ? 'bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100'
+                    : 'ml-auto bg-indigo-600 text-white'
+                }`}
+              >
+                {message.content}
+              </div>
+            ))}
+          </div>
+
+          <div className="px-4 pt-3 pb-2 border-t border-slate-200 dark:border-slate-700">
+            <div className="flex flex-wrap gap-2 mb-3">
+              {suggestions.map((suggestion) => (
+                <button
+                  key={suggestion}
+                  onClick={() => sendQuestion(suggestion)}
+                  className="px-2 py-1 text-xs rounded-md bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-200"
+                >
+                  {suggestion}
+                </button>
+              ))}
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                value={input}
+                onChange={(event) => setInput(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') sendQuestion(input);
+                }}
+                placeholder="Escribe tu consulta..."
+                disabled={sending}
+                className="flex-1 px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100"
+              />
+              <button
+                onClick={() => sendQuestion(input)}
+                disabled={sending}
+                className="h-9 w-9 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-center"
+                aria-label="Enviar"
+              >
+                <Send className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
+
+export default VirtualAssistantPanel;

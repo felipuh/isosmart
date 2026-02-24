@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Upload, X, File, AlertCircle } from 'lucide-react';
+import { useI18n } from '../../context/I18nContext';
 
 const DocumentUploadForm = ({ onUpload, onCancel, uploading }) => {
+  const { t } = useI18n();
   const [formData, setFormData] = useState({
     title: '',
     content: '',
@@ -157,11 +159,11 @@ const DocumentUploadForm = ({ onUpload, onCancel, uploading }) => {
             className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
             required
           >
-            <option value="acta">Acta</option>
-            <option value="reporte">Reporte</option>
-            <option value="política">Política</option>
-            <option value="procedimiento">Procedimiento</option>
-            <option value="otro">Otro</option>
+            <option value="acta">{t('literals.Acta')}</option>
+            <option value="reporte">{t('literals.Reporte')}</option>
+            <option value="política">{t('literals.Política')}</option>
+            <option value="procedimiento">{t('literals.Procedimiento')}</option>
+            <option value="otro">{t('literals.Otro')}</option>
           </select>
         </div>
 

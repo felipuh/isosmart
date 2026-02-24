@@ -1,8 +1,11 @@
 import React, { Suspense, lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import ProtectedRoute, { PublicRoute } from './components/Auth/ProtectedRoute'
+import OnboardingGuard from './components/Auth/OnboardingGuard';
 const LoginPage = lazy(() => import('./pages/LoginPage'));
+const OnboardingPage = lazy(() => import('./pages/OnboardingPage'));
 import Layout from './components/Layout/Layout'
+import { useI18n } from './context/I18nContext';
 
 const Dashboard = lazy(() => import('./components/Dashboard/Dashboard'));
 const StakeholderDashboard = lazy(() => import('./components/Stakeholders/StakeholderDashboard'));
@@ -71,10 +74,13 @@ function App() {
       <Route
         element={
           <ProtectedRoute>
-            <Layout />
+            <OnboardingGuard>
+              <Layout />
+            </OnboardingGuard>
           </ProtectedRoute>
         }
       >
+        <Route path="onboarding" element={<OnboardingPage />} />
         <Route index element={<Dashboard />} />
         <Route path="context" element={<ContextDashboard />} />
         <Route path="stakeholders" element={<StakeholderDashboard />} />

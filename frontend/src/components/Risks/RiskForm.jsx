@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useI18n } from '../../context/I18nContext';
 
 const probabilityOptions = [
   { value: 'muy_baja', label: 'Muy Baja', score: 1 },
@@ -17,6 +18,7 @@ const impactOptions = [
 ];
 
 const RiskForm = ({ risk, onSubmit, onCancel }) => {
+  const { t } = useI18n();
   const [formData, setFormData] = useState({
     risk_description: '',
     risk_category: '',
@@ -163,7 +165,7 @@ const RiskForm = ({ risk, onSubmit, onCancel }) => {
                 <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 transition-colors">Categoría <span className="text-red-500">*</span></label>
                 <select name="risk_category" value={formData.risk_category} onChange={handleChange}
                   className={`w-full border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white dark:border-slate-600 transition-colors ${errors.risk_category ? 'border-red-300' : 'border-gray-300'}`}>
-                  <option value="">Seleccionar categoría...</option>
+                  <option value="">{t('literals.Seleccionar categoría...')}</option>
                   {categoryOptions.map(cat => <option key={cat} value={cat}>{cat}</option>)}
                 </select>
                 {errors.risk_category && <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.risk_category}</p>}
@@ -200,7 +202,7 @@ const RiskForm = ({ risk, onSubmit, onCancel }) => {
                 {errors.responsible && <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.responsible}</p>}
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 transition-colors">Estado</label>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 transition-colors">{t('common.forms.status')}</label>
                 <select name="status" value={formData.status} onChange={handleChange} className="w-full border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 transition-colors">
                   {statusOptions.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
                 </select>
@@ -228,9 +230,9 @@ const RiskForm = ({ risk, onSubmit, onCancel }) => {
           </div>
 
           <div className="px-6 py-4 border-t border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-700/50 flex justify-end gap-3 transition-colors">
-            <button type="button" onClick={onCancel} className="px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-md shadow-sm hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors">Cancelar</button>
+            <button type="button" onClick={onCancel} className="px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-md shadow-sm hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors">{t('common.buttons.cancel')}</button>
             <button type="submit" disabled={loading} className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 dark:bg-blue-700 border border-transparent rounded-md shadow-sm hover:bg-blue-700 dark:hover:bg-blue-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
-              {loading ? 'Guardando...' : (risk ? 'Actualizar' : 'Crear')} Riesgo
+              {loading ? t('common.messages.saving') : (risk ? t('common.buttons.update') : t('common.buttons.create'))} Riesgo
             </button>
           </div>
         </form>

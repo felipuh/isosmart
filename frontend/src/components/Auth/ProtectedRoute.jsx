@@ -6,6 +6,7 @@
 
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { useI18n } from '../../context/I18nContext';
 
 // Spinner de carga
 const LoadingSpinner = () => (

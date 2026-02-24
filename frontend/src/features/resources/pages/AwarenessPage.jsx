@@ -1,12 +1,14 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
+import { useI18n } from '../../../context/I18nContext';
 import Modal from '../../../components/Common/Modal';
 import { getAwareness, createAwareness, updateAwareness, deleteAwareness } from '../api/resourcesApi';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
 
 const AwarenessPage = () => {
+  const { t } = useI18n();
   const { currentOrganization } = useAuth();
   const orgId = currentOrganization?.id || null;
   const orgName = currentOrganization?.name || '';
@@ -149,7 +151,7 @@ const AwarenessPage = () => {
           <thead className="bg-gray-800/50">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Actividad</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Fecha</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.date')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Tipo</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Método</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Acciones</th>
@@ -163,8 +165,8 @@ const AwarenessPage = () => {
                 <td className="px-6 py-4 text-sm text-gray-300">{i.awareness_type_display}</td>
                 <td className="px-6 py-4 text-sm text-gray-300">{i.method_display}</td>
                 <td className="px-6 py-4 text-sm space-x-2">
-                  <button onClick={() => handleEdit(i)} className="text-blue-400 hover:text-blue-300">Editar</button>
-                  <button onClick={() => handleDelete(i.id)} className="text-red-400 hover:text-red-300">Eliminar</button>
+                  <button onClick={() => handleEdit(i)} className="text-blue-400 hover:text-blue-300">{t('common.buttons.edit')}</button>
+                  <button onClick={() => handleDelete(i.id)} className="text-red-400 hover:text-red-300">{t('common.buttons.delete')}</button>
                 </td>
               </tr>
             ))}
@@ -191,23 +193,23 @@ const AwarenessPage = () => {
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">Tipo</label>
               <select value={form.awareness_type} onChange={(e) => setForm({...form, awareness_type: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="policy">Política de Calidad</option>
-                <option value="objectives">Objetivos de Calidad</option>
-                <option value="contribution">Contribución a la Eficacia</option>
-                <option value="improvement">Beneficios de Mejora</option>
-                <option value="nonconformity">Implicaciones de No Conformidad</option>
+                <option value="policy">{t('literals.Política de Calidad')}</option>
+                <option value="objectives">{t('literals.Objetivos de Calidad')}</option>
+                <option value="contribution">{t('literals.Contribución a la Eficacia')}</option>
+                <option value="improvement">{t('literals.Beneficios de Mejora')}</option>
+                <option value="nonconformity">{t('literals.Implicaciones de No Conformidad')}</option>
               </select>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">Método</label>
               <select value={form.method} onChange={(e) => setForm({...form, method: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="meeting">Reunión</option>
-                <option value="training">Capacitación</option>
-                <option value="email">Correo Electrónico</option>
-                <option value="poster">Cartel/Póster</option>
-                <option value="intranet">Intranet</option>
-                <option value="video">Video</option>
-                <option value="other">Otro</option>
+                <option value="meeting">{t('literals.Reunión')}</option>
+                <option value="training">{t('literals.Capacitación')}</option>
+                <option value="email">{t('literals.Correo Electrónico')}</option>
+                <option value="poster">{t('literals.Cartel/Póster')}</option>
+                <option value="intranet">{t('literals.Intranet')}</option>
+                <option value="video">{t('literals.Video')}</option>
+                <option value="other">{t('literals.Otro')}</option>
               </select>
             </div>
             <div>
@@ -215,15 +217,15 @@ const AwarenessPage = () => {
               <input type="text" value={form.target_audience} onChange={(e) => setForm({...form, target_audience: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Descripción</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('common.forms.description')}</label>
               <textarea value={form.description} onChange={(e) => setForm({...form, description: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="3" required />
             </div>
           </div>
           <div className="flex space-x-3">
             <button type="submit" disabled={saving} className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
-              {saving ? 'Guardando...' : editingId ? 'Actualizar' : 'Crear'}
+              {saving ? t('common.messages.saving') : editingId ? t('common.buttons.update') : t('common.buttons.create')}
             </button>
-            {editingId && <button type="button" onClick={closeForm} className="px-6 py-2 bg-gray-600 text-white rounded-lg">Cancelar</button>}
+            {editingId && <button type="button" onClick={closeForm} className="px-6 py-2 bg-gray-600 text-white rounded-lg">{t('common.buttons.cancel')}</button>}
           </div>
         </form>
       </Modal>

@@ -1,7 +1,9 @@
 import React, { useMemo } from 'react';
 import { ArrowRight, GitBranch } from 'lucide-react';
+import { useI18n } from '../../context/I18nContext';
 
 const ProcessDiagram = ({ diagramData, processes, loading }) => {
+  const { t } = useI18n();
   
   // Combinar datos del diagrama IA con procesos manuales
   const combinedData = useMemo(() => {
