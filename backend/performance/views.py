@@ -4,6 +4,11 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
+from core.organization_scoping import OrganizationScopedViewSetMixin
+from improvement.services import (
+    sync_finding_to_improvement_nc,
+    sync_management_review_to_continual_improvement,
+)
 from .models import (
     PerformanceIndicator, Measurement, DataAnalysis,
     InternalAudit, AuditFinding, ManagementReview
@@ -13,7 +18,8 @@ from .serializers import (
     InternalAuditSerializer, AuditFindingSerializer, ManagementReviewSerializer
 )
 
-class PerformanceIndicatorViewSet(viewsets.ModelViewSet):
+class PerformanceIndicatorViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
+    queryset = PerformanceIndicator.objects.all()
     serializer_class = PerformanceIndicatorSerializer
     permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -22,10 +28,8 @@ class PerformanceIndicatorViewSet(viewsets.ModelViewSet):
     ordering_fields = ['created_at', 'name', 'target_value']
     ordering = ['-created_at']
     
-    def get_queryset(self):
-        return PerformanceIndicator.objects.all()
-
-class MeasurementViewSet(viewsets.ModelViewSet):
+class MeasurementViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
+    queryset = Measurement.objects.all()
     serializer_class = MeasurementSerializer
     permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -34,17 +38,10 @@ class MeasurementViewSet(viewsets.ModelViewSet):
     ordering_fields = ['measurement_date', 'actual_value']
     ordering = ['-measurement_date']
     
-    def get_queryset(self):
-        return Measurement.objects.all()
-    
     @action(detail=False, methods=['get'])
     def dashboard_stats(self, request):
         """Get dashboard statistics"""
-        organization_id = request.query_params.get('organization_id')
-        if not organization_id:
-            return Response({'error': 'organization_id required'}, status=status.HTTP_400_BAD_REQUEST)
-
-        measurements = self.get_queryset().filter(organization_id=organization_id)
+        measurements = self.get_queryset()
         
         stats = {
             'total_measurements': measurements.count(),
@@ -56,7 +53,8 @@ class MeasurementViewSet(viewsets.ModelViewSet):
         
         return Response(stats)
 
-class DataAnalysisViewSet(viewsets.ModelViewSet):
+class DataAnalysisViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
+    queryset = DataAnalysis.objects.all()
     serializer_class = DataAnalysisSerializer
     permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -65,10 +63,8 @@ class DataAnalysisViewSet(viewsets.ModelViewSet):
     ordering_fields = ['created_at', 'period_start']
     ordering = ['-created_at']
     
-    def get_queryset(self):
-        return DataAnalysis.objects.all()
-
-class InternalAuditViewSet(viewsets.ModelViewSet):
+class InternalAuditViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
+    queryset = InternalAudit.objects.all()
     serializer_class = InternalAuditSerializer
     permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -76,9 +72,6 @@ class InternalAuditViewSet(viewsets.ModelViewSet):
     search_fields = ['audit_code', 'title', 'objectives']
     ordering_fields = ['planned_date', 'created_at']
     ordering = ['-planned_date']
-    
-    def get_queryset(self):
-        return InternalAudit.objects.all()
     
     @action(detail=True, methods=['get'])
     def findings_summary(self, request, pk=None):
@@ -99,7 +92,8 @@ class InternalAuditViewSet(viewsets.ModelViewSet):
         
         return Response(summary)
 
-class AuditFindingViewSet(viewsets.ModelViewSet):
+class AuditFindingViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
+    queryset = AuditFinding.objects.all()
     serializer_class = AuditFindingSerializer
     permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -108,10 +102,16 @@ class AuditFindingViewSet(viewsets.ModelViewSet):
     ordering_fields = ['created_at', 'due_date']
     ordering = ['-created_at']
     
-    def get_queryset(self):
-        return AuditFinding.objects.all()
+    def perform_create(self, serializer):
+        super().perform_create(serializer)
+        sync_finding_to_improvement_nc(serializer.instance)
 
-class ManagementReviewViewSet(viewsets.ModelViewSet):
+    def perform_update(self, serializer):
+        super().perform_update(serializer)
+        sync_finding_to_improvement_nc(serializer.instance)
+
+class ManagementReviewViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
+    queryset = ManagementReview.objects.all()
     serializer_class = ManagementReviewSerializer
     permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -120,5 +120,10 @@ class ManagementReviewViewSet(viewsets.ModelViewSet):
     ordering_fields = ['scheduled_date', 'created_at']
     ordering = ['-scheduled_date']
     
-    def get_queryset(self):
-        return ManagementReview.objects.all()
+    def perform_create(self, serializer):
+        super().perform_create(serializer)
+        sync_management_review_to_continual_improvement(serializer.instance)
+
+    def perform_update(self, serializer):
+        super().perform_update(serializer)
+        sync_management_review_to_continual_improvement(serializer.instance)

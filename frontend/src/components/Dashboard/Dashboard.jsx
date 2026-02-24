@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   Network, 
@@ -13,18 +13,86 @@ import {
   BarChart3
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import api from '../../services/api';
 
 const Dashboard = () => {
   const { currentOrganization, user } = useAuth();
-  const [stats] = useState({
-    modulesActive: 4,
-    totalModules: 4,
-    clause4Progress: 100,
-    iso9001Progress: 100,
-    totalProcesses: 11,
+  const orgId = currentOrganization?.id || null;
+  const [stats, setStats] = useState({
+    modulesActive: 0,
+    totalModules: 7,
+    clause4Progress: 0,
+    iso9001Progress: 0,
+    totalProcesses: 0,
     totalStakeholders: 0,
-    lastUpdate: new Date().toISOString()
+    lastUpdate: new Date().toISOString(),
   });
+  const [clauseProgress, setClauseProgress] = useState([]);
+
+  const normalizeCount = (data) => {
+    if (Array.isArray(data)) return data.length;
+    if (Array.isArray(data?.results)) return data.results.length;
+    if (typeof data?.count === 'number') return data.count;
+    return 0;
+  };
+
+  const fetchCount = useCallback(async (endpoint) => {
+    try {
+      const response = await api.get(endpoint, { params: { organization_id: orgId } });
+      return normalizeCount(response.data);
+    } catch {
+      return 0;
+    }
+  }, [orgId]);
+
+  const loadDashboardStats = useCallback(async () => {
+    if (!orgId) return;
+
+    const clauseChecks = [
+      { id: '4', label: '4. Contexto de la Organización', checks: ['/context/history/', '/stakeholders/stakeholders/', '/scope/scopes/', '/processes/maps/'] },
+      { id: '5', label: '5. Liderazgo', checks: ['/leadership/policies/', '/leadership/commitments/', '/leadership/roles/'] },
+      { id: '6', label: '6. Planificación', checks: ['/planning/risks-opportunities/', '/planning/objectives/', '/planning/actions/'] },
+      { id: '7', label: '7. Apoyo', checks: ['/resources/resources/', '/resources/competences/', '/resources/trainings/'] },
+      { id: '8', label: '8. Operación', checks: ['/operations/requirements/', '/operations/providers/', '/operations/nonconformities/'] },
+      { id: '9', label: '9. Evaluación del Desempeño', checks: ['/performance/measurements/', '/performance/findings/', '/performance/reviews/'] },
+      { id: '10', label: '10. Mejora', checks: ['/improvement/nonconformities/', '/improvement/corrective-actions/', '/improvement/continual-improvements/'] },
+    ];
+
+    const [processCount, stakeholderCount, clauseResults] = await Promise.all([
+      fetchCount('/processes/maps/'),
+      fetchCount('/stakeholders/stakeholders/'),
+      Promise.all(
+        clauseChecks.map(async (clause) => {
+          const values = await Promise.all(clause.checks.map((endpoint) => fetchCount(endpoint)));
+          const completed = values.filter((value) => value > 0).length;
+          const progress = Math.round((completed / clause.checks.length) * 100);
+          return { ...clause, progress };
+        })
+      ),
+    ]);
+
+    const iso9001Progress = clauseResults.length
+      ? Math.round(clauseResults.reduce((acc, clause) => acc + clause.progress, 0) / clauseResults.length)
+      : 0;
+
+    setClauseProgress(clauseResults);
+    setStats({
+      modulesActive: clauseResults.filter((clause) => clause.progress > 0).length,
+      totalModules: clauseResults.length,
+      clause4Progress: clauseResults.find((clause) => clause.id === '4')?.progress || 0,
+      iso9001Progress,
+      totalProcesses: processCount,
+      totalStakeholders: stakeholderCount,
+      lastUpdate: new Date().toISOString(),
+    });
+  }, [fetchCount, orgId]);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      loadDashboardStats();
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, [loadDashboardStats]);
 
   const modules = [
     {
@@ -144,21 +212,20 @@ const Dashboard = () => {
         </p>
       </div>
 
-      {/* Celebración 100% */}
-      <div className="mb-8 bg-gradient-to-r from-green-500 to-blue-500 rounded-lg shadow-lg p-6 text-white">
+      <div className="mb-8 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg shadow-lg p-6 text-white">
         <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center mb-2">
               <Award className="h-8 w-8 mr-3" />
-              <h2 className="text-2xl font-bold">¡Cláusula 4 Completada al 100%!</h2>
+              <h2 className="text-2xl font-bold">Estado global de cumplimiento ISO 9001</h2>
             </div>
-            <p className="text-green-100">
-              Los 4 módulos de IA están activos y funcionando. Sistema de gestión base completo.
+            <p className="text-blue-100">
+              Progreso dinámico por cláusula según datos reales de cada módulo.
             </p>
           </div>
           <div className="text-right">
-            <div className="text-6xl font-bold">100%</div>
-            <div className="text-sm text-green-100">Contexto de la Organización</div>
+            <div className="text-6xl font-bold">{stats.iso9001Progress}%</div>
+            <div className="text-sm text-blue-100">Promedio cláusulas 4-10</div>
           </div>
         </div>
       </div>
@@ -168,7 +235,7 @@ const Dashboard = () => {
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-slate-600 dark:text-slate-400 mb-1">Módulos Activos</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400 mb-1">Cláusulas con avance</p>
               <p className="text-3xl font-bold text-green-600 dark:text-green-400">
                 {stats.modulesActive}/{stats.totalModules}
               </p>
@@ -177,9 +244,9 @@ const Dashboard = () => {
           </div>
           <div className="mt-4">
             <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
-              <div 
+              <div
                 className="bg-green-500 dark:bg-green-600 h-2 rounded-full transition-all duration-500"
-                style={{ width: '100%' }}
+                style={{ width: `${stats.totalModules ? Math.round((stats.modulesActive / stats.totalModules) * 100) : 0}%` }}
               />
             </div>
           </div>
@@ -219,13 +286,13 @@ const Dashboard = () => {
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600 dark:text-slate-400 mb-1">Análisis Ejecutados</p>
-              <p className="text-3xl font-bold text-orange-600 dark:text-orange-400">4</p>
+              <p className="text-sm text-gray-600 dark:text-slate-400 mb-1">Partes Interesadas</p>
+              <p className="text-3xl font-bold text-orange-600 dark:text-orange-400">{stats.totalStakeholders}</p>
             </div>
             <Activity className="h-12 w-12 text-orange-400" />
           </div>
           <div className="mt-2">
-            <p className="text-xs text-gray-500">Todos los módulos inicializados</p>
+            <p className="text-xs text-gray-500">Registros activos de stakeholders</p>
           </div>
         </div>
       </div>
@@ -312,42 +379,17 @@ const Dashboard = () => {
             Progreso por Cláusula ISO 9001:2015
           </h3>
           <div className="space-y-4">
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium text-slate-700 dark:text-slate-300">4. Contexto de la Organización</span>
-                <span className="text-sm font-bold text-green-600 dark:text-green-400">100%</span>
+            {clauseProgress.map((clause) => (
+              <div key={clause.id}>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-medium text-slate-700 dark:text-slate-300">{clause.label}</span>
+                  <span className="text-sm font-bold text-blue-600 dark:text-blue-400">{clause.progress}%</span>
+                </div>
+                <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-3">
+                  <div className="bg-blue-500 dark:bg-blue-600 h-3 rounded-full" style={{ width: `${clause.progress}%` }} />
+                </div>
               </div>
-              <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-3">
-                <div className="bg-green-500 dark:bg-green-600 h-3 rounded-full" style={{ width: '100%' }} />
-              </div>
-            </div>
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium text-slate-700 dark:text-slate-300">5. Liderazgo</span>
-                <span className="text-sm font-bold text-slate-400 dark:text-slate-500">0%</span>
-              </div>
-              <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-3">
-                <div className="bg-slate-300 dark:bg-slate-600 h-3 rounded-full" style={{ width: '0%' }} />
-              </div>
-            </div>
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium text-slate-700 dark:text-slate-300">6. Planificación</span>
-                <span className="text-sm font-bold text-slate-400 dark:text-slate-500">0%</span>
-              </div>
-              <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-3">
-                <div className="bg-slate-300 dark:bg-slate-600 h-3 rounded-full" style={{ width: '0%' }} />
-              </div>
-            </div>
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium text-slate-700 dark:text-slate-300">7-10. Otras Cláusulas</span>
-                <span className="text-sm font-bold text-slate-400 dark:text-slate-500">0%</span>
-              </div>
-              <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-3">
-                <div className="bg-slate-300 dark:bg-slate-600 h-3 rounded-full" style={{ width: '0%' }} />
-              </div>
-            </div>
+            ))}
           </div>
         </div>
 
@@ -359,19 +401,19 @@ const Dashboard = () => {
           <div className="space-y-3">
             <div className="flex items-center justify-between py-2 border-b border-slate-100 dark:border-slate-700">
               <span className="text-sm text-slate-600 dark:text-slate-400">Módulos de IA Activos</span>
-              <span className="text-sm font-bold text-gray-900 dark:text-slate-500">4/4</span>
+              <span className="text-sm font-bold text-gray-900 dark:text-slate-500">{stats.modulesActive}/{stats.totalModules}</span>
             </div>
             <div className="flex items-center justify-between py-2 border-b border-gray-100">
               <span className="text-sm text-gray-600 dark:text-slate-400">Requisitos ISO Cubiertos</span>
-              <span className="text-sm font-bold text-gray-900 dark:text-slate-500">4.1 - 4.4</span>
+              <span className="text-sm font-bold text-gray-900 dark:text-slate-500">4 - 10 (progreso dinámico)</span>
             </div>
             <div className="flex items-center justify-between py-2 border-b border-gray-100">
               <span className="text-sm text-gray-600 dark:text-slate-400">Procesos Mapeados</span>
-              <span className="text-sm font-bold text-gray-900 dark:text-slate-500">11 procesos</span>
+              <span className="text-sm font-bold text-gray-900 dark:text-slate-500">{stats.totalProcesses} procesos</span>
             </div>
             <div className="flex items-center justify-between py-2 border-b border-gray-100">
-              <span className="text-sm text-gray-600 dark:text-slate-400">Dashboards Disponibles</span>
-              <span className="text-sm font-bold text-gray-900 dark:text-slate-500">4 dashboards</span>
+              <span className="text-sm text-gray-600 dark:text-slate-400">Cumplimiento ISO 9001</span>
+              <span className="text-sm font-bold text-gray-900 dark:text-slate-500">{stats.iso9001Progress}%</span>
             </div>
             <div className="flex items-center justify-between py-2">
               <span className="text-sm text-gray-600 dark:text-slate-400">Estado del Sistema</span>

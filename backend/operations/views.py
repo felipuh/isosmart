@@ -7,8 +7,11 @@ from rest_framework import viewsets, filters, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.exceptions import PermissionDenied
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db import models
+from core.organization_scoping import OrganizationScopedViewSetMixin
+from improvement.services import sync_operations_nc_to_improvement_nc
 
 from .models import (
     OperationalControl,
@@ -32,7 +35,7 @@ from .serializers import (
 )
 
 
-class OperationalControlViewSet(viewsets.ModelViewSet):
+class OperationalControlViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
     """ViewSet para Controles Operacionales"""
     queryset = OperationalControl.objects.all()
     serializer_class = OperationalControlSerializer
@@ -44,7 +47,7 @@ class OperationalControlViewSet(viewsets.ModelViewSet):
     ordering = ['control_code']
 
 
-class CustomerRequirementViewSet(viewsets.ModelViewSet):
+class CustomerRequirementViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
     """ViewSet para Requisitos del Cliente"""
     queryset = CustomerRequirement.objects.all()
     serializer_class = CustomerRequirementSerializer
@@ -58,11 +61,7 @@ class CustomerRequirementViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def pending_review(self, request):
         """Requisitos pendientes de revisión"""
-        organization_id = request.query_params.get('organization_id')
-        if not organization_id:
-            return Response({'error': 'organization_id required'}, status=status.HTTP_400_BAD_REQUEST)
-        queryset = self.queryset.filter(
-            organization_id=organization_id,
+        queryset = self.get_queryset().filter(
             is_reviewed=False,
             status='identified'
         ).order_by('communication_date')
@@ -73,11 +72,7 @@ class CustomerRequirementViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def pending_confirmation(self, request):
         """Requisitos revisados pero no confirmados con cliente"""
-        organization_id = request.query_params.get('organization_id')
-        if not organization_id:
-            return Response({'error': 'organization_id required'}, status=status.HTTP_400_BAD_REQUEST)
-        queryset = self.queryset.filter(
-            organization_id=organization_id,
+        queryset = self.get_queryset().filter(
             is_reviewed=True,
             is_confirmed=False
         ).order_by('review_date')
@@ -88,11 +83,7 @@ class CustomerRequirementViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def not_feasible(self, request):
         """Requisitos que no se pueden cumplir"""
-        organization_id = request.query_params.get('organization_id')
-        if not organization_id:
-            return Response({'error': 'organization_id required'}, status=status.HTTP_400_BAD_REQUEST)
-        queryset = self.queryset.filter(
-            organization_id=organization_id,
+        queryset = self.get_queryset().filter(
             can_meet_requirement=False
         )
         
@@ -100,7 +91,7 @@ class CustomerRequirementViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class DesignProjectViewSet(viewsets.ModelViewSet):
+class DesignProjectViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
     """ViewSet para Proyectos de Diseño y Desarrollo"""
     queryset = DesignProject.objects.all()
     serializer_class = DesignProjectSerializer
@@ -114,11 +105,7 @@ class DesignProjectViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def active(self, request):
         """Proyectos activos"""
-        organization_id = request.query_params.get('organization_id')
-        if not organization_id:
-            return Response({'error': 'organization_id required'}, status=status.HTTP_400_BAD_REQUEST)
-        queryset = self.queryset.filter(
-            organization_id=organization_id,
+        queryset = self.get_queryset().filter(
             status='active'
         ).order_by('target_completion_date')
         
@@ -128,11 +115,7 @@ class DesignProjectViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def pending_verification(self, request):
         """Proyectos pendientes de verificación"""
-        organization_id = request.query_params.get('organization_id')
-        if not organization_id:
-            return Response({'error': 'organization_id required'}, status=status.HTTP_400_BAD_REQUEST)
-        queryset = self.queryset.filter(
-            organization_id=organization_id,
+        queryset = self.get_queryset().filter(
             is_verified=False,
             status='active'
         )
@@ -143,11 +126,7 @@ class DesignProjectViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def pending_validation(self, request):
         """Proyectos verificados pero pendientes de validación"""
-        organization_id = request.query_params.get('organization_id')
-        if not organization_id:
-            return Response({'error': 'organization_id required'}, status=status.HTTP_400_BAD_REQUEST)
-        queryset = self.queryset.filter(
-            organization_id=organization_id,
+        queryset = self.get_queryset().filter(
             is_verified=True,
             is_validated=False,
             status='active'
@@ -157,7 +136,7 @@ class DesignProjectViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class ExternalProviderViewSet(viewsets.ModelViewSet):
+class ExternalProviderViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
     """ViewSet para Proveedores Externos"""
     queryset = ExternalProvider.objects.all()
     serializer_class = ExternalProviderSerializer
@@ -171,11 +150,7 @@ class ExternalProviderViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def approved(self, request):
         """Proveedores aprobados"""
-        organization_id = request.query_params.get('organization_id')
-        if not organization_id:
-            return Response({'error': 'organization_id required'}, status=status.HTTP_400_BAD_REQUEST)
-        queryset = self.queryset.filter(
-            organization_id=organization_id,
+        queryset = self.get_queryset().filter(
             classification='approved',
             is_active=True
         ).order_by('-evaluation_score')
@@ -188,13 +163,9 @@ class ExternalProviderViewSet(viewsets.ModelViewSet):
         """Proveedores que requieren evaluación"""
         from datetime import date, timedelta
         
-        organization_id = request.query_params.get('organization_id')
-        if not organization_id:
-            return Response({'error': 'organization_id required'}, status=status.HTTP_400_BAD_REQUEST)
         threshold_date = date.today() - timedelta(days=365)  # Sin evaluación en 1 año
         
-        queryset = self.queryset.filter(
-            organization_id=organization_id,
+        queryset = self.get_queryset().filter(
             is_active=True
         ).filter(
             models.Q(last_evaluation_date__lt=threshold_date) | 
@@ -205,7 +176,7 @@ class ExternalProviderViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class ProductionControlViewSet(viewsets.ModelViewSet):
+class ProductionControlViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
     """ViewSet para Controles de Producción"""
     queryset = ProductionControl.objects.all()
     serializer_class = ProductionControlSerializer
@@ -217,7 +188,7 @@ class ProductionControlViewSet(viewsets.ModelViewSet):
     ordering = ['control_code']
 
 
-class ProductReleaseViewSet(viewsets.ModelViewSet):
+class ProductReleaseViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
     """ViewSet para Liberación de Productos/Servicios"""
     queryset = ProductRelease.objects.all()
     serializer_class = ProductReleaseSerializer
@@ -231,11 +202,7 @@ class ProductReleaseViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def pending_approval(self, request):
         """Liberaciones pendientes de aprobación"""
-        organization_id = request.query_params.get('organization_id')
-        if not organization_id:
-            return Response({'error': 'organization_id required'}, status=status.HTTP_400_BAD_REQUEST)
-        queryset = self.queryset.filter(
-            organization_id=organization_id,
+        queryset = self.get_queryset().filter(
             status='pending'
         ).order_by('release_date')
         
@@ -247,13 +214,9 @@ class ProductReleaseViewSet(viewsets.ModelViewSet):
         """Liberaciones recientes (últimos 30 días)"""
         from datetime import date, timedelta
         
-        organization_id = request.query_params.get('organization_id')
-        if not organization_id:
-            return Response({'error': 'organization_id required'}, status=status.HTTP_400_BAD_REQUEST)
         start_date = date.today() - timedelta(days=30)
         
-        queryset = self.queryset.filter(
-            organization_id=organization_id,
+        queryset = self.get_queryset().filter(
             release_date__gte=start_date
         ).order_by('-release_date')
         
@@ -261,7 +224,7 @@ class ProductReleaseViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class NonconformityViewSet(viewsets.ModelViewSet):
+class NonconformityViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
     """ViewSet para No Conformidades"""
     queryset = Nonconformity.objects.all()
     serializer_class = NonconformitySerializer
@@ -271,15 +234,39 @@ class NonconformityViewSet(viewsets.ModelViewSet):
     search_fields = ['nc_number', 'title', 'description', 'affected_product_service']
     ordering_fields = ['detection_date', 'nc_number', 'severity', 'created_at']
     ordering = ['-detection_date']
+
+    def perform_create(self, serializer):
+        super().perform_create(serializer)
+        sync_operations_nc_to_improvement_nc(serializer.instance)
+
+    def perform_update(self, serializer):
+        super().perform_update(serializer)
+        sync_operations_nc_to_improvement_nc(serializer.instance)
+
+    @action(detail=True, methods=['post'])
+    def sync_to_improvement(self, request, pk=None):
+        nc = self.get_object()
+        linked = sync_operations_nc_to_improvement_nc(nc)
+        return Response({
+            'success': True,
+            'operations_nc': nc.nc_number,
+            'improvement_nc': linked.nc_number,
+            'improvement_id': linked.id,
+        })
+
+    @action(detail=False, methods=['post'])
+    def sync_open_to_improvement(self, request):
+        queryset = self.get_queryset().filter(status__in=['identified', 'under_review', 'disposition_pending', 'treated'])
+        synced = []
+        for nc in queryset:
+            linked = sync_operations_nc_to_improvement_nc(nc)
+            synced.append({'operations_nc': nc.nc_number, 'improvement_nc': linked.nc_number, 'improvement_id': linked.id})
+        return Response({'success': True, 'count': len(synced), 'items': synced})
     
     @action(detail=False, methods=['get'])
     def open(self, request):
         """No conformidades abiertas"""
-        organization_id = request.query_params.get('organization_id')
-        if not organization_id:
-            return Response({'error': 'organization_id required'}, status=status.HTTP_400_BAD_REQUEST)
-        queryset = self.queryset.filter(
-            organization_id=organization_id,
+        queryset = self.get_queryset().filter(
             status__in=['identified', 'under_review', 'disposition_pending', 'treated']
         ).order_by('-severity', 'detection_date')
         
@@ -289,11 +276,7 @@ class NonconformityViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def critical(self, request):
         """No conformidades críticas"""
-        organization_id = request.query_params.get('organization_id')
-        if not organization_id:
-            return Response({'error': 'organization_id required'}, status=status.HTTP_400_BAD_REQUEST)
-        queryset = self.queryset.filter(
-            organization_id=organization_id,
+        queryset = self.get_queryset().filter(
             severity='critical',
             status__in=['identified', 'under_review', 'disposition_pending', 'treated']
         ).order_by('detection_date')
@@ -304,11 +287,7 @@ class NonconformityViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def customer_impact(self, request):
         """No conformidades que afectan al cliente"""
-        organization_id = request.query_params.get('organization_id')
-        if not organization_id:
-            return Response({'error': 'organization_id required'}, status=status.HTTP_400_BAD_REQUEST)
-        queryset = self.queryset.filter(
-            organization_id=organization_id,
+        queryset = self.get_queryset().filter(
             affects_customer=True
         ).order_by('-detection_date')
         
@@ -318,11 +297,7 @@ class NonconformityViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def pending_disposition(self, request):
         """No conformidades sin disposición"""
-        organization_id = request.query_params.get('organization_id')
-        if not organization_id:
-            return Response({'error': 'organization_id required'}, status=status.HTTP_400_BAD_REQUEST)
-        queryset = self.queryset.filter(
-            organization_id=organization_id,
+        queryset = self.get_queryset().filter(
             status='disposition_pending'
         ).order_by('detection_date')
         
@@ -333,7 +308,9 @@ class NonconformityViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class DispositionViewSet(viewsets.ModelViewSet):
+class DispositionViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
+    organization_lookup_field = 'nonconformity__organization_id'
+    organization_write_field = None
     """ViewSet para Disposiciones"""
     queryset = Disposition.objects.all()
     serializer_class = DispositionSerializer
@@ -343,15 +320,18 @@ class DispositionViewSet(viewsets.ModelViewSet):
     search_fields = ['nonconformity__nc_number', 'action_description']
     ordering_fields = ['created_at', 'implementation_date', 'verification_date']
     ordering = ['-created_at']
+
+    def perform_create(self, serializer):
+        organization_id = self.get_organization_id()
+        nonconformity = serializer.validated_data.get('nonconformity')
+        if nonconformity and nonconformity.organization_id != organization_id:
+            raise PermissionDenied('No conformidad fuera de la organización activa')
+        serializer.save()
     
     @action(detail=False, methods=['get'])
     def pending_verification(self, request):
         """Disposiciones implementadas pero no verificadas"""
-        organization_id = request.query_params.get('organization_id')
-        if not organization_id:
-            return Response({'error': 'organization_id required'}, status=status.HTTP_400_BAD_REQUEST)
-        queryset = self.queryset.filter(
-            nonconformity__organization_id=organization_id,
+        queryset = self.get_queryset().filter(
             implementation_date__isnull=False,
             is_verified=False
         ).order_by('implementation_date')

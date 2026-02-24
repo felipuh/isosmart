@@ -8,6 +8,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django_filters.rest_framework import DjangoFilterBackend
+from core.organization_scoping import OrganizationScopedViewSetMixin
 
 from .models import Nonconformity, CorrectiveAction, ContinualImprovement
 from .serializers import (
@@ -17,7 +18,7 @@ from .serializers import (
 )
 
 
-class NonconformityViewSet(viewsets.ModelViewSet):
+class NonconformityViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
     """ViewSet para No Conformidades"""
     queryset = Nonconformity.objects.all()
     serializer_class = NonconformitySerializer
@@ -31,11 +32,7 @@ class NonconformityViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def dashboard_stats(self, request):
         """Estadisticas de no conformidades"""
-        organization_id = request.query_params.get('organization_id')
-        if not organization_id:
-            return Response({'error': 'organization_id required'}, status=status.HTTP_400_BAD_REQUEST)
-
-        queryset = self.queryset.filter(organization_id=organization_id)
+        queryset = self.get_queryset()
         stats = {
             'total': queryset.count(),
             'open': queryset.filter(status='open').count(),
@@ -52,7 +49,7 @@ class NonconformityViewSet(viewsets.ModelViewSet):
         return Response(stats)
 
 
-class CorrectiveActionViewSet(viewsets.ModelViewSet):
+class CorrectiveActionViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
     """ViewSet para Acciones Correctivas"""
     queryset = CorrectiveAction.objects.all()
     serializer_class = CorrectiveActionSerializer
@@ -68,12 +65,7 @@ class CorrectiveActionViewSet(viewsets.ModelViewSet):
         """Acciones vencidas"""
         from datetime import date
 
-        organization_id = request.query_params.get('organization_id')
-        if not organization_id:
-            return Response({'error': 'organization_id required'}, status=status.HTTP_400_BAD_REQUEST)
-
-        queryset = self.queryset.filter(
-            organization_id=organization_id,
+        queryset = self.get_queryset().filter(
             planned_completion_date__lt=date.today(),
             status__in=['planned', 'in_progress']
         )
@@ -82,7 +74,7 @@ class CorrectiveActionViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class ContinualImprovementViewSet(viewsets.ModelViewSet):
+class ContinualImprovementViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
     """ViewSet para Mejora Continua"""
     queryset = ContinualImprovement.objects.all()
     serializer_class = ContinualImprovementSerializer
@@ -96,12 +88,7 @@ class ContinualImprovementViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def active_initiatives(self, request):
         """Iniciativas activas"""
-        organization_id = request.query_params.get('organization_id')
-        if not organization_id:
-            return Response({'error': 'organization_id required'}, status=status.HTTP_400_BAD_REQUEST)
-
-        queryset = self.queryset.filter(
-            organization_id=organization_id,
+        queryset = self.get_queryset().filter(
             status__in=['approved', 'in_progress', 'implemented', 'measuring_results']
         )
         serializer = self.get_serializer(queryset, many=True)
