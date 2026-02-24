@@ -77,8 +77,41 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
         notes: stakeholder.notes || '',
         is_active: stakeholder.is_active !== undefined ? stakeholder.is_active : true
       });
+    } else {
+      // Reset form for new stakeholder
+      setFormData({
+        name: '',
+        stakeholder_type: 'cliente',
+        organization: '',
+        contact_person: '',
+        email: '',
+        phone: '',
+        power: 'medio',
+        interest: 'medio',
+        satisfaction_score: 5.0,
+        communication_frequency: 'mensual',
+        preferred_channel: '',
+        expectations: [],
+        requirements: [],
+        notes: '',
+        is_active: true
+      });
     }
+    setNewExpectation('');
+    setNewRequirement('');
   }, [stakeholder]);
+
+  // Handle keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && !saving) {
+        onClose();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [onClose, saving]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -138,19 +171,28 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
     }
   };
 
+  const handleOverlayClick = (e) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
   return (
-    <div className="fixed inset-0 bg-black/50 dark:bg-gray-900/75 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-all duration-300">
-      <div className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-md rounded-lg shadow-2xl dark:shadow-slate-900/70 w-full max-w-3xl max-h-[90vh] overflow-hidden border border-white/20 dark:border-slate-700/30 transition-all duration-300">
-        <div className="sticky top-0 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md border-b border-slate-200/50 dark:border-slate-700/50 px-6 py-4 flex items-center justify-between transition-all duration-300">
+    <div 
+      className="fixed inset-0 bg-black/50 dark:bg-gray-900/75 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-all duration-300"
+      onClick={handleOverlayClick}
+    >
+      <div className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-md rounded-lg shadow-2xl dark:shadow-slate-900/70 w-full max-w-3xl max-h-[90vh] flex flex-col border border-white/20 dark:border-slate-700/30 transition-all duration-300">
+        <div className="flex-shrink-0 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md border-b border-slate-200/50 dark:border-slate-700/50 px-6 py-4 flex items-center justify-between transition-all duration-300">
           <h2 className="text-xl font-bold text-gray-900 dark:text-white">
             {stakeholder ? 'Editar Stakeholder' : 'Nuevo Stakeholder'}
           </h2>
-          <button onClick={onClose} className="text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-300 transition-colors">
+          <button type="button" onClick={onClose} className="text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-300 transition-colors">
             <X className="h-6 w-6" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+        <form id="stakeholder-form" onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-6">
           {/* Información Básica */}
           <div className="bg-gray-50/70 dark:bg-slate-700/70 backdrop-blur-md rounded-lg p-4 border border-gray-100/50 dark:border-slate-600/50 transition-all duration-300">
             <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Información Básica</h3>
@@ -355,18 +397,25 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
               </button>
             </div>
             <div className="space-y-2">
-              {formData.expectations.map((exp, index) => (
-                <div key={index} className="flex items-center justify-between bg-white dark:bg-slate-700 p-2 rounded border border-gray-200 dark:border-slate-600 transition-colors">
-                  <span className="text-sm text-gray-900 dark:text-white">{exp}</span>
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveExpectation(index)}
-                    className="text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
-                </div>
-              ))}
+              {formData.expectations.length === 0 ? (
+                <p className="text-sm text-gray-500 dark:text-slate-400 italic text-center py-3">
+                  No hay expectativas definidas. Agrega una usando el campo de arriba.
+                </p>
+              ) : (
+                formData.expectations.map((exp, index) => (
+                  <div key={index} className="flex items-center justify-between bg-white dark:bg-slate-700 p-2 rounded border border-gray-200 dark:border-slate-600 transition-colors">
+                    <span className="text-sm text-gray-900 dark:text-white">{exp}</span>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveExpectation(index)}
+                      className="text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors"
+                      aria-label="Eliminar expectativa"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                ))
+              )}
             </div>
           </div>
 
@@ -391,18 +440,25 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
               </button>
             </div>
             <div className="space-y-2">
-              {formData.requirements.map((req, index) => (
-                <div key={index} className="flex items-center justify-between bg-white dark:bg-slate-700 p-2 rounded border border-gray-200 dark:border-slate-600 transition-colors">
-                  <span className="text-sm text-gray-900 dark:text-white">{req}</span>
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveRequirement(index)}
-                    className="text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
-                </div>
-              ))}
+              {formData.requirements.length === 0 ? (
+                <p className="text-sm text-gray-500 dark:text-slate-400 italic text-center py-3">
+                  No hay requisitos definidos. Agrega uno usando el campo de arriba.
+                </p>
+              ) : (
+                formData.requirements.map((req, index) => (
+                  <div key={index} className="flex items-center justify-between bg-white dark:bg-slate-700 p-2 rounded border border-gray-200 dark:border-slate-600 transition-colors">
+                    <span className="text-sm text-gray-900 dark:text-white">{req}</span>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveRequirement(index)}
+                      className="text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors"
+                      aria-label="Eliminar requisito"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                ))
+              )}
             </div>
           </div>
 
@@ -435,25 +491,27 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
             </label>
           </div>
 
-          {/* Botones */}
-          <div className="flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-slate-700 transition-colors">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 text-gray-700 dark:text-slate-300 bg-gray-100 dark:bg-slate-700 rounded-lg hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors"
-            >
-              Cancelar
-            </button>
-            <button
-              type="submit"
-              disabled={saving}
-              className="flex items-center px-4 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-800 disabled:bg-blue-300 dark:disabled:bg-blue-900 transition-colors"
-            >
-              <Save className="mr-2 h-4 w-4" />
-              {saving ? 'Guardando...' : 'Guardar'}
-            </button>
-          </div>
         </form>
+
+        {/* Botones fijos en el footer */}
+        <div className="flex-shrink-0 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md border-t border-gray-200 dark:border-slate-700 px-6 py-4 flex justify-end gap-3 transition-colors">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-4 py-2 text-gray-700 dark:text-slate-300 bg-gray-100 dark:bg-slate-700 rounded-lg hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors"
+          >
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            form="stakeholder-form"
+            disabled={saving}
+            className="flex items-center px-4 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-800 disabled:bg-blue-300 dark:disabled:bg-blue-900 disabled:cursor-not-allowed transition-colors"
+          >
+            <Save className="mr-2 h-4 w-4" />
+            {saving ? 'Guardando...' : 'Guardar'}
+          </button>
+        </div>
       </div>
     </div>
   );
