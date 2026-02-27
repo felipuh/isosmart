@@ -55,8 +55,8 @@ const Recommendations = ({ recomendaciones, loading }) => {
       {!recomendaciones || recomendaciones.length === 0 ? (
         <div className="text-center py-8">
           <CheckCircle2 className="h-16 w-16 text-green-500 mx-auto mb-4" />
-          <p className="text-slate-500 dark:text-slate-400">No hay recomendaciones pendientes</p>
-          <p className="text-sm text-slate-400 dark:text-slate-500 mt-2">¡Todo está en orden!</p>
+          <p className="text-slate-500 dark:text-slate-400">{t('literals.No hay recomendaciones pendientes')}</p>
+          <p className="text-sm text-slate-400 dark:text-slate-500 mt-2">{t('literals.¡Todo está en orden!')}</p>
         </div>
       ) : (
         <div className="space-y-4">
@@ -84,7 +84,7 @@ const Recommendations = ({ recomendaciones, loading }) => {
 
               {rec.acciones && rec.acciones.length > 0 && (
                 <div className="mt-3 pt-3 border-t dark:border-slate-700">
-                  <p className="text-xs font-medium text-slate-600 dark:text-slate-400 mb-2">Acciones sugeridas:</p>
+                  <p className="text-xs font-medium text-slate-600 dark:text-slate-400 mb-2">{t('literals.Acciones sugeridas:')}</p>
                   <ul className="space-y-1">
                     {rec.acciones.map((acción, actionIdx) => (
                       <li key={actionIdx} className="flex items-start text-sm text-slate-700 dark:text-slate-300">
@@ -99,7 +99,7 @@ const Recommendations = ({ recomendaciones, loading }) => {
               {rec.beneficio && (
                 <div className="mt-3 pt-3 border-t dark:border-slate-700">
                   <p className="text-xs text-slate-600 dark:text-slate-400">
-                    <span className="font-medium">Beneficio esperado:</span> {rec.beneficio}
+                    <span className="font-medium">{t('literals.Beneficio esperado:')}</span> {rec.beneficio}
                   </p>
                 </div>
               )}

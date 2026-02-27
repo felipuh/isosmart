@@ -31,7 +31,7 @@ const FODAAnalysis = ({ fortalezas, oportunidades, debilidades, amenazas, loadin
 
   return (
     <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
-      <h3 className="text-xl font-semibold mb-6 dark:text-white">Análisis FODA</h3>
+      <h3 className="text-xl font-semibold mb-6 dark:text-white">{t('literals.Análisis FODA')}</h3>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         
@@ -41,7 +41,7 @@ const FODAAnalysis = ({ fortalezas, oportunidades, debilidades, amenazas, loadin
             <div className="bg-green-500 rounded-full p-2 mr-3">
               <Shield className="h-5 w-5 text-white" />
             </div>
-            <h4 className="text-lg font-semibold text-green-900 dark:text-green-300">Fortalezas</h4>
+            <h4 className="text-lg font-semibold text-green-900 dark:text-green-300">{t('literals.Fortalezas')}</h4>
           </div>
           <ul className="space-y-2">
             {fortalezas && fortalezas.length > 0 ? (
@@ -52,7 +52,7 @@ const FODAAnalysis = ({ fortalezas, oportunidades, debilidades, amenazas, loadin
                 </li>
               ))
             ) : (
-              <li className="text-sm text-slate-500 dark:text-slate-400 italic">No se identificaron fortalezas</li>
+              <li className="text-sm text-slate-500 dark:text-slate-400 italic">{t('literals.No se identificaron fortalezas')}</li>
             )}
           </ul>
         </div>
@@ -63,7 +63,7 @@ const FODAAnalysis = ({ fortalezas, oportunidades, debilidades, amenazas, loadin
             <div className="bg-blue-500 rounded-full p-2 mr-3">
               <TrendingUp className="h-5 w-5 text-white" />
             </div>
-            <h4 className="text-lg font-semibold text-blue-900 dark:text-blue-300">Oportunidades</h4>
+            <h4 className="text-lg font-semibold text-blue-900 dark:text-blue-300">{t('literals.Oportunidades')}</h4>
           </div>
           <ul className="space-y-2">
             {oportunidades && oportunidades.length > 0 ? (
@@ -74,7 +74,7 @@ const FODAAnalysis = ({ fortalezas, oportunidades, debilidades, amenazas, loadin
                 </li>
               ))
             ) : (
-              <li className="text-sm text-slate-500 dark:text-slate-400 italic">No se identificaron oportunidades</li>
+              <li className="text-sm text-slate-500 dark:text-slate-400 italic">{t('literals.No se identificaron oportunidades')}</li>
             )}
           </ul>
         </div>
@@ -85,7 +85,7 @@ const FODAAnalysis = ({ fortalezas, oportunidades, debilidades, amenazas, loadin
             <div className="bg-yellow-500 rounded-full p-2 mr-3">
               <TrendingDown className="h-5 w-5 text-white" />
             </div>
-            <h4 className="text-lg font-semibold text-yellow-900 dark:text-yellow-300">Debilidades</h4>
+            <h4 className="text-lg font-semibold text-yellow-900 dark:text-yellow-300">{t('literals.Debilidades')}</h4>
           </div>
           <ul className="space-y-2">
             {debilidades && debilidades.length > 0 ? (
@@ -96,7 +96,7 @@ const FODAAnalysis = ({ fortalezas, oportunidades, debilidades, amenazas, loadin
                 </li>
               ))
             ) : (
-              <li className="text-sm text-slate-500 dark:text-slate-400 italic">No se identificaron debilidades</li>
+              <li className="text-sm text-slate-500 dark:text-slate-400 italic">{t('literals.No se identificaron debilidades')}</li>
             )}
           </ul>
         </div>
@@ -107,7 +107,7 @@ const FODAAnalysis = ({ fortalezas, oportunidades, debilidades, amenazas, loadin
             <div className="bg-red-500 rounded-full p-2 mr-3">
               <AlertTriangle className="h-5 w-5 text-white" />
             </div>
-            <h4 className="text-lg font-semibold text-red-900 dark:text-red-300">Amenazas</h4>
+            <h4 className="text-lg font-semibold text-red-900 dark:text-red-300">{t('literals.Amenazas')}</h4>
           </div>
           <ul className="space-y-2">
             {amenazas && amenazas.length > 0 ? (
@@ -118,7 +118,7 @@ const FODAAnalysis = ({ fortalezas, oportunidades, debilidades, amenazas, loadin
                 </li>
               ))
             ) : (
-              <li className="text-sm text-slate-500 dark:text-slate-400 italic">No se identificaron amenazas</li>
+              <li className="text-sm text-slate-500 dark:text-slate-400 italic">{t('literals.No se identificaron amenazas')}</li>
             )}
           </ul>
         </div>

@@ -177,7 +177,7 @@ const ObjectiveActionsPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">Acciones para Objetivos</h1>
+        <h1 className="text-3xl font-bold text-white">{t('literals.Acciones para Objetivos')}</h1>
         <button
           type="button"
           onClick={openForm}
@@ -191,12 +191,12 @@ const ObjectiveActionsPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Objetivo</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Número</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Objetivo')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Número')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.status')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Fecha Límite</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">% Avance</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Acciones</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Fecha Límite')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.% Avance')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acciones')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -215,7 +215,7 @@ const ObjectiveActionsPage = () => {
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">No hay acciones</div>}
+        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('literals.No hay acciones')}</div>}
       </div>
 
       <Modal
@@ -226,7 +226,7 @@ const ObjectiveActionsPage = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Objetivo *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Objetivo *')}</label>
               <select value={form.objective} onChange={(e) => setForm({...form, objective: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required>
                 <option value="">{t('literals.Seleccionar')}</option>
                 {objectives.map(o => (
@@ -235,11 +235,11 @@ const ObjectiveActionsPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Número *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Número *')}</label>
               <input type="number" min="1" value={form.action_number} onChange={(e) => setForm({...form, action_number: parseInt(e.target.value || 1)})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Responsable</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Responsable')}</label>
               <select value={form.responsible} onChange={(e) => setForm({...form, responsible: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
                 <option value="">{t('literals.Sin asignar')}</option>
                 {users.map(u => (
@@ -248,19 +248,19 @@ const ObjectiveActionsPage = () => {
               </select>
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Descripción *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Descripción *')}</label>
               <textarea value={form.description} onChange={(e) => setForm({...form, description: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" required />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Qué se hará *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Qué se hará *')}</label>
               <textarea value={form.what_will_be_done} onChange={(e) => setForm({...form, what_will_be_done: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" required />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Cómo se hará</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Cómo se hará')}</label>
               <textarea value={form.how_will_be_done} onChange={(e) => setForm({...form, how_will_be_done: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Fecha Límite *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Fecha Límite *')}</label>
               <input type="date" value={form.due_date} onChange={(e) => setForm({...form, due_date: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
@@ -274,15 +274,15 @@ const ObjectiveActionsPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">% Avance</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.% Avance')}</label>
               <input type="number" min="0" max="100" value={form.progress_percentage} onChange={(e) => setForm({...form, progress_percentage: parseInt(e.target.value || 0)})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Recursos Necesarios</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Recursos Necesarios')}</label>
               <textarea value={form.resources_needed} onChange={(e) => setForm({...form, resources_needed: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Costo Estimado</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Costo Estimado')}</label>
               <input type="number" value={form.estimated_cost} onChange={(e) => setForm({...form, estimated_cost: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
             </div>
           </div>

@@ -124,7 +124,7 @@ const DocumentDashboard = () => {
         <div className="bg-white/70 dark:bg-slate-800/70 backdrop-blur-md dark:backdrop-blur-md rounded-lg shadow dark:shadow-slate-900/50 border border-white/20 dark:border-slate-700/50 p-6 transition-all duration-300 hover:shadow-md dark:hover:shadow-slate-900/70">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-slate-600 dark:text-slate-400">Total Documentos</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400">{t('literals.Total Documentos')}</p>
               <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">
                 {stats?.total_documents || 0}
               </p>
@@ -136,7 +136,7 @@ const DocumentDashboard = () => {
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-slate-600 dark:text-slate-400">Políticas</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400">{t('literals.Políticas')}</p>
               <p className="text-3xl font-bold text-purple-600 dark:text-purple-400">
                 {stats?.by_type?.política || 0}
               </p>
@@ -148,7 +148,7 @@ const DocumentDashboard = () => {
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-slate-600 dark:text-slate-400">Procedimientos</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400">{t('literals.Procedimientos')}</p>
               <p className="text-3xl font-bold text-green-600 dark:text-green-400">
                 {stats?.by_type?.procedimiento || 0}
               </p>
@@ -160,7 +160,7 @@ const DocumentDashboard = () => {
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-slate-600 dark:text-slate-400">Reportes</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400">{t('literals.Reportes')}</p>
               <p className="text-3xl font-bold text-orange-600 dark:text-orange-400">
                 {stats?.by_type?.reporte || 0}
               </p>
@@ -192,7 +192,7 @@ const DocumentDashboard = () => {
           </div>
 
           <div className="flex items-center space-x-3">
-            <label className="text-sm text-slate-600 dark:text-slate-400 transition-colors">Filtrar por tipo:</label>
+            <label className="text-sm text-slate-600 dark:text-slate-400 transition-colors">{t('literals.Filtrar por tipo:')}</label>
             <select
               value={filterType}
               onChange={(e) => setFilterType(e.target.value)}

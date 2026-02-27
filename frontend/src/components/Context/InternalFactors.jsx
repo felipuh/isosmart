@@ -46,7 +46,7 @@ const InternalFactors = ({ fortalezas, debilidades, loading }) => {
           </div>
           
           {!fortalezas || fortalezas.length === 0 ? (
-            <p className="text-slate-500 dark:text-slate-400 text-sm ml-7">No se identificaron fortalezas internas</p>
+            <p className="text-slate-500 dark:text-slate-400 text-sm ml-7">{t('literals.No se identificaron fortalezas internas')}</p>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 ml-7">
               {fortalezas.map((item, idx) => (
@@ -72,7 +72,7 @@ const InternalFactors = ({ fortalezas, debilidades, loading }) => {
           </div>
           
           {!debilidades || debilidades.length === 0 ? (
-            <p className="text-slate-500 dark:text-slate-400 text-sm ml-7">No se identificaron debilidades internas</p>
+            <p className="text-slate-500 dark:text-slate-400 text-sm ml-7">{t('literals.No se identificaron debilidades internas')}</p>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 ml-7">
               {debilidades.map((item, idx) => (

@@ -3,8 +3,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { TrendingUp, Users, Network } from 'lucide-react';
 import { useI18n } from '../../context/I18nContext';
 
-const InfluenceTooltip = ({ active, payload }) => {
-  const { t } = useI18n();
+const InfluenceTooltip = ({ active, payload, t }) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload;
     return (
@@ -21,6 +20,8 @@ const InfluenceTooltip = ({ active, payload }) => {
 };
 
 const InfluenceMetrics = ({ stakeholders, loading }) => {
+  const { t } = useI18n();
+
   if (loading) {
     return (
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
@@ -35,8 +36,8 @@ const InfluenceMetrics = ({ stakeholders, loading }) => {
   if (!stakeholders || stakeholders.length === 0) {
     return (
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
-        <h3 className="text-lg font-semibold dark:text-white mb-4">Métricas de Influencia</h3>
-        <p className="text-slate-500 dark:text-slate-400 text-center py-8">No hay datos disponibles</p>
+        <h3 className="text-lg font-semibold dark:text-white mb-4">{t('literals.Métricas de Influencia')}</h3>
+        <p className="text-slate-500 dark:text-slate-400 text-center py-8">{t('literals.No hay datos disponibles')}</p>
       </div>
     );
   }
@@ -80,7 +81,7 @@ const InfluenceMetrics = ({ stakeholders, loading }) => {
         <div className="bg-blue-50 dark:bg-blue-900/30 rounded-lg p-4 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm dark:text-blue-300">Total</p>
+              <p className="text-sm dark:text-blue-300">{t('literals.Total')}</p>
               <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{stats.total}</p>
             </div>
             <Users className="h-8 w-8 text-blue-400 dark:text-blue-300" />
@@ -90,7 +91,7 @@ const InfluenceMetrics = ({ stakeholders, loading }) => {
         <div className="bg-green-50 dark:bg-green-900/30 rounded-lg p-4 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm dark:text-green-300">Promedio</p>
+              <p className="text-sm dark:text-green-300">{t('literals.Promedio')}</p>
               <p className="text-2xl font-bold text-green-600 dark:text-green-400">{stats.avgInfluence}%</p>
             </div>
             <TrendingUp className="h-8 w-8 text-green-400 dark:text-green-300" />
@@ -100,7 +101,7 @@ const InfluenceMetrics = ({ stakeholders, loading }) => {
         <div className="bg-orange-50 dark:bg-orange-900/30 rounded-lg p-4 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Alta Influencia</p>
+              <p className="text-sm text-gray-600">{t('literals.Alta Influencia')}</p>
               <p className="text-2xl font-bold text-orange-600">{stats.highInfluence}</p>
             </div>
             <Network className="h-8 w-8 text-orange-400" />
@@ -110,7 +111,7 @@ const InfluenceMetrics = ({ stakeholders, loading }) => {
         <div className="bg-red-50 rounded-lg p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm dark:text-red-300">Críticos</p>
+              <p className="text-sm dark:text-red-300">{t('literals.Críticos')}</p>
               <p className="text-2xl font-bold text-red-600 dark:text-red-400">{stats.criticalCount}</p>
             </div>
             <Network className="h-8 w-8 text-red-400 dark:text-red-300" />
@@ -120,13 +121,13 @@ const InfluenceMetrics = ({ stakeholders, loading }) => {
 
       {/* Bar Chart */}
       <div className="mt-6">
-        <h4 className="text-sm font-medium dark:text-slate-300 mb-3">Top 10 por Influencia</h4>
+        <h4 className="text-sm font-medium dark:text-slate-300 mb-3">{t('literals.Top 10 por Influencia')}</h4>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={chartData} layout="vertical" margin={{ top: 5, right: 30, left: 120, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#cbd5e1" />
             <XAxis type="number" domain={[0, 100]} tick={{ fill: '#9ca3af' }} />
             <YAxis type="category" dataKey="name" width={100} tick={{ fill: '#9ca3af', fontSize: 12 }} />
-            <Tooltip content={<InfluenceTooltip />} />
+            <Tooltip content={<InfluenceTooltip t={t} />} />
             <Bar dataKey="influence" radius={[0, 8, 8, 0]}>
               {chartData.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={getBarColor(entry.influence)} />

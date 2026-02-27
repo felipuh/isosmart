@@ -182,7 +182,7 @@ const DesignProjectsPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">Proyectos de Diseño y Desarrollo</h1>
+        <h1 className="text-3xl font-bold text-white">{t('literals.Proyectos de Diseño y Desarrollo')}</h1>
         <button
           type="button"
           onClick={openForm}
@@ -196,12 +196,12 @@ const DesignProjectsPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Código</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Código')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.name')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Tipo</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Etapa</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Tipo')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Etapa')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.status')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Acciones</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acciones')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -220,7 +220,7 @@ const DesignProjectsPage = () => {
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">No hay proyectos</div>}
+        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('literals.No hay proyectos')}</div>}
       </div>
 
       <Modal
@@ -231,15 +231,15 @@ const DesignProjectsPage = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Código *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Código *')}</label>
               <input type="text" value={form.project_code} onChange={(e) => setForm({...form, project_code: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Nombre *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Nombre *')}</label>
               <input type="text" value={form.project_name} onChange={(e) => setForm({...form, project_name: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Tipo</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Tipo')}</label>
               <select value={form.project_type} onChange={(e) => setForm({...form, project_type: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
                 <option value="product">{t('literals.Producto')}</option>
                 <option value="service">{t('literals.Servicio')}</option>
@@ -248,7 +248,7 @@ const DesignProjectsPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Etapa</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Etapa')}</label>
               <select value={form.current_stage} onChange={(e) => setForm({...form, current_stage: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
                 <option value="planning">{t('literals.Planificación')}</option>
                 <option value="inputs">{t('literals.Elementos de Entrada')}</option>
@@ -270,7 +270,7 @@ const DesignProjectsPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Líder del Proyecto</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Líder del Proyecto')}</label>
               <select value={form.project_leader} onChange={(e) => setForm({...form, project_leader: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
                 <option value="">{t('literals.Sin asignar')}</option>
                 {users.map(u => (
@@ -279,11 +279,11 @@ const DesignProjectsPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Fecha Inicio *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Fecha Inicio *')}</label>
               <input type="date" value={form.start_date} onChange={(e) => setForm({...form, start_date: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Fecha Meta *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Fecha Meta *')}</label>
               <input type="date" value={form.target_completion_date} onChange={(e) => setForm({...form, target_completion_date: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div className="md:col-span-3">
@@ -291,19 +291,19 @@ const DesignProjectsPage = () => {
               <textarea value={form.description} onChange={(e) => setForm({...form, description: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="3" required />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Entradas de Diseño</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Entradas de Diseño')}</label>
               <textarea value={form.design_inputs} onChange={(e) => setForm({...form, design_inputs: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Resultados de Diseño</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Resultados de Diseño')}</label>
               <textarea value={form.design_outputs} onChange={(e) => setForm({...form, design_outputs: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Controles de Diseño</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Controles de Diseño')}</label>
               <textarea value={form.design_controls} onChange={(e) => setForm({...form, design_controls: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Método de Verificación</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Método de Verificación')}</label>
               <input type="text" value={form.verification_method} onChange={(e) => setForm({...form, verification_method: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
             </div>
             <div className="flex items-center">
@@ -313,13 +313,13 @@ const DesignProjectsPage = () => {
               </label>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Método de Validación</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Método de Validación')}</label>
               <input type="text" value={form.validation_method} onChange={(e) => setForm({...form, validation_method: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
             </div>
             <div className="flex items-center">
               <label className="flex items-center space-x-2">
                 <input type="checkbox" checked={form.is_validated} onChange={(e) => setForm({...form, is_validated: e.target.checked})} className="rounded" />
-                <span className="text-sm text-gray-300">Validado</span>
+                <span className="text-sm text-gray-300">{t('literals.Validado')}</span>
               </label>
             </div>
           </div>

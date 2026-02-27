@@ -65,8 +65,8 @@ const ImprovementCorrectiveActionsPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <div><h1 className="text-3xl font-bold text-white">Acciones Correctivas</h1><p className="text-gray-400 mt-1">ISO 9001:2015 - Cláusula 10.2</p></div>
-        <button type="button" onClick={openForm} className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">Nueva acción correctiva</button>
+        <div><h1 className="text-3xl font-bold text-white">{t('literals.Acciones Correctivas')}</h1><p className="text-gray-400 mt-1">{t('literals.ISO 9001:2015 - Cláusula 10.2')}</p></div>
+        <button type="button" onClick={openForm} className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">{t('literals.Nueva acción correctiva')}</button>
       </div>
 
       <Modal
@@ -77,10 +77,10 @@ const ImprovementCorrectiveActionsPage = () => {
       >
         <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-3">
-              <label className="text-xs text-slate-400">Número de acción *<input type="text" required value={form.action_number} onChange={e => setForm({ ...form, action_number: e.target.value })} placeholder="AC-2026-001" className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100" /></label>
+              <label className="text-xs text-slate-400">{t('literals.Número de acción *')}<input type="text" required value={form.action_number} onChange={e => setForm({ ...form, action_number: e.target.value })} placeholder="AC-2026-001" className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
               <label className="text-xs text-slate-400">No conformidad asociada *
                 <select required value={form.nonconformity} onChange={e => setForm({ ...form, nonconformity: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100">
-                  <option value="">Seleccionar NC…</option>
+                  <option value="">{t('literals.Seleccionar NC…')}</option>
                   {ncs.map(nc => <option key={nc.id} value={nc.id}>{nc.nc_number} - {nc.title}</option>)}
                 </select>
               </label>
@@ -91,16 +91,16 @@ const ImprovementCorrectiveActionsPage = () => {
               </label>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
-              <label className="text-xs text-slate-400">Análisis de causa raíz *<textarea required value={form.root_cause_analysis} onChange={e => setForm({ ...form, root_cause_analysis: e.target.value })} placeholder="5 porqués, Ishikawa, etc." className="mt-1 h-20 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100" /></label>
-              <label className="text-xs text-slate-400">Causa raíz identificada *<textarea required value={form.root_cause_identified} onChange={e => setForm({ ...form, root_cause_identified: e.target.value })} className="mt-1 h-20 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100" /></label>
+              <label className="text-xs text-slate-400">{t('literals.Análisis de causa raíz *')}<textarea required value={form.root_cause_analysis} onChange={e => setForm({ ...form, root_cause_analysis: e.target.value })} placeholder="5 porqués, Ishikawa, etc." className="mt-1 h-20 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
+              <label className="text-xs text-slate-400">{t('literals.Causa raíz identificada *')}<textarea required value={form.root_cause_identified} onChange={e => setForm({ ...form, root_cause_identified: e.target.value })} className="mt-1 h-20 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
             </div>
-            <label className="text-xs text-slate-400 block">Método de análisis<input type="text" value={form.analysis_method} onChange={e => setForm({ ...form, analysis_method: e.target.value })} placeholder="5 porqués, Ishikawa, Pareto..." className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100" /></label>
-            <label className="text-xs text-slate-400 block">Descripción de la acción *<textarea required value={form.action_description} onChange={e => setForm({ ...form, action_description: e.target.value })} className="mt-1 h-20 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100" /></label>
-            <label className="text-xs text-slate-400 block">Pasos de implementación *<textarea required value={form.implementation_steps} onChange={e => setForm({ ...form, implementation_steps: e.target.value })} className="mt-1 h-20 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100" /></label>
+            <label className="text-xs text-slate-400 block">{t('literals.Método de análisis')}<input type="text" value={form.analysis_method} onChange={e => setForm({ ...form, analysis_method: e.target.value })} placeholder="5 porqués, Ishikawa, Pareto..." className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
+            <label className="text-xs text-slate-400 block">{t('literals.Descripción de la acción *')}<textarea required value={form.action_description} onChange={e => setForm({ ...form, action_description: e.target.value })} className="mt-1 h-20 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
+            <label className="text-xs text-slate-400 block">{t('literals.Pasos de implementación *')}<textarea required value={form.implementation_steps} onChange={e => setForm({ ...form, implementation_steps: e.target.value })} className="mt-1 h-20 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
             <div className="grid gap-4 sm:grid-cols-3">
-              <label className="text-xs text-slate-400">Recursos requeridos<textarea value={form.resources_required} onChange={e => setForm({ ...form, resources_required: e.target.value })} className="mt-1 h-16 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100" /></label>
-              <label className="text-xs text-slate-400">Inicio planificado *<input type="date" required value={form.planned_start_date} onChange={e => setForm({ ...form, planned_start_date: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100" /></label>
-              <label className="text-xs text-slate-400">Fin planificado *<input type="date" required value={form.planned_completion_date} onChange={e => setForm({ ...form, planned_completion_date: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100" /></label>
+              <label className="text-xs text-slate-400">{t('literals.Recursos requeridos')}<textarea value={form.resources_required} onChange={e => setForm({ ...form, resources_required: e.target.value })} className="mt-1 h-16 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
+              <label className="text-xs text-slate-400">{t('literals.Inicio planificado *')}<input type="date" required value={form.planned_start_date} onChange={e => setForm({ ...form, planned_start_date: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
+              <label className="text-xs text-slate-400">{t('literals.Fin planificado *')}<input type="date" required value={form.planned_completion_date} onChange={e => setForm({ ...form, planned_completion_date: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
             </div>
             <div className="grid gap-4 sm:grid-cols-3">
               <label className="text-xs text-slate-400">Estado
@@ -108,8 +108,8 @@ const ImprovementCorrectiveActionsPage = () => {
                   {Object.entries(statusLabels).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
                 </select>
               </label>
-              <label className="text-xs text-slate-400">% Completado<input type="number" min="0" max="100" value={form.completion_percentage} onChange={e => setForm({ ...form, completion_percentage: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100" /></label>
-              <label className="text-xs text-slate-400">Comentarios<input type="text" value={form.comments} onChange={e => setForm({ ...form, comments: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100" /></label>
+              <label className="text-xs text-slate-400">{t('literals.% Completado')}<input type="number" min="0" max="100" value={form.completion_percentage} onChange={e => setForm({ ...form, completion_percentage: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
+              <label className="text-xs text-slate-400">{t('literals.Comentarios')}<input type="text" value={form.comments} onChange={e => setForm({ ...form, comments: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
             </div>
             <div className="flex flex-wrap gap-2">
               <button type="submit" disabled={saving || !orgId} className="rounded-lg bg-emerald-500/80 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-500 disabled:opacity-50">{saving ? t('common.messages.saving') : editingId ? t('common.buttons.update') : t('common.buttons.create')}</button>
@@ -122,17 +122,17 @@ const ImprovementCorrectiveActionsPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Acción #</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">NC</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Tipo</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Progreso</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acción #')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.NC')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Tipo')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Progreso')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.status')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Acciones</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acciones')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700/30">
             {items.length === 0 ? (
-              <tr><td colSpan={6} className="px-6 py-8 text-center text-gray-400">No hay acciones correctivas registradas</td></tr>
+              <tr><td colSpan={6} className="px-6 py-8 text-center text-gray-400">{t('literals.No hay acciones correctivas registradas')}</td></tr>
             ) : items.map(item => (
               <tr key={item.id} className="hover:bg-gray-800/30">
                 <td className="px-6 py-4 text-sm font-mono text-blue-400">{item.action_number}</td>

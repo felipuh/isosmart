@@ -126,19 +126,19 @@ const UsersManagement = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <div className="p-4 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border border-blue-100 dark:border-blue-800/50">
             <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{stats.total_users}</p>
-            <p className="text-sm text-blue-600/70 dark:text-blue-400/70">Total Usuarios</p>
+            <p className="text-sm text-blue-600/70 dark:text-blue-400/70">{t('literals.Total Usuarios')}</p>
           </div>
           <div className="p-4 bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 rounded-xl border border-emerald-100 dark:border-emerald-800/50">
             <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{stats.active_users}</p>
-            <p className="text-sm text-emerald-600/70 dark:text-emerald-400/70">Activos</p>
+            <p className="text-sm text-emerald-600/70 dark:text-emerald-400/70">{t('literals.Activos')}</p>
           </div>
           <div className="p-4 bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-xl border border-amber-100 dark:border-amber-800/50">
             <p className="text-2xl font-bold text-amber-600 dark:text-amber-400">{stats.by_role?.org_admin || 0}</p>
-            <p className="text-sm text-amber-600/70 dark:text-amber-400/70">Administradores</p>
+            <p className="text-sm text-amber-600/70 dark:text-amber-400/70">{t('literals.Administradores')}</p>
           </div>
           <div className="p-4 bg-gradient-to-br from-rose-50 to-pink-50 dark:from-rose-900/20 dark:to-pink-900/20 rounded-xl border border-rose-100 dark:border-rose-800/50">
             <p className="text-2xl font-bold text-rose-600 dark:text-rose-400">{stats.inactive_users}</p>
-            <p className="text-sm text-rose-600/70 dark:text-rose-400/70">Inactivos</p>
+            <p className="text-sm text-rose-600/70 dark:text-rose-400/70">{t('literals.Inactivos')}</p>
           </div>
         </div>
       )}
@@ -179,7 +179,7 @@ const UsersManagement = () => {
       ) : filteredUsers.length === 0 ? (
         <div className="text-center py-12">
           <Users className="w-12 h-12 text-slate-300 dark:text-slate-600 mx-auto mb-4" />
-          <p className="text-slate-500 dark:text-slate-400">No se encontraron usuarios</p>
+          <p className="text-slate-500 dark:text-slate-400">{t('literals.No se encontraron usuarios')}</p>
         </div>
       ) : (
         <div className="overflow-x-auto">
@@ -187,10 +187,10 @@ const UsersManagement = () => {
             <thead>
               <tr className="border-b border-slate-200 dark:border-slate-700">
                 <th className="text-left py-4 px-4 text-sm font-semibold text-slate-600 dark:text-slate-300">{t('literals.Usuario')}</th>
-                <th className="text-left py-4 px-4 text-sm font-semibold text-slate-600 dark:text-slate-300">Rol</th>
-                <th className="text-left py-4 px-4 text-sm font-semibold text-slate-600 dark:text-slate-300 hidden md:table-cell">Departamento</th>
+                <th className="text-left py-4 px-4 text-sm font-semibold text-slate-600 dark:text-slate-300">{t('literals.Rol')}</th>
+                <th className="text-left py-4 px-4 text-sm font-semibold text-slate-600 dark:text-slate-300 hidden md:table-cell">{t('literals.Departamento')}</th>
                 <th className="text-left py-4 px-4 text-sm font-semibold text-slate-600 dark:text-slate-300">{t('common.forms.status')}</th>
-                <th className="text-right py-4 px-4 text-sm font-semibold text-slate-600 dark:text-slate-300">Acciones</th>
+                <th className="text-right py-4 px-4 text-sm font-semibold text-slate-600 dark:text-slate-300">{t('literals.Acciones')}</th>
               </tr>
             </thead>
             <tbody>
@@ -424,7 +424,7 @@ const CreateUserModal = ({ organizationId, onClose, onSuccess }) => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Apellido</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('literals.Apellido')}</label>
               <input
                 type="text"
                 value={formData.last_name}
@@ -435,7 +435,7 @@ const CreateUserModal = ({ organizationId, onClose, onSuccess }) => {
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nombre de usuario *</label>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('literals.Nombre de usuario *')}</label>
             <input
               type="text"
               required
@@ -446,7 +446,7 @@ const CreateUserModal = ({ organizationId, onClose, onSuccess }) => {
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Email *</label>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('literals.Email *')}</label>
             <input
               type="email"
               required
@@ -457,7 +457,7 @@ const CreateUserModal = ({ organizationId, onClose, onSuccess }) => {
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Contraseña *</label>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('literals.Contraseña *')}</label>
             <input
               type="password"
               required
@@ -470,7 +470,7 @@ const CreateUserModal = ({ organizationId, onClose, onSuccess }) => {
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Rol *</label>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('literals.Rol *')}</label>
             <select
               value={formData.role}
               onChange={(e) => setFormData({...formData, role: e.target.value})}
@@ -486,7 +486,7 @@ const CreateUserModal = ({ organizationId, onClose, onSuccess }) => {
           
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Cargo</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('literals.Cargo')}</label>
               <input
                 type="text"
                 value={formData.job_title}
@@ -495,7 +495,7 @@ const CreateUserModal = ({ organizationId, onClose, onSuccess }) => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Departamento</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('literals.Departamento')}</label>
               <input
                 type="text"
                 value={formData.department}
@@ -571,7 +571,7 @@ const EditUserModal = ({ user, onClose, onSuccess }) => {
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Rol</label>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('literals.Rol')}</label>
             <select
               value={formData.role}
               onChange={(e) => setFormData({...formData, role: e.target.value})}
@@ -586,7 +586,7 @@ const EditUserModal = ({ user, onClose, onSuccess }) => {
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Cargo</label>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('literals.Cargo')}</label>
             <input
               type="text"
               value={formData.job_title}
@@ -596,7 +596,7 @@ const EditUserModal = ({ user, onClose, onSuccess }) => {
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Departamento</label>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('literals.Departamento')}</label>
             <input
               type="text"
               value={formData.department}
@@ -673,7 +673,7 @@ const PasswordResetModal = ({ user, onClose, onSuccess }) => {
           )}
           
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nueva Contraseña</label>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('literals.Nueva Contraseña')}</label>
             <input
               type="password"
               required
@@ -686,7 +686,7 @@ const PasswordResetModal = ({ user, onClose, onSuccess }) => {
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Confirmar Contraseña</label>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('literals.Confirmar Contraseña')}</label>
             <input
               type="password"
               required

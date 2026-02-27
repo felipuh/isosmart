@@ -163,7 +163,7 @@ const FindingsPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">Hallazgos de Auditoria</h1>
+        <h1 className="text-3xl font-bold text-white">{t('literals.Hallazgos de Auditoria')}</h1>
         <button
           type="button"
           onClick={openForm}
@@ -177,11 +177,11 @@ const FindingsPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Hallazgo</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Auditoria</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Tipo</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Hallazgo')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Auditoria')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Tipo')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.status')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Acciones</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acciones')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -201,7 +201,7 @@ const FindingsPage = () => {
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">No hay hallazgos</div>}
+        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('literals.No hay hallazgos')}</div>}
       </div>
 
       <Modal
@@ -212,7 +212,7 @@ const FindingsPage = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Auditoria *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Auditoria *')}</label>
               <select
                 value={form.audit}
                 onChange={(event) => setForm({ ...form, audit: event.target.value })}
@@ -228,7 +228,7 @@ const FindingsPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Número de Hallazgo *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Número de Hallazgo *')}</label>
               <input
                 type="text"
                 value={form.finding_number}
@@ -238,7 +238,7 @@ const FindingsPage = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Tipo *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Tipo *')}</label>
               <select
                 value={form.finding_type}
                 onChange={(event) => setForm({ ...form, finding_type: event.target.value })}
@@ -251,7 +251,7 @@ const FindingsPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Referencia de Cláusula *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Referencia de Cláusula *')}</label>
               <input
                 type="text"
                 value={form.clause_reference}
@@ -261,7 +261,7 @@ const FindingsPage = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Fecha Compromiso</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Fecha Compromiso')}</label>
               <input
                 type="date"
                 value={form.due_date}
@@ -282,7 +282,7 @@ const FindingsPage = () => {
               </select>
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Descripción *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Descripción *')}</label>
               <textarea
                 value={form.description}
                 onChange={(event) => setForm({ ...form, description: event.target.value })}
@@ -292,7 +292,7 @@ const FindingsPage = () => {
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Evidencia</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Evidencia')}</label>
               <textarea
                 value={form.evidence}
                 onChange={(event) => setForm({ ...form, evidence: event.target.value })}

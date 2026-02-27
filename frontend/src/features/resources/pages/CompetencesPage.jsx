@@ -156,7 +156,7 @@ const CompetencesPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">Competencias</h1>
+        <h1 className="text-3xl font-bold text-white">{t('literals.Competencias')}</h1>
         <button
           type="button"
           onClick={openForm}
@@ -171,11 +171,11 @@ const CompetencesPage = () => {
           <thead className="bg-gray-800/50">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Usuario')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Competencia</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Puesto</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Requerido</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Actual</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Acciones</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Competencia')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Puesto')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Requerido')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Actual')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acciones')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -194,7 +194,7 @@ const CompetencesPage = () => {
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">No hay competencias</div>}
+        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('literals.No hay competencias')}</div>}
       </div>
 
       <Modal
@@ -205,7 +205,7 @@ const CompetencesPage = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Usuario *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Usuario *')}</label>
               <select value={form.user} onChange={(e) => setForm({...form, user: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required>
                 <option value="">{t('literals.Seleccionar')}</option>
                 {users.map(u => (
@@ -217,15 +217,15 @@ const CompetencesPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Competencia *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Competencia *')}</label>
               <input type="text" value={form.competence_name} onChange={(e) => setForm({...form, competence_name: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Puesto *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Puesto *')}</label>
               <input type="text" value={form.position} onChange={(e) => setForm({...form, position: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Nivel Requerido</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Nivel Requerido')}</label>
               <select value={form.required_level} onChange={(e) => setForm({...form, required_level: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
                 <option value="basic">{t('literals.Básico')}</option>
                 <option value="intermediate">{t('literals.Intermedio')}</option>
@@ -234,7 +234,7 @@ const CompetencesPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Nivel Actual</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Nivel Actual')}</label>
               <select value={form.current_level} onChange={(e) => setForm({...form, current_level: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
                 <option value="basic">{t('literals.Básico')}</option>
                 <option value="intermediate">{t('literals.Intermedio')}</option>
@@ -243,7 +243,7 @@ const CompetencesPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Método de Adquisición</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Método de Adquisición')}</label>
               <select value={form.acquisition_method} onChange={(e) => setForm({...form, acquisition_method: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
                 <option value="education">{t('literals.Educación Formal')}</option>
                 <option value="training">{t('literals.Capacitación')}</option>

@@ -166,7 +166,7 @@ const RisksOpportunitiesPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">Riesgos y Oportunidades</h1>
+        <h1 className="text-3xl font-bold text-white">{t('literals.Riesgos y Oportunidades')}</h1>
         <button
           type="button"
           onClick={openForm}
@@ -192,12 +192,12 @@ const RisksOpportunitiesPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Código</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Título</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Tipo</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Categoría</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Nivel</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Acciones</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Código')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Título')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Tipo')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Categoría')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Nivel')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acciones')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -234,7 +234,7 @@ const RisksOpportunitiesPage = () => {
             ))}
           </tbody>
         </table>
-        {filteredItems.length === 0 && <div className="text-center py-8 text-gray-400">No hay elementos</div>}
+        {filteredItems.length === 0 && <div className="text-center py-8 text-gray-400">{t('literals.No hay elementos')}</div>}
       </div>
 
       <Modal
@@ -245,18 +245,18 @@ const RisksOpportunitiesPage = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Tipo *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Tipo *')}</label>
               <select value={form.item_type} onChange={(e) => setForm({...form, item_type: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required>
                 <option value="risk">{t('literals.Riesgo')}</option>
                 <option value="opportunity">{t('literals.Oportunidad')}</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Código *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Código *')}</label>
               <input type="text" value={form.code} onChange={(e) => setForm({...form, code: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Categoría</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Categoría')}</label>
               <select value={form.category} onChange={(e) => setForm({...form, category: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
                 <option value="strategic">{t('literals.Estratégico')}</option>
                 <option value="operational">{t('literals.Operacional')}</option>
@@ -269,7 +269,7 @@ const RisksOpportunitiesPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Contexto</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Contexto')}</label>
               <select value={form.context} onChange={(e) => setForm({...form, context: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
                 <option value="internal">{t('literals.Interno')}</option>
                 <option value="external">{t('literals.Externo')}</option>
@@ -277,7 +277,7 @@ const RisksOpportunitiesPage = () => {
               </select>
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Título *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Título *')}</label>
               <input type="text" value={form.title} onChange={(e) => setForm({...form, title: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div className="md:col-span-3">
@@ -287,11 +287,11 @@ const RisksOpportunitiesPage = () => {
             {form.item_type === 'risk' && (
               <>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Probabilidad (1-5)</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Probabilidad (1-5)')}</label>
                   <input type="number" min="1" max="5" value={form.probability} onChange={(e) => setForm({...form, probability: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Impacto (1-5)</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Impacto (1-5)')}</label>
                   <input type="number" min="1" max="5" value={form.impact} onChange={(e) => setForm({...form, impact: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
                 </div>
               </>
@@ -299,17 +299,17 @@ const RisksOpportunitiesPage = () => {
             {form.item_type === 'opportunity' && (
               <>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Factibilidad (1-5)</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Factibilidad (1-5)')}</label>
                   <input type="number" min="1" max="5" value={form.feasibility} onChange={(e) => setForm({...form, feasibility: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Beneficio (1-5)</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Beneficio (1-5)')}</label>
                   <input type="number" min="1" max="5" value={form.benefit} onChange={(e) => setForm({...form, benefit: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
                 </div>
               </>
             )}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Tratamiento</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Tratamiento')}</label>
               <select value={form.treatment} onChange={(e) => setForm({...form, treatment: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
                 <option value="avoid">{t('literals.Evitar')}</option>
                 <option value="mitigate">{t('literals.Mitigar')}</option>
@@ -320,7 +320,7 @@ const RisksOpportunitiesPage = () => {
               </select>
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Descripción del Tratamiento</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Descripción del Tratamiento')}</label>
               <textarea value={form.treatment_description} onChange={(e) => setForm({...form, treatment_description: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" />
             </div>
           </div>

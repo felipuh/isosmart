@@ -107,7 +107,7 @@ const RiskDashboard = () => {
     <div className="p-6 bg-slate-50 dark:bg-slate-900 min-h-screen transition-colors duration-300">
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Gestión de Riesgos</h1>
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">{t('literals.Gestión de Riesgos')}</h1>
         <p className="text-slate-500 dark:text-slate-400 mt-1">
           Administra los riesgos y oportunidades del SGC según ISO 9001:2015 - Cláusula 6.1
         </p>
@@ -247,7 +247,7 @@ const RiskDashboard = () => {
             </svg>
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-slate-900 dark:text-white">Gestión de Riesgos con IA</h3>
+            <h3 className="text-sm font-semibold text-slate-900 dark:text-white">{t('literals.Gestión de Riesgos con IA')}</h3>
             <p className="text-sm text-slate-700 dark:text-slate-300 mt-1">
               Los riesgos pueden ser identificados automáticamente por los módulos SCA (Context Analyzer), 
               SIE (Stakeholder Intelligence) y SPM (Process Mapper) para un análisis integral del SGC.

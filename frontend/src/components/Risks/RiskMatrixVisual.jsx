@@ -84,7 +84,7 @@ const RiskMatrixVisual = ({ onRiskClick }) => {
     return (
       <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 rounded-lg p-4 text-center transition-colors">
         <p className="text-red-600 dark:text-red-400">{error}</p>
-        <button onClick={loadMatrixData} className="mt-2 text-sm text-red-700 dark:text-red-300 underline hover:no-underline transition-colors">Reintentar</button>
+        <button onClick={loadMatrixData} className="mt-2 text-sm text-red-700 dark:text-red-300 underline hover:no-underline transition-colors">{t('literals.Reintentar')}</button>
       </div>
     );
   }
@@ -92,7 +92,7 @@ const RiskMatrixVisual = ({ onRiskClick }) => {
   return (
     <div className="space-y-6">
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-4 transition-colors">
-        <h3 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Leyenda de Niveles de Riesgo</h3>
+        <h3 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">{t('literals.Leyenda de Niveles de Riesgo')}</h3>
         <div className="flex flex-wrap gap-4">
           <div className="flex items-center"><div className="w-4 h-4 bg-red-500 rounded mr-2"></div><span className="text-sm text-slate-600 dark:text-slate-400">{t('literals.Crítico')}</span></div>
           <div className="flex items-center"><div className="w-4 h-4 bg-orange-500 rounded mr-2"></div><span className="text-sm text-slate-600 dark:text-slate-400">{t('literals.Alto')}</span></div>
@@ -102,7 +102,7 @@ const RiskMatrixVisual = ({ onRiskClick }) => {
       </div>
 
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 overflow-x-auto transition-colors">
-        <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-6 text-center">Matriz de Riesgos - Probabilidad vs Impacto</h3>
+        <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-6 text-center">{t('literals.Matriz de Riesgos - Probabilidad vs Impacto')}</h3>
         
         <div className="min-w-[600px]">
           <div className="flex">
@@ -146,7 +146,7 @@ const RiskMatrixVisual = ({ onRiskClick }) => {
           </div>
 
           <div className="flex justify-center mt-4">
-            <span className="text-sm font-medium text-slate-600 dark:text-slate-400">→ IMPACTO</span>
+            <span className="text-sm font-medium text-slate-600 dark:text-slate-400">{t('literals.→ IMPACTO')}</span>
           </div>
         </div>
       </div>
@@ -158,7 +158,7 @@ const RiskMatrixVisual = ({ onRiskClick }) => {
               <h3 className="text-lg font-medium text-slate-900 dark:text-white">
                 Riesgos: {probabilityLabels[selectedCell.prob]} probabilidad, {impactLabels[selectedCell.impact]} impacto
               </h3>
-              <p className="text-sm text-slate-500 dark:text-slate-400">Nivel: <span className="font-medium text-slate-700 dark:text-slate-300">{getRiskLevelLabel(selectedCell.prob, selectedCell.impact)}</span></p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">{t('literals.Nivel:')} <span className="font-medium text-slate-700 dark:text-slate-300">{getRiskLevelLabel(selectedCell.prob, selectedCell.impact)}</span></p>
             </div>
             <button onClick={() => setSelectedCell(null)} className="text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -169,7 +169,7 @@ const RiskMatrixVisual = ({ onRiskClick }) => {
           <div className="space-y-3">
             {matrixData.matrix[selectedCell.prob][selectedCell.impact].risks.map((risk) => (
               <div key={risk.id} onClick={() => onRiskClick && onRiskClick(risk)} className="p-3 bg-slate-50 dark:bg-slate-700/50 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition-colors">
-                <span className="text-sm font-medium text-slate-900 dark:text-white">#{risk.id}</span>
+                <span className="text-sm font-medium text-slate-900 dark:text-white">{t('literals.#{risk.id}')}</span>
                 <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">{risk.description}</p>
               </div>
             ))}

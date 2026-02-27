@@ -3,7 +3,6 @@ import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, Responsive
 import { useI18n } from '../../context/I18nContext';
 
 const getQuadrantColor = (quadrant) => {
-  const { t } = useI18n();
   switch (quadrant) {
     case 'Gestionar de Cerca': return '#ef4444';
     case 'Mantener Satisfecho': return '#f59e0b';
@@ -13,7 +12,7 @@ const getQuadrantColor = (quadrant) => {
   }
 };
 
-const PowerInterestTooltip = ({ active, payload }) => {
+const PowerInterestTooltip = ({ active, payload, t }) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload;
     return (
@@ -32,6 +31,7 @@ const PowerInterestTooltip = ({ active, payload }) => {
 };
 
 const PowerInterestMatrix = ({ matrixData, loading }) => {
+  const { t } = useI18n();
   if (loading) {
     return (
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
@@ -74,10 +74,10 @@ const PowerInterestMatrix = ({ matrixData, loading }) => {
 
   return (
     <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
-      <h3 className="text-lg font-semibold dark:text-white mb-4">Matriz Poder / Interés</h3>
+      <h3 className="text-lg font-semibold dark:text-white mb-4">{t('literals.Matriz Poder / Interés')}</h3>
       
       {scatterData.length === 0 ? (
-        <p className="text-slate-500 dark:text-slate-400 text-center py-8">No hay datos disponibles</p>
+        <p className="text-slate-500 dark:text-slate-400 text-center py-8">{t('literals.No hay datos disponibles')}</p>
       ) : (
         <ResponsiveContainer width="100%" height={400}>
           <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
@@ -109,7 +109,7 @@ const PowerInterestMatrix = ({ matrixData, loading }) => {
                 return '';
               }}
             />
-            <Tooltip content={<PowerInterestTooltip />} />
+            <Tooltip content={<PowerInterestTooltip t={t} />} />
             <Scatter data={scatterData} fill="#8884d8">
               {scatterData.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={getColor(entry.quadrant)} />
@@ -123,19 +123,19 @@ const PowerInterestMatrix = ({ matrixData, loading }) => {
       <div className="grid grid-cols-2 gap-4 mt-6">
         <div className="flex items-center">
           <div className="w-4 h-4 bg-red-500 rounded mr-2"></div>
-          <span className="text-sm">Gestionar de Cerca (Alto/Alto)</span>
+          <span className="text-sm">{t('literals.Gestionar de Cerca (Alto/Alto)')}</span>
         </div>
         <div className="flex items-center">
           <div className="w-4 h-4 bg-orange-500 rounded mr-2"></div>
-          <span className="text-sm">Mantener Satisfecho (Alto/Bajo)</span>
+          <span className="text-sm">{t('literals.Mantener Satisfecho (Alto/Bajo)')}</span>
         </div>
         <div className="flex items-center">
           <div className="w-4 h-4 bg-blue-500 rounded mr-2"></div>
-          <span className="text-sm">Mantener Informado (Bajo/Alto)</span>
+          <span className="text-sm">{t('literals.Mantener Informado (Bajo/Alto)')}</span>
         </div>
         <div className="flex items-center">
           <div className="w-4 h-4 bg-green-500 rounded mr-2"></div>
-          <span className="text-sm">Monitorear (Bajo/Bajo)</span>
+          <span className="text-sm">{t('literals.Monitorear (Bajo/Bajo)')}</span>
         </div>
       </div>
     </div>

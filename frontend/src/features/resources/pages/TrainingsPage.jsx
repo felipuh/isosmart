@@ -139,7 +139,7 @@ const TrainingsPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">Capacitaciones</h1>
+        <h1 className="text-3xl font-bold text-white">{t('literals.Capacitaciones')}</h1>
         <button
           type="button"
           onClick={openForm}
@@ -153,11 +153,11 @@ const TrainingsPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Código</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Título</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Inicio</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Fin</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Acciones</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Código')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Título')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Inicio')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Fin')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acciones')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -175,7 +175,7 @@ const TrainingsPage = () => {
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">No hay capacitaciones</div>}
+        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('literals.No hay capacitaciones')}</div>}
       </div>
 
       <Modal
@@ -186,15 +186,15 @@ const TrainingsPage = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Título *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Título *')}</label>
               <input type="text" value={form.title} onChange={(e) => setForm({...form, title: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Código *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Código *')}</label>
               <input type="text" value={form.code} onChange={(e) => setForm({...form, code: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Tipo</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Tipo')}</label>
               <select value={form.training_type} onChange={(e) => setForm({...form, training_type: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
                 <option value="internal">{t('literals.Interno')}</option>
                 <option value="external">{t('literals.Externo')}</option>
@@ -203,11 +203,11 @@ const TrainingsPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Fecha Inicio *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Fecha Inicio *')}</label>
               <input type="date" value={form.start_date} onChange={(e) => setForm({...form, start_date: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Fecha Fin *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Fecha Fin *')}</label>
               <input type="date" value={form.end_date} onChange={(e) => setForm({...form, end_date: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div className="md:col-span-2">

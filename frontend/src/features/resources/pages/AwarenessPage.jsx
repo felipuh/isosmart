@@ -136,7 +136,7 @@ const AwarenessPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">Toma de Conciencia</h1>
+        <h1 className="text-3xl font-bold text-white">{t('literals.Toma de Conciencia')}</h1>
         <button
           type="button"
           onClick={openForm}
@@ -150,11 +150,11 @@ const AwarenessPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Actividad</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Actividad')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.date')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Tipo</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Método</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Acciones</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Tipo')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Método')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acciones')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -172,7 +172,7 @@ const AwarenessPage = () => {
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">No hay actividades</div>}
+        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('literals.No hay actividades')}</div>}
       </div>
 
       <Modal
@@ -183,15 +183,15 @@ const AwarenessPage = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Actividad *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Actividad *')}</label>
               <input type="text" value={form.activity_name} onChange={(e) => setForm({...form, activity_name: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Fecha *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Fecha *')}</label>
               <input type="date" value={form.date} onChange={(e) => setForm({...form, date: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Tipo</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Tipo')}</label>
               <select value={form.awareness_type} onChange={(e) => setForm({...form, awareness_type: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
                 <option value="policy">{t('literals.Política de Calidad')}</option>
                 <option value="objectives">{t('literals.Objetivos de Calidad')}</option>
@@ -201,7 +201,7 @@ const AwarenessPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Método</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Método')}</label>
               <select value={form.method} onChange={(e) => setForm({...form, method: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
                 <option value="meeting">{t('literals.Reunión')}</option>
                 <option value="training">{t('literals.Capacitación')}</option>
@@ -213,7 +213,7 @@ const AwarenessPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Público Objetivo *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Público Objetivo *')}</label>
               <input type="text" value={form.target_audience} onChange={(e) => setForm({...form, target_audience: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div className="md:col-span-2">

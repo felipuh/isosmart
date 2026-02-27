@@ -151,7 +151,7 @@ const AnalysesPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">Análisis de Datos</h1>
+        <h1 className="text-3xl font-bold text-white">{t('literals.Análisis de Datos')}</h1>
         <button
           type="button"
           onClick={openForm}
@@ -165,11 +165,11 @@ const AnalysesPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Título</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Tipo</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Periodo</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Título')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Tipo')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Periodo')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.status')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Acciones</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acciones')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -187,7 +187,7 @@ const AnalysesPage = () => {
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">No hay análisis</div>}
+        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('literals.No hay análisis')}</div>}
       </div>
 
       <Modal
@@ -198,7 +198,7 @@ const AnalysesPage = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Título *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Título *')}</label>
               <input
                 type="text"
                 value={form.title}
@@ -208,7 +208,7 @@ const AnalysesPage = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Tipo *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Tipo *')}</label>
               <select
                 value={form.analysis_type}
                 onChange={(event) => setForm({ ...form, analysis_type: event.target.value })}
@@ -221,7 +221,7 @@ const AnalysesPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Inicio del Periodo *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Inicio del Periodo *')}</label>
               <input
                 type="date"
                 value={form.period_start}
@@ -231,7 +231,7 @@ const AnalysesPage = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Fin del Periodo *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Fin del Periodo *')}</label>
               <input
                 type="date"
                 value={form.period_end}
@@ -253,7 +253,7 @@ const AnalysesPage = () => {
               </select>
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Objetivos *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Objetivos *')}</label>
               <textarea
                 value={form.objectives}
                 onChange={(event) => setForm({ ...form, objectives: event.target.value })}
@@ -263,7 +263,7 @@ const AnalysesPage = () => {
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Metodologia *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Metodologia *')}</label>
               <textarea
                 value={form.methodology}
                 onChange={(event) => setForm({ ...form, methodology: event.target.value })}
@@ -273,7 +273,7 @@ const AnalysesPage = () => {
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Hallazgos *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Hallazgos *')}</label>
               <textarea
                 value={form.findings}
                 onChange={(event) => setForm({ ...form, findings: event.target.value })}
@@ -283,7 +283,7 @@ const AnalysesPage = () => {
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Conclusiones *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Conclusiones *')}</label>
               <textarea
                 value={form.conclusions}
                 onChange={(event) => setForm({ ...form, conclusions: event.target.value })}
@@ -293,7 +293,7 @@ const AnalysesPage = () => {
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Recomendaciones *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Recomendaciones *')}</label>
               <textarea
                 value={form.recommendations}
                 onChange={(event) => setForm({ ...form, recommendations: event.target.value })}

@@ -22,8 +22,8 @@ const ScopeStatement = ({ scopeData, loading }) => {
   if (!scopeData) {
     return (
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
-        <h3 className="text-xl font-semibold mb-4 dark:text-white">Declaración de Alcance</h3>
-        <p className="text-slate-500 dark:text-slate-400 text-center py-8">No hay definición de alcance disponible</p>
+        <h3 className="text-xl font-semibold mb-4 dark:text-white">{t('literals.Declaración de Alcance')}</h3>
+        <p className="text-slate-500 dark:text-slate-400 text-center py-8">{t('literals.No hay definición de alcance disponible')}</p>
       </div>
     );
   }
@@ -33,7 +33,7 @@ const ScopeStatement = ({ scopeData, loading }) => {
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center">
           <FileText className="h-6 w-6 text-blue-500 mr-2" />
-          <h3 className="text-xl font-semibold dark:text-white">Declaración de Alcance</h3>
+          <h3 className="text-xl font-semibold dark:text-white">{t('literals.Declaración de Alcance')}</h3>
         </div>
         <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
           scopeData.status === 'active' ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300' :
@@ -50,17 +50,17 @@ const ScopeStatement = ({ scopeData, loading }) => {
       {/* Info del alcance */}
       <div className="grid grid-cols-3 gap-4 mb-6 pb-6 border-b dark:border-slate-700">
         <div>
-          <p className="text-sm text-slate-600 dark:text-slate-400">Versión</p>
+          <p className="text-sm text-slate-600 dark:text-slate-400">{t('literals.Versión')}</p>
           <p className="text-lg font-semibold dark:text-white">{scopeData.version}</p>
         </div>
         <div>
-          <p className="text-sm text-slate-600 dark:text-slate-400">Fecha Vigencia</p>
+          <p className="text-sm text-slate-600 dark:text-slate-400">{t('literals.Fecha Vigencia')}</p>
           <p className="text-lg font-semibold dark:text-white">
             {scopeData.effective_date ? new Date(scopeData.effective_date).toLocaleDateString('es-ES') : 'No disponible'}
           </p>
         </div>
         <div>
-          <p className="text-sm text-slate-600 dark:text-slate-400">Cobertura</p>
+          <p className="text-sm text-slate-600 dark:text-slate-400">{t('literals.Cobertura')}</p>
           <p className="text-lg font-semibold text-blue-600">
             {scopeData.coverage_percentage?.toFixed(0)}%
           </p>
@@ -69,7 +69,7 @@ const ScopeStatement = ({ scopeData, loading }) => {
 
       {/* Declaración */}
       <div className="mb-6">
-        <h4 className="font-semibold text-slate-900 dark:text-white mb-3">Declaración Formal</h4>
+        <h4 className="font-semibold text-slate-900 dark:text-white mb-3">{t('literals.Declaración Formal')}</h4>
         <div className="bg-slate-50 dark:bg-slate-700/50 rounded-lg p-4 border-l-4 border-blue-500 transition-colors">
           <p className="text-slate-700 dark:text-slate-300 whitespace-pre-line leading-relaxed">
             {scopeData.scope_statement}
@@ -109,11 +109,11 @@ const ScopeStatement = ({ scopeData, loading }) => {
                   Cláusula {exclusion.clause}: {exclusion.title}
                 </p>
                 <p className="text-sm text-orange-700 dark:text-orange-400 mt-1">
-                  <span className="font-medium">Razón:</span> {exclusion.reason}
+                  <span className="font-medium">{t('literals.Razón:')}</span> {exclusion.reason}
                 </p>
                 {exclusion.impact && (
                   <p className="text-xs text-orange-600 dark:text-orange-400 mt-1">
-                    <span className="font-medium">Impacto:</span> {exclusion.impact}
+                    <span className="font-medium">{t('literals.Impacto:')}</span> {exclusion.impact}
                   </p>
                 )}
               </div>

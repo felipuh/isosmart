@@ -142,7 +142,7 @@ const ResourcesPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">Recursos</h1>
+        <h1 className="text-3xl font-bold text-white">{t('literals.Recursos')}</h1>
         <button
           type="button"
           onClick={openForm}
@@ -156,10 +156,10 @@ const ResourcesPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Código</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Código')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.name')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Tipo</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Acciones</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Tipo')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acciones')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -176,7 +176,7 @@ const ResourcesPage = () => {
             ))}
           </tbody>
         </table>
-        {resources.length === 0 && <div className="text-center py-8 text-gray-400">No hay recursos</div>}
+        {resources.length === 0 && <div className="text-center py-8 text-gray-400">{t('literals.No hay recursos')}</div>}
       </div>
 
       <Modal
@@ -187,7 +187,7 @@ const ResourcesPage = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Tipo</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Tipo')}</label>
               <select value={form.resource_type} onChange={(e) => setForm({...form, resource_type: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required>
                 <option value="human">{t('literals.Recurso Humano')}</option>
                 <option value="infrastructure">{t('literals.Infraestructura')}</option>
@@ -196,11 +196,11 @@ const ResourcesPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Nombre *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Nombre *')}</label>
               <input type="text" value={form.name} onChange={(e) => setForm({...form, name: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Código *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Código *')}</label>
               <input type="text" value={form.code} onChange={(e) => setForm({...form, code: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
           </div>

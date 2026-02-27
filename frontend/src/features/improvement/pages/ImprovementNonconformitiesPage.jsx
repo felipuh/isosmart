@@ -66,10 +66,10 @@ const ImprovementNonconformitiesPage = () => {
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-white">No Conformidades</h1>
-          <p className="text-gray-400 mt-1">ISO 9001:2015 - Cláusula 10.2</p>
+          <h1 className="text-3xl font-bold text-white">{t('literals.No Conformidades')}</h1>
+          <p className="text-gray-400 mt-1">{t('literals.ISO 9001:2015 - Cláusula 10.2')}</p>
         </div>
-        <button type="button" onClick={openForm} className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">Nueva no conformidad</button>
+        <button type="button" onClick={openForm} className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">{t('literals.Nueva no conformidad')}</button>
       </div>
 
       <Modal
@@ -143,17 +143,17 @@ const ImprovementNonconformitiesPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">NC #</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Título</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Fuente</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Severidad</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.NC #')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Título')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Fuente')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Severidad')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.status')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Acciones</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acciones')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700/30">
             {items.length === 0 ? (
-              <tr><td colSpan={6} className="px-6 py-8 text-center text-gray-400">No hay no conformidades registradas</td></tr>
+              <tr><td colSpan={6} className="px-6 py-8 text-center text-gray-400">{t('literals.No hay no conformidades registradas')}</td></tr>
             ) : items.map(item => (
               <tr key={item.id} className="hover:bg-gray-800/30">
                 <td className="px-6 py-4 text-sm font-mono text-blue-400">{item.nc_number}</td>

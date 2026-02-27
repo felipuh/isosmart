@@ -210,7 +210,7 @@ const ObjectiveDashboard = () => {
             </svg>
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-slate-900 dark:text-white">Objetivos SMART</h3>
+            <h3 className="text-sm font-semibold text-slate-900 dark:text-white">{t('literals.Objetivos SMART')}</h3>
             <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
               Los objetivos de calidad deben ser medibles, coherentes con la política de calidad 
               y pertinentes para la conformidad de productos/servicios y el aumento de la satisfacción del cliente.

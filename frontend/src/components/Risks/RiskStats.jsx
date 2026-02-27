@@ -23,7 +23,7 @@ const RiskStats = ({ stats, onRefresh }) => {
               </svg>
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">Total Riesgos</p>
+              <p className="text-sm font-medium text-gray-500">{t('literals.Total Riesgos')}</p>
               <p className="text-2xl font-semibold text-gray-900">{stats.total_risks || 0}</p>
             </div>
           </div>
@@ -37,7 +37,7 @@ const RiskStats = ({ stats, onRefresh }) => {
               </svg>
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">Activos</p>
+              <p className="text-sm font-medium text-gray-500">{t('literals.Activos')}</p>
               <p className="text-2xl font-semibold text-gray-900">{stats.active_risks || 0}</p>
             </div>
           </div>
@@ -51,7 +51,7 @@ const RiskStats = ({ stats, onRefresh }) => {
               </svg>
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">Críticos</p>
+              <p className="text-sm font-medium text-gray-500">{t('literals.Críticos')}</p>
               <p className="text-2xl font-semibold text-red-600">{stats.by_level?.critico || 0}</p>
             </div>
           </div>
@@ -65,7 +65,7 @@ const RiskStats = ({ stats, onRefresh }) => {
               </svg>
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">Mitigados</p>
+              <p className="text-sm font-medium text-gray-500">{t('literals.Mitigados')}</p>
               <p className="text-2xl font-semibold text-green-600">{stats.by_status?.mitigated || 0}</p>
             </div>
           </div>
@@ -74,7 +74,7 @@ const RiskStats = ({ stats, onRefresh }) => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Distribución por Nivel</h3>
+          <h3 className="text-lg font-medium text-gray-900 mb-4">{t('literals.Distribución por Nivel')}</h3>
           <div className="space-y-4">
             {Object.entries(levelColors).map(([level, colors]) => {
               const count = stats.by_level?.[level] || 0;
@@ -96,7 +96,7 @@ const RiskStats = ({ stats, onRefresh }) => {
         </div>
 
         <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Riesgos por Módulo de IA</h3>
+          <h3 className="text-lg font-medium text-gray-900 mb-4">{t('literals.Riesgos por Módulo de IA')}</h3>
           <div className="grid grid-cols-2 gap-4">
             {[
               { source: 'SCA', label: 'Context Analyzer', icon: '🔍' },

@@ -142,8 +142,8 @@ const RACIEntriesPage = () => {
     <div className="space-y-6" style={{ fontFamily: '"Sora", "Work Sans", sans-serif' }}>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-white">Entradas RACI</h1>
-          <p className="text-sm text-slate-400">Matriz: {matrixId}</p>
+          <h1 className="text-2xl font-semibold text-white">{t('literals.Entradas RACI')}</h1>
+          <p className="text-sm text-slate-400">{t('literals.Matriz: {matrixId}')}</p>
         </div>
         <Link
           to="/leadership/raci"
@@ -162,15 +162,15 @@ const RACIEntriesPage = () => {
       <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
         <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-4">
           {loading ? (
-            <div className="py-10 text-center text-slate-400">Cargando entradas...</div>
+            <div className="py-10 text-center text-slate-400">{t('literals.Cargando entradas...')}</div>
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full text-left text-sm text-slate-200">
                 <thead className="text-xs uppercase text-slate-400">
                   <tr>
-                    <th className="px-3 py-2">Orden</th>
-                    <th className="px-3 py-2">Actividad</th>
-                    <th className="px-3 py-2 text-right">Acciones</th>
+                    <th className="px-3 py-2">{t('literals.Orden')}</th>
+                    <th className="px-3 py-2">{t('literals.Actividad')}</th>
+                    <th className="px-3 py-2 text-right">{t('literals.Acciones')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-800">

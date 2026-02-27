@@ -142,7 +142,7 @@ const CommunicationsPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">Comunicaciones</h1>
+        <h1 className="text-3xl font-bold text-white">{t('literals.Comunicaciones')}</h1>
         <button
           type="button"
           onClick={openForm}
@@ -156,12 +156,12 @@ const CommunicationsPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Título</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Tipo</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Método</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Título')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Tipo')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Método')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.date')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.status')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Acciones</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acciones')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -180,7 +180,7 @@ const CommunicationsPage = () => {
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">No hay comunicaciones</div>}
+        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('literals.No hay comunicaciones')}</div>}
       </div>
 
       <Modal
@@ -191,18 +191,18 @@ const CommunicationsPage = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Título *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Título *')}</label>
               <input type="text" value={form.title} onChange={(e) => setForm({...form, title: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Tipo</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Tipo')}</label>
               <select value={form.communication_type} onChange={(e) => setForm({...form, communication_type: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
                 <option value="internal">{t('literals.Interna')}</option>
                 <option value="external">{t('literals.Externa')}</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Método</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Método')}</label>
               <select value={form.method} onChange={(e) => setForm({...form, method: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
                 <option value="email">{t('literals.Correo Electrónico')}</option>
                 <option value="meeting">{t('literals.Reunión')}</option>
@@ -215,7 +215,7 @@ const CommunicationsPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Frecuencia</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Frecuencia')}</label>
               <select value={form.frequency} onChange={(e) => setForm({...form, frequency: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
                 <option value="one_time">{t('literals.Una Vez')}</option>
                 <option value="daily">{t('literals.Diaria')}</option>
@@ -226,15 +226,15 @@ const CommunicationsPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Fecha Programada</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Fecha Programada')}</label>
               <input type="date" value={form.scheduled_date} onChange={(e) => setForm({...form, scheduled_date: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Público Objetivo *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Público Objetivo *')}</label>
               <input type="text" value={form.target_audience} onChange={(e) => setForm({...form, target_audience: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Resumen del Contenido</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Resumen del Contenido')}</label>
               <textarea value={form.content_summary} onChange={(e) => setForm({...form, content_summary: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="3" required />
             </div>
             <div className="md:col-span-2">

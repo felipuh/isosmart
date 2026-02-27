@@ -159,7 +159,7 @@ const MeasurementsPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">Mediciones</h1>
+        <h1 className="text-3xl font-bold text-white">{t('literals.Mediciones')}</h1>
         <button
           type="button"
           onClick={openForm}
@@ -174,11 +174,11 @@ const MeasurementsPage = () => {
           <thead className="bg-gray-800/50">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.date')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Indicador</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Real</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Objetivo</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Indicador')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Real')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Objetivo')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.status')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Acciones</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acciones')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -199,7 +199,7 @@ const MeasurementsPage = () => {
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">No hay mediciones</div>}
+        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('literals.No hay mediciones')}</div>}
       </div>
 
       <Modal
@@ -210,7 +210,7 @@ const MeasurementsPage = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Indicador *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Indicador *')}</label>
               <select
                 value={form.indicator}
                 onChange={(event) => handleIndicatorChange(event.target.value)}
@@ -226,7 +226,7 @@ const MeasurementsPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Fecha de Medicion *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Fecha de Medicion *')}</label>
               <input
                 type="date"
                 value={form.measurement_date}
@@ -236,7 +236,7 @@ const MeasurementsPage = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Estado *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Estado *')}</label>
               <select
                 value={form.status}
                 onChange={(event) => setForm({ ...form, status: event.target.value })}
@@ -249,7 +249,7 @@ const MeasurementsPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Valor Real *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Valor Real *')}</label>
               <input
                 type="number"
                 step="0.01"
@@ -260,7 +260,7 @@ const MeasurementsPage = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Valor Objetivo *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Valor Objetivo *')}</label>
               <input
                 type="number"
                 step="0.01"
@@ -271,7 +271,7 @@ const MeasurementsPage = () => {
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Comentarios</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Comentarios')}</label>
               <textarea
                 value={form.comments}
                 onChange={(event) => setForm({ ...form, comments: event.target.value })}

@@ -180,7 +180,7 @@ const ProductReleasesPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">Liberación de Productos</h1>
+        <h1 className="text-3xl font-bold text-white">{t('literals.Liberación de Productos')}</h1>
         <button
           type="button"
           onClick={openForm}
@@ -194,11 +194,11 @@ const ProductReleasesPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Código</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Producto/Servicio</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Código')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Producto/Servicio')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.date')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.status')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Acciones</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acciones')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -216,7 +216,7 @@ const ProductReleasesPage = () => {
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">No hay liberaciones</div>}
+        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('literals.No hay liberaciones')}</div>}
       </div>
 
       <Modal
@@ -227,43 +227,43 @@ const ProductReleasesPage = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Código *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Código *')}</label>
               <input type="text" value={form.release_code} onChange={(e) => setForm({...form, release_code: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Producto/Servicio *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Producto/Servicio *')}</label>
               <input type="text" value={form.product_service_name} onChange={(e) => setForm({...form, product_service_name: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Lote/Batch</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Lote/Batch')}</label>
               <input type="text" value={form.batch_lot_number} onChange={(e) => setForm({...form, batch_lot_number: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Fecha *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Fecha *')}</label>
               <input type="date" value={form.release_date} onChange={(e) => setForm({...form, release_date: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Cantidad *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Cantidad *')}</label>
               <input type="number" value={form.quantity_released} onChange={(e) => setForm({...form, quantity_released: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Unidad</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Unidad')}</label>
               <input type="text" value={form.unit} onChange={(e) => setForm({...form, unit: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
             </div>
             <div className="flex items-center">
               <label className="flex items-center space-x-2">
                 <input type="checkbox" checked={form.verification_performed} onChange={(e) => setForm({...form, verification_performed: e.target.checked})} className="rounded" />
-                <span className="text-sm text-gray-300">Verificación Realizada</span>
+                <span className="text-sm text-gray-300">{t('literals.Verificación Realizada')}</span>
               </label>
             </div>
             <div className="flex items-center">
               <label className="flex items-center space-x-2">
                 <input type="checkbox" checked={form.acceptance_criteria_met} onChange={(e) => setForm({...form, acceptance_criteria_met: e.target.checked})} className="rounded" />
-                <span className="text-sm text-gray-300">Criterios Cumplidos</span>
+                <span className="text-sm text-gray-300">{t('literals.Criterios Cumplidos')}</span>
               </label>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Autorizado por</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Autorizado por')}</label>
               <select value={form.authorized_by} onChange={(e) => setForm({...form, authorized_by: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
                 <option value="">{t('literals.Sin asignar')}</option>
                 {users.map(u => (
@@ -281,23 +281,23 @@ const ProductReleasesPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Cliente</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Cliente')}</label>
               <input type="text" value={form.customer_name} onChange={(e) => setForm({...form, customer_name: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Fecha de Entrega</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Fecha de Entrega')}</label>
               <input type="date" value={form.delivery_date} onChange={(e) => setForm({...form, delivery_date: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Resultados de Verificación</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Resultados de Verificación')}</label>
               <textarea value={form.verification_results} onChange={(e) => setForm({...form, verification_results: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Detalles de Criterios</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Detalles de Criterios')}</label>
               <textarea value={form.criteria_details} onChange={(e) => setForm({...form, criteria_details: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Notas</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Notas')}</label>
               <textarea value={form.notes} onChange={(e) => setForm({...form, notes: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" />
             </div>
           </div>

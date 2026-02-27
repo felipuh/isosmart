@@ -68,8 +68,8 @@ const ProcessDiagram = ({ diagramData, processes, loading }) => {
   if (!hasData) {
     return (
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
-        <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-4">Mapa de Procesos</h3>
-        <p className="text-slate-500 dark:text-slate-400 text-center py-8">No hay procesos disponibles. Ejecuta el mapeo con IA o agrega procesos manualmente.</p>
+        <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-4">{t('literals.Mapa de Procesos')}</h3>
+        <p className="text-slate-500 dark:text-slate-400 text-center py-8">{t('literals.No hay procesos disponibles. Ejecuta el mapeo con IA o agrega procesos manualmente.')}</p>
       </div>
     );
   }
@@ -79,7 +79,7 @@ const ProcessDiagram = ({ diagramData, processes, loading }) => {
   return (
     <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-xl font-semibold text-slate-900 dark:text-white">Mapa de Procesos</h3>
+        <h3 className="text-xl font-semibold text-slate-900 dark:text-white">{t('literals.Mapa de Procesos')}</h3>
         <div className="flex items-center text-sm text-slate-600 dark:text-slate-400 transition-colors">
           <GitBranch className="h-4 w-4 mr-1" />
           <span>{statistics?.total_interactions || 0} interacciones</span>
@@ -185,25 +185,25 @@ const ProcessDiagram = ({ diagramData, processes, loading }) => {
             <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">
               {statistics?.total_processes || 0}
             </p>
-            <p className="text-xs text-gray-600 dark:text-slate-400">Total Procesos</p>
+            <p className="text-xs text-gray-600 dark:text-slate-400">{t('literals.Total Procesos')}</p>
           </div>
           <div>
             <p className="text-2xl font-bold text-red-600 dark:text-red-400">
               {statistics?.critical_processes || 0}
             </p>
-            <p className="text-xs text-gray-600 dark:text-slate-400">Críticos</p>
+            <p className="text-xs text-gray-600 dark:text-slate-400">{t('literals.Críticos')}</p>
           </div>
           <div>
             <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
               {statistics?.total_interactions || 0}
             </p>
-            <p className="text-xs text-gray-600 dark:text-slate-400">Interacciones</p>
+            <p className="text-xs text-gray-600 dark:text-slate-400">{t('literals.Interacciones')}</p>
           </div>
           <div>
             <p className="text-2xl font-bold text-green-600 dark:text-green-400">
               {((statistics?.network_density || 0) * 100).toFixed(0)}%
             </p>
-            <p className="text-xs text-gray-600 dark:text-slate-400">Densidad Red</p>
+            <p className="text-xs text-gray-600 dark:text-slate-400">{t('literals.Densidad Red')}</p>
           </div>
         </div>
       </div>

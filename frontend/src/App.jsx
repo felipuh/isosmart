@@ -57,8 +57,9 @@ const ImprovementCorrectiveActionsPage = lazy(() => import('./features/improveme
 const ImprovementContinualPage = lazy(() => import('./features/improvement/pages/ImprovementContinualPage'));
 
 function App() {
+  const { t } = useI18n();
   return (
-    <Suspense fallback={<div className="flex items-center justify-center h-screen text-slate-300">Cargando...</div>}>
+    <Suspense fallback={<div className="flex items-center justify-center h-screen text-slate-300">{t('literals.Cargando...')}</div>}>
       <Routes>
       {/* Rutas públicas */}
       <Route

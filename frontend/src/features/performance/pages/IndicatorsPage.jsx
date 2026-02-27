@@ -166,7 +166,7 @@ const IndicatorsPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">Indicadores de Desempeno</h1>
+        <h1 className="text-3xl font-bold text-white">{t('literals.Indicadores de Desempeno')}</h1>
         <button
           type="button"
           onClick={openForm}
@@ -180,12 +180,12 @@ const IndicatorsPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Codigo</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Codigo')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.name')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Tipo</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Frecuencia</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Tipo')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Frecuencia')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.status')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Acciones</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acciones')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -204,7 +204,7 @@ const IndicatorsPage = () => {
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">No hay indicadores</div>}
+        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('literals.No hay indicadores')}</div>}
       </div>
 
       <Modal
@@ -215,7 +215,7 @@ const IndicatorsPage = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Codigo *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Codigo *')}</label>
               <input
                 type="text"
                 value={form.code}
@@ -225,7 +225,7 @@ const IndicatorsPage = () => {
               />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Nombre *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Nombre *')}</label>
               <input
                 type="text"
                 value={form.name}
@@ -235,7 +235,7 @@ const IndicatorsPage = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Tipo *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Tipo *')}</label>
               <select
                 value={form.indicator_type}
                 onChange={(event) => setForm({ ...form, indicator_type: event.target.value })}
@@ -248,7 +248,7 @@ const IndicatorsPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Frecuencia *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Frecuencia *')}</label>
               <select
                 value={form.frequency}
                 onChange={(event) => setForm({ ...form, frequency: event.target.value })}
@@ -261,7 +261,7 @@ const IndicatorsPage = () => {
               </select>
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Metodo de Medicion *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Metodo de Medicion *')}</label>
               <input
                 type="text"
                 value={form.measurement_method}
@@ -271,7 +271,7 @@ const IndicatorsPage = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Valor Objetivo *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Valor Objetivo *')}</label>
               <input
                 type="number"
                 step="0.01"
@@ -282,7 +282,7 @@ const IndicatorsPage = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Unidad *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Unidad *')}</label>
               <input
                 type="text"
                 value={form.unit_of_measure}
@@ -292,7 +292,7 @@ const IndicatorsPage = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Formula</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Formula')}</label>
               <input
                 type="text"
                 value={form.formula}
@@ -301,7 +301,7 @@ const IndicatorsPage = () => {
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Descripción *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Descripción *')}</label>
               <textarea
                 value={form.description}
                 onChange={(event) => setForm({ ...form, description: event.target.value })}

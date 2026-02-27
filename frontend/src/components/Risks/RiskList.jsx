@@ -52,8 +52,8 @@ const RiskList = ({ risks, onEdit, onDelete, onStatusChange }) => {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
         </div>
-        <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-1">No hay riesgos registrados</h3>
-        <p className="text-slate-500 dark:text-slate-400">Comienza agregando un nuevo riesgo al sistema.</p>
+        <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-1">{t('literals.No hay riesgos registrados')}</h3>
+        <p className="text-slate-500 dark:text-slate-400">{t('literals.Comienza agregando un nuevo riesgo al sistema.')}</p>
       </div>
     );
   }
@@ -63,10 +63,10 @@ const RiskList = ({ risks, onEdit, onDelete, onStatusChange }) => {
       {/* Table Header */}
       <div className="grid grid-cols-12 gap-4 px-6 py-3 bg-gray-50 dark:bg-slate-700/50 border-b border-gray-200 dark:border-slate-700 text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase tracking-wider transition-colors">
         <div className="col-span-4">{t('literals.Riesgo')}</div>
-        <div className="col-span-2">Nivel</div>
-        <div className="col-span-2">Fuente</div>
+        <div className="col-span-2">{t('literals.Nivel')}</div>
+        <div className="col-span-2">{t('literals.Fuente')}</div>
         <div className="col-span-2">{t('common.forms.date')}</div>
-        <div className="col-span-2 text-right">Acciones</div>
+        <div className="col-span-2 text-right">{t('literals.Acciones')}</div>
       </div>
 
       {/* Table Body */}
@@ -150,18 +150,18 @@ const RiskList = ({ risks, onEdit, onDelete, onStatusChange }) => {
               <div className="px-6 pb-4 bg-slate-50 dark:bg-slate-700/50 border-t border-gray-100 dark:border-slate-700 transition-colors">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
                   <div className="bg-white dark:bg-slate-800 rounded-lg p-4 border border-gray-200 dark:border-slate-600 transition-colors">
-                    <h4 className="text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase mb-2">Evaluación</h4>
+                    <h4 className="text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase mb-2">{t('literals.Evaluación')}</h4>
                     <div className="space-y-2 text-sm">
                       <div className="flex justify-between">
-                        <span className="text-slate-500 dark:text-slate-400">Probabilidad:</span>
+                        <span className="text-slate-500 dark:text-slate-400">{t('literals.Probabilidad:')}</span>
                         <span className="font-medium text-slate-900 dark:text-white">{risk.probability || 'N/A'}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-slate-500 dark:text-slate-400">Impacto:</span>
+                        <span className="text-slate-500 dark:text-slate-400">{t('literals.Impacto:')}</span>
                         <span className="font-medium text-slate-900 dark:text-white">{risk.impact || 'N/A'}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-slate-500 dark:text-slate-400">Responsable:</span>
+                        <span className="text-slate-500 dark:text-slate-400">{t('literals.Responsable:')}</span>
                         <span className="font-medium text-slate-900 dark:text-white">{risk.responsible || 'Sin asignar'}</span>
                       </div>
                     </div>
@@ -185,7 +185,7 @@ const RiskList = ({ risks, onEdit, onDelete, onStatusChange }) => {
                     </div>
                   </div>
                   <div className="bg-white dark:bg-slate-800 rounded-lg p-4 border border-gray-200 dark:border-slate-600 transition-colors">
-                    <h4 className="text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase mb-2">Mitigación</h4>
+                    <h4 className="text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase mb-2">{t('literals.Mitigación')}</h4>
                     <p className="text-sm text-slate-600 dark:text-slate-300">
                       {risk.mitigation_actions || 'No se han definido acciones de mitigación.'}
                     </p>

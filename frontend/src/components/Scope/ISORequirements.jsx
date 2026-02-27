@@ -28,10 +28,10 @@ const ISORequirements = ({ requirements, loading }) => {
   return (
     <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-xl font-semibold dark:text-white">Requisitos ISO 9001:2015</h3>
+        <h3 className="text-xl font-semibold dark:text-white">{t('literals.Requisitos ISO 9001:2015')}</h3>
         <div className="flex items-center">
           <div className="text-right mr-4">
-            <p className="text-sm text-slate-600 dark:text-slate-400">Cobertura</p>
+            <p className="text-sm text-slate-600 dark:text-slate-400">{t('literals.Cobertura')}</p>
             <p className="text-2xl font-bold text-green-600">{coverage.toFixed(0)}%</p>
           </div>
           <div className="w-16 h-16">

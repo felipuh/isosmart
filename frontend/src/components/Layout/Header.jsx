@@ -32,9 +32,9 @@ const Header = () => {
               onChange={(event) => setLanguage(event.target.value)}
               className="px-2 py-1.5 text-xs rounded-md border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200"
             >
-              <option value="es-LATAM">ES</option>
-              <option value="en">EN</option>
-              <option value="pt">PT</option>
+              <option value="es-LATAM">{t('literals.ES')}</option>
+              <option value="en">{t('literals.EN')}</option>
+              <option value="pt">{t('literals.PT')}</option>
             </select>
 
             <button className="relative p-2 text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-700 rounded-lg transition-colors">

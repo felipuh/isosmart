@@ -168,12 +168,12 @@ const ChangeControlPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Número</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Título</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Tipo</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Urgencia</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Número')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Título')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Tipo')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Urgencia')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.status')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Acciones</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acciones')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -192,7 +192,7 @@ const ChangeControlPage = () => {
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">No hay cambios</div>}
+        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('literals.No hay cambios')}</div>}
       </div>
 
       <Modal
@@ -203,11 +203,11 @@ const ChangeControlPage = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Número *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Número *')}</label>
               <input type="text" value={form.change_number} onChange={(e) => setForm({...form, change_number: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Título *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Título *')}</label>
               <input type="text" value={form.title} onChange={(e) => setForm({...form, title: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div className="md:col-span-3">
@@ -215,7 +215,7 @@ const ChangeControlPage = () => {
               <textarea value={form.description} onChange={(e) => setForm({...form, description: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Tipo</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Tipo')}</label>
               <select value={form.change_type} onChange={(e) => setForm({...form, change_type: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
                 <option value="process">{t('literals.Proceso')}</option>
                 <option value="procedure">{t('literals.Procedimiento')}</option>
@@ -228,7 +228,7 @@ const ChangeControlPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Razón</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Razón')}</label>
               <select value={form.reason} onChange={(e) => setForm({...form, reason: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
                 <option value="improvement">{t('literals.Mejora')}</option>
                 <option value="correction">{t('literals.Corrección')}</option>
@@ -239,7 +239,7 @@ const ChangeControlPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Urgencia</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Urgencia')}</label>
               <select value={form.urgency} onChange={(e) => setForm({...form, urgency: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
                 <option value="low">{t('literals.Baja')}</option>
                 <option value="medium">{t('literals.Media')}</option>
@@ -248,7 +248,7 @@ const ChangeControlPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Fecha Planificada *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Fecha Planificada *')}</label>
               <input type="date" value={form.planned_date} onChange={(e) => setForm({...form, planned_date: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
@@ -266,23 +266,23 @@ const ChangeControlPage = () => {
               </select>
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Justificación *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Justificación *')}</label>
               <textarea value={form.justification} onChange={(e) => setForm({...form, justification: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" required />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Áreas Afectadas *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Áreas Afectadas *')}</label>
               <textarea value={form.affected_areas} onChange={(e) => setForm({...form, affected_areas: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" required />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Evaluación de Impacto *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Evaluación de Impacto *')}</label>
               <textarea value={form.impact_assessment} onChange={(e) => setForm({...form, impact_assessment: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" required />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Riesgos Potenciales</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Riesgos Potenciales')}</label>
               <textarea value={form.potential_risks} onChange={(e) => setForm({...form, potential_risks: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Plan de Mitigación</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Plan de Mitigación')}</label>
               <textarea value={form.mitigation_plan} onChange={(e) => setForm({...form, mitigation_plan: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" />
             </div>
           </div>

@@ -215,13 +215,13 @@ const QualityObjectivesPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Código</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Título</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Código')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Título')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.status')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Meta</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">% Avance</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Responsable</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Acciones</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Meta')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.% Avance')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Responsable')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acciones')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -241,7 +241,7 @@ const QualityObjectivesPage = () => {
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">No hay objetivos</div>}
+        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('literals.No hay objetivos')}</div>}
       </div>
 
       <Modal
@@ -252,11 +252,11 @@ const QualityObjectivesPage = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Código *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Código *')}</label>
               <input type="text" value={form.code} onChange={(e) => setForm({...form, code: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Título *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Título *')}</label>
               <input type="text" value={form.title} onChange={(e) => setForm({...form, title: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div className="md:col-span-3">
@@ -264,7 +264,7 @@ const QualityObjectivesPage = () => {
               <textarea value={form.description} onChange={(e) => setForm({...form, description: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="3" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Alineación</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Alineación')}</label>
               <select value={form.alignment} onChange={(e) => setForm({...form, alignment: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
                 <option value="policy">{t('literals.Política de Calidad')}</option>
                 <option value="strategic">{t('literals.Estrategia Organizacional')}</option>
@@ -274,27 +274,27 @@ const QualityObjectivesPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Métrica *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Métrica *')}</label>
               <input type="text" value={form.metric} onChange={(e) => setForm({...form, metric: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Unidad</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Unidad')}</label>
               <input type="text" value={form.unit} onChange={(e) => setForm({...form, unit: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Línea Base</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Línea Base')}</label>
               <input type="number" value={form.baseline} onChange={(e) => setForm({...form, baseline: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Meta *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Meta *')}</label>
               <input type="number" value={form.target} onChange={(e) => setForm({...form, target: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Valor Actual</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Valor Actual')}</label>
               <input type="number" value={form.current_value} onChange={(e) => setForm({...form, current_value: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Responsable</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Responsable')}</label>
               <select value={form.owner} onChange={(e) => setForm({...form, owner: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
                 <option value="">{t('literals.Sin asignar')}</option>
                 {users.map(u => (
@@ -303,11 +303,11 @@ const QualityObjectivesPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Fecha Inicio *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Fecha Inicio *')}</label>
               <input type="date" value={form.start_date} onChange={(e) => setForm({...form, start_date: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Fecha Meta *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Fecha Meta *')}</label>
               <input type="date" value={form.target_date} onChange={(e) => setForm({...form, target_date: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
@@ -323,35 +323,35 @@ const QualityObjectivesPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">% Avance</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.% Avance')}</label>
               <input type="number" min="0" max="100" value={form.progress_percentage} onChange={(e) => setForm({...form, progress_percentage: parseInt(e.target.value || 0)})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Recursos Requeridos</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Recursos Requeridos')}</label>
               <textarea value={form.required_resources} onChange={(e) => setForm({...form, required_resources: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Presupuesto</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Presupuesto')}</label>
               <input type="number" value={form.budget} onChange={(e) => setForm({...form, budget: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Criterios SMART</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Criterios SMART')}</label>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 <label className="flex items-center space-x-2">
                   <input type="checkbox" checked={form.is_specific} onChange={(e) => setForm({...form, is_specific: e.target.checked})} className="rounded" />
-                  <span className="text-sm text-gray-300">Específico</span>
+                  <span className="text-sm text-gray-300">{t('literals.Específico')}</span>
                 </label>
                 <label className="flex items-center space-x-2">
                   <input type="checkbox" checked={form.is_measurable} onChange={(e) => setForm({...form, is_measurable: e.target.checked})} className="rounded" />
-                  <span className="text-sm text-gray-300">Medible</span>
+                  <span className="text-sm text-gray-300">{t('literals.Medible')}</span>
                 </label>
                 <label className="flex items-center space-x-2">
                   <input type="checkbox" checked={form.is_achievable} onChange={(e) => setForm({...form, is_achievable: e.target.checked})} className="rounded" />
-                  <span className="text-sm text-gray-300">Alcanzable</span>
+                  <span className="text-sm text-gray-300">{t('literals.Alcanzable')}</span>
                 </label>
                 <label className="flex items-center space-x-2">
                   <input type="checkbox" checked={form.is_relevant} onChange={(e) => setForm({...form, is_relevant: e.target.checked})} className="rounded" />
-                  <span className="text-sm text-gray-300">Relevante</span>
+                  <span className="text-sm text-gray-300">{t('literals.Relevante')}</span>
                 </label>
                 <label className="flex items-center space-x-2">
                   <input type="checkbox" checked={form.is_time_bound} onChange={(e) => setForm({...form, is_time_bound: e.target.checked})} className="rounded" />

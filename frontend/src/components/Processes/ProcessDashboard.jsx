@@ -156,7 +156,7 @@ const ProcessDashboard = () => {
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-slate-600 dark:text-slate-400">Total Procesos</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400">{t('literals.Total Procesos')}</p>
               <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">
                 {processMap?.total_processes || processes.length || 0}
               </p>
@@ -168,7 +168,7 @@ const ProcessDashboard = () => {
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-slate-600 dark:text-slate-400">Estratégicos</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400">{t('literals.Estratégicos')}</p>
               <p className="text-3xl font-bold text-purple-600">
                 {processMap?.strategic_count || 0}
               </p>
@@ -180,7 +180,7 @@ const ProcessDashboard = () => {
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-slate-600 dark:text-slate-400">Operativos</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400">{t('literals.Operativos')}</p>
               <p className="text-3xl font-bold text-blue-600">
                 {processMap?.operational_count || 0}
               </p>
@@ -192,7 +192,7 @@ const ProcessDashboard = () => {
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-slate-600 dark:text-slate-400">Apoyo</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400">{t('literals.Apoyo')}</p>
               <p className="text-3xl font-bold text-green-600">
                 {processMap?.support_count || 0}
               </p>

@@ -173,7 +173,7 @@ const ProductionControlsPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">Control de Producción</h1>
+        <h1 className="text-3xl font-bold text-white">{t('literals.Control de Producción')}</h1>
         <button
           type="button"
           onClick={openForm}
@@ -187,10 +187,10 @@ const ProductionControlsPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Código</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Producto/Servicio</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Tipo</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Acciones</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Código')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Producto/Servicio')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Tipo')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acciones')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -207,7 +207,7 @@ const ProductionControlsPage = () => {
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">No hay controles</div>}
+        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('literals.No hay controles')}</div>}
       </div>
 
       <Modal
@@ -218,22 +218,22 @@ const ProductionControlsPage = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Código *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Código *')}</label>
               <input type="text" value={form.control_code} onChange={(e) => setForm({...form, control_code: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Producto/Servicio *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Producto/Servicio *')}</label>
               <input type="text" value={form.product_service_name} onChange={(e) => setForm({...form, product_service_name: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Tipo</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Tipo')}</label>
               <select value={form.control_type} onChange={(e) => setForm({...form, control_type: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
                 <option value="production">{t('literals.Producción')}</option>
                 <option value="service_delivery">{t('literals.Prestación de Servicio')}</option>
               </select>
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Método de Control *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Método de Control *')}</label>
               <input type="text" value={form.control_method} onChange={(e) => setForm({...form, control_method: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div className="md:col-span-3">
@@ -243,29 +243,29 @@ const ProductionControlsPage = () => {
             <div className="flex items-center">
               <label className="flex items-center space-x-2">
                 <input type="checkbox" checked={form.requires_traceability} onChange={(e) => setForm({...form, requires_traceability: e.target.checked})} className="rounded" />
-                <span className="text-sm text-gray-300">Requiere Trazabilidad</span>
+                <span className="text-sm text-gray-300">{t('literals.Requiere Trazabilidad')}</span>
               </label>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Método de Trazabilidad</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Método de Trazabilidad')}</label>
               <input type="text" value={form.traceability_method} onChange={(e) => setForm({...form, traceability_method: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
             </div>
             <div className="flex items-center">
               <label className="flex items-center space-x-2">
                 <input type="checkbox" checked={form.handles_customer_property} onChange={(e) => setForm({...form, handles_customer_property: e.target.checked})} className="rounded" />
-                <span className="text-sm text-gray-300">Maneja Propiedad del Cliente</span>
+                <span className="text-sm text-gray-300">{t('literals.Maneja Propiedad del Cliente')}</span>
               </label>
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Controles de Propiedad</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Controles de Propiedad')}</label>
               <input type="text" value={form.customer_property_controls} onChange={(e) => setForm({...form, customer_property_controls: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Requisitos de Preservación</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Requisitos de Preservación')}</label>
               <textarea value={form.preservation_requirements} onChange={(e) => setForm({...form, preservation_requirements: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Actividades Post-Entrega</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Actividades Post-Entrega')}</label>
               <textarea value={form.post_delivery_activities} onChange={(e) => setForm({...form, post_delivery_activities: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" />
             </div>
             <div className="md:col-span-3">
@@ -273,7 +273,7 @@ const ProductionControlsPage = () => {
               <textarea value={form.change_control_process} onChange={(e) => setForm({...form, change_control_process: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Responsable</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Responsable')}</label>
               <select value={form.responsible} onChange={(e) => setForm({...form, responsible: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
                 <option value="">{t('literals.Sin asignar')}</option>
                 {users.map(u => (

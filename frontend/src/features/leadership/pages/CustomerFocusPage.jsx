@@ -134,8 +134,8 @@ const CustomerFocusPage = () => {
     <div className="space-y-6" style={{ fontFamily: '"Sora", "Work Sans", sans-serif' }}>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-white">Enfoque al cliente</h1>
-          <p className="text-sm text-slate-400">Evidencias y acciones enfocadas en el cliente.</p>
+          <h1 className="text-2xl font-semibold text-white">{t('literals.Enfoque al cliente')}</h1>
+          <p className="text-sm text-slate-400">{t('literals.Evidencias y acciones enfocadas en el cliente.')}</p>
         </div>
         <button
           type="button"
@@ -155,16 +155,16 @@ const CustomerFocusPage = () => {
       <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
         <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-4">
           {loading ? (
-            <div className="py-10 text-center text-slate-400">Cargando evidencias...</div>
+            <div className="py-10 text-center text-slate-400">{t('literals.Cargando evidencias...')}</div>
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full text-left text-sm text-slate-200">
                 <thead className="text-xs uppercase text-slate-400">
                   <tr>
-                    <th className="px-3 py-2">Título</th>
-                    <th className="px-3 py-2">Tipo</th>
+                    <th className="px-3 py-2">{t('literals.Título')}</th>
+                    <th className="px-3 py-2">{t('literals.Tipo')}</th>
                     <th className="px-3 py-2">{t('common.forms.date')}</th>
-                    <th className="px-3 py-2 text-right">Acciones</th>
+                    <th className="px-3 py-2 text-right">{t('literals.Acciones')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-800">
@@ -204,7 +204,7 @@ const CustomerFocusPage = () => {
             <h2 className="text-lg font-semibold text-white">
               {editingId ? 'Editar evidencia' : 'Nueva evidencia'}
             </h2>
-            <p className="text-xs text-slate-400">Organizacion: {orgName || 'Sin seleccionar'}</p>
+            <p className="text-xs text-slate-400">{t('literals.Organizacion: {orgName || \'Sin seleccionar\'}')}</p>
           </div>
 
           <div className="grid gap-3">

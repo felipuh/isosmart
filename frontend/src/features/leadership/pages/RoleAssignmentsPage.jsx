@@ -135,8 +135,8 @@ const RoleAssignmentsPage = () => {
     <div className="space-y-6" style={{ fontFamily: '"Sora", "Work Sans", sans-serif' }}>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-white">Asignaciones de rol</h1>
-          <p className="text-sm text-slate-400">Vincula usuarios con roles del SGC.</p>
+          <h1 className="text-2xl font-semibold text-white">{t('literals.Asignaciones de rol')}</h1>
+          <p className="text-sm text-slate-400">{t('literals.Vincula usuarios con roles del SGC.')}</p>
         </div>
         <button
           type="button"
@@ -162,17 +162,17 @@ const RoleAssignmentsPage = () => {
       <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
         <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-4">
           {loading ? (
-            <div className="py-10 text-center text-slate-400">Cargando asignaciónes...</div>
+            <div className="py-10 text-center text-slate-400">{t('literals.Cargando asignaciónes...')}</div>
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full text-left text-sm text-slate-200">
                 <thead className="text-xs uppercase text-slate-400">
                   <tr>
-                    <th className="px-3 py-2">Rol</th>
+                    <th className="px-3 py-2">{t('literals.Rol')}</th>
                     <th className="px-3 py-2">{t('literals.Usuario')}</th>
-                    <th className="px-3 py-2">Inicio</th>
-                    <th className="px-3 py-2">Tipo</th>
-                    <th className="px-3 py-2 text-right">Acciones</th>
+                    <th className="px-3 py-2">{t('literals.Inicio')}</th>
+                    <th className="px-3 py-2">{t('literals.Tipo')}</th>
+                    <th className="px-3 py-2 text-right">{t('literals.Acciones')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-800">
@@ -213,7 +213,7 @@ const RoleAssignmentsPage = () => {
             <h2 className="text-lg font-semibold text-white">
               {editingId ? 'Editar asignación' : 'Nueva asignación'}
             </h2>
-            <p className="text-xs text-slate-400">Organizacion activa: {currentOrganization?.name || 'Sin seleccionar'}</p>
+            <p className="text-xs text-slate-400">{t('literals.Organizacion activa: {currentOrganization?.name || \'Sin seleccionar\'}')}</p>
           </div>
 
           <div className="grid gap-3">

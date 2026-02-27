@@ -21,10 +21,10 @@ const ProcessRecommendations = ({ recommendations, loading }) => {
   if (!recommendations || recommendations.length === 0) {
     return (
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
-        <h3 className="text-xl font-semibold mb-4 dark:text-white">Recomendaciones</h3>
+        <h3 className="text-xl font-semibold mb-4 dark:text-white">{t('literals.Recomendaciones')}</h3>
         <div className="flex items-center justify-center py-8 text-green-600 dark:text-green-400">
           <CheckCircle2 className="h-12 w-12 mr-3" />
-          <p className="text-lg">Todo está en orden. No hay recomendaciones pendientes.</p>
+          <p className="text-lg">{t('literals.Todo está en orden. No hay recomendaciones pendientes.')}</p>
         </div>
       </div>
     );
@@ -56,7 +56,7 @@ const ProcessRecommendations = ({ recommendations, loading }) => {
     <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
       <div className="flex items-center mb-4">
         <Lightbulb className="h-6 w-6 text-yellow-500 mr-2" />
-        <h3 className="text-xl font-semibold dark:text-white">Recomendaciones del Sistema</h3>
+        <h3 className="text-xl font-semibold dark:text-white">{t('literals.Recomendaciones del Sistema')}</h3>
       </div>
 
       <div className="space-y-3">

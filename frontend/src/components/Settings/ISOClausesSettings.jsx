@@ -186,15 +186,15 @@ const ISOClausesSettings = () => {
           <div className="mb-8 grid grid-cols-3 gap-4">
             <div className="p-4 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border border-blue-100 dark:border-blue-800/50">
               <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{clauses.length}</p>
-              <p className="text-sm text-blue-600/70 dark:text-blue-400/70">Total Cláusulas</p>
+              <p className="text-sm text-blue-600/70 dark:text-blue-400/70">{t('literals.Total Cláusulas')}</p>
             </div>
             <div className="p-4 bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 rounded-xl border border-emerald-100 dark:border-emerald-800/50">
               <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{applicableCount}</p>
-              <p className="text-sm text-emerald-600/70 dark:text-emerald-400/70">Aplicables</p>
+              <p className="text-sm text-emerald-600/70 dark:text-emerald-400/70">{t('literals.Aplicables')}</p>
             </div>
             <div className="p-4 bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-xl border border-amber-100 dark:border-amber-800/50">
               <p className="text-2xl font-bold text-amber-600 dark:text-amber-400">{excludedCount}</p>
-              <p className="text-sm text-amber-600/70 dark:text-amber-400/70">Excluidas</p>
+              <p className="text-sm text-amber-600/70 dark:text-amber-400/70">{t('literals.Excluidas')}</p>
             </div>
           </div>
 
@@ -274,7 +274,7 @@ const ISOClausesSettings = () => {
       <div className="mt-8 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl flex items-start gap-3">
         <Info className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
         <div className="text-sm text-blue-700 dark:text-blue-300">
-          <p className="font-medium mb-1">Sobre las exclusiones</p>
+          <p className="font-medium mb-1">{t('literals.Sobre las exclusiones')}</p>
           <p>
             Según ISO 9001:2015, solo es posible excluir requisitos que no afecten la capacidad 
             o responsabilidad de la organización de asegurar la conformidad de sus productos y servicios. 
@@ -321,7 +321,7 @@ const ClauseRow = ({ clause, isEditing, onEdit, onSave, onCancel }) => {
                 onChange={(e) => setFormData(prev => ({ ...prev, is_applicable: e.target.checked }))}
                 className="w-5 h-5 rounded border-slate-300 text-teal-500 focus:ring-teal-500"
               />
-              <span className="text-sm text-slate-700 dark:text-slate-300">Aplicable</span>
+              <span className="text-sm text-slate-700 dark:text-slate-300">{t('literals.Aplicable')}</span>
             </label>
           </div>
           

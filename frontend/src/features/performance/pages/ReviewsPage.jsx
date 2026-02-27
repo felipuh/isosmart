@@ -132,7 +132,7 @@ const ReviewsPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">Revision por la Direccion</h1>
+        <h1 className="text-3xl font-bold text-white">{t('literals.Revision por la Direccion')}</h1>
         <button
           type="button"
           onClick={openForm}
@@ -146,11 +146,11 @@ const ReviewsPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Codigo</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Título</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Programada</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Codigo')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Título')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Programada')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.status')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Acciones</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acciones')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -168,7 +168,7 @@ const ReviewsPage = () => {
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">No hay revisiones</div>}
+        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('literals.No hay revisiones')}</div>}
       </div>
 
       <Modal
@@ -179,7 +179,7 @@ const ReviewsPage = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Codigo de Revision *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Codigo de Revision *')}</label>
               <input
                 type="text"
                 value={form.review_code}
@@ -189,7 +189,7 @@ const ReviewsPage = () => {
               />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Título *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Título *')}</label>
               <input
                 type="text"
                 value={form.title}
@@ -199,7 +199,7 @@ const ReviewsPage = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Fecha Programada *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Fecha Programada *')}</label>
               <input
                 type="date"
                 value={form.scheduled_date}
@@ -221,7 +221,7 @@ const ReviewsPage = () => {
               </select>
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Resultados de Desempeno *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Resultados de Desempeno *')}</label>
               <textarea
                 value={form.performance_results}
                 onChange={(event) => setForm({ ...form, performance_results: event.target.value })}
@@ -231,7 +231,7 @@ const ReviewsPage = () => {
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Retroalimentacion del Cliente</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Retroalimentacion del Cliente')}</label>
               <textarea
                 value={form.customer_feedback}
                 onChange={(event) => setForm({ ...form, customer_feedback: event.target.value })}

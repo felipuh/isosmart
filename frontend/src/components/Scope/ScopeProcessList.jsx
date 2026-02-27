@@ -61,7 +61,7 @@ const ScopeProcessList = ({ processes, locations, loading, onAddProcess, onEditP
       {/* Procesos */}
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 transition-colors">
         <div className="p-4 border-b dark:border-slate-700 flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-slate-800 dark:text-white">Procesos en Alcance</h3>
+          <h3 className="text-lg font-semibold text-slate-800 dark:text-white">{t('literals.Procesos en Alcance')}</h3>
           <button
             onClick={onAddProcess}
             className="flex items-center px-3 py-1.5 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
@@ -90,10 +90,10 @@ const ScopeProcessList = ({ processes, locations, loading, onAddProcess, onEditP
                           </span>
                         </p>
                         {process.owner && (
-                          <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">Responsable: {process.owner}</p>
+                          <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">{t('literals.Responsable: {process.owner}')}</p>
                         )}
                         {!process.is_included && (
-                          <p className="text-xs text-red-600 dark:text-red-400 mt-1">Excluido: {process.exclusion_reason}</p>
+                          <p className="text-xs text-red-600 dark:text-red-400 mt-1">{t('literals.Excluido: {process.exclusion_reason}')}</p>
                         )}
                       </div>
                     </div>
@@ -118,7 +118,7 @@ const ScopeProcessList = ({ processes, locations, loading, onAddProcess, onEditP
           ) : (
             <div className="text-center py-8 text-slate-500 dark:text-slate-400">
               <Settings className="h-12 w-12 mx-auto mb-3 text-slate-300 dark:text-slate-600" />
-              <p>No hay procesos definidos</p>
+              <p>{t('literals.No hay procesos definidos')}</p>
               <button
                 onClick={onAddProcess}
                 className="mt-2 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-sm transition-colors"
@@ -133,7 +133,7 @@ const ScopeProcessList = ({ processes, locations, loading, onAddProcess, onEditP
       {/* Ubicaciones */}
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 transition-colors">
         <div className="p-4 border-b dark:border-slate-700 flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-slate-800 dark:text-white">Ubicaciones en Alcance</h3>
+          <h3 className="text-lg font-semibold text-slate-800 dark:text-white">{t('literals.Ubicaciones en Alcance')}</h3>
           <button
             onClick={onAddLocation}
             className="flex items-center px-3 py-1.5 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 transition-colors"
@@ -184,7 +184,7 @@ const ScopeProcessList = ({ processes, locations, loading, onAddProcess, onEditP
           ) : (
             <div className="text-center py-8 text-slate-500 dark:text-slate-400">
               <Truck className="h-12 w-12 mx-auto mb-3 text-slate-300 dark:text-slate-600" />
-              <p>No hay ubicaciones definidas</p>
+              <p>{t('literals.No hay ubicaciones definidas')}</p>
               <button
                 onClick={onAddLocation}
                 className="mt-2 text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300 text-sm transition-colors"

@@ -233,7 +233,7 @@ const ScopeDashboard = () => {
         <div className="bg-white/70 dark:bg-slate-800/70 backdrop-blur-md dark:backdrop-blur-md rounded-lg shadow dark:shadow-slate-900/50 border border-white/20 dark:border-slate-700/50 p-6 transition-all duration-300 hover:shadow-md dark:hover:shadow-slate-900/70">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-slate-600 dark:text-slate-400">Alcances Definidos</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400">{t('literals.Alcances Definidos')}</p>
               <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">
                 {stats?.total_definitions || 0}
               </p>
@@ -245,7 +245,7 @@ const ScopeDashboard = () => {
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-slate-600 dark:text-slate-400">Procesos</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400">{t('literals.Procesos')}</p>
               <p className="text-3xl font-bold text-green-600">
                 {processes.length}
               </p>
@@ -257,7 +257,7 @@ const ScopeDashboard = () => {
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-slate-600 dark:text-slate-400">Ubicaciones</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400">{t('literals.Ubicaciones')}</p>
               <p className="text-3xl font-bold text-orange-600">
                 {locations.length}
               </p>
@@ -269,7 +269,7 @@ const ScopeDashboard = () => {
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-slate-600 dark:text-slate-400">Cobertura</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400">{t('literals.Cobertura')}</p>
               <p className="text-3xl font-bold text-purple-600">
                 {scopeData?.coverage_percentage?.toFixed(0) || 0}%
               </p>
@@ -316,7 +316,7 @@ const ScopeDashboard = () => {
       {/* Configuration Panel */}
       {showConfig && (
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 mb-6 transition-colors">
-          <h3 className="text-lg font-semibold mb-4 dark:text-white">Configuración del Análisis</h3>
+          <h3 className="text-lg font-semibold mb-4 dark:text-white">{t('literals.Configuración del Análisis')}</h3>
           
           <div className="mb-4">
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">

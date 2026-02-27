@@ -107,7 +107,7 @@ const VirtualAssistantPanel = () => {
         <div className="fixed bottom-20 right-6 z-50 w-[360px] max-w-[calc(100vw-2rem)] bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl overflow-hidden">
           <div className="px-4 py-3 bg-indigo-600 text-white flex items-center gap-2">
             <Bot className="w-4 h-4" />
-            <p className="font-medium text-sm">Asistente Virtual ISO Smart (MVP)</p>
+            <p className="font-medium text-sm">{t('literals.Asistente Virtual ISO Smart (MVP)')}</p>
           </div>
 
           <div className="p-4 h-72 overflow-y-auto space-y-3 bg-slate-50 dark:bg-slate-900">

@@ -145,7 +145,7 @@ const RiskForm = ({ risk, onSubmit, onCancel }) => {
 
             <div className="bg-gray-50/70 dark:bg-slate-700/70 backdrop-blur-md rounded-lg p-4 border border-gray-100/50 dark:border-slate-600/50 transition-all duration-300">
               <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Nivel de Riesgo Calculado:</span>
+                <span className="text-sm font-medium text-slate-700 dark:text-slate-300">{t('literals.Nivel de Riesgo Calculado:')}</span>
                 <span className={`px-4 py-2 text-sm font-bold rounded-lg border ${getLevelColor(formData.risk_level)}`}>
                   {formData.risk_level?.toUpperCase()}
                 </span>
@@ -153,7 +153,7 @@ const RiskForm = ({ risk, onSubmit, onCancel }) => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 transition-colors">Descripción del Riesgo <span className="text-red-500">*</span></label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 transition-colors">{t('literals.Descripción del Riesgo')} <span className="text-red-500">*</span></label>
               <textarea name="risk_description" value={formData.risk_description} onChange={handleChange} rows={3}
                 className={`w-full border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white dark:border-slate-600 transition-colors ${errors.risk_description ? 'border-red-300' : 'border-gray-300'}`}
                 placeholder="Describa el riesgo identificado..." />
@@ -162,7 +162,7 @@ const RiskForm = ({ risk, onSubmit, onCancel }) => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 transition-colors">Categoría <span className="text-red-500">*</span></label>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 transition-colors">{t('literals.Categoría')} <span className="text-red-500">*</span></label>
                 <select name="risk_category" value={formData.risk_category} onChange={handleChange}
                   className={`w-full border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white dark:border-slate-600 transition-colors ${errors.risk_category ? 'border-red-300' : 'border-gray-300'}`}>
                   <option value="">{t('literals.Seleccionar categoría...')}</option>
@@ -171,22 +171,22 @@ const RiskForm = ({ risk, onSubmit, onCancel }) => {
                 {errors.risk_category && <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.risk_category}</p>}
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 transition-colors">Cláusula ISO</label>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 transition-colors">{t('literals.Cláusula ISO')}</label>
                 <select name="iso_clause" value={formData.iso_clause} onChange={handleChange} className="w-full border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 transition-colors">
-                  {isoClauseOptions.map(clause => <option key={clause} value={clause}>ISO 9001 - {clause}</option>)}
+                  {isoClauseOptions.map(clause => <option key={clause} value={clause}>{t('literals.ISO 9001 - {clause}')}</option>)}
                 </select>
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 transition-colors">Probabilidad</label>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 transition-colors">{t('literals.Probabilidad')}</label>
                 <select name="probability" value={formData.probability} onChange={handleChange} className="w-full border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 transition-colors">
                   {probabilityOptions.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 transition-colors">Impacto</label>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 transition-colors">{t('literals.Impacto')}</label>
                 <select name="impact" value={formData.impact} onChange={handleChange} className="w-full border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 transition-colors">
                   {impactOptions.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
                 </select>
@@ -195,7 +195,7 @@ const RiskForm = ({ risk, onSubmit, onCancel }) => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 transition-colors">Responsable <span className="text-red-500">*</span></label>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 transition-colors">{t('literals.Responsable')} <span className="text-red-500">*</span></label>
                 <input type="text" name="responsible" value={formData.responsible} onChange={handleChange}
                   className={`w-full border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white dark:border-slate-600 transition-colors ${errors.responsible ? 'border-red-300' : 'border-gray-300'}`}
                   placeholder="Nombre del responsable" />
@@ -211,17 +211,17 @@ const RiskForm = ({ risk, onSubmit, onCancel }) => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 transition-colors">Fecha Límite</label>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 transition-colors">{t('literals.Fecha Límite')}</label>
                 <input type="date" name="deadline" value={formData.deadline} onChange={handleChange} className="w-full border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 transition-colors" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 transition-colors">ID de Proceso (opcional)</label>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 transition-colors">{t('literals.ID de Proceso (opcional)')}</label>
                 <input type="text" name="process_id" value={formData.process_id} onChange={handleChange} className="w-full border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 transition-colors" placeholder="Ej: PROC-001" />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 transition-colors">Acciones de Mitigación <span className="text-red-500">*</span></label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 transition-colors">{t('literals.Acciones de Mitigación')} <span className="text-red-500">*</span></label>
               <textarea name="mitigation_actions" value={formData.mitigation_actions} onChange={handleChange} rows={4}
                 className={`w-full border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white dark:border-slate-600 transition-colors ${errors.mitigation_actions ? 'border-red-300' : 'border-gray-300'}`}
                 placeholder="Describa las acciones para mitigar o controlar este riesgo..." />

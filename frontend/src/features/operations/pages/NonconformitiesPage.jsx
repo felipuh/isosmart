@@ -179,7 +179,7 @@ const NonconformitiesPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">No Conformidades</h1>
+        <h1 className="text-3xl font-bold text-white">{t('literals.No Conformidades')}</h1>
         <button
           type="button"
           onClick={openForm}
@@ -193,12 +193,12 @@ const NonconformitiesPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Número</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Título</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Tipo</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Severidad</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Número')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Título')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Tipo')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Severidad')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.status')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Acciones</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acciones')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -225,7 +225,7 @@ const NonconformitiesPage = () => {
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">No hay no conformidades</div>}
+        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('literals.No hay no conformidades')}</div>}
       </div>
 
       <Modal
@@ -236,11 +236,11 @@ const NonconformitiesPage = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Número NC *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Número NC *')}</label>
               <input type="text" value={form.nc_number} onChange={(e) => setForm({...form, nc_number: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Tipo</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Tipo')}</label>
               <select value={form.nc_type} onChange={(e) => setForm({...form, nc_type: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
                 <option value="product">{t('literals.Producto')}</option>
                 <option value="service">{t('literals.Servicio')}</option>
@@ -249,7 +249,7 @@ const NonconformitiesPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Severidad</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Severidad')}</label>
               <select value={form.severity} onChange={(e) => setForm({...form, severity: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
                 <option value="minor">{t('literals.Menor')}</option>
                 <option value="major">{t('literals.Mayor')}</option>
@@ -257,15 +257,15 @@ const NonconformitiesPage = () => {
               </select>
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Título *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Título *')}</label>
               <input type="text" value={form.title} onChange={(e) => setForm({...form, title: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Fecha Detección *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Fecha Detección *')}</label>
               <input type="date" value={form.detection_date} onChange={(e) => setForm({...form, detection_date: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Etapa de Detección</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Etapa de Detección')}</label>
               <select value={form.detection_stage} onChange={(e) => setForm({...form, detection_stage: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
                 <option value="production">{t('literals.Durante Producción')}</option>
                 <option value="pre_delivery">{t('literals.Antes de Entrega')}</option>
@@ -274,7 +274,7 @@ const NonconformitiesPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Detectado por</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Detectado por')}</label>
               <select value={form.detected_by} onChange={(e) => setForm({...form, detected_by: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
                 <option value="">{t('literals.Sin asignar')}</option>
                 {users.map(u => (
@@ -283,43 +283,43 @@ const NonconformitiesPage = () => {
               </select>
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Producto/Servicio Afectado *</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Producto/Servicio Afectado *')}</label>
               <input type="text" value={form.affected_product_service} onChange={(e) => setForm({...form, affected_product_service: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Lote/Batch</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Lote/Batch')}</label>
               <input type="text" value={form.batch_lot_number} onChange={(e) => setForm({...form, batch_lot_number: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Cantidad Afectada</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Cantidad Afectada')}</label>
               <input type="number" value={form.quantity_affected} onChange={(e) => setForm({...form, quantity_affected: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
             </div>
             <div className="flex items-center">
               <label className="flex items-center space-x-2">
                 <input type="checkbox" checked={form.affects_customer} onChange={(e) => setForm({...form, affects_customer: e.target.checked})} className="rounded" />
-                <span className="text-sm text-gray-300">Afecta al Cliente</span>
+                <span className="text-sm text-gray-300">{t('literals.Afecta al Cliente')}</span>
               </label>
             </div>
             {form.affects_customer && (
               <>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Cliente</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Cliente')}</label>
                   <input type="text" value={form.customer_name} onChange={(e) => setForm({...form, customer_name: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
                 </div>
                 <div className="flex items-center">
                   <label className="flex items-center space-x-2">
                     <input type="checkbox" checked={form.customer_notified} onChange={(e) => setForm({...form, customer_notified: e.target.checked})} className="rounded" />
-                    <span className="text-sm text-gray-300">Cliente Notificado</span>
+                    <span className="text-sm text-gray-300">{t('literals.Cliente Notificado')}</span>
                   </label>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Fecha de Notificación</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Fecha de Notificación')}</label>
                   <input type="date" value={form.notification_date} onChange={(e) => setForm({...form, notification_date: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
                 </div>
               </>
             )}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Responsable</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Responsable')}</label>
               <select value={form.responsible} onChange={(e) => setForm({...form, responsible: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
                 <option value="">{t('literals.Sin asignar')}</option>
                 {users.map(u => (

@@ -159,10 +159,10 @@ const ProcessForm = ({ process, mapId, onSave, onClose }) => {
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
           {/* Información Básica */}
           <div className="bg-gray-50/70 dark:bg-slate-700/70 backdrop-blur-md rounded-lg p-4 border border-gray-100/50 dark:border-slate-600/50 transition-all duration-300">
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Información del Proceso</h3>
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">{t('literals.Información del Proceso')}</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1 transition-colors">Código *</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1 transition-colors">{t('literals.Código *')}</label>
                 <input
                   type="text"
                   name="code"
@@ -175,7 +175,7 @@ const ProcessForm = ({ process, mapId, onSave, onClose }) => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1 transition-colors">Tipo *</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1 transition-colors">{t('literals.Tipo *')}</label>
                 <select
                   name="process_type"
                   value={formData.process_type}
@@ -189,7 +189,7 @@ const ProcessForm = ({ process, mapId, onSave, onClose }) => {
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1 transition-colors">Nombre *</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1 transition-colors">{t('literals.Nombre *')}</label>
                 <input
                   type="text"
                   name="name"
@@ -202,7 +202,7 @@ const ProcessForm = ({ process, mapId, onSave, onClose }) => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1 transition-colors">Responsable *</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1 transition-colors">{t('literals.Responsable *')}</label>
                 <input
                   type="text"
                   name="owner"
@@ -215,7 +215,7 @@ const ProcessForm = ({ process, mapId, onSave, onClose }) => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1 transition-colors">Documentado en</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1 transition-colors">{t('literals.Documentado en')}</label>
                 <input
                   type="text"
                   name="documented_in"
@@ -227,7 +227,7 @@ const ProcessForm = ({ process, mapId, onSave, onClose }) => {
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1 transition-colors">Objetivo</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1 transition-colors">{t('literals.Objetivo')}</label>
                 <textarea
                   name="objective"
                   value={formData.objective}
@@ -273,7 +273,7 @@ const ProcessForm = ({ process, mapId, onSave, onClose }) => {
               onChange={handleChange}
               className="h-4 w-4 text-blue-600 border-gray-300 dark:border-slate-600 dark:bg-slate-700 rounded transition-colors"
             />
-            <label className="ml-2 text-sm text-gray-700 dark:text-slate-300 transition-colors">Proceso Activo</label>
+            <label className="ml-2 text-sm text-gray-700 dark:text-slate-300 transition-colors">{t('literals.Proceso Activo')}</label>
           </div>
 
           {/* Botones */}
