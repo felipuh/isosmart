@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import { useI18n } from '../../../context/I18nContext';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -6,9 +6,6 @@ import Modal from '../../../components/Common/Modal';
 import { getContinualImprovements, createContinualImprovement, updateContinualImprovement, deleteContinualImprovement } from '../api/improvementApi';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
-const improvementTypeLabels = { process: 'Mejora de proceso', product: 'Mejora de producto', service: 'Mejora de servicio', system: 'Mejora del SGC', technology: 'Mejora tecnológica', methodology: 'Mejora metodológica' };
-const priorityLabels = { critical: 'Crítica', high: 'Alta', medium: 'Media', low: 'Baja' };
-const statusLabels = { proposed: 'Propuesta', under_evaluation: 'En evaluación', approved: 'Aprobada', in_progress: 'En progreso', implemented: 'Implementada', measuring_results: 'Midiendo resultados', successful: 'Exitosa', unsuccessful: 'No exitosa', cancelled: 'Cancelada' };
 const statusColors = { proposed: 'bg-gray-500/20 text-gray-400', under_evaluation: 'bg-blue-500/20 text-blue-400', approved: 'bg-cyan-500/20 text-cyan-400', in_progress: 'bg-orange-500/20 text-orange-400', implemented: 'bg-purple-500/20 text-purple-400', measuring_results: 'bg-yellow-500/20 text-yellow-400', successful: 'bg-green-500/20 text-green-400', unsuccessful: 'bg-red-500/20 text-red-400', cancelled: 'bg-gray-500/20 text-gray-400' };
 const priorityColors = { critical: 'bg-red-500/20 text-red-400', high: 'bg-orange-500/20 text-orange-400', medium: 'bg-yellow-500/20 text-yellow-400', low: 'bg-green-500/20 text-green-400' };
 
@@ -28,6 +25,34 @@ const ImprovementContinualPage = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [showForm, setShowForm] = useState(false);
+
+  const improvementTypeLabels = useMemo(() => ({
+    process: t('modules.improvement.continualPage.types.process'),
+    product: t('modules.improvement.continualPage.types.product'),
+    service: t('modules.improvement.continualPage.types.service'),
+    system: t('modules.improvement.continualPage.types.system'),
+    technology: t('modules.improvement.continualPage.types.technology'),
+    methodology: t('modules.improvement.continualPage.types.methodology'),
+  }), [t]);
+
+  const priorityLabels = useMemo(() => ({
+    critical: t('modules.improvement.continualPage.priorities.critical'),
+    high: t('modules.improvement.continualPage.priorities.high'),
+    medium: t('modules.improvement.continualPage.priorities.medium'),
+    low: t('modules.improvement.continualPage.priorities.low'),
+  }), [t]);
+
+  const statusLabels = useMemo(() => ({
+    proposed: t('modules.improvement.continualPage.statuses.proposed'),
+    under_evaluation: t('modules.improvement.continualPage.statuses.underEvaluation'),
+    approved: t('modules.improvement.continualPage.statuses.approved'),
+    in_progress: t('modules.improvement.continualPage.statuses.inProgress'),
+    implemented: t('modules.improvement.continualPage.statuses.implemented'),
+    measuring_results: t('modules.improvement.continualPage.statuses.measuringResults'),
+    successful: t('modules.improvement.continualPage.statuses.successful'),
+    unsuccessful: t('modules.improvement.continualPage.statuses.unsuccessful'),
+    cancelled: t('modules.improvement.continualPage.statuses.cancelled'),
+  }), [t]);
 
   const loadData = useCallback(async () => {
     try { setLoading(true); const data = await getContinualImprovements({ organization_id: orgId }); setItems(normalizeList(data)); }
@@ -53,7 +78,7 @@ const ImprovementContinualPage = () => {
     setEditingId(item.id); setShowForm(true);
   };
 
-  const handleDelete = async (id) => { if (!confirm('¿Eliminar esta iniciativa de mejora?')) return; try { await deleteContinualImprovement(id); await loadData(); } catch (error) { console.error('Error:', error); } };
+  const handleDelete = async (id) => { if (!confirm(t('modules.improvement.continualPage.deleteConfirm'))) return; try { await deleteContinualImprovement(id); await loadData(); } catch (error) { console.error('Error:', error); } };
   const resetForm = () => { setForm(initialForm); setEditingId(null); };
   const openForm = () => { resetForm(); setShowForm(true); };
   const closeForm = () => { resetForm(); setShowForm(false); if (location.pathname.endsWith('/new')) navigate(location.pathname.replace(/\/new$/, ''), { replace: true }); };
@@ -63,53 +88,53 @@ const ImprovementContinualPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <div><h1 className="text-3xl font-bold text-white">{t('literals.Mejora Continua')}</h1><p className="text-gray-400 mt-1">ISO 9001:2015 - Cláusula 10.3</p></div>
-        <button type="button" onClick={openForm} className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">{t('literals.Nueva iniciativa')}</button>
+        <div><h1 className="text-3xl font-bold text-white">{t('modules.improvement.continualPage.title')}</h1><p className="text-gray-400 mt-1">{t('modules.improvement.continualPage.isoClause')}</p></div>
+        <button type="button" onClick={openForm} className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">{t('modules.improvement.continualPage.new')}</button>
       </div>
 
       <Modal
-        title={editingId ? 'Editar iniciativa de mejora' : 'Nueva iniciativa de mejora'}
+        title={editingId ? t('modules.improvement.continualPage.edit') : t('modules.improvement.continualPage.newDetailed')}
         isOpen={showForm}
         onClose={closeForm}
         maxWidth="max-w-6xl"
       >
         <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-3">
-              <label className="text-xs text-slate-400">{t('literals.Número *')}<input type="text" required value={form.initiative_number} onChange={e => setForm({ ...form, initiative_number: e.target.value })} placeholder="MI-2026-001" className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
-              <label className="text-xs text-slate-400">{t('literals.Título *')}<input type="text" required value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
-              <label className="text-xs text-slate-400">{t('literals.Fecha propuesta *')}<input type="date" required value={form.proposed_date} onChange={e => setForm({ ...form, proposed_date: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
+              <label className="text-xs text-slate-400">{t('modules.improvement.continualPage.fields.number')}<input type="text" required value={form.initiative_number} onChange={e => setForm({ ...form, initiative_number: e.target.value })} placeholder="MI-2026-001" className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
+              <label className="text-xs text-slate-400">{t('modules.improvement.continualPage.fields.title')}<input type="text" required value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
+              <label className="text-xs text-slate-400">{t('modules.improvement.continualPage.fields.proposedDate')}<input type="date" required value={form.proposed_date} onChange={e => setForm({ ...form, proposed_date: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
             </div>
-            <label className="text-xs text-slate-400 block">{t('literals.Descripción *')}<textarea required value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} className="mt-1 h-20 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
+            <label className="text-xs text-slate-400 block">{t('modules.improvement.continualPage.fields.description')}<textarea required value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} className="mt-1 h-20 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
             <div className="grid gap-4 sm:grid-cols-3">
-              <label className="text-xs text-slate-400">Tipo
+              <label className="text-xs text-slate-400">{t('modules.improvement.continualPage.fields.type')}
                 <select value={form.improvement_type} onChange={e => setForm({ ...form, improvement_type: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100">
                   {Object.entries(improvementTypeLabels).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
                 </select>
               </label>
-              <label className="text-xs text-slate-400">Prioridad
+              <label className="text-xs text-slate-400">{t('modules.improvement.continualPage.fields.priority')}
                 <select value={form.priority} onChange={e => setForm({ ...form, priority: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100">
                   {Object.entries(priorityLabels).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
                 </select>
               </label>
-              <label className="text-xs text-slate-400">Estado
+              <label className="text-xs text-slate-400">{t('common.forms.status')}
                 <select value={form.status} onChange={e => setForm({ ...form, status: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100">
                   {Object.entries(statusLabels).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
                 </select>
               </label>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
-              <label className="text-xs text-slate-400">{t('literals.Situación actual *')}<textarea required value={form.current_situation} onChange={e => setForm({ ...form, current_situation: e.target.value })} className="mt-1 h-20 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
-              <label className="text-xs text-slate-400">{t('literals.Mejora propuesta *')}<textarea required value={form.proposed_improvement} onChange={e => setForm({ ...form, proposed_improvement: e.target.value })} className="mt-1 h-20 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
+              <label className="text-xs text-slate-400">{t('modules.improvement.continualPage.fields.currentSituation')}<textarea required value={form.current_situation} onChange={e => setForm({ ...form, current_situation: e.target.value })} className="mt-1 h-20 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
+              <label className="text-xs text-slate-400">{t('modules.improvement.continualPage.fields.proposedImprovement')}<textarea required value={form.proposed_improvement} onChange={e => setForm({ ...form, proposed_improvement: e.target.value })} className="mt-1 h-20 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
-              <label className="text-xs text-slate-400">{t('literals.Beneficios esperados *')}<textarea required value={form.expected_benefits} onChange={e => setForm({ ...form, expected_benefits: e.target.value })} className="mt-1 h-16 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
-              <label className="text-xs text-slate-400">{t('literals.Alineación con objetivos')}<textarea value={form.alignment_with_objectives} onChange={e => setForm({ ...form, alignment_with_objectives: e.target.value })} className="mt-1 h-16 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
+              <label className="text-xs text-slate-400">{t('modules.improvement.continualPage.fields.expectedBenefits')}<textarea required value={form.expected_benefits} onChange={e => setForm({ ...form, expected_benefits: e.target.value })} className="mt-1 h-16 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
+              <label className="text-xs text-slate-400">{t('modules.improvement.continualPage.fields.alignmentWithObjectives')}<textarea value={form.alignment_with_objectives} onChange={e => setForm({ ...form, alignment_with_objectives: e.target.value })} className="mt-1 h-16 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
             </div>
             <div className="grid gap-4 sm:grid-cols-4">
-              <label className="text-xs text-slate-400">{t('literals.Inversión ($)')}<input type="number" step="0.01" value={form.estimated_investment} onChange={e => setForm({ ...form, estimated_investment: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
-              <label className="text-xs text-slate-400">{t('literals.Ahorro ($)')}<input type="number" step="0.01" value={form.estimated_savings} onChange={e => setForm({ ...form, estimated_savings: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
-              <label className="text-xs text-slate-400">{t('literals.ROI (%)')}<input type="number" step="0.01" value={form.expected_roi} onChange={e => setForm({ ...form, expected_roi: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
-              <label className="text-xs text-slate-400">{t('literals.% Completado')}<input type="number" min="0" max="100" value={form.completion_percentage} onChange={e => setForm({ ...form, completion_percentage: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
+              <label className="text-xs text-slate-400">{t('modules.improvement.continualPage.fields.estimatedInvestment')}<input type="number" step="0.01" value={form.estimated_investment} onChange={e => setForm({ ...form, estimated_investment: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
+              <label className="text-xs text-slate-400">{t('modules.improvement.continualPage.fields.estimatedSavings')}<input type="number" step="0.01" value={form.estimated_savings} onChange={e => setForm({ ...form, estimated_savings: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
+              <label className="text-xs text-slate-400">{t('modules.improvement.continualPage.fields.expectedRoi')}<input type="number" step="0.01" value={form.expected_roi} onChange={e => setForm({ ...form, expected_roi: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
+              <label className="text-xs text-slate-400">{t('modules.improvement.continualPage.fields.completionPercentage')}<input type="number" min="0" max="100" value={form.completion_percentage} onChange={e => setForm({ ...form, completion_percentage: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
             </div>
             <div className="flex flex-wrap gap-2">
               <button type="submit" disabled={saving || !orgId} className="rounded-lg bg-emerald-500/80 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-500 disabled:opacity-50">{saving ? t('common.messages.saving') : editingId ? t('common.buttons.update') : t('common.buttons.create')}</button>
@@ -122,18 +147,18 @@ const ImprovementContinualPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Iniciativa #')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Título')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Tipo')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Prioridad')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Progreso')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.improvement.continualPage.table.code')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.name')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.improvement.continualPage.table.type')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.improvement.continualPage.table.priority')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.improvement.continualPage.table.progress')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.status')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acciones')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.improvement.continualPage.table.actions')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700/30">
             {items.length === 0 ? (
-              <tr><td colSpan={7} className="px-6 py-8 text-center text-gray-400">{t('literals.No hay iniciativas de mejora registradas')}</td></tr>
+              <tr><td colSpan={7} className="px-6 py-8 text-center text-gray-400">{t('modules.improvement.continualPage.empty')}</td></tr>
             ) : items.map(item => (
               <tr key={item.id} className="hover:bg-gray-800/30">
                 <td className="px-6 py-4 text-sm font-mono text-blue-400">{item.initiative_number}</td>

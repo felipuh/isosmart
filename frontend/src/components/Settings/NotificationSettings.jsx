@@ -114,7 +114,7 @@ const NotificationSettings = ({ settings, onUpdate, organizationId }) => {
       {success && (
         <div className="mb-6 p-4 bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800 rounded-xl flex items-center gap-3">
           <Check className="w-5 h-5 text-emerald-500" />
-          <span className="text-emerald-700 dark:text-emerald-300">{t('literals.Configuración guardada correctamente')}</span>
+          <span className="text-emerald-700 dark:text-emerald-300">{t('common.messages.success')}</span>
         </div>
       )}
 
@@ -235,7 +235,7 @@ const NotificationSettings = ({ settings, onUpdate, organizationId }) => {
       <div className="mb-8 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl flex items-start gap-3">
         <Info className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
         <div className="text-sm text-blue-700 dark:text-blue-300">
-          <p className="font-medium mb-1">{t('literals.¿Cómo funcionan las notificaciones?')}</p>
+          <p className="font-medium mb-1">{t('settings.notifications.howItWorks')}</p>
           <p>
             Las notificaciones se envían por correo electrónico cuando se detectan eventos importantes en tu sistema. 
             También verás las alertas en el dashboard principal y en la campana de notificaciones.

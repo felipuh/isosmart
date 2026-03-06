@@ -66,7 +66,15 @@ class DocumentUploadSerializer(serializers.Serializer):
 # Serializers para Configuración y Multicliente
 # =====================================================
 
-from .models import Organization, OrganizationSettings, ISOClauseConfig, AuditLog
+from .models import (
+    Organization,
+    OrganizationSettings,
+    ISOClauseConfig,
+    AuditLog,
+    OnboardingInsightSnapshot,
+    BillingSubscription,
+    BillingPayment,
+)
 from authentication.models import UserProfile
 from django.contrib.auth import get_user_model
 
@@ -140,7 +148,8 @@ class OrganizationSettingsSerializer(serializers.ModelSerializer):
             'ai_auto_analysis', 'ai_analysis_frequency',
             'notify_risk_critical', 'notify_risk_high', 'notify_objective_deadline',
             'notify_document_upload', 'notify_stakeholder_change', 'notification_email',
-            'iso_standard', 'enabled_standards', 'fiscal_year_start',
+            'iso_standard', 'enabled_standards', 'preferred_language', 'preferred_response_tone',
+            'onboarding_profile', 'fiscal_year_start',
             'onboarding_completed', 'onboarding_completed_at', 'onboarding_completed_by',
             'auto_backup_enabled', 'backup_frequency', 'last_backup_at',
             'created_at', 'updated_at'
@@ -166,10 +175,47 @@ class AuditLogSerializer(serializers.ModelSerializer):
         model = AuditLog
         fields = [
             'id', 'organization', 'user', 'user_name', 'action', 'action_display',
-            'module', 'description', 'ip_address', 'created_at'
+            'module', 'description', 'ip_address', 'old_values', 'new_values', 'created_at'
         ]
     
     def get_user_name(self, obj):
         if obj.user:
             return f"{obj.user.first_name} {obj.user.last_name}".strip() or obj.user.username
         return "Sistema"
+
+
+class OnboardingInsightSnapshotSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OnboardingInsightSnapshot
+        fields = [
+            'id', 'organization', 'generated_by', 'version',
+            'input_profile', 'organizational_profile_output', 'impact_savings_output',
+            'purpose_alignment_output', 'summary_output', 'created_at'
+        ]
+        read_only_fields = fields
+
+
+class BillingSubscriptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BillingSubscription
+        fields = [
+            'id', 'organization', 'status', 'payment_method',
+            'payer_user', 'payer_name', 'payer_email', 'payer_phone',
+            'monthly_price', 'currency', 'grace_days', 'auto_suspend_enabled',
+            'current_period_start', 'current_period_end', 'next_due_date', 'last_payment_date', 'past_due_since',
+            'suspended_at', 'cancelled_at', 'notes', 'created_at', 'updated_at'
+        ]
+        read_only_fields = ['id', 'organization', 'suspended_at', 'cancelled_at', 'created_at', 'updated_at']
+
+
+class BillingPaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BillingPayment
+        fields = [
+            'id', 'subscription', 'status', 'payment_method',
+            'amount', 'currency', 'due_date', 'paid_at',
+            'reference', 'evidence_file', 'evidence_uploaded_at',
+            'created_by', 'confirmed_by', 'rejection_reason',
+            'created_at', 'updated_at'
+        ]
+        read_only_fields = ['id', 'subscription', 'created_by', 'confirmed_by', 'evidence_uploaded_at', 'created_at', 'updated_at']

@@ -9,6 +9,7 @@ router.register(r'objectives', views.QualityObjectiveViewSet, basename='objectiv
 router.register(r'organizations', views.OrganizationViewSet, basename='organization')
 router.register(r'users', views.UserManagementViewSet, basename='user-management')
 router.register(r'settings', views.SettingsViewSet, basename='settings')
+router.register(r'billing', views.BillingViewSet, basename='billing')
 router.register(r'iso-clauses', views.ISOClauseConfigViewSet, basename='iso-clause')
 router.register(r'audit-logs', views.AuditLogViewSet, basename='audit-log')
 

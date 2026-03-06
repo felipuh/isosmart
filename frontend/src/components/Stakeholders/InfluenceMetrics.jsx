@@ -9,10 +9,10 @@ const InfluenceTooltip = ({ active, payload, t }) => {
     return (
       <div className="bg-white dark:bg-slate-800 p-3 rounded-lg shadow-lg border border-slate-200 dark:border-slate-600 transition-colors">
         <p className="font-semibold dark:text-white">{data.fullName}</p>
-        <p className="text-sm dark:text-slate-400 capitalize">Tipo: {data.type}</p>
-        <p className="text-sm dark:text-slate-400">Influencia: {data.influence}%</p>
-        <p className="text-sm dark:text-slate-400 capitalize">Poder: {data.power}</p>
-        <p className="text-sm dark:text-slate-400 capitalize">Interés: {data.interest}</p>
+        <p className="text-sm dark:text-slate-400 capitalize">{t('stakeholdersInsights.metrics.tooltip.type')}: {data.type}</p>
+        <p className="text-sm dark:text-slate-400">{t('stakeholdersInsights.metrics.tooltip.influence')}: {data.influence}%</p>
+        <p className="text-sm dark:text-slate-400 capitalize">{t('stakeholdersInsights.metrics.tooltip.power')}: {data.power}</p>
+        <p className="text-sm dark:text-slate-400 capitalize">{t('stakeholdersInsights.metrics.tooltip.interest')}: {data.interest}</p>
       </div>
     );
   }
@@ -36,8 +36,8 @@ const InfluenceMetrics = ({ stakeholders, loading }) => {
   if (!stakeholders || stakeholders.length === 0) {
     return (
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
-        <h3 className="text-lg font-semibold dark:text-white mb-4">{t('literals.Métricas de Influencia')}</h3>
-        <p className="text-slate-500 dark:text-slate-400 text-center py-8">{t('literals.No hay datos disponibles')}</p>
+        <h3 className="text-lg font-semibold dark:text-white mb-4">{t('stakeholdersInsights.metrics.title')}</h3>
+        <p className="text-slate-500 dark:text-slate-400 text-center py-8">{t('stakeholdersInsights.noData')}</p>
       </div>
     );
   }
@@ -73,7 +73,7 @@ const InfluenceMetrics = ({ stakeholders, loading }) => {
     <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
       <h3 className="text-lg font-semibold dark:text-white mb-4 flex items-center">
         <TrendingUp className="mr-2 h-5 w-5 text-blue-500" />
-        Métricas de Influencia
+        {t('stakeholdersInsights.metrics.title')}
       </h3>
 
       {/* Stats Cards */}
@@ -81,7 +81,7 @@ const InfluenceMetrics = ({ stakeholders, loading }) => {
         <div className="bg-blue-50 dark:bg-blue-900/30 rounded-lg p-4 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm dark:text-blue-300">{t('literals.Total')}</p>
+              <p className="text-sm dark:text-blue-300">{t('stakeholdersInsights.metrics.cards.total')}</p>
               <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{stats.total}</p>
             </div>
             <Users className="h-8 w-8 text-blue-400 dark:text-blue-300" />
@@ -91,7 +91,7 @@ const InfluenceMetrics = ({ stakeholders, loading }) => {
         <div className="bg-green-50 dark:bg-green-900/30 rounded-lg p-4 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm dark:text-green-300">{t('literals.Promedio')}</p>
+              <p className="text-sm dark:text-green-300">{t('stakeholdersInsights.metrics.cards.average')}</p>
               <p className="text-2xl font-bold text-green-600 dark:text-green-400">{stats.avgInfluence}%</p>
             </div>
             <TrendingUp className="h-8 w-8 text-green-400 dark:text-green-300" />
@@ -101,7 +101,7 @@ const InfluenceMetrics = ({ stakeholders, loading }) => {
         <div className="bg-orange-50 dark:bg-orange-900/30 rounded-lg p-4 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">{t('literals.Alta Influencia')}</p>
+              <p className="text-sm text-gray-600">{t('stakeholdersInsights.metrics.cards.highInfluence')}</p>
               <p className="text-2xl font-bold text-orange-600">{stats.highInfluence}</p>
             </div>
             <Network className="h-8 w-8 text-orange-400" />
@@ -111,7 +111,7 @@ const InfluenceMetrics = ({ stakeholders, loading }) => {
         <div className="bg-red-50 rounded-lg p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm dark:text-red-300">{t('literals.Críticos')}</p>
+              <p className="text-sm dark:text-red-300">{t('stakeholdersInsights.metrics.cards.critical')}</p>
               <p className="text-2xl font-bold text-red-600 dark:text-red-400">{stats.criticalCount}</p>
             </div>
             <Network className="h-8 w-8 text-red-400 dark:text-red-300" />
@@ -121,7 +121,7 @@ const InfluenceMetrics = ({ stakeholders, loading }) => {
 
       {/* Bar Chart */}
       <div className="mt-6">
-        <h4 className="text-sm font-medium dark:text-slate-300 mb-3">{t('literals.Top 10 por Influencia')}</h4>
+        <h4 className="text-sm font-medium dark:text-slate-300 mb-3">{t('stakeholdersInsights.metrics.top10')}</h4>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={chartData} layout="vertical" margin={{ top: 5, right: 30, left: 120, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#cbd5e1" />

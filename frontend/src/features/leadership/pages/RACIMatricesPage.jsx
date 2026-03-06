@@ -36,7 +36,7 @@ const RACIMatricesPage = () => {
       const data = await getRACIMatrices();
       setMatrices(normalizeList(data));
     } catch {
-      setError('No se pudieron cargar las matrices.');
+      setError(t('modules.leadership.raciMatricesPage.messages.loadError'));
     } finally {
       setLoading(false);
     }
@@ -74,7 +74,7 @@ const RACIMatricesPage = () => {
       resetForm();
       await loadMatrices();
     } catch {
-      setError('No se pudo guardar la matriz.');
+      setError(t('modules.leadership.raciMatricesPage.messages.saveError'));
     } finally {
       setSaving(false);
     }
@@ -90,7 +90,7 @@ const RACIMatricesPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Eliminar esta matriz?')) {
+    if (!window.confirm(t('modules.leadership.raciMatricesPage.messages.confirmDelete'))) {
       return;
     }
 
@@ -98,7 +98,7 @@ const RACIMatricesPage = () => {
       await deleteRACIMatrix(id);
       await loadMatrices();
     } catch {
-      setError('No se pudo eliminar la matriz.');
+      setError(t('modules.leadership.raciMatricesPage.messages.deleteError'));
     }
   };
 
@@ -106,15 +106,15 @@ const RACIMatricesPage = () => {
     <div className="space-y-6" style={{ fontFamily: '"Sora", "Work Sans", sans-serif' }}>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-white">{t('literals.Matrices RACI')}</h1>
-          <p className="text-sm text-slate-400">{t('literals.Define responsabilidades y autoridades.')}</p>
+          <h1 className="text-2xl font-semibold text-white">{t('modules.leadership.raciMatricesPage.title')}</h1>
+          <p className="text-sm text-slate-400">{t('modules.leadership.raciMatricesPage.subtitle')}</p>
         </div>
         <button
           type="button"
           onClick={resetForm}
           className="rounded-lg border border-slate-700 px-3 py-2 text-sm text-slate-200 hover:border-slate-500"
         >
-          Nueva matriz
+          {t('modules.leadership.raciMatricesPage.buttons.new')}
         </button>
       </div>
 
@@ -127,7 +127,7 @@ const RACIMatricesPage = () => {
       <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
         <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-4">
           {loading ? (
-            <div className="py-10 text-center text-slate-400">{t('literals.Cargando matrices...')}</div>
+            <div className="py-10 text-center text-slate-400">{t('modules.leadership.raciMatricesPage.messages.loading')}</div>
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full text-left text-sm text-slate-200">
@@ -135,8 +135,8 @@ const RACIMatricesPage = () => {
                   <tr>
                     <th className="px-3 py-2">{t('common.forms.name')}</th>
                     <th className="px-3 py-2">{t('common.forms.description')}</th>
-                    <th className="px-3 py-2">{t('literals.Activa')}</th>
-                    <th className="px-3 py-2 text-right">{t('literals.Acciones')}</th>
+                    <th className="px-3 py-2">{t('modules.leadership.raciMatricesPage.table.active')}</th>
+                    <th className="px-3 py-2 text-right">{t('modules.leadership.raciMatricesPage.table.actions')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-800">
@@ -151,7 +151,7 @@ const RACIMatricesPage = () => {
                         </Link>
                       </td>
                       <td className="px-3 py-2">{matrix.description || '-'}</td>
-                      <td className="px-3 py-2">{matrix.is_active ? 'Si' : 'No'}</td>
+                      <td className="px-3 py-2">{matrix.is_active ? t('modules.leadership.raciMatricesPage.options.yes') : t('modules.leadership.raciMatricesPage.options.no')}</td>
                       <td className="px-3 py-2 text-right">
                         <div className="flex justify-end gap-2">
                           <button
@@ -159,14 +159,14 @@ const RACIMatricesPage = () => {
                             onClick={() => handleEdit(matrix)}
                             className="rounded-md border border-slate-700 px-2 py-1 text-xs text-slate-200"
                           >
-                            Editar
+                            {t('common.buttons.edit')}
                           </button>
                           <button
                             type="button"
                             onClick={() => handleDelete(matrix.id)}
                             className="rounded-md border border-red-500/50 px-2 py-1 text-xs text-red-200"
                           >
-                            Eliminar
+                            {t('common.buttons.delete')}
                           </button>
                         </div>
                       </td>
@@ -181,14 +181,14 @@ const RACIMatricesPage = () => {
         <form onSubmit={handleSubmit} className="rounded-xl border border-slate-800 bg-slate-900/70 p-4 space-y-4">
           <div>
             <h2 className="text-lg font-semibold text-white">
-              {editingId ? 'Editar matriz' : 'Nueva matriz'}
+              {editingId ? t('modules.leadership.raciMatricesPage.form.editTitle') : t('modules.leadership.raciMatricesPage.form.newTitle')}
             </h2>
-            <p className="text-xs text-slate-400">{t('literals.Organizacion: {orgName || \'Sin seleccionar\'}')}</p>
+            <p className="text-xs text-slate-400">{t('modules.leadership.raciMatricesPage.form.organization')}: {orgName || t('modules.leadership.raciMatricesPage.form.unselected')}</p>
           </div>
 
           <div className="grid gap-3">
             <label className="text-xs text-slate-400">
-              Nombre
+              {t('modules.leadership.raciMatricesPage.form.name')}
               <input
                 type="text"
                 value={form.name}
@@ -199,7 +199,7 @@ const RACIMatricesPage = () => {
             </label>
 
             <label className="text-xs text-slate-400">
-              Descripción
+              {t('common.forms.description')}
               <textarea
                 value={form.description}
                 onChange={(event) => setForm({ ...form, description: event.target.value })}
@@ -214,7 +214,7 @@ const RACIMatricesPage = () => {
                 onChange={(event) => setForm({ ...form, is_active: event.target.checked })}
                 className="h-4 w-4 rounded border-slate-600"
               />
-              {t('literals.Activa')}
+              {t('modules.leadership.raciMatricesPage.form.active')}
             </label>
           </div>
 
@@ -231,7 +231,7 @@ const RACIMatricesPage = () => {
               onClick={resetForm}
               className="rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-200"
             >
-              Limpiar
+              {t('common.buttons.clear')}
             </button>
           </div>
         </form>

@@ -60,7 +60,7 @@ const TrainingsPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!orgId) {
-      alert('Selecciona una organizacion antes de crear registros.');
+      alert(t('modules.resources.trainingsPage.messages.selectOrganization'));
       return;
     }
     try {
@@ -99,7 +99,7 @@ const TrainingsPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('¿Eliminar?')) return;
+    if (!confirm(t('modules.resources.trainingsPage.messages.confirmDelete'))) return;
     try {
       await deleteTraining(id);
       await loadData();
@@ -139,13 +139,13 @@ const TrainingsPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">{t('literals.Capacitaciones')}</h1>
+        <h1 className="text-3xl font-bold text-white">{t('modules.resources.trainingsPage.title')}</h1>
         <button
           type="button"
           onClick={openForm}
           className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
         >
-          Nueva capacitación
+          {t('modules.resources.trainingsPage.buttons.new')}
         </button>
       </div>
 
@@ -153,11 +153,11 @@ const TrainingsPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Código')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Título')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Inicio')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Fin')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acciones')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.resources.trainingsPage.table.code')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.resources.trainingsPage.table.title')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.resources.trainingsPage.table.start')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.resources.trainingsPage.table.end')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.resources.trainingsPage.table.actions')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -175,39 +175,39 @@ const TrainingsPage = () => {
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('literals.No hay capacitaciones')}</div>}
+        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('modules.resources.trainingsPage.messages.empty')}</div>}
       </div>
 
       <Modal
-        title={editingId ? 'Editar capacitación' : 'Nueva capacitación'}
+        title={editingId ? t('modules.resources.trainingsPage.modal.editTitle') : t('modules.resources.trainingsPage.modal.newTitle')}
         isOpen={showForm}
         onClose={closeForm}
       >
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Título *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.resources.trainingsPage.form.titleRequired')}</label>
               <input type="text" value={form.title} onChange={(e) => setForm({...form, title: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Código *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.resources.trainingsPage.form.codeRequired')}</label>
               <input type="text" value={form.code} onChange={(e) => setForm({...form, code: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Tipo')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.resources.trainingsPage.form.type')}</label>
               <select value={form.training_type} onChange={(e) => setForm({...form, training_type: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="internal">{t('literals.Interno')}</option>
-                <option value="external">{t('literals.Externo')}</option>
-                <option value="online">{t('literals.En Línea')}</option>
-                <option value="on_the_job">{t('literals.En el Puesto')}</option>
+                <option value="internal">{t('modules.resources.trainingsPage.options.type.internal')}</option>
+                <option value="external">{t('modules.resources.trainingsPage.options.type.external')}</option>
+                <option value="online">{t('modules.resources.trainingsPage.options.type.online')}</option>
+                <option value="on_the_job">{t('modules.resources.trainingsPage.options.type.onTheJob')}</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Fecha Inicio *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.resources.trainingsPage.form.startDateRequired')}</label>
               <input type="date" value={form.start_date} onChange={(e) => setForm({...form, start_date: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Fecha Fin *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.resources.trainingsPage.form.endDateRequired')}</label>
               <input type="date" value={form.end_date} onChange={(e) => setForm({...form, end_date: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div className="md:col-span-2">

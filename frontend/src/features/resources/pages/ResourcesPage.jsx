@@ -61,7 +61,7 @@ const ResourcesPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!orgId) {
-      alert('Selecciona una organizacion antes de crear registros.');
+      alert(t('modules.resources.resourcesPage.messages.selectOrganization'));
       return;
     }
     try {
@@ -101,7 +101,7 @@ const ResourcesPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('¿Eliminar?')) return;
+    if (!confirm(t('modules.resources.resourcesPage.messages.confirmDelete'))) return;
     try {
       await deleteResource(id);
       await loadResources();
@@ -142,13 +142,13 @@ const ResourcesPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">{t('literals.Recursos')}</h1>
+        <h1 className="text-3xl font-bold text-white">{t('modules.resources.resourcesPage.title')}</h1>
         <button
           type="button"
           onClick={openForm}
           className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
         >
-          Nuevo recurso
+          {t('modules.resources.resourcesPage.buttons.new')}
         </button>
       </div>
 
@@ -156,10 +156,10 @@ const ResourcesPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Código')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.resources.resourcesPage.table.code')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.name')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Tipo')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acciones')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.resources.resourcesPage.table.type')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.resources.resourcesPage.table.actions')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -176,31 +176,31 @@ const ResourcesPage = () => {
             ))}
           </tbody>
         </table>
-        {resources.length === 0 && <div className="text-center py-8 text-gray-400">{t('literals.No hay recursos')}</div>}
+        {resources.length === 0 && <div className="text-center py-8 text-gray-400">{t('modules.resources.resourcesPage.messages.empty')}</div>}
       </div>
 
       <Modal
-        title={editingId ? 'Editar recurso' : 'Nuevo recurso'}
+        title={editingId ? t('modules.resources.resourcesPage.modal.editTitle') : t('modules.resources.resourcesPage.modal.newTitle')}
         isOpen={showForm}
         onClose={closeForm}
       >
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Tipo')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.resources.resourcesPage.form.type')}</label>
               <select value={form.resource_type} onChange={(e) => setForm({...form, resource_type: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required>
-                <option value="human">{t('literals.Recurso Humano')}</option>
-                <option value="infrastructure">{t('literals.Infraestructura')}</option>
-                <option value="technology">{t('literals.Tecnología')}</option>
-                <option value="material">{t('literals.Material')}</option>
+                <option value="human">{t('modules.resources.resourcesPage.options.type.human')}</option>
+                <option value="infrastructure">{t('modules.resources.resourcesPage.options.type.infrastructure')}</option>
+                <option value="technology">{t('modules.resources.resourcesPage.options.type.technology')}</option>
+                <option value="material">{t('modules.resources.resourcesPage.options.type.material')}</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Nombre *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.resources.resourcesPage.form.nameRequired')}</label>
               <input type="text" value={form.name} onChange={(e) => setForm({...form, name: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Código *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.resources.resourcesPage.form.codeRequired')}</label>
               <input type="text" value={form.code} onChange={(e) => setForm({...form, code: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
           </div>

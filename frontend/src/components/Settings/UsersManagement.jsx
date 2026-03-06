@@ -25,11 +25,11 @@ const UsersManagement = () => {
   const canManageUsers = hasRole(['org_admin', 'iso_manager']);
 
   const roleLabels = {
-    org_admin: { label: 'Administrador', color: 'bg-purple-100 text-purple-700 dark:bg-purple-900/50 dark:text-purple-300' },
-    iso_manager: { label: 'Gestor ISO', color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300' },
-    auditor: { label: 'Auditor', color: 'bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300' },
-    user: { label: 'Usuario', color: 'bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300' },
-    viewer: { label: 'Solo Lectura', color: 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400' },
+    org_admin: { label: t('settings.users.roles.org_admin'), color: 'bg-purple-100 text-purple-700 dark:bg-purple-900/50 dark:text-purple-300' },
+    iso_manager: { label: t('settings.users.roles.iso_manager'), color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300' },
+    auditor: { label: t('settings.users.roles.auditor'), color: 'bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300' },
+    user: { label: t('settings.users.roles.user'), color: 'bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300' },
+    viewer: { label: t('settings.users.roles.viewer'), color: 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400' },
   };
 
   const loadUsers = useCallback(async () => {
@@ -77,11 +77,11 @@ const UsersManagement = () => {
 
   const handleDeleteUser = async (userId) => {
     if (!canManageUsers) {
-      alert('❌ No tienes permisos para eliminar usuarios');
+      alert(t('settings.users.messages.noPermissionDelete'));
       return;
     }
     
-    if (!confirm('¿Estás seguro de eliminar este usuario?')) return;
+    if (!confirm(t('settings.users.messages.confirmDelete'))) return;
     
     try {
       await settingsService.deleteUser(userId);
@@ -102,10 +102,10 @@ const UsersManagement = () => {
           </div>
           <div>
             <h2 className="text-xl font-bold text-slate-800 dark:text-white">
-              Gestión de Usuarios
+              {t('settings.users.title')}
             </h2>
             <p className="text-sm text-slate-500 dark:text-slate-400">
-              Administra usuarios y permisos del sistema
+              {t('settings.users.subtitle')}
             </p>
           </div>
         </div>
@@ -114,10 +114,10 @@ const UsersManagement = () => {
           onClick={() => setShowCreateModal(true)}
           disabled={!canManageUsers}
           className="px-4 py-2.5 bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:from-violet-600 hover:to-fuchsia-600 text-white rounded-xl font-medium shadow-lg shadow-violet-500/25 transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-          title={!canManageUsers ? 'No tienes permisos para crear usuarios' : ''}
+          title={!canManageUsers ? t('settings.users.messages.noPermissionCreate') : ''}
         >
           <UserPlus className="w-5 h-5" />
-          Nuevo Usuario
+          {t('settings.users.actions.newUser')}
         </button>
       </div>
 
@@ -126,19 +126,19 @@ const UsersManagement = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <div className="p-4 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border border-blue-100 dark:border-blue-800/50">
             <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{stats.total_users}</p>
-            <p className="text-sm text-blue-600/70 dark:text-blue-400/70">{t('literals.Total Usuarios')}</p>
+            <p className="text-sm text-blue-600/70 dark:text-blue-400/70">{t('settings.users.stats.totalUsers')}</p>
           </div>
           <div className="p-4 bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 rounded-xl border border-emerald-100 dark:border-emerald-800/50">
             <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{stats.active_users}</p>
-            <p className="text-sm text-emerald-600/70 dark:text-emerald-400/70">{t('literals.Activos')}</p>
+            <p className="text-sm text-emerald-600/70 dark:text-emerald-400/70">{t('settings.users.stats.active')}</p>
           </div>
           <div className="p-4 bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-xl border border-amber-100 dark:border-amber-800/50">
             <p className="text-2xl font-bold text-amber-600 dark:text-amber-400">{stats.by_role?.org_admin || 0}</p>
-            <p className="text-sm text-amber-600/70 dark:text-amber-400/70">{t('literals.Administradores')}</p>
+            <p className="text-sm text-amber-600/70 dark:text-amber-400/70">{t('settings.users.stats.admins')}</p>
           </div>
           <div className="p-4 bg-gradient-to-br from-rose-50 to-pink-50 dark:from-rose-900/20 dark:to-pink-900/20 rounded-xl border border-rose-100 dark:border-rose-800/50">
             <p className="text-2xl font-bold text-rose-600 dark:text-rose-400">{stats.inactive_users}</p>
-            <p className="text-sm text-rose-600/70 dark:text-rose-400/70">{t('literals.Inactivos')}</p>
+            <p className="text-sm text-rose-600/70 dark:text-rose-400/70">{t('settings.users.stats.inactive')}</p>
           </div>
         </div>
       )}
@@ -149,7 +149,7 @@ const UsersManagement = () => {
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
           <input
             type="text"
-            placeholder="Buscar usuarios..."
+            placeholder={t('settings.users.filters.searchPlaceholder')}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full pl-12 pr-4 py-3 bg-white dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all text-slate-800 dark:text-white"
@@ -162,7 +162,7 @@ const UsersManagement = () => {
             onChange={(e) => setRoleFilter(e.target.value)}
             className="appearance-none pl-4 pr-10 py-3 bg-white dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all text-slate-800 dark:text-white cursor-pointer min-w-[180px]"
           >
-            <option value="all">{t('literals.Todos los roles')}</option>
+            <option value="all">{t('settings.users.filters.allRoles')}</option>
             {Object.entries(roleLabels).map(([value, { label }]) => (
               <option key={value} value={value}>{label}</option>
             ))}
@@ -179,18 +179,18 @@ const UsersManagement = () => {
       ) : filteredUsers.length === 0 ? (
         <div className="text-center py-12">
           <Users className="w-12 h-12 text-slate-300 dark:text-slate-600 mx-auto mb-4" />
-          <p className="text-slate-500 dark:text-slate-400">{t('literals.No se encontraron usuarios')}</p>
+          <p className="text-slate-500 dark:text-slate-400">{t('settings.users.empty.noUsers')}</p>
         </div>
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
               <tr className="border-b border-slate-200 dark:border-slate-700">
-                <th className="text-left py-4 px-4 text-sm font-semibold text-slate-600 dark:text-slate-300">{t('literals.Usuario')}</th>
-                <th className="text-left py-4 px-4 text-sm font-semibold text-slate-600 dark:text-slate-300">{t('literals.Rol')}</th>
-                <th className="text-left py-4 px-4 text-sm font-semibold text-slate-600 dark:text-slate-300 hidden md:table-cell">{t('literals.Departamento')}</th>
+                <th className="text-left py-4 px-4 text-sm font-semibold text-slate-600 dark:text-slate-300">{t('settings.users.table.user')}</th>
+                <th className="text-left py-4 px-4 text-sm font-semibold text-slate-600 dark:text-slate-300">{t('settings.users.table.role')}</th>
+                <th className="text-left py-4 px-4 text-sm font-semibold text-slate-600 dark:text-slate-300 hidden md:table-cell">{t('settings.users.table.department')}</th>
                 <th className="text-left py-4 px-4 text-sm font-semibold text-slate-600 dark:text-slate-300">{t('common.forms.status')}</th>
-                <th className="text-right py-4 px-4 text-sm font-semibold text-slate-600 dark:text-slate-300">{t('literals.Acciones')}</th>
+                <th className="text-right py-4 px-4 text-sm font-semibold text-slate-600 dark:text-slate-300">{t('settings.users.table.actions')}</th>
               </tr>
             </thead>
             <tbody>
@@ -236,12 +236,12 @@ const UsersManagement = () => {
                     {user.is_active ? (
                       <span className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
                         <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
-                        {t('literals.Activo')}
+                        {t('common.labels.active')}
                       </span>
                     ) : (
                       <span className="flex items-center gap-1.5 text-slate-400">
                         <span className="w-2 h-2 bg-slate-400 rounded-full"></span>
-                        Inactivo
+                        {t('common.labels.inactive')}
                       </span>
                     )}
                   </td>
@@ -265,7 +265,7 @@ const UsersManagement = () => {
                             className="w-full px-4 py-2 text-left text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-2"
                           >
                             <Edit2 className="w-4 h-4" />
-                            Editar
+                            {t('common.buttons.edit')}
                           </button>
                           <button
                             onClick={() => {
@@ -276,7 +276,7 @@ const UsersManagement = () => {
                             className="w-full px-4 py-2 text-left text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-2"
                           >
                             <Key className="w-4 h-4" />
-                            Cambiar Contraseña
+                            {t('settings.users.actions.changePassword')}
                           </button>
                           <button
                             onClick={() => handleToggleActive(user.id)}
@@ -285,12 +285,12 @@ const UsersManagement = () => {
                             {user.is_active ? (
                               <>
                                 <UserX className="w-4 h-4" />
-                                Desactivar
+                                {t('settings.users.actions.deactivate')}
                               </>
                             ) : (
                               <>
                                 <UserCheck className="w-4 h-4" />
-                                Activar
+                                {t('settings.users.actions.activate')}
                               </>
                             )}
                           </button>
@@ -300,7 +300,7 @@ const UsersManagement = () => {
                             className="w-full px-4 py-2 text-left text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 flex items-center gap-2"
                           >
                             <Trash2 className="w-4 h-4" />
-                            Eliminar
+                            {t('common.buttons.delete')}
                           </button>
                         </div>
                       )}
@@ -361,6 +361,7 @@ const UsersManagement = () => {
 
 // Modal para crear usuario
 const CreateUserModal = ({ organizationId, onClose, onSuccess }) => {
+  const { t } = useI18n();
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -386,7 +387,7 @@ const CreateUserModal = ({ organizationId, onClose, onSuccess }) => {
       });
       onSuccess();
     } catch (err) {
-      setError(err.response?.data?.message || 'Error al crear usuario');
+      setError(err.response?.data?.message || t('settings.users.messages.createError'));
     } finally {
       setSaving(false);
     }
@@ -398,7 +399,7 @@ const CreateUserModal = ({ organizationId, onClose, onSuccess }) => {
         <div className="p-6 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
           <h3 className="text-lg font-bold text-slate-800 dark:text-white flex items-center gap-2">
             <UserPlus className="w-5 h-5 text-violet-500" />
-            Nuevo Usuario
+            {t('settings.users.create.title')}
           </h3>
           <button onClick={onClose} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg">
             <X className="w-5 h-5 text-slate-400" />
@@ -424,7 +425,7 @@ const CreateUserModal = ({ organizationId, onClose, onSuccess }) => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('literals.Apellido')}</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('settings.users.fields.lastName')}</label>
               <input
                 type="text"
                 value={formData.last_name}
@@ -435,7 +436,7 @@ const CreateUserModal = ({ organizationId, onClose, onSuccess }) => {
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('literals.Nombre de usuario *')}</label>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('settings.users.fields.usernameRequired')}</label>
             <input
               type="text"
               required
@@ -446,7 +447,7 @@ const CreateUserModal = ({ organizationId, onClose, onSuccess }) => {
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('literals.Email *')}</label>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('settings.users.fields.emailRequired')}</label>
             <input
               type="email"
               required
@@ -457,7 +458,7 @@ const CreateUserModal = ({ organizationId, onClose, onSuccess }) => {
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('literals.Contraseña *')}</label>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('settings.users.fields.passwordRequired')}</label>
             <input
               type="password"
               required
@@ -465,28 +466,28 @@ const CreateUserModal = ({ organizationId, onClose, onSuccess }) => {
               value={formData.password}
               onChange={(e) => setFormData({...formData, password: e.target.value})}
               className="w-full px-4 py-2.5 bg-white dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-violet-500 text-slate-800 dark:text-white"
-              placeholder="Mínimo 8 caracteres"
+              placeholder={t('settings.users.placeholders.min8Chars')}
             />
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('literals.Rol *')}</label>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('settings.users.fields.roleRequired')}</label>
             <select
               value={formData.role}
               onChange={(e) => setFormData({...formData, role: e.target.value})}
               className="w-full px-4 py-2.5 bg-white dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-violet-500 text-slate-800 dark:text-white"
             >
-              <option value="user">{t('literals.Usuario')}</option>
-              <option value="viewer">{t('literals.Solo Lectura')}</option>
-              <option value="auditor">{t('literals.Auditor')}</option>
-              <option value="iso_manager">{t('literals.Gestor ISO')}</option>
-              <option value="org_admin">{t('literals.Administrador')}</option>
+              <option value="user">{t('settings.users.roles.user')}</option>
+              <option value="viewer">{t('settings.users.roles.viewer')}</option>
+              <option value="auditor">{t('settings.users.roles.auditor')}</option>
+              <option value="iso_manager">{t('settings.users.roles.iso_manager')}</option>
+              <option value="org_admin">{t('settings.users.roles.org_admin')}</option>
             </select>
           </div>
           
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('literals.Cargo')}</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('settings.users.fields.position')}</label>
               <input
                 type="text"
                 value={formData.job_title}
@@ -495,7 +496,7 @@ const CreateUserModal = ({ organizationId, onClose, onSuccess }) => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('literals.Departamento')}</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('settings.users.fields.department')}</label>
               <input
                 type="text"
                 value={formData.department}
@@ -507,7 +508,7 @@ const CreateUserModal = ({ organizationId, onClose, onSuccess }) => {
           
           <div className="flex justify-end gap-3 pt-4">
             <button type="button" onClick={onClose} className="px-4 py-2.5 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl">
-              Cancelar
+              {t('common.buttons.cancel')}
             </button>
             <button
               type="submit"
@@ -515,7 +516,7 @@ const CreateUserModal = ({ organizationId, onClose, onSuccess }) => {
               className="px-4 py-2.5 bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white rounded-xl font-medium flex items-center gap-2 disabled:opacity-50"
             >
               {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
-              Crear Usuario
+              {t('settings.users.create.submit')}
             </button>
           </div>
         </form>
@@ -526,6 +527,7 @@ const CreateUserModal = ({ organizationId, onClose, onSuccess }) => {
 
 // Modal para editar usuario
 const EditUserModal = ({ user, onClose, onSuccess }) => {
+  const { t } = useI18n();
   const [formData, setFormData] = useState({
     role: user.role,
     job_title: user.job_title || '',
@@ -552,7 +554,7 @@ const EditUserModal = ({ user, onClose, onSuccess }) => {
         <div className="p-6 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
           <h3 className="text-lg font-bold text-slate-800 dark:text-white flex items-center gap-2">
             <Edit2 className="w-5 h-5 text-violet-500" />
-            Editar Usuario
+            {t('settings.users.edit.title')}
           </h3>
           <button onClick={onClose} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg">
             <X className="w-5 h-5 text-slate-400" />
@@ -571,22 +573,22 @@ const EditUserModal = ({ user, onClose, onSuccess }) => {
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('literals.Rol')}</label>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('settings.users.fields.role')}</label>
             <select
               value={formData.role}
               onChange={(e) => setFormData({...formData, role: e.target.value})}
               className="w-full px-4 py-2.5 bg-white dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl text-slate-800 dark:text-white"
             >
-              <option value="user">{t('literals.Usuario')}</option>
-              <option value="viewer">{t('literals.Solo Lectura')}</option>
-              <option value="auditor">{t('literals.Auditor')}</option>
-              <option value="iso_manager">{t('literals.Gestor ISO')}</option>
-              <option value="org_admin">{t('literals.Administrador')}</option>
+              <option value="user">{t('settings.users.roles.user')}</option>
+              <option value="viewer">{t('settings.users.roles.viewer')}</option>
+              <option value="auditor">{t('settings.users.roles.auditor')}</option>
+              <option value="iso_manager">{t('settings.users.roles.iso_manager')}</option>
+              <option value="org_admin">{t('settings.users.roles.org_admin')}</option>
             </select>
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('literals.Cargo')}</label>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('settings.users.fields.position')}</label>
             <input
               type="text"
               value={formData.job_title}
@@ -596,7 +598,7 @@ const EditUserModal = ({ user, onClose, onSuccess }) => {
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('literals.Departamento')}</label>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('settings.users.fields.department')}</label>
             <input
               type="text"
               value={formData.department}
@@ -607,11 +609,11 @@ const EditUserModal = ({ user, onClose, onSuccess }) => {
           
           <div className="flex justify-end gap-3 pt-4">
             <button type="button" onClick={onClose} className="px-4 py-2.5 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl">
-              Cancelar
+              {t('common.buttons.cancel')}
             </button>
             <button type="submit" disabled={saving} className="px-4 py-2.5 bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white rounded-xl font-medium flex items-center gap-2 disabled:opacity-50">
               {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
-              Guardar Cambios
+              {t('settings.users.edit.submit')}
             </button>
           </div>
         </form>
@@ -622,6 +624,7 @@ const EditUserModal = ({ user, onClose, onSuccess }) => {
 
 // Modal para resetear contraseña
 const PasswordResetModal = ({ user, onClose, onSuccess }) => {
+  const { t } = useI18n();
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [saving, setSaving] = useState(false);
@@ -631,7 +634,7 @@ const PasswordResetModal = ({ user, onClose, onSuccess }) => {
     e.preventDefault();
     
     if (password !== confirmPassword) {
-      setError('Las contraseñas no coinciden');
+      setError(t('common.messages.passwordMismatch'));
       return;
     }
     
@@ -642,7 +645,7 @@ const PasswordResetModal = ({ user, onClose, onSuccess }) => {
       onSuccess();
     } catch (error) {
       console.error('Error al cambiar contraseña:', error);
-      setError('Error al cambiar contraseña');
+      setError(t('settings.users.messages.changePasswordError'));
     } finally {
       setSaving(false);
     }
@@ -654,7 +657,7 @@ const PasswordResetModal = ({ user, onClose, onSuccess }) => {
         <div className="p-6 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
           <h3 className="text-lg font-bold text-slate-800 dark:text-white flex items-center gap-2">
             <Key className="w-5 h-5 text-amber-500" />
-            Cambiar Contraseña
+            {t('settings.users.password.title')}
           </h3>
           <button onClick={onClose} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg">
             <X className="w-5 h-5 text-slate-400" />
@@ -663,7 +666,7 @@ const PasswordResetModal = ({ user, onClose, onSuccess }) => {
         
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           <p className="text-sm text-slate-600 dark:text-slate-400">
-            Establecer nueva contraseña para <strong>{user.full_name}</strong>
+            {t('settings.users.password.subtitle')} <strong>{user.full_name}</strong>
           </p>
           
           {error && (
@@ -673,7 +676,7 @@ const PasswordResetModal = ({ user, onClose, onSuccess }) => {
           )}
           
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('literals.Nueva Contraseña')}</label>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('settings.users.fields.newPassword')}</label>
             <input
               type="password"
               required
@@ -681,12 +684,12 @@ const PasswordResetModal = ({ user, onClose, onSuccess }) => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full px-4 py-2.5 bg-white dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl text-slate-800 dark:text-white"
-              placeholder="Mínimo 8 caracteres"
+              placeholder={t('settings.users.placeholders.min8Chars')}
             />
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('literals.Confirmar Contraseña')}</label>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('common.forms.confirmPassword')}</label>
             <input
               type="password"
               required
@@ -698,11 +701,11 @@ const PasswordResetModal = ({ user, onClose, onSuccess }) => {
           
           <div className="flex justify-end gap-3 pt-4">
             <button type="button" onClick={onClose} className="px-4 py-2.5 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl">
-              Cancelar
+              {t('common.buttons.cancel')}
             </button>
             <button type="submit" disabled={saving} className="px-4 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-xl font-medium flex items-center gap-2 disabled:opacity-50">
               {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Key className="w-4 h-4" />}
-              Cambiar Contraseña
+              {t('settings.users.password.submit')}
             </button>
           </div>
         </form>

@@ -21,7 +21,7 @@ const ProcessList = ({ processesByType, loading }) => {
   if (!processesByType) {
     return (
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
-        <p className="text-slate-500 dark:text-slate-400 text-center py-8">{t('literals.No hay procesos disponibles')}</p>
+        <p className="text-slate-500 dark:text-slate-400 text-center py-8">{t('processList.empty')}</p>
       </div>
     );
   }
@@ -54,9 +54,9 @@ const ProcessList = ({ processesByType, loading }) => {
   };
 
   const typeNames = {
-    'strategic': 'Procesos Estratégicos',
-    'operational': 'Procesos Operativos',
-    'support': 'Procesos de Apoyo'
+    strategic: t('processList.types.strategic'),
+    operational: t('processList.types.operational'),
+    support: t('processList.types.support'),
   };
 
   return (
@@ -88,7 +88,7 @@ const ProcessList = ({ processesByType, loading }) => {
                         {process.is_critical && (
                           <span className="flex items-center text-xs bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 px-2 py-0.5 rounded transition-colors">
                             <AlertCircle className="h-3 w-3 mr-1" />
-                            CRÍTICO
+                            {t('processList.criticalBadge')}
                           </span>
                         )}
                       </div>
@@ -106,29 +106,29 @@ const ProcessList = ({ processesByType, loading }) => {
 
                   <div className="flex items-center text-sm text-slate-600 dark:text-slate-400 mb-2">
                     <Users className="h-4 w-4 mr-1" />
-                    <span className="font-medium">{t('literals.Responsable:')}</span>
+                    <span className="font-medium">{t('processList.fields.responsible')}:</span>
                     <span className="ml-1">{process.owner}</span>
                   </div>
 
                   <div className="grid grid-cols-2 gap-2 text-xs text-slate-600 dark:text-slate-400">
                     <div>
-                      <span className="font-medium">{t('literals.Entradas:')}</span> {process.inputs?.length || 0}
+                      <span className="font-medium">{t('processList.fields.inputs')}:</span> {process.inputs?.length || 0}
                     </div>
                     <div>
-                      <span className="font-medium">{t('literals.Salidas:')}</span> {process.outputs?.length || 0}
+                      <span className="font-medium">{t('processList.fields.outputs')}:</span> {process.outputs?.length || 0}
                     </div>
                     <div>
-                      <span className="font-medium">{t('literals.KPIs:')}</span> {process.kpis?.length || 0}
+                      <span className="font-medium">{t('processList.fields.kpis')}:</span> {process.kpis?.length || 0}
                     </div>
                     <div>
-                      <span className="font-medium">{t('literals.Actividades:')}</span> {process.activities_count || 0}
+                      <span className="font-medium">{t('processList.fields.activities')}:</span> {process.activities_count || 0}
                     </div>
                   </div>
 
                   {process.criticality_score !== undefined && (
                     <div className="mt-3 pt-3 border-t dark:border-slate-700">
                       <div className="flex items-center justify-between text-xs">
-                        <span className="text-slate-600 dark:text-slate-400">{t('literals.Criticidad:')}</span>
+                        <span className="text-slate-600 dark:text-slate-400">{t('processList.fields.criticality')}:</span>
                         <div className="flex items-center">
                           <div className="w-24 h-2 bg-slate-200 dark:bg-slate-700 rounded-full mr-2">
                             <div
@@ -150,7 +150,7 @@ const ProcessList = ({ processesByType, loading }) => {
               ))}
             </div>
           ) : (
-            <p className="text-slate-500 dark:text-slate-400 text-sm italic">{t('literals.No hay procesos en esta categoría')}</p>
+            <p className="text-slate-500 dark:text-slate-400 text-sm italic">{t('processList.emptyByCategory')}</p>
           )}
         </div>
       ))}

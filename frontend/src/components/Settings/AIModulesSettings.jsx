@@ -118,7 +118,7 @@ const AIModulesSettings = ({ settings, onUpdate, organizationId }) => {
       {success && (
         <div className="mb-6 p-4 bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800 rounded-xl flex items-center gap-3 animate-fade-in">
           <Check className="w-5 h-5 text-emerald-500" />
-          <span className="text-emerald-700 dark:text-emerald-300">{t('literals.Configuración guardada correctamente')}</span>
+          <span className="text-emerald-700 dark:text-emerald-300">{t('common.messages.success')}</span>
         </div>
       )}
 
@@ -239,7 +239,7 @@ const AIModulesSettings = ({ settings, onUpdate, organizationId }) => {
               <Zap className="w-5 h-5 text-amber-600 dark:text-amber-400" />
             </div>
             <div>
-              <p className="font-semibold text-slate-800 dark:text-white">{t('literals.Análisis Automático')}</p>
+              <p className="font-semibold text-slate-800 dark:text-white">{t('settings.aiModules.autoAnalysis')}</p>
               <p className="text-sm text-slate-500 dark:text-slate-400">
                 Ejecutar análisis de IA automáticamente según la frecuencia configurada
               </p>

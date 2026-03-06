@@ -59,7 +59,7 @@ const InfrastructurePage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!orgId) {
-      alert('Selecciona una organizacion antes de crear registros.');
+      alert(t('modules.resources.infrastructurePage.messages.selectOrganization'));
       return;
     }
     try {
@@ -97,7 +97,7 @@ const InfrastructurePage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('¿Eliminar?')) return;
+    if (!confirm(t('modules.resources.infrastructurePage.messages.confirmDelete'))) return;
     try {
       await deleteInfrastructure(id);
       await loadData();
@@ -136,13 +136,13 @@ const InfrastructurePage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">{t('literals.Infraestructura')}</h1>
+        <h1 className="text-3xl font-bold text-white">{t('modules.resources.infrastructurePage.title')}</h1>
         <button
           type="button"
           onClick={openForm}
           className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
         >
-          Nueva infraestructura
+          {t('modules.resources.infrastructurePage.buttons.new')}
         </button>
       </div>
 
@@ -150,11 +150,11 @@ const InfrastructurePage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Código')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.resources.infrastructurePage.table.code')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.name')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Tipo')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Ubicación')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acciones')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.resources.infrastructurePage.table.type')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.resources.infrastructurePage.table.location')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.resources.infrastructurePage.table.actions')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -172,35 +172,35 @@ const InfrastructurePage = () => {
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('literals.No hay infraestructura')}</div>}
+        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('modules.resources.infrastructurePage.messages.empty')}</div>}
       </div>
 
       <Modal
-        title={editingId ? 'Editar infraestructura' : 'Nueva infraestructura'}
+        title={editingId ? t('modules.resources.infrastructurePage.modal.editTitle') : t('modules.resources.infrastructurePage.modal.newTitle')}
         isOpen={showForm}
         onClose={closeForm}
       >
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Tipo')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.resources.infrastructurePage.form.type')}</label>
               <select value={form.infrastructure_type} onChange={(e) => setForm({...form, infrastructure_type: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required>
-                <option value="building">{t('literals.Edificio')}</option>
-                <option value="equipment">{t('literals.Equipo')}</option>
-                <option value="software">{t('literals.Software')}</option>
-                <option value="transport">{t('literals.Transporte')}</option>
+                <option value="building">{t('modules.resources.infrastructurePage.options.type.building')}</option>
+                <option value="equipment">{t('modules.resources.infrastructurePage.options.type.equipment')}</option>
+                <option value="software">{t('modules.resources.infrastructurePage.options.type.software')}</option>
+                <option value="transport">{t('modules.resources.infrastructurePage.options.type.transport')}</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Nombre *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.resources.infrastructurePage.form.nameRequired')}</label>
               <input type="text" value={form.name} onChange={(e) => setForm({...form, name: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Código *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.resources.infrastructurePage.form.codeRequired')}</label>
               <input type="text" value={form.code} onChange={(e) => setForm({...form, code: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Ubicación')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.resources.infrastructurePage.form.location')}</label>
               <input type="text" value={form.location} onChange={(e) => setForm({...form, location: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
             </div>
             <div className="md:col-span-3">

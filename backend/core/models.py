@@ -1,6 +1,9 @@
 from django.db import models
 from django.conf import settings  # Cambiado de: from django.contrib.auth.models import User
 from django.utils import timezone
+from datetime import date
+from decimal import Decimal
+from typing import Optional
 import json
 
 # =====================================================
@@ -551,6 +554,11 @@ class OrganizationSettings(models.Model):
         ('en', 'English'),
         ('pt', 'Português'),
     ])
+    preferred_response_tone = models.CharField(max_length=20, default='manager', choices=[
+        ('manager', 'Lenguaje gerente'),
+        ('technical', 'Lenguaje técnico'),
+    ])
+    onboarding_profile = models.JSONField(default=dict, blank=True)
     fiscal_year_start = models.IntegerField(default=1, choices=[(i, f'Mes {i}') for i in range(1, 13)])
 
     # Onboarding
@@ -642,3 +650,149 @@ class AuditLog(models.Model):
     
     def __str__(self):
         return f"{self.action} - {self.module} - {self.created_at}"
+
+
+class OnboardingInsightSnapshot(models.Model):
+    """Snapshot versionado de resultados del onboarding disruptivo"""
+
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name='onboarding_snapshots')
+    generated_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
+    version = models.PositiveIntegerField(default=1)
+
+    input_profile = models.JSONField(default=dict, blank=True)
+    organizational_profile_output = models.JSONField(default=dict, blank=True)
+    impact_savings_output = models.JSONField(default=dict, blank=True)
+    purpose_alignment_output = models.JSONField(default=dict, blank=True)
+    summary_output = models.JSONField(default=dict, blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'onboarding_insight_snapshots'
+        ordering = ['-created_at']
+        unique_together = ['organization', 'version']
+
+    def __str__(self):
+        return f"OnboardingSnapshot org={self.organization_id} v{self.version}"
+
+
+class BillingSubscription(models.Model):
+    """Suscripción interna de facturación por organización"""
+
+    STATUS_CHOICES = [
+        ('active', 'Activa'),
+        ('past_due', 'Pendiente de pago'),
+        ('suspended', 'Suspendida'),
+        ('cancelled', 'Cancelada'),
+    ]
+
+    PAYMENT_METHOD_CHOICES = [
+        ('bank_transfer', 'Transferencia bancaria'),
+        ('credit_card', 'Tarjeta de crédito'),
+        ('debit_card', 'Tarjeta de débito'),
+        ('other', 'Otro'),
+    ]
+
+    organization = models.OneToOneField(Organization, on_delete=models.CASCADE, related_name='billing_subscription')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='active')
+    payment_method = models.CharField(max_length=20, choices=PAYMENT_METHOD_CHOICES, default='bank_transfer')
+
+    payer_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
+    payer_name = models.CharField(max_length=255, blank=True)
+    payer_email = models.EmailField(blank=True)
+    payer_phone = models.CharField(max_length=50, blank=True)
+
+    monthly_price = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal('0.00'))
+    currency = models.CharField(max_length=10, default='USD')
+    grace_days = models.PositiveIntegerField(default=8)
+    auto_suspend_enabled = models.BooleanField(default=True)
+
+    current_period_start = models.DateField(null=True, blank=True)
+    current_period_end = models.DateField(null=True, blank=True)
+    next_due_date = models.DateField(null=True, blank=True)
+    last_payment_date = models.DateField(null=True, blank=True)
+    past_due_since = models.DateField(null=True, blank=True)
+
+    suspended_at = models.DateTimeField(null=True, blank=True)
+    cancelled_at = models.DateTimeField(null=True, blank=True)
+    notes = models.TextField(blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'billing_subscriptions'
+
+    def __str__(self):
+        return f"Subscription org={self.organization_id} status={self.status}"
+
+    def evaluate_status(self, today: Optional[date] = None):
+        today = today or timezone.now().date()
+
+        if self.status == 'cancelled':
+            return self.status
+
+        if not self.next_due_date:
+            return self.status
+
+        overdue_days = (today - self.next_due_date).days
+
+        if overdue_days <= 0:
+            if self.status in ['past_due', 'suspended']:
+                self.status = 'active'
+                self.past_due_since = None
+                self.suspended_at = None
+            return self.status
+
+        if overdue_days <= self.grace_days:
+            self.status = 'past_due'
+            if self.past_due_since is None:
+                self.past_due_since = self.next_due_date
+            return self.status
+
+        if self.auto_suspend_enabled:
+            self.status = 'suspended'
+            if self.suspended_at is None:
+                self.suspended_at = timezone.now()
+        else:
+            self.status = 'past_due'
+            if self.past_due_since is None:
+                self.past_due_since = self.next_due_date
+
+        return self.status
+
+
+class BillingPayment(models.Model):
+    """Registro de pagos de suscripción"""
+
+    STATUS_CHOICES = [
+        ('pending', 'Pendiente'),
+        ('confirmed', 'Confirmado'),
+        ('rejected', 'Rechazado'),
+    ]
+
+    subscription = models.ForeignKey(BillingSubscription, on_delete=models.CASCADE, related_name='payments')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    payment_method = models.CharField(max_length=20, choices=BillingSubscription.PAYMENT_METHOD_CHOICES, default='bank_transfer')
+
+    amount = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal('0.00'))
+    currency = models.CharField(max_length=10, default='USD')
+    due_date = models.DateField(null=True, blank=True)
+    paid_at = models.DateTimeField(null=True, blank=True)
+
+    reference = models.CharField(max_length=255, blank=True)
+    evidence_file = models.FileField(upload_to='billing/evidence/%Y/%m/', null=True, blank=True)
+    evidence_uploaded_at = models.DateTimeField(null=True, blank=True)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name='created_billing_payments')
+    confirmed_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name='confirmed_billing_payments')
+    rejection_reason = models.TextField(blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'billing_payments'
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"Payment {self.id} org={self.subscription.organization_id} status={self.status}"

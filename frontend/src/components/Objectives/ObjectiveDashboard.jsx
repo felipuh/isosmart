@@ -63,7 +63,7 @@ const ObjectiveDashboard = () => {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('¿Está seguro de eliminar este objetivo?')) {
+    if (window.confirm(t('objectivesDashboard.confirmDelete'))) {
       try {
         await objectiveService.deleteObjective(id);
         await loadData();
@@ -100,9 +100,9 @@ const ObjectiveDashboard = () => {
     <div className="p-6 bg-slate-50 dark:bg-slate-900 min-h-screen transition-colors duration-300">
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">{t('literals.Objetivos de Calidad')}</h1>
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">{t('objectivesDashboard.title')}</h1>
         <p className="text-slate-500 dark:text-slate-400 mt-1">
-          Gestiona los objetivos de calidad del SGC según ISO 9001:2015 - Cláusula 6.2
+          {t('objectivesDashboard.subtitle')}
         </p>
       </div>
 
@@ -112,26 +112,26 @@ const ObjectiveDashboard = () => {
           icon={<svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>}
           iconBg="bg-blue-50"
           value={stats?.total_objectives || 0}
-          label="Total Objetivos"
+          label={t('objectivesDashboard.stats.totalObjectives')}
         />
         <StatCard
           icon={<svg className="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>}
           iconBg="bg-yellow-50"
           value={stats?.active_count || 0}
-          label="En Progreso"
+          label={t('objectivesDashboard.stats.inProgress')}
         />
         <StatCard
           icon={<svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
           iconBg="bg-green-50"
           value={stats?.achieved_count || 0}
-          label="Logrados"
+          label={t('objectivesDashboard.stats.achieved')}
           valueColor="text-green-600"
         />
         <StatCard
           icon={<svg className="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>}
           iconBg="bg-indigo-50"
           value={stats?.average_progress || 0}
-          label="Progreso Promedio"
+          label={t('objectivesDashboard.stats.avgProgress')}
           valueColor="text-indigo-600"
           suffix="%"
         />
@@ -146,7 +146,7 @@ const ObjectiveDashboard = () => {
           <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
           </svg>
-          Nuevo Objetivo
+          {t('objectivesDashboard.actions.newObjective')}
         </button>
         <button
           onClick={loadData}
@@ -155,7 +155,7 @@ const ObjectiveDashboard = () => {
           <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
           </svg>
-          Actualizar
+          {t('objectivesDashboard.actions.refresh')}
         </button>
 
         {/* Filters */}
@@ -165,12 +165,12 @@ const ObjectiveDashboard = () => {
             onChange={(e) => setFilters({...filters, status: e.target.value})}
             className="px-4 py-2.5 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors"
           >
-            <option value="">{t('literals.Todos los estados')}</option>
-            <option value="active">{t('literals.Activo')}</option>
-            <option value="in_progress">{t('literals.En Progreso')}</option>
-            <option value="achieved">{t('literals.Logrado')}</option>
-            <option value="delayed">{t('literals.Retrasado')}</option>
-            <option value="cancelled">{t('literals.Cancelado')}</option>
+            <option value="">{t('objectivesDashboard.filters.allStatuses')}</option>
+            <option value="active">{t('objectivesList.status.active')}</option>
+            <option value="in_progress">{t('objectivesList.status.in_progress')}</option>
+            <option value="achieved">{t('objectivesList.status.achieved')}</option>
+            <option value="delayed">{t('objectivesList.status.delayed')}</option>
+            <option value="cancelled">{t('objectivesList.status.cancelled')}</option>
           </select>
         </div>
       </div>
@@ -210,10 +210,9 @@ const ObjectiveDashboard = () => {
             </svg>
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-slate-900 dark:text-white">{t('literals.Objetivos SMART')}</h3>
+            <h3 className="text-sm font-semibold text-slate-900 dark:text-white">{t('objectivesDashboard.info.smartTitle')}</h3>
             <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
-              Los objetivos de calidad deben ser medibles, coherentes con la política de calidad 
-              y pertinentes para la conformidad de productos/servicios y el aumento de la satisfacción del cliente.
+              {t('objectivesDashboard.info.smartDescription')}
             </p>
           </div>
         </div>

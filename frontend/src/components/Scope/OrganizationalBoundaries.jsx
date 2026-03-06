@@ -54,7 +54,7 @@ const OrganizationalBoundaries = ({ boundaries, loading }) => {
 
   return (
     <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
-      <h3 className="text-xl font-semibold mb-6 dark:text-white">{t('literals.Límites Organizacionales')}</h3>
+      <h3 className="text-xl font-semibold mb-6 dark:text-white">{t('organizationalBoundaries.title')}</h3>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {Object.entries(boundaries).map(([type, items]) => (
@@ -74,7 +74,7 @@ const OrganizationalBoundaries = ({ boundaries, loading }) => {
                 ))}
               </ul>
             ) : (
-              <p className="text-sm italic opacity-75">{t('literals.No definido')}</p>
+              <p className="text-sm italic opacity-75">{t('organizationalBoundaries.notDefined')}</p>
             )}
           </div>
         ))}

@@ -15,7 +15,7 @@ const normalizeList = (data) => (Array.isArray(data) ? data : data?.results || [
 
 const initialForm = {
   version: '',
-  title: 'Politica de Calidad',
+  title: '',
   content: '',
   customer_focus: '',
   framework_for_objectives: '',
@@ -47,7 +47,7 @@ const PoliciesPage = () => {
       const data = await getPolicies();
       setPolicies(normalizeList(data));
     } catch {
-      setError('No se pudieron cargar las políticas.');
+      setError(t('modules.leadership.policiesPage.messages.loadError'));
     } finally {
       setLoading(false);
     }
@@ -99,7 +99,7 @@ const PoliciesPage = () => {
       resetForm();
       await loadPolicies();
     } catch {
-      setError('No se pudo guardar la política.');
+      setError(t('modules.leadership.policiesPage.messages.saveError'));
     } finally {
       setSaving(false);
     }
@@ -109,7 +109,7 @@ const PoliciesPage = () => {
     setEditingId(policy.id);
     setForm({
       version: policy.version || '',
-      title: policy.title || 'Politica de Calidad',
+      title: policy.title || t('modules.leadership.policiesPage.form.defaultTitle'),
       content: policy.content || '',
       customer_focus: policy.customer_focus || '',
       framework_for_objectives: policy.framework_for_objectives || '',
@@ -124,7 +124,7 @@ const PoliciesPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Eliminar esta política?')) {
+    if (!window.confirm(t('modules.leadership.policiesPage.messages.confirmDelete'))) {
       return;
     }
 
@@ -132,7 +132,7 @@ const PoliciesPage = () => {
       await deletePolicy(id);
       await loadPolicies();
     } catch {
-      setError('No se pudo eliminar la política.');
+      setError(t('modules.leadership.policiesPage.messages.deleteError'));
     }
   };
 
@@ -149,7 +149,7 @@ const PoliciesPage = () => {
       }
       await loadPolicies();
     } catch {
-      setError('No se pudo actualizar el estado.');
+      setError(t('modules.leadership.policiesPage.messages.statusError'));
     }
   };
 
@@ -157,15 +157,15 @@ const PoliciesPage = () => {
     <div className="space-y-6" style={{ fontFamily: '"Sora", "Work Sans", sans-serif' }}>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-white">{t('literals.Politicas de Calidad')}</h1>
-          <p className="text-sm text-slate-400">{t('literals.Gestion y aprobación de políticas ISO 9001.')}</p>
+          <h1 className="text-2xl font-semibold text-white">{t('modules.leadership.policiesPage.title')}</h1>
+          <p className="text-sm text-slate-400">{t('modules.leadership.policiesPage.subtitle')}</p>
         </div>
         <button
           type="button"
           onClick={resetForm}
           className="rounded-lg border border-slate-700 px-3 py-2 text-sm text-slate-200 hover:border-slate-500"
         >
-          Nueva política
+          {t('modules.leadership.policiesPage.buttons.new')}
         </button>
       </div>
 
@@ -178,17 +178,17 @@ const PoliciesPage = () => {
       <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
         <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-4">
           {loading ? (
-            <div className="py-10 text-center text-slate-400">{t('literals.Cargando políticas...')}</div>
+            <div className="py-10 text-center text-slate-400">{t('modules.leadership.policiesPage.messages.loading')}</div>
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full text-left text-sm text-slate-200">
                 <thead className="text-xs uppercase text-slate-400">
                   <tr>
-                    <th className="px-3 py-2">{t('literals.Version')}</th>
-                    <th className="px-3 py-2">{t('literals.Título')}</th>
+                    <th className="px-3 py-2">{t('modules.leadership.policiesPage.table.version')}</th>
+                    <th className="px-3 py-2">{t('modules.leadership.policiesPage.table.title')}</th>
                     <th className="px-3 py-2">{t('common.forms.status')}</th>
-                    <th className="px-3 py-2">{t('literals.Vigencia')}</th>
-                    <th className="px-3 py-2 text-right">{t('literals.Acciones')}</th>
+                    <th className="px-3 py-2">{t('modules.leadership.policiesPage.table.effectiveDate')}</th>
+                    <th className="px-3 py-2 text-right">{t('modules.leadership.policiesPage.table.actions')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-800">
@@ -205,35 +205,35 @@ const PoliciesPage = () => {
                             onClick={() => handleEdit(policy)}
                             className="rounded-md border border-slate-700 px-2 py-1 text-xs text-slate-200"
                           >
-                            Editar
+                            {t('common.buttons.edit')}
                           </button>
                           <button
                             type="button"
                             onClick={() => handleStatusAction(policy.id, 'approve')}
                             className="rounded-md border border-emerald-500/50 px-2 py-1 text-xs text-emerald-200"
                           >
-                            Aprobar
+                            {t('common.buttons.approve')}
                           </button>
                           <button
                             type="button"
                             onClick={() => handleStatusAction(policy.id, 'publish')}
                             className="rounded-md border border-sky-500/50 px-2 py-1 text-xs text-sky-200"
                           >
-                            Publicar
+                            {t('common.buttons.publish')}
                           </button>
                           <button
                             type="button"
                             onClick={() => handleStatusAction(policy.id, 'obsolete')}
                             className="rounded-md border border-amber-500/50 px-2 py-1 text-xs text-amber-200"
                           >
-                            {t('literals.Obsoleta')}
+                            {t('modules.leadership.policiesPage.options.status.obsolete')}
                           </button>
                           <button
                             type="button"
                             onClick={() => handleDelete(policy.id)}
                             className="rounded-md border border-red-500/50 px-2 py-1 text-xs text-red-200"
                           >
-                            Eliminar
+                            {t('common.buttons.delete')}
                           </button>
                         </div>
                       </td>
@@ -248,14 +248,14 @@ const PoliciesPage = () => {
         <form onSubmit={handleSubmit} className="rounded-xl border border-slate-800 bg-slate-900/70 p-4 space-y-4">
           <div>
             <h2 className="text-lg font-semibold text-white">
-              {editingId ? 'Editar política' : 'Nueva política'}
+              {editingId ? t('modules.leadership.policiesPage.form.editTitle') : t('modules.leadership.policiesPage.form.newTitle')}
             </h2>
-            <p className="text-xs text-slate-400">{t('literals.Organizacion: {orgName || \'Sin seleccionar\'}')}</p>
+            <p className="text-xs text-slate-400">{t('modules.leadership.policiesPage.form.organization')}: {orgName || t('modules.leadership.policiesPage.form.unselected')}</p>
           </div>
 
           <div className="grid gap-3">
             <label className="text-xs text-slate-400">
-              Version
+              {t('modules.leadership.policiesPage.form.version')}
               <input
                 type="text"
                 value={form.version}
@@ -266,7 +266,7 @@ const PoliciesPage = () => {
             </label>
 
             <label className="text-xs text-slate-400">
-              Título
+              {t('modules.leadership.policiesPage.form.title')}
               <input
                 type="text"
                 value={form.title}
@@ -276,7 +276,7 @@ const PoliciesPage = () => {
             </label>
 
             <label className="text-xs text-slate-400">
-              Contenido
+              {t('modules.leadership.policiesPage.form.content')}
               <textarea
                 value={form.content}
                 onChange={(event) => setForm({ ...form, content: event.target.value })}
@@ -286,7 +286,7 @@ const PoliciesPage = () => {
             </label>
 
             <label className="text-xs text-slate-400">
-              Enfoque al cliente
+              {t('modules.leadership.policiesPage.form.customerFocus')}
               <textarea
                 value={form.customer_focus}
                 onChange={(event) => setForm({ ...form, customer_focus: event.target.value })}
@@ -295,7 +295,7 @@ const PoliciesPage = () => {
             </label>
 
             <label className="text-xs text-slate-400">
-              Marco para objetivos
+              {t('modules.leadership.policiesPage.form.frameworkForObjectives')}
               <textarea
                 value={form.framework_for_objectives}
                 onChange={(event) => setForm({ ...form, framework_for_objectives: event.target.value })}
@@ -304,7 +304,7 @@ const PoliciesPage = () => {
             </label>
 
             <label className="text-xs text-slate-400">
-              Compromiso con requisitos
+              {t('modules.leadership.policiesPage.form.commitmentRequirements')}
               <textarea
                 value={form.commitment_requirements}
                 onChange={(event) => setForm({ ...form, commitment_requirements: event.target.value })}
@@ -313,7 +313,7 @@ const PoliciesPage = () => {
             </label>
 
             <label className="text-xs text-slate-400">
-              Compromiso con mejora
+              {t('modules.leadership.policiesPage.form.commitmentImprovement')}
               <textarea
                 value={form.commitment_improvement}
                 onChange={(event) => setForm({ ...form, commitment_improvement: event.target.value })}
@@ -323,22 +323,22 @@ const PoliciesPage = () => {
 
             <div className="grid gap-3 sm:grid-cols-2">
               <label className="text-xs text-slate-400">
-                Estado
+                {t('common.forms.status')}
                 <select
                   value={form.status}
                   onChange={(event) => setForm({ ...form, status: event.target.value })}
                   className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
                 >
-                  <option value="draft">{t('literals.Borrador')}</option>
-                  <option value="review">{t('literals.Revision')}</option>
-                  <option value="approved">{t('literals.Aprobada')}</option>
-                  <option value="active">{t('literals.Activa')}</option>
-                  <option value="obsolete">{t('literals.Obsoleta')}</option>
+                  <option value="draft">{t('modules.leadership.policiesPage.options.status.draft')}</option>
+                  <option value="review">{t('modules.leadership.policiesPage.options.status.review')}</option>
+                  <option value="approved">{t('modules.leadership.policiesPage.options.status.approved')}</option>
+                  <option value="active">{t('modules.leadership.policiesPage.options.status.active')}</option>
+                  <option value="obsolete">{t('modules.leadership.policiesPage.options.status.obsolete')}</option>
                 </select>
               </label>
 
               <label className="text-xs text-slate-400">
-                Fecha de vigencia
+                {t('modules.leadership.policiesPage.form.effectiveDate')}
                 <input
                   type="date"
                   value={form.effective_date}
@@ -348,7 +348,7 @@ const PoliciesPage = () => {
               </label>
 
               <label className="text-xs text-slate-400">
-                Fecha de revision
+                {t('modules.leadership.policiesPage.form.reviewDate')}
                 <input
                   type="date"
                   value={form.review_date}
@@ -358,7 +358,7 @@ const PoliciesPage = () => {
               </label>
 
               <label className="text-xs text-slate-400">
-                Comentarios de aprobación
+                {t('modules.leadership.policiesPage.form.approvalComments')}
                 <input
                   type="text"
                   value={form.approval_comments}
@@ -369,7 +369,7 @@ const PoliciesPage = () => {
             </div>
 
             <label className="text-xs text-slate-400">
-              PDF firmado
+              {t('modules.leadership.policiesPage.form.signedPdf')}
               <input
                 type="file"
                 onChange={(event) => setPdfFile(event.target.files?.[0] || null)}
@@ -391,7 +391,7 @@ const PoliciesPage = () => {
               onClick={resetForm}
               className="rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-200"
             >
-              Limpiar
+              {t('common.buttons.clear')}
             </button>
           </div>
         </form>

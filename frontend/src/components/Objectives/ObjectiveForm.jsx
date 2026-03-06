@@ -186,7 +186,7 @@ const ObjectiveForm = ({ objective, onSubmit, onCancel }) => {
                 {errors.target_value && <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.target_value}</p>}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">{t('literals.Valor Actual')}</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">{t('objectiveForm.fields.currentValue')}</label>
                 <input
                   type="number"
                   step="0.01"
@@ -220,7 +220,7 @@ const ObjectiveForm = ({ objective, onSubmit, onCancel }) => {
             {/* Frequency and Responsible */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">{t('literals.Frecuencia de Medición')}</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">{t('objectiveForm.fields.measurementFrequency')}</label>
                 <select
                   name="measurement_frequency"
                   value={formData.measurement_frequency}
@@ -276,7 +276,7 @@ const ObjectiveForm = ({ objective, onSubmit, onCancel }) => {
 
             {/* Process ID */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">{t('literals.ID de Proceso (opcional)')}</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">{t('objectiveForm.fields.processIdOptional')}</label>
               <input
                 type="text"
                 name="process_id"

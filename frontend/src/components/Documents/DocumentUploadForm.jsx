@@ -69,7 +69,7 @@ const DocumentUploadForm = ({ onUpload, onCancel, uploading }) => {
   return (
     <div className="bg-white/70 dark:bg-slate-800/70 backdrop-blur-md rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-all duration-300 border border-white/20 dark:border-slate-700/50 hover:shadow-md dark:hover:shadow-slate-900/70">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-xl font-semibold text-slate-900 dark:text-white">{t('literals.Subir Documento')}</h3>
+        <h3 className="text-xl font-semibold text-slate-900 dark:text-white">{t('documentsManager.upload.title')}</h3>
         {onCancel && (
           <button
             onClick={onCancel}
@@ -101,7 +101,7 @@ const DocumentUploadForm = ({ onUpload, onCancel, uploading }) => {
                   <>
                     <Upload className="h-10 w-10 text-gray-400 dark:text-slate-500 mb-2" />
                     <p className="text-sm text-gray-500 dark:text-slate-400">
-                      <span className="font-semibold">{t('literals.Click para subir')}</span> o arrastra el archivo
+                      <span className="font-semibold">{t('documentsManager.upload.clickToUpload')}</span> {t('documentsManager.upload.orDrag')}
                     </p>
                     <p className="text-xs text-gray-500 dark:text-slate-500">
                       PDF, DOCX, TXT, XLSX (máx. 10MB)
@@ -159,11 +159,11 @@ const DocumentUploadForm = ({ onUpload, onCancel, uploading }) => {
             className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
             required
           >
-            <option value="acta">{t('literals.Acta')}</option>
-            <option value="reporte">{t('literals.Reporte')}</option>
-            <option value="política">{t('literals.Política')}</option>
-            <option value="procedimiento">{t('literals.Procedimiento')}</option>
-            <option value="otro">{t('literals.Otro')}</option>
+            <option value="acta">{t('documentsManager.types.minute')}</option>
+            <option value="reporte">{t('documentsManager.types.report')}</option>
+            <option value="política">{t('documentsManager.types.policy')}</option>
+            <option value="procedimiento">{t('documentsManager.types.procedure')}</option>
+            <option value="otro">{t('documentsManager.types.other')}</option>
           </select>
         </div>
 

@@ -43,7 +43,7 @@ const RACIEntriesPage = () => {
       setEntries(normalizeList(entriesData));
       setRoles(normalizeList(rolesData));
     } catch {
-      setError('No se pudieron cargar las entradas RACI.');
+      setError(t('modules.leadership.raciEntriesPage.messages.loadError'));
     } finally {
       setLoading(false);
     }
@@ -84,7 +84,7 @@ const RACIEntriesPage = () => {
       resetForm();
       await loadData();
     } catch {
-      setError('No se pudo guardar la entrada.');
+      setError(t('modules.leadership.raciEntriesPage.messages.saveError'));
     } finally {
       setSaving(false);
     }
@@ -104,7 +104,7 @@ const RACIEntriesPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Eliminar esta entrada?')) {
+    if (!window.confirm(t('modules.leadership.raciEntriesPage.messages.confirmDelete'))) {
       return;
     }
 
@@ -112,7 +112,7 @@ const RACIEntriesPage = () => {
       await deleteRACIEntry(id);
       await loadData();
     } catch {
-      setError('No se pudo eliminar la entrada.');
+      setError(t('modules.leadership.raciEntriesPage.messages.deleteError'));
     }
   };
 
@@ -142,14 +142,14 @@ const RACIEntriesPage = () => {
     <div className="space-y-6" style={{ fontFamily: '"Sora", "Work Sans", sans-serif' }}>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-white">{t('literals.Entradas RACI')}</h1>
-          <p className="text-sm text-slate-400">{t('literals.Matriz: {matrixId}')}</p>
+          <h1 className="text-2xl font-semibold text-white">{t('modules.leadership.raciEntriesPage.title')}</h1>
+          <p className="text-sm text-slate-400">{t('modules.leadership.raciEntriesPage.subtitle')}: {matrixId}</p>
         </div>
         <Link
           to="/leadership/raci"
           className="rounded-lg border border-slate-700 px-3 py-2 text-sm text-slate-200 hover:border-slate-500"
         >
-          Volver a matrices
+          {t('modules.leadership.raciEntriesPage.buttons.backToMatrices')}
         </Link>
       </div>
 
@@ -162,15 +162,15 @@ const RACIEntriesPage = () => {
       <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
         <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-4">
           {loading ? (
-            <div className="py-10 text-center text-slate-400">{t('literals.Cargando entradas...')}</div>
+            <div className="py-10 text-center text-slate-400">{t('modules.leadership.raciEntriesPage.messages.loading')}</div>
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full text-left text-sm text-slate-200">
                 <thead className="text-xs uppercase text-slate-400">
                   <tr>
-                    <th className="px-3 py-2">{t('literals.Orden')}</th>
-                    <th className="px-3 py-2">{t('literals.Actividad')}</th>
-                    <th className="px-3 py-2 text-right">{t('literals.Acciones')}</th>
+                    <th className="px-3 py-2">{t('modules.leadership.raciEntriesPage.table.order')}</th>
+                    <th className="px-3 py-2">{t('modules.leadership.raciEntriesPage.table.activity')}</th>
+                    <th className="px-3 py-2 text-right">{t('modules.leadership.raciEntriesPage.table.actions')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-800">
@@ -185,14 +185,14 @@ const RACIEntriesPage = () => {
                             onClick={() => handleEdit(entry)}
                             className="rounded-md border border-slate-700 px-2 py-1 text-xs text-slate-200"
                           >
-                            Editar
+                            {t('common.buttons.edit')}
                           </button>
                           <button
                             type="button"
                             onClick={() => handleDelete(entry.id)}
                             className="rounded-md border border-red-500/50 px-2 py-1 text-xs text-red-200"
                           >
-                            Eliminar
+                            {t('common.buttons.delete')}
                           </button>
                         </div>
                       </td>
@@ -207,13 +207,13 @@ const RACIEntriesPage = () => {
         <form onSubmit={handleSubmit} className="rounded-xl border border-slate-800 bg-slate-900/70 p-4 space-y-4">
           <div>
             <h2 className="text-lg font-semibold text-white">
-              {editingId ? 'Editar entrada' : 'Nueva entrada'}
+              {editingId ? t('modules.leadership.raciEntriesPage.form.editTitle') : t('modules.leadership.raciEntriesPage.form.newTitle')}
             </h2>
           </div>
 
           <div className="grid gap-3">
             <label className="text-xs text-slate-400">
-              Actividad
+              {t('modules.leadership.raciEntriesPage.form.activity')}
               <input
                 type="text"
                 value={form.activity}
@@ -224,7 +224,7 @@ const RACIEntriesPage = () => {
             </label>
 
             <label className="text-xs text-slate-400">
-              Descripción
+              {t('common.forms.description')}
               <textarea
                 value={form.description}
                 onChange={(event) => setForm({ ...form, description: event.target.value })}
@@ -233,7 +233,7 @@ const RACIEntriesPage = () => {
             </label>
 
             <label className="text-xs text-slate-400">
-              Orden
+              {t('modules.leadership.raciEntriesPage.form.order')}
               <input
                 type="number"
                 value={form.order}
@@ -242,10 +242,10 @@ const RACIEntriesPage = () => {
               />
             </label>
 
-            {renderRoleChecklist('Responsable', 'responsible_roles')}
-            {renderRoleChecklist('Aprobador', 'accountable_roles')}
-            {renderRoleChecklist('Consultado', 'consulted_roles')}
-            {renderRoleChecklist('Informado', 'informed_roles')}
+            {renderRoleChecklist(t('modules.leadership.raciEntriesPage.form.responsible'), 'responsible_roles')}
+            {renderRoleChecklist(t('modules.leadership.raciEntriesPage.form.accountable'), 'accountable_roles')}
+            {renderRoleChecklist(t('modules.leadership.raciEntriesPage.form.consulted'), 'consulted_roles')}
+            {renderRoleChecklist(t('modules.leadership.raciEntriesPage.form.informed'), 'informed_roles')}
           </div>
 
           <div className="flex flex-wrap gap-2">
@@ -261,7 +261,7 @@ const RACIEntriesPage = () => {
               onClick={resetForm}
               className="rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-200"
             >
-              Limpiar
+              {t('common.buttons.clear')}
             </button>
           </div>
         </form>

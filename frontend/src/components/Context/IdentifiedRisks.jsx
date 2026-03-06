@@ -54,7 +54,7 @@ const IdentifiedRisks = ({ riesgos, loading }) => {
       {!riesgos || riesgos.length === 0 ? (
         <div className="text-center py-8">
           <Shield className="h-16 w-16 text-green-500 mx-auto mb-4" />
-          <p className="text-slate-500 dark:text-slate-400">{t('literals.No se identificaron riesgos críticos')}</p>
+          <p className="text-slate-500 dark:text-slate-400">{t('identifiedRisks.empty')}</p>
         </div>
       ) : (
         <div className="space-y-4">
@@ -82,7 +82,7 @@ const IdentifiedRisks = ({ riesgos, loading }) => {
                   <div className="flex items-start">
                     <TrendingUp className="h-4 w-4 text-green-600 mr-2 mt-0.5" />
                     <div>
-                      <p className="text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">{t('literals.Plan de Mitigación:')}</p>
+                      <p className="text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">{t('identifiedRisks.mitigationPlan')}</p>
                       <p className="text-sm text-slate-700 dark:text-slate-300">{riesgo.mitigacion}</p>
                     </div>
                   </div>

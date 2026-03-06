@@ -29,9 +29,9 @@ const ProcessForm = ({ process, mapId, onSave, onClose }) => {
   const [saving, setSaving] = useState(false);
 
   const PROCESS_TYPES = [
-    { value: 'strategic', label: 'Estratégico' },
-    { value: 'operational', label: 'Operativo' },
-    { value: 'support', label: 'Apoyo' }
+    { value: 'strategic', label: t('processForm.types.strategic') },
+    { value: 'operational', label: t('processForm.types.operational') },
+    { value: 'support', label: t('processForm.types.support') }
   ];
 
   useEffect(() => {
@@ -84,11 +84,11 @@ const ProcessForm = ({ process, mapId, onSave, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.code.trim() || !formData.name.trim()) {
-      alert('El código y nombre del proceso son requeridos');
+      alert(t('processForm.errors.codeAndNameRequired'));
       return;
     }
     if (!formData.owner.trim()) {
-      alert('El responsable del proceso es requerido');
+      alert(t('processForm.errors.responsibleRequired'));
       return;
     }
     setSaving(true);
@@ -149,7 +149,7 @@ const ProcessForm = ({ process, mapId, onSave, onClose }) => {
       <div className="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md rounded-lg shadow-xl dark:shadow-slate-900/50 border border-white/30 dark:border-slate-700/30 w-full max-w-3xl max-h-[90vh] overflow-y-auto transition-all duration-300">
         <div className="sticky top-0 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md border-b dark:border-slate-700/50 px-6 py-4 flex items-center justify-between transition-all duration-300">
           <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-            {process ? 'Editar Proceso' : 'Nuevo Proceso'}
+            {process ? t('processForm.titleEdit') : t('processForm.titleCreate')}
           </h2>
           <button onClick={onClose} className="text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-300 transition-colors">
             <X className="h-6 w-6" />
@@ -159,10 +159,10 @@ const ProcessForm = ({ process, mapId, onSave, onClose }) => {
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
           {/* Información Básica */}
           <div className="bg-gray-50/70 dark:bg-slate-700/70 backdrop-blur-md rounded-lg p-4 border border-gray-100/50 dark:border-slate-600/50 transition-all duration-300">
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">{t('literals.Información del Proceso')}</h3>
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">{t('processForm.sections.processInfo')}</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1 transition-colors">{t('literals.Código *')}</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1 transition-colors">{t('processForm.fields.codeRequired')}</label>
                 <input
                   type="text"
                   name="code"
@@ -175,7 +175,7 @@ const ProcessForm = ({ process, mapId, onSave, onClose }) => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1 transition-colors">{t('literals.Tipo *')}</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1 transition-colors">{t('processForm.fields.typeRequired')}</label>
                 <select
                   name="process_type"
                   value={formData.process_type}
@@ -189,7 +189,7 @@ const ProcessForm = ({ process, mapId, onSave, onClose }) => {
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1 transition-colors">{t('literals.Nombre *')}</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1 transition-colors">{t('processForm.fields.nameRequired')}</label>
                 <input
                   type="text"
                   name="name"
@@ -202,7 +202,7 @@ const ProcessForm = ({ process, mapId, onSave, onClose }) => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1 transition-colors">{t('literals.Responsable *')}</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1 transition-colors">{t('processForm.fields.responsibleRequired')}</label>
                 <input
                   type="text"
                   name="owner"
@@ -215,7 +215,7 @@ const ProcessForm = ({ process, mapId, onSave, onClose }) => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1 transition-colors">{t('literals.Documentado en')}</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1 transition-colors">{t('processForm.fields.documentedIn')}</label>
                 <input
                   type="text"
                   name="documented_in"
@@ -227,7 +227,7 @@ const ProcessForm = ({ process, mapId, onSave, onClose }) => {
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1 transition-colors">{t('literals.Objetivo')}</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1 transition-colors">{t('processForm.fields.objective')}</label>
                 <textarea
                   name="objective"
                   value={formData.objective}
@@ -254,14 +254,14 @@ const ProcessForm = ({ process, mapId, onSave, onClose }) => {
 
           {/* Entradas y Salidas */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {renderListSection('Entradas', 'inputs', newInput, setNewInput, 'blue')}
-            {renderListSection('Salidas', 'outputs', newOutput, setNewOutput, 'green')}
+            {renderListSection(t('processForm.listSections.inputs'), 'inputs', newInput, setNewInput, 'blue')}
+            {renderListSection(t('processForm.listSections.outputs'), 'outputs', newOutput, setNewOutput, 'green')}
           </div>
 
           {/* Recursos y KPIs */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {renderListSection('Recursos', 'resources', newResource, setNewResource, 'purple')}
-            {renderListSection('KPIs', 'kpis', newKpi, setNewKpi, 'yellow')}
+            {renderListSection(t('processForm.listSections.resources'), 'resources', newResource, setNewResource, 'purple')}
+            {renderListSection(t('processForm.listSections.kpis'), 'kpis', newKpi, setNewKpi, 'yellow')}
           </div>
 
           {/* Estado */}
@@ -273,7 +273,7 @@ const ProcessForm = ({ process, mapId, onSave, onClose }) => {
               onChange={handleChange}
               className="h-4 w-4 text-blue-600 border-gray-300 dark:border-slate-600 dark:bg-slate-700 rounded transition-colors"
             />
-            <label className="ml-2 text-sm text-gray-700 dark:text-slate-300 transition-colors">{t('literals.Proceso Activo')}</label>
+            <label className="ml-2 text-sm text-gray-700 dark:text-slate-300 transition-colors">{t('processForm.fields.activeProcess')}</label>
           </div>
 
           {/* Botones */}
@@ -283,7 +283,7 @@ const ProcessForm = ({ process, mapId, onSave, onClose }) => {
               onClick={onClose}
               className="px-4 py-2 text-gray-700 dark:text-slate-300 bg-gray-100 dark:bg-slate-700 rounded-lg hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors"
             >
-              Cancelar
+              {t('common.buttons.cancel')}
             </button>
             <button
               type="submit"

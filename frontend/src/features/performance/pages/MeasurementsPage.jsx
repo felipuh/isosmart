@@ -12,13 +12,6 @@ import {
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
 
-const statusLabels = {
-  on_target: 'En Objetivo',
-  below_target: 'Bajo Objetivo',
-  above_target: 'Sobre Objetivo',
-  needs_attention: 'Requiere Atencion'
-};
-
 const MeasurementsPage = () => {
   const { t } = useI18n();
   const { currentOrganization } = useAuth();
@@ -38,6 +31,13 @@ const MeasurementsPage = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [showForm, setShowForm] = useState(false);
+
+  const statusLabels = useMemo(() => ({
+    on_target: t('modules.performance.measurementsPage.statuses.onTarget'),
+    below_target: t('modules.performance.measurementsPage.statuses.belowTarget'),
+    above_target: t('modules.performance.measurementsPage.statuses.aboveTarget'),
+    needs_attention: t('modules.performance.measurementsPage.statuses.needsAttention'),
+  }), [t]);
 
   const indicatorMap = useMemo(() => {
     return indicators.reduce((acc, indicator) => {
@@ -117,7 +117,7 @@ const MeasurementsPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('Delete measurement?')) return;
+    if (!confirm(t('modules.performance.measurementsPage.deleteConfirm'))) return;
     try {
       await deleteMeasurement(id);
       await loadData();
@@ -159,13 +159,13 @@ const MeasurementsPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">{t('literals.Mediciones')}</h1>
+        <h1 className="text-3xl font-bold text-white">{t('modules.performance.measurementsPage.title')}</h1>
         <button
           type="button"
           onClick={openForm}
           className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
         >
-          Nueva medicion
+          {t('modules.performance.measurementsPage.new')}
         </button>
       </div>
 
@@ -174,11 +174,11 @@ const MeasurementsPage = () => {
           <thead className="bg-gray-800/50">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.date')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Indicador')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Real')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Objetivo')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.performance.measurementsPage.table.indicator')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.performance.measurementsPage.table.actual')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.performance.measurementsPage.table.target')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.status')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acciones')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.performance.measurementsPage.table.actions')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -199,25 +199,25 @@ const MeasurementsPage = () => {
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('literals.No hay mediciones')}</div>}
+        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('modules.performance.measurementsPage.empty')}</div>}
       </div>
 
       <Modal
-        title={editingId ? 'Editar medicion' : 'Nueva medicion'}
+        title={editingId ? t('modules.performance.measurementsPage.edit') : t('modules.performance.measurementsPage.new')}
         isOpen={showForm}
         onClose={closeForm}
       >
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Indicador *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.measurementsPage.fields.indicator')}</label>
               <select
                 value={form.indicator}
                 onChange={(event) => handleIndicatorChange(event.target.value)}
                 className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
                 required
               >
-                <option value="">{t('literals.Selecciona indicador')}</option>
+                <option value="">{t('modules.performance.measurementsPage.fields.selectIndicator')}</option>
                 {indicators.map((indicator) => (
                   <option key={indicator.id} value={indicator.id}>
                     {indicator.code} - {indicator.name}
@@ -226,7 +226,7 @@ const MeasurementsPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Fecha de Medicion *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.measurementsPage.fields.measurementDate')}</label>
               <input
                 type="date"
                 value={form.measurement_date}
@@ -236,7 +236,7 @@ const MeasurementsPage = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Estado *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.measurementsPage.fields.status')}</label>
               <select
                 value={form.status}
                 onChange={(event) => setForm({ ...form, status: event.target.value })}
@@ -249,7 +249,7 @@ const MeasurementsPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Valor Real *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.measurementsPage.fields.actualValue')}</label>
               <input
                 type="number"
                 step="0.01"
@@ -260,7 +260,7 @@ const MeasurementsPage = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Valor Objetivo *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.measurementsPage.fields.targetValue')}</label>
               <input
                 type="number"
                 step="0.01"
@@ -271,7 +271,7 @@ const MeasurementsPage = () => {
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Comentarios')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.measurementsPage.fields.comments')}</label>
               <textarea
                 value={form.comments}
                 onChange={(event) => setForm({ ...form, comments: event.target.value })}

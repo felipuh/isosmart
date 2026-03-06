@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import { useI18n } from '../../../context/I18nContext';
 import Modal from '../../../components/Common/Modal';
@@ -10,21 +10,6 @@ import {
 } from '../api/performanceApi';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
-
-const auditTypeLabels = {
-  system: 'Sistema SGC',
-  process: 'Proceso',
-  product: 'Producto',
-  compliance: 'Cumplimiento',
-  management: 'Direccion'
-};
-
-const statusLabels = {
-  planned: 'Planificada',
-  in_progress: 'En Proceso',
-  completed: 'Completada',
-  cancelled: 'Cancelada'
-};
 
 const AuditsPage = () => {
   const { t } = useI18n();
@@ -47,6 +32,21 @@ const AuditsPage = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [showForm, setShowForm] = useState(false);
+
+  const auditTypeLabels = useMemo(() => ({
+    system: t('modules.performance.auditsPage.types.system'),
+    process: t('modules.performance.auditsPage.types.process'),
+    product: t('modules.performance.auditsPage.types.product'),
+    compliance: t('modules.performance.auditsPage.types.compliance'),
+    management: t('modules.performance.auditsPage.types.management'),
+  }), [t]);
+
+  const statusLabels = useMemo(() => ({
+    planned: t('modules.performance.auditsPage.statuses.planned'),
+    in_progress: t('modules.performance.auditsPage.statuses.inProgress'),
+    completed: t('modules.performance.auditsPage.statuses.completed'),
+    cancelled: t('modules.performance.auditsPage.statuses.cancelled'),
+  }), [t]);
 
   const loadAudits = useCallback(async () => {
     try {
@@ -102,7 +102,7 @@ const AuditsPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('Delete audit?')) return;
+    if (!confirm(t('modules.performance.auditsPage.deleteConfirm'))) return;
     try {
       await deleteAudit(id);
       await loadAudits();
@@ -146,13 +146,13 @@ const AuditsPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">{t('literals.Auditorias Internas')}</h1>
+        <h1 className="text-3xl font-bold text-white">{t('modules.performance.auditsPage.title')}</h1>
         <button
           type="button"
           onClick={openForm}
           className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
         >
-          Nueva auditoria
+          {t('modules.performance.auditsPage.new')}
         </button>
       </div>
 
@@ -160,12 +160,12 @@ const AuditsPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Codigo')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Título')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Tipo')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Planificada')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.performance.auditsPage.table.code')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.name')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.performance.auditsPage.table.type')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.performance.auditsPage.table.plannedDate')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.status')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acciones')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.performance.auditsPage.table.actions')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -184,18 +184,18 @@ const AuditsPage = () => {
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('literals.No hay auditorias')}</div>}
+        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('modules.performance.auditsPage.empty')}</div>}
       </div>
 
       <Modal
-        title={editingId ? 'Editar auditoria' : 'Nueva auditoria'}
+        title={editingId ? t('modules.performance.auditsPage.edit') : t('modules.performance.auditsPage.new')}
         isOpen={showForm}
         onClose={closeForm}
       >
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Codigo de Auditoria *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.auditsPage.fields.auditCode')}</label>
               <input
                 type="text"
                 value={form.audit_code}
@@ -205,7 +205,7 @@ const AuditsPage = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Tipo *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.auditsPage.fields.auditType')}</label>
               <select
                 value={form.audit_type}
                 onChange={(event) => setForm({ ...form, audit_type: event.target.value })}
@@ -218,7 +218,7 @@ const AuditsPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Fecha Planificada *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.auditsPage.fields.plannedDate')}</label>
               <input
                 type="date"
                 value={form.planned_date}
@@ -228,7 +228,7 @@ const AuditsPage = () => {
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Título *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.auditsPage.fields.title')}</label>
               <input
                 type="text"
                 value={form.title}
@@ -238,7 +238,7 @@ const AuditsPage = () => {
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Objetivos *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.auditsPage.fields.objectives')}</label>
               <textarea
                 value={form.objectives}
                 onChange={(event) => setForm({ ...form, objectives: event.target.value })}
@@ -248,7 +248,7 @@ const AuditsPage = () => {
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Alcance *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.auditsPage.fields.scope')}</label>
               <textarea
                 value={form.scope}
                 onChange={(event) => setForm({ ...form, scope: event.target.value })}
@@ -258,7 +258,7 @@ const AuditsPage = () => {
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Criterios *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.auditsPage.fields.criteria')}</label>
               <textarea
                 value={form.criteria}
                 onChange={(event) => setForm({ ...form, criteria: event.target.value })}

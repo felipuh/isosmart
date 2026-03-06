@@ -153,7 +153,7 @@ const ProductReleasesPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('¿Eliminar?')) return;
+    if (!confirm(t('modules.operations.productReleasesPage.messages.confirmDelete'))) return;
     try {
       await deleteProductRelease(id);
       await loadData();
@@ -180,13 +180,13 @@ const ProductReleasesPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">{t('literals.Liberación de Productos')}</h1>
+        <h1 className="text-3xl font-bold text-white">{t('modules.operations.productReleasesPage.title')}</h1>
         <button
           type="button"
           onClick={openForm}
           className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
         >
-          Nueva liberación
+          {t('modules.operations.productReleasesPage.buttons.new')}
         </button>
       </div>
 
@@ -194,11 +194,11 @@ const ProductReleasesPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Código')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Producto/Servicio')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.operations.productReleasesPage.table.code')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.operations.productReleasesPage.table.productService')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.date')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.status')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acciones')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.operations.productReleasesPage.table.actions')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -216,56 +216,56 @@ const ProductReleasesPage = () => {
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('literals.No hay liberaciones')}</div>}
+        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('modules.operations.productReleasesPage.messages.empty')}</div>}
       </div>
 
       <Modal
-        title={editingId ? 'Editar liberación' : 'Nueva liberación'}
+        title={editingId ? t('modules.operations.productReleasesPage.modal.editTitle') : t('modules.operations.productReleasesPage.modal.newTitle')}
         isOpen={showForm}
         onClose={closeForm}
       >
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Código *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.productReleasesPage.form.codeRequired')}</label>
               <input type="text" value={form.release_code} onChange={(e) => setForm({...form, release_code: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Producto/Servicio *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.productReleasesPage.form.productServiceRequired')}</label>
               <input type="text" value={form.product_service_name} onChange={(e) => setForm({...form, product_service_name: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Lote/Batch')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.productReleasesPage.form.batchLot')}</label>
               <input type="text" value={form.batch_lot_number} onChange={(e) => setForm({...form, batch_lot_number: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Fecha *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.productReleasesPage.form.dateRequired')}</label>
               <input type="date" value={form.release_date} onChange={(e) => setForm({...form, release_date: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Cantidad *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.productReleasesPage.form.quantityRequired')}</label>
               <input type="number" value={form.quantity_released} onChange={(e) => setForm({...form, quantity_released: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Unidad')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.productReleasesPage.form.unit')}</label>
               <input type="text" value={form.unit} onChange={(e) => setForm({...form, unit: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
             </div>
             <div className="flex items-center">
               <label className="flex items-center space-x-2">
                 <input type="checkbox" checked={form.verification_performed} onChange={(e) => setForm({...form, verification_performed: e.target.checked})} className="rounded" />
-                <span className="text-sm text-gray-300">{t('literals.Verificación Realizada')}</span>
+                <span className="text-sm text-gray-300">{t('modules.operations.productReleasesPage.form.verificationPerformed')}</span>
               </label>
             </div>
             <div className="flex items-center">
               <label className="flex items-center space-x-2">
                 <input type="checkbox" checked={form.acceptance_criteria_met} onChange={(e) => setForm({...form, acceptance_criteria_met: e.target.checked})} className="rounded" />
-                <span className="text-sm text-gray-300">{t('literals.Criterios Cumplidos')}</span>
+                <span className="text-sm text-gray-300">{t('modules.operations.productReleasesPage.form.criteriaMet')}</span>
               </label>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Autorizado por')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.productReleasesPage.form.authorizedBy')}</label>
               <select value={form.authorized_by} onChange={(e) => setForm({...form, authorized_by: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="">{t('literals.Sin asignar')}</option>
+                <option value="">{t('modules.operations.productReleasesPage.form.unassigned')}</option>
                 {users.map(u => (
                   <option key={u.id} value={u.id}>{u.full_name || u.username || u.email}</option>
                 ))}
@@ -274,30 +274,30 @@ const ProductReleasesPage = () => {
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">{t('common.forms.status')}</label>
               <select value={form.status} onChange={(e) => setForm({...form, status: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="pending">{t('literals.Pendiente')}</option>
-                <option value="approved">{t('literals.Aprobado')}</option>
-                <option value="released">{t('literals.Liberado')}</option>
-                <option value="rejected">{t('literals.Rechazado')}</option>
+                <option value="pending">{t('modules.operations.productReleasesPage.options.status.pending')}</option>
+                <option value="approved">{t('modules.operations.productReleasesPage.options.status.approved')}</option>
+                <option value="released">{t('modules.operations.productReleasesPage.options.status.released')}</option>
+                <option value="rejected">{t('modules.operations.productReleasesPage.options.status.rejected')}</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Cliente')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.productReleasesPage.form.customer')}</label>
               <input type="text" value={form.customer_name} onChange={(e) => setForm({...form, customer_name: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Fecha de Entrega')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.productReleasesPage.form.deliveryDate')}</label>
               <input type="date" value={form.delivery_date} onChange={(e) => setForm({...form, delivery_date: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Resultados de Verificación')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.productReleasesPage.form.verificationResults')}</label>
               <textarea value={form.verification_results} onChange={(e) => setForm({...form, verification_results: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Detalles de Criterios')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.productReleasesPage.form.criteriaDetails')}</label>
               <textarea value={form.criteria_details} onChange={(e) => setForm({...form, criteria_details: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Notas')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.productReleasesPage.form.notes')}</label>
               <textarea value={form.notes} onChange={(e) => setForm({...form, notes: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" />
             </div>
           </div>

@@ -90,7 +90,7 @@ const CompetencesPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!orgId) {
-      alert('Selecciona una organizacion antes de crear registros.');
+      alert(t('modules.resources.competencesPage.messages.selectOrganization'));
       return;
     }
     try {
@@ -129,7 +129,7 @@ const CompetencesPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('¿Eliminar?')) return;
+    if (!confirm(t('modules.resources.competencesPage.messages.confirmDelete'))) return;
     try {
       await deleteCompetence(id);
       await loadData();
@@ -156,13 +156,13 @@ const CompetencesPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">{t('literals.Competencias')}</h1>
+        <h1 className="text-3xl font-bold text-white">{t('modules.resources.competencesPage.title')}</h1>
         <button
           type="button"
           onClick={openForm}
           className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
         >
-          Nueva competencia
+          {t('modules.resources.competencesPage.buttons.new')}
         </button>
       </div>
 
@@ -170,12 +170,12 @@ const CompetencesPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Usuario')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Competencia')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Puesto')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Requerido')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Actual')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acciones')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.resources.competencesPage.table.user')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.resources.competencesPage.table.competence')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.resources.competencesPage.table.position')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.resources.competencesPage.table.required')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.resources.competencesPage.table.current')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.resources.competencesPage.table.actions')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -194,20 +194,20 @@ const CompetencesPage = () => {
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('literals.No hay competencias')}</div>}
+        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('modules.resources.competencesPage.messages.empty')}</div>}
       </div>
 
       <Modal
-        title={editingId ? 'Editar competencia' : 'Nueva competencia'}
+        title={editingId ? t('modules.resources.competencesPage.modal.editTitle') : t('modules.resources.competencesPage.modal.newTitle')}
         isOpen={showForm}
         onClose={closeForm}
       >
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Usuario *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.resources.competencesPage.form.userRequired')}</label>
               <select value={form.user} onChange={(e) => setForm({...form, user: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required>
-                <option value="">{t('literals.Seleccionar')}</option>
+                <option value="">{t('modules.resources.competencesPage.form.selectOption')}</option>
                 {users.map(u => (
                   <option key={u.id} value={u.id}>{u.full_name || u.username || u.email}</option>
                 ))}
@@ -217,38 +217,38 @@ const CompetencesPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Competencia *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.resources.competencesPage.form.competenceRequired')}</label>
               <input type="text" value={form.competence_name} onChange={(e) => setForm({...form, competence_name: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Puesto *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.resources.competencesPage.form.positionRequired')}</label>
               <input type="text" value={form.position} onChange={(e) => setForm({...form, position: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Nivel Requerido')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.resources.competencesPage.form.requiredLevel')}</label>
               <select value={form.required_level} onChange={(e) => setForm({...form, required_level: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="basic">{t('literals.Básico')}</option>
-                <option value="intermediate">{t('literals.Intermedio')}</option>
-                <option value="advanced">{t('literals.Avanzado')}</option>
-                <option value="expert">{t('literals.Experto')}</option>
+                <option value="basic">{t('modules.resources.competencesPage.options.level.basic')}</option>
+                <option value="intermediate">{t('modules.resources.competencesPage.options.level.intermediate')}</option>
+                <option value="advanced">{t('modules.resources.competencesPage.options.level.advanced')}</option>
+                <option value="expert">{t('modules.resources.competencesPage.options.level.expert')}</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Nivel Actual')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.resources.competencesPage.form.currentLevel')}</label>
               <select value={form.current_level} onChange={(e) => setForm({...form, current_level: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="basic">{t('literals.Básico')}</option>
-                <option value="intermediate">{t('literals.Intermedio')}</option>
-                <option value="advanced">{t('literals.Avanzado')}</option>
-                <option value="expert">{t('literals.Experto')}</option>
+                <option value="basic">{t('modules.resources.competencesPage.options.level.basic')}</option>
+                <option value="intermediate">{t('modules.resources.competencesPage.options.level.intermediate')}</option>
+                <option value="advanced">{t('modules.resources.competencesPage.options.level.advanced')}</option>
+                <option value="expert">{t('modules.resources.competencesPage.options.level.expert')}</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Método de Adquisición')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.resources.competencesPage.form.acquisitionMethod')}</label>
               <select value={form.acquisition_method} onChange={(e) => setForm({...form, acquisition_method: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="education">{t('literals.Educación Formal')}</option>
-                <option value="training">{t('literals.Capacitación')}</option>
-                <option value="experience">{t('literals.Experiencia Laboral')}</option>
-                <option value="certification">{t('literals.Certificación')}</option>
+                <option value="education">{t('modules.resources.competencesPage.options.acquisition.education')}</option>
+                <option value="training">{t('modules.resources.competencesPage.options.acquisition.training')}</option>
+                <option value="experience">{t('modules.resources.competencesPage.options.acquisition.experience')}</option>
+                <option value="certification">{t('modules.resources.competencesPage.options.acquisition.certification')}</option>
               </select>
             </div>
             <div className="md:col-span-2">

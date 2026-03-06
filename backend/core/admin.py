@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import (
     ContextAnalysis, Document, StakeholderProfile, StakeholderChangeLog,
     ScopeElement, ScopeAudit, ProcessMap, RiskMatrix, QualityObjective,
-    ChangeLog, AIModelVersion, AIAuditLog
+    ChangeLog, AIModelVersion, AIAuditLog, BillingSubscription, BillingPayment
 )
 
 @admin.register(ContextAnalysis)
@@ -85,3 +85,19 @@ class AIAuditLogAdmin(admin.ModelAdmin):
     search_fields = ['model_name', 'user_id']
     date_hierarchy = 'timestamp'
     readonly_fields = ['timestamp', 'input_hash', 'output_hash']
+
+
+@admin.register(BillingSubscription)
+class BillingSubscriptionAdmin(admin.ModelAdmin):
+    list_display = ['organization', 'status', 'payment_method', 'next_due_date', 'grace_days', 'auto_suspend_enabled']
+    list_filter = ['status', 'payment_method', 'auto_suspend_enabled', 'currency']
+    search_fields = ['organization__name', 'payer_name', 'payer_email']
+    readonly_fields = ['created_at', 'updated_at', 'suspended_at', 'cancelled_at']
+
+
+@admin.register(BillingPayment)
+class BillingPaymentAdmin(admin.ModelAdmin):
+    list_display = ['id', 'subscription', 'status', 'payment_method', 'amount', 'currency', 'due_date', 'paid_at', 'evidence_file']
+    list_filter = ['status', 'payment_method', 'currency', 'created_at']
+    search_fields = ['subscription__organization__name', 'reference']
+    readonly_fields = ['created_at', 'updated_at', 'evidence_uploaded_at']

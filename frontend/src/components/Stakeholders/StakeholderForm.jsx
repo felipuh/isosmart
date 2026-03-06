@@ -197,7 +197,7 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
         <form id="stakeholder-form" onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-6">
           {/* Información Básica */}
           <div className="bg-gray-50/70 dark:bg-slate-700/70 backdrop-blur-md rounded-lg p-4 border border-gray-100/50 dark:border-slate-600/50 transition-all duration-300">
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">{t('literals.Información Básica')}</h3>
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">{t('stakeholderForm.sections.basicInfo')}</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
@@ -290,7 +290,7 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
 
           {/* Análisis de Poder e Interés */}
           <div className="bg-blue-50/70 dark:bg-blue-900/20 backdrop-blur-md rounded-lg p-4 border border-blue-100/50 dark:border-blue-800/50 transition-all duration-300">
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">{t('literals.Análisis de Poder e Interés')}</h3>
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">{t('stakeholderForm.sections.powerInterestAnalysis')}</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
@@ -344,7 +344,7 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
 
           {/* Comunicación */}
           <div className="bg-green-50/70 dark:bg-green-900/20 backdrop-blur-md rounded-lg p-4 border border-green-100/50 dark:border-green-800/50 transition-all duration-300">
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">{t('literals.Estrategia de Comunicación')}</h3>
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">{t('stakeholderForm.sections.communicationStrategy')}</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
@@ -380,7 +380,7 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
 
           {/* Expectativas */}
           <div className="bg-yellow-50/70 dark:bg-yellow-900/20 backdrop-blur-md rounded-lg p-4 border border-yellow-100/50 dark:border-yellow-800/50 transition-all duration-300">
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">{t('literals.Expectativas')}</h3>
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">{t('stakeholderForm.sections.expectations')}</h3>
             <div className="flex gap-2 mb-3">
               <input
                 type="text"
@@ -423,7 +423,7 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
 
           {/* Requisitos */}
           <div className="bg-purple-50/70 dark:bg-purple-900/20 backdrop-blur-md rounded-lg p-4 border border-purple-100/50 dark:border-purple-800/50 transition-all duration-300">
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">{t('literals.Requisitos')}</h3>
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">{t('stakeholderForm.sections.requirements')}</h3>
             <div className="flex gap-2 mb-3">
               <input
                 type="text"

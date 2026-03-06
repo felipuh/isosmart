@@ -174,7 +174,7 @@ const QualityObjectivesPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('¿Eliminar?')) return;
+    if (!confirm(t('modules.planning.qualityObjectivesPage.deleteConfirm'))) return;
     try {
       await deleteObjective(id);
       await loadData();
@@ -201,13 +201,13 @@ const QualityObjectivesPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">{t('literals.Objetivos de Calidad')}</h1>
+        <h1 className="text-3xl font-bold text-white">{t('modules.planning.qualityObjectivesPage.title')}</h1>
         <button
           type="button"
           onClick={openForm}
           className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
         >
-          Nuevo objetivo
+          {t('modules.planning.qualityObjectivesPage.new')}
         </button>
       </div>
 
@@ -215,13 +215,13 @@ const QualityObjectivesPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Código')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Título')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.planning.qualityObjectivesPage.table.code')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.planning.qualityObjectivesPage.table.title')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.status')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Meta')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.% Avance')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Responsable')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acciones')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.planning.qualityObjectivesPage.table.target')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.planning.qualityObjectivesPage.table.progress')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.planning.qualityObjectivesPage.table.owner')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.planning.qualityObjectivesPage.table.actions')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -241,22 +241,22 @@ const QualityObjectivesPage = () => {
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('literals.No hay objetivos')}</div>}
+        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('modules.planning.qualityObjectivesPage.empty')}</div>}
       </div>
 
       <Modal
-        title={editingId ? 'Editar objetivo' : 'Nuevo objetivo'}
+        title={editingId ? t('modules.planning.qualityObjectivesPage.edit') : t('modules.planning.qualityObjectivesPage.new')}
         isOpen={showForm}
         onClose={closeForm}
       >
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Código *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.qualityObjectivesPage.fields.code')}</label>
               <input type="text" value={form.code} onChange={(e) => setForm({...form, code: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Título *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.qualityObjectivesPage.fields.title')}</label>
               <input type="text" value={form.title} onChange={(e) => setForm({...form, title: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div className="md:col-span-3">
@@ -264,98 +264,98 @@ const QualityObjectivesPage = () => {
               <textarea value={form.description} onChange={(e) => setForm({...form, description: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="3" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Alineación')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.qualityObjectivesPage.fields.alignment')}</label>
               <select value={form.alignment} onChange={(e) => setForm({...form, alignment: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="policy">{t('literals.Política de Calidad')}</option>
-                <option value="strategic">{t('literals.Estrategia Organizacional')}</option>
-                <option value="customer">{t('literals.Requisitos del Cliente')}</option>
-                <option value="compliance">{t('literals.Cumplimiento Legal')}</option>
-                <option value="improvement">{t('literals.Mejora Continua')}</option>
+                <option value="policy">{t('modules.planning.qualityObjectivesPage.alignment.policy')}</option>
+                <option value="strategic">{t('modules.planning.qualityObjectivesPage.alignment.strategic')}</option>
+                <option value="customer">{t('modules.planning.qualityObjectivesPage.alignment.customer')}</option>
+                <option value="compliance">{t('modules.planning.qualityObjectivesPage.alignment.compliance')}</option>
+                <option value="improvement">{t('modules.planning.qualityObjectivesPage.alignment.improvement')}</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Métrica *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.qualityObjectivesPage.fields.metric')}</label>
               <input type="text" value={form.metric} onChange={(e) => setForm({...form, metric: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Unidad')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.qualityObjectivesPage.fields.unit')}</label>
               <input type="text" value={form.unit} onChange={(e) => setForm({...form, unit: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Línea Base')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.qualityObjectivesPage.fields.baseline')}</label>
               <input type="number" value={form.baseline} onChange={(e) => setForm({...form, baseline: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Meta *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.qualityObjectivesPage.fields.target')}</label>
               <input type="number" value={form.target} onChange={(e) => setForm({...form, target: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Valor Actual')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.qualityObjectivesPage.fields.currentValue')}</label>
               <input type="number" value={form.current_value} onChange={(e) => setForm({...form, current_value: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Responsable')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.qualityObjectivesPage.fields.owner')}</label>
               <select value={form.owner} onChange={(e) => setForm({...form, owner: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="">{t('literals.Sin asignar')}</option>
+                <option value="">{t('modules.planning.qualityObjectivesPage.fields.unassigned')}</option>
                 {users.map(u => (
                   <option key={u.id} value={u.id}>{u.full_name || u.username || u.email}</option>
                 ))}
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Fecha Inicio *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.qualityObjectivesPage.fields.startDate')}</label>
               <input type="date" value={form.start_date} onChange={(e) => setForm({...form, start_date: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Fecha Meta *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.qualityObjectivesPage.fields.targetDate')}</label>
               <input type="date" value={form.target_date} onChange={(e) => setForm({...form, target_date: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">{t('common.forms.status')}</label>
               <select value={form.status} onChange={(e) => setForm({...form, status: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="draft">{t('literals.Borrador')}</option>
-                <option value="approved">{t('literals.Aprobado')}</option>
-                <option value="in_progress">{t('literals.En Progreso')}</option>
-                <option value="achieved">{t('literals.Logrado')}</option>
-                <option value="partially_achieved">{t('literals.Parcialmente Logrado')}</option>
-                <option value="not_achieved">{t('literals.No Logrado')}</option>
-                <option value="cancelled">{t('literals.Cancelado')}</option>
+                <option value="draft">{t('modules.planning.qualityObjectivesPage.statuses.draft')}</option>
+                <option value="approved">{t('modules.planning.qualityObjectivesPage.statuses.approved')}</option>
+                <option value="in_progress">{t('modules.planning.qualityObjectivesPage.statuses.inProgress')}</option>
+                <option value="achieved">{t('modules.planning.qualityObjectivesPage.statuses.achieved')}</option>
+                <option value="partially_achieved">{t('modules.planning.qualityObjectivesPage.statuses.partiallyAchieved')}</option>
+                <option value="not_achieved">{t('modules.planning.qualityObjectivesPage.statuses.notAchieved')}</option>
+                <option value="cancelled">{t('modules.planning.qualityObjectivesPage.statuses.cancelled')}</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.% Avance')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.qualityObjectivesPage.fields.progress')}</label>
               <input type="number" min="0" max="100" value={form.progress_percentage} onChange={(e) => setForm({...form, progress_percentage: parseInt(e.target.value || 0)})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Recursos Requeridos')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.qualityObjectivesPage.fields.requiredResources')}</label>
               <textarea value={form.required_resources} onChange={(e) => setForm({...form, required_resources: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Presupuesto')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.qualityObjectivesPage.fields.budget')}</label>
               <input type="number" value={form.budget} onChange={(e) => setForm({...form, budget: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Criterios SMART')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.qualityObjectivesPage.fields.smartCriteria')}</label>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 <label className="flex items-center space-x-2">
                   <input type="checkbox" checked={form.is_specific} onChange={(e) => setForm({...form, is_specific: e.target.checked})} className="rounded" />
-                  <span className="text-sm text-gray-300">{t('literals.Específico')}</span>
+                  <span className="text-sm text-gray-300">{t('modules.planning.qualityObjectivesPage.smart.specific')}</span>
                 </label>
                 <label className="flex items-center space-x-2">
                   <input type="checkbox" checked={form.is_measurable} onChange={(e) => setForm({...form, is_measurable: e.target.checked})} className="rounded" />
-                  <span className="text-sm text-gray-300">{t('literals.Medible')}</span>
+                  <span className="text-sm text-gray-300">{t('modules.planning.qualityObjectivesPage.smart.measurable')}</span>
                 </label>
                 <label className="flex items-center space-x-2">
                   <input type="checkbox" checked={form.is_achievable} onChange={(e) => setForm({...form, is_achievable: e.target.checked})} className="rounded" />
-                  <span className="text-sm text-gray-300">{t('literals.Alcanzable')}</span>
+                  <span className="text-sm text-gray-300">{t('modules.planning.qualityObjectivesPage.smart.achievable')}</span>
                 </label>
                 <label className="flex items-center space-x-2">
                   <input type="checkbox" checked={form.is_relevant} onChange={(e) => setForm({...form, is_relevant: e.target.checked})} className="rounded" />
-                  <span className="text-sm text-gray-300">{t('literals.Relevante')}</span>
+                  <span className="text-sm text-gray-300">{t('modules.planning.qualityObjectivesPage.smart.relevant')}</span>
                 </label>
                 <label className="flex items-center space-x-2">
                   <input type="checkbox" checked={form.is_time_bound} onChange={(e) => setForm({...form, is_time_bound: e.target.checked})} className="rounded" />
-                  <span className="text-sm text-gray-300">{t('literals.Temporal')}</span>
+                  <span className="text-sm text-gray-300">{t('modules.planning.qualityObjectivesPage.smart.timeBound')}</span>
                 </label>
               </div>
             </div>

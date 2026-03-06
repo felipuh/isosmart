@@ -23,10 +23,10 @@ const CriticalStakeholders = ({ stakeholders, loading }) => {
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
         <h3 className="text-lg font-semibold dark:text-white mb-4 flex items-center">
           <Users className="mr-2 h-5 w-5" />
-          Stakeholders Críticos
+          {t('stakeholdersInsights.critical.title')}
         </h3>
         <p className="text-slate-500 dark:text-slate-400 text-center py-8">
-          No hay stakeholders críticos identificados
+          {t('stakeholdersInsights.critical.empty')}
         </p>
       </div>
     );
@@ -51,7 +51,7 @@ const CriticalStakeholders = ({ stakeholders, loading }) => {
     <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
       <h3 className="text-lg font-semibold dark:text-white mb-4 flex items-center">
         <AlertTriangle className="mr-2 h-5 w-5 text-red-500" />
-        Stakeholders Críticos ({stakeholders.length})
+        {t('stakeholdersInsights.critical.title')} ({stakeholders.length})
       </h3>
 
       <div className="space-y-4">
@@ -69,19 +69,19 @@ const CriticalStakeholders = ({ stakeholders, loading }) => {
                 <span className={`text-2xl font-bold ${getInfluenceColor(sh.composite_score)}`}>
                   {(sh.composite_score * 100).toFixed(0)}%
                 </span>
-                <span className="text-xs dark:text-slate-400">{t('literals.Influencia')}</span>
+                <span className="text-xs dark:text-slate-400">{t('stakeholdersInsights.critical.influence')}</span>
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3 mt-3">
               <div className="flex items-center text-sm">
                 <TrendingUp className="h-4 w-4 mr-1 dark:text-slate-400" />
-                <span className="dark:text-slate-300">{t('literals.Poder:')}</span>
+                <span className="dark:text-slate-300">{t('stakeholdersInsights.critical.powerLabel')}</span>
                 <span className="ml-1 font-medium capitalize dark:text-slate-200">{sh.power}</span>
               </div>
               <div className="flex items-center text-sm">
                 <Activity className="h-4 w-4 mr-1 text-gray-500" />
-                <span className="text-gray-600">{t('literals.Interés:')}</span>
+                <span className="text-gray-600">{t('stakeholdersInsights.critical.interestLabel')}</span>
                 <span className="ml-1 font-medium capitalize">{sh.interest}</span>
               </div>
             </div>
@@ -89,17 +89,17 @@ const CriticalStakeholders = ({ stakeholders, loading }) => {
             {sh.engagement_strategy && (
               <div className="mt-3 pt-3 border-t border-gray-200">
                 <p className="text-sm text-gray-700">
-                  <span className="font-medium">{t('literals.Estrategia:')}</span> {sh.engagement_strategy}
+                  <span className="font-medium">{t('stakeholdersInsights.critical.strategyLabel')}</span> {sh.engagement_strategy}
                 </p>
               </div>
             )}
 
             <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-200">
               <span className="text-xs font-medium px-2 py-1 rounded bg-gray-100">
-                {sh.is_hub && '🌟 Hub'} {sh.is_broker && '🔗 Broker'}
+                {sh.is_hub && t('stakeholdersInsights.critical.tags.hub')} {sh.is_broker && t('stakeholdersInsights.critical.tags.broker')}
               </span>
               <span className="text-xs text-gray-500">
-                {sh.connections} conexiones
+                {sh.connections} {t('stakeholdersInsights.critical.connections')}
               </span>
             </div>
           </div>

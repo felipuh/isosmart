@@ -108,7 +108,8 @@ export const AuthProvider = ({ children }) => {
   // Login
   const login = async (email, password, organizationId = null) => {
     try {
-      const payload = { email, password };
+      const normalizedEmail = String(email || '').trim().toLowerCase();
+      const payload = { email: normalizedEmail, password };
       if (organizationId) {
         payload.organization_id = organizationId;
       }
@@ -134,11 +135,22 @@ export const AuthProvider = ({ children }) => {
       return { success: true };
     } catch (error) {
       console.error('Error de login:', error);
+
+      const responseData = error.response?.data;
+      const backendMessage =
+        responseData?.detail ||
+        responseData?.non_field_errors?.[0] ||
+        responseData?.email?.[0] ||
+        responseData?.password?.[0] ||
+        null;
+
+      const networkMessage = !error.response
+        ? 'No se pudo conectar al servidor de autenticación. Verifica backend/proxy y vuelve a intentar.'
+        : null;
+
       return {
         success: false,
-        error: error.response?.data?.detail || 
-               error.response?.data?.non_field_errors?.[0] ||
-               'Error al iniciar sesión. Verifica tus credenciales.',
+        error: backendMessage || networkMessage || 'Error al iniciar sesión. Verifica tus credenciales.',
       };
     }
   };

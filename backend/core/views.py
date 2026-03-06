@@ -2,7 +2,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
-from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from rest_framework.permissions import IsAuthenticated
 from django.http import FileResponse, Http404
 from django.views.decorators.csrf import csrf_exempt
@@ -10,6 +10,7 @@ from django.utils.decorators import method_decorator
 from django.utils import timezone
 from django.db.models import Count, Avg, Q
 from datetime import datetime, timedelta
+import calendar
 from .models import (
     ContextAnalysis, RiskMatrix, QualityObjective, 
     StakeholderProfile, ProcessMap, Document
@@ -578,15 +579,57 @@ class QualityObjectiveViewSet(viewsets.ModelViewSet):
 # ViewSets para Configuración y Multicliente
 # =====================================================
 
-from .models import Organization, OrganizationSettings, ISOClauseConfig, AuditLog
+from .models import (
+    Organization,
+    OrganizationSettings,
+    ISOClauseConfig,
+    AuditLog,
+    OnboardingInsightSnapshot,
+    BillingSubscription,
+    BillingPayment,
+)
 from authentication.models import UserProfile
 from .serializers import (
     OrganizationSerializer, UserProfileSerializer, UserCreateSerializer,
     OrganizationSettingsSerializer, ISOClauseConfigSerializer, AuditLogSerializer,
-    UserSerializer
+    UserSerializer, OnboardingInsightSnapshotSerializer,
+    BillingSubscriptionSerializer, BillingPaymentSerializer,
 )
+from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
 import json
+from .services.onboarding_orchestrator import OnboardingOrchestrator
+from .services.billing_notifications import (
+    log_billing_event,
+    notify_payment_registered,
+    notify_payment_confirmed,
+    notify_payment_rejected,
+    notify_subscription_status_change,
+)
+
+
+User = get_user_model()
+
+
+def _add_one_month(input_date):
+    year = input_date.year
+    month = input_date.month + 1
+    if month == 13:
+        month = 1
+        year += 1
+    day = min(input_date.day, calendar.monthrange(year, month)[1])
+    return input_date.replace(year=year, month=month, day=day)
+
+
+def _sync_org_active_with_subscription(subscription):
+    if subscription.status in ['suspended', 'cancelled']:
+        if subscription.organization.is_active:
+            subscription.organization.is_active = False
+            subscription.organization.save(update_fields=['is_active', 'updated_at'])
+    else:
+        if not subscription.organization.is_active:
+            subscription.organization.is_active = True
+            subscription.organization.save(update_fields=['is_active', 'updated_at'])
 
 
 class OrganizationViewSet(viewsets.ModelViewSet):
@@ -938,6 +981,25 @@ class SettingsViewSet(viewsets.ModelViewSet):
                 }
                 user_profile.language = language_map.get(preferred_language, 'es')
                 user_profile.save(update_fields=['language'])
+
+        preferred_response_tone = request.data.get('preferred_response_tone')
+        if preferred_response_tone:
+            valid_tones = ['manager', 'technical']
+            if preferred_response_tone not in valid_tones:
+                return Response(
+                    {'error': f'Tono no válido. Debe ser uno de: {", ".join(valid_tones)}'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            settings.preferred_response_tone = preferred_response_tone
+
+        onboarding_profile = request.data.get('onboarding_profile')
+        if onboarding_profile is not None:
+            if not isinstance(onboarding_profile, dict):
+                return Response(
+                    {'error': 'El campo onboarding_profile debe ser un objeto JSON'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            settings.onboarding_profile = onboarding_profile
         
         # Marcar onboarding como completado
         settings.onboarding_completed = True
@@ -950,7 +1012,368 @@ class SettingsViewSet(viewsets.ModelViewSet):
             'organization_id': org.id,
             'enabled_standards': settings.enabled_standards,
             'preferred_language': settings.preferred_language,
+            'preferred_response_tone': settings.preferred_response_tone,
+            'onboarding_profile': settings.onboarding_profile,
         })
+
+    @action(detail=False, methods=['post'])
+    def run_onboarding_orchestration(self, request):
+        """Ejecuta motores Fase 2 y guarda snapshot versionado"""
+        org = self._resolve_org(request)
+        settings, _ = OrganizationSettings.objects.get_or_create(organization=org)
+
+        profile = settings.onboarding_profile or {}
+        if not isinstance(profile, dict):
+            profile = {}
+
+        orchestrator = OnboardingOrchestrator()
+        result = orchestrator.run(profile, settings.preferred_response_tone)
+
+        last_version = (
+            OnboardingInsightSnapshot.objects
+            .filter(organization=org)
+            .order_by('-version')
+            .values_list('version', flat=True)
+            .first()
+            or 0
+        )
+
+        snapshot = OnboardingInsightSnapshot.objects.create(
+            organization=org,
+            generated_by=request.user,
+            version=last_version + 1,
+            input_profile=profile,
+            organizational_profile_output=result.get('organizational_profile', {}),
+            impact_savings_output=result.get('impact_savings', {}),
+            purpose_alignment_output=result.get('purpose_alignment', {}),
+            summary_output=result.get('summary', {}),
+        )
+
+        return Response({
+            'message': 'Orquestación de onboarding ejecutada correctamente',
+            'snapshot': OnboardingInsightSnapshotSerializer(snapshot).data,
+        }, status=status.HTTP_201_CREATED)
+
+    @action(detail=False, methods=['get'])
+    def onboarding_insights(self, request):
+        """Obtiene último snapshot o historial de insights de onboarding"""
+        org = self._resolve_org(request)
+        include_history = str(request.query_params.get('history', '')).lower() in ['1', 'true', 'yes']
+
+        queryset = OnboardingInsightSnapshot.objects.filter(organization=org)
+        if include_history:
+            data = OnboardingInsightSnapshotSerializer(queryset[:20], many=True).data
+            return Response({'results': data})
+
+        latest = queryset.first()
+        if latest is None:
+            return Response({'detail': 'No hay insights de onboarding generados aún.'}, status=status.HTTP_404_NOT_FOUND)
+        return Response(OnboardingInsightSnapshotSerializer(latest).data)
+
+    @action(detail=False, methods=['get'])
+    def onboarding_iso_skeleton(self, request):
+        """Obtiene el Esqueleto ISO generado en Fase 3"""
+        org = self._resolve_org(request)
+        latest = OnboardingInsightSnapshot.objects.filter(organization=org).first()
+        if latest is None:
+            return Response({'detail': 'No hay snapshot de onboarding disponible.'}, status=status.HTTP_404_NOT_FOUND)
+
+        iso_skeleton = (latest.summary_output or {}).get('iso_skeleton')
+        if not iso_skeleton:
+            return Response({'detail': 'El snapshot no contiene Esqueleto ISO generado.'}, status=status.HTTP_404_NOT_FOUND)
+
+        return Response({
+            'organization_id': org.id,
+            'snapshot_version': latest.version,
+            'generated_at': latest.created_at,
+            'iso_skeleton': iso_skeleton,
+        })
+
+    @action(detail=False, methods=['get'])
+    def onboarding_adaptive_route(self, request):
+        """Obtiene la ruta adaptativa de implementación (Fase 4)"""
+        org = self._resolve_org(request)
+        latest = OnboardingInsightSnapshot.objects.filter(organization=org).first()
+        if latest is None:
+            return Response({'detail': 'No hay snapshot de onboarding disponible.'}, status=status.HTTP_404_NOT_FOUND)
+
+        adaptive_route = (latest.summary_output or {}).get('adaptive_route')
+        if not adaptive_route:
+            return Response({'detail': 'El snapshot no contiene ruta adaptativa.'}, status=status.HTTP_404_NOT_FOUND)
+
+        return Response({
+            'organization_id': org.id,
+            'snapshot_version': latest.version,
+            'generated_at': latest.created_at,
+            'adaptive_route': adaptive_route,
+        })
+
+
+class BillingViewSet(viewsets.ViewSet):
+    """Motor interno de billing (sin pasarela externa)."""
+    permission_classes = [IsAuthenticated]
+
+    def _allowed_organization_ids(self, request):
+        if request.user and request.user.is_superuser:
+            return None
+        return list(
+            UserProfile.objects.filter(user=request.user, is_active=True)
+            .values_list('organization_id', flat=True)
+        )
+
+    def _request_meta(self, request):
+        return {
+            'ip_address': request.META.get('REMOTE_ADDR'),
+            'user_agent': request.META.get('HTTP_USER_AGENT', ''),
+        }
+
+    def _resolve_org(self, request):
+        allowed_org_ids = self._allowed_organization_ids(request)
+        org_id = (
+            request.query_params.get('organization')
+            or request.query_params.get('organization_id')
+            or request.data.get('organization_id')
+            or getattr(request, 'organization_id', None)
+        )
+        if org_id:
+            if allowed_org_ids is not None and int(org_id) not in allowed_org_ids:
+                raise Organization.DoesNotExist('No autorizado para esta organización')
+            return Organization.objects.get(id=org_id)
+        profile = UserProfile.objects.filter(user=request.user, is_active=True).select_related('organization').first()
+        if profile:
+            return profile.organization
+        raise Organization.DoesNotExist('No hay organización activa')
+
+    @action(detail=False, methods=['get'])
+    def current(self, request):
+        org = self._resolve_org(request)
+        subscription, _ = BillingSubscription.objects.get_or_create(
+            organization=org,
+            defaults={
+                'status': 'active',
+                'payment_method': 'bank_transfer',
+                'grace_days': 8,
+                'current_period_start': timezone.now().date(),
+                'current_period_end': _add_one_month(timezone.now().date()),
+                'next_due_date': _add_one_month(timezone.now().date()),
+            }
+        )
+        previous_status = subscription.status
+        subscription.evaluate_status()
+        subscription.save(update_fields=['status', 'past_due_since', 'suspended_at', 'updated_at'])
+        _sync_org_active_with_subscription(subscription)
+        notify_subscription_status_change(subscription, previous_status, source='api_current')
+
+        return Response({
+            'subscription': BillingSubscriptionSerializer(subscription).data,
+            'recent_payments': BillingPaymentSerializer(subscription.payments.all()[:10], many=True).data,
+        })
+
+    @action(detail=False, methods=['post'])
+    def update_payer(self, request):
+        org = self._resolve_org(request)
+        subscription, _ = BillingSubscription.objects.get_or_create(organization=org)
+        old_values = {
+            'payer_user': subscription.payer_user_id,
+            'payer_name': subscription.payer_name,
+            'payer_email': subscription.payer_email,
+            'payment_method': subscription.payment_method,
+            'grace_days': subscription.grace_days,
+            'auto_suspend_enabled': subscription.auto_suspend_enabled,
+            'monthly_price': str(subscription.monthly_price),
+            'currency': subscription.currency,
+        }
+
+        if 'payer_user_id' in request.data:
+            payer_user_id = request.data.get('payer_user_id')
+            if payer_user_id:
+                payer_user = User.objects.filter(id=payer_user_id).first()
+                subscription.payer_user = payer_user
+                if payer_user:
+                    subscription.payer_name = payer_user.get_full_name() or payer_user.username
+                    subscription.payer_email = payer_user.email
+            else:
+                subscription.payer_user = None
+
+        for field in ['payer_name', 'payer_email', 'payer_phone', 'payment_method', 'grace_days', 'auto_suspend_enabled', 'monthly_price', 'currency', 'notes']:
+            if field in request.data:
+                setattr(subscription, field, request.data.get(field))
+
+        subscription.save()
+        meta = self._request_meta(request)
+        log_billing_event(
+            organization=org,
+            user=request.user,
+            action='update',
+            description='Actualización de configuración de pagador y parámetros de facturación.',
+            old_values=old_values,
+            new_values={
+                'payer_user': subscription.payer_user_id,
+                'payer_name': subscription.payer_name,
+                'payer_email': subscription.payer_email,
+                'payment_method': subscription.payment_method,
+                'grace_days': subscription.grace_days,
+                'auto_suspend_enabled': subscription.auto_suspend_enabled,
+                'monthly_price': str(subscription.monthly_price),
+                'currency': subscription.currency,
+            },
+            ip_address=meta['ip_address'],
+            user_agent=meta['user_agent'],
+        )
+        return Response(BillingSubscriptionSerializer(subscription).data)
+
+    @action(detail=False, methods=['post'], parser_classes=[MultiPartParser, FormParser, JSONParser])
+    def register_payment(self, request):
+        org = self._resolve_org(request)
+        subscription, _ = BillingSubscription.objects.get_or_create(organization=org)
+
+        serializer = BillingPaymentSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        evidence_file = request.FILES.get('evidence_file')
+        payment = BillingPayment.objects.create(
+            subscription=subscription,
+            status='pending',
+            payment_method=serializer.validated_data.get('payment_method', subscription.payment_method),
+            amount=serializer.validated_data.get('amount', subscription.monthly_price),
+            currency=serializer.validated_data.get('currency', subscription.currency),
+            due_date=serializer.validated_data.get('due_date') or subscription.next_due_date,
+            reference=serializer.validated_data.get('reference', ''),
+            evidence_file=evidence_file,
+            evidence_uploaded_at=timezone.now() if evidence_file else None,
+            created_by=request.user,
+        )
+
+        meta = self._request_meta(request)
+        log_billing_event(
+            organization=org,
+            user=request.user,
+            action='create',
+            description='Registro de pago en estado pendiente.',
+            new_values={
+                'payment_id': payment.id,
+                'amount': str(payment.amount),
+                'currency': payment.currency,
+                'reference': payment.reference,
+                'has_evidence_file': bool(payment.evidence_file),
+            },
+            ip_address=meta['ip_address'],
+            user_agent=meta['user_agent'],
+        )
+        notify_payment_registered(payment)
+        return Response(BillingPaymentSerializer(payment).data, status=status.HTTP_201_CREATED)
+
+    @action(detail=False, methods=['post'])
+    def confirm_payment(self, request):
+        org = self._resolve_org(request)
+        subscription = BillingSubscription.objects.filter(organization=org).first()
+        if not subscription:
+            return Response({'detail': 'No existe suscripción para la organización.'}, status=status.HTTP_404_NOT_FOUND)
+
+        payment_id = request.data.get('payment_id')
+        payment = BillingPayment.objects.filter(id=payment_id, subscription=subscription).first()
+        if not payment:
+            return Response({'detail': 'Pago no encontrado.'}, status=status.HTTP_404_NOT_FOUND)
+
+        previous_status = payment.status
+        payment.status = 'confirmed'
+        payment.confirmed_by = request.user
+        payment.paid_at = timezone.now()
+        payment.save(update_fields=['status', 'confirmed_by', 'paid_at', 'updated_at'])
+
+        paid_date = payment.paid_at.date()
+        subscription.last_payment_date = paid_date
+        if not subscription.current_period_start:
+            subscription.current_period_start = paid_date
+        if not subscription.current_period_end:
+            subscription.current_period_end = _add_one_month(paid_date)
+        else:
+            subscription.current_period_start = subscription.current_period_end
+            subscription.current_period_end = _add_one_month(subscription.current_period_end)
+
+        subscription.next_due_date = subscription.current_period_end
+        subscription.status = 'active'
+        subscription.past_due_since = None
+        subscription.suspended_at = None
+        subscription.save()
+        _sync_org_active_with_subscription(subscription)
+
+        meta = self._request_meta(request)
+        log_billing_event(
+            organization=org,
+            user=request.user,
+            action='update',
+            description='Confirmación de pago de suscripción.',
+            old_values={'payment_id': payment.id, 'status': previous_status},
+            new_values={'payment_id': payment.id, 'status': payment.status, 'paid_at': payment.paid_at.isoformat() if payment.paid_at else None},
+            ip_address=meta['ip_address'],
+            user_agent=meta['user_agent'],
+        )
+        notify_payment_confirmed(payment)
+
+        return Response({
+            'payment': BillingPaymentSerializer(payment).data,
+            'subscription': BillingSubscriptionSerializer(subscription).data,
+        })
+
+    @action(detail=False, methods=['post'])
+    def reject_payment(self, request):
+        org = self._resolve_org(request)
+        subscription = BillingSubscription.objects.filter(organization=org).first()
+        if not subscription:
+            return Response({'detail': 'No existe suscripción para la organización.'}, status=status.HTTP_404_NOT_FOUND)
+
+        payment_id = request.data.get('payment_id')
+        payment = BillingPayment.objects.filter(id=payment_id, subscription=subscription).first()
+        if not payment:
+            return Response({'detail': 'Pago no encontrado.'}, status=status.HTTP_404_NOT_FOUND)
+
+        previous_status = payment.status
+        payment.status = 'rejected'
+        payment.rejection_reason = request.data.get('rejection_reason', '')
+        payment.confirmed_by = request.user
+        payment.save(update_fields=['status', 'rejection_reason', 'confirmed_by', 'updated_at'])
+
+        meta = self._request_meta(request)
+        log_billing_event(
+            organization=org,
+            user=request.user,
+            action='update',
+            description='Rechazo de pago de suscripción.',
+            old_values={'payment_id': payment.id, 'status': previous_status},
+            new_values={'payment_id': payment.id, 'status': payment.status, 'rejection_reason': payment.rejection_reason},
+            ip_address=meta['ip_address'],
+            user_agent=meta['user_agent'],
+        )
+        notify_payment_rejected(payment)
+
+        return Response(BillingPaymentSerializer(payment).data)
+
+    @action(detail=False, methods=['post'])
+    def evaluate(self, request):
+        org = self._resolve_org(request)
+        subscription = BillingSubscription.objects.filter(organization=org).first()
+        if not subscription:
+            return Response({'detail': 'No existe suscripción para la organización.'}, status=status.HTTP_404_NOT_FOUND)
+
+        previous_status = subscription.status
+        subscription.evaluate_status()
+        subscription.save(update_fields=['status', 'past_due_since', 'suspended_at', 'updated_at'])
+        _sync_org_active_with_subscription(subscription)
+        notify_subscription_status_change(subscription, previous_status, source='api_manual')
+
+        meta = self._request_meta(request)
+        log_billing_event(
+            organization=org,
+            user=request.user,
+            action='update',
+            description='Evaluación manual de estado de facturación.',
+            old_values={'status': previous_status},
+            new_values={'status': subscription.status},
+            ip_address=meta['ip_address'],
+            user_agent=meta['user_agent'],
+        )
+
+        return Response(BillingSubscriptionSerializer(subscription).data)
 
 
 class ISOClauseConfigViewSet(viewsets.ModelViewSet):
@@ -1107,9 +1530,17 @@ class AuditLogViewSet(viewsets.ReadOnlyModelViewSet):
     """ViewSet para logs de auditoría (solo lectura)"""
     queryset = AuditLog.objects.all()
     serializer_class = AuditLogSerializer
+    permission_classes = [IsAuthenticated]
     
     def get_queryset(self):
         queryset = super().get_queryset()
+        if not (self.request.user and self.request.user.is_superuser):
+            allowed_org_ids = list(
+                UserProfile.objects.filter(user=self.request.user, is_active=True)
+                .values_list('organization_id', flat=True)
+            )
+            queryset = queryset.filter(organization_id__in=allowed_org_ids)
+
         org_id = self.request.query_params.get('organization')
         if org_id:
             queryset = queryset.filter(organization_id=org_id)

@@ -108,7 +108,7 @@ const ChangeControlPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('¿Eliminar?')) return;
+    if (!confirm(t('modules.planning.changeControlPage.deleteConfirm'))) return;
     try {
       await deleteChange(id);
       await loadData();
@@ -154,13 +154,13 @@ const ChangeControlPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">{t('literals.Control de Cambios')}</h1>
+        <h1 className="text-3xl font-bold text-white">{t('modules.planning.changeControlPage.title')}</h1>
         <button
           type="button"
           onClick={openForm}
           className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
         >
-          Nuevo cambio
+          {t('modules.planning.changeControlPage.new')}
         </button>
       </div>
 
@@ -168,12 +168,12 @@ const ChangeControlPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Número')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Título')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Tipo')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Urgencia')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.planning.changeControlPage.table.number')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.planning.changeControlPage.table.title')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.planning.changeControlPage.table.type')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.planning.changeControlPage.table.urgency')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.status')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acciones')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.planning.changeControlPage.table.actions')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -192,22 +192,22 @@ const ChangeControlPage = () => {
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('literals.No hay cambios')}</div>}
+        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('modules.planning.changeControlPage.empty')}</div>}
       </div>
 
       <Modal
-        title={editingId ? 'Editar cambio' : 'Nuevo cambio'}
+        title={editingId ? t('modules.planning.changeControlPage.edit') : t('modules.planning.changeControlPage.new')}
         isOpen={showForm}
         onClose={closeForm}
       >
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Número *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.changeControlPage.fields.number')}</label>
               <input type="text" value={form.change_number} onChange={(e) => setForm({...form, change_number: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Título *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.changeControlPage.fields.title')}</label>
               <input type="text" value={form.title} onChange={(e) => setForm({...form, title: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div className="md:col-span-3">
@@ -215,74 +215,74 @@ const ChangeControlPage = () => {
               <textarea value={form.description} onChange={(e) => setForm({...form, description: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Tipo')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.changeControlPage.fields.type')}</label>
               <select value={form.change_type} onChange={(e) => setForm({...form, change_type: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="process">{t('literals.Proceso')}</option>
-                <option value="procedure">{t('literals.Procedimiento')}</option>
-                <option value="resource">{t('literals.Recurso')}</option>
-                <option value="technology">{t('literals.Tecnología')}</option>
-                <option value="structure">{t('literals.Estructura Organizacional')}</option>
-                <option value="scope">{t('literals.Alcance del SGC')}</option>
-                <option value="policy">{t('literals.Política')}</option>
-                <option value="other">{t('literals.Otro')}</option>
+                <option value="process">{t('modules.planning.changeControlPage.types.process')}</option>
+                <option value="procedure">{t('modules.planning.changeControlPage.types.procedure')}</option>
+                <option value="resource">{t('modules.planning.changeControlPage.types.resource')}</option>
+                <option value="technology">{t('modules.planning.changeControlPage.types.technology')}</option>
+                <option value="structure">{t('modules.planning.changeControlPage.types.structure')}</option>
+                <option value="scope">{t('modules.planning.changeControlPage.types.scope')}</option>
+                <option value="policy">{t('modules.planning.changeControlPage.types.policy')}</option>
+                <option value="other">{t('modules.planning.changeControlPage.types.other')}</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Razón')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.changeControlPage.fields.reason')}</label>
               <select value={form.reason} onChange={(e) => setForm({...form, reason: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="improvement">{t('literals.Mejora')}</option>
-                <option value="correction">{t('literals.Corrección')}</option>
-                <option value="compliance">{t('literals.Cumplimiento')}</option>
-                <option value="risk_mitigation">{t('literals.Mitigación de Riesgo')}</option>
-                <option value="opportunity">{t('literals.Oportunidad')}</option>
-                <option value="external_requirement">{t('literals.Requisito Externo')}</option>
+                <option value="improvement">{t('modules.planning.changeControlPage.reasons.improvement')}</option>
+                <option value="correction">{t('modules.planning.changeControlPage.reasons.correction')}</option>
+                <option value="compliance">{t('modules.planning.changeControlPage.reasons.compliance')}</option>
+                <option value="risk_mitigation">{t('modules.planning.changeControlPage.reasons.riskMitigation')}</option>
+                <option value="opportunity">{t('modules.planning.changeControlPage.reasons.opportunity')}</option>
+                <option value="external_requirement">{t('modules.planning.changeControlPage.reasons.externalRequirement')}</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Urgencia')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.changeControlPage.fields.urgency')}</label>
               <select value={form.urgency} onChange={(e) => setForm({...form, urgency: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="low">{t('literals.Baja')}</option>
-                <option value="medium">{t('literals.Media')}</option>
-                <option value="high">{t('literals.Alta')}</option>
-                <option value="critical">{t('literals.Crítica')}</option>
+                <option value="low">{t('modules.planning.changeControlPage.urgency.low')}</option>
+                <option value="medium">{t('modules.planning.changeControlPage.urgency.medium')}</option>
+                <option value="high">{t('modules.planning.changeControlPage.urgency.high')}</option>
+                <option value="critical">{t('modules.planning.changeControlPage.urgency.critical')}</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Fecha Planificada *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.changeControlPage.fields.plannedDate')}</label>
               <input type="date" value={form.planned_date} onChange={(e) => setForm({...form, planned_date: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">{t('common.forms.status')}</label>
               <select value={form.status} onChange={(e) => setForm({...form, status: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="draft">{t('literals.Borrador')}</option>
-                <option value="submitted">{t('literals.Enviado')}</option>
-                <option value="under_review">{t('literals.En Revisión')}</option>
-                <option value="approved">{t('literals.Aprobado')}</option>
-                <option value="rejected">{t('literals.Rechazado')}</option>
-                <option value="in_implementation">{t('literals.En Implementación')}</option>
-                <option value="implemented">{t('literals.Implementado')}</option>
-                <option value="verified">{t('literals.Verificado')}</option>
-                <option value="closed">{t('literals.Cerrado')}</option>
+                <option value="draft">{t('modules.planning.changeControlPage.statuses.draft')}</option>
+                <option value="submitted">{t('modules.planning.changeControlPage.statuses.submitted')}</option>
+                <option value="under_review">{t('modules.planning.changeControlPage.statuses.underReview')}</option>
+                <option value="approved">{t('modules.planning.changeControlPage.statuses.approved')}</option>
+                <option value="rejected">{t('modules.planning.changeControlPage.statuses.rejected')}</option>
+                <option value="in_implementation">{t('modules.planning.changeControlPage.statuses.inImplementation')}</option>
+                <option value="implemented">{t('modules.planning.changeControlPage.statuses.implemented')}</option>
+                <option value="verified">{t('modules.planning.changeControlPage.statuses.verified')}</option>
+                <option value="closed">{t('modules.planning.changeControlPage.statuses.closed')}</option>
               </select>
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Justificación *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.changeControlPage.fields.justification')}</label>
               <textarea value={form.justification} onChange={(e) => setForm({...form, justification: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" required />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Áreas Afectadas *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.changeControlPage.fields.affectedAreas')}</label>
               <textarea value={form.affected_areas} onChange={(e) => setForm({...form, affected_areas: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" required />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Evaluación de Impacto *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.changeControlPage.fields.impactAssessment')}</label>
               <textarea value={form.impact_assessment} onChange={(e) => setForm({...form, impact_assessment: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" required />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Riesgos Potenciales')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.changeControlPage.fields.potentialRisks')}</label>
               <textarea value={form.potential_risks} onChange={(e) => setForm({...form, potential_risks: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Plan de Mitigación')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.changeControlPage.fields.mitigationPlan')}</label>
               <textarea value={form.mitigation_plan} onChange={(e) => setForm({...form, mitigation_plan: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" />
             </div>
           </div>

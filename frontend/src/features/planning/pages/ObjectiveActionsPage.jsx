@@ -150,7 +150,7 @@ const ObjectiveActionsPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('¿Eliminar?')) return;
+    if (!confirm(t('modules.planning.objectiveActionsPage.deleteConfirm'))) return;
     try {
       await deleteAction(id);
       await loadData();
@@ -177,13 +177,13 @@ const ObjectiveActionsPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">{t('literals.Acciones para Objetivos')}</h1>
+        <h1 className="text-3xl font-bold text-white">{t('modules.planning.objectiveActionsPage.title')}</h1>
         <button
           type="button"
           onClick={openForm}
           className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
         >
-          Nueva acción
+          {t('modules.planning.objectiveActionsPage.new')}
         </button>
       </div>
 
@@ -191,12 +191,12 @@ const ObjectiveActionsPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Objetivo')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Número')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.planning.objectiveActionsPage.table.objective')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.planning.objectiveActionsPage.table.number')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.status')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Fecha Límite')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.% Avance')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acciones')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.planning.objectiveActionsPage.table.dueDate')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.planning.objectiveActionsPage.table.progress')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.planning.objectiveActionsPage.table.actions')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -215,74 +215,74 @@ const ObjectiveActionsPage = () => {
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('literals.No hay acciones')}</div>}
+        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('modules.planning.objectiveActionsPage.empty')}</div>}
       </div>
 
       <Modal
-        title={editingId ? 'Editar acción' : 'Nueva acción'}
+        title={editingId ? t('modules.planning.objectiveActionsPage.edit') : t('modules.planning.objectiveActionsPage.new')}
         isOpen={showForm}
         onClose={closeForm}
       >
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Objetivo *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.objectiveActionsPage.fields.objective')}</label>
               <select value={form.objective} onChange={(e) => setForm({...form, objective: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required>
-                <option value="">{t('literals.Seleccionar')}</option>
+                <option value="">{t('modules.planning.objectiveActionsPage.fields.select')}</option>
                 {objectives.map(o => (
                   <option key={o.id} value={o.id}>{o.code} - {o.title}</option>
                 ))}
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Número *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.objectiveActionsPage.fields.number')}</label>
               <input type="number" min="1" value={form.action_number} onChange={(e) => setForm({...form, action_number: parseInt(e.target.value || 1)})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Responsable')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.objectiveActionsPage.fields.responsible')}</label>
               <select value={form.responsible} onChange={(e) => setForm({...form, responsible: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="">{t('literals.Sin asignar')}</option>
+                <option value="">{t('modules.planning.objectiveActionsPage.fields.unassigned')}</option>
                 {users.map(u => (
                   <option key={u.id} value={u.id}>{u.full_name || u.username || u.email}</option>
                 ))}
               </select>
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Descripción *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.objectiveActionsPage.fields.description')}</label>
               <textarea value={form.description} onChange={(e) => setForm({...form, description: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" required />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Qué se hará *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.objectiveActionsPage.fields.whatWillBeDone')}</label>
               <textarea value={form.what_will_be_done} onChange={(e) => setForm({...form, what_will_be_done: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" required />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Cómo se hará')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.objectiveActionsPage.fields.howWillBeDone')}</label>
               <textarea value={form.how_will_be_done} onChange={(e) => setForm({...form, how_will_be_done: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Fecha Límite *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.objectiveActionsPage.fields.dueDate')}</label>
               <input type="date" value={form.due_date} onChange={(e) => setForm({...form, due_date: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">{t('common.forms.status')}</label>
               <select value={form.status} onChange={(e) => setForm({...form, status: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="planned">{t('literals.Planificada')}</option>
-                <option value="in_progress">{t('literals.En Progreso')}</option>
-                <option value="completed">{t('literals.Completada')}</option>
-                <option value="cancelled">{t('literals.Cancelada')}</option>
-                <option value="delayed">{t('literals.Retrasada')}</option>
+                <option value="planned">{t('modules.planning.objectiveActionsPage.statuses.planned')}</option>
+                <option value="in_progress">{t('modules.planning.objectiveActionsPage.statuses.inProgress')}</option>
+                <option value="completed">{t('modules.planning.objectiveActionsPage.statuses.completed')}</option>
+                <option value="cancelled">{t('modules.planning.objectiveActionsPage.statuses.cancelled')}</option>
+                <option value="delayed">{t('modules.planning.objectiveActionsPage.statuses.delayed')}</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.% Avance')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.objectiveActionsPage.fields.progress')}</label>
               <input type="number" min="0" max="100" value={form.progress_percentage} onChange={(e) => setForm({...form, progress_percentage: parseInt(e.target.value || 0)})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Recursos Necesarios')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.objectiveActionsPage.fields.resourcesNeeded')}</label>
               <textarea value={form.resources_needed} onChange={(e) => setForm({...form, resources_needed: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Costo Estimado')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.objectiveActionsPage.fields.estimatedCost')}</label>
               <input type="number" value={form.estimated_cost} onChange={(e) => setForm({...form, estimated_cost: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
             </div>
           </div>

@@ -104,7 +104,7 @@ const LocationScopeForm = ({ location, scopeId, onSave, onClose }) => {
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
           {/* Información Básica */}
           <div className="bg-gray-50/70 dark:bg-slate-700/70 backdrop-blur-md rounded-lg p-4 border border-gray-100/50 dark:border-slate-600/50 transition-all duration-300">
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">{t('literals.Información de la Ubicación')}</h3>
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">{t('locationScopeForm.sections.locationInfo')}</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
@@ -199,7 +199,7 @@ const LocationScopeForm = ({ location, scopeId, onSave, onClose }) => {
 
           {/* Actividades */}
           <div className="bg-blue-50/70 dark:bg-blue-900/20 backdrop-blur-md rounded-lg p-4 border border-blue-100/50 dark:border-blue-800/50 transition-all duration-300">
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">{t('literals.Actividades Realizadas')}</h3>
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">{t('locationScopeForm.sections.activitiesPerformed')}</h3>
             <div className="flex gap-2 mb-3">
               <input
                 type="text"

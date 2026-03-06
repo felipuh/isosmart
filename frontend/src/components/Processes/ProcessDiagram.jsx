@@ -18,19 +18,19 @@ const ProcessDiagram = ({ diagramData, processes, loading }) => {
           strategic: strategic.map(p => ({
             id: p.code || p.id,
             name: p.name,
-            owner: p.owner || 'Sin asignar',
+            owner: p.owner || t('processDiagram.unassigned'),
             is_critical: p.is_critical || false
           })),
           operational: operational.map(p => ({
             id: p.code || p.id,
             name: p.name,
-            owner: p.owner || 'Sin asignar',
+            owner: p.owner || t('processDiagram.unassigned'),
             is_critical: p.is_critical || false
           })),
           support: support.map(p => ({
             id: p.code || p.id,
             name: p.name,
-            owner: p.owner || 'Sin asignar',
+            owner: p.owner || t('processDiagram.unassigned'),
             is_critical: p.is_critical || false
           }))
         },
@@ -68,8 +68,8 @@ const ProcessDiagram = ({ diagramData, processes, loading }) => {
   if (!hasData) {
     return (
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
-        <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-4">{t('literals.Mapa de Procesos')}</h3>
-        <p className="text-slate-500 dark:text-slate-400 text-center py-8">{t('literals.No hay procesos disponibles. Ejecuta el mapeo con IA o agrega procesos manualmente.')}</p>
+        <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-4">{t('processDiagram.title')}</h3>
+        <p className="text-slate-500 dark:text-slate-400 text-center py-8">{t('processDiagram.empty')}</p>
       </div>
     );
   }
@@ -79,10 +79,10 @@ const ProcessDiagram = ({ diagramData, processes, loading }) => {
   return (
     <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-xl font-semibold text-slate-900 dark:text-white">{t('literals.Mapa de Procesos')}</h3>
+        <h3 className="text-xl font-semibold text-slate-900 dark:text-white">{t('processDiagram.title')}</h3>
         <div className="flex items-center text-sm text-slate-600 dark:text-slate-400 transition-colors">
           <GitBranch className="h-4 w-4 mr-1" />
-          <span>{statistics?.total_interactions || 0} interacciones</span>
+          <span>{statistics?.total_interactions || 0} {t('processDiagram.interactions')}</span>
         </div>
       </div>
 
@@ -92,7 +92,7 @@ const ProcessDiagram = ({ diagramData, processes, loading }) => {
         {layers.strategic && layers.strategic.length > 0 && (
           <div className="border-2 border-purple-200 dark:border-purple-700 rounded-lg p-4 bg-purple-50 dark:bg-purple-900/30 transition-colors">
             <h4 className="text-sm font-semibold text-purple-900 dark:text-purple-300 mb-3">
-              ESTRATÉGICOS ({layers.strategic.length})
+              {t('processDiagram.layers.strategic').toUpperCase()} ({layers.strategic.length})
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               {layers.strategic.map((process, index) => (
@@ -124,7 +124,7 @@ const ProcessDiagram = ({ diagramData, processes, loading }) => {
         {layers.operational && layers.operational.length > 0 && (
           <div className="border-2 border-blue-200 dark:border-blue-700 rounded-lg p-4 bg-blue-50 dark:bg-blue-900/30 transition-colors">
             <h4 className="text-sm font-semibold text-blue-900 dark:text-blue-300 mb-3">
-              OPERATIVOS ({layers.operational.length})
+              {t('processDiagram.layers.operational').toUpperCase()} ({layers.operational.length})
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               {layers.operational.map((process, index) => (
@@ -156,7 +156,7 @@ const ProcessDiagram = ({ diagramData, processes, loading }) => {
         {layers.support && layers.support.length > 0 && (
           <div className="border-2 border-green-200 dark:border-green-700 rounded-lg p-4 bg-green-50 dark:bg-green-900/30 transition-colors">
             <h4 className="text-sm font-semibold text-green-900 dark:text-green-300 mb-3">
-              APOYO ({layers.support.length})
+              {t('processDiagram.layers.support').toUpperCase()} ({layers.support.length})
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               {layers.support.map((process, index) => (
@@ -185,25 +185,25 @@ const ProcessDiagram = ({ diagramData, processes, loading }) => {
             <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">
               {statistics?.total_processes || 0}
             </p>
-            <p className="text-xs text-gray-600 dark:text-slate-400">{t('literals.Total Procesos')}</p>
+            <p className="text-xs text-gray-600 dark:text-slate-400">{t('processDiagram.stats.totalProcesses')}</p>
           </div>
           <div>
             <p className="text-2xl font-bold text-red-600 dark:text-red-400">
               {statistics?.critical_processes || 0}
             </p>
-            <p className="text-xs text-gray-600 dark:text-slate-400">{t('literals.Críticos')}</p>
+            <p className="text-xs text-gray-600 dark:text-slate-400">{t('processDiagram.stats.critical')}</p>
           </div>
           <div>
             <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
               {statistics?.total_interactions || 0}
             </p>
-            <p className="text-xs text-gray-600 dark:text-slate-400">{t('literals.Interacciones')}</p>
+            <p className="text-xs text-gray-600 dark:text-slate-400">{t('processDiagram.stats.interactions')}</p>
           </div>
           <div>
             <p className="text-2xl font-bold text-green-600 dark:text-green-400">
               {((statistics?.network_density || 0) * 100).toFixed(0)}%
             </p>
-            <p className="text-xs text-gray-600 dark:text-slate-400">{t('literals.Densidad Red')}</p>
+            <p className="text-xs text-gray-600 dark:text-slate-400">{t('processDiagram.stats.networkDensity')}</p>
           </div>
         </div>
       </div>

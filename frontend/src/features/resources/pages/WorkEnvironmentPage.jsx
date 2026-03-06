@@ -57,7 +57,7 @@ const WorkEnvironmentPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!orgId) {
-      alert('Selecciona una organizacion antes de crear registros.');
+      alert(t('modules.resources.workEnvironmentPage.messages.selectOrganization'));
       return;
     }
     try {
@@ -93,7 +93,7 @@ const WorkEnvironmentPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('¿Eliminar?')) return;
+    if (!confirm(t('modules.resources.workEnvironmentPage.messages.confirmDelete'))) return;
     try {
       await deleteWorkEnvironment(id);
       await loadData();
@@ -130,13 +130,13 @@ const WorkEnvironmentPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">{t('literals.Ambiente de Trabajo')}</h1>
+        <h1 className="text-3xl font-bold text-white">{t('modules.resources.workEnvironmentPage.title')}</h1>
         <button
           type="button"
           onClick={openForm}
           className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
         >
-          Nuevo ambiente
+          {t('modules.resources.workEnvironmentPage.buttons.new')}
         </button>
       </div>
 
@@ -144,10 +144,10 @@ const WorkEnvironmentPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Área')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Ubicación')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Condición')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acciones')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.resources.workEnvironmentPage.table.area')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.resources.workEnvironmentPage.table.location')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.resources.workEnvironmentPage.table.condition')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.resources.workEnvironmentPage.table.actions')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -164,22 +164,22 @@ const WorkEnvironmentPage = () => {
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('literals.No hay ambientes')}</div>}
+        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('modules.resources.workEnvironmentPage.messages.empty')}</div>}
       </div>
 
       <Modal
-        title={editingId ? 'Editar ambiente' : 'Nuevo ambiente'}
+        title={editingId ? t('modules.resources.workEnvironmentPage.modal.editTitle') : t('modules.resources.workEnvironmentPage.modal.newTitle')}
         isOpen={showForm}
         onClose={closeForm}
       >
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Área *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.resources.workEnvironmentPage.form.areaRequired')}</label>
               <input type="text" value={form.area_name} onChange={(e) => setForm({...form, area_name: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Ubicación *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.resources.workEnvironmentPage.form.locationRequired')}</label>
               <input type="text" value={form.location} onChange={(e) => setForm({...form, location: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div className="md:col-span-2">

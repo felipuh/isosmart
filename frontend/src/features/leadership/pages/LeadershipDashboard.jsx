@@ -117,44 +117,44 @@ const LeadershipDashboard = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white">{t('literals.Liderazgo y Compromiso')}</h1>
-          <p className="text-gray-400 mt-1">{t('literals.ISO 9001:2015 - Cláusula 5')}</p>
+          <h1 className="text-3xl font-bold text-white">{t('modules.leadership.dashboard.title')}</h1>
+          <p className="text-gray-400 mt-1">{t('modules.leadership.dashboard.subtitle')}</p>
         </div>
       </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard
-          title={t('literals.Políticas Totales')}
+          title={t('modules.leadership.dashboard.stats.policies.title')}
           value={stats.policies.total}
-          subtitle={`${stats.policies.active} ${t('literals.activas')}, ${stats.policies.draft} ${t('literals.borradores')}`}
+          subtitle={`${stats.policies.active} ${t('modules.leadership.dashboard.stats.policies.activeSuffix')}, ${stats.policies.draft} ${t('modules.leadership.dashboard.stats.policies.draftSuffix')}`}
           icon="📋"
           link="/leadership/policies"
           color="blue"
         />
         
         <StatCard
-          title={t('literals.Roles Organizacionales')}
+          title={t('modules.leadership.dashboard.stats.roles.title')}
           value={stats.roles.total}
-          subtitle={`${stats.roles.assigned} ${t('literals.asignados')}`}
+          subtitle={`${stats.roles.assigned} ${t('modules.leadership.dashboard.stats.roles.assignedSuffix')}`}
           icon="👥"
           link="/leadership/roles"
           color="purple"
         />
         
         <StatCard
-          title={t('literals.Compromisos')}
+          title={t('modules.leadership.dashboard.stats.commitments.title')}
           value={stats.commitments.total}
-          subtitle={`${stats.commitments.completed} ${t('literals.completados')}, ${stats.commitments.pending} ${t('literals.pendientes')}`}
+          subtitle={`${stats.commitments.completed} ${t('modules.leadership.dashboard.stats.commitments.completedSuffix')}, ${stats.commitments.pending} ${t('modules.leadership.dashboard.stats.commitments.pendingSuffix')}`}
           icon="✅"
           link="/leadership/commitments"
           color="green"
         />
         
         <StatCard
-          title={t('literals.Matrices RACI')}
-          value={t('literals.Ver todas')}
-          subtitle={t('literals.Responsabilidades y autoridades')}
+          title={t('modules.leadership.dashboard.stats.raci.title')}
+          value={t('modules.leadership.dashboard.stats.raci.value')}
+          subtitle={t('modules.leadership.dashboard.stats.raci.subtitle')}
           icon="📊"
           link="/leadership/raci"
           color="orange"
@@ -163,7 +163,7 @@ const LeadershipDashboard = () => {
 
       {/* Quick Actions */}
       <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg p-6">
-        <h2 className="text-xl font-bold text-white mb-4">{t('literals.Acciones Rápidas')}</h2>
+        <h2 className="text-xl font-bold text-white mb-4">{t('modules.leadership.dashboard.quickActions.title')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Link
             to="/leadership/policies/new"
@@ -171,8 +171,8 @@ const LeadershipDashboard = () => {
           >
             <span className="text-2xl">📝</span>
             <div>
-              <p className="font-medium text-white">{t('literals.Nueva Política')}</p>
-              <p className="text-xs text-gray-400">{t('literals.Crear política de calidad')}</p>
+              <p className="font-medium text-white">{t('modules.leadership.dashboard.quickActions.newPolicy')}</p>
+              <p className="text-xs text-gray-400">{t('modules.leadership.dashboard.quickActions.newPolicyDesc')}</p>
             </div>
           </Link>
           
@@ -182,8 +182,8 @@ const LeadershipDashboard = () => {
           >
             <span className="text-2xl">👤</span>
             <div>
-              <p className="font-medium text-white">{t('literals.Nuevo Rol')}</p>
-              <p className="text-xs text-gray-400">{t('literals.Definir rol organizacional')}</p>
+              <p className="font-medium text-white">{t('modules.leadership.dashboard.quickActions.newRole')}</p>
+              <p className="text-xs text-gray-400">{t('modules.leadership.dashboard.quickActions.newRoleDesc')}</p>
             </div>
           </Link>
           
@@ -193,8 +193,8 @@ const LeadershipDashboard = () => {
           >
             <span className="text-2xl">📋</span>
             <div>
-              <p className="font-medium text-white">{t('literals.Nueva Matriz RACI')}</p>
-              <p className="text-xs text-gray-400">{t('literals.Crear matriz de responsabilidades')}</p>
+              <p className="font-medium text-white">{t('modules.leadership.dashboard.quickActions.newRaci')}</p>
+              <p className="text-xs text-gray-400">{t('modules.leadership.dashboard.quickActions.newRaciDesc')}</p>
             </div>
           </Link>
         </div>
@@ -202,28 +202,28 @@ const LeadershipDashboard = () => {
 
       {/* Recent Activity */}
       <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg p-6">
-        <h2 className="text-xl font-bold text-white mb-4">{t('literals.Actividad Reciente')}</h2>
+        <h2 className="text-xl font-bold text-white mb-4">{t('modules.leadership.dashboard.recentActivity.title')}</h2>
         <div className="space-y-3">
           <div className="flex items-center justify-between p-3 bg-gray-800/30 rounded-lg">
             <div className="flex items-center space-x-3">
               <span className="text-blue-400">📋</span>
               <div>
-                <p className="text-sm font-medium text-white">{t('literals.Política de Calidad v1.0')}</p>
-                <p className="text-xs text-gray-400">{t('literals.Creada hace 2 horas')}</p>
+                <p className="text-sm font-medium text-white">{t('modules.leadership.dashboard.recentActivity.policyTitle')}</p>
+                <p className="text-xs text-gray-400">{t('modules.leadership.dashboard.recentActivity.policyWhen')}</p>
               </div>
             </div>
-            <span className="px-2 py-1 bg-yellow-500/20 text-yellow-400 text-xs rounded">{t('literals.Borrador')}</span>
+            <span className="px-2 py-1 bg-yellow-500/20 text-yellow-400 text-xs rounded">{t('modules.leadership.dashboard.recentActivity.draft')}</span>
           </div>
           
           <div className="flex items-center justify-between p-3 bg-gray-800/30 rounded-lg">
             <div className="flex items-center space-x-3">
               <span className="text-purple-400">👥</span>
               <div>
-                <p className="text-sm font-medium text-white">{t('literals.Director de Calidad')}</p>
-                <p className="text-xs text-gray-400">{t('literals.Rol creado hace 1 día')}</p>
+                <p className="text-sm font-medium text-white">{t('modules.leadership.dashboard.recentActivity.qualityDirector')}</p>
+                <p className="text-xs text-gray-400">{t('modules.leadership.dashboard.recentActivity.roleWhen')}</p>
               </div>
             </div>
-            <span className="px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded">{t('literals.Activo')}</span>
+            <span className="px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded">{t('modules.leadership.dashboard.recentActivity.active')}</span>
           </div>
         </div>
       </div>

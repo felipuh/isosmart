@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { 
   Settings, Building2, Users, Brain, Bell, Database, 
   FileCheck, Palette, ChevronRight, Shield, Activity,
-  Server, BarChart3
+  Server, CreditCard
 } from 'lucide-react';
 import OrganizationSettings from './OrganizationSettings';
 import UsersManagement from './UsersManagement';
@@ -11,6 +11,7 @@ import NotificationSettings from './NotificationSettings';
 import BackupExportSettings from './BackupExportSettings';
 import ISOClausesSettings from './ISOClausesSettings';
 import ThemeSettings from './ThemeSettings';
+import BillingSettings from './BillingSettings';
 import settingsService from '../../services/settingsService';
 import { useAuth } from '../../context/AuthContext';
 import { useI18n } from '../../context/I18nContext';
@@ -50,6 +51,12 @@ const SettingsDashboard = () => {
       label: 'Notificaciones', 
       icon: Bell,
       description: 'Alertas y notificaciones'
+    },
+    {
+      id: 'billing',
+      label: 'Facturación',
+      icon: CreditCard,
+      description: 'Cobros, pagos y estado de cuenta'
     },
     { 
       id: 'backup', 
@@ -141,6 +148,12 @@ const SettingsDashboard = () => {
             onUpdate={handleSettingsUpdate}
           />
         );
+      case 'billing':
+        return (
+          <BillingSettings
+            organizationId={organizationId}
+          />
+        );
       case 'backup':
         return (
           <BackupExportSettings 
@@ -186,7 +199,7 @@ const SettingsDashboard = () => {
               </div>
               <div>
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">
-                  {t('literals.Configuración')}
+                  {t('settings.title')}
                 </h1>
                 <p className="text-sm text-slate-500 dark:text-slate-400">
                   Gestiona tu organización y sistema ISO Smart

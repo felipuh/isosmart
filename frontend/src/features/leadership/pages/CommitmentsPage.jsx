@@ -6,32 +6,32 @@ import { getCommitments, createCommitment, updateCommitment, deleteCommitment } 
 const normalizeList = (data) => (Array.isArray(data) ? data : data?.results || []);
 
 const commitmentTypes = [
-  { value: 'responsibility', label: 'Responsabilidad por SGC' },
-  { value: 'policy', label: 'Politica y objetivos' },
-  { value: 'integration', label: 'Integracion en procesos' },
-  { value: 'resources', label: 'Disponibilidad de recursos' },
-  { value: 'importance', label: 'Comunicacion de importancia' },
-  { value: 'results', label: 'Logro de resultados' },
-  { value: 'engagement', label: 'Participacion de personal' },
-  { value: 'improvement', label: 'Promocion de mejora' },
-  { value: 'management', label: 'Apoyo a gestión' }
+  { value: 'responsibility', labelKey: 'modules.leadership.commitmentsPage.options.commitmentType.responsibility' },
+  { value: 'policy', labelKey: 'modules.leadership.commitmentsPage.options.commitmentType.policy' },
+  { value: 'integration', labelKey: 'modules.leadership.commitmentsPage.options.commitmentType.integration' },
+  { value: 'resources', labelKey: 'modules.leadership.commitmentsPage.options.commitmentType.resources' },
+  { value: 'importance', labelKey: 'modules.leadership.commitmentsPage.options.commitmentType.importance' },
+  { value: 'results', labelKey: 'modules.leadership.commitmentsPage.options.commitmentType.results' },
+  { value: 'engagement', labelKey: 'modules.leadership.commitmentsPage.options.commitmentType.engagement' },
+  { value: 'improvement', labelKey: 'modules.leadership.commitmentsPage.options.commitmentType.improvement' },
+  { value: 'management', labelKey: 'modules.leadership.commitmentsPage.options.commitmentType.management' }
 ];
 
 const evidenceTypes = [
-  { value: 'meeting', label: 'Acta de reunion' },
-  { value: 'communication', label: 'Comunicacion' },
-  { value: 'decision', label: 'Decision documentada' },
-  { value: 'resource_allocation', label: 'Asignacion de recursos' },
-  { value: 'review', label: 'Revision por la direccion' },
-  { value: 'policy_update', label: 'Actualizacion de política' },
-  { value: 'other', label: 'Otro' }
+  { value: 'meeting', labelKey: 'modules.leadership.commitmentsPage.options.evidenceType.meeting' },
+  { value: 'communication', labelKey: 'modules.leadership.commitmentsPage.options.evidenceType.communication' },
+  { value: 'decision', labelKey: 'modules.leadership.commitmentsPage.options.evidenceType.decision' },
+  { value: 'resource_allocation', labelKey: 'modules.leadership.commitmentsPage.options.evidenceType.resourceAllocation' },
+  { value: 'review', labelKey: 'modules.leadership.commitmentsPage.options.evidenceType.review' },
+  { value: 'policy_update', labelKey: 'modules.leadership.commitmentsPage.options.evidenceType.policyUpdate' },
+  { value: 'other', labelKey: 'modules.leadership.commitmentsPage.options.evidenceType.other' }
 ];
 
 const statusOptions = [
-  { value: 'planned', label: 'Planificado' },
-  { value: 'in_progress', label: 'En progreso' },
-  { value: 'completed', label: 'Completado' },
-  { value: 'verified', label: 'Verificado' }
+  { value: 'planned', labelKey: 'modules.leadership.commitmentsPage.options.status.planned' },
+  { value: 'in_progress', labelKey: 'modules.leadership.commitmentsPage.options.status.inProgress' },
+  { value: 'completed', labelKey: 'modules.leadership.commitmentsPage.options.status.completed' },
+  { value: 'verified', labelKey: 'modules.leadership.commitmentsPage.options.status.verified' }
 ];
 
 const initialForm = {
@@ -64,7 +64,7 @@ const CommitmentsPage = () => {
       const data = await getCommitments();
       setCommitments(normalizeList(data));
     } catch {
-      setError('No se pudieron cargar los compromisos.');
+      setError(t('modules.leadership.commitmentsPage.messages.loadError'));
     } finally {
       setLoading(false);
     }
@@ -122,7 +122,7 @@ const CommitmentsPage = () => {
       resetForm();
       await loadCommitments();
     } catch {
-      setError('No se pudo guardar el compromiso.');
+      setError(t('modules.leadership.commitmentsPage.messages.saveError'));
     } finally {
       setSaving(false);
     }
@@ -143,7 +143,7 @@ const CommitmentsPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Eliminar este compromiso?')) {
+    if (!window.confirm(t('modules.leadership.commitmentsPage.messages.confirmDelete'))) {
       return;
     }
 
@@ -151,7 +151,7 @@ const CommitmentsPage = () => {
       await deleteCommitment(id);
       await loadCommitments();
     } catch {
-      setError('No se pudo eliminar el compromiso.');
+      setError(t('modules.leadership.commitmentsPage.messages.deleteError'));
     }
   };
 
@@ -159,15 +159,15 @@ const CommitmentsPage = () => {
     <div className="space-y-6" style={{ fontFamily: '"Sora", "Work Sans", sans-serif' }}>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-white">{t('literals.Compromisos de liderazgo')}</h1>
-          <p className="text-sm text-slate-400">{t('literals.Evidencias de liderazgo ISO 9001.')}</p>
+          <h1 className="text-2xl font-semibold text-white">{t('modules.leadership.commitmentsPage.title')}</h1>
+          <p className="text-sm text-slate-400">{t('modules.leadership.commitmentsPage.subtitle')}</p>
         </div>
         <button
           type="button"
           onClick={resetForm}
           className="rounded-lg border border-slate-700 px-3 py-2 text-sm text-slate-200 hover:border-slate-500"
         >
-          Nuevo compromiso
+          {t('modules.leadership.commitmentsPage.buttons.new')}
         </button>
       </div>
 
@@ -180,17 +180,17 @@ const CommitmentsPage = () => {
       <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
         <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-4">
           {loading ? (
-            <div className="py-10 text-center text-slate-400">{t('literals.Cargando compromisos...')}</div>
+            <div className="py-10 text-center text-slate-400">{t('modules.leadership.commitmentsPage.messages.loading')}</div>
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full text-left text-sm text-slate-200">
                 <thead className="text-xs uppercase text-slate-400">
                   <tr>
-                    <th className="px-3 py-2">{t('literals.Título')}</th>
-                    <th className="px-3 py-2">{t('literals.Tipo')}</th>
+                    <th className="px-3 py-2">{t('modules.leadership.commitmentsPage.table.title')}</th>
+                    <th className="px-3 py-2">{t('modules.leadership.commitmentsPage.table.type')}</th>
                     <th className="px-3 py-2">{t('common.forms.date')}</th>
                     <th className="px-3 py-2">{t('common.forms.status')}</th>
-                    <th className="px-3 py-2 text-right">{t('literals.Acciones')}</th>
+                    <th className="px-3 py-2 text-right">{t('modules.leadership.commitmentsPage.table.actions')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-800">
@@ -207,14 +207,14 @@ const CommitmentsPage = () => {
                             onClick={() => handleEdit(commitment)}
                             className="rounded-md border border-slate-700 px-2 py-1 text-xs text-slate-200"
                           >
-                            Editar
+                            {t('common.buttons.edit')}
                           </button>
                           <button
                             type="button"
                             onClick={() => handleDelete(commitment.id)}
                             className="rounded-md border border-red-500/50 px-2 py-1 text-xs text-red-200"
                           >
-                            Eliminar
+                            {t('common.buttons.delete')}
                           </button>
                         </div>
                       </td>
@@ -229,14 +229,14 @@ const CommitmentsPage = () => {
         <form onSubmit={handleSubmit} className="rounded-xl border border-slate-800 bg-slate-900/70 p-4 space-y-4">
           <div>
             <h2 className="text-lg font-semibold text-white">
-              {editingId ? 'Editar compromiso' : 'Nuevo compromiso'}
+              {editingId ? t('modules.leadership.commitmentsPage.form.editTitle') : t('modules.leadership.commitmentsPage.form.newTitle')}
             </h2>
-            <p className="text-xs text-slate-400">{t('literals.Organizacion: {orgName || \'Sin seleccionar\'}')}</p>
+            <p className="text-xs text-slate-400">{t('modules.leadership.commitmentsPage.form.organization')}: {orgName || t('modules.leadership.commitmentsPage.form.unselected')}</p>
           </div>
 
           <div className="grid gap-3">
             <label className="text-xs text-slate-400">
-              Tipo de compromiso
+              {t('modules.leadership.commitmentsPage.form.commitmentType')}
               <select
                 value={form.commitment_type}
                 onChange={(event) => setForm({ ...form, commitment_type: event.target.value })}
@@ -244,14 +244,14 @@ const CommitmentsPage = () => {
               >
                 {commitmentTypes.map((type) => (
                   <option key={type.value} value={type.value}>
-                    {type.label}
+                    {t(type.labelKey)}
                   </option>
                 ))}
               </select>
             </label>
 
             <label className="text-xs text-slate-400">
-              Título
+              {t('modules.leadership.commitmentsPage.form.title')}
               <input
                 type="text"
                 value={form.title}
@@ -262,7 +262,7 @@ const CommitmentsPage = () => {
             </label>
 
             <label className="text-xs text-slate-400">
-              Descripción
+              {t('common.forms.description')}
               <textarea
                 value={form.description}
                 onChange={(event) => setForm({ ...form, description: event.target.value })}
@@ -272,7 +272,7 @@ const CommitmentsPage = () => {
             </label>
 
             <label className="text-xs text-slate-400">
-              Tipo de evidencia
+              {t('modules.leadership.commitmentsPage.form.evidenceType')}
               <select
                 value={form.evidence_type}
                 onChange={(event) => setForm({ ...form, evidence_type: event.target.value })}
@@ -280,14 +280,14 @@ const CommitmentsPage = () => {
               >
                 {evidenceTypes.map((type) => (
                   <option key={type.value} value={type.value}>
-                    {type.label}
+                    {t(type.labelKey)}
                   </option>
                 ))}
               </select>
             </label>
 
             <label className="text-xs text-slate-400">
-              URL evidencia
+              {t('modules.leadership.commitmentsPage.form.evidenceUrl')}
               <input
                 type="url"
                 value={form.evidence_url}
@@ -297,7 +297,7 @@ const CommitmentsPage = () => {
             </label>
 
             <label className="text-xs text-slate-400">
-              Documento evidencia
+              {t('modules.leadership.commitmentsPage.form.evidenceDocument')}
               <input
                 type="file"
                 onChange={(event) => setDocumentFile(event.target.files?.[0] || null)}
@@ -306,7 +306,7 @@ const CommitmentsPage = () => {
             </label>
 
             <label className="text-xs text-slate-400">
-              Fecha
+              {t('common.forms.date')}
               <input
                 type="date"
                 value={form.commitment_date}
@@ -317,7 +317,7 @@ const CommitmentsPage = () => {
             </label>
 
             <label className="text-xs text-slate-400">
-              Estado
+              {t('common.forms.status')}
               <select
                 value={form.status}
                 onChange={(event) => setForm({ ...form, status: event.target.value })}
@@ -325,7 +325,7 @@ const CommitmentsPage = () => {
               >
                 {statusOptions.map((option) => (
                   <option key={option.value} value={option.value}>
-                    {option.label}
+                    {t(option.labelKey)}
                   </option>
                 ))}
               </select>
@@ -345,7 +345,7 @@ const CommitmentsPage = () => {
               onClick={resetForm}
               className="rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-200"
             >
-              Limpiar
+              {t('common.buttons.clear')}
             </button>
           </div>
         </form>

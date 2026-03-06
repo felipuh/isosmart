@@ -70,7 +70,7 @@ const RiskDashboard = () => {
   };
 
   const handleDeleteRisk = async (id) => {
-    if (window.confirm('¿Está seguro de eliminar este riesgo?')) {
+    if (window.confirm(t('riskManagement.dashboard.messages.confirmDelete'))) {
       try {
         await riskService.deleteRisk(id);
         await loadData();
@@ -107,9 +107,9 @@ const RiskDashboard = () => {
     <div className="p-6 bg-slate-50 dark:bg-slate-900 min-h-screen transition-colors duration-300">
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">{t('literals.Gestión de Riesgos')}</h1>
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">{t('riskManagement.dashboard.title')}</h1>
         <p className="text-slate-500 dark:text-slate-400 mt-1">
-          Administra los riesgos y oportunidades del SGC según ISO 9001:2015 - Cláusula 6.1
+          {t('riskManagement.dashboard.subtitle')}
         </p>
       </div>
 
@@ -119,26 +119,26 @@ const RiskDashboard = () => {
           icon={<svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>}
           iconBg="bg-blue-50"
           value={stats?.total_risks || 0}
-          label="Total Riesgos"
+          label={t('riskManagement.dashboard.stats.totalRisks')}
         />
         <StatCard
           icon={<svg className="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>}
           iconBg="bg-yellow-50"
           value={stats?.active_risks || 0}
-          label="Activos"
+          label={t('riskManagement.dashboard.stats.active')}
         />
         <StatCard
           icon={<svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
           iconBg="bg-red-50"
           value={stats?.by_level?.critico || 0}
-          label="Críticos"
+          label={t('riskManagement.dashboard.stats.critical')}
           valueColor="text-red-600"
         />
         <StatCard
           icon={<svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
           iconBg="bg-green-50"
           value={stats?.by_status?.mitigated || 0}
-          label="Mitigados"
+          label={t('riskManagement.dashboard.stats.mitigated')}
           valueColor="text-green-600"
         />
       </div>
@@ -152,7 +152,7 @@ const RiskDashboard = () => {
           <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
           </svg>
-          Nuevo Riesgo
+          {t('riskManagement.dashboard.buttons.newRisk')}
         </button>
         <button
           onClick={loadData}
@@ -161,7 +161,7 @@ const RiskDashboard = () => {
           <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
           </svg>
-          Actualizar
+          {t('riskManagement.dashboard.buttons.refresh')}
         </button>
 
         {/* Tabs */}
@@ -174,7 +174,7 @@ const RiskDashboard = () => {
                 : 'text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-300'
             }`}
           >
-            Lista
+            {t('riskManagement.dashboard.tabs.list')}
           </button>
           <button
             onClick={() => setActiveTab('matrix')}
@@ -184,7 +184,7 @@ const RiskDashboard = () => {
                 : 'text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-300'
             }`}
           >
-            Matriz Visual
+            {t('riskManagement.dashboard.tabs.visualMatrix')}
           </button>
         </div>
 
@@ -194,11 +194,11 @@ const RiskDashboard = () => {
           onChange={(e) => setFilters({...filters, level: e.target.value})}
           className="px-4 py-2.5 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
         >
-          <option value="">{t('literals.Todos los niveles')}</option>
-          <option value="critico">{t('literals.Crítico')}</option>
-          <option value="alto">{t('literals.Alto')}</option>
-          <option value="medio">{t('literals.Medio')}</option>
-          <option value="bajo">{t('literals.Bajo')}</option>
+          <option value="">{t('riskManagement.dashboard.filters.allLevels')}</option>
+          <option value="critico">{t('riskManagement.levels.critico')}</option>
+          <option value="alto">{t('riskManagement.levels.alto')}</option>
+          <option value="medio">{t('riskManagement.levels.medio')}</option>
+          <option value="bajo">{t('riskManagement.levels.bajo')}</option>
         </select>
       </div>
 
@@ -247,13 +247,12 @@ const RiskDashboard = () => {
             </svg>
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-slate-900 dark:text-white">{t('literals.Gestión de Riesgos con IA')}</h3>
+            <h3 className="text-sm font-semibold text-slate-900 dark:text-white">{t('riskManagement.dashboard.info.title')}</h3>
             <p className="text-sm text-slate-700 dark:text-slate-300 mt-1">
-              Los riesgos pueden ser identificados automáticamente por los módulos SCA (Context Analyzer), 
-              SIE (Stakeholder Intelligence) y SPM (Process Mapper) para un análisis integral del SGC.
+              {t('riskManagement.dashboard.info.description')}
             </p>
             <a href="/context" className="inline-flex items-center text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 mt-2 font-medium transition-colors">
-              Ir a Análisis de Contexto
+              {t('riskManagement.dashboard.info.goToContext')}
               <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>

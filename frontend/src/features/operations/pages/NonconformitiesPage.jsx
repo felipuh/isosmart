@@ -130,7 +130,7 @@ const NonconformitiesPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('¿Eliminar?')) return;
+    if (!confirm(t('modules.operations.nonconformitiesOpsPage.deleteConfirm'))) return;
     try {
       await deleteNonconformity(id);
       await loadData();
@@ -179,13 +179,13 @@ const NonconformitiesPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">{t('literals.No Conformidades')}</h1>
+        <h1 className="text-3xl font-bold text-white">{t('modules.operations.nonconformitiesOpsPage.title')}</h1>
         <button
           type="button"
           onClick={openForm}
           className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
         >
-          Nueva no conformidad
+          {t('modules.operations.nonconformitiesOpsPage.new')}
         </button>
       </div>
 
@@ -193,12 +193,12 @@ const NonconformitiesPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Número')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Título')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Tipo')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Severidad')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.operations.nonconformitiesOpsPage.table.number')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.operations.nonconformitiesOpsPage.table.title')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.operations.nonconformitiesOpsPage.table.type')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.operations.nonconformitiesOpsPage.table.severity')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.status')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acciones')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.operations.nonconformitiesOpsPage.table.actions')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -225,103 +225,103 @@ const NonconformitiesPage = () => {
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('literals.No hay no conformidades')}</div>}
+        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('modules.operations.nonconformitiesOpsPage.empty')}</div>}
       </div>
 
       <Modal
-        title={editingId ? 'Editar no conformidad' : 'Nueva no conformidad'}
+        title={editingId ? t('modules.operations.nonconformitiesOpsPage.edit') : t('modules.operations.nonconformitiesOpsPage.new')}
         isOpen={showForm}
         onClose={closeForm}
       >
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Número NC *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.nonconformitiesOpsPage.fields.ncNumber')}</label>
               <input type="text" value={form.nc_number} onChange={(e) => setForm({...form, nc_number: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Tipo')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.nonconformitiesOpsPage.fields.type')}</label>
               <select value={form.nc_type} onChange={(e) => setForm({...form, nc_type: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="product">{t('literals.Producto')}</option>
-                <option value="service">{t('literals.Servicio')}</option>
-                <option value="process">{t('literals.Proceso')}</option>
-                <option value="documentation">{t('literals.Documentación')}</option>
+                <option value="product">{t('modules.operations.nonconformitiesOpsPage.types.product')}</option>
+                <option value="service">{t('modules.operations.nonconformitiesOpsPage.types.service')}</option>
+                <option value="process">{t('modules.operations.nonconformitiesOpsPage.types.process')}</option>
+                <option value="documentation">{t('modules.operations.nonconformitiesOpsPage.types.documentation')}</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Severidad')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.nonconformitiesOpsPage.fields.severity')}</label>
               <select value={form.severity} onChange={(e) => setForm({...form, severity: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="minor">{t('literals.Menor')}</option>
-                <option value="major">{t('literals.Mayor')}</option>
-                <option value="critical">{t('literals.Crítica')}</option>
+                <option value="minor">{t('modules.operations.nonconformitiesOpsPage.severities.minor')}</option>
+                <option value="major">{t('modules.operations.nonconformitiesOpsPage.severities.major')}</option>
+                <option value="critical">{t('modules.operations.nonconformitiesOpsPage.severities.critical')}</option>
               </select>
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Título *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.nonconformitiesOpsPage.fields.title')}</label>
               <input type="text" value={form.title} onChange={(e) => setForm({...form, title: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Fecha Detección *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.nonconformitiesOpsPage.fields.detectionDate')}</label>
               <input type="date" value={form.detection_date} onChange={(e) => setForm({...form, detection_date: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Etapa de Detección')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.nonconformitiesOpsPage.fields.detectionStage')}</label>
               <select value={form.detection_stage} onChange={(e) => setForm({...form, detection_stage: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="production">{t('literals.Durante Producción')}</option>
-                <option value="pre_delivery">{t('literals.Antes de Entrega')}</option>
-                <option value="post_delivery">{t('literals.Después de Entrega')}</option>
-                <option value="in_use">{t('literals.Durante Uso')}</option>
+                <option value="production">{t('modules.operations.nonconformitiesOpsPage.detectionStages.production')}</option>
+                <option value="pre_delivery">{t('modules.operations.nonconformitiesOpsPage.detectionStages.preDelivery')}</option>
+                <option value="post_delivery">{t('modules.operations.nonconformitiesOpsPage.detectionStages.postDelivery')}</option>
+                <option value="in_use">{t('modules.operations.nonconformitiesOpsPage.detectionStages.inUse')}</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Detectado por')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.nonconformitiesOpsPage.fields.detectedBy')}</label>
               <select value={form.detected_by} onChange={(e) => setForm({...form, detected_by: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="">{t('literals.Sin asignar')}</option>
+                <option value="">{t('modules.operations.nonconformitiesOpsPage.fields.unassigned')}</option>
                 {users.map(u => (
                   <option key={u.id} value={u.id}>{u.full_name || u.username || u.email}</option>
                 ))}
               </select>
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Producto/Servicio Afectado *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.nonconformitiesOpsPage.fields.affectedProductService')}</label>
               <input type="text" value={form.affected_product_service} onChange={(e) => setForm({...form, affected_product_service: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Lote/Batch')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.nonconformitiesOpsPage.fields.batchLot')}</label>
               <input type="text" value={form.batch_lot_number} onChange={(e) => setForm({...form, batch_lot_number: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Cantidad Afectada')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.nonconformitiesOpsPage.fields.quantityAffected')}</label>
               <input type="number" value={form.quantity_affected} onChange={(e) => setForm({...form, quantity_affected: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
             </div>
             <div className="flex items-center">
               <label className="flex items-center space-x-2">
                 <input type="checkbox" checked={form.affects_customer} onChange={(e) => setForm({...form, affects_customer: e.target.checked})} className="rounded" />
-                <span className="text-sm text-gray-300">{t('literals.Afecta al Cliente')}</span>
+                <span className="text-sm text-gray-300">{t('modules.operations.nonconformitiesOpsPage.fields.affectsCustomer')}</span>
               </label>
             </div>
             {form.affects_customer && (
               <>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Cliente')}</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.nonconformitiesOpsPage.fields.customer')}</label>
                   <input type="text" value={form.customer_name} onChange={(e) => setForm({...form, customer_name: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
                 </div>
                 <div className="flex items-center">
                   <label className="flex items-center space-x-2">
                     <input type="checkbox" checked={form.customer_notified} onChange={(e) => setForm({...form, customer_notified: e.target.checked})} className="rounded" />
-                    <span className="text-sm text-gray-300">{t('literals.Cliente Notificado')}</span>
+                    <span className="text-sm text-gray-300">{t('modules.operations.nonconformitiesOpsPage.fields.customerNotified')}</span>
                   </label>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Fecha de Notificación')}</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.nonconformitiesOpsPage.fields.notificationDate')}</label>
                   <input type="date" value={form.notification_date} onChange={(e) => setForm({...form, notification_date: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
                 </div>
               </>
             )}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Responsable')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.nonconformitiesOpsPage.fields.responsible')}</label>
               <select value={form.responsible} onChange={(e) => setForm({...form, responsible: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="">{t('literals.Sin asignar')}</option>
+                <option value="">{t('modules.operations.nonconformitiesOpsPage.fields.unassigned')}</option>
                 {users.map(u => (
                   <option key={u.id} value={u.id}>{u.full_name || u.username || u.email}</option>
                 ))}

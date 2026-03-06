@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import { useI18n } from '../../../context/I18nContext';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -7,9 +7,6 @@ import { getNonconformities, createNonconformity, updateNonconformity, deleteNon
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
 
-const sourceLabels = { internal_audit: 'Auditoría interna', customer_complaint: 'Queja de cliente', process_monitoring: 'Monitoreo de procesos', product_inspection: 'Inspección de producto', management_review: 'Revisión por la dirección', supplier_issue: 'Problema de proveedor', other: 'Otro' };
-const severityLabels = { critical: 'Crítica', major: 'Mayor', minor: 'Menor' };
-const statusLabels = { open: 'Abierta', analysis: 'En análisis', action_plan: 'Plan de acción definido', implementing: 'Implementando acciones', verification: 'Verificación', closed: 'Cerrada', rejected: 'Rechazada' };
 const severityColors = { critical: 'bg-red-500/20 text-red-400', major: 'bg-orange-500/20 text-orange-400', minor: 'bg-yellow-500/20 text-yellow-400' };
 const statusColors = { open: 'bg-red-500/20 text-red-400', analysis: 'bg-blue-500/20 text-blue-400', action_plan: 'bg-purple-500/20 text-purple-400', implementing: 'bg-orange-500/20 text-orange-400', verification: 'bg-cyan-500/20 text-cyan-400', closed: 'bg-green-500/20 text-green-400', rejected: 'bg-gray-500/20 text-gray-400' };
 
@@ -29,6 +26,32 @@ const ImprovementNonconformitiesPage = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [showForm, setShowForm] = useState(false);
+
+  const sourceLabels = useMemo(() => ({
+    internal_audit: t('modules.improvement.nonconformitiesPage.sources.internalAudit'),
+    customer_complaint: t('modules.improvement.nonconformitiesPage.sources.customerComplaint'),
+    process_monitoring: t('modules.improvement.nonconformitiesPage.sources.processMonitoring'),
+    product_inspection: t('modules.improvement.nonconformitiesPage.sources.productInspection'),
+    management_review: t('modules.improvement.nonconformitiesPage.sources.managementReview'),
+    supplier_issue: t('modules.improvement.nonconformitiesPage.sources.supplierIssue'),
+    other: t('modules.improvement.nonconformitiesPage.sources.other'),
+  }), [t]);
+
+  const severityLabels = useMemo(() => ({
+    critical: t('modules.improvement.nonconformitiesPage.severities.critical'),
+    major: t('modules.improvement.nonconformitiesPage.severities.major'),
+    minor: t('modules.improvement.nonconformitiesPage.severities.minor'),
+  }), [t]);
+
+  const statusLabels = useMemo(() => ({
+    open: t('modules.improvement.nonconformitiesPage.statuses.open'),
+    analysis: t('modules.improvement.nonconformitiesPage.statuses.analysis'),
+    action_plan: t('modules.improvement.nonconformitiesPage.statuses.actionPlan'),
+    implementing: t('modules.improvement.nonconformitiesPage.statuses.implementing'),
+    verification: t('modules.improvement.nonconformitiesPage.statuses.verification'),
+    closed: t('modules.improvement.nonconformitiesPage.statuses.closed'),
+    rejected: t('modules.improvement.nonconformitiesPage.statuses.rejected'),
+  }), [t]);
 
   const loadData = useCallback(async () => {
     try { setLoading(true); const data = await getNonconformities({ organization_id: orgId }); setItems(normalizeList(data)); }
@@ -55,7 +78,7 @@ const ImprovementNonconformitiesPage = () => {
     setEditingId(item.id); setShowForm(true);
   };
 
-  const handleDelete = async (id) => { if (!confirm('¿Eliminar esta no conformidad?')) return; try { await deleteNonconformity(id); await loadData(); } catch (error) { console.error('Error:', error); } };
+  const handleDelete = async (id) => { if (!confirm(t('modules.improvement.nonconformitiesPage.deleteConfirm'))) return; try { await deleteNonconformity(id); await loadData(); } catch (error) { console.error('Error:', error); } };
   const resetForm = () => { setForm(initialForm); setEditingId(null); };
   const openForm = () => { resetForm(); setShowForm(true); };
   const closeForm = () => { resetForm(); setShowForm(false); if (location.pathname.endsWith('/new')) navigate(location.pathname.replace(/\/new$/, ''), { replace: true }); };
@@ -66,70 +89,70 @@ const ImprovementNonconformitiesPage = () => {
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-white">{t('literals.No Conformidades')}</h1>
-          <p className="text-gray-400 mt-1">{t('literals.ISO 9001:2015 - Cláusula 10.2')}</p>
+          <h1 className="text-3xl font-bold text-white">{t('modules.improvement.nonconformitiesPage.title')}</h1>
+          <p className="text-gray-400 mt-1">{t('modules.improvement.nonconformitiesPage.isoClause')}</p>
         </div>
-        <button type="button" onClick={openForm} className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">{t('literals.Nueva no conformidad')}</button>
+        <button type="button" onClick={openForm} className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">{t('modules.improvement.nonconformitiesPage.new')}</button>
       </div>
 
       <Modal
-        title={editingId ? 'Editar no conformidad' : 'Nueva no conformidad'}
+        title={editingId ? t('modules.improvement.nonconformitiesPage.edit') : t('modules.improvement.nonconformitiesPage.new')}
         isOpen={showForm}
         onClose={closeForm}
         maxWidth="max-w-6xl"
       >
         <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              <label className="text-xs text-slate-400">Número de NC *
+              <label className="text-xs text-slate-400">{t('modules.improvement.nonconformitiesPage.fields.code')}
                 <input type="text" required value={form.nc_number} onChange={e => setForm({ ...form, nc_number: e.target.value })} placeholder="NC-2026-001" className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100" />
               </label>
-              <label className="text-xs text-slate-400">Título *
+              <label className="text-xs text-slate-400">{t('modules.improvement.nonconformitiesPage.fields.title')}
                 <input type="text" required value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100" />
               </label>
-              <label className="text-xs text-slate-400">Fecha de detección *
+              <label className="text-xs text-slate-400">{t('modules.improvement.nonconformitiesPage.fields.detectionDate')}
                 <input type="date" required value={form.detection_date} onChange={e => setForm({ ...form, detection_date: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100" />
               </label>
             </div>
-            <label className="text-xs text-slate-400 block">Descripción *
+            <label className="text-xs text-slate-400 block">{t('modules.improvement.nonconformitiesPage.fields.description')}
               <textarea required value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} className="mt-1 h-20 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100" />
             </label>
             <div className="grid gap-4 sm:grid-cols-3">
-              <label className="text-xs text-slate-400">Fuente
+              <label className="text-xs text-slate-400">{t('modules.improvement.nonconformitiesPage.fields.source')}
                 <select value={form.source} onChange={e => setForm({ ...form, source: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100">
                   {Object.entries(sourceLabels).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
                 </select>
               </label>
-              <label className="text-xs text-slate-400">Severidad
+              <label className="text-xs text-slate-400">{t('modules.improvement.nonconformitiesPage.fields.severity')}
                 <select value={form.severity} onChange={e => setForm({ ...form, severity: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100">
                   {Object.entries(severityLabels).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
                 </select>
               </label>
-              <label className="text-xs text-slate-400">Estado
+              <label className="text-xs text-slate-400">{t('common.forms.status')}
                 <select value={form.status} onChange={e => setForm({ ...form, status: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100">
                   {Object.entries(statusLabels).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
                 </select>
               </label>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
-              <label className="text-xs text-slate-400">Proceso afectado
+              <label className="text-xs text-slate-400">{t('modules.improvement.nonconformitiesPage.fields.affectedProcess')}
                 <input type="text" value={form.affected_process} onChange={e => setForm({ ...form, affected_process: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100" />
               </label>
-              <label className="text-xs text-slate-400">Cláusula ISO de referencia
+              <label className="text-xs text-slate-400">{t('modules.improvement.nonconformitiesPage.fields.isoClauseReference')}
                 <input type="text" value={form.iso_clause_reference} onChange={e => setForm({ ...form, iso_clause_reference: e.target.value })} placeholder="8.5, 9.1, etc." className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100" />
               </label>
             </div>
-            <label className="text-xs text-slate-400 block">Descripción del impacto
+            <label className="text-xs text-slate-400 block">{t('modules.improvement.nonconformitiesPage.fields.impactDescription')}
               <textarea value={form.impact_description} onChange={e => setForm({ ...form, impact_description: e.target.value })} className="mt-1 h-16 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100" />
             </label>
             <div className="grid gap-4 sm:grid-cols-2">
-              <label className="text-xs text-slate-400">Acción inmediata tomada
+              <label className="text-xs text-slate-400">{t('modules.improvement.nonconformitiesPage.fields.immediateAction')}
                 <textarea value={form.immediate_action_taken} onChange={e => setForm({ ...form, immediate_action_taken: e.target.value })} className="mt-1 h-16 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100" />
               </label>
-              <label className="text-xs text-slate-400">Medidas de contención
+              <label className="text-xs text-slate-400">{t('modules.improvement.nonconformitiesPage.fields.containmentMeasures')}
                 <textarea value={form.containment_measures} onChange={e => setForm({ ...form, containment_measures: e.target.value })} className="mt-1 h-16 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100" />
               </label>
             </div>
-            <label className="text-xs text-slate-400">Fecha objetivo de cierre
+            <label className="text-xs text-slate-400">{t('modules.improvement.nonconformitiesPage.fields.targetClosureDate')}
               <input type="date" value={form.target_closure_date} onChange={e => setForm({ ...form, target_closure_date: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 max-w-xs" />
             </label>
             <div className="flex flex-wrap gap-2">
@@ -143,17 +166,17 @@ const ImprovementNonconformitiesPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.NC #')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Título')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Fuente')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Severidad')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.improvement.nonconformitiesPage.table.code')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.name')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.improvement.nonconformitiesPage.table.source')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.improvement.nonconformitiesPage.table.severity')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.status')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acciones')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.improvement.nonconformitiesPage.table.actions')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700/30">
             {items.length === 0 ? (
-              <tr><td colSpan={6} className="px-6 py-8 text-center text-gray-400">{t('literals.No hay no conformidades registradas')}</td></tr>
+              <tr><td colSpan={6} className="px-6 py-8 text-center text-gray-400">{t('modules.improvement.nonconformitiesPage.empty')}</td></tr>
             ) : items.map(item => (
               <tr key={item.id} className="hover:bg-gray-800/30">
                 <td className="px-6 py-4 text-sm font-mono text-blue-400">{item.nc_number}</td>

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import { useI18n } from '../../../context/I18nContext';
 import Modal from '../../../components/Common/Modal';
@@ -10,21 +10,6 @@ import {
 } from '../api/performanceApi';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
-
-const analysisTypeLabels = {
-  trend: 'Tendencia',
-  comparative: 'Comparativo',
-  root_cause: 'Causa Raiz',
-  predictive: 'Predictivo',
-  statistical: 'Estadistico'
-};
-
-const statusLabels = {
-  draft: 'Borrador',
-  in_review: 'En Revision',
-  completed: 'Completado',
-  archived: 'Archivado'
-};
 
 const AnalysesPage = () => {
   const { t } = useI18n();
@@ -48,6 +33,21 @@ const AnalysesPage = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [showForm, setShowForm] = useState(false);
+
+  const analysisTypeLabels = useMemo(() => ({
+    trend: t('modules.performance.analysesPage.types.trend'),
+    comparative: t('modules.performance.analysesPage.types.comparative'),
+    root_cause: t('modules.performance.analysesPage.types.rootCause'),
+    predictive: t('modules.performance.analysesPage.types.predictive'),
+    statistical: t('modules.performance.analysesPage.types.statistical'),
+  }), [t]);
+
+  const statusLabels = useMemo(() => ({
+    draft: t('modules.performance.analysesPage.statuses.draft'),
+    in_review: t('modules.performance.analysesPage.statuses.inReview'),
+    completed: t('modules.performance.analysesPage.statuses.completed'),
+    archived: t('modules.performance.analysesPage.statuses.archived'),
+  }), [t]);
 
   const loadAnalyses = useCallback(async () => {
     try {
@@ -105,7 +105,7 @@ const AnalysesPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('Delete analysis?')) return;
+    if (!confirm(t('modules.performance.analysesPage.deleteConfirm'))) return;
     try {
       await deleteAnalysis(id);
       await loadAnalyses();
@@ -151,13 +151,13 @@ const AnalysesPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">{t('literals.Análisis de Datos')}</h1>
+        <h1 className="text-3xl font-bold text-white">{t('modules.performance.analysesPage.title')}</h1>
         <button
           type="button"
           onClick={openForm}
           className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
         >
-          Nuevo análisis
+          {t('modules.performance.analysesPage.new')}
         </button>
       </div>
 
@@ -165,11 +165,11 @@ const AnalysesPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Título')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Tipo')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Periodo')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.performance.analysesPage.table.title')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.performance.analysesPage.table.type')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.performance.analysesPage.table.period')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.status')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acciones')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.performance.analysesPage.table.actions')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -187,18 +187,18 @@ const AnalysesPage = () => {
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('literals.No hay análisis')}</div>}
+        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('modules.performance.analysesPage.empty')}</div>}
       </div>
 
       <Modal
-        title={editingId ? 'Editar análisis' : 'Nuevo análisis'}
+        title={editingId ? t('modules.performance.analysesPage.edit') : t('modules.performance.analysesPage.new')}
         isOpen={showForm}
         onClose={closeForm}
       >
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Título *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.analysesPage.fields.title')}</label>
               <input
                 type="text"
                 value={form.title}
@@ -208,7 +208,7 @@ const AnalysesPage = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Tipo *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.analysesPage.fields.type')}</label>
               <select
                 value={form.analysis_type}
                 onChange={(event) => setForm({ ...form, analysis_type: event.target.value })}
@@ -221,7 +221,7 @@ const AnalysesPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Inicio del Periodo *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.analysesPage.fields.startPeriod')}</label>
               <input
                 type="date"
                 value={form.period_start}
@@ -231,7 +231,7 @@ const AnalysesPage = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Fin del Periodo *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.analysesPage.fields.endPeriod')}</label>
               <input
                 type="date"
                 value={form.period_end}
@@ -253,7 +253,7 @@ const AnalysesPage = () => {
               </select>
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Objetivos *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.analysesPage.fields.objectives')}</label>
               <textarea
                 value={form.objectives}
                 onChange={(event) => setForm({ ...form, objectives: event.target.value })}
@@ -263,7 +263,7 @@ const AnalysesPage = () => {
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Metodologia *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.analysesPage.fields.methodology')}</label>
               <textarea
                 value={form.methodology}
                 onChange={(event) => setForm({ ...form, methodology: event.target.value })}
@@ -273,7 +273,7 @@ const AnalysesPage = () => {
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Hallazgos *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.analysesPage.fields.findings')}</label>
               <textarea
                 value={form.findings}
                 onChange={(event) => setForm({ ...form, findings: event.target.value })}
@@ -283,7 +283,7 @@ const AnalysesPage = () => {
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Conclusiones *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.analysesPage.fields.conclusions')}</label>
               <textarea
                 value={form.conclusions}
                 onChange={(event) => setForm({ ...form, conclusions: event.target.value })}
@@ -293,7 +293,7 @@ const AnalysesPage = () => {
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Recomendaciones *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.analysesPage.fields.recommendations')}</label>
               <textarea
                 value={form.recommendations}
                 onChange={(event) => setForm({ ...form, recommendations: event.target.value })}

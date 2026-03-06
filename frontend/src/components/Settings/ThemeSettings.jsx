@@ -256,14 +256,14 @@ const ThemeSettings = () => {
                 <Layout className="w-5 h-5 text-indigo-500" />
               </div>
               <div>
-                <p className="font-semibold text-slate-800 dark:text-white">{t('literals.Diseño Glassmorphism')}</p>
+                <p className="font-semibold text-slate-800 dark:text-white">{t('settings.theme.features.glassmorphism')}</p>
                 <p className="text-sm text-slate-500 dark:text-slate-400">
                   Efectos de transparencia y blur en las tarjetas
                 </p>
               </div>
             </div>
             <span className="px-3 py-1 bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 rounded-full text-sm font-medium">
-              {t('literals.Activo')}
+              {t('common.labels.active')}
             </span>
           </div>
         </div>
@@ -275,14 +275,14 @@ const ThemeSettings = () => {
                 <Sparkles className="w-5 h-5 text-violet-500" />
               </div>
               <div>
-                <p className="font-semibold text-slate-800 dark:text-white">{t('literals.Animaciones')}</p>
+                <p className="font-semibold text-slate-800 dark:text-white">{t('settings.theme.features.animations')}</p>
                 <p className="text-sm text-slate-500 dark:text-slate-400">
                   Transiciones suaves y micro-interacciones
                 </p>
               </div>
             </div>
             <span className="px-3 py-1 bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 rounded-full text-sm font-medium">
-              {t('literals.Activo')}
+              {t('common.labels.active')}
             </span>
           </div>
         </div>
@@ -294,7 +294,7 @@ const ThemeSettings = () => {
                 <Type className="w-5 h-5 text-amber-500" />
               </div>
               <div>
-                <p className="font-semibold text-slate-800 dark:text-white">{t('literals.Tipografía')}</p>
+                <p className="font-semibold text-slate-800 dark:text-white">{t('settings.theme.features.typography')}</p>
                 <p className="text-sm text-slate-500 dark:text-slate-400">
                   Inter - Moderna y legible
                 </p>

@@ -4,11 +4,26 @@ import { useI18n } from '../../context/I18nContext';
 
 const getQuadrantColor = (quadrant) => {
   switch (quadrant) {
-    case 'Gestionar de Cerca': return '#ef4444';
-    case 'Mantener Satisfecho': return '#f59e0b';
-    case 'Mantener Informado': return '#3b82f6';
-    case 'Monitorear': return '#10b981';
+    case 'manageClosely': return '#ef4444';
+    case 'keepSatisfied': return '#f59e0b';
+    case 'keepInformed': return '#3b82f6';
+    case 'monitor': return '#10b981';
     default: return '#6b7280';
+  }
+};
+
+const getQuadrantLabel = (quadrant, t) => {
+  switch (quadrant) {
+    case 'manageClosely':
+      return t('stakeholdersInsights.matrix.quadrants.manageClosely');
+    case 'keepSatisfied':
+      return t('stakeholdersInsights.matrix.quadrants.keepSatisfied');
+    case 'keepInformed':
+      return t('stakeholdersInsights.matrix.quadrants.keepInformed');
+    case 'monitor':
+      return t('stakeholdersInsights.matrix.quadrants.monitor');
+    default:
+      return quadrant;
   }
 };
 
@@ -18,11 +33,11 @@ const PowerInterestTooltip = ({ active, payload, t }) => {
     return (
       <div className="bg-white dark:bg-slate-800 p-3 rounded-lg shadow-lg border border-slate-200 dark:border-slate-600 transition-colors">
         <p className="font-semibold dark:text-white">{data.name}</p>
-        <p className="text-sm dark:text-slate-400 capitalize">Tipo: {data.type}</p>
-        <p className="text-sm dark:text-slate-400">Influencia: {(data.influence * 100).toFixed(0)}%</p>
-        <p className="text-sm dark:text-slate-400">Satisfacción: {data.satisfaction?.toFixed(1)}/10</p>
+        <p className="text-sm dark:text-slate-400 capitalize">{t('stakeholdersInsights.matrix.tooltip.type')}: {data.type}</p>
+        <p className="text-sm dark:text-slate-400">{t('stakeholdersInsights.matrix.tooltip.influence')}: {(data.influence * 100).toFixed(0)}%</p>
+        <p className="text-sm dark:text-slate-400">{t('stakeholdersInsights.matrix.tooltip.satisfaction')}: {data.satisfaction?.toFixed(1)}/10</p>
         <p className="text-sm font-medium mt-1" style={{ color: getQuadrantColor(data.quadrant) }}>
-          {data.quadrant}
+          {getQuadrantLabel(data.quadrant, t)}
         </p>
       </div>
     );
@@ -64,20 +79,20 @@ const PowerInterestMatrix = ({ matrixData, loading }) => {
       });
     };
 
-    addToScatter(matrixData.manage_closely || [], 'Gestionar de Cerca');
-    addToScatter(matrixData.keep_satisfied || [], 'Mantener Satisfecho');
-    addToScatter(matrixData.keep_informed || [], 'Mantener Informado');
-    addToScatter(matrixData.monitor || [], 'Monitorear');
+    addToScatter(matrixData.manage_closely || [], 'manageClosely');
+    addToScatter(matrixData.keep_satisfied || [], 'keepSatisfied');
+    addToScatter(matrixData.keep_informed || [], 'keepInformed');
+    addToScatter(matrixData.monitor || [], 'monitor');
   }
 
   const getColor = getQuadrantColor;
 
   return (
     <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
-      <h3 className="text-lg font-semibold dark:text-white mb-4">{t('literals.Matriz Poder / Interés')}</h3>
+      <h3 className="text-lg font-semibold dark:text-white mb-4">{t('stakeholdersInsights.matrix.title')}</h3>
       
       {scatterData.length === 0 ? (
-        <p className="text-slate-500 dark:text-slate-400 text-center py-8">{t('literals.No hay datos disponibles')}</p>
+        <p className="text-slate-500 dark:text-slate-400 text-center py-8">{t('stakeholdersInsights.noData')}</p>
       ) : (
         <ResponsiveContainer width="100%" height={400}>
           <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
@@ -85,13 +100,13 @@ const PowerInterestMatrix = ({ matrixData, loading }) => {
             <XAxis
               type="number"
               dataKey="x"
-              name="Interés"
+              name={t('stakeholdersInsights.matrix.axes.interest')}
               domain={[0.5, 3.5]}
               ticks={[1, 2, 3]}
               tickFormatter={(value) => {
-                if (value === 1) return 'Bajo';
-                if (value === 2) return 'Medio';
-                if (value === 3) return 'Alto';
+                if (value === 1) return t('stakeholdersInsights.matrix.levels.low');
+                if (value === 2) return t('stakeholdersInsights.matrix.levels.medium');
+                if (value === 3) return t('stakeholdersInsights.matrix.levels.high');
                 return '';
               }}
               stroke="#9ca3af"
@@ -99,13 +114,13 @@ const PowerInterestMatrix = ({ matrixData, loading }) => {
             <YAxis
               type="number"
               dataKey="y"
-              name="Poder"
+              name={t('stakeholdersInsights.matrix.axes.power')}
               domain={[0.5, 3.5]}
               ticks={[1, 2, 3]}
               tickFormatter={(value) => {
-                if (value === 1) return 'Bajo';
-                if (value === 2) return 'Medio';
-                if (value === 3) return 'Alto';
+                if (value === 1) return t('stakeholdersInsights.matrix.levels.low');
+                if (value === 2) return t('stakeholdersInsights.matrix.levels.medium');
+                if (value === 3) return t('stakeholdersInsights.matrix.levels.high');
                 return '';
               }}
             />
@@ -123,19 +138,19 @@ const PowerInterestMatrix = ({ matrixData, loading }) => {
       <div className="grid grid-cols-2 gap-4 mt-6">
         <div className="flex items-center">
           <div className="w-4 h-4 bg-red-500 rounded mr-2"></div>
-          <span className="text-sm">{t('literals.Gestionar de Cerca (Alto/Alto)')}</span>
+          <span className="text-sm">{t('stakeholdersInsights.matrix.legend.manageClosely')}</span>
         </div>
         <div className="flex items-center">
           <div className="w-4 h-4 bg-orange-500 rounded mr-2"></div>
-          <span className="text-sm">{t('literals.Mantener Satisfecho (Alto/Bajo)')}</span>
+          <span className="text-sm">{t('stakeholdersInsights.matrix.legend.keepSatisfied')}</span>
         </div>
         <div className="flex items-center">
           <div className="w-4 h-4 bg-blue-500 rounded mr-2"></div>
-          <span className="text-sm">{t('literals.Mantener Informado (Bajo/Alto)')}</span>
+          <span className="text-sm">{t('stakeholdersInsights.matrix.legend.keepInformed')}</span>
         </div>
         <div className="flex items-center">
           <div className="w-4 h-4 bg-green-500 rounded mr-2"></div>
-          <span className="text-sm">{t('literals.Monitorear (Bajo/Bajo)')}</span>
+          <span className="text-sm">{t('stakeholdersInsights.matrix.legend.monitor')}</span>
         </div>
       </div>
     </div>

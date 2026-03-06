@@ -155,7 +155,7 @@ const DesignProjectsPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('¿Eliminar?')) return;
+    if (!confirm(t('modules.operations.designProjectsPage.deleteConfirm'))) return;
     try {
       await deleteDesignProject(id);
       await loadData();
@@ -182,13 +182,13 @@ const DesignProjectsPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">{t('literals.Proyectos de Diseño y Desarrollo')}</h1>
+        <h1 className="text-3xl font-bold text-white">{t('modules.operations.designProjectsPage.title')}</h1>
         <button
           type="button"
           onClick={openForm}
           className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
         >
-          Nuevo proyecto
+          {t('modules.operations.designProjectsPage.new')}
         </button>
       </div>
 
@@ -196,12 +196,12 @@ const DesignProjectsPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Código')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.operations.designProjectsPage.table.code')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.name')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Tipo')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Etapa')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.operations.designProjectsPage.table.type')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.operations.designProjectsPage.table.stage')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.status')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acciones')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.operations.designProjectsPage.table.actions')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -220,70 +220,70 @@ const DesignProjectsPage = () => {
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('literals.No hay proyectos')}</div>}
+        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('modules.operations.designProjectsPage.empty')}</div>}
       </div>
 
       <Modal
-        title={editingId ? 'Editar proyecto' : 'Nuevo proyecto'}
+        title={editingId ? t('modules.operations.designProjectsPage.edit') : t('modules.operations.designProjectsPage.new')}
         isOpen={showForm}
         onClose={closeForm}
       >
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Código *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.designProjectsPage.fields.code')}</label>
               <input type="text" value={form.project_code} onChange={(e) => setForm({...form, project_code: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Nombre *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.designProjectsPage.fields.name')}</label>
               <input type="text" value={form.project_name} onChange={(e) => setForm({...form, project_name: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Tipo')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.designProjectsPage.fields.type')}</label>
               <select value={form.project_type} onChange={(e) => setForm({...form, project_type: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="product">{t('literals.Producto')}</option>
-                <option value="service">{t('literals.Servicio')}</option>
-                <option value="process">{t('literals.Proceso')}</option>
-                <option value="system">{t('literals.Sistema')}</option>
+                <option value="product">{t('modules.operations.designProjectsPage.types.product')}</option>
+                <option value="service">{t('modules.operations.designProjectsPage.types.service')}</option>
+                <option value="process">{t('modules.operations.designProjectsPage.types.process')}</option>
+                <option value="system">{t('modules.operations.designProjectsPage.types.system')}</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Etapa')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.designProjectsPage.fields.stage')}</label>
               <select value={form.current_stage} onChange={(e) => setForm({...form, current_stage: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="planning">{t('literals.Planificación')}</option>
-                <option value="inputs">{t('literals.Elementos de Entrada')}</option>
-                <option value="controls">{t('literals.Controles')}</option>
-                <option value="outputs">{t('literals.Resultados')}</option>
-                <option value="verification">{t('literals.Verificación')}</option>
-                <option value="validation">{t('literals.Validación')}</option>
-                <option value="changes">{t('literals.Control de Cambios')}</option>
-                <option value="completed">{t('literals.Completado')}</option>
+                <option value="planning">{t('modules.operations.designProjectsPage.stages.planning')}</option>
+                <option value="inputs">{t('modules.operations.designProjectsPage.stages.inputs')}</option>
+                <option value="controls">{t('modules.operations.designProjectsPage.stages.controls')}</option>
+                <option value="outputs">{t('modules.operations.designProjectsPage.stages.outputs')}</option>
+                <option value="verification">{t('modules.operations.designProjectsPage.stages.verification')}</option>
+                <option value="validation">{t('modules.operations.designProjectsPage.stages.validation')}</option>
+                <option value="changes">{t('modules.operations.designProjectsPage.stages.changes')}</option>
+                <option value="completed">{t('modules.operations.designProjectsPage.stages.completed')}</option>
               </select>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">{t('common.forms.status')}</label>
               <select value={form.status} onChange={(e) => setForm({...form, status: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="active">{t('literals.Activo')}</option>
-                <option value="on_hold">{t('literals.En Espera')}</option>
-                <option value="completed">{t('literals.Completado')}</option>
-                <option value="cancelled">{t('literals.Cancelado')}</option>
+                <option value="active">{t('modules.operations.designProjectsPage.statuses.active')}</option>
+                <option value="on_hold">{t('modules.operations.designProjectsPage.statuses.onHold')}</option>
+                <option value="completed">{t('modules.operations.designProjectsPage.statuses.completed')}</option>
+                <option value="cancelled">{t('modules.operations.designProjectsPage.statuses.cancelled')}</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Líder del Proyecto')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.designProjectsPage.fields.projectLeader')}</label>
               <select value={form.project_leader} onChange={(e) => setForm({...form, project_leader: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="">{t('literals.Sin asignar')}</option>
+                <option value="">{t('modules.operations.designProjectsPage.fields.unassigned')}</option>
                 {users.map(u => (
                   <option key={u.id} value={u.id}>{u.full_name || u.username || u.email}</option>
                 ))}
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Fecha Inicio *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.designProjectsPage.fields.startDate')}</label>
               <input type="date" value={form.start_date} onChange={(e) => setForm({...form, start_date: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Fecha Meta *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.designProjectsPage.fields.targetDate')}</label>
               <input type="date" value={form.target_completion_date} onChange={(e) => setForm({...form, target_completion_date: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div className="md:col-span-3">
@@ -291,35 +291,35 @@ const DesignProjectsPage = () => {
               <textarea value={form.description} onChange={(e) => setForm({...form, description: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="3" required />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Entradas de Diseño')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.designProjectsPage.fields.designInputs')}</label>
               <textarea value={form.design_inputs} onChange={(e) => setForm({...form, design_inputs: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Resultados de Diseño')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.designProjectsPage.fields.designOutputs')}</label>
               <textarea value={form.design_outputs} onChange={(e) => setForm({...form, design_outputs: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Controles de Diseño')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.designProjectsPage.fields.designControls')}</label>
               <textarea value={form.design_controls} onChange={(e) => setForm({...form, design_controls: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Método de Verificación')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.designProjectsPage.fields.verificationMethod')}</label>
               <input type="text" value={form.verification_method} onChange={(e) => setForm({...form, verification_method: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
             </div>
             <div className="flex items-center">
               <label className="flex items-center space-x-2">
                 <input type="checkbox" checked={form.is_verified} onChange={(e) => setForm({...form, is_verified: e.target.checked})} className="rounded" />
-                <span className="text-sm text-gray-300">{t('literals.Verificado')}</span>
+                <span className="text-sm text-gray-300">{t('modules.operations.designProjectsPage.fields.verified')}</span>
               </label>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Método de Validación')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.designProjectsPage.fields.validationMethod')}</label>
               <input type="text" value={form.validation_method} onChange={(e) => setForm({...form, validation_method: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
             </div>
             <div className="flex items-center">
               <label className="flex items-center space-x-2">
                 <input type="checkbox" checked={form.is_validated} onChange={(e) => setForm({...form, is_validated: e.target.checked})} className="rounded" />
-                <span className="text-sm text-gray-300">{t('literals.Validado')}</span>
+                <span className="text-sm text-gray-300">{t('modules.operations.designProjectsPage.fields.validated')}</span>
               </label>
             </div>
           </div>

@@ -101,35 +101,35 @@ const ImprovementDashboard = () => {
     <div className="space-y-6" style={{ fontFamily: '"Sora", "Work Sans", sans-serif' }}>
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white">{t('literals.Mejora')}</h1>
-          <p className="text-gray-400 mt-1">{t('literals.ISO 9001:2015 - Cláusula 10')}</p>
+          <h1 className="text-3xl font-bold text-white">{t('modules.improvement.dashboard.title')}</h1>
+          <p className="text-gray-400 mt-1">{t('modules.improvement.dashboard.subtitle')}</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard title="No Conformidades" value={stats.nonconformities.total}
-          subtitle={`${stats.nonconformities.open} abiertas, ${stats.nonconformities.critical} críticas`}
+        <StatCard title={t('modules.improvement.dashboard.stats.nonconformities')} value={stats.nonconformities.total}
+          subtitle={t('modules.improvement.dashboard.stats.nonconformitiesDetail').replace('{open}', stats.nonconformities.open).replace('{critical}', stats.nonconformities.critical)}
           icon="🚨" link="/improvement/nonconformities" color="red" />
-        <StatCard title="Acciones Correctivas" value={stats.corrective_actions.total}
-          subtitle={`${stats.corrective_actions.overdue} vencidas, ${stats.corrective_actions.effective} efectivas`}
+        <StatCard title={t('modules.improvement.dashboard.stats.correctiveActions')} value={stats.corrective_actions.total}
+          subtitle={t('modules.improvement.dashboard.stats.actionsDetail').replace('{overdue}', stats.corrective_actions.overdue).replace('{effective}', stats.corrective_actions.effective)}
           icon="🔧" link="/improvement/corrective-actions" color="orange" />
-        <StatCard title="Mejora Continua" value={stats.improvements.total}
-          subtitle={`${stats.improvements.active} activas, ${stats.improvements.successful} exitosas`}
+        <StatCard title={t('modules.improvement.dashboard.stats.continualImprovement')} value={stats.improvements.total}
+          subtitle={t('modules.improvement.dashboard.stats.improvementsDetail').replace('{active}', stats.improvements.active).replace('{successful}', stats.improvements.successful)}
           icon="📈" link="/improvement/continual" color="green" />
-        <StatCard title="Efectividad"
-          value={stats.corrective_actions.total > 0 ? `${Math.round((stats.corrective_actions.effective / stats.corrective_actions.total) * 100)}%` : 'N/A'}
-          subtitle="Tasa de acciones efectivas" icon="✅" link="/improvement/corrective-actions" color="blue" />
+        <StatCard title={t('modules.improvement.dashboard.stats.effectiveness')}
+          value={stats.corrective_actions.total > 0 ? `${Math.round((stats.corrective_actions.effective / stats.corrective_actions.total) * 100)}%` : t('modules.improvement.dashboard.stats.notAvailable')}
+          subtitle={t('modules.improvement.dashboard.stats.effectivenessDetail')} icon="✅" link="/improvement/corrective-actions" color="blue" />
       </div>
 
       {stats.nonconformities.critical > 0 && (
         <div className="bg-gradient-to-br from-red-500/10 to-red-600/5 backdrop-blur-sm border border-red-500/20 rounded-lg p-6">
           <div className="flex items-center space-x-3 mb-2">
             <span className="text-2xl">🚨</span>
-            <h2 className="text-xl font-bold text-white">{t('literals.Atención requerida')}</h2>
+            <h2 className="text-xl font-bold text-white">{t('modules.improvement.dashboard.alerts.attentionRequired')}</h2>
           </div>
-          <p className="text-gray-300">{t('literals.Hay {stats.nonconformities.critical} no conformidad(es) crítica(s) que requieren acción inmediata.')}</p>
+          <p className="text-gray-300">{t('modules.improvement.dashboard.alerts.criticalNcMessage').replace('{count}', stats.nonconformities.critical)}</p>
           <Link to="/improvement/nonconformities" className="inline-block mt-4 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-all">
-            Ver no conformidades críticas
+            {t('modules.improvement.dashboard.alerts.viewCriticalNc')}
           </Link>
         </div>
       )}
@@ -138,29 +138,29 @@ const ImprovementDashboard = () => {
         <div className="bg-gradient-to-br from-orange-500/10 to-orange-600/5 backdrop-blur-sm border border-orange-500/20 rounded-lg p-6">
           <div className="flex items-center space-x-3 mb-2">
             <span className="text-2xl">⏰</span>
-            <h2 className="text-xl font-bold text-white">{t('literals.Acciones Vencidas')}</h2>
+            <h2 className="text-xl font-bold text-white">{t('modules.improvement.dashboard.alerts.overdueActions')}</h2>
           </div>
-          <p className="text-gray-300">{t('literals.Hay {stats.corrective_actions.overdue} acción(es) correctiva(s) que han superado su fecha de cumplimiento.')}</p>
+          <p className="text-gray-300">{t('modules.improvement.dashboard.alerts.overdueMessage').replace('{count}', stats.corrective_actions.overdue)}</p>
           <Link to="/improvement/corrective-actions" className="inline-block mt-4 px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition-all">
-            Ver Acciones Vencidas
+            {t('modules.improvement.dashboard.alerts.viewOverdue')}
           </Link>
         </div>
       )}
 
       <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg p-6">
-        <h2 className="text-xl font-bold text-white mb-4">{t('literals.Acciones rápidas')}</h2>
+        <h2 className="text-xl font-bold text-white mb-4">{t('modules.improvement.dashboard.quickActions.title')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Link to="/improvement/nonconformities/new" className="flex items-center space-x-3 p-4 bg-red-500/10 border border-red-500/20 rounded-lg hover:bg-red-500/20 transition-all">
             <span className="text-2xl">🚨</span>
-            <div><p className="font-medium text-white">{t('literals.Reportar NC')}</p><p className="text-xs text-gray-400">{t('literals.Registrar no conformidad')}</p></div>
+            <div><p className="font-medium text-white">{t('modules.improvement.dashboard.quickActions.reportNc')}</p><p className="text-xs text-gray-400">{t('modules.improvement.dashboard.quickActions.registerNc')}</p></div>
           </Link>
           <Link to="/improvement/corrective-actions/new" className="flex items-center space-x-3 p-4 bg-orange-500/10 border border-orange-500/20 rounded-lg hover:bg-orange-500/20 transition-all">
             <span className="text-2xl">🔧</span>
-            <div><p className="font-medium text-white">{t('literals.Nueva acción correctiva')}</p><p className="text-xs text-gray-400">{t('literals.Crear plan de acción')}</p></div>
+            <div><p className="font-medium text-white">{t('modules.improvement.dashboard.quickActions.newCorrectiveAction')}</p><p className="text-xs text-gray-400">{t('modules.improvement.dashboard.quickActions.createActionPlan')}</p></div>
           </Link>
           <Link to="/improvement/continual/new" className="flex items-center space-x-3 p-4 bg-green-500/10 border border-green-500/20 rounded-lg hover:bg-green-500/20 transition-all">
             <span className="text-2xl">📈</span>
-            <div><p className="font-medium text-white">{t('literals.Iniciativa de mejora')}</p><p className="text-xs text-gray-400">{t('literals.Proponer mejora continua')}</p></div>
+            <div><p className="font-medium text-white">{t('modules.improvement.dashboard.quickActions.improvementInitiative')}</p><p className="text-xs text-gray-400">{t('modules.improvement.dashboard.quickActions.proposeContinual')}</p></div>
           </Link>
         </div>
       </div>
@@ -169,16 +169,16 @@ const ImprovementDashboard = () => {
         <Link to="/improvement/nonconformities" className="p-6 bg-gradient-to-br from-red-500/10 to-red-600/5 border border-red-500/20 rounded-lg hover:shadow-lg transition-all">
           <div className="flex items-center space-x-3 mb-2">
             <span className="text-2xl">📋</span>
-            <h3 className="text-lg font-bold text-white">{t('literals.No Conformidades y Acciones Correctivas')}</h3>
+            <h3 className="text-lg font-bold text-white">{t('modules.improvement.dashboard.cards.ncAndActionsTitle')}</h3>
           </div>
-          <p className="text-sm text-gray-400">{t('literals.ISO 9001:2015 Cláusula 10.2 - Gestión de no conformidades, análisis de causa raíz y acciones correctivas')}</p>
+          <p className="text-sm text-gray-400">{t('modules.improvement.dashboard.cards.ncAndActionsDesc')}</p>
         </Link>
         <Link to="/improvement/continual" className="p-6 bg-gradient-to-br from-green-500/10 to-green-600/5 border border-green-500/20 rounded-lg hover:shadow-lg transition-all">
           <div className="flex items-center space-x-3 mb-2">
             <span className="text-2xl">🚀</span>
-            <h3 className="text-lg font-bold text-white">{t('literals.Mejora Continua')}</h3>
+            <h3 className="text-lg font-bold text-white">{t('modules.improvement.dashboard.cards.continualTitle')}</h3>
           </div>
-          <p className="text-sm text-gray-400">{t('literals.ISO 9001:2015 Cláusula 10.3 - Iniciativas de mejora, análisis de ROI y seguimiento de resultados')}</p>
+          <p className="text-sm text-gray-400">{t('modules.improvement.dashboard.cards.continualDesc')}</p>
         </Link>
       </div>
     </div>

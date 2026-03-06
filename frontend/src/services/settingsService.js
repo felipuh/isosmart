@@ -162,6 +162,103 @@ const settingsService = {
     return response.data;
   },
 
+  runOnboardingOrchestration: async (organizationId) => {
+    const response = await api.post('/settings/run_onboarding_orchestration/', {
+      organization_id: organizationId,
+    });
+    return response.data;
+  },
+
+  getOnboardingInsights: async (organizationId, history = false) => {
+    const response = await api.get('/settings/onboarding_insights/', {
+      params: {
+        ...withOrg(organizationId),
+        history,
+      },
+    });
+    return response.data;
+  },
+
+  getOnboardingIsoSkeleton: async (organizationId) => {
+    const response = await api.get('/settings/onboarding_iso_skeleton/', {
+      params: withOrg(organizationId),
+    });
+    return response.data;
+  },
+
+  getOnboardingAdaptiveRoute: async (organizationId) => {
+    const response = await api.get('/settings/onboarding_adaptive_route/', {
+      params: withOrg(organizationId),
+    });
+    return response.data;
+  },
+
+  getBillingCurrent: async (organizationId) => {
+    const response = await api.get('/billing/current/', {
+      params: withOrg(organizationId),
+    });
+    return response.data;
+  },
+
+  updateBillingPayer: async (organizationId, data) => {
+    const response = await api.post('/billing/update_payer/', data, {
+      params: withOrg(organizationId),
+    });
+    return response.data;
+  },
+
+  registerBillingPayment: async (organizationId, data) => {
+    const formData = new FormData();
+    Object.entries(data || {}).forEach(([key, value]) => {
+      if (value === null || value === undefined || value === '') return;
+      formData.append(key, value);
+    });
+
+    const response = await api.post('/billing/register_payment/', formData, {
+      params: withOrg(organizationId),
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  },
+
+  confirmBillingPayment: async (organizationId, paymentId) => {
+    const response = await api.post('/billing/confirm_payment/', {
+      payment_id: paymentId,
+    }, {
+      params: withOrg(organizationId),
+    });
+    return response.data;
+  },
+
+  rejectBillingPayment: async (organizationId, paymentId, rejectionReason = '') => {
+    const response = await api.post('/billing/reject_payment/', {
+      payment_id: paymentId,
+      rejection_reason: rejectionReason,
+    }, {
+      params: withOrg(organizationId),
+    });
+    return response.data;
+  },
+
+  evaluateBilling: async (organizationId) => {
+    const response = await api.post('/billing/evaluate/', {}, {
+      params: withOrg(organizationId),
+    });
+    return response.data;
+  },
+
+  getBillingTimeline: async (organizationId) => {
+    const response = await api.get('/audit-logs/', {
+      params: {
+        ...withOrg(organizationId),
+        module: 'billing',
+      },
+    });
+    return response.data.results || response.data;
+  },
+
   updateStandards: async (organizationId, standards) => {
     const response = await api.post('/settings/update_standards/', {
       organization_id: organizationId,

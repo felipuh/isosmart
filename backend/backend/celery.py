@@ -22,6 +22,11 @@ app.conf.beat_schedule = {
         'task': 'ai_modules.sca.tasks.analyze_context_periodic',
         'schedule': crontab(hour=2, minute=0),
     },
+    # Evaluación de estado de facturación diaria a las 3 AM
+    'evaluate-billing-status-daily': {
+        'task': 'backend.tasks.evaluate_billing_statuses_task',
+        'schedule': crontab(hour=3, minute=0),
+    },
 }
 
 # Configuración adicional

@@ -50,17 +50,17 @@ const ExecutiveDashboard = () => {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
-                Dashboard Ejecutivo
+                {t('dashboard.executive.title')}
               </h1>
               <p className="text-slate-600 dark:text-slate-400 mt-1">
-                Sistema Inteligente de Gobierno de la Calidad - ISO 9001:2015
+                {t('dashboard.executive.subtitle')}
               </p>
             </div>
             
             <div className="flex items-center gap-4">
               {lastUpdate && (
                 <span className="text-sm text-slate-500 dark:text-slate-400">
-                  Última actualización: {lastUpdate.toLocaleTimeString('es-ES')}
+                  {t('dashboard.executive.lastUpdate')}: {lastUpdate.toLocaleTimeString('es-ES')}
                 </span>
               )}
               <button
@@ -69,11 +69,11 @@ const ExecutiveDashboard = () => {
                 className="px-4 py-2 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-lg font-semibold border-2 border-slate-300 dark:border-slate-600 hover:border-blue-500 dark:hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400 transition-all flex items-center gap-2"
               >
                 <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-                Actualizar
+                {t('dashboard.executive.refresh')}
               </button>
               <button className="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all shadow-md hover:shadow-lg flex items-center gap-2">
                 <Download className="w-4 h-4" />
-                Exportar Reporte
+                {t('dashboard.executive.exportReport')}
               </button>
             </div>
           </div>
@@ -104,15 +104,15 @@ const ExecutiveDashboard = () => {
             <div className="flex items-center gap-4">
               <Shield className="w-12 h-12" />
               <div>
-                <h3 className="text-xl font-bold mb-2">{t('literals.Estado de Cumplimiento ISO 9001:2015')}</h3>
+                <h3 className="text-xl font-bold mb-2">{t('dashboard.executive.compliance.title')}</h3>
                 <p className="text-blue-100">
-                  Cláusulas 4.1-4.4, 6.1-6.3 • Cumplimiento ISO/IEC 42001:2023 (IA Responsable)
+                  {t('dashboard.executive.compliance.subtitle')}
                 </p>
               </div>
             </div>
             <div className="text-right">
               <div className="text-5xl font-bold">95%</div>
-              <div className="text-blue-100 text-lg">{t('literals.Cumplimiento Global')}</div>
+              <div className="text-blue-100 text-lg">{t('dashboard.executive.compliance.global')}</div>
             </div>
           </div>
         </div>

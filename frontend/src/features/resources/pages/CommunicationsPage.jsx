@@ -61,7 +61,7 @@ const CommunicationsPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!orgId) {
-      alert('Selecciona una organizacion antes de crear registros.');
+      alert(t('modules.resources.communicationsPage.messages.selectOrganization'));
       return;
     }
     try {
@@ -101,7 +101,7 @@ const CommunicationsPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('¿Eliminar?')) return;
+    if (!confirm(t('modules.resources.communicationsPage.messages.confirmDelete'))) return;
     try {
       await deleteCommunication(id);
       await loadData();
@@ -142,13 +142,13 @@ const CommunicationsPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">{t('literals.Comunicaciones')}</h1>
+        <h1 className="text-3xl font-bold text-white">{t('modules.resources.communicationsPage.title')}</h1>
         <button
           type="button"
           onClick={openForm}
           className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
         >
-          Nueva comunicación
+          {t('modules.resources.communicationsPage.buttons.new')}
         </button>
       </div>
 
@@ -156,12 +156,12 @@ const CommunicationsPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Título')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Tipo')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Método')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.resources.communicationsPage.table.title')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.resources.communicationsPage.table.type')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.resources.communicationsPage.table.method')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.date')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.status')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acciones')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.resources.communicationsPage.table.actions')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -170,7 +170,7 @@ const CommunicationsPage = () => {
                 <td className="px-6 py-4 text-sm text-white">{i.title}</td>
                 <td className="px-6 py-4 text-sm text-gray-300">{i.communication_type_display}</td>
                 <td className="px-6 py-4 text-sm text-gray-300">{i.method_display}</td>
-                <td className="px-6 py-4 text-sm text-gray-300">{i.scheduled_date || '-'}</td>
+                <td className="px-6 py-4 text-sm text-gray-300">{i.scheduled_date || t('modules.resources.communicationsPage.table.noDate')}</td>
                 <td className="px-6 py-4 text-sm text-gray-300">{i.status_display}</td>
                 <td className="px-6 py-4 text-sm space-x-2">
                   <button onClick={() => handleEdit(i)} className="text-blue-400 hover:text-blue-300">{t('common.buttons.edit')}</button>
@@ -180,61 +180,61 @@ const CommunicationsPage = () => {
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('literals.No hay comunicaciones')}</div>}
+        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('modules.resources.communicationsPage.messages.empty')}</div>}
       </div>
 
       <Modal
-        title={editingId ? 'Editar comunicación' : 'Nueva comunicación'}
+        title={editingId ? t('modules.resources.communicationsPage.modal.editTitle') : t('modules.resources.communicationsPage.modal.newTitle')}
         isOpen={showForm}
         onClose={closeForm}
       >
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Título *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.resources.communicationsPage.form.titleRequired')}</label>
               <input type="text" value={form.title} onChange={(e) => setForm({...form, title: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Tipo')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.resources.communicationsPage.form.type')}</label>
               <select value={form.communication_type} onChange={(e) => setForm({...form, communication_type: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="internal">{t('literals.Interna')}</option>
-                <option value="external">{t('literals.Externa')}</option>
+                <option value="internal">{t('modules.resources.communicationsPage.options.type.internal')}</option>
+                <option value="external">{t('modules.resources.communicationsPage.options.type.external')}</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Método')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.resources.communicationsPage.form.method')}</label>
               <select value={form.method} onChange={(e) => setForm({...form, method: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="email">{t('literals.Correo Electrónico')}</option>
-                <option value="meeting">{t('literals.Reunión')}</option>
-                <option value="memo">{t('literals.Memorándum')}</option>
-                <option value="report">{t('literals.Informe')}</option>
-                <option value="presentation">{t('literals.Presentación')}</option>
-                <option value="intranet">{t('literals.Intranet')}</option>
-                <option value="notice_board">{t('literals.Tablón de Anuncios')}</option>
-                <option value="other">{t('literals.Otro')}</option>
+                <option value="email">{t('modules.resources.communicationsPage.options.method.email')}</option>
+                <option value="meeting">{t('modules.resources.communicationsPage.options.method.meeting')}</option>
+                <option value="memo">{t('modules.resources.communicationsPage.options.method.memo')}</option>
+                <option value="report">{t('modules.resources.communicationsPage.options.method.report')}</option>
+                <option value="presentation">{t('modules.resources.communicationsPage.options.method.presentation')}</option>
+                <option value="intranet">{t('modules.resources.communicationsPage.options.method.intranet')}</option>
+                <option value="notice_board">{t('modules.resources.communicationsPage.options.method.noticeBoard')}</option>
+                <option value="other">{t('modules.resources.communicationsPage.options.method.other')}</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Frecuencia')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.resources.communicationsPage.form.frequency')}</label>
               <select value={form.frequency} onChange={(e) => setForm({...form, frequency: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="one_time">{t('literals.Una Vez')}</option>
-                <option value="daily">{t('literals.Diaria')}</option>
-                <option value="weekly">{t('literals.Semanal')}</option>
-                <option value="monthly">{t('literals.Mensual')}</option>
-                <option value="quarterly">{t('literals.Trimestral')}</option>
-                <option value="annual">{t('literals.Anual')}</option>
+                <option value="one_time">{t('modules.resources.communicationsPage.options.frequency.oneTime')}</option>
+                <option value="daily">{t('modules.resources.communicationsPage.options.frequency.daily')}</option>
+                <option value="weekly">{t('modules.resources.communicationsPage.options.frequency.weekly')}</option>
+                <option value="monthly">{t('modules.resources.communicationsPage.options.frequency.monthly')}</option>
+                <option value="quarterly">{t('modules.resources.communicationsPage.options.frequency.quarterly')}</option>
+                <option value="annual">{t('modules.resources.communicationsPage.options.frequency.annual')}</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Fecha Programada')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.resources.communicationsPage.form.scheduledDate')}</label>
               <input type="date" value={form.scheduled_date} onChange={(e) => setForm({...form, scheduled_date: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Público Objetivo *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.resources.communicationsPage.form.targetAudienceRequired')}</label>
               <input type="text" value={form.target_audience} onChange={(e) => setForm({...form, target_audience: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Resumen del Contenido')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.resources.communicationsPage.form.contentSummary')}</label>
               <textarea value={form.content_summary} onChange={(e) => setForm({...form, content_summary: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="3" required />
             </div>
             <div className="md:col-span-2">

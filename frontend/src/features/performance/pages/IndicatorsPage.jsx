@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import { useI18n } from '../../../context/I18nContext';
 import Modal from '../../../components/Common/Modal';
@@ -10,30 +10,6 @@ import {
 } from '../api/performanceApi';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
-
-const indicatorTypeLabels = {
-  quality: 'Calidad',
-  efficiency: 'Eficiencia',
-  effectiveness: 'Efectividad',
-  customer_satisfaction: 'Satisfacción del Cliente',
-  process: 'Desempeno de Procesos',
-  financial: 'Financiero',
-  operational: 'Operacional'
-};
-
-const frequencyLabels = {
-  daily: 'Diario',
-  weekly: 'Semanal',
-  monthly: 'Mensual',
-  quarterly: 'Trimestral',
-  annually: 'Anual'
-};
-
-const statusLabels = {
-  active: 'Activo',
-  inactive: 'Inactivo',
-  archived: 'Archivado'
-};
 
 const IndicatorsPage = () => {
   const { t } = useI18n();
@@ -58,6 +34,30 @@ const IndicatorsPage = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [showForm, setShowForm] = useState(false);
+
+  const indicatorTypeLabels = useMemo(() => ({
+    quality: t('modules.performance.indicatorsPage.types.quality'),
+    efficiency: t('modules.performance.indicatorsPage.types.efficiency'),
+    effectiveness: t('modules.performance.indicatorsPage.types.effectiveness'),
+    customer_satisfaction: t('modules.performance.indicatorsPage.types.customerSatisfaction'),
+    process: t('modules.performance.indicatorsPage.types.processPerformance'),
+    financial: t('modules.performance.indicatorsPage.types.financial'),
+    operational: t('modules.performance.indicatorsPage.types.operational'),
+  }), [t]);
+
+  const frequencyLabels = useMemo(() => ({
+    daily: t('modules.performance.indicatorsPage.frequencies.daily'),
+    weekly: t('modules.performance.indicatorsPage.frequencies.weekly'),
+    monthly: t('modules.performance.indicatorsPage.frequencies.monthly'),
+    quarterly: t('modules.performance.indicatorsPage.frequencies.quarterly'),
+    annually: t('modules.performance.indicatorsPage.frequencies.annually'),
+  }), [t]);
+
+  const statusLabels = useMemo(() => ({
+    active: t('modules.performance.indicatorsPage.statuses.active'),
+    inactive: t('modules.performance.indicatorsPage.statuses.inactive'),
+    archived: t('modules.performance.indicatorsPage.statuses.archived'),
+  }), [t]);
 
   const loadIndicators = useCallback(async () => {
     try {
@@ -120,7 +120,7 @@ const IndicatorsPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('Delete indicator?')) return;
+    if (!confirm(t('modules.performance.indicatorsPage.deleteConfirm'))) return;
     try {
       await deleteIndicator(id);
       await loadIndicators();
@@ -166,13 +166,13 @@ const IndicatorsPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">{t('literals.Indicadores de Desempeno')}</h1>
+        <h1 className="text-3xl font-bold text-white">{t('modules.performance.indicatorsPage.title')}</h1>
         <button
           type="button"
           onClick={openForm}
           className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
         >
-          Nuevo indicador
+          {t('modules.performance.indicatorsPage.new')}
         </button>
       </div>
 
@@ -180,12 +180,12 @@ const IndicatorsPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Codigo')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.performance.indicatorsPage.table.code')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.name')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Tipo')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Frecuencia')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.performance.indicatorsPage.table.type')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.performance.indicatorsPage.table.frequency')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.status')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acciones')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.performance.indicatorsPage.table.actions')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -204,18 +204,18 @@ const IndicatorsPage = () => {
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('literals.No hay indicadores')}</div>}
+        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('modules.performance.indicatorsPage.empty')}</div>}
       </div>
 
       <Modal
-        title={editingId ? 'Editar indicador' : 'Nuevo indicador'}
+        title={editingId ? t('modules.performance.indicatorsPage.edit') : t('modules.performance.indicatorsPage.new')}
         isOpen={showForm}
         onClose={closeForm}
       >
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Codigo *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.indicatorsPage.fields.code')}</label>
               <input
                 type="text"
                 value={form.code}
@@ -225,7 +225,7 @@ const IndicatorsPage = () => {
               />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Nombre *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.indicatorsPage.fields.name')}</label>
               <input
                 type="text"
                 value={form.name}
@@ -235,7 +235,7 @@ const IndicatorsPage = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Tipo *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.indicatorsPage.fields.type')}</label>
               <select
                 value={form.indicator_type}
                 onChange={(event) => setForm({ ...form, indicator_type: event.target.value })}
@@ -248,7 +248,7 @@ const IndicatorsPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Frecuencia *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.indicatorsPage.fields.frequency')}</label>
               <select
                 value={form.frequency}
                 onChange={(event) => setForm({ ...form, frequency: event.target.value })}
@@ -261,7 +261,7 @@ const IndicatorsPage = () => {
               </select>
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Metodo de Medicion *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.indicatorsPage.fields.measurementMethod')}</label>
               <input
                 type="text"
                 value={form.measurement_method}
@@ -271,7 +271,7 @@ const IndicatorsPage = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Valor Objetivo *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.indicatorsPage.fields.targetValue')}</label>
               <input
                 type="number"
                 step="0.01"
@@ -282,7 +282,7 @@ const IndicatorsPage = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Unidad *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.indicatorsPage.fields.unit')}</label>
               <input
                 type="text"
                 value={form.unit_of_measure}
@@ -292,7 +292,7 @@ const IndicatorsPage = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Formula')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.indicatorsPage.fields.formula')}</label>
               <input
                 type="text"
                 value={form.formula}
@@ -301,7 +301,7 @@ const IndicatorsPage = () => {
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Descripción *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.indicatorsPage.fields.description')}</label>
               <textarea
                 value={form.description}
                 onChange={(event) => setForm({ ...form, description: event.target.value })}

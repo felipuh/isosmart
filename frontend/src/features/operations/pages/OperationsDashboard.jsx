@@ -143,44 +143,44 @@ const OperationsDashboard = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white">{t('literals.Operación')}</h1>
-          <p className="text-gray-400 mt-1">{t('literals.ISO 9001:2015 - Cláusula 8')}</p>
+          <h1 className="text-3xl font-bold text-white">{t('modules.operations.dashboard.title')}</h1>
+          <p className="text-gray-400 mt-1">{t('modules.operations.dashboard.subtitle')}</p>
         </div>
       </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard
-          title="Requisitos del Cliente"
+          title={t('modules.operations.dashboard.stats.customerRequirements.title')}
           value={stats.requirements.total}
-          subtitle={`${stats.requirements.pending_review} pendientes de revisión`}
+          subtitle={`${stats.requirements.pending_review} ${t('modules.operations.dashboard.stats.customerRequirements.pendingReviewSuffix')}`}
           icon="📋"
           link="/operations/requirements"
           color="blue"
         />
 
         <StatCard
-          title="Proyectos de Diseño"
+          title={t('modules.operations.dashboard.stats.designProjects.title')}
           value={stats.design_projects.total}
-          subtitle={`${stats.design_projects.active} activos`}
+          subtitle={`${stats.design_projects.active} ${t('modules.operations.dashboard.stats.designProjects.activeSuffix')}`}
           icon="🎨"
           link="/operations/design-projects"
           color="purple"
         />
 
         <StatCard
-          title="Proveedores Externos"
+          title={t('modules.operations.dashboard.stats.externalProviders.title')}
           value={stats.providers.total}
-          subtitle={`${stats.providers.approved} aprobados`}
+          subtitle={`${stats.providers.approved} ${t('modules.operations.dashboard.stats.externalProviders.approvedSuffix')}`}
           icon="🏢"
           link="/operations/providers"
           color="green"
         />
 
         <StatCard
-          title="No Conformidades"
+          title={t('modules.operations.dashboard.stats.nonconformities.title')}
           value={stats.nonconformities.total}
-          subtitle={`${stats.nonconformities.open} abiertas, ${stats.nonconformities.critical} críticas`}
+          subtitle={`${stats.nonconformities.open} ${t('modules.operations.dashboard.stats.nonconformities.openSuffix')}, ${stats.nonconformities.critical} ${t('modules.operations.dashboard.stats.nonconformities.criticalSuffix')}`}
           icon="⚠️"
           link="/operations/nonconformities"
           color="red"
@@ -192,23 +192,23 @@ const OperationsDashboard = () => {
         <div className="bg-gradient-to-br from-red-500/10 to-red-600/5 backdrop-blur-sm border border-red-500/20 rounded-lg p-6">
           <div className="flex items-center space-x-3 mb-2">
             <span className="text-2xl">🚨</span>
-            <h2 className="text-xl font-bold text-white">{t('literals.Atención Requerida')}</h2>
+            <h2 className="text-xl font-bold text-white">{t('modules.operations.dashboard.alerts.title')}</h2>
           </div>
           <p className="text-gray-300">
-            Hay {stats.nonconformities.critical} no conformidad(es) crítica(s) que requieren atención inmediata.
+            {t('modules.operations.dashboard.alerts.messagePrefix')} {stats.nonconformities.critical} {t('modules.operations.dashboard.alerts.messageSuffix')}
           </p>
           <Link
             to="/operations/nonconformities"
             className="inline-block mt-4 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-all"
           >
-            Ver No Conformidades Críticas
+            {t('modules.operations.dashboard.alerts.viewCritical')}
           </Link>
         </div>
       )}
 
       {/* Quick Actions */}
       <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg p-6">
-        <h2 className="text-xl font-bold text-white mb-4">{t('literals.Acciones Rápidas')}</h2>
+        <h2 className="text-xl font-bold text-white mb-4">{t('modules.operations.dashboard.quickActions.title')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Link
             to="/operations/requirements/new"
@@ -216,8 +216,8 @@ const OperationsDashboard = () => {
           >
             <span className="text-2xl">📋</span>
             <div>
-              <p className="font-medium text-white">{t('literals.Nuevo Requisito')}</p>
-              <p className="text-xs text-gray-400">{t('literals.Registrar requisito del cliente')}</p>
+              <p className="font-medium text-white">{t('modules.operations.dashboard.quickActions.newRequirement')}</p>
+              <p className="text-xs text-gray-400">{t('modules.operations.dashboard.quickActions.newRequirementDesc')}</p>
             </div>
           </Link>
 
@@ -227,8 +227,8 @@ const OperationsDashboard = () => {
           >
             <span className="text-2xl">⚠️</span>
             <div>
-              <p className="font-medium text-white">{t('literals.Reportar NC')}</p>
-              <p className="text-xs text-gray-400">{t('literals.Registrar no conformidad')}</p>
+              <p className="font-medium text-white">{t('modules.operations.dashboard.quickActions.reportNc')}</p>
+              <p className="text-xs text-gray-400">{t('modules.operations.dashboard.quickActions.reportNcDesc')}</p>
             </div>
           </Link>
 
@@ -238,8 +238,8 @@ const OperationsDashboard = () => {
           >
             <span className="text-2xl">✅</span>
             <div>
-              <p className="font-medium text-white">{t('literals.Liberar Producto')}</p>
-              <p className="text-xs text-gray-400">{t('literals.Autorizar liberación')}</p>
+              <p className="font-medium text-white">{t('modules.operations.dashboard.quickActions.releaseProduct')}</p>
+              <p className="text-xs text-gray-400">{t('modules.operations.dashboard.quickActions.releaseProductDesc')}</p>
             </div>
           </Link>
         </div>
@@ -253,10 +253,10 @@ const OperationsDashboard = () => {
         >
           <div className="flex items-center space-x-3 mb-2">
             <span className="text-2xl">📦</span>
-            <h3 className="text-lg font-bold text-white">{t('literals.Liberación de Productos')}</h3>
+            <h3 className="text-lg font-bold text-white">{t('modules.operations.dashboard.moduleLinks.releasesTitle')}</h3>
           </div>
           <p className="text-sm text-gray-400">
-            {stats.releases.pending} liberaciones pendientes de aprobación
+            {stats.releases.pending} {t('modules.operations.dashboard.moduleLinks.pendingReleasesSuffix')}
           </p>
         </Link>
 
@@ -266,9 +266,9 @@ const OperationsDashboard = () => {
         >
           <div className="flex items-center space-x-3 mb-2">
             <span className="text-2xl">⚙️</span>
-            <h3 className="text-lg font-bold text-white">{t('literals.Control de Producción')}</h3>
+            <h3 className="text-lg font-bold text-white">{t('modules.operations.dashboard.moduleLinks.productionTitle')}</h3>
           </div>
-          <p className="text-sm text-gray-400">{t('literals.Controles operacionales de producción')}</p>
+          <p className="text-sm text-gray-400">{t('modules.operations.dashboard.moduleLinks.productionSubtitle')}</p>
         </Link>
       </div>
     </div>

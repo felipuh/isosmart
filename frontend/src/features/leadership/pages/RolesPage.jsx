@@ -43,7 +43,7 @@ const RolesPage = () => {
       const data = await getRoles();
       setRoles(normalizeList(data));
     } catch {
-      setError('No se pudieron cargar los roles.');
+      setError(t('modules.leadership.rolesPage.messages.loadError'));
     } finally {
       setLoading(false);
     }
@@ -88,7 +88,7 @@ const RolesPage = () => {
       resetForm();
       await loadRoles();
     } catch {
-      setError('No se pudo guardar el rol.');
+      setError(t('modules.leadership.rolesPage.messages.saveError'));
     } finally {
       setSaving(false);
     }
@@ -111,7 +111,7 @@ const RolesPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Eliminar este rol?')) {
+    if (!window.confirm(t('modules.leadership.rolesPage.messages.confirmDelete'))) {
       return;
     }
 
@@ -119,7 +119,7 @@ const RolesPage = () => {
       await deleteRole(id);
       await loadRoles();
     } catch {
-      setError('No se pudo eliminar el rol.');
+      setError(t('modules.leadership.rolesPage.messages.deleteError'));
     }
   };
 
@@ -127,15 +127,15 @@ const RolesPage = () => {
     <div className="space-y-6" style={{ fontFamily: '"Sora", "Work Sans", sans-serif' }}>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-white">{t('literals.Roles organizacionales')}</h1>
-          <p className="text-sm text-slate-400">{t('literals.Define responsabilidades y jerarquias.')}</p>
+          <h1 className="text-2xl font-semibold text-white">{t('modules.leadership.rolesPage.title')}</h1>
+          <p className="text-sm text-slate-400">{t('modules.leadership.rolesPage.subtitle')}</p>
         </div>
         <button
           type="button"
           onClick={resetForm}
           className="rounded-lg border border-slate-700 px-3 py-2 text-sm text-slate-200 hover:border-slate-500"
         >
-          Nuevo rol
+          {t('modules.leadership.rolesPage.buttons.new')}
         </button>
       </div>
 
@@ -148,17 +148,17 @@ const RolesPage = () => {
       <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
         <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-4">
           {loading ? (
-            <div className="py-10 text-center text-slate-400">{t('literals.Cargando roles...')}</div>
+            <div className="py-10 text-center text-slate-400">{t('modules.leadership.rolesPage.messages.loading')}</div>
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full text-left text-sm text-slate-200">
                 <thead className="text-xs uppercase text-slate-400">
                   <tr>
                     <th className="px-3 py-2">{t('common.forms.name')}</th>
-                    <th className="px-3 py-2">{t('literals.Codigo')}</th>
-                    <th className="px-3 py-2">{t('literals.Nivel')}</th>
-                    <th className="px-3 py-2">{t('literals.Activo')}</th>
-                    <th className="px-3 py-2 text-right">{t('literals.Acciones')}</th>
+                    <th className="px-3 py-2">{t('modules.leadership.rolesPage.table.code')}</th>
+                    <th className="px-3 py-2">{t('modules.leadership.rolesPage.table.level')}</th>
+                    <th className="px-3 py-2">{t('modules.leadership.rolesPage.table.active')}</th>
+                    <th className="px-3 py-2 text-right">{t('modules.leadership.rolesPage.table.actions')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-800">
@@ -167,7 +167,7 @@ const RolesPage = () => {
                       <td className="px-3 py-2 font-medium text-slate-100">{role.name}</td>
                       <td className="px-3 py-2">{role.code}</td>
                       <td className="px-3 py-2">{role.level}</td>
-                      <td className="px-3 py-2">{role.is_active ? 'Si' : 'No'}</td>
+                      <td className="px-3 py-2">{role.is_active ? t('modules.leadership.rolesPage.options.yes') : t('modules.leadership.rolesPage.options.no')}</td>
                       <td className="px-3 py-2 text-right">
                         <div className="flex justify-end gap-2">
                           <button
@@ -175,14 +175,14 @@ const RolesPage = () => {
                             onClick={() => handleEdit(role)}
                             className="rounded-md border border-slate-700 px-2 py-1 text-xs text-slate-200"
                           >
-                            Editar
+                            {t('common.buttons.edit')}
                           </button>
                           <button
                             type="button"
                             onClick={() => handleDelete(role.id)}
                             className="rounded-md border border-red-500/50 px-2 py-1 text-xs text-red-200"
                           >
-                            Eliminar
+                            {t('common.buttons.delete')}
                           </button>
                         </div>
                       </td>
@@ -197,14 +197,14 @@ const RolesPage = () => {
         <form onSubmit={handleSubmit} className="rounded-xl border border-slate-800 bg-slate-900/70 p-4 space-y-4">
           <div>
             <h2 className="text-lg font-semibold text-white">
-              {editingId ? 'Editar rol' : 'Nuevo rol'}
+              {editingId ? t('modules.leadership.rolesPage.form.editTitle') : t('modules.leadership.rolesPage.form.newTitle')}
             </h2>
-            <p className="text-xs text-slate-400">{t('literals.Organizacion: {orgName || \'Sin seleccionar\'}')}</p>
+            <p className="text-xs text-slate-400">{t('modules.leadership.rolesPage.form.organization')}: {orgName || t('modules.leadership.rolesPage.form.unselected')}</p>
           </div>
 
           <div className="grid gap-3">
             <label className="text-xs text-slate-400">
-              Nombre
+              {t('modules.leadership.rolesPage.form.name')}
               <input
                 type="text"
                 value={form.name}
@@ -215,7 +215,7 @@ const RolesPage = () => {
             </label>
 
             <label className="text-xs text-slate-400">
-              Codigo
+              {t('modules.leadership.rolesPage.form.code')}
               <input
                 type="text"
                 value={form.code}
@@ -226,7 +226,7 @@ const RolesPage = () => {
             </label>
 
             <label className="text-xs text-slate-400">
-              Nivel
+              {t('modules.leadership.rolesPage.form.level')}
               <input
                 type="number"
                 min="1"
@@ -239,13 +239,13 @@ const RolesPage = () => {
             </label>
 
             <label className="text-xs text-slate-400">
-              Reporta a
+              {t('modules.leadership.rolesPage.form.reportsTo')}
               <select
                 value={form.reports_to}
                 onChange={(event) => setForm({ ...form, reports_to: event.target.value })}
                 className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
               >
-                <option value="">{t('literals.Sin dependencia')}</option>
+                <option value="">{t('modules.leadership.rolesPage.form.noDependency')}</option>
                 {roles.map((role) => (
                   <option key={role.id} value={role.id}>
                     {role.name}
@@ -255,7 +255,7 @@ const RolesPage = () => {
             </label>
 
             <label className="text-xs text-slate-400">
-              Descripción
+              {t('common.forms.description')}
               <textarea
                 value={form.description}
                 onChange={(event) => setForm({ ...form, description: event.target.value })}
@@ -264,7 +264,7 @@ const RolesPage = () => {
             </label>
 
             <label className="text-xs text-slate-400">
-              Responsabilidades (separadas por coma)
+              {t('modules.leadership.rolesPage.form.responsibilities')}
               <textarea
                 value={form.responsibilities}
                 onChange={(event) => setForm({ ...form, responsibilities: event.target.value })}
@@ -273,7 +273,7 @@ const RolesPage = () => {
             </label>
 
             <label className="text-xs text-slate-400">
-              Autoridades (separadas por coma)
+              {t('modules.leadership.rolesPage.form.authorities')}
               <textarea
                 value={form.authorities}
                 onChange={(event) => setForm({ ...form, authorities: event.target.value })}
@@ -282,7 +282,7 @@ const RolesPage = () => {
             </label>
 
             <label className="text-xs text-slate-400">
-              Competencias requeridas (separadas por coma)
+              {t('modules.leadership.rolesPage.form.requiredCompetencies')}
               <textarea
                 value={form.required_competencies}
                 onChange={(event) => setForm({ ...form, required_competencies: event.target.value })}
@@ -298,7 +298,7 @@ const RolesPage = () => {
                   onChange={(event) => setForm({ ...form, is_qms_role: event.target.checked })}
                   className="h-4 w-4 rounded border-slate-600"
                 />
-                Rol SGC
+                {t('modules.leadership.rolesPage.form.qmsRole')}
               </label>
               <label className="flex items-center gap-2">
                 <input
@@ -307,7 +307,7 @@ const RolesPage = () => {
                   onChange={(event) => setForm({ ...form, is_active: event.target.checked })}
                   className="h-4 w-4 rounded border-slate-600"
                 />
-                {t('literals.Activo')}
+                {t('common.labels.active')}
               </label>
             </div>
           </div>
@@ -325,7 +325,7 @@ const RolesPage = () => {
               onClick={resetForm}
               className="rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-200"
             >
-              Limpiar
+              {t('common.buttons.clear')}
             </button>
           </div>
         </form>

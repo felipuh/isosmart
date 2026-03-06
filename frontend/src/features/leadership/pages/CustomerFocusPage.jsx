@@ -6,10 +6,10 @@ import { getCustomerFocus, createCustomerFocus, updateCustomerFocus, deleteCusto
 const normalizeList = (data) => (Array.isArray(data) ? data : data?.results || []);
 
 const focusTypes = [
-  { value: 'requirements', label: 'Determinacion de requisitos' },
-  { value: 'risks', label: 'Determinacion de riesgos' },
-  { value: 'satisfaction', label: 'Enfoque en satisfacción' },
-  { value: 'compliance', label: 'Cumplimiento legal' }
+  { value: 'requirements', labelKey: 'modules.leadership.customerFocusPage.options.focusType.requirements' },
+  { value: 'risks', labelKey: 'modules.leadership.customerFocusPage.options.focusType.risks' },
+  { value: 'satisfaction', labelKey: 'modules.leadership.customerFocusPage.options.focusType.satisfaction' },
+  { value: 'compliance', labelKey: 'modules.leadership.customerFocusPage.options.focusType.compliance' }
 ];
 
 const initialForm = {
@@ -41,7 +41,7 @@ const CustomerFocusPage = () => {
       const data = await getCustomerFocus();
       setItems(normalizeList(data));
     } catch {
-      setError('No se pudieron cargar las evidencias.');
+      setError(t('modules.leadership.customerFocusPage.messages.loadError'));
     } finally {
       setLoading(false);
     }
@@ -98,7 +98,7 @@ const CustomerFocusPage = () => {
       resetForm();
       await loadItems();
     } catch {
-      setError('No se pudo guardar la evidencia.');
+      setError(t('modules.leadership.customerFocusPage.messages.saveError'));
     } finally {
       setSaving(false);
     }
@@ -118,7 +118,7 @@ const CustomerFocusPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Eliminar esta evidencia?')) {
+    if (!window.confirm(t('modules.leadership.customerFocusPage.messages.confirmDelete'))) {
       return;
     }
 
@@ -126,7 +126,7 @@ const CustomerFocusPage = () => {
       await deleteCustomerFocus(id);
       await loadItems();
     } catch {
-      setError('No se pudo eliminar la evidencia.');
+      setError(t('modules.leadership.customerFocusPage.messages.deleteError'));
     }
   };
 
@@ -134,15 +134,15 @@ const CustomerFocusPage = () => {
     <div className="space-y-6" style={{ fontFamily: '"Sora", "Work Sans", sans-serif' }}>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-white">{t('literals.Enfoque al cliente')}</h1>
-          <p className="text-sm text-slate-400">{t('literals.Evidencias y acciones enfocadas en el cliente.')}</p>
+          <h1 className="text-2xl font-semibold text-white">{t('modules.leadership.customerFocusPage.title')}</h1>
+          <p className="text-sm text-slate-400">{t('modules.leadership.customerFocusPage.subtitle')}</p>
         </div>
         <button
           type="button"
           onClick={resetForm}
           className="rounded-lg border border-slate-700 px-3 py-2 text-sm text-slate-200 hover:border-slate-500"
         >
-          Nueva evidencia
+          {t('modules.leadership.customerFocusPage.buttons.new')}
         </button>
       </div>
 
@@ -155,16 +155,16 @@ const CustomerFocusPage = () => {
       <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
         <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-4">
           {loading ? (
-            <div className="py-10 text-center text-slate-400">{t('literals.Cargando evidencias...')}</div>
+            <div className="py-10 text-center text-slate-400">{t('modules.leadership.customerFocusPage.messages.loading')}</div>
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full text-left text-sm text-slate-200">
                 <thead className="text-xs uppercase text-slate-400">
                   <tr>
-                    <th className="px-3 py-2">{t('literals.Título')}</th>
-                    <th className="px-3 py-2">{t('literals.Tipo')}</th>
+                    <th className="px-3 py-2">{t('modules.leadership.customerFocusPage.table.title')}</th>
+                    <th className="px-3 py-2">{t('modules.leadership.customerFocusPage.table.type')}</th>
                     <th className="px-3 py-2">{t('common.forms.date')}</th>
-                    <th className="px-3 py-2 text-right">{t('literals.Acciones')}</th>
+                    <th className="px-3 py-2 text-right">{t('modules.leadership.customerFocusPage.table.actions')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-800">
@@ -180,14 +180,14 @@ const CustomerFocusPage = () => {
                             onClick={() => handleEdit(item)}
                             className="rounded-md border border-slate-700 px-2 py-1 text-xs text-slate-200"
                           >
-                            Editar
+                            {t('common.buttons.edit')}
                           </button>
                           <button
                             type="button"
                             onClick={() => handleDelete(item.id)}
                             className="rounded-md border border-red-500/50 px-2 py-1 text-xs text-red-200"
                           >
-                            Eliminar
+                            {t('common.buttons.delete')}
                           </button>
                         </div>
                       </td>
@@ -202,14 +202,14 @@ const CustomerFocusPage = () => {
         <form onSubmit={handleSubmit} className="rounded-xl border border-slate-800 bg-slate-900/70 p-4 space-y-4">
           <div>
             <h2 className="text-lg font-semibold text-white">
-              {editingId ? 'Editar evidencia' : 'Nueva evidencia'}
+              {editingId ? t('modules.leadership.customerFocusPage.form.editTitle') : t('modules.leadership.customerFocusPage.form.newTitle')}
             </h2>
-            <p className="text-xs text-slate-400">{t('literals.Organizacion: {orgName || \'Sin seleccionar\'}')}</p>
+            <p className="text-xs text-slate-400">{t('modules.leadership.customerFocusPage.form.organization')}: {orgName || t('modules.leadership.customerFocusPage.form.unselected')}</p>
           </div>
 
           <div className="grid gap-3">
             <label className="text-xs text-slate-400">
-              Tipo
+              {t('modules.leadership.customerFocusPage.form.type')}
               <select
                 value={form.focus_type}
                 onChange={(event) => setForm({ ...form, focus_type: event.target.value })}
@@ -217,14 +217,14 @@ const CustomerFocusPage = () => {
               >
                 {focusTypes.map((type) => (
                   <option key={type.value} value={type.value}>
-                    {type.label}
+                    {t(type.labelKey)}
                   </option>
                 ))}
               </select>
             </label>
 
             <label className="text-xs text-slate-400">
-              Título
+              {t('modules.leadership.customerFocusPage.form.title')}
               <input
                 type="text"
                 value={form.title}
@@ -235,7 +235,7 @@ const CustomerFocusPage = () => {
             </label>
 
             <label className="text-xs text-slate-400">
-              Descripción
+              {t('common.forms.description')}
               <textarea
                 value={form.description}
                 onChange={(event) => setForm({ ...form, description: event.target.value })}
@@ -245,7 +245,7 @@ const CustomerFocusPage = () => {
             </label>
 
             <label className="text-xs text-slate-400">
-              Acción tomada
+              {t('modules.leadership.customerFocusPage.form.actionTaken')}
               <textarea
                 value={form.action_taken}
                 onChange={(event) => setForm({ ...form, action_taken: event.target.value })}
@@ -255,7 +255,7 @@ const CustomerFocusPage = () => {
             </label>
 
             <label className="text-xs text-slate-400">
-              {t('literals.Resultados')}
+              {t('modules.leadership.customerFocusPage.form.results')}
               <textarea
                 value={form.results}
                 onChange={(event) => setForm({ ...form, results: event.target.value })}
@@ -264,7 +264,7 @@ const CustomerFocusPage = () => {
             </label>
 
             <label className="text-xs text-slate-400">
-              Fecha de acción
+              {t('modules.leadership.customerFocusPage.form.actionDate')}
               <input
                 type="date"
                 value={form.action_date}
@@ -275,7 +275,7 @@ const CustomerFocusPage = () => {
             </label>
 
             <label className="text-xs text-slate-400">
-              Evidencia
+              {t('modules.leadership.customerFocusPage.form.evidence')}
               <input
                 type="file"
                 onChange={(event) => setEvidenceFile(event.target.files?.[0] || null)}
@@ -297,7 +297,7 @@ const CustomerFocusPage = () => {
               onClick={resetForm}
               className="rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-200"
             >
-              Limpiar
+              {t('common.buttons.clear')}
             </button>
           </div>
         </form>

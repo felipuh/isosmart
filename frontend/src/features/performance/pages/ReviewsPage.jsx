@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import { useI18n } from '../../../context/I18nContext';
 import Modal from '../../../components/Common/Modal';
@@ -10,13 +10,6 @@ import {
 } from '../api/performanceApi';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
-
-const statusLabels = {
-  scheduled: 'Programada',
-  in_progress: 'En Proceso',
-  completed: 'Completada',
-  cancelled: 'Cancelada'
-};
 
 const ReviewsPage = () => {
   const { t } = useI18n();
@@ -37,6 +30,13 @@ const ReviewsPage = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [showForm, setShowForm] = useState(false);
+
+  const statusLabels = useMemo(() => ({
+    scheduled: t('modules.performance.reviewsPage.statuses.scheduled'),
+    in_progress: t('modules.performance.reviewsPage.statuses.inProgress'),
+    completed: t('modules.performance.reviewsPage.statuses.completed'),
+    cancelled: t('modules.performance.reviewsPage.statuses.cancelled'),
+  }), [t]);
 
   const loadReviews = useCallback(async () => {
     try {
@@ -90,7 +90,7 @@ const ReviewsPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('Delete review?')) return;
+    if (!confirm(t('modules.performance.reviewsPage.deleteConfirm'))) return;
     try {
       await deleteReview(id);
       await loadReviews();
@@ -132,13 +132,13 @@ const ReviewsPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">{t('literals.Revision por la Direccion')}</h1>
+        <h1 className="text-3xl font-bold text-white">{t('modules.performance.reviewsPage.title')}</h1>
         <button
           type="button"
           onClick={openForm}
           className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
         >
-          Nueva revision
+          {t('modules.performance.reviewsPage.new')}
         </button>
       </div>
 
@@ -146,11 +146,11 @@ const ReviewsPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Codigo')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Título')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Programada')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.performance.reviewsPage.table.code')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.performance.reviewsPage.table.title')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.performance.reviewsPage.table.scheduled')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.status')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acciones')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.performance.reviewsPage.table.actions')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -168,18 +168,18 @@ const ReviewsPage = () => {
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('literals.No hay revisiones')}</div>}
+        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('modules.performance.reviewsPage.empty')}</div>}
       </div>
 
       <Modal
-        title={editingId ? 'Editar revision' : 'Nueva revision'}
+        title={editingId ? t('modules.performance.reviewsPage.edit') : t('modules.performance.reviewsPage.new')}
         isOpen={showForm}
         onClose={closeForm}
       >
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Codigo de Revision *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.reviewsPage.fields.reviewCode')}</label>
               <input
                 type="text"
                 value={form.review_code}
@@ -189,7 +189,7 @@ const ReviewsPage = () => {
               />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Título *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.reviewsPage.fields.title')}</label>
               <input
                 type="text"
                 value={form.title}
@@ -199,7 +199,7 @@ const ReviewsPage = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Fecha Programada *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.reviewsPage.fields.scheduledDate')}</label>
               <input
                 type="date"
                 value={form.scheduled_date}
@@ -221,7 +221,7 @@ const ReviewsPage = () => {
               </select>
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Resultados de Desempeno *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.reviewsPage.fields.performanceResults')}</label>
               <textarea
                 value={form.performance_results}
                 onChange={(event) => setForm({ ...form, performance_results: event.target.value })}
@@ -231,7 +231,7 @@ const ReviewsPage = () => {
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Retroalimentacion del Cliente')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.reviewsPage.fields.customerFeedback')}</label>
               <textarea
                 value={form.customer_feedback}
                 onChange={(event) => setForm({ ...form, customer_feedback: event.target.value })}

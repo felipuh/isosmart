@@ -99,12 +99,12 @@ const DocumentDashboard = () => {
   };
 
   const documentTypes = [
-    { value: 'all', label: 'Todos' },
-    { value: 'acta', label: 'Actas' },
-    { value: 'reporte', label: 'Reportes' },
-    { value: 'política', label: 'Políticas' },
-    { value: 'procedimiento', label: 'Procedimientos' },
-    { value: 'otro', label: 'Otros' }
+    { value: 'all', label: t('documentsManager.types.all') },
+    { value: 'acta', label: t('documentsManager.types.minutePlural') },
+    { value: 'reporte', label: t('documentsManager.types.reportPlural') },
+    { value: 'política', label: t('documentsManager.types.policyPlural') },
+    { value: 'procedimiento', label: t('documentsManager.types.procedurePlural') },
+    { value: 'otro', label: t('documentsManager.types.otherPlural') }
   ];
 
   return (
@@ -112,10 +112,10 @@ const DocumentDashboard = () => {
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-          Gestión de Documentos
+          {t('documentsManager.dashboard.title')}
         </h1>
         <p className="text-slate-600 dark:text-slate-400">
-          Administra los documentos organizacionales para análisis del SGC
+          {t('documentsManager.dashboard.subtitle')}
         </p>
       </div>
 
@@ -124,7 +124,7 @@ const DocumentDashboard = () => {
         <div className="bg-white/70 dark:bg-slate-800/70 backdrop-blur-md dark:backdrop-blur-md rounded-lg shadow dark:shadow-slate-900/50 border border-white/20 dark:border-slate-700/50 p-6 transition-all duration-300 hover:shadow-md dark:hover:shadow-slate-900/70">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-slate-600 dark:text-slate-400">{t('literals.Total Documentos')}</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400">{t('documentsManager.dashboard.stats.total')}</p>
               <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">
                 {stats?.total_documents || 0}
               </p>
@@ -136,7 +136,7 @@ const DocumentDashboard = () => {
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-slate-600 dark:text-slate-400">{t('literals.Políticas')}</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400">{t('documentsManager.dashboard.stats.policies')}</p>
               <p className="text-3xl font-bold text-purple-600 dark:text-purple-400">
                 {stats?.by_type?.política || 0}
               </p>
@@ -148,7 +148,7 @@ const DocumentDashboard = () => {
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-slate-600 dark:text-slate-400">{t('literals.Procedimientos')}</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400">{t('documentsManager.dashboard.stats.procedures')}</p>
               <p className="text-3xl font-bold text-green-600 dark:text-green-400">
                 {stats?.by_type?.procedimiento || 0}
               </p>
@@ -160,7 +160,7 @@ const DocumentDashboard = () => {
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-slate-600 dark:text-slate-400">{t('literals.Reportes')}</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400">{t('documentsManager.dashboard.stats.reports')}</p>
               <p className="text-3xl font-bold text-orange-600 dark:text-orange-400">
                 {stats?.by_type?.reporte || 0}
               </p>
@@ -179,7 +179,7 @@ const DocumentDashboard = () => {
               className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 transition-colors"
             >
               <Plus className="mr-2 h-4 w-4" />
-              {showUploadForm ? t('common.buttons.cancel') : 'Subir Documento'}
+              {showUploadForm ? t('common.buttons.cancel') : t('documentsManager.dashboard.actions.upload')}
             </button>
 
             <button
@@ -187,12 +187,12 @@ const DocumentDashboard = () => {
               className="flex items-center px-4 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
             >
               <RefreshCw className="mr-2 h-4 w-4" />
-              Actualizar
+              {t('documentsManager.dashboard.actions.refresh')}
             </button>
           </div>
 
           <div className="flex items-center space-x-3">
-            <label className="text-sm text-slate-600 dark:text-slate-400 transition-colors">{t('literals.Filtrar por tipo:')}</label>
+            <label className="text-sm text-slate-600 dark:text-slate-400 transition-colors">{t('documentsManager.dashboard.filterByType')}</label>
             <select
               value={filterType}
               onChange={(e) => setFilterType(e.target.value)}

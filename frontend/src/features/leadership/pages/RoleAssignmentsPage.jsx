@@ -47,7 +47,7 @@ const RoleAssignmentsPage = () => {
       setAssignments(normalizeList(assignmentsData));
       setRoles(normalizeList(rolesData));
     } catch {
-      setError('No se pudieron cargar las asignaciónes.');
+      setError(t('modules.leadership.roleAssignmentsPage.messages.loadError'));
     } finally {
       setLoading(false);
     }
@@ -59,7 +59,7 @@ const RoleAssignmentsPage = () => {
       setUsers(normalizeList(data));
       setUserError('');
     } catch {
-      setUserError('No se pudieron cargar usuarios (requiere rol admin).');
+      setUserError(t('modules.leadership.roleAssignmentsPage.messages.usersLoadError'));
     }
   };
 
@@ -99,7 +99,7 @@ const RoleAssignmentsPage = () => {
       resetForm();
       await loadData();
     } catch {
-      setError('No se pudo guardar la asignación.');
+      setError(t('modules.leadership.roleAssignmentsPage.messages.saveError'));
     } finally {
       setSaving(false);
     }
@@ -119,7 +119,7 @@ const RoleAssignmentsPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Eliminar esta asignación?')) {
+    if (!window.confirm(t('modules.leadership.roleAssignmentsPage.messages.confirmDelete'))) {
       return;
     }
 
@@ -127,7 +127,7 @@ const RoleAssignmentsPage = () => {
       await deleteRoleAssignment(id);
       await loadData();
     } catch {
-      setError('No se pudo eliminar la asignación.');
+      setError(t('modules.leadership.roleAssignmentsPage.messages.deleteError'));
     }
   };
 
@@ -135,15 +135,15 @@ const RoleAssignmentsPage = () => {
     <div className="space-y-6" style={{ fontFamily: '"Sora", "Work Sans", sans-serif' }}>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-white">{t('literals.Asignaciones de rol')}</h1>
-          <p className="text-sm text-slate-400">{t('literals.Vincula usuarios con roles del SGC.')}</p>
+          <h1 className="text-2xl font-semibold text-white">{t('modules.leadership.roleAssignmentsPage.title')}</h1>
+          <p className="text-sm text-slate-400">{t('modules.leadership.roleAssignmentsPage.subtitle')}</p>
         </div>
         <button
           type="button"
           onClick={resetForm}
           className="rounded-lg border border-slate-700 px-3 py-2 text-sm text-slate-200 hover:border-slate-500"
         >
-          Nueva asignación
+          {t('modules.leadership.roleAssignmentsPage.buttons.new')}
         </button>
       </div>
 
@@ -162,17 +162,17 @@ const RoleAssignmentsPage = () => {
       <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
         <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-4">
           {loading ? (
-            <div className="py-10 text-center text-slate-400">{t('literals.Cargando asignaciónes...')}</div>
+            <div className="py-10 text-center text-slate-400">{t('modules.leadership.roleAssignmentsPage.messages.loading')}</div>
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full text-left text-sm text-slate-200">
                 <thead className="text-xs uppercase text-slate-400">
                   <tr>
-                    <th className="px-3 py-2">{t('literals.Rol')}</th>
-                    <th className="px-3 py-2">{t('literals.Usuario')}</th>
-                    <th className="px-3 py-2">{t('literals.Inicio')}</th>
-                    <th className="px-3 py-2">{t('literals.Tipo')}</th>
-                    <th className="px-3 py-2 text-right">{t('literals.Acciones')}</th>
+                    <th className="px-3 py-2">{t('modules.leadership.roleAssignmentsPage.table.role')}</th>
+                    <th className="px-3 py-2">{t('modules.leadership.roleAssignmentsPage.table.user')}</th>
+                    <th className="px-3 py-2">{t('modules.leadership.roleAssignmentsPage.table.startDate')}</th>
+                    <th className="px-3 py-2">{t('modules.leadership.roleAssignmentsPage.table.type')}</th>
+                    <th className="px-3 py-2 text-right">{t('modules.leadership.roleAssignmentsPage.table.actions')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-800">
@@ -189,14 +189,14 @@ const RoleAssignmentsPage = () => {
                             onClick={() => handleEdit(assignment)}
                             className="rounded-md border border-slate-700 px-2 py-1 text-xs text-slate-200"
                           >
-                            Editar
+                            {t('common.buttons.edit')}
                           </button>
                           <button
                             type="button"
                             onClick={() => handleDelete(assignment.id)}
                             className="rounded-md border border-red-500/50 px-2 py-1 text-xs text-red-200"
                           >
-                            Eliminar
+                            {t('common.buttons.delete')}
                           </button>
                         </div>
                       </td>
@@ -211,21 +211,21 @@ const RoleAssignmentsPage = () => {
         <form onSubmit={handleSubmit} className="rounded-xl border border-slate-800 bg-slate-900/70 p-4 space-y-4">
           <div>
             <h2 className="text-lg font-semibold text-white">
-              {editingId ? 'Editar asignación' : 'Nueva asignación'}
+              {editingId ? t('modules.leadership.roleAssignmentsPage.form.editTitle') : t('modules.leadership.roleAssignmentsPage.form.newTitle')}
             </h2>
-            <p className="text-xs text-slate-400">{t('literals.Organizacion activa: {currentOrganization?.name || \'Sin seleccionar\'}')}</p>
+            <p className="text-xs text-slate-400">{t('modules.leadership.roleAssignmentsPage.form.activeOrganization')}: {currentOrganization?.name || t('modules.leadership.roleAssignmentsPage.form.unselected')}</p>
           </div>
 
           <div className="grid gap-3">
             <label className="text-xs text-slate-400">
-              Rol
+              {t('modules.leadership.roleAssignmentsPage.form.role')}
               <select
                 value={form.role}
                 onChange={(event) => setForm({ ...form, role: event.target.value })}
                 className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
                 required
               >
-                <option value="">{t('literals.Selecciona un rol')}</option>
+                <option value="">{t('modules.leadership.roleAssignmentsPage.form.selectRole')}</option>
                 {roles.map((role) => (
                   <option key={role.id} value={role.id}>
                     {role.name}
@@ -235,7 +235,7 @@ const RoleAssignmentsPage = () => {
             </label>
 
             <label className="text-xs text-slate-400">
-              Usuario
+              {t('modules.leadership.roleAssignmentsPage.form.user')}
               {users.length > 0 ? (
                 <select
                   value={form.user}
@@ -243,7 +243,7 @@ const RoleAssignmentsPage = () => {
                   className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
                   required
                 >
-                  <option value="">{t('literals.Selecciona un usuario')}</option>
+                  <option value="">{t('modules.leadership.roleAssignmentsPage.form.selectUser')}</option>
                   {users.map((user) => (
                     <option key={user.id} value={user.id}>
                       {user.full_name || user.email}
@@ -256,14 +256,14 @@ const RoleAssignmentsPage = () => {
                   value={form.user}
                   onChange={(event) => setForm({ ...form, user: event.target.value })}
                   className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
-                  placeholder="ID de usuario"
+                  placeholder={t('modules.leadership.roleAssignmentsPage.form.userIdPlaceholder')}
                   required
                 />
               )}
             </label>
 
             <label className="text-xs text-slate-400">
-              Fecha inicio
+              {t('modules.leadership.roleAssignmentsPage.form.startDate')}
               <input
                 type="date"
                 value={form.start_date}
@@ -274,7 +274,7 @@ const RoleAssignmentsPage = () => {
             </label>
 
             <label className="text-xs text-slate-400">
-              Fecha fin
+              {t('modules.leadership.roleAssignmentsPage.form.endDate')}
               <input
                 type="date"
                 value={form.end_date}
@@ -284,20 +284,20 @@ const RoleAssignmentsPage = () => {
             </label>
 
             <label className="text-xs text-slate-400">
-              Tipo
+              {t('modules.leadership.roleAssignmentsPage.form.type')}
               <select
                 value={form.assignment_type}
                 onChange={(event) => setForm({ ...form, assignment_type: event.target.value })}
                 className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
               >
-                <option value="permanent">{t('literals.Permanente')}</option>
-                <option value="temporary">{t('literals.Temporal')}</option>
-                <option value="acting">{t('literals.Interino')}</option>
+                <option value="permanent">{t('modules.leadership.roleAssignmentsPage.options.type.permanent')}</option>
+                <option value="temporary">{t('modules.leadership.roleAssignmentsPage.options.type.temporary')}</option>
+                <option value="acting">{t('modules.leadership.roleAssignmentsPage.options.type.acting')}</option>
               </select>
             </label>
 
             <label className="text-xs text-slate-400">
-              Notas
+              {t('modules.leadership.roleAssignmentsPage.form.notes')}
               <textarea
                 value={form.notes}
                 onChange={(event) => setForm({ ...form, notes: event.target.value })}
@@ -312,7 +312,7 @@ const RoleAssignmentsPage = () => {
                 onChange={(event) => setForm({ ...form, is_active: event.target.checked })}
                 className="h-4 w-4 rounded border-slate-600"
               />
-              {t('literals.Activo')}
+              {t('common.labels.active')}
             </label>
           </div>
 
@@ -329,7 +329,7 @@ const RoleAssignmentsPage = () => {
               onClick={resetForm}
               className="rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-200"
             >
-              Limpiar
+              {t('common.buttons.clear')}
             </button>
           </div>
         </form>

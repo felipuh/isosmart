@@ -63,7 +63,7 @@ const ExternalFactors = ({ factors, loading }) => {
       </h3>
 
       {!factors || factors.length === 0 ? (
-        <p className="text-slate-500 dark:text-slate-400 text-center py-8">{t('literals.No se identificaron factores externos')}</p>
+        <p className="text-slate-500 dark:text-slate-400 text-center py-8">{t('externalFactors.empty')}</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
           {factors.map((factor, idx) => (
@@ -84,7 +84,7 @@ const ExternalFactors = ({ factors, loading }) => {
               {factor.tendencia && (
                 <div className="mt-3 pt-3 border-t border-gray-200">
                   <p className="text-xs text-gray-600 dark:text-slate-400">
-                    <span className="font-medium">{t('literals.Tendencia:')}</span> {getText(factor.tendencia)}
+                    <span className="font-medium">{t('externalFactors.trend')}</span> {getText(factor.tendencia)}
                   </p>
                 </div>
               )}

@@ -117,7 +117,7 @@ const RisksOpportunitiesPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('¿Eliminar?')) return;
+    if (!confirm(t('modules.planning.risksOpportunitiesPage.deleteConfirm'))) return;
     try {
       await deleteRiskOpportunity(id);
       await loadData();
@@ -166,13 +166,13 @@ const RisksOpportunitiesPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">{t('literals.Riesgos y Oportunidades')}</h1>
+        <h1 className="text-3xl font-bold text-white">{t('modules.planning.risksOpportunitiesPage.title')}</h1>
         <button
           type="button"
           onClick={openForm}
           className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
         >
-          Nuevo riesgo u oportunidad
+          {t('modules.planning.risksOpportunitiesPage.new')}
         </button>
       </div>
 
@@ -183,7 +183,11 @@ const RisksOpportunitiesPage = () => {
             onClick={() => setFilterType(type)}
             className={`px-4 py-2 rounded-lg ${filterType === type ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
           >
-            {type === 'all' ? 'Todos' : type === 'risk' ? 'Riesgos' : 'Oportunidades'}
+            {type === 'all'
+              ? t('modules.planning.risksOpportunitiesPage.filters.all')
+              : type === 'risk'
+                ? t('modules.planning.risksOpportunitiesPage.filters.risks')
+                : t('modules.planning.risksOpportunitiesPage.filters.opportunities')}
           </button>
         ))}
       </div>
@@ -192,12 +196,12 @@ const RisksOpportunitiesPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Código')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Título')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Tipo')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Categoría')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Nivel')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acciones')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.planning.risksOpportunitiesPage.table.code')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.planning.risksOpportunitiesPage.table.title')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.planning.risksOpportunitiesPage.table.type')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.planning.risksOpportunitiesPage.table.category')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.planning.risksOpportunitiesPage.table.level')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.planning.risksOpportunitiesPage.table.actions')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -234,50 +238,50 @@ const RisksOpportunitiesPage = () => {
             ))}
           </tbody>
         </table>
-        {filteredItems.length === 0 && <div className="text-center py-8 text-gray-400">{t('literals.No hay elementos')}</div>}
+        {filteredItems.length === 0 && <div className="text-center py-8 text-gray-400">{t('modules.planning.risksOpportunitiesPage.empty')}</div>}
       </div>
 
       <Modal
-        title={editingId ? 'Editar riesgo u oportunidad' : 'Nuevo riesgo u oportunidad'}
+        title={editingId ? t('modules.planning.risksOpportunitiesPage.edit') : t('modules.planning.risksOpportunitiesPage.new')}
         isOpen={showForm}
         onClose={closeForm}
       >
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Tipo *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.risksOpportunitiesPage.fields.type')}</label>
               <select value={form.item_type} onChange={(e) => setForm({...form, item_type: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required>
-                <option value="risk">{t('literals.Riesgo')}</option>
-                <option value="opportunity">{t('literals.Oportunidad')}</option>
+                <option value="risk">{t('modules.planning.risksOpportunitiesPage.types.risk')}</option>
+                <option value="opportunity">{t('modules.planning.risksOpportunitiesPage.types.opportunity')}</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Código *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.risksOpportunitiesPage.fields.code')}</label>
               <input type="text" value={form.code} onChange={(e) => setForm({...form, code: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Categoría')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.risksOpportunitiesPage.fields.category')}</label>
               <select value={form.category} onChange={(e) => setForm({...form, category: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="strategic">{t('literals.Estratégico')}</option>
-                <option value="operational">{t('literals.Operacional')}</option>
-                <option value="financial">{t('literals.Financiero')}</option>
-                <option value="compliance">{t('literals.Cumplimiento')}</option>
-                <option value="reputation">{t('literals.Reputacional')}</option>
-                <option value="technology">{t('literals.Tecnológico')}</option>
-                <option value="market">{t('literals.Mercado')}</option>
-                <option value="other">{t('literals.Otro')}</option>
+                <option value="strategic">{t('modules.planning.risksOpportunitiesPage.categories.strategic')}</option>
+                <option value="operational">{t('modules.planning.risksOpportunitiesPage.categories.operational')}</option>
+                <option value="financial">{t('modules.planning.risksOpportunitiesPage.categories.financial')}</option>
+                <option value="compliance">{t('modules.planning.risksOpportunitiesPage.categories.compliance')}</option>
+                <option value="reputation">{t('modules.planning.risksOpportunitiesPage.categories.reputation')}</option>
+                <option value="technology">{t('modules.planning.risksOpportunitiesPage.categories.technology')}</option>
+                <option value="market">{t('modules.planning.risksOpportunitiesPage.categories.market')}</option>
+                <option value="other">{t('modules.planning.risksOpportunitiesPage.categories.other')}</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Contexto')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.risksOpportunitiesPage.fields.context')}</label>
               <select value={form.context} onChange={(e) => setForm({...form, context: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="internal">{t('literals.Interno')}</option>
-                <option value="external">{t('literals.Externo')}</option>
-                <option value="both">{t('literals.Interno y Externo')}</option>
+                <option value="internal">{t('modules.planning.risksOpportunitiesPage.context.internal')}</option>
+                <option value="external">{t('modules.planning.risksOpportunitiesPage.context.external')}</option>
+                <option value="both">{t('modules.planning.risksOpportunitiesPage.context.both')}</option>
               </select>
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Título *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.risksOpportunitiesPage.fields.title')}</label>
               <input type="text" value={form.title} onChange={(e) => setForm({...form, title: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div className="md:col-span-3">
@@ -287,11 +291,11 @@ const RisksOpportunitiesPage = () => {
             {form.item_type === 'risk' && (
               <>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Probabilidad (1-5)')}</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.risksOpportunitiesPage.fields.probability')}</label>
                   <input type="number" min="1" max="5" value={form.probability} onChange={(e) => setForm({...form, probability: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Impacto (1-5)')}</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.risksOpportunitiesPage.fields.impact')}</label>
                   <input type="number" min="1" max="5" value={form.impact} onChange={(e) => setForm({...form, impact: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
                 </div>
               </>
@@ -299,28 +303,28 @@ const RisksOpportunitiesPage = () => {
             {form.item_type === 'opportunity' && (
               <>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Factibilidad (1-5)')}</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.risksOpportunitiesPage.fields.feasibility')}</label>
                   <input type="number" min="1" max="5" value={form.feasibility} onChange={(e) => setForm({...form, feasibility: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Beneficio (1-5)')}</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.risksOpportunitiesPage.fields.benefit')}</label>
                   <input type="number" min="1" max="5" value={form.benefit} onChange={(e) => setForm({...form, benefit: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
                 </div>
               </>
             )}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Tratamiento')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.risksOpportunitiesPage.fields.treatment')}</label>
               <select value={form.treatment} onChange={(e) => setForm({...form, treatment: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="avoid">{t('literals.Evitar')}</option>
-                <option value="mitigate">{t('literals.Mitigar')}</option>
-                <option value="transfer">{t('literals.Transferir')}</option>
-                <option value="accept">{t('literals.Aceptar')}</option>
-                <option value="exploit">{t('literals.Explotar (Oportunidad)')}</option>
-                <option value="enhance">{t('literals.Mejorar (Oportunidad)')}</option>
+                <option value="avoid">{t('modules.planning.risksOpportunitiesPage.treatments.avoid')}</option>
+                <option value="mitigate">{t('modules.planning.risksOpportunitiesPage.treatments.mitigate')}</option>
+                <option value="transfer">{t('modules.planning.risksOpportunitiesPage.treatments.transfer')}</option>
+                <option value="accept">{t('modules.planning.risksOpportunitiesPage.treatments.accept')}</option>
+                <option value="exploit">{t('modules.planning.risksOpportunitiesPage.treatments.exploit')}</option>
+                <option value="enhance">{t('modules.planning.risksOpportunitiesPage.treatments.enhance')}</option>
               </select>
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Descripción del Tratamiento')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.risksOpportunitiesPage.fields.treatmentDescription')}</label>
               <textarea value={form.treatment_description} onChange={(e) => setForm({...form, treatment_description: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" />
             </div>
           </div>

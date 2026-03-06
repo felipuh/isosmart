@@ -59,7 +59,7 @@ const AwarenessPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!orgId) {
-      alert('Selecciona una organizacion antes de crear registros.');
+      alert(t('modules.resources.awarenessPage.messages.selectOrganization'));
       return;
     }
     try {
@@ -97,7 +97,7 @@ const AwarenessPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('¿Eliminar?')) return;
+    if (!confirm(t('modules.resources.awarenessPage.messages.confirmDelete'))) return;
     try {
       await deleteAwareness(id);
       await loadData();
@@ -136,13 +136,13 @@ const AwarenessPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">{t('literals.Toma de Conciencia')}</h1>
+        <h1 className="text-3xl font-bold text-white">{t('modules.resources.awarenessPage.title')}</h1>
         <button
           type="button"
           onClick={openForm}
           className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
         >
-          Nueva actividad
+          {t('modules.resources.awarenessPage.buttons.new')}
         </button>
       </div>
 
@@ -150,11 +150,11 @@ const AwarenessPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Actividad')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.resources.awarenessPage.table.activity')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.date')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Tipo')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Método')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acciones')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.resources.awarenessPage.table.type')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.resources.awarenessPage.table.method')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.resources.awarenessPage.table.actions')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -172,48 +172,48 @@ const AwarenessPage = () => {
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('literals.No hay actividades')}</div>}
+        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('modules.resources.awarenessPage.messages.empty')}</div>}
       </div>
 
       <Modal
-        title={editingId ? 'Editar actividad' : 'Nueva actividad'}
+        title={editingId ? t('modules.resources.awarenessPage.modal.editTitle') : t('modules.resources.awarenessPage.modal.newTitle')}
         isOpen={showForm}
         onClose={closeForm}
       >
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Actividad *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.resources.awarenessPage.form.activityRequired')}</label>
               <input type="text" value={form.activity_name} onChange={(e) => setForm({...form, activity_name: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Fecha *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.resources.awarenessPage.form.dateRequired')}</label>
               <input type="date" value={form.date} onChange={(e) => setForm({...form, date: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Tipo')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.resources.awarenessPage.form.type')}</label>
               <select value={form.awareness_type} onChange={(e) => setForm({...form, awareness_type: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="policy">{t('literals.Política de Calidad')}</option>
-                <option value="objectives">{t('literals.Objetivos de Calidad')}</option>
-                <option value="contribution">{t('literals.Contribución a la Eficacia')}</option>
-                <option value="improvement">{t('literals.Beneficios de Mejora')}</option>
-                <option value="nonconformity">{t('literals.Implicaciones de No Conformidad')}</option>
+                <option value="policy">{t('modules.resources.awarenessPage.options.type.policy')}</option>
+                <option value="objectives">{t('modules.resources.awarenessPage.options.type.objectives')}</option>
+                <option value="contribution">{t('modules.resources.awarenessPage.options.type.contribution')}</option>
+                <option value="improvement">{t('modules.resources.awarenessPage.options.type.improvement')}</option>
+                <option value="nonconformity">{t('modules.resources.awarenessPage.options.type.nonconformity')}</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Método')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.resources.awarenessPage.form.method')}</label>
               <select value={form.method} onChange={(e) => setForm({...form, method: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
-                <option value="meeting">{t('literals.Reunión')}</option>
-                <option value="training">{t('literals.Capacitación')}</option>
-                <option value="email">{t('literals.Correo Electrónico')}</option>
-                <option value="poster">{t('literals.Cartel/Póster')}</option>
-                <option value="intranet">{t('literals.Intranet')}</option>
-                <option value="video">{t('literals.Video')}</option>
-                <option value="other">{t('literals.Otro')}</option>
+                <option value="meeting">{t('modules.resources.awarenessPage.options.method.meeting')}</option>
+                <option value="training">{t('modules.resources.awarenessPage.options.method.training')}</option>
+                <option value="email">{t('modules.resources.awarenessPage.options.method.email')}</option>
+                <option value="poster">{t('modules.resources.awarenessPage.options.method.poster')}</option>
+                <option value="intranet">{t('modules.resources.awarenessPage.options.method.intranet')}</option>
+                <option value="video">{t('modules.resources.awarenessPage.options.method.video')}</option>
+                <option value="other">{t('modules.resources.awarenessPage.options.method.other')}</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Público Objetivo *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.resources.awarenessPage.form.targetAudienceRequired')}</label>
               <input type="text" value={form.target_audience} onChange={(e) => setForm({...form, target_audience: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
             </div>
             <div className="md:col-span-2">

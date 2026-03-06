@@ -132,44 +132,44 @@ const ResourcesDashboard = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white">{t('literals.Recursos y Apoyo')}</h1>
-          <p className="text-gray-400 mt-1">{t('literals.ISO 9001:2015 - Cláusula 7')}</p>
+          <h1 className="text-3xl font-bold text-white">{t('modules.resources.dashboard.title')}</h1>
+          <p className="text-gray-400 mt-1">{t('modules.resources.dashboard.subtitle')}</p>
         </div>
       </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard
-          title="Recursos Totales"
+          title={t('modules.resources.dashboard.stats.resources.title')}
           value={stats.resources.total}
-          subtitle={`${stats.resources.available} disponibles, ${stats.resources.in_use} en uso`}
+          subtitle={`${stats.resources.available} ${t('modules.resources.dashboard.stats.resources.availableSuffix')}, ${stats.resources.in_use} ${t('modules.resources.dashboard.stats.resources.inUseSuffix')}`}
           icon="📦"
           link="/resources/resources"
           color="blue"
         />
 
         <StatCard
-          title="Infraestructura"
+          title={t('modules.resources.dashboard.stats.infrastructure.title')}
           value={stats.infrastructure.total}
-          subtitle={`${stats.infrastructure.operational} operativa, ${stats.infrastructure.maintenance} en mantenimiento`}
+          subtitle={`${stats.infrastructure.operational} ${t('modules.resources.dashboard.stats.infrastructure.operationalSuffix')}, ${stats.infrastructure.maintenance} ${t('modules.resources.dashboard.stats.infrastructure.maintenanceSuffix')}`}
           icon="🏗️"
           link="/resources/infrastructure"
           color="purple"
         />
 
         <StatCard
-          title="Competencias"
+          title={t('modules.resources.dashboard.stats.competences.title')}
           value={stats.competences.total}
-          subtitle={`${stats.competences.gaps} brechas identificadas`}
+          subtitle={`${stats.competences.gaps} ${t('modules.resources.dashboard.stats.competences.gapsSuffix')}`}
           icon="🎓"
           link="/resources/competences"
           color="green"
         />
 
         <StatCard
-          title="Capacitaciones"
+          title={t('modules.resources.dashboard.stats.trainings.title')}
           value={stats.trainings.upcoming}
-          subtitle={`${stats.trainings.in_progress} en progreso`}
+          subtitle={`${stats.trainings.in_progress} ${t('modules.resources.dashboard.stats.trainings.inProgressSuffix')}`}
           icon="📚"
           link="/resources/trainings"
           color="orange"
@@ -178,7 +178,7 @@ const ResourcesDashboard = () => {
 
       {/* Quick Actions */}
       <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg p-6">
-        <h2 className="text-xl font-bold text-white mb-4">{t('literals.Acciones Rápidas')}</h2>
+        <h2 className="text-xl font-bold text-white mb-4">{t('modules.resources.dashboard.quickActions.title')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Link
             to="/resources/resources/new"
@@ -186,8 +186,8 @@ const ResourcesDashboard = () => {
           >
             <span className="text-2xl">📦</span>
             <div>
-              <p className="font-medium text-white">{t('literals.Nuevo Recurso')}</p>
-              <p className="text-xs text-gray-400">{t('literals.Registrar recurso')}</p>
+              <p className="font-medium text-white">{t('modules.resources.dashboard.quickActions.newResource')}</p>
+              <p className="text-xs text-gray-400">{t('modules.resources.dashboard.quickActions.newResourceDesc')}</p>
             </div>
           </Link>
 
@@ -197,8 +197,8 @@ const ResourcesDashboard = () => {
           >
             <span className="text-2xl">📚</span>
             <div>
-              <p className="font-medium text-white">{t('literals.Nueva Capacitación')}</p>
-              <p className="text-xs text-gray-400">{t('literals.Planificar capacitación')}</p>
+              <p className="font-medium text-white">{t('modules.resources.dashboard.quickActions.newTraining')}</p>
+              <p className="text-xs text-gray-400">{t('modules.resources.dashboard.quickActions.newTrainingDesc')}</p>
             </div>
           </Link>
 
@@ -208,8 +208,8 @@ const ResourcesDashboard = () => {
           >
             <span className="text-2xl">🎓</span>
             <div>
-              <p className="font-medium text-white">{t('literals.Nueva Competencia')}</p>
-              <p className="text-xs text-gray-400">{t('literals.Registrar competencia')}</p>
+              <p className="font-medium text-white">{t('modules.resources.dashboard.quickActions.newCompetence')}</p>
+              <p className="text-xs text-gray-400">{t('modules.resources.dashboard.quickActions.newCompetenceDesc')}</p>
             </div>
           </Link>
         </div>
@@ -223,9 +223,9 @@ const ResourcesDashboard = () => {
         >
           <div className="flex items-center space-x-3 mb-2">
             <span className="text-2xl">🏢</span>
-            <h3 className="text-lg font-bold text-white">{t('literals.Ambiente de Trabajo')}</h3>
+            <h3 className="text-lg font-bold text-white">{t('modules.resources.dashboard.moduleLinks.workEnvironmentTitle')}</h3>
           </div>
-          <p className="text-sm text-gray-400">{t('literals.Gestión de ambientes laborales')}</p>
+          <p className="text-sm text-gray-400">{t('modules.resources.dashboard.moduleLinks.workEnvironmentSubtitle')}</p>
         </Link>
 
         <Link
@@ -234,9 +234,9 @@ const ResourcesDashboard = () => {
         >
           <div className="flex items-center space-x-3 mb-2">
             <span className="text-2xl">💡</span>
-            <h3 className="text-lg font-bold text-white">{t('literals.Toma de Conciencia')}</h3>
+            <h3 className="text-lg font-bold text-white">{t('modules.resources.dashboard.moduleLinks.awarenessTitle')}</h3>
           </div>
-          <p className="text-sm text-gray-400">{t('literals.Actividades de sensibilización')}</p>
+          <p className="text-sm text-gray-400">{t('modules.resources.dashboard.moduleLinks.awarenessSubtitle')}</p>
         </Link>
 
         <Link
@@ -245,9 +245,9 @@ const ResourcesDashboard = () => {
         >
           <div className="flex items-center space-x-3 mb-2">
             <span className="text-2xl">📢</span>
-            <h3 className="text-lg font-bold text-white">{t('literals.Comunicaciones')}</h3>
+            <h3 className="text-lg font-bold text-white">{t('modules.resources.dashboard.moduleLinks.communicationsTitle')}</h3>
           </div>
-          <p className="text-sm text-gray-400">{t('literals.Plan de comunicación')}</p>
+          <p className="text-sm text-gray-400">{t('modules.resources.dashboard.moduleLinks.communicationsSubtitle')}</p>
         </Link>
       </div>
     </div>

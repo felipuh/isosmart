@@ -12,22 +12,6 @@ import {
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
 
-const findingTypeLabels = {
-  nc_major: 'No Conformidad Mayor',
-  nc_minor: 'No Conformidad Menor',
-  observation: 'Observacion',
-  opportunity: 'Oportunidad',
-  conformity: 'Conformidad'
-};
-
-const statusLabels = {
-  open: 'Abierto',
-  in_progress: 'En Proceso',
-  resolved: 'Resuelto',
-  verified: 'Verificado',
-  closed: 'Cerrado'
-};
-
 const FindingsPage = () => {
   const { t } = useI18n();
   const { currentOrganization } = useAuth();
@@ -49,6 +33,22 @@ const FindingsPage = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [showForm, setShowForm] = useState(false);
+
+  const findingTypeLabels = useMemo(() => ({
+    nc_major: t('modules.performance.findingsPage.types.ncMajor'),
+    nc_minor: t('modules.performance.findingsPage.types.ncMinor'),
+    observation: t('modules.performance.findingsPage.types.observation'),
+    opportunity: t('modules.performance.findingsPage.types.opportunity'),
+    conformity: t('modules.performance.findingsPage.types.conformity'),
+  }), [t]);
+
+  const statusLabels = useMemo(() => ({
+    open: t('modules.performance.findingsPage.statuses.open'),
+    in_progress: t('modules.performance.findingsPage.statuses.inProgress'),
+    resolved: t('modules.performance.findingsPage.statuses.resolved'),
+    verified: t('modules.performance.findingsPage.statuses.verified'),
+    closed: t('modules.performance.findingsPage.statuses.closed'),
+  }), [t]);
 
   const auditMap = useMemo(() => {
     return audits.reduce((acc, audit) => {
@@ -119,7 +119,7 @@ const FindingsPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('Delete finding?')) return;
+    if (!confirm(t('modules.performance.findingsPage.deleteConfirm'))) return;
     try {
       await deleteFinding(id);
       await loadData();
@@ -163,13 +163,13 @@ const FindingsPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">{t('literals.Hallazgos de Auditoria')}</h1>
+        <h1 className="text-3xl font-bold text-white">{t('modules.performance.findingsPage.title')}</h1>
         <button
           type="button"
           onClick={openForm}
           className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
         >
-          Nuevo hallazgo
+          {t('modules.performance.findingsPage.new')}
         </button>
       </div>
 
@@ -177,11 +177,11 @@ const FindingsPage = () => {
         <table className="w-full">
           <thead className="bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Hallazgo')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Auditoria')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Tipo')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.performance.findingsPage.table.finding')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.performance.findingsPage.table.audit')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.performance.findingsPage.table.type')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.status')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('literals.Acciones')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.performance.findingsPage.table.actions')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -201,25 +201,25 @@ const FindingsPage = () => {
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('literals.No hay hallazgos')}</div>}
+        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('modules.performance.findingsPage.empty')}</div>}
       </div>
 
       <Modal
-        title={editingId ? 'Editar hallazgo' : 'Nuevo hallazgo'}
+        title={editingId ? t('modules.performance.findingsPage.edit') : t('modules.performance.findingsPage.new')}
         isOpen={showForm}
         onClose={closeForm}
       >
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Auditoria *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.findingsPage.fields.audit')}</label>
               <select
                 value={form.audit}
                 onChange={(event) => setForm({ ...form, audit: event.target.value })}
                 className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
                 required
               >
-                <option value="">{t('literals.Selecciona auditoria')}</option>
+                <option value="">{t('modules.performance.findingsPage.fields.selectAudit')}</option>
                 {audits.map((audit) => (
                   <option key={audit.id} value={audit.id}>
                     {audit.audit_code} - {audit.title}
@@ -228,7 +228,7 @@ const FindingsPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Número de Hallazgo *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.findingsPage.fields.findingNumber')}</label>
               <input
                 type="text"
                 value={form.finding_number}
@@ -238,7 +238,7 @@ const FindingsPage = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Tipo *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.findingsPage.fields.type')}</label>
               <select
                 value={form.finding_type}
                 onChange={(event) => setForm({ ...form, finding_type: event.target.value })}
@@ -251,7 +251,7 @@ const FindingsPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Referencia de Cláusula *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.findingsPage.fields.clauseReference')}</label>
               <input
                 type="text"
                 value={form.clause_reference}
@@ -261,7 +261,7 @@ const FindingsPage = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Fecha Compromiso')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.findingsPage.fields.dueDate')}</label>
               <input
                 type="date"
                 value={form.due_date}
@@ -282,7 +282,7 @@ const FindingsPage = () => {
               </select>
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Descripción *')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.findingsPage.fields.description')}</label>
               <textarea
                 value={form.description}
                 onChange={(event) => setForm({ ...form, description: event.target.value })}
@@ -292,7 +292,7 @@ const FindingsPage = () => {
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('literals.Evidencia')}</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.performance.findingsPage.fields.evidence')}</label>
               <textarea
                 value={form.evidence}
                 onChange={(event) => setForm({ ...form, evidence: event.target.value })}

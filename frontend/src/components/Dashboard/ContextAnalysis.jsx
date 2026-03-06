@@ -58,11 +58,11 @@ const ContextAnalysis = () => {
       <div className="card">
         <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
           <Brain className="w-6 h-6 text-purple-600" />
-          Análisis de Contexto (ISO 4.1)
+          {t('dashboard.contextAnalysis.title')}
         </h2>
         <div className="text-center py-12">
           <Brain className="w-16 h-16 mx-auto mb-4 text-gray-300" />
-          <p className="text-gray-500 mb-4">{t('literals.No hay análisis de contexto disponible')}</p>
+          <p className="text-gray-500 mb-4">{t('dashboard.contextAnalysis.empty')}</p>
           <button
             onClick={triggerAnalysis}
             disabled={triggering}
@@ -71,10 +71,10 @@ const ContextAnalysis = () => {
             {triggering ? (
               <span className="flex items-center gap-2">
                 <RefreshCw className="w-4 h-4 animate-spin" />
-                Analizando...
+                {t('dashboard.contextAnalysis.analyzing')}
               </span>
             ) : (
-              'Iniciar Análisis'
+              t('dashboard.contextAnalysis.start')
             )}
           </button>
         </div>
@@ -87,7 +87,7 @@ const ContextAnalysis = () => {
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
           <Brain className="w-6 h-6 text-purple-600" />
-          Análisis de Contexto Inteligente (ISO 4.1)
+          {t('dashboard.contextAnalysis.intelligentTitle')}
         </h2>
         <button
           onClick={triggerAnalysis}
@@ -107,7 +107,7 @@ const ContextAnalysis = () => {
         <div className="p-4 bg-green-50 rounded-lg border-2 border-green-200">
           <h3 className="font-bold text-green-900 mb-3 flex items-center gap-2">
             <TrendingUp className="w-5 h-5" />
-            Fortalezas Identificadas
+            {t('dashboard.contextAnalysis.strengthsTitle')}
           </h3>
           <div className="space-y-2">
             {contextData.internal_insights?.fortalezas?.length > 0 ? (
@@ -117,13 +117,13 @@ const ContextAnalysis = () => {
                   <div className="flex items-center justify-between mt-2">
                     <span className="text-xs text-gray-500">{item.fuente}</span>
                     <span className="text-xs font-semibold text-green-600">
-                      {Math.round(item.confianza * 100)}% confianza
+                      {Math.round(item.confianza * 100)}% {t('dashboard.contextAnalysis.confidenceSuffix')}
                     </span>
                   </div>
                 </div>
               ))
             ) : (
-              <p className="text-sm text-gray-500">{t('literals.No se identificaron fortalezas')}</p>
+              <p className="text-sm text-gray-500">{t('dashboard.contextAnalysis.noStrengths')}</p>
             )}
           </div>
         </div>
@@ -132,7 +132,7 @@ const ContextAnalysis = () => {
         <div className="p-4 bg-red-50 rounded-lg border-2 border-red-200">
           <h3 className="font-bold text-red-900 mb-3 flex items-center gap-2">
             <AlertCircle className="w-5 h-5" />
-            Riesgos Identificados
+            {t('dashboard.contextAnalysis.risksTitle')}
           </h3>
           <div className="space-y-2">
             {contextData.internal_insights?.riesgos_identificados?.length > 0 ? (
@@ -142,13 +142,13 @@ const ContextAnalysis = () => {
                   <div className="flex items-center justify-between mt-2">
                     <span className="text-xs text-gray-500">{item.fuente}</span>
                     <span className="text-xs font-semibold text-red-600">
-                      Severidad: {item.severidad}
+                      {t('dashboard.contextAnalysis.severityLabel')}: {item.severidad}
                     </span>
                   </div>
                 </div>
               ))
             ) : (
-              <p className="text-sm text-gray-500">{t('literals.No se identificaron riesgos')}</p>
+              <p className="text-sm text-gray-500">{t('dashboard.contextAnalysis.noRisks')}</p>
             )}
           </div>
         </div>
@@ -159,10 +159,10 @@ const ContextAnalysis = () => {
         <div className="flex items-center justify-between text-sm text-gray-600">
           <span className="flex items-center gap-2">
             <FileText className="w-4 h-4" />
-            {contextData.total_documents_processed || 0} documentos procesados
+            {t('dashboard.contextAnalysis.documentsProcessed', { count: contextData.total_documents_processed || 0 })}
           </span>
           <span>
-            Última actualización: {contextData.timestamp ? new Date(contextData.timestamp).toLocaleString('es-ES') : 'No disponible'}
+            {t('dashboard.contextAnalysis.lastUpdate')}: {contextData.timestamp ? new Date(contextData.timestamp).toLocaleString('es-ES') : t('dashboard.contextAnalysis.notAvailable')}
           </span>
         </div>
       </div>

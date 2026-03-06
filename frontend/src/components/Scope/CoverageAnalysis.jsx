@@ -44,18 +44,18 @@ const CoverageAnalysis = ({ coverageData, loading }) => {
 
   return (
     <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
-      <h3 className="text-xl font-semibold mb-6 dark:text-white">{t('literals.Análisis de Cobertura')}</h3>
+      <h3 className="text-xl font-semibold mb-6 dark:text-white">{t('scopeInsights.coverage.title')}</h3>
 
       {/* Score General */}
       <div className={`${getScoreBg(overallScore)} rounded-lg p-6 mb-6 text-center transition-colors`}>
-        <p className="text-sm text-slate-600 dark:text-slate-400 mb-2">{t('literals.Cobertura General del Alcance')}</p>
+        <p className="text-sm text-slate-600 dark:text-slate-400 mb-2">{t('scopeInsights.coverage.overallCoverage')}</p>
         <p className={`text-5xl font-bold ${getScoreColor(overallScore)}`}>
           {overallScore.toFixed(1)}%
         </p>
         <p className="text-sm text-slate-600 dark:text-slate-400 mt-2">
-          {overallScore >= 90 ? 'Excelente cobertura' :
-           overallScore >= 70 ? 'Buena cobertura' :
-           overallScore >= 50 ? 'Cobertura aceptable' : 'Requiere mejoras'}
+          {overallScore >= 90 ? t('scopeInsights.coverage.levels.excellent') :
+           overallScore >= 70 ? t('scopeInsights.coverage.levels.good') :
+           overallScore >= 50 ? t('scopeInsights.coverage.levels.acceptable') : t('scopeInsights.coverage.levels.needsImprovement')}
         </p>
       </div>
 
@@ -68,7 +68,7 @@ const CoverageAnalysis = ({ coverageData, loading }) => {
               {coverageData.products_coverage?.score?.toFixed(0) || 0}%
             </span>
           </div>
-          <p className="text-xs text-slate-700 dark:text-slate-400">{t('literals.Productos/Servicios')}</p>
+          <p className="text-xs text-slate-700 dark:text-slate-400">{t('scopeInsights.coverage.categories.productsServices')}</p>
         </div>
 
         <div className="bg-green-50 dark:bg-green-900/30 rounded-lg p-4 transition-colors">
@@ -78,7 +78,7 @@ const CoverageAnalysis = ({ coverageData, loading }) => {
               {coverageData.stakeholder_coverage?.score?.toFixed(0) || 0}%
             </span>
           </div>
-          <p className="text-xs text-slate-700 dark:text-slate-400">{t('literals.Stakeholders')}</p>
+          <p className="text-xs text-slate-700 dark:text-slate-400">{t('scopeInsights.coverage.categories.stakeholders')}</p>
         </div>
 
         <div className="bg-purple-50 dark:bg-purple-900/30 rounded-lg p-4 transition-colors">
@@ -88,7 +88,7 @@ const CoverageAnalysis = ({ coverageData, loading }) => {
               {coverageData.process_coverage?.score?.toFixed(0) || 0}%
             </span>
           </div>
-          <p className="text-xs text-slate-700 dark:text-slate-400">{t('literals.Procesos')}</p>
+          <p className="text-xs text-slate-700 dark:text-slate-400">{t('scopeInsights.coverage.categories.processes')}</p>
         </div>
 
         <div className="bg-orange-50 dark:bg-orange-900/30 rounded-lg p-4 transition-colors">
@@ -98,14 +98,14 @@ const CoverageAnalysis = ({ coverageData, loading }) => {
               {coverageData.risk_coverage?.score?.toFixed(0) || 0}%
             </span>
           </div>
-          <p className="text-xs text-slate-700 dark:text-slate-400">{t('literals.Riesgos')}</p>
+          <p className="text-xs text-slate-700 dark:text-slate-400">{t('scopeInsights.coverage.categories.risks')}</p>
         </div>
       </div>
 
       {/* Gaps identificados */}
       {gaps.length > 0 && (
         <div className="mb-6">
-          <h4 className="font-semibold text-slate-900 dark:text-white mb-3">{t('literals.Brechas Identificadas')}</h4>
+          <h4 className="font-semibold text-slate-900 dark:text-white mb-3">{t('scopeInsights.coverage.gapsTitle')}</h4>
           <div className="space-y-2">
             {gaps.map((gap, idx) => (
               <div key={idx} className="flex items-start bg-red-50 dark:bg-red-900/30 border-l-4 border-red-400 dark:border-red-600 p-3 rounded transition-colors">
@@ -120,7 +120,7 @@ const CoverageAnalysis = ({ coverageData, loading }) => {
       {/* Recomendaciones */}
       {recommendations.length > 0 && (
         <div>
-          <h4 className="font-semibold text-slate-900 dark:text-white mb-3">{t('literals.Recomendaciones')}</h4>
+          <h4 className="font-semibold text-slate-900 dark:text-white mb-3">{t('scopeInsights.coverage.recommendationsTitle')}</h4>
           <div className="space-y-2">
             {recommendations.map((rec, idx) => (
               <div key={idx} className="flex items-start bg-blue-50 dark:bg-blue-900/30 border-l-4 border-blue-400 dark:border-blue-600 p-3 rounded transition-colors">

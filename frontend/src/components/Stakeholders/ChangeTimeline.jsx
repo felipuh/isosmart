@@ -26,7 +26,7 @@ const ChangeTimeline = ({ changes, loading }) => {
           <Clock className="mr-2 h-5 w-5" />
           Cambios Recientes
         </h3>
-        <p className="text-slate-500 dark:text-slate-400 text-center py-8">{t('literals.No hay cambios registrados')}</p>
+        <p className="text-slate-500 dark:text-slate-400 text-center py-8">{t('changeTimeline.empty')}</p>
       </div>
     );
   }
@@ -90,7 +90,7 @@ const ChangeTimeline = ({ changes, loading }) => {
                   
                   {change.new_expectations && change.new_expectations.length > 0 && (
                     <div className="mt-2">
-                      <p className="text-sm dark:text-slate-300">{t('literals.Nuevas expectativas:')}</p>
+                      <p className="text-sm dark:text-slate-300">{t('changeTimeline.newExpectations')}</p>
                       <ul className="list-disc list-inside text-sm dark:text-slate-400">
                         {change.new_expectations.map((exp, idx) => (
                           <li key={idx}>{exp}</li>
@@ -101,7 +101,7 @@ const ChangeTimeline = ({ changes, loading }) => {
 
                   {change.removed_expectations && change.removed_expectations.length > 0 && (
                     <div className="mt-2">
-                      <p className="text-sm dark:text-slate-300">{t('literals.Expectativas removidas:')}</p>
+                      <p className="text-sm dark:text-slate-300">{t('changeTimeline.removedExpectations')}</p>
                       <ul className="list-disc list-inside text-sm dark:text-slate-500 line-through">
                         {change.removed_expectations.map((exp, idx) => (
                           <li key={idx}>{exp}</li>

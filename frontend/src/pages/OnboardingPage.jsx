@@ -13,12 +13,29 @@ const STANDARD_OPTIONS = [
   { code: 'ISO45001_2018', label: 'ISO 45001:2018' },
 ];
 
+const ROLE_OPTIONS = ['owner_founder', 'general_manager', 'operations_manager', 'quality_manager', 'external_consultant', 'other'];
+const EXPERTISE_OPTIONS = ['none', 'beginner', 'intermediate', 'expert', 'ninja'];
+const COMPANY_SIZE_OPTIONS = ['10-50', '51-200', '201-500', '501-2000', '2000+'];
+const CERTIFICATION_OPTIONS = ['first_time', 'already_certified', 'in_transition'];
+const TONE_OPTIONS = ['manager', 'technical'];
+
 const OnboardingPage = () => {
   const navigate = useNavigate();
   const { currentOrganization } = useAuth();
   const { language, setLanguage, t } = useI18n();
 
   const [enabledStandards, setEnabledStandards] = useState(['ISO9001_2015']);
+  const [onboardingProfile, setOnboardingProfile] = useState({
+    primary_role: 'quality_manager',
+    iso_expertise: 'intermediate',
+    company_size_range: '10-50',
+    industry_sector: '',
+    employees_count: '',
+    sites_count: '',
+    countries: '',
+    certification_status: 'first_time',
+  });
+  const [preferredTone, setPreferredTone] = useState('manager');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
@@ -41,6 +58,16 @@ const OnboardingPage = () => {
     });
   };
 
+  const updateProfileField = (key, value) => {
+    setOnboardingProfile((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const parseOptionalInt = (value) => {
+    if (value === '' || value === null || value === undefined) return null;
+    const parsed = Number.parseInt(value, 10);
+    return Number.isNaN(parsed) ? null : parsed;
+  };
+
   const handleFinish = async () => {
     if (!organizationId) return;
     setSaving(true);
@@ -51,10 +78,27 @@ const OnboardingPage = () => {
       await settingsService.completeOnboarding(organizationId, {
         enabled_standards: selectedStandards,
         preferred_language: language,
+        preferred_response_tone: preferredTone,
+        onboarding_profile: {
+          ...onboardingProfile,
+          employees_count: parseOptionalInt(onboardingProfile.employees_count),
+          sites_count: parseOptionalInt(onboardingProfile.sites_count),
+          countries: onboardingProfile.countries
+            .split(',')
+            .map((item) => item.trim())
+            .filter(Boolean),
+        },
       });
+
+      try {
+        await settingsService.runOnboardingOrchestration(organizationId);
+      } catch {
+        // No bloquear el acceso al sistema si la orquestación falla
+      }
+
       navigate('/', { replace: true });
     } catch (err) {
-      setError(err?.response?.data?.detail || 'No fue posible completar el onboarding');
+      setError(err?.response?.data?.detail || t('onboarding.errorComplete'));
     } finally {
       setSaving(false);
     }
@@ -88,9 +132,9 @@ const OnboardingPage = () => {
               onChange={(event) => setLanguage(event.target.value)}
               className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100"
             >
-              <option value="es-LATAM">{t('literals.Español (LATAM)')}</option>
-              <option value="en">{t('literals.English')}</option>
-              <option value="pt">{t('literals.Português')}</option>
+              <option value="es-LATAM">{t('onboarding.languages.es-LATAM')}</option>
+              <option value="en">{t('onboarding.languages.en')}</option>
+              <option value="pt">{t('onboarding.languages.pt')}</option>
             </select>
           </section>
 
@@ -118,6 +162,134 @@ const OnboardingPage = () => {
             <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">{t('onboarding.requiredStandard')}</p>
           </section>
         </div>
+
+        <div className="grid gap-6 md:grid-cols-2 mb-8">
+          <section className="p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/80 dark:bg-slate-800/50">
+            <h2 className="font-semibold text-slate-900 dark:text-slate-100 mb-3">{t('onboarding.profileTitle')}</h2>
+            <div className="space-y-3">
+              <label className="block text-sm text-slate-700 dark:text-slate-200">
+                {t('onboarding.primaryRole')}
+                <select
+                  value={onboardingProfile.primary_role}
+                  onChange={(event) => updateProfileField('primary_role', event.target.value)}
+                  className="mt-1 w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700"
+                >
+                  {ROLE_OPTIONS.map((option) => (
+                    <option key={option} value={option}>{t(`onboarding.roles.${option}`)}</option>
+                  ))}
+                </select>
+              </label>
+
+              <label className="block text-sm text-slate-700 dark:text-slate-200">
+                {t('onboarding.expertise')}
+                <select
+                  value={onboardingProfile.iso_expertise}
+                  onChange={(event) => updateProfileField('iso_expertise', event.target.value)}
+                  className="mt-1 w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700"
+                >
+                  {EXPERTISE_OPTIONS.map((option) => (
+                    <option key={option} value={option}>{t(`onboarding.expertiseLevels.${option}`)}</option>
+                  ))}
+                </select>
+              </label>
+
+              <label className="block text-sm text-slate-700 dark:text-slate-200">
+                {t('onboarding.companySize')}
+                <select
+                  value={onboardingProfile.company_size_range}
+                  onChange={(event) => updateProfileField('company_size_range', event.target.value)}
+                  className="mt-1 w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700"
+                >
+                  {COMPANY_SIZE_OPTIONS.map((option) => (
+                    <option key={option} value={option}>{option}</option>
+                  ))}
+                </select>
+              </label>
+
+              <label className="block text-sm text-slate-700 dark:text-slate-200">
+                {t('onboarding.industry')}
+                <input
+                  type="text"
+                  value={onboardingProfile.industry_sector}
+                  onChange={(event) => updateProfileField('industry_sector', event.target.value)}
+                  placeholder={t('onboarding.industryPlaceholder')}
+                  className="mt-1 w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700"
+                />
+              </label>
+            </div>
+          </section>
+
+          <section className="p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/80 dark:bg-slate-800/50">
+            <h2 className="font-semibold text-slate-900 dark:text-slate-100 mb-3">{t('onboarding.contextTitle')}</h2>
+            <div className="space-y-3">
+              <label className="block text-sm text-slate-700 dark:text-slate-200">
+                {t('onboarding.employeesCount')}
+                <input
+                  type="number"
+                  min="1"
+                  value={onboardingProfile.employees_count}
+                  onChange={(event) => updateProfileField('employees_count', event.target.value)}
+                  className="mt-1 w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700"
+                />
+              </label>
+
+              <label className="block text-sm text-slate-700 dark:text-slate-200">
+                {t('onboarding.sitesCount')}
+                <input
+                  type="number"
+                  min="1"
+                  value={onboardingProfile.sites_count}
+                  onChange={(event) => updateProfileField('sites_count', event.target.value)}
+                  className="mt-1 w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700"
+                />
+              </label>
+
+              <label className="block text-sm text-slate-700 dark:text-slate-200">
+                {t('onboarding.countries')}
+                <input
+                  type="text"
+                  value={onboardingProfile.countries}
+                  onChange={(event) => updateProfileField('countries', event.target.value)}
+                  placeholder={t('onboarding.countriesPlaceholder')}
+                  className="mt-1 w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700"
+                />
+              </label>
+
+              <label className="block text-sm text-slate-700 dark:text-slate-200">
+                {t('onboarding.certification')}
+                <select
+                  value={onboardingProfile.certification_status}
+                  onChange={(event) => updateProfileField('certification_status', event.target.value)}
+                  className="mt-1 w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700"
+                >
+                  {CERTIFICATION_OPTIONS.map((option) => (
+                    <option key={option} value={option}>{t(`onboarding.certificationOptions.${option}`)}</option>
+                  ))}
+                </select>
+              </label>
+            </div>
+          </section>
+        </div>
+
+        <section className="mb-8 p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/80 dark:bg-slate-800/50">
+          <h2 className="font-semibold text-slate-900 dark:text-slate-100 mb-3">{t('onboarding.toneTitle')}</h2>
+          <div className="grid gap-2 md:grid-cols-2">
+            {TONE_OPTIONS.map((option) => (
+              <label key={option} className="flex items-start gap-2 text-sm text-slate-700 dark:text-slate-200 p-3 rounded-lg border border-slate-300 dark:border-slate-600">
+                <input
+                  type="radio"
+                  name="preferredTone"
+                  checked={preferredTone === option}
+                  onChange={() => setPreferredTone(option)}
+                />
+                <span>
+                  <span className="font-medium block">{t(`onboarding.tones.${option}.title`)}</span>
+                  <span className="text-xs text-slate-500 dark:text-slate-400">{t(`onboarding.tones.${option}.desc`)}</span>
+                </span>
+              </label>
+            ))}
+          </div>
+        </section>
 
         {error && (
           <div className="mb-4 px-4 py-3 rounded-lg border border-red-200 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-300">

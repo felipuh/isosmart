@@ -10,15 +10,18 @@ import {
   Award,
   Activity,
   FileText,
-  BarChart3
+  BarChart3,
+  CreditCard,
+  CalendarClock
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useI18n } from '../../context/I18nContext';
 import api from '../../services/api';
+import settingsService from '../../services/settingsService';
 
 const Dashboard = () => {
   const { currentOrganization, user } = useAuth();
-  const { t } = useI18n();
+  const { t, language } = useI18n();
   const orgId = currentOrganization?.id || null;
   const [stats, setStats] = useState({
     modulesActive: 0,
@@ -30,6 +33,10 @@ const Dashboard = () => {
     lastUpdate: new Date().toISOString(),
   });
   const [clauseProgress, setClauseProgress] = useState([]);
+  const [onboardingInsights, setOnboardingInsights] = useState(null);
+  const [onboardingIsoSkeleton, setOnboardingIsoSkeleton] = useState(null);
+  const [onboardingAdaptiveRoute, setOnboardingAdaptiveRoute] = useState(null);
+  const [billingSummary, setBillingSummary] = useState(null);
 
   const normalizeCount = (data) => {
     if (Array.isArray(data)) return data.length;
@@ -95,6 +102,165 @@ const Dashboard = () => {
     }, 0);
     return () => window.clearTimeout(timer);
   }, [loadDashboardStats]);
+
+  useEffect(() => {
+    let mounted = true;
+
+    const loadInsights = async () => {
+      if (!orgId) return;
+      try {
+        const data = await settingsService.getOnboardingInsights(orgId);
+        if (mounted) setOnboardingInsights(data);
+      } catch {
+        if (mounted) setOnboardingInsights(null);
+      }
+    };
+
+    loadInsights();
+    return () => {
+      mounted = false;
+    };
+  }, [orgId]);
+
+  useEffect(() => {
+    let mounted = true;
+
+    const loadBillingSummary = async () => {
+      if (!orgId) return;
+      try {
+        const data = await settingsService.getBillingCurrent(orgId);
+        if (!mounted) return;
+
+        const subscription = data?.subscription || null;
+        const recentPayments = data?.recent_payments || [];
+        const pendingPayments = recentPayments.filter((payment) => payment.status === 'pending').length;
+
+        setBillingSummary({
+          subscription,
+          pendingPayments,
+        });
+      } catch {
+        if (mounted) setBillingSummary(null);
+      }
+    };
+
+    loadBillingSummary();
+    return () => {
+      mounted = false;
+    };
+  }, [orgId]);
+
+  const billingStatusBadge = {
+    active: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300',
+    past_due: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300',
+    suspended: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300',
+    cancelled: 'bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300',
+  };
+
+  const billingStatusLabel = {
+    active: t('settings.billing.status.active'),
+    past_due: t('settings.billing.status.pastDue'),
+    suspended: t('settings.billing.status.suspended'),
+    cancelled: t('settings.billing.status.cancelled'),
+  };
+
+  const getBillingHealth = (subscription) => {
+    if (!subscription) return null;
+
+    if (subscription.status === 'suspended' || subscription.status === 'cancelled') {
+      return {
+        label: t('dashboard.billing.health.critical'),
+        detail: t('dashboard.billing.health.suspendedOrCancelled'),
+        badgeClass: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300',
+        dotClass: 'bg-red-500',
+      };
+    }
+
+    if (!subscription.next_due_date) {
+      return {
+        label: t('dashboard.billing.health.stable'),
+        detail: t('dashboard.billing.health.noDueDate'),
+        badgeClass: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300',
+        dotClass: 'bg-emerald-500',
+      };
+    }
+
+    const dueDate = new Date(subscription.next_due_date);
+    const today = new Date();
+    dueDate.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
+
+    const msDiff = today.getTime() - dueDate.getTime();
+    const overdueDays = Math.floor(msDiff / (1000 * 60 * 60 * 24));
+    const graceDays = Number(subscription.grace_days || 0);
+
+    if (overdueDays <= 0) {
+      const remainingDays = Math.abs(overdueDays);
+      const stableDetail = remainingDays === 0
+        ? t('dashboard.billing.health.dueToday')
+        : t('dashboard.billing.health.daysToDue', `${remainingDays} day(s) to due`).replace('{days}', remainingDays);
+      return {
+        label: t('dashboard.billing.health.stable'),
+        detail: stableDetail,
+        badgeClass: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300',
+        dotClass: 'bg-emerald-500',
+      };
+    }
+
+    if (overdueDays <= graceDays) {
+      return {
+        label: t('dashboard.billing.health.attention'),
+        detail: t('dashboard.billing.health.daysOverdue', `With ${overdueDays} overdue day(s)`).replace('{days}', overdueDays),
+        badgeClass: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300',
+        dotClass: 'bg-amber-500',
+      };
+    }
+
+    return {
+      label: t('dashboard.billing.health.critical'),
+      detail: t('dashboard.billing.health.overGrace', `Over grace period (${overdueDays} day(s))`).replace('{days}', overdueDays),
+      badgeClass: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300',
+      dotClass: 'bg-red-500',
+    };
+  };
+
+  useEffect(() => {
+    let mounted = true;
+
+    const loadAdaptiveRoute = async () => {
+      if (!orgId) return;
+      try {
+        const data = await settingsService.getOnboardingAdaptiveRoute(orgId);
+        if (mounted) setOnboardingAdaptiveRoute(data?.adaptive_route || null);
+      } catch {
+        if (mounted) setOnboardingAdaptiveRoute(null);
+      }
+    };
+
+    loadAdaptiveRoute();
+    return () => {
+      mounted = false;
+    };
+  }, [orgId]);
+
+  useEffect(() => {
+    let mounted = true;
+
+    const loadIsoSkeleton = async () => {
+      if (!orgId) return;
+      try {
+        const data = await settingsService.getOnboardingIsoSkeleton(orgId);
+        if (mounted) setOnboardingIsoSkeleton(data?.iso_skeleton || null);
+      } catch {
+        if (mounted) setOnboardingIsoSkeleton(null);
+      }
+    };
+
+    loadIsoSkeleton();
+    return () => {
+      mounted = false;
+    };
+  }, [orgId]);
 
   const modules = [
     {
@@ -220,7 +386,7 @@ const Dashboard = () => {
           <div>
             <div className="flex items-center mb-2">
               <Award className="h-8 w-8 mr-3" />
-              <h2 className="text-2xl font-bold">{t('literals.Estado global de cumplimiento ISO 9001')}</h2>
+              <h2 className="text-2xl font-bold">{t('dashboard.main.globalComplianceTitle')}</h2>
             </div>
             <p className="text-blue-100">
               Progreso dinámico por cláusula según datos reales de cada módulo.
@@ -228,17 +394,188 @@ const Dashboard = () => {
           </div>
           <div className="text-right">
             <div className="text-6xl font-bold">{stats.iso9001Progress}%</div>
-            <div className="text-sm text-blue-100">{t('literals.Promedio cláusulas 4-10')}</div>
+            <div className="text-sm text-blue-100">{t('dashboard.main.averageClauses')}</div>
           </div>
         </div>
       </div>
+
+      {onboardingInsights && (
+        <div className="mb-8 bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white">Resultados sesión inicial IA</h2>
+            <span className="text-xs px-2 py-1 rounded bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300">
+              v{onboardingInsights.version}
+            </span>
+          </div>
+
+          <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
+            {onboardingInsights.summary_output?.message || 'Se generaron recomendaciones iniciales de implementación.'}
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="p-4 rounded-lg border border-slate-200 dark:border-slate-700">
+              <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-2">Quick Wins</p>
+              <ul className="text-xs text-slate-600 dark:text-slate-300 space-y-1">
+                {(onboardingInsights.impact_savings_output?.quick_wins || []).slice(0, 3).map((item, index) => (
+                  <li key={`qw-${index}`}>• {item}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="p-4 rounded-lg border border-slate-200 dark:border-slate-700">
+              <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-2">Big Bets</p>
+              <ul className="text-xs text-slate-600 dark:text-slate-300 space-y-1">
+                {(onboardingInsights.impact_savings_output?.big_bets || []).slice(0, 3).map((item, index) => (
+                  <li key={`bb-${index}`}>• {item}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="p-4 rounded-lg border border-slate-200 dark:border-slate-700">
+              <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-2">Siguiente foco</p>
+              <ul className="text-xs text-slate-600 dark:text-slate-300 space-y-1">
+                {(onboardingInsights.summary_output?.top_priorities_today || []).slice(0, 3).map((item, index) => (
+                  <li key={`tp-${index}`}>• {item}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {onboardingIsoSkeleton && (
+        <div className="mb-8 bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white">Esqueleto ISO autogenerado</h2>
+            <span className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">
+              Sistema listo al {onboardingIsoSkeleton.system_readiness?.score_percentage || 0}%
+            </span>
+          </div>
+
+          <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
+            {onboardingIsoSkeleton.scope_draft}
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="p-4 rounded-lg border border-slate-200 dark:border-slate-700">
+              <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-2">Procesos iniciales</p>
+              <p className="text-xs text-slate-600 dark:text-slate-300">
+                {(onboardingIsoSkeleton.initial_process_map?.strategic || []).length} estratégicos · {(onboardingIsoSkeleton.initial_process_map?.operational || []).length} operativos · {(onboardingIsoSkeleton.initial_process_map?.support || []).length} soporte
+              </p>
+            </div>
+
+            <div className="p-4 rounded-lg border border-slate-200 dark:border-slate-700">
+              <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-2">Riesgos/Oportunidades</p>
+              <p className="text-xs text-slate-600 dark:text-slate-300">
+                {(onboardingIsoSkeleton.top_5_risks || []).length} riesgos · {(onboardingIsoSkeleton.top_5_opportunities || []).length} oportunidades
+              </p>
+            </div>
+
+            <div className="p-4 rounded-lg border border-slate-200 dark:border-slate-700">
+              <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-2">Objetivos v1</p>
+              <p className="text-xs text-slate-600 dark:text-slate-300">
+                {(onboardingIsoSkeleton.quality_objectives_v1 || []).length} objetivos generados para validación
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {onboardingAdaptiveRoute && (
+        <div className="mb-8 bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white">Ruta adaptativa activa</h2>
+            <span className="text-xs px-2 py-1 rounded bg-cyan-100 text-cyan-700 dark:bg-cyan-900/40 dark:text-cyan-300">
+              {onboardingAdaptiveRoute.mode} · {onboardingAdaptiveRoute.cadence}
+            </span>
+          </div>
+
+          <p className="text-sm font-semibold text-slate-800 dark:text-slate-100 mb-1">{onboardingAdaptiveRoute.title}</p>
+          <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">{onboardingAdaptiveRoute.description}</p>
+
+          <div className="p-4 rounded-lg border border-slate-200 dark:border-slate-700">
+            <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-2">Acciones sugeridas</p>
+            <ul className="text-xs text-slate-600 dark:text-slate-300 space-y-1">
+              {(onboardingAdaptiveRoute.recommended_actions || []).slice(0, 4).map((item, index) => (
+                <li key={`ra-${index}`}>• {item}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
+
+      {billingSummary?.subscription && (
+        <div className="mb-8 bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
+          {(() => {
+            const billingHealth = getBillingHealth(billingSummary.subscription);
+            return (
+              <>
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-1">{t('dashboard.billing.title')}</h2>
+              <p className="text-sm text-slate-600 dark:text-slate-400">{t('dashboard.billing.subtitle')}</p>
+            </div>
+            <CreditCard className="h-6 w-6 text-indigo-500" />
+          </div>
+
+          {billingHealth && (
+            <div className="mt-4 flex items-center justify-between p-3 rounded-lg border border-slate-200 dark:border-slate-700">
+              <div className="flex items-center gap-2">
+                <span className={`w-2.5 h-2.5 rounded-full ${billingHealth.dotClass}`} />
+                <p className="text-sm font-semibold text-slate-800 dark:text-slate-100">{t('dashboard.billing.trafficLight')}: {billingHealth.label}</p>
+              </div>
+              <span className={`inline-flex px-2.5 py-1 rounded-full text-xs font-medium ${billingHealth.badgeClass}`}>
+                {billingHealth.detail}
+              </span>
+            </div>
+          )}
+
+          <div className="mt-5 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="p-4 rounded-lg border border-slate-200 dark:border-slate-700">
+              <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">{t('dashboard.billing.currentStatus')}</p>
+              <span className={`inline-flex px-3 py-1 rounded-full text-xs font-semibold ${billingStatusBadge[billingSummary.subscription.status] || billingStatusBadge.cancelled}`}>
+                {billingStatusLabel[billingSummary.subscription.status] || billingSummary.subscription.status}
+              </span>
+            </div>
+
+            <div className="p-4 rounded-lg border border-slate-200 dark:border-slate-700">
+              <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">{t('dashboard.billing.nextCharge')}</p>
+              <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                <CalendarClock className="h-4 w-4 text-indigo-500" />
+                {billingSummary.subscription.next_due_date
+                  ? new Date(billingSummary.subscription.next_due_date).toLocaleDateString(language === 'es-LATAM' ? 'es-ES' : language)
+                  : t('dashboard.billing.noDate')}
+              </p>
+            </div>
+
+            <div className="p-4 rounded-lg border border-slate-200 dark:border-slate-700">
+              <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">{t('dashboard.billing.monthlyAndPending')}</p>
+              <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                {billingSummary.subscription.monthly_price} {billingSummary.subscription.currency}
+              </p>
+              <p className="text-xs mt-2 text-slate-500 dark:text-slate-400">
+                {t('dashboard.billing.pendingPayments', '{count} payment(s) pending').replace('{count}', billingSummary.pendingPayments)}
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-4">
+            <Link to="/settings" className="text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:underline">
+              {t('dashboard.billing.goToSettings')} →
+            </Link>
+          </div>
+              </>
+            );
+          })()}
+        </div>
+      )}
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-slate-600 dark:text-slate-400 mb-1">{t('literals.Cláusulas con avance')}</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400 mb-1">{t('dashboard.main.cards.clausesWithProgress')}</p>
               <p className="text-3xl font-bold text-green-600 dark:text-green-400">
                 {stats.modulesActive}/{stats.totalModules}
               </p>
@@ -258,7 +595,7 @@ const Dashboard = () => {
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-slate-600 dark:text-slate-400 mb-1">{t('literals.Cláusula 4 ISO')}</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400 mb-1">{t('dashboard.main.cards.isoClause4')}</p>
               <p className="text-3xl font-bold text-blue-600">{stats.clause4Progress}%</p>
             </div>
             <Target className="h-12 w-12 text-blue-400" />
@@ -276,33 +613,33 @@ const Dashboard = () => {
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-slate-600 dark:text-slate-400 mb-1">{t('literals.Procesos Mapeados')}</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400 mb-1">{t('dashboard.main.cards.mappedProcesses')}</p>
               <p className="text-3xl font-bold text-purple-600 dark:text-purple-400">{stats.totalProcesses}</p>
             </div>
             <Workflow className="h-12 w-12 text-purple-400" />
           </div>
           <div className="mt-2">
-            <p className="text-xs text-gray-500">{t('literals.3 Estratégicos • 3 Operativos • 5 Apoyo')}</p>
+            <p className="text-xs text-gray-500">{t('dashboard.main.cards.mappedProcessesDetail')}</p>
           </div>
         </div>
 
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600 dark:text-slate-400 mb-1">{t('literals.Partes Interesadas')}</p>
+              <p className="text-sm text-gray-600 dark:text-slate-400 mb-1">{t('dashboard.main.cards.stakeholders')}</p>
               <p className="text-3xl font-bold text-orange-600 dark:text-orange-400">{stats.totalStakeholders}</p>
             </div>
             <Activity className="h-12 w-12 text-orange-400" />
           </div>
           <div className="mt-2">
-            <p className="text-xs text-gray-500">{t('literals.Registros activos de stakeholders')}</p>
+            <p className="text-xs text-gray-500">{t('dashboard.main.cards.stakeholdersDetail')}</p>
           </div>
         </div>
       </div>
 
       {/* Módulos Grid */}
       <div className="mb-8">
-        <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">{t('literals.Módulos del Sistema')}</h2>
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">{t('dashboard.main.modulesTitle')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {modules.map((module) => {
             const Icon = module.icon;
@@ -360,7 +697,7 @@ const Dashboard = () => {
 
       {/* Quick Actions */}
       <div className="mb-8">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{t('literals.Acciones Rápidas')}</h2>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{t('dashboard.quickActions.title')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-4 dark:text-white gap-4">
           {quickActions.map((action, idx) => {
             const Icon = action.icon;
@@ -410,24 +747,24 @@ const Dashboard = () => {
           </h3>
           <div className="space-y-3">
             <div className="flex items-center justify-between py-2 border-b border-slate-100 dark:border-slate-700">
-              <span className="text-sm text-slate-600 dark:text-slate-400">{t('literals.Módulos de IA Activos')}</span>
+              <span className="text-sm text-slate-600 dark:text-slate-400">{t('dashboard.main.summary.activeAiModules')}</span>
               <span className="text-sm font-bold text-gray-900 dark:text-slate-500">{stats.modulesActive}/{stats.totalModules}</span>
             </div>
             <div className="flex items-center justify-between py-2 border-b border-gray-100">
-              <span className="text-sm text-gray-600 dark:text-slate-400">{t('literals.Requisitos ISO Cubiertos')}</span>
-              <span className="text-sm font-bold text-gray-900 dark:text-slate-500">{t('literals.4 - 10 (progreso dinámico)')}</span>
+              <span className="text-sm text-gray-600 dark:text-slate-400">{t('dashboard.main.summary.isoRequirementsCovered')}</span>
+              <span className="text-sm font-bold text-gray-900 dark:text-slate-500">{t('dashboard.main.summary.isoCoveredRange')}</span>
             </div>
             <div className="flex items-center justify-between py-2 border-b border-gray-100">
-              <span className="text-sm text-gray-600 dark:text-slate-400">{t('literals.Procesos Mapeados')}</span>
-              <span className="text-sm font-bold text-gray-900 dark:text-slate-500">{stats.totalProcesses} procesos</span>
+              <span className="text-sm text-gray-600 dark:text-slate-400">{t('dashboard.main.cards.mappedProcesses')}</span>
+              <span className="text-sm font-bold text-gray-900 dark:text-slate-500">{stats.totalProcesses} {t('dashboard.main.summary.processesSuffix')}</span>
             </div>
             <div className="flex items-center justify-between py-2 border-b border-gray-100">
-              <span className="text-sm text-gray-600 dark:text-slate-400">{t('literals.Cumplimiento ISO 9001')}</span>
+              <span className="text-sm text-gray-600 dark:text-slate-400">{t('dashboard.main.summary.isoCompliance')}</span>
               <span className="text-sm font-bold text-gray-900 dark:text-slate-500">{stats.iso9001Progress}%</span>
             </div>
             <div className="flex items-center justify-between py-2">
-              <span className="text-sm text-gray-600 dark:text-slate-400">{t('literals.Estado del Sistema')}</span>
-              <span className="text-sm font-bold text-green-600">{t('literals.✓ Operacional')}</span>
+              <span className="text-sm text-gray-600 dark:text-slate-400">{t('dashboard.main.summary.systemStatus')}</span>
+              <span className="text-sm font-bold text-green-600">{t('dashboard.main.summary.operational')}</span>
             </div>
           </div>
         </div>
@@ -437,13 +774,13 @@ const Dashboard = () => {
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="font-semibold text-gray-900 dark:text-white mb-1">{t('literals.ISO Smart v1.0')}</h3>
+            <h3 className="font-semibold text-gray-900 dark:text-white mb-1">{t('dashboard.main.footer.version')}</h3>
             <p className="text-sm text-gray-600 dark:text-slate-400">
               Sistema Inteligente de Gestión de Calidad con IA
             </p>
           </div>
           <div className="text-right">
-            <p className="text-sm text-gray-600 dark:text-slate-400">{t('literals.Última actualización')}</p>
+            <p className="text-sm text-gray-600 dark:text-slate-400">{t('dashboard.executive.lastUpdate')}</p>
             <p className="text-sm font-medium text-gray-900 dark:text-slate-500">
               {new Date(stats.lastUpdate).toLocaleDateString('es-ES', {
                 day: '2-digit',

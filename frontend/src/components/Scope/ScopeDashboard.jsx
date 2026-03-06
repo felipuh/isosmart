@@ -69,7 +69,7 @@ const ScopeDashboard = () => {
     const cleanProducts = analysisConfig.products_services.filter(p => p.trim() !== '');
     
     if (cleanProducts.length === 0) {
-      alert('Debes agregar al menos un producto o servicio');
+      alert(t('scopeDashboard.alerts.addAtLeastOneProduct'));
       return;
     }
 
@@ -83,16 +83,18 @@ const ScopeDashboard = () => {
       if (result.status === 'success') {
         await loadData();
         setShowConfig(false);
-        alert('Análisis de alcance completado!\n\n' +
-              'Productos/Servicios: ' + result.products_count + '\n' +
-              'Exclusiones: ' + result.exclusions_count + '\n' +
-              'Cobertura: ' + (result.coverage_score?.toFixed(1) || 0) + '%');
+        alert(
+          `${t('scopeDashboard.alerts.analysisCompleted')}\n\n` +
+          `${t('scopeDashboard.alerts.productsServices')}: ${result.products_count}\n` +
+          `${t('scopeDashboard.alerts.exclusions')}: ${result.exclusions_count}\n` +
+          `${t('scopeDashboard.alerts.coverage')}: ${result.coverage_score?.toFixed(1) || 0}%`
+        );
       } else {
         alert(result.message);
       }
     } catch (error) {
       console.error('Error ejecutando análisis:', error);
-      alert('Error al ejecutar el análisis de alcance');
+      alert(t('scopeDashboard.alerts.analysisError'));
     } finally {
       setAnalyzing(false);
     }
@@ -113,32 +115,32 @@ const ScopeDashboard = () => {
     try {
       if (editingProcess) {
         await scopeService.updateProcess(editingProcess.id, formData);
-        alert('Proceso actualizado exitosamente');
+        alert(t('scopeDashboard.alerts.processUpdated'));
       } else {
         await scopeService.createProcess(formData);
-        alert('Proceso creado exitosamente');
+        alert(t('scopeDashboard.alerts.processCreated'));
       }
       setShowProcessForm(false);
       setEditingProcess(null);
       await loadData();
     } catch (error) {
       console.error('Error guardando proceso:', error);
-      alert('Error al guardar el proceso');
+      alert(t('scopeDashboard.alerts.processSaveError'));
       throw error;
     }
   };
 
   const handleDeleteProcess = async (process) => {
-    if (!window.confirm('¿Estás seguro de eliminar el proceso "' + process.process_name + '"?')) {
+    if (!window.confirm(`${t('scopeDashboard.alerts.confirmDeleteProcess')} "${process.process_name}"?`)) {
       return;
     }
     try {
       await scopeService.deleteProcess(process.id);
-      alert('Proceso eliminado exitosamente');
+      alert(t('scopeDashboard.alerts.processDeleted'));
       await loadData();
     } catch (error) {
       console.error('Error eliminando proceso:', error);
-      alert('Error al eliminar el proceso');
+      alert(t('scopeDashboard.alerts.processDeleteError'));
     }
   };
 
@@ -157,32 +159,32 @@ const ScopeDashboard = () => {
     try {
       if (editingLocation) {
         await scopeService.updateLocation(editingLocation.id, formData);
-        alert('Ubicación actualizada exitosamente');
+        alert(t('scopeDashboard.alerts.locationUpdated'));
       } else {
         await scopeService.createLocation(formData);
-        alert('Ubicación creada exitosamente');
+        alert(t('scopeDashboard.alerts.locationCreated'));
       }
       setShowLocationForm(false);
       setEditingLocation(null);
       await loadData();
     } catch (error) {
       console.error('Error guardando ubicación:', error);
-      alert('Error al guardar la ubicación');
+      alert(t('scopeDashboard.alerts.locationSaveError'));
       throw error;
     }
   };
 
   const handleDeleteLocation = async (location) => {
-    if (!window.confirm('¿Estás seguro de eliminar la ubicación "' + location.location_name + '"?')) {
+    if (!window.confirm(`${t('scopeDashboard.alerts.confirmDeleteLocation')} "${location.location_name}"?`)) {
       return;
     }
     try {
       await scopeService.deleteLocation(location.id);
-      alert('Ubicación eliminada exitosamente');
+      alert(t('scopeDashboard.alerts.locationDeleted'));
       await loadData();
     } catch (error) {
       console.error('Error eliminando ubicación:', error);
-      alert('Error al eliminar la ubicación');
+      alert(t('scopeDashboard.alerts.locationDeleteError'));
     }
   };
 
@@ -208,7 +210,7 @@ const ScopeDashboard = () => {
   };
 
   const formatDate = (date) => {
-    if (!date) return 'No disponible';
+    if (!date) return t('scopeInsights.statement.notAvailable');
     return new Intl.DateTimeFormat('es-ES', {
       day: '2-digit',
       month: 'long',
@@ -221,10 +223,10 @@ const ScopeDashboard = () => {
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-          Definición del Alcance del SGC
+          {t('scopeDashboard.title')}
         </h1>
         <p className="text-slate-600 dark:text-slate-400">
-          ISO 4.3 - Determinación del alcance del sistema de gestión de calidad
+          {t('scopeDashboard.subtitle')}
         </p>
       </div>
 
@@ -233,7 +235,7 @@ const ScopeDashboard = () => {
         <div className="bg-white/70 dark:bg-slate-800/70 backdrop-blur-md dark:backdrop-blur-md rounded-lg shadow dark:shadow-slate-900/50 border border-white/20 dark:border-slate-700/50 p-6 transition-all duration-300 hover:shadow-md dark:hover:shadow-slate-900/70">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-slate-600 dark:text-slate-400">{t('literals.Alcances Definidos')}</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400">{t('scopeDashboard.stats.definedScopes')}</p>
               <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">
                 {stats?.total_definitions || 0}
               </p>
@@ -245,7 +247,7 @@ const ScopeDashboard = () => {
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-slate-600 dark:text-slate-400">{t('literals.Procesos')}</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400">{t('scopeDashboard.stats.processes')}</p>
               <p className="text-3xl font-bold text-green-600">
                 {processes.length}
               </p>
@@ -257,7 +259,7 @@ const ScopeDashboard = () => {
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-slate-600 dark:text-slate-400">{t('literals.Ubicaciones')}</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400">{t('scopeDashboard.stats.locations')}</p>
               <p className="text-3xl font-bold text-orange-600">
                 {locations.length}
               </p>
@@ -269,7 +271,7 @@ const ScopeDashboard = () => {
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-slate-600 dark:text-slate-400">{t('literals.Cobertura')}</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400">{t('scopeDashboard.stats.coverage')}</p>
               <p className="text-3xl font-bold text-purple-600">
                 {scopeData?.coverage_percentage?.toFixed(0) || 0}%
               </p>
@@ -289,7 +291,7 @@ const ScopeDashboard = () => {
               className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-blue-300 transition-colors"
             >
               <PlayCircle className={'mr-2 h-4 w-4 ' + (analyzing ? 'animate-spin' : '')} />
-              {analyzing ? 'Analizando...' : 'Definir Alcance con IA'}
+              {analyzing ? t('scopeDashboard.actions.analyzing') : t('scopeDashboard.actions.defineWithAi')}
             </button>
 
             <button
@@ -297,17 +299,17 @@ const ScopeDashboard = () => {
               className="flex items-center px-4 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
             >
               <RefreshCw className="mr-2 h-4 w-4" />
-              Actualizar
+              {t('common.update')}
             </button>
           </div>
 
           <div className="flex items-center space-x-4">
             <span className="text-sm text-slate-600 dark:text-slate-400">
-              Última actualización: {formatDate(scopeData?.updated_at)}
+              {t('scopeDashboard.lastUpdate')}: {formatDate(scopeData?.updated_at)}
             </span>
             <button className="flex items-center px-4 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
               <Download className="mr-2 h-4 w-4" />
-              Exportar
+              {t('common.export')}
             </button>
           </div>
         </div>
@@ -316,11 +318,11 @@ const ScopeDashboard = () => {
       {/* Configuration Panel */}
       {showConfig && (
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 mb-6 transition-colors">
-          <h3 className="text-lg font-semibold mb-4 dark:text-white">{t('literals.Configuración del Análisis')}</h3>
+          <h3 className="text-lg font-semibold mb-4 dark:text-white">{t('scopeDashboard.config.title')}</h3>
           
           <div className="mb-4">
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-              Productos y Servicios
+              {t('scopeDashboard.config.productsServices')}
             </label>
             {analysisConfig.products_services.map((product, index) => (
               <div key={index} className="flex items-center space-x-2 mb-2">
@@ -328,7 +330,7 @@ const ScopeDashboard = () => {
                   type="text"
                   value={product}
                   onChange={(e) => updateProduct(index, e.target.value)}
-                  placeholder="Ej: Consultoría en gestión de calidad"
+                  placeholder={t('scopeDashboard.config.productPlaceholder')}
                   className="flex-1 px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
                 />
                 {analysisConfig.products_services.length > 1 && (
@@ -345,7 +347,7 @@ const ScopeDashboard = () => {
               onClick={addProductField}
               className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors"
             >
-              + Agregar producto/servicio
+              + {t('scopeDashboard.config.addProductService')}
             </button>
           </div>
 
@@ -358,7 +360,7 @@ const ScopeDashboard = () => {
                 className="mr-2 accent-blue-600"
               />
               <span className="text-sm text-slate-700 dark:text-slate-300">
-                La organización realiza actividades de diseño y desarrollo
+                {t('scopeDashboard.config.hasDesignActivities')}
               </span>
             </label>
           </div>
@@ -369,13 +371,13 @@ const ScopeDashboard = () => {
               disabled={analyzing}
               className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-blue-300 transition-colors"
             >
-              {analyzing ? 'Procesando...' : 'Ejecutar Análisis'}
+              {analyzing ? t('scopeDashboard.actions.processing') : t('scopeDashboard.actions.runAnalysis')}
             </button>
             <button
               onClick={() => setShowConfig(false)}
               className="px-4 py-2 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors"
             >
-              Cancelar
+              {t('common.cancel')}
             </button>
           </div>
         </div>

@@ -9,11 +9,11 @@ const QualityObjectives = ({ objectives }) => {
       <div className="card">
         <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
           <Target className="w-6 h-6 text-green-600" />
-          Objetivos de Calidad (ISO 6.2)
+          {t('dashboard.qualityObjectives.title')}
         </h2>
         <div className="text-center py-12 text-gray-500">
           <Target className="w-12 h-12 mx-auto mb-3 text-gray-400" />
-          <p>{t('literals.No hay objetivos configurados')}</p>
+          <p>{t('dashboard.qualityObjectives.empty')}</p>
         </div>
       </div>
     );
@@ -23,7 +23,7 @@ const QualityObjectives = ({ objectives }) => {
     <div className="card">
       <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
         <Target className="w-6 h-6 text-green-600" />
-        Objetivos de Calidad (ISO 6.2)
+        {t('dashboard.qualityObjectives.title')}
       </h2>
 
       <div className="space-y-4">
@@ -52,15 +52,15 @@ const QualityObjectives = ({ objectives }) => {
               {/* Métricas */}
               <div className="grid grid-cols-3 gap-3 mb-4 text-sm">
                 <div className="text-center p-2 bg-blue-50 rounded">
-                  <p className="text-xs text-gray-600">{t('literals.Línea Base')}</p>
+                  <p className="text-xs text-gray-600">{t('dashboard.qualityObjectives.baseline')}</p>
                   <p className="font-bold text-blue-900">{obj.baseline}</p>
                 </div>
                 <div className="text-center p-2 bg-purple-50 rounded">
-                  <p className="text-xs text-gray-600">{t('literals.Actual')}</p>
+                  <p className="text-xs text-gray-600">{t('dashboard.qualityObjectives.current')}</p>
                   <p className="font-bold text-purple-900">{obj.current || '-'}</p>
                 </div>
                 <div className="text-center p-2 bg-green-50 rounded">
-                  <p className="text-xs text-gray-600">{t('literals.Meta')}</p>
+                  <p className="text-xs text-gray-600">{t('dashboard.qualityObjectives.target')}</p>
                   <p className="font-bold text-green-900">{obj.target}</p>
                 </div>
               </div>
@@ -83,7 +83,7 @@ const QualityObjectives = ({ objectives }) => {
                 </span>
                 <span className="flex items-center gap-1">
                   <Calendar className="w-3 h-3" />
-                  {obj.deadline || 'Sin fecha'}
+                  {obj.deadline || t('dashboard.qualityObjectives.noDate')}
                 </span>
               </div>
             </div>

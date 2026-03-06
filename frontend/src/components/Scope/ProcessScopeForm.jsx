@@ -103,7 +103,7 @@ const ProcessScopeForm = ({ process, scopeId, onSave, onClose }) => {
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
           {/* Información Básica */}
           <div className="bg-gray-50/70 dark:bg-slate-700/70 backdrop-blur-md rounded-lg p-4 border border-gray-100/50 dark:border-slate-600/50 transition-all duration-300">
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">{t('literals.Información del Proceso')}</h3>
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">{t('processScopeForm.sections.processInfo')}</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
@@ -182,7 +182,7 @@ const ProcessScopeForm = ({ process, scopeId, onSave, onClose }) => {
 
           {/* Entradas */}
           <div className="bg-blue-50/70 dark:bg-blue-900/20 backdrop-blur-md rounded-lg p-4 border border-blue-100/50 dark:border-blue-800/50 transition-all duration-300">
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">{t('literals.Entradas del Proceso')}</h3>
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">{t('processScopeForm.sections.inputs')}</h3>
             <div className="flex gap-2 mb-3">
               <input
                 type="text"
@@ -214,7 +214,7 @@ const ProcessScopeForm = ({ process, scopeId, onSave, onClose }) => {
 
           {/* Salidas */}
           <div className="bg-green-50/70 dark:bg-green-900/20 backdrop-blur-md rounded-lg p-4 border border-green-100/50 dark:border-green-800/50 transition-all duration-300">
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">{t('literals.Salidas del Proceso')}</h3>
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">{t('processScopeForm.sections.outputs')}</h3>
             <div className="flex gap-2 mb-3">
               <input
                 type="text"
@@ -246,7 +246,7 @@ const ProcessScopeForm = ({ process, scopeId, onSave, onClose }) => {
 
           {/* KPIs */}
           <div className="bg-purple-50/70 dark:bg-purple-900/20 backdrop-blur-md rounded-lg p-4 border border-purple-100/50 dark:border-purple-800/50 transition-all duration-300">
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">{t('literals.Indicadores (KPIs)')}</h3>
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">{t('processScopeForm.sections.kpis')}</h3>
             <div className="flex gap-2 mb-3">
               <input
                 type="text"

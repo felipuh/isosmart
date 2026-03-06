@@ -23,7 +23,7 @@ const RiskStats = ({ stats, onRefresh }) => {
               </svg>
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">{t('literals.Total Riesgos')}</p>
+                    <p className="text-sm font-medium text-gray-500">{t('riskManagement.stats.totalRisks')}</p>
               <p className="text-2xl font-semibold text-gray-900">{stats.total_risks || 0}</p>
             </div>
           </div>
@@ -37,7 +37,7 @@ const RiskStats = ({ stats, onRefresh }) => {
               </svg>
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">{t('literals.Activos')}</p>
+                    <p className="text-sm font-medium text-gray-500">{t('riskManagement.stats.active')}</p>
               <p className="text-2xl font-semibold text-gray-900">{stats.active_risks || 0}</p>
             </div>
           </div>
@@ -51,7 +51,7 @@ const RiskStats = ({ stats, onRefresh }) => {
               </svg>
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">{t('literals.Críticos')}</p>
+                    <p className="text-sm font-medium text-gray-500">{t('riskManagement.stats.critical')}</p>
               <p className="text-2xl font-semibold text-red-600">{stats.by_level?.critico || 0}</p>
             </div>
           </div>
@@ -65,7 +65,7 @@ const RiskStats = ({ stats, onRefresh }) => {
               </svg>
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">{t('literals.Mitigados')}</p>
+                    <p className="text-sm font-medium text-gray-500">{t('riskManagement.stats.mitigated')}</p>
               <p className="text-2xl font-semibold text-green-600">{stats.by_status?.mitigated || 0}</p>
             </div>
           </div>
@@ -74,12 +74,17 @@ const RiskStats = ({ stats, onRefresh }) => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">{t('literals.Distribución por Nivel')}</h3>
+                <h3 className="text-lg font-medium text-gray-900 mb-4">{t('riskManagement.stats.distributionByLevel')}</h3>
           <div className="space-y-4">
             {Object.entries(levelColors).map(([level, colors]) => {
               const count = stats.by_level?.[level] || 0;
               const percentage = stats.active_risks ? ((count / stats.active_risks) * 100).toFixed(1) : 0;
-              const labels = { critico: 'Crítico', alto: 'Alto', medio: 'Medio', bajo: 'Bajo' };
+                    const labels = {
+                      critico: t('riskManagement.levels.critico'),
+                      alto: t('riskManagement.levels.alto'),
+                      medio: t('riskManagement.levels.medio'),
+                      bajo: t('riskManagement.levels.bajo'),
+                    };
               return (
                 <div key={level}>
                   <div className="flex justify-between items-center mb-1">
@@ -96,13 +101,13 @@ const RiskStats = ({ stats, onRefresh }) => {
         </div>
 
         <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">{t('literals.Riesgos por Módulo de IA')}</h3>
+                <h3 className="text-lg font-medium text-gray-900 mb-4">{t('riskManagement.stats.byAiModule')}</h3>
           <div className="grid grid-cols-2 gap-4">
             {[
-              { source: 'SCA', label: 'Context Analyzer', icon: '🔍' },
-              { source: 'SIE', label: 'Stakeholder Intelligence', icon: '👥' },
-              { source: 'SPM', label: 'Process Mapper', icon: '⚙️' },
-              { source: 'MANUAL', label: 'Entrada Manual', icon: '✏️' }
+                    { source: 'SCA', label: t('riskManagement.stats.modules.sca'), icon: '🔍' },
+                    { source: 'SIE', label: t('riskManagement.stats.modules.sie'), icon: '👥' },
+                    { source: 'SPM', label: t('riskManagement.stats.modules.spm'), icon: '⚙️' },
+                    { source: 'MANUAL', label: t('riskManagement.stats.modules.manual'), icon: '✏️' }
             ].map(({ source, label, icon }) => (
               <div key={source} className="bg-gray-50 rounded-lg p-4 text-center">
                 <div className="text-2xl mb-2">{icon}</div>
@@ -119,7 +124,7 @@ const RiskStats = ({ stats, onRefresh }) => {
           <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
           </svg>
-          Actualizar
+                {t('riskManagement.dashboard.buttons.refresh')}
         </button>
       </div>
     </div>

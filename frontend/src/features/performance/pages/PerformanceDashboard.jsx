@@ -138,16 +138,16 @@ const PerformanceDashboard = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white">{t('literals.Evaluacion del Desempeno')}</h1>
-          <p className="text-gray-400 mt-1">{t('literals.ISO 9001:2015 - Cláusula 9')}</p>
+          <h1 className="text-3xl font-bold text-white">{t('modules.performance.dashboard.title')}</h1>
+          <p className="text-gray-400 mt-1">{t('modules.performance.dashboard.subtitle')}</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard
-          title="Indicadores"
+          title={t('modules.performance.dashboard.stats.indicators')}
           value={stats.indicators.total}
-          subtitle={`${stats.indicators.active} activos`}
+          subtitle={t('modules.performance.dashboard.stats.indicatorsActive').replace('{count}', stats.indicators.active)}
           icon="🎯"
           link="/performance/indicators"
           color="blue"
@@ -155,9 +155,11 @@ const PerformanceDashboard = () => {
         />
 
         <StatCard
-          title="Mediciones"
+          title={t('modules.performance.dashboard.stats.measurements')}
           value={stats.measurements.total}
-          subtitle={`${stats.measurements.on_target} en objetivo, ${stats.measurements.needs_attention} requieren atención`}
+          subtitle={t('modules.performance.dashboard.stats.measurementsDetail')
+            .replace('{onTarget}', stats.measurements.on_target)
+            .replace('{needsAttention}', stats.measurements.needs_attention)}
           icon="📈"
           link="/performance/measurements"
           color="green"
@@ -165,9 +167,9 @@ const PerformanceDashboard = () => {
         />
 
         <StatCard
-          title="Auditorias"
+          title={t('modules.performance.dashboard.stats.audits')}
           value={stats.audits.total}
-          subtitle={`${stats.audits.planned} planificadas`}
+          subtitle={t('modules.performance.dashboard.stats.auditsPlanned').replace('{count}', stats.audits.planned)}
           icon="🧾"
           link="/performance/audits"
           color="orange"
@@ -175,9 +177,9 @@ const PerformanceDashboard = () => {
         />
 
         <StatCard
-          title="Hallazgos"
+          title={t('modules.performance.dashboard.stats.findings')}
           value={stats.findings.total}
-          subtitle={`${stats.findings.open} abiertos`}
+          subtitle={t('modules.performance.dashboard.stats.findingsOpen').replace('{count}', stats.findings.open)}
           icon="🔎"
           link="/performance/findings"
           color="red"
@@ -186,7 +188,7 @@ const PerformanceDashboard = () => {
       </div>
 
       <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg p-6">
-        <h2 className="text-xl font-bold text-white mb-4">{t('literals.Acciones Rápidas')}</h2>
+        <h2 className="text-xl font-bold text-white mb-4">{t('modules.performance.dashboard.quickActions.title')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Link
             to="/performance/indicators"
@@ -194,8 +196,8 @@ const PerformanceDashboard = () => {
           >
             <span className="text-2xl">🎯</span>
             <div>
-              <p className="font-medium text-white">{t('literals.Nuevo Indicador')}</p>
-              <p className="text-xs text-gray-400">{t('literals.Define KPI y objetivos')}</p>
+              <p className="font-medium text-white">{t('modules.performance.dashboard.quickActions.newIndicator')}</p>
+              <p className="text-xs text-gray-400">{t('modules.performance.dashboard.quickActions.defineKpi')}</p>
             </div>
           </Link>
 
@@ -205,8 +207,8 @@ const PerformanceDashboard = () => {
           >
             <span className="text-2xl">📈</span>
             <div>
-              <p className="font-medium text-white">{t('literals.Registrar Medicion')}</p>
-              <p className="text-xs text-gray-400">{t('literals.Capturar resultados')}</p>
+              <p className="font-medium text-white">{t('modules.performance.dashboard.quickActions.registerMeasurement')}</p>
+              <p className="text-xs text-gray-400">{t('modules.performance.dashboard.quickActions.captureResults')}</p>
             </div>
           </Link>
 
@@ -216,8 +218,8 @@ const PerformanceDashboard = () => {
           >
             <span className="text-2xl">🧾</span>
             <div>
-              <p className="font-medium text-white">{t('literals.Planificar Auditoria')}</p>
-              <p className="text-xs text-gray-400">{t('literals.Programar y dar seguimiento')}</p>
+              <p className="font-medium text-white">{t('modules.performance.dashboard.quickActions.planAudit')}</p>
+              <p className="text-xs text-gray-400">{t('modules.performance.dashboard.quickActions.scheduleTracking')}</p>
             </div>
           </Link>
         </div>
@@ -230,9 +232,9 @@ const PerformanceDashboard = () => {
         >
           <div className="flex items-center space-x-3 mb-2">
             <span className="text-2xl">🧠</span>
-            <h3 className="text-lg font-bold text-white">{t('literals.Análisis')}</h3>
+            <h3 className="text-lg font-bold text-white">{t('modules.performance.dashboard.cards.analysisTitle')}</h3>
           </div>
-          <p className="text-sm text-gray-400">{t('literals.Tendencias y causas raíz')}</p>
+          <p className="text-sm text-gray-400">{t('modules.performance.dashboard.cards.analysisDesc')}</p>
         </Link>
 
         <Link
@@ -241,9 +243,9 @@ const PerformanceDashboard = () => {
         >
           <div className="flex items-center space-x-3 mb-2">
             <span className="text-2xl">📋</span>
-            <h3 className="text-lg font-bold text-white">{t('literals.Revision por la Direccion')}</h3>
+            <h3 className="text-lg font-bold text-white">{t('modules.performance.dashboard.cards.managementReviewTitle')}</h3>
           </div>
-          <p className="text-sm text-gray-400">{t('literals.Reuniones de revision gerencial')}</p>
+          <p className="text-sm text-gray-400">{t('modules.performance.dashboard.cards.managementReviewDesc')}</p>
         </Link>
 
         <Link
@@ -252,9 +254,9 @@ const PerformanceDashboard = () => {
         >
           <div className="flex items-center space-x-3 mb-2">
             <span className="text-2xl">🔎</span>
-            <h3 className="text-lg font-bold text-white">{t('literals.Hallazgos de Auditoria')}</h3>
+            <h3 className="text-lg font-bold text-white">{t('modules.performance.dashboard.cards.findingsTitle')}</h3>
           </div>
-          <p className="text-sm text-gray-400">{t('literals.Seguimiento de hallazgos')}</p>
+          <p className="text-sm text-gray-400">{t('modules.performance.dashboard.cards.findingsDesc')}</p>
         </Link>
       </div>
     </div>

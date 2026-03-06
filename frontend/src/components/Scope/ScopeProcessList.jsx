@@ -16,21 +16,21 @@ const ScopeProcessList = ({ processes, locations, loading, onAddProcess, onEditP
 
   const getProcessTypeLabel = (type) => {
     switch(type) {
-      case 'strategic': return 'Estratégico';
-      case 'operational': return 'Operativo';
-      case 'support': return 'Apoyo';
+      case 'strategic': return t('processForm.types.strategic');
+      case 'operational': return t('processForm.types.operational');
+      case 'support': return t('processForm.types.support');
       default: return type;
     }
   };
 
   const getLocationTypeLabel = (type) => {
     const types = {
-      'headquarters': 'Sede Principal',
-      'branch': 'Sucursal',
-      'warehouse': 'Almacén',
-      'plant': 'Planta',
-      'office': 'Oficina',
-      'remote': 'Remoto'
+      headquarters: t('scopeProcessList.locationTypes.headquarters'),
+      branch: t('scopeProcessList.locationTypes.branch'),
+      warehouse: t('scopeProcessList.locationTypes.warehouse'),
+      plant: t('scopeProcessList.locationTypes.plant'),
+      office: t('scopeProcessList.locationTypes.office'),
+      remote: t('scopeProcessList.locationTypes.remote')
     };
     return types[type] || type;
   };
@@ -61,13 +61,13 @@ const ScopeProcessList = ({ processes, locations, loading, onAddProcess, onEditP
       {/* Procesos */}
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 transition-colors">
         <div className="p-4 border-b dark:border-slate-700 flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-slate-800 dark:text-white">{t('literals.Procesos en Alcance')}</h3>
+          <h3 className="text-lg font-semibold text-slate-800 dark:text-white">{t('scopeProcessList.processes.title')}</h3>
           <button
             onClick={onAddProcess}
             className="flex items-center px-3 py-1.5 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
           >
             <Plus className="h-4 w-4 mr-1" />
-            Agregar
+            {t('common.add')}
           </button>
         </div>
         <div className="p-4">
@@ -90,10 +90,10 @@ const ScopeProcessList = ({ processes, locations, loading, onAddProcess, onEditP
                           </span>
                         </p>
                         {process.owner && (
-                          <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">{t('literals.Responsable: {process.owner}')}</p>
+                          <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">{t('scopeProcessList.processes.owner')}: {process.owner}</p>
                         )}
                         {!process.is_included && (
-                          <p className="text-xs text-red-600 dark:text-red-400 mt-1">{t('literals.Excluido: {process.exclusion_reason}')}</p>
+                          <p className="text-xs text-red-600 dark:text-red-400 mt-1">{t('scopeProcessList.processes.excluded')}: {process.exclusion_reason}</p>
                         )}
                       </div>
                     </div>
@@ -118,12 +118,12 @@ const ScopeProcessList = ({ processes, locations, loading, onAddProcess, onEditP
           ) : (
             <div className="text-center py-8 text-slate-500 dark:text-slate-400">
               <Settings className="h-12 w-12 mx-auto mb-3 text-slate-300 dark:text-slate-600" />
-              <p>{t('literals.No hay procesos definidos')}</p>
+              <p>{t('scopeProcessList.processes.empty')}</p>
               <button
                 onClick={onAddProcess}
                 className="mt-2 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-sm transition-colors"
               >
-                Agregar primer proceso
+                {t('scopeProcessList.processes.addFirst')}
               </button>
             </div>
           )}
@@ -133,13 +133,13 @@ const ScopeProcessList = ({ processes, locations, loading, onAddProcess, onEditP
       {/* Ubicaciones */}
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 transition-colors">
         <div className="p-4 border-b dark:border-slate-700 flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-slate-800 dark:text-white">{t('literals.Ubicaciones en Alcance')}</h3>
+          <h3 className="text-lg font-semibold text-slate-800 dark:text-white">{t('scopeProcessList.locations.title')}</h3>
           <button
             onClick={onAddLocation}
             className="flex items-center px-3 py-1.5 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 transition-colors"
           >
             <Plus className="h-4 w-4 mr-1" />
-            Agregar
+            {t('common.add')}
           </button>
         </div>
         <div className="p-4">
@@ -160,7 +160,7 @@ const ScopeProcessList = ({ processes, locations, loading, onAddProcess, onEditP
                         </span>
                       </p>
                       {location.employee_count > 0 && (
-                        <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">{location.employee_count} empleados</p>
+                        <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">{location.employee_count} {t('scopeProcessList.locations.employees')}</p>
                       )}
                     </div>
                     <div className="flex space-x-1">
@@ -184,12 +184,12 @@ const ScopeProcessList = ({ processes, locations, loading, onAddProcess, onEditP
           ) : (
             <div className="text-center py-8 text-slate-500 dark:text-slate-400">
               <Truck className="h-12 w-12 mx-auto mb-3 text-slate-300 dark:text-slate-600" />
-              <p>{t('literals.No hay ubicaciones definidas')}</p>
+              <p>{t('scopeProcessList.locations.empty')}</p>
               <button
                 onClick={onAddLocation}
                 className="mt-2 text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300 text-sm transition-colors"
               >
-                Agregar primera ubicación
+                {t('scopeProcessList.locations.addFirst')}
               </button>
             </div>
           )}

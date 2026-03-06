@@ -25,8 +25,15 @@ const LoginPage = () => {
     setError('');
     setLoading(true);
 
+    const normalizedEmail = email.trim().toLowerCase();
+    if (!normalizedEmail) {
+      setError(`${t('common.forms.email')}: ${t('common.messages.required')}`);
+      setLoading(false);
+      return;
+    }
+
     try {
-      const result = await login(email, password);
+      const result = await login(normalizedEmail, password);
 
       if (result.success) {
         // Redirigir a donde venía o al dashboard
@@ -36,7 +43,7 @@ const LoginPage = () => {
         setError(result.error);
       }
     } catch {
-      setError('Error de conexión. Intenta nuevamente.');
+      setError(t('auth.loginPage.messages.connectionError'));
     } finally {
       setLoading(false);
     }
@@ -60,8 +67,8 @@ const LoginPage = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
               </svg>
             </div>
-            <h1 className="text-2xl font-bold text-white">{t('literals.ISO Smart')}</h1>
-            <p className="text-slate-400 mt-1">{t('literals.Sistema de Gestión de Calidad')}</p>
+            <h1 className="text-2xl font-bold text-white">{t('auth.loginPage.brand.title')}</h1>
+            <p className="text-slate-400 mt-1">{t('auth.loginPage.brand.subtitle')}</p>
           </div>
 
           {/* Mensaje de Error */}
@@ -81,7 +88,7 @@ const LoginPage = () => {
             {/* Email */}
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-2">
-                Correo electrónico
+                {t('common.forms.email')}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -96,7 +103,7 @@ const LoginPage = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   className="w-full pl-10 pr-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 transition-all"
-                  placeholder="tu@email.com"
+                  placeholder={t('auth.loginPage.form.emailPlaceholder')}
                 />
               </div>
             </div>
@@ -104,7 +111,7 @@ const LoginPage = () => {
             {/* Password */}
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-slate-300 mb-2">
-                Contraseña
+                {t('common.forms.password')}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -147,10 +154,10 @@ const LoginPage = () => {
                   type="checkbox"
                   className="w-4 h-4 rounded border-slate-600 bg-slate-700 text-cyan-500 focus:ring-cyan-500/50"
                 />
-                <span>{t('literals.Recordarme')}</span>
+                <span>{t('auth.loginPage.form.rememberMe')}</span>
               </label>
               <a href="#" className="text-cyan-400 hover:text-cyan-300 transition-colors">
-                ¿Olvidaste tu contraseña?
+                {t('auth.loginPage.form.forgotPassword')}
               </a>
             </div>
 
@@ -166,11 +173,11 @@ const LoginPage = () => {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  <span>{t('literals.Iniciando sesión...')}</span>
+                  <span>{t('auth.loginPage.buttons.signingIn')}</span>
                 </>
               ) : (
                 <>
-                  <span>{t('literals.Iniciar Sesión')}</span>
+                  <span>{t('auth.loginPage.buttons.signIn')}</span>
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                   </svg>
@@ -181,7 +188,7 @@ const LoginPage = () => {
 
           {/* Footer */}
           <div className="mt-8 text-center text-sm text-slate-500">
-            <p>{t('literals.© 2026 ISO Smart by Comtech')}</p>
+            <p>{t('auth.loginPage.footer.copyright')}</p>
           </div>
         </div>
       </div>

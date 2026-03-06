@@ -150,7 +150,7 @@ const BackupExportSettings = ({ settings, onUpdate, organizationId }) => {
               <Clock className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
             </div>
             <div>
-              <p className="font-semibold text-slate-800 dark:text-white">{t('literals.Último Backup')}</p>
+              <p className="font-semibold text-slate-800 dark:text-white">{t('settings.backup.lastBackup')}</p>
               <p className="text-sm text-slate-500 dark:text-slate-400">
                 {formatDate(settings?.last_backup_at)}
               </p>
@@ -182,7 +182,7 @@ const BackupExportSettings = ({ settings, onUpdate, organizationId }) => {
               <Calendar className="w-5 h-5 text-blue-600 dark:text-blue-400" />
             </div>
             <div>
-              <p className="font-semibold text-slate-800 dark:text-white">{t('literals.Backup Automático')}</p>
+              <p className="font-semibold text-slate-800 dark:text-white">{t('settings.backup.autoBackup')}</p>
               <p className="text-sm text-slate-500 dark:text-slate-400">
                 Realizar respaldos automáticamente
               </p>
@@ -285,7 +285,7 @@ const BackupExportSettings = ({ settings, onUpdate, organizationId }) => {
       <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl flex items-start gap-3">
         <Info className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
         <div className="text-sm text-blue-700 dark:text-blue-300">
-          <p className="font-medium mb-1">{t('literals.Sobre los respaldos')}</p>
+          <p className="font-medium mb-1">{t('settings.backup.aboutBackups')}</p>
           <p>
             Los backups se almacenan de forma segura en el servidor. Te recomendamos realizar 
             backups regulares y descargar una copia local periódicamente para mayor seguridad.

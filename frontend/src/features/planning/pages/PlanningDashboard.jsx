@@ -141,44 +141,46 @@ const PlanningDashboard = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white">{t('literals.Planificación')}</h1>
-          <p className="text-gray-400 mt-1">{t('literals.ISO 9001:2015 - Cláusula 6')}</p>
+          <h1 className="text-3xl font-bold text-white">{t('modules.planning.dashboard.title')}</h1>
+          <p className="text-gray-400 mt-1">{t('modules.planning.dashboard.subtitle')}</p>
         </div>
       </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard
-          title="Riesgos"
+          title={t('modules.planning.dashboard.stats.risks')}
           value={stats.risks.total}
-          subtitle={`${stats.risks.high} de alta prioridad`}
+          subtitle={t('modules.planning.dashboard.stats.risksDetail').replace('{count}', stats.risks.high)}
           icon="⚠️"
           link="/planning/risks-opportunities"
           color="red"
         />
 
         <StatCard
-          title="Oportunidades"
+          title={t('modules.planning.dashboard.stats.opportunities')}
           value={stats.opportunities.total}
-          subtitle="Identificadas y en seguimiento"
+          subtitle={t('modules.planning.dashboard.stats.opportunitiesDetail')}
           icon="🎯"
           link="/planning/risks-opportunities"
           color="green"
         />
 
         <StatCard
-          title="Objetivos de Calidad"
+          title={t('modules.planning.dashboard.stats.objectives')}
           value={stats.objectives.total}
-          subtitle={`${stats.objectives.active} activos, ${stats.objectives.at_risk} en riesgo`}
+          subtitle={t('modules.planning.dashboard.stats.objectivesDetail')
+            .replace('{active}', stats.objectives.active)
+            .replace('{atRisk}', stats.objectives.at_risk)}
           icon="🎪"
           link="/planning/objectives"
           color="blue"
         />
 
         <StatCard
-          title="Acciones"
+          title={t('modules.planning.dashboard.stats.actions')}
           value={stats.actions.total}
-          subtitle={`${stats.actions.overdue} vencidas`}
+          subtitle={t('modules.planning.dashboard.stats.actionsDetail').replace('{count}', stats.actions.overdue)}
           icon="✅"
           link="/planning/actions"
           color="purple"
@@ -189,31 +191,31 @@ const PlanningDashboard = () => {
       <div className="bg-gradient-to-br from-orange-500/10 to-orange-600/5 backdrop-blur-sm border border-orange-500/20 rounded-lg p-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-xl font-bold text-white">{t('literals.Control de Cambios')}</h2>
-            <p className="text-sm text-gray-400">{t('literals.Gestión de cambios al SGC')}</p>
+            <h2 className="text-xl font-bold text-white">{t('modules.planning.dashboard.changeControl.title')}</h2>
+            <p className="text-sm text-gray-400">{t('modules.planning.dashboard.changeControl.subtitle')}</p>
           </div>
           <Link
             to="/planning/changes"
             className="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition-all"
           >
-            Ver Todos
+            {t('modules.planning.dashboard.changeControl.viewAll')}
           </Link>
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div className="bg-gray-800/30 rounded-lg p-4">
             <p className="text-2xl font-bold text-orange-400">{stats.changes.total}</p>
-            <p className="text-sm text-gray-400">{t('literals.Total de cambios')}</p>
+            <p className="text-sm text-gray-400">{t('modules.planning.dashboard.changeControl.totalChanges')}</p>
           </div>
           <div className="bg-gray-800/30 rounded-lg p-4">
             <p className="text-2xl font-bold text-yellow-400">{stats.changes.pending}</p>
-            <p className="text-sm text-gray-400">{t('literals.Pendientes de aprobación')}</p>
+            <p className="text-sm text-gray-400">{t('modules.planning.dashboard.changeControl.pendingApproval')}</p>
           </div>
         </div>
       </div>
 
       {/* Quick Actions */}
       <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg p-6">
-        <h2 className="text-xl font-bold text-white mb-4">{t('literals.Acciones Rápidas')}</h2>
+        <h2 className="text-xl font-bold text-white mb-4">{t('modules.planning.dashboard.quickActions.title')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Link
             to="/planning/risks-opportunities/new"
@@ -221,8 +223,8 @@ const PlanningDashboard = () => {
           >
             <span className="text-2xl">⚠️</span>
             <div>
-              <p className="font-medium text-white">{t('literals.Nuevo Riesgo/Oportunidad')}</p>
-              <p className="text-xs text-gray-400">{t('literals.Identificar y evaluar')}</p>
+              <p className="font-medium text-white">{t('modules.planning.dashboard.quickActions.newRiskOpportunity')}</p>
+              <p className="text-xs text-gray-400">{t('modules.planning.dashboard.quickActions.identifyAndAssess')}</p>
             </div>
           </Link>
 
@@ -232,8 +234,8 @@ const PlanningDashboard = () => {
           >
             <span className="text-2xl">🎯</span>
             <div>
-              <p className="font-medium text-white">{t('literals.Nuevo Objetivo')}</p>
-              <p className="text-xs text-gray-400">{t('literals.Crear objetivo SMART')}</p>
+              <p className="font-medium text-white">{t('modules.planning.dashboard.quickActions.newObjective')}</p>
+              <p className="text-xs text-gray-400">{t('modules.planning.dashboard.quickActions.createSmartObjective')}</p>
             </div>
           </Link>
 
@@ -243,8 +245,8 @@ const PlanningDashboard = () => {
           >
             <span className="text-2xl">🔄</span>
             <div>
-              <p className="font-medium text-white">{t('literals.Solicitar Cambio')}</p>
-              <p className="text-xs text-gray-400">{t('literals.Control de cambios SGC')}</p>
+              <p className="font-medium text-white">{t('modules.planning.dashboard.quickActions.requestChange')}</p>
+              <p className="text-xs text-gray-400">{t('modules.planning.dashboard.quickActions.changeControlQms')}</p>
             </div>
           </Link>
         </div>
