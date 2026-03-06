@@ -5488,14 +5488,51 @@ const MESSAGES = {
       theme: {
         title: 'Appearance',
         subtitle: 'Customize the visual interface',
+        colorThemeTitle: 'Color Theme',
         lightMode: 'Light Mode',
         darkMode: 'Dark Mode',
+        systemMode: 'Automatic',
+        optionDescriptions: {
+          light: 'Bright and clear interface for well-lit environments',
+          dark: 'Reduces eye strain in low-light environments',
+          system: 'Automatically adapts to your operating system settings',
+        },
+        currentThemeLabel: 'Current theme: {theme}',
+        systemFollowing: 'Following your system settings',
+        manualConfiguration: 'Manual configuration',
         language: 'Language',
         languageDesc: 'Select the interface language',
+        languageOptions: {
+          esLatam: 'Spanish (LATAM)',
+          en: 'English',
+          pt: 'Portuguese',
+        },
+        messages: {
+          languageChanged: 'Language changed to {language}',
+          languageChangeError: 'Error changing language',
+        },
+        visualFeaturesTitle: 'Visual Features',
         features: {
           glassmorphism: 'Glassmorphism Design',
+          glassmorphismDescription: 'Transparency and blur effects on cards',
           animations: 'Animations',
+          animationsDescription: 'Smooth transitions and micro-interactions',
           typography: 'Typography',
+          typographyDescription: 'Inter - modern and readable',
+        },
+        defaultLabel: 'Default',
+        paletteTitle: 'System Color Palette',
+        palette: {
+          primary: 'Primary',
+          secondary: 'Secondary',
+          success: 'Success',
+          warning: 'Warning',
+          error: 'Error',
+          info: 'Info',
+          accent: 'Accent',
+          pink: 'Pink',
+          neutral: 'Neutral',
+          violet: 'Violet',
         },
       },
       iso: {
@@ -5551,15 +5588,134 @@ const MESSAGES = {
       },
       backup: {
         title: 'Backup and Export',
-        subtitle: 'Download system data',
+        subtitle: 'Back up and export your system data',
         createBackup: 'Create Backup',
         exportData: 'Export Data',
         lastBackup: 'Last Backup',
         autoBackup: 'Automatic Backup',
+        autoBackupDescription: 'Run backups automatically',
+        backupConfigTitle: 'Backup Settings',
+        backupFrequency: 'Backup Frequency',
+        exportDescription: 'Download data in JSON format for external analysis or migration.',
+        never: 'Never',
         aboutBackups: 'About backups',
+        infoDescription: 'Backups are securely stored on the server. We recommend running regular backups and downloading a local copy periodically for extra safety.',
+        frequencyOptions: {
+          daily: 'Daily',
+          weekly: 'Weekly',
+          monthly: 'Monthly',
+        },
+        exportOptions: {
+          all: {
+            title: 'Full Export',
+            description: 'All system data (risks, objectives, stakeholders, documents, processes)',
+          },
+          risks: {
+            title: 'Risk Matrix',
+            description: 'All identified risks and their current status',
+          },
+          objectives: {
+            title: 'Quality Objectives',
+            description: 'Objectives, indicators, and progress',
+          },
+          stakeholders: {
+            title: 'Stakeholders',
+            description: 'Stakeholder profiles and expectations',
+          },
+          processes: {
+            title: 'Process Maps',
+            description: 'Processes, KPIs, and diagrams',
+          },
+        },
+        actions: {
+          backingUp: 'Backing up...',
+          backupNow: 'Backup Now',
+          exporting: 'Exporting...',
+          downloadJson: 'Download JSON',
+        },
+        messages: {
+          exportSuccess: 'Data exported successfully ({type})',
+          exportError: 'Error exporting data',
+          backupSuccess: 'Backup completed successfully',
+          backupError: 'Error creating backup',
+        },
       },
       aiModules: {
         autoAnalysis: 'Automatic Analysis',
+        title: 'Artificial Intelligence Modules',
+        subtitle: 'Configure AI modules that enhance your QMS',
+        banner: {
+          activeModules: '{count} of 4 modules active',
+          clauseCoverage: 'ISO 9001 Clause 4 coverage: {percentage}%',
+        },
+        modules: {
+          sca: {
+            name: 'Smart Context Analyzer (SCA)',
+            description: 'Automatically analyzes the organization\'s internal and external context according to ISO 4.1',
+            features: {
+              swot: 'Automatic SWOT analysis',
+              risks: 'Contextual risk detection',
+              trends: 'Trend monitoring',
+            },
+          },
+          sie: {
+            name: 'Stakeholder Intelligence Engine (SIE)',
+            description: 'Identifies and monitors stakeholders and their expectations according to ISO 4.2',
+            features: {
+              matrix: 'Power/interest matrix',
+              expectations: 'Expectation tracking',
+              alerts: 'Change alerts',
+            },
+          },
+          asb: {
+            name: 'AI Scope Builder (ASB)',
+            description: 'Automatically defines and audits QMS scope according to ISO 4.3',
+            features: {
+              scope: 'Scope definition',
+              requirements: 'Requirement assessment',
+              exclusions: 'Exclusion management',
+            },
+          },
+          spm: {
+            name: 'Smart Process Mapper (SPM)',
+            description: 'Generates and maintains process maps with KPIs and risks according to ISO 4.4',
+            features: {
+              mapping: 'Process mapping',
+              kpis: 'KPI identification',
+              interactions: 'Interaction analysis',
+            },
+          },
+        },
+        frequency: {
+          daily: {
+            label: 'Daily',
+            description: 'Run analysis every day',
+          },
+          weekly: {
+            label: 'Weekly',
+            description: 'Run analysis every week',
+          },
+          monthly: {
+            label: 'Monthly',
+            description: 'Run analysis every month',
+          },
+          manual: {
+            label: 'Manual',
+            description: 'Run only when requested',
+          },
+        },
+        automation: {
+          title: 'Automation Settings',
+          autoAnalysisDescription: 'Run AI analyses automatically according to the selected frequency',
+          frequencyLabel: 'Analysis Frequency',
+          infoDescription: 'Automatic analyses run in the background and keep dashboards updated with fresh information. You can still run manual analyses at any time from each module.',
+        },
+        actions: {
+          saveConfiguration: 'Save Configuration',
+        },
+        messages: {
+          errorSaving: 'Error saving configuration',
+        },
       },
       users: {
         title: 'Users and Access',
@@ -9011,14 +9167,51 @@ const MESSAGES = {
       theme: {
         title: 'Aparência',
         subtitle: 'Personalize a interface visual',
+        colorThemeTitle: 'Tema de Cor',
         lightMode: 'Modo Claro',
         darkMode: 'Modo Escuro',
+        systemMode: 'Automático',
+        optionDescriptions: {
+          light: 'Interface clara e brilhante para ambientes iluminados',
+          dark: 'Reduz a fadiga visual em ambientes com pouca luz',
+          system: 'Adapta-se automaticamente às configurações do seu sistema operacional',
+        },
+        currentThemeLabel: 'Tema atual: {theme}',
+        systemFollowing: 'Seguindo a configuração do seu sistema',
+        manualConfiguration: 'Configuração manual',
         language: 'Idioma',
         languageDesc: 'Selecione o idioma da interface',
+        languageOptions: {
+          esLatam: 'Espanhol (LATAM)',
+          en: 'Inglês',
+          pt: 'Português',
+        },
+        messages: {
+          languageChanged: 'Idioma alterado para {language}',
+          languageChangeError: 'Erro ao alterar o idioma',
+        },
+        visualFeaturesTitle: 'Características Visuais',
         features: {
           glassmorphism: 'Design Glassmorphism',
+          glassmorphismDescription: 'Efeitos de transparência e blur nos cartões',
           animations: 'Animações',
+          animationsDescription: 'Transições suaves e microinterações',
           typography: 'Tipografia',
+          typographyDescription: 'Inter - moderna e legível',
+        },
+        defaultLabel: 'Padrão',
+        paletteTitle: 'Paleta de Cores do Sistema',
+        palette: {
+          primary: 'Principal',
+          secondary: 'Secundário',
+          success: 'Sucesso',
+          warning: 'Aviso',
+          error: 'Erro',
+          info: 'Info',
+          accent: 'Acento',
+          pink: 'Rosa',
+          neutral: 'Neutro',
+          violet: 'Violeta',
         },
       },
       iso: {
@@ -9074,15 +9267,134 @@ const MESSAGES = {
       },
       backup: {
         title: 'Backup e Exportação',
-        subtitle: 'Baixar dados do sistema',
+        subtitle: 'Faça backup e exporte os dados do seu sistema',
         createBackup: 'Criar Backup',
         exportData: 'Exportar Dados',
         lastBackup: 'Último Backup',
         autoBackup: 'Backup Automático',
+        autoBackupDescription: 'Executar backups automaticamente',
+        backupConfigTitle: 'Configuração de Backup',
+        backupFrequency: 'Frequência de Backup',
+        exportDescription: 'Baixe os dados em formato JSON para análise externa ou migração.',
+        never: 'Nunca',
         aboutBackups: 'Sobre os backups',
+        infoDescription: 'Os backups são armazenados com segurança no servidor. Recomendamos realizar backups regulares e baixar uma cópia local periodicamente para maior segurança.',
+        frequencyOptions: {
+          daily: 'Diário',
+          weekly: 'Semanal',
+          monthly: 'Mensal',
+        },
+        exportOptions: {
+          all: {
+            title: 'Exportação Completa',
+            description: 'Todos os dados do sistema (riscos, objetivos, stakeholders, documentos, processos)',
+          },
+          risks: {
+            title: 'Matriz de Riscos',
+            description: 'Todos os riscos identificados e seu status atual',
+          },
+          objectives: {
+            title: 'Objetivos da Qualidade',
+            description: 'Objetivos, indicadores e progresso',
+          },
+          stakeholders: {
+            title: 'Partes Interessadas',
+            description: 'Perfis de stakeholders e expectativas',
+          },
+          processes: {
+            title: 'Mapas de Processos',
+            description: 'Processos, KPIs e diagramas',
+          },
+        },
+        actions: {
+          backingUp: 'Fazendo backup...',
+          backupNow: 'Fazer Backup Agora',
+          exporting: 'Exportando...',
+          downloadJson: 'Baixar JSON',
+        },
+        messages: {
+          exportSuccess: 'Dados exportados com sucesso ({type})',
+          exportError: 'Erro ao exportar dados',
+          backupSuccess: 'Backup realizado com sucesso',
+          backupError: 'Erro ao realizar backup',
+        },
       },
       aiModules: {
         autoAnalysis: 'Análise Automática',
+        title: 'Módulos de Inteligência Artificial',
+        subtitle: 'Configure os módulos de IA que potencializam seu SGQ',
+        banner: {
+          activeModules: '{count} de 4 módulos ativos',
+          clauseCoverage: 'Cobertura ISO 9001 Cláusula 4: {percentage}%',
+        },
+        modules: {
+          sca: {
+            name: 'Smart Context Analyzer (SCA)',
+            description: 'Analisa automaticamente o contexto interno e externo da organização conforme ISO 4.1',
+            features: {
+              swot: 'Análise SWOT automática',
+              risks: 'Detecção de riscos contextuais',
+              trends: 'Monitoramento de tendências',
+            },
+          },
+          sie: {
+            name: 'Stakeholder Intelligence Engine (SIE)',
+            description: 'Identifica e monitora as partes interessadas e suas expectativas conforme ISO 4.2',
+            features: {
+              matrix: 'Matriz poder/interesse',
+              expectations: 'Acompanhamento de expectativas',
+              alerts: 'Alertas de mudanças',
+            },
+          },
+          asb: {
+            name: 'AI Scope Builder (ASB)',
+            description: 'Define e audita automaticamente o escopo do SGQ conforme ISO 4.3',
+            features: {
+              scope: 'Definição de escopo',
+              requirements: 'Avaliação de requisitos',
+              exclusions: 'Gestão de exclusões',
+            },
+          },
+          spm: {
+            name: 'Smart Process Mapper (SPM)',
+            description: 'Gera e mantém mapas de processos com KPIs e riscos conforme ISO 4.4',
+            features: {
+              mapping: 'Mapeamento de processos',
+              kpis: 'Identificação de KPIs',
+              interactions: 'Análise de interações',
+            },
+          },
+        },
+        frequency: {
+          daily: {
+            label: 'Diário',
+            description: 'Executar análise todos os dias',
+          },
+          weekly: {
+            label: 'Semanal',
+            description: 'Executar análise toda semana',
+          },
+          monthly: {
+            label: 'Mensal',
+            description: 'Executar análise todo mês',
+          },
+          manual: {
+            label: 'Manual',
+            description: 'Executar apenas quando solicitado',
+          },
+        },
+        automation: {
+          title: 'Configuração de Automação',
+          autoAnalysisDescription: 'Executar análises de IA automaticamente conforme a frequência definida',
+          frequencyLabel: 'Frequência de Análise',
+          infoDescription: 'As análises automáticas são executadas em segundo plano e atualizam os dashboards com dados recentes. Você pode executar análises manuais a qualquer momento em cada módulo.',
+        },
+        actions: {
+          saveConfiguration: 'Salvar Configuração',
+        },
+        messages: {
+          errorSaving: 'Erro ao salvar a configuração',
+        },
       },
       users: {
         title: 'Usuários e Acesso',
