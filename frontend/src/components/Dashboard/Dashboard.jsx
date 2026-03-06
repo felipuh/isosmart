@@ -265,11 +265,10 @@ const Dashboard = () => {
   const modules = [
     {
       id: 'sca',
-      name: t('modules.leadership.title'),
-      nameKey: 'modules.leadership.title',
+      nameKey: 'dashboard.main.modulesCatalog.sca.name',
       code: 'SCA',
       iso: 'ISO 4.1',
-      descriptionKey: 'modules.leadership.subtitle',
+      descriptionKey: 'dashboard.main.modulesCatalog.sca.description',
       icon: TrendingUp,
       color: 'bg-blue-500',
       bgColor: 'bg-blue-50',
@@ -277,7 +276,11 @@ const Dashboard = () => {
       textColor: 'text-blue-700',
       route: '/context',
       status: 'active',
-      featuresKey: ['modules.context.title', 'modules.context.externalFactors', 'modules.context.internalFactors']
+      featuresKey: [
+        'dashboard.main.modulesCatalog.sca.features.swot',
+        'dashboard.main.modulesCatalog.sca.features.risks',
+        'dashboard.main.modulesCatalog.sca.features.trends',
+      ]
     },
     {
       id: 'sie',

@@ -67,7 +67,7 @@ const ScopeProcessList = ({ processes, locations, loading, onAddProcess, onEditP
             className="flex items-center px-3 py-1.5 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
           >
             <Plus className="h-4 w-4 mr-1" />
-            {t('common.add')}
+            {t('common.buttons.add')}
           </button>
         </div>
         <div className="p-4">
@@ -139,7 +139,7 @@ const ScopeProcessList = ({ processes, locations, loading, onAddProcess, onEditP
             className="flex items-center px-3 py-1.5 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 transition-colors"
           >
             <Plus className="h-4 w-4 mr-1" />
-            {t('common.add')}
+            {t('common.buttons.add')}
           </button>
         </div>
         <div className="p-4">
