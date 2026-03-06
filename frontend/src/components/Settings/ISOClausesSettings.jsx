@@ -31,13 +31,13 @@ const ISOClausesSettings = () => {
   }, {});
 
   const sectionNames = {
-    '4': 'Contexto de la Organización',
-    '5': 'Liderazgo',
-    '6': 'Planificación',
-    '7': 'Apoyo',
-    '8': 'Operación',
-    '9': 'Evaluación del Desempeño',
-    '10': 'Mejora',
+    '4': t('settings.iso.sectionNames.4'),
+    '5': t('settings.iso.sectionNames.5'),
+    '6': t('settings.iso.sectionNames.6'),
+    '7': t('settings.iso.sectionNames.7'),
+    '8': t('settings.iso.sectionNames.8'),
+    '9': t('settings.iso.sectionNames.9'),
+    '10': t('settings.iso.sectionNames.10'),
   };
 
   const loadClauses = useCallback(async () => {
@@ -51,12 +51,12 @@ const ISOClausesSettings = () => {
       const data = await settingsService.getISOClauses(organizationId, selectedStandard);
       setClauses(data);
     } catch (err) {
-      console.error('Error cargando cláusulas:', err);
-      setError('Error al cargar las cláusulas');
+      console.error('Error loading clauses:', err);
+      setError(t('settings.iso.messages.errorLoadingClauses'));
     } finally {
       setLoading(false);
     }
-  }, [organizationId, selectedStandard]);
+  }, [organizationId, selectedStandard, t]);
 
   useEffect(() => {
     loadClauses();
@@ -72,11 +72,12 @@ const ISOClausesSettings = () => {
       await settingsService.updateStandards(organizationId, [selectedStandard]);
       
       await loadClauses();
-      setSuccess(`Cláusulas ${selectedStandard} inicializadas correctamente`);
+      const standardName = t(`settings.iso.standards.${selectedStandard}`);
+      setSuccess(t('settings.iso.messages.initializedSuccess').replace('{standard}', standardName));
       setTimeout(() => setSuccess(null), 3000);
     } catch (error) {
-      console.error('Error al inicializar cláusulas:', error);
-      setError('Error al inicializar las cláusulas');
+      console.error('Error initializing clauses:', error);
+      setError(t('settings.iso.messages.errorInitializingClauses'));
     } finally {
       setSaving(false);
     }
@@ -88,11 +89,11 @@ const ISOClausesSettings = () => {
       await settingsService.updateISOClause(clauseId, updates);
       setClauses(prev => prev.map(c => c.id === clauseId ? { ...c, ...updates } : c));
       setEditingClause(null);
-      setSuccess('Cláusula actualizada correctamente');
+      setSuccess(t('settings.iso.messages.clauseUpdated'));
       setTimeout(() => setSuccess(null), 3000);
     } catch (error) {
-      console.error('Error al actualizar cláusula:', error);
-      setError('Error al actualizar la cláusula');
+      console.error('Error updating clause:', error);
+      setError(t('settings.iso.messages.errorUpdatingClause'));
     } finally {
       setSaving(false);
     }
@@ -108,6 +109,7 @@ const ISOClausesSettings = () => {
 
   const applicableCount = clauses.filter(c => c.is_applicable).length;
   const excludedCount = clauses.filter(c => !c.is_applicable).length;
+  const selectedStandardLabel = t(`settings.iso.standards.${selectedStandard}`);
 
   if (loading) {
     return (
@@ -127,10 +129,10 @@ const ISOClausesSettings = () => {
           </div>
           <div>
             <h2 className="text-xl font-bold text-slate-800 dark:text-white">
-              Parámetros ISO 9001:2015
+              {t('settings.iso.title')}
             </h2>
             <p className="text-sm text-slate-500 dark:text-slate-400">
-              Configura la aplicabilidad de las cláusulas
+              {t('settings.iso.clausesSubtitle')}
             </p>
           </div>
         </div>
@@ -159,7 +161,7 @@ const ISOClausesSettings = () => {
               ) : (
                 <RefreshCw className="w-4 h-4" />
               )}
-              Inicializar Cláusulas
+              {t('settings.iso.initialize')}
             </button>
           )}
         </div>
@@ -213,10 +215,14 @@ const ISOClausesSettings = () => {
                     </div>
                     <div className="text-left">
                       <h3 className="font-bold text-slate-800 dark:text-white">
-                        Cláusula {section}: {sectionNames[section]}
+                        {t('settings.iso.sectionTitle')
+                          .replace('{section}', section)
+                          .replace('{name}', sectionNames[section])}
                       </h3>
                       <p className="text-sm text-slate-500 dark:text-slate-400">
-                        {sectionClauses.filter(c => c.is_applicable).length} de {sectionClauses.length} aplicables
+                        {t('settings.iso.sectionApplicableCount')
+                          .replace('{applicable}', sectionClauses.filter(c => c.is_applicable).length)
+                          .replace('{total}', sectionClauses.length)}
                       </p>
                     </div>
                   </div>
@@ -250,10 +256,10 @@ const ISOClausesSettings = () => {
         <div className="text-center py-12">
           <FileCheck className="w-16 h-16 text-slate-300 dark:text-slate-600 mx-auto mb-4" />
           <h3 className="text-lg font-semibold text-slate-800 dark:text-white mb-2">
-            No hay cláusulas configuradas
+            {t('settings.iso.noClausesConfigured')}
           </h3>
           <p className="text-slate-500 dark:text-slate-400 mb-6">
-            Inicializa las cláusulas ISO 9001:2015 para comenzar a configurar tu SGC
+            {t('settings.iso.noClausesDescription').replace('{standard}', selectedStandardLabel)}
           </p>
           <button
             onClick={handleInitialize}
@@ -265,7 +271,7 @@ const ISOClausesSettings = () => {
             ) : (
               <RefreshCw className="w-5 h-5" />
             )}
-            Inicializar ISO 9001:2015
+            {t('settings.iso.initializeSelected').replace('{standard}', selectedStandardLabel)}
           </button>
         </div>
       )}
@@ -275,11 +281,7 @@ const ISOClausesSettings = () => {
         <Info className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
         <div className="text-sm text-blue-700 dark:text-blue-300">
           <p className="font-medium mb-1">{t('settings.iso.aboutExclusions')}</p>
-          <p>
-            Según ISO 9001:2015, solo es posible excluir requisitos que no afecten la capacidad 
-            o responsabilidad de la organización de asegurar la conformidad de sus productos y servicios. 
-            Las exclusiones deben estar justificadas.
-          </p>
+          <p>{t('settings.iso.infoDescription')}</p>
         </div>
       </div>
     </div>
@@ -288,6 +290,7 @@ const ISOClausesSettings = () => {
 
 // Componente de fila de cláusula
 const ClauseRow = ({ clause, isEditing, onEdit, onSave, onCancel }) => {
+  const { t } = useI18n();
   const [formData, setFormData] = useState({
     is_applicable: clause.is_applicable,
     exclusion_justification: clause.exclusion_justification || '',
@@ -328,28 +331,28 @@ const ClauseRow = ({ clause, isEditing, onEdit, onSave, onCancel }) => {
           {!formData.is_applicable && (
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                Justificación de Exclusión
+                {t('settings.iso.exclusionJustificationLabel')}
               </label>
               <textarea
                 value={formData.exclusion_justification}
                 onChange={(e) => setFormData(prev => ({ ...prev, exclusion_justification: e.target.value }))}
                 rows={2}
                 className="w-full px-4 py-2 bg-white dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-lg text-slate-800 dark:text-white resize-none"
-                placeholder="Explique por qué esta cláusula no aplica..."
+                placeholder={t('settings.iso.exclusionJustificationPlaceholder')}
               />
             </div>
           )}
           
           <div>
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-              Responsable
+              {t('settings.iso.responsibleLabel')}
             </label>
             <input
               type="text"
               value={formData.responsible}
               onChange={(e) => setFormData(prev => ({ ...prev, responsible: e.target.value }))}
               className="w-full px-4 py-2 bg-white dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-lg text-slate-800 dark:text-white"
-              placeholder="Nombre del responsable"
+              placeholder={t('settings.iso.responsiblePlaceholder')}
             />
           </div>
           
@@ -358,14 +361,14 @@ const ClauseRow = ({ clause, isEditing, onEdit, onSave, onCancel }) => {
               onClick={onCancel}
               className="px-4 py-2 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-lg"
             >
-              Cancelar
+              {t('common.buttons.cancel')}
             </button>
             <button
               onClick={handleSave}
               className="px-4 py-2 bg-teal-500 hover:bg-teal-600 text-white rounded-lg flex items-center gap-2"
             >
               <Save className="w-4 h-4" />
-              Guardar
+              {t('common.buttons.save')}
             </button>
           </div>
         </div>
@@ -385,7 +388,7 @@ const ClauseRow = ({ clause, isEditing, onEdit, onSave, onCancel }) => {
         <p className="font-medium text-slate-800 dark:text-white">{clause.clause_name}</p>
         {clause.responsible && (
           <p className="text-sm text-slate-500 dark:text-slate-400">
-            Responsable: {clause.responsible}
+            {t('settings.iso.responsiblePrefix').replace('{name}', clause.responsible)}
           </p>
         )}
       </div>
@@ -394,12 +397,12 @@ const ClauseRow = ({ clause, isEditing, onEdit, onSave, onCancel }) => {
         {clause.is_applicable ? (
           <span className="flex items-center gap-1.5 px-3 py-1 bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 rounded-full text-sm font-medium">
             <Check className="w-4 h-4" />
-            Aplicable
+            {t('settings.iso.applicableStatus')}
           </span>
         ) : (
           <span className="flex items-center gap-1.5 px-3 py-1 bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300 rounded-full text-sm font-medium">
             <X className="w-4 h-4" />
-            Excluida
+            {t('settings.iso.excludedStatus')}
           </span>
         )}
         

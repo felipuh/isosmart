@@ -23,48 +23,48 @@ const NotificationSettings = ({ settings, onUpdate, organizationId }) => {
   const notifications = [
     {
       key: 'notify_risk_critical',
-      title: 'Riesgos Críticos',
-      description: 'Recibir alertas cuando se detecten riesgos de nivel crítico',
+      title: t('settings.notifications.types.criticalRisk.title'),
+      description: t('settings.notifications.types.criticalRisk.description'),
       icon: AlertTriangle,
       color: 'text-red-500',
       bgColor: 'bg-red-100 dark:bg-red-900/30',
-      priority: 'Alta'
+      priority: 'high'
     },
     {
       key: 'notify_risk_high',
-      title: 'Riesgos Altos',
-      description: 'Recibir alertas cuando se detecten riesgos de nivel alto',
+      title: t('settings.notifications.types.highRisk.title'),
+      description: t('settings.notifications.types.highRisk.description'),
       icon: AlertTriangle,
       color: 'text-amber-500',
       bgColor: 'bg-amber-100 dark:bg-amber-900/30',
-      priority: 'Media'
+      priority: 'medium'
     },
     {
       key: 'notify_objective_deadline',
-      title: 'Vencimiento de Objetivos',
-      description: 'Alertas cuando un objetivo de calidad está próximo a vencer',
+      title: t('settings.notifications.types.objectiveDeadline.title'),
+      description: t('settings.notifications.types.objectiveDeadline.description'),
       icon: Target,
       color: 'text-blue-500',
       bgColor: 'bg-blue-100 dark:bg-blue-900/30',
-      priority: 'Media'
+      priority: 'medium'
     },
     {
       key: 'notify_document_upload',
-      title: 'Nuevos Documentos',
-      description: 'Notificar cuando se suban nuevos documentos al sistema',
+      title: t('settings.notifications.types.newDocuments.title'),
+      description: t('settings.notifications.types.newDocuments.description'),
       icon: FileText,
       color: 'text-emerald-500',
       bgColor: 'bg-emerald-100 dark:bg-emerald-900/30',
-      priority: 'Baja'
+      priority: 'low'
     },
     {
       key: 'notify_stakeholder_change',
-      title: 'Cambios en Stakeholders',
-      description: 'Alertas cuando cambien las expectativas de partes interesadas',
+      title: t('settings.notifications.types.stakeholderChanges.title'),
+      description: t('settings.notifications.types.stakeholderChanges.description'),
       icon: Users,
       color: 'text-violet-500',
       bgColor: 'bg-violet-100 dark:bg-violet-900/30',
-      priority: 'Media'
+      priority: 'medium'
     },
   ];
 
@@ -84,7 +84,7 @@ const NotificationSettings = ({ settings, onUpdate, organizationId }) => {
       
       setTimeout(() => setSuccess(false), 3000);
     } catch (err) {
-      setError('Error al guardar la configuración');
+      setError(t('settings.notifications.messages.errorSaving'));
       console.error(err);
     } finally {
       setSaving(false);
@@ -102,10 +102,10 @@ const NotificationSettings = ({ settings, onUpdate, organizationId }) => {
         </div>
         <div>
           <h2 className="text-xl font-bold text-slate-800 dark:text-white">
-            Configuración de Notificaciones
+            {t('settings.notifications.title')}
           </h2>
           <p className="text-sm text-slate-500 dark:text-slate-400">
-            Configura qué alertas deseas recibir del sistema
+            {t('settings.notifications.subtitle')}
           </p>
         </div>
       </div>
@@ -133,10 +133,14 @@ const NotificationSettings = ({ settings, onUpdate, organizationId }) => {
           </div>
           <div>
             <p className="font-semibold text-slate-800 dark:text-white">
-              {enabledCount} de {notifications.length} notificaciones activas
+              {t('settings.notifications.summary.activeCount')
+                .replace('{enabled}', enabledCount)
+                .replace('{total}', notifications.length)}
             </p>
             <p className="text-sm text-slate-500 dark:text-slate-400">
-              {enabledCount === 0 ? 'No recibirás ninguna alerta' : 'Recibirás alertas según tu configuración'}
+              {enabledCount === 0
+                ? t('settings.notifications.summary.none')
+                : t('settings.notifications.summary.configured')}
             </p>
           </div>
         </div>
@@ -146,12 +150,12 @@ const NotificationSettings = ({ settings, onUpdate, organizationId }) => {
       <div className="mb-8 p-6 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-700/30 dark:to-slate-800/30 rounded-2xl border border-slate-200 dark:border-slate-700">
         <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-4 flex items-center gap-2">
           <Mail className="w-5 h-5 text-indigo-500" />
-          Email para Notificaciones
+          {t('settings.notifications.email.title')}
         </h3>
         
         <div className="space-y-2">
           <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-            Dirección de correo electrónico
+            {t('settings.notifications.email.label')}
           </label>
           <div className="relative">
             <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
@@ -159,12 +163,12 @@ const NotificationSettings = ({ settings, onUpdate, organizationId }) => {
               type="email"
               value={formData.notification_email}
               onChange={(e) => setFormData(prev => ({ ...prev, notification_email: e.target.value }))}
-              placeholder="alertas@miempresa.com"
+              placeholder={t('settings.notifications.email.placeholder')}
               className="w-full pl-12 pr-4 py-3 bg-white dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all text-slate-800 dark:text-white placeholder-slate-400"
             />
           </div>
           <p className="text-sm text-slate-500 dark:text-slate-400">
-            Las notificaciones se enviarán a esta dirección. Deja vacío para no recibir emails.
+            {t('settings.notifications.email.help')}
           </p>
         </div>
       </div>
@@ -172,7 +176,7 @@ const NotificationSettings = ({ settings, onUpdate, organizationId }) => {
       {/* Notification List */}
       <div className="space-y-4 mb-8">
         <h3 className="text-lg font-bold text-slate-800 dark:text-white">
-          Tipos de Notificaciones
+          {t('settings.notifications.listTitle')}
         </h3>
         
         {notifications.map((notification) => {
@@ -202,11 +206,11 @@ const NotificationSettings = ({ settings, onUpdate, organizationId }) => {
                       </h4>
                       <span className={`
                         px-2 py-0.5 rounded text-xs font-medium
-                        ${notification.priority === 'Alta' ? 'bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-300' :
-                          notification.priority === 'Media' ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300' :
+                        ${notification.priority === 'high' ? 'bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-300' :
+                          notification.priority === 'medium' ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300' :
                           'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300'}
                       `}>
-                        {notification.priority}
+                        {t(`settings.notifications.priorities.${notification.priority}`)}
                       </span>
                     </div>
                     <p className="text-sm text-slate-500 dark:text-slate-400">
@@ -237,8 +241,7 @@ const NotificationSettings = ({ settings, onUpdate, organizationId }) => {
         <div className="text-sm text-blue-700 dark:text-blue-300">
           <p className="font-medium mb-1">{t('settings.notifications.howItWorks')}</p>
           <p>
-            Las notificaciones se envían por correo electrónico cuando se detectan eventos importantes en tu sistema. 
-            También verás las alertas en el dashboard principal y en la campana de notificaciones.
+            {t('settings.notifications.infoDescription')}
           </p>
         </div>
       </div>
@@ -253,12 +256,12 @@ const NotificationSettings = ({ settings, onUpdate, organizationId }) => {
           {saving ? (
             <>
               <Loader2 className="w-5 h-5 animate-spin" />
-              Guardando...
+              {t('common.messages.saving')}
             </>
           ) : (
             <>
               <Save className="w-5 h-5" />
-              Guardar Configuración
+              {t('settings.notifications.actions.save')}
             </>
           )}
         </button>

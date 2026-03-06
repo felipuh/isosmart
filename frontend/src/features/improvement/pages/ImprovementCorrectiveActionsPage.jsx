@@ -91,7 +91,7 @@ const ImprovementCorrectiveActionsPage = () => {
       >
         <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-3">
-              <label className="text-xs text-slate-400">{t('modules.improvement.correctiveActionsPage.fields.actionNumber')}<input type="text" required value={form.action_number} onChange={e => setForm({ ...form, action_number: e.target.value })} placeholder="AC-2026-001" className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
+              <label className="text-xs text-slate-400">{t('modules.improvement.correctiveActionsPage.fields.actionNumber')}<input type="text" required value={form.action_number} onChange={e => setForm({ ...form, action_number: e.target.value })} placeholder={t('modules.improvement.correctiveActionsPage.placeholders.actionNumber')} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
               <label className="text-xs text-slate-400">{t('modules.improvement.correctiveActionsPage.fields.relatedNc')}
                 <select required value={form.nonconformity} onChange={e => setForm({ ...form, nonconformity: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100">
                   <option value="">{t('modules.improvement.correctiveActionsPage.fields.selectNc')}</option>
@@ -105,10 +105,10 @@ const ImprovementCorrectiveActionsPage = () => {
               </label>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
-              <label className="text-xs text-slate-400">{t('modules.improvement.correctiveActionsPage.fields.rootCauseAnalysis')}<textarea required value={form.root_cause_analysis} onChange={e => setForm({ ...form, root_cause_analysis: e.target.value })} placeholder="5 porqués, Ishikawa, etc." className="mt-1 h-20 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
+              <label className="text-xs text-slate-400">{t('modules.improvement.correctiveActionsPage.fields.rootCauseAnalysis')}<textarea required value={form.root_cause_analysis} onChange={e => setForm({ ...form, root_cause_analysis: e.target.value })} placeholder={t('modules.improvement.correctiveActionsPage.placeholders.rootCauseAnalysis')} className="mt-1 h-20 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
               <label className="text-xs text-slate-400">{t('modules.improvement.correctiveActionsPage.fields.rootCauseIdentified')}<textarea required value={form.root_cause_identified} onChange={e => setForm({ ...form, root_cause_identified: e.target.value })} className="mt-1 h-20 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
             </div>
-            <label className="text-xs text-slate-400 block">{t('modules.improvement.correctiveActionsPage.fields.analysisMethod')}<input type="text" value={form.analysis_method} onChange={e => setForm({ ...form, analysis_method: e.target.value })} placeholder="5 porqués, Ishikawa, Pareto..." className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
+            <label className="text-xs text-slate-400 block">{t('modules.improvement.correctiveActionsPage.fields.analysisMethod')}<input type="text" value={form.analysis_method} onChange={e => setForm({ ...form, analysis_method: e.target.value })} placeholder={t('modules.improvement.correctiveActionsPage.placeholders.analysisMethod')} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
             <label className="text-xs text-slate-400 block">{t('modules.improvement.correctiveActionsPage.fields.actionDescription')}<textarea required value={form.action_description} onChange={e => setForm({ ...form, action_description: e.target.value })} className="mt-1 h-20 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
             <label className="text-xs text-slate-400 block">{t('modules.improvement.correctiveActionsPage.fields.implementationSteps')}<textarea required value={form.implementation_steps} onChange={e => setForm({ ...form, implementation_steps: e.target.value })} className="mt-1 h-20 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
             <div className="grid gap-4 sm:grid-cols-3">
@@ -150,7 +150,7 @@ const ImprovementCorrectiveActionsPage = () => {
             ) : items.map(item => (
               <tr key={item.id} className="hover:bg-gray-800/30">
                 <td className="px-6 py-4 text-sm font-mono text-blue-400">{item.action_number}</td>
-                <td className="px-6 py-4 text-sm text-gray-300">{item.nonconformity_number || `NC #${item.nonconformity}`}</td>
+                <td className="px-6 py-4 text-sm text-gray-300">{item.nonconformity_number || t('modules.improvement.correctiveActionsPage.table.ncFallback').replace('{id}', item.nonconformity)}</td>
                 <td className="px-6 py-4 text-sm text-gray-300">{actionTypeLabels[item.action_type] || item.action_type}</td>
                 <td className="px-6 py-4"><div className="flex items-center gap-2"><div className="w-20 bg-gray-700 rounded-full h-2"><div className="bg-blue-500 h-2 rounded-full" style={{ width: `${item.completion_percentage || 0}%` }}></div></div><span className="text-xs text-gray-400">{item.completion_percentage || 0}%</span></div></td>
                 <td className="px-6 py-4"><span className={`px-2 py-1 rounded text-xs ${statusColors[item.status] || ''}`}>{statusLabels[item.status] || item.status}</span></td>

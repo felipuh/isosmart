@@ -100,7 +100,7 @@ const ImprovementContinualPage = () => {
       >
         <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-3">
-              <label className="text-xs text-slate-400">{t('modules.improvement.continualPage.fields.number')}<input type="text" required value={form.initiative_number} onChange={e => setForm({ ...form, initiative_number: e.target.value })} placeholder="MI-2026-001" className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
+              <label className="text-xs text-slate-400">{t('modules.improvement.continualPage.fields.number')}<input type="text" required value={form.initiative_number} onChange={e => setForm({ ...form, initiative_number: e.target.value })} placeholder={t('modules.improvement.continualPage.placeholders.number')} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
               <label className="text-xs text-slate-400">{t('modules.improvement.continualPage.fields.title')}<input type="text" required value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
               <label className="text-xs text-slate-400">{t('modules.improvement.continualPage.fields.proposedDate')}<input type="date" required value={form.proposed_date} onChange={e => setForm({ ...form, proposed_date: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"  /></label>
             </div>

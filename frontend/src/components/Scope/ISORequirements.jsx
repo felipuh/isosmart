@@ -65,10 +65,10 @@ const ISORequirements = ({ requirements, loading }) => {
               <div className="flex-1">
                 <div className="flex items-center justify-between mb-1">
                   <h4 className="font-semibold text-slate-900 dark:text-white">
-                    Cláusula {req.clause}: {req.title}
+                    {t('isoRequirements.clauseLabel').replace('{clause}', req.clause).replace('{title}', req.title)}
                   </h4>
                   <span className="text-xs bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-300 px-2 py-1 rounded transition-colors">
-                    APLICABLE
+                    {t('isoRequirements.applicableStatus')}
                   </span>
                 </div>
                 {req.justification && (
@@ -82,7 +82,7 @@ const ISORequirements = ({ requirements, loading }) => {
         </div>
       ) : (
         <p className="text-slate-500 dark:text-slate-400 text-center py-8">
-          No hay requisitos definidos
+          {t('isoRequirements.noRequirementsDefined')}
         </p>
       )}
     </div>

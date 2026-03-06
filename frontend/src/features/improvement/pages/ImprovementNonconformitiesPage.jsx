@@ -104,7 +104,7 @@ const ImprovementNonconformitiesPage = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               <label className="text-xs text-slate-400">{t('modules.improvement.nonconformitiesPage.fields.code')}
-                <input type="text" required value={form.nc_number} onChange={e => setForm({ ...form, nc_number: e.target.value })} placeholder="NC-2026-001" className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100" />
+                <input type="text" required value={form.nc_number} onChange={e => setForm({ ...form, nc_number: e.target.value })} placeholder={t('modules.improvement.nonconformitiesPage.placeholders.code')} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100" />
               </label>
               <label className="text-xs text-slate-400">{t('modules.improvement.nonconformitiesPage.fields.title')}
                 <input type="text" required value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100" />
@@ -138,7 +138,7 @@ const ImprovementNonconformitiesPage = () => {
                 <input type="text" value={form.affected_process} onChange={e => setForm({ ...form, affected_process: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100" />
               </label>
               <label className="text-xs text-slate-400">{t('modules.improvement.nonconformitiesPage.fields.isoClauseReference')}
-                <input type="text" value={form.iso_clause_reference} onChange={e => setForm({ ...form, iso_clause_reference: e.target.value })} placeholder="8.5, 9.1, etc." className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100" />
+                <input type="text" value={form.iso_clause_reference} onChange={e => setForm({ ...form, iso_clause_reference: e.target.value })} placeholder={t('modules.improvement.nonconformitiesPage.placeholders.isoClauseReference')} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100" />
               </label>
             </div>
             <label className="text-xs text-slate-400 block">{t('modules.improvement.nonconformitiesPage.fields.impactDescription')}

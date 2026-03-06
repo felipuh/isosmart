@@ -31,7 +31,7 @@ const InternalFactors = ({ fortalezas, debilidades, loading }) => {
     <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
       <h3 className="text-xl font-semibold dark:text-white mb-6 flex items-center">
         <Building className="mr-2 h-6 w-6 text-purple-500" />
-        Factores Internos
+        {t('internalFactors.title')}
       </h3>
 
       <div className="space-y-6">
@@ -41,7 +41,7 @@ const InternalFactors = ({ fortalezas, debilidades, loading }) => {
           <div className="flex items-center mb-4">
             <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
             <h4 className="text-lg font-semibold dark:text-white text-slate-900">
-              Fortalezas ({fortalezas?.length || 0})
+              {t('internalFactors.strengthsTitle').replace('{count}', fortalezas?.length || 0)}
             </h4>
           </div>
           
@@ -67,7 +67,7 @@ const InternalFactors = ({ fortalezas, debilidades, loading }) => {
           <div className="flex items-center mb-4">
             <AlertCircle className="h-5 w-5 text-orange-500 mr-2" />
             <h4 className="text-lg font-semibold dark:text-white text-slate-900">
-              Debilidades ({debilidades?.length || 0})
+              {t('internalFactors.weaknessesTitle').replace('{count}', debilidades?.length || 0)}
             </h4>
           </div>
           

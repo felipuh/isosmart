@@ -100,7 +100,7 @@ const RiskList = ({ risks, onEdit, onDelete, onStatusChange }) => {
               {/* Level */}
               <div className="col-span-2">
                 <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${levelColors[risk.risk_level] || 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300'}`}>
-                  {risk.risk_level ? t(`riskManagement.levels.${risk.risk_level}`) : 'N/A'}
+                  {risk.risk_level ? t(`riskManagement.levels.${risk.risk_level}`) : t('riskManagement.list.details.notAvailable')}
                 </span>
               </div>
 
@@ -154,11 +154,11 @@ const RiskList = ({ risks, onEdit, onDelete, onStatusChange }) => {
                     <div className="space-y-2 text-sm">
                       <div className="flex justify-between">
                         <span className="text-slate-500 dark:text-slate-400">{t('riskManagement.list.details.probability')}:</span>
-                        <span className="font-medium text-slate-900 dark:text-white">{risk.probability || 'N/A'}</span>
+                        <span className="font-medium text-slate-900 dark:text-white">{risk.probability || t('riskManagement.list.details.notAvailable')}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-slate-500 dark:text-slate-400">{t('riskManagement.list.details.impact')}:</span>
-                        <span className="font-medium text-slate-900 dark:text-white">{risk.impact || 'N/A'}</span>
+                        <span className="font-medium text-slate-900 dark:text-white">{risk.impact || t('riskManagement.list.details.notAvailable')}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-slate-500 dark:text-slate-400">{t('riskManagement.list.details.responsible')}:</span>

@@ -442,7 +442,7 @@ const BillingSettings = ({ organizationId }) => {
               value={payerForm.currency}
               onChange={handlePayerChange}
               className="w-full px-4 py-3 bg-white dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl text-slate-800 dark:text-white"
-              placeholder="USD"
+              placeholder={t('settings.billing.currencyPlaceholder')}
             />
           </div>
 

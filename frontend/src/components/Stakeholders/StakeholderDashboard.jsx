@@ -39,7 +39,7 @@ const StakeholderDashboard = () => {
       setMatrixData(matrix);
       setRecentChanges(changes.changes || []);
     } catch (error) {
-      console.error('Error cargando datos:', error);
+      console.error('Error loading stakeholders data:', error);
     } finally {
       setLoading(false);
     }
@@ -55,15 +55,17 @@ const StakeholderDashboard = () => {
     setAnalyzing(true);
     try {
       const result = await stakeholderService.runAnalysis();
-      console.log('Análisis completado:', result);
+      console.log('Analysis completed:', result);
       await loadAllData();
-      alert('✅ Análisis completado!\n\n' +
-            'Stakeholders analizados: ' + result.stakeholders_analyzed + '\n' +
-            'Críticos detectados: ' + (result.critical_stakeholders?.length || 0) + '\n' +
-            'Cambios detectados: ' + (result.changes_detected?.length || 0));
+      alert(
+        t('stakeholderDashboard.messages.analysisCompleted')
+          .replace('{analyzed}', result.stakeholders_analyzed || 0)
+          .replace('{critical}', result.critical_stakeholders?.length || 0)
+          .replace('{changes}', result.changes_detected?.length || 0)
+      );
     } catch (error) {
-      console.error('Error ejecutando análisis:', error);
-      alert('❌ Error al ejecutar el análisis');
+      console.error('Error running analysis:', error);
+      alert(t('stakeholderDashboard.messages.analysisError'));
     } finally {
       setAnalyzing(false);
     }
@@ -83,17 +85,17 @@ const StakeholderDashboard = () => {
     try {
       if (editingStakeholder) {
         await stakeholderService.update(editingStakeholder.id, formData);
-        alert('✅ Stakeholder actualizado exitosamente');
+        alert(t('stakeholderDashboard.messages.stakeholderUpdated'));
       } else {
         await stakeholderService.create(formData);
-        alert('✅ Stakeholder creado exitosamente');
+        alert(t('stakeholderDashboard.messages.stakeholderCreated'));
       }
       setShowForm(false);
       setEditingStakeholder(null);
       await loadAllData();
     } catch (error) {
-      console.error('Error guardando stakeholder:', error);
-      alert('❌ Error al guardar el stakeholder');
+      console.error('Error saving stakeholder:', error);
+      alert(t('stakeholderDashboard.messages.saveError'));
       throw error;
     }
   };
@@ -113,10 +115,10 @@ const StakeholderDashboard = () => {
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-          Dashboard de Stakeholders
+          {t('stakeholderDashboard.title')}
         </h1>
         <p className="text-slate-600 dark:text-slate-400">
-          {currentOrganization?.name} | Análisis inteligente de partes interesadas - ISO 4.2
+          {(currentOrganization?.name || t('dashboard.noOrganization'))} | {t('stakeholderDashboard.subtitle')}
         </p>
       </div>
 
@@ -130,7 +132,7 @@ const StakeholderDashboard = () => {
               className="flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white rounded-lg disabled:bg-blue-300 dark:disabled:bg-blue-900 transition-colors"
             >
               <RefreshCw className={'mr-2 h-4 w-4 ' + (analyzing ? 'animate-spin' : '')} />
-              {analyzing ? 'Analizando...' : 'Ejecutar Análisis IA'}
+              {analyzing ? t('stakeholderDashboard.actions.analyzing') : t('stakeholderDashboard.actions.runAiAnalysis')}
             </button>
 
             <button
@@ -138,7 +140,7 @@ const StakeholderDashboard = () => {
               className="flex items-center px-4 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
             >
               <RefreshCw className="mr-2 h-4 w-4" />
-              Actualizar
+              {t('stakeholderDashboard.actions.refresh')}
             </button>
 
             <button 
@@ -146,7 +148,7 @@ const StakeholderDashboard = () => {
               className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
             >
               <Plus className="mr-2 h-4 w-4" />
-              Nuevo Stakeholder
+              {t('stakeholderDashboard.actions.newStakeholder')}
             </button>
           </div>
 
@@ -155,7 +157,7 @@ const StakeholderDashboard = () => {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400 dark:text-slate-500" />
               <input
                 type="text"
-                placeholder="Buscar stakeholders..."
+                placeholder={t('stakeholderDashboard.searchPlaceholder')}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10 pr-4 py-2 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:focus:ring-blue-400 transition-colors"
@@ -164,7 +166,7 @@ const StakeholderDashboard = () => {
 
             <button className="flex items-center px-4 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
               <Download className="mr-2 h-4 w-4" />
-              Exportar
+              {t('stakeholderDashboard.actions.export')}
             </button>
           </div>
         </div>

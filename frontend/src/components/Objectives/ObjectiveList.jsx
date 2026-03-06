@@ -188,7 +188,7 @@ const ObjectiveList = ({ objectives, onEdit, onDelete, onUpdateProgress }) => {
                       value={progressValue}
                       onChange={(e) => setProgressValue(e.target.value)}
                       className="w-32 px-3 py-2 border border-gray-300 dark:bg-slate-700 dark:text-white dark:border-slate-600 rounded-lg text-sm focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400 transition-colors"
-                      placeholder={`Meta: ${objective.target_value}`}
+                      placeholder={t('objectivesList.progressEditor.targetPlaceholder').replace('{value}', objective.target_value)}
                     />
                     <span className="text-sm text-gray-500 dark:text-slate-400">{objective.measurement_unit}</span>
                     <button

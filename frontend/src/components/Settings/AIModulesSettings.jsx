@@ -24,47 +24,79 @@ const AIModulesSettings = ({ settings, onUpdate, organizationId }) => {
   const modules = [
     {
       key: 'ai_sca_enabled',
-      name: 'Smart Context Analyzer (SCA)',
-      description: 'Analiza automáticamente el contexto interno y externo de la organización según ISO 4.1',
+      name: t('settings.aiModules.modules.sca.name'),
+      description: t('settings.aiModules.modules.sca.description'),
       icon: Sparkles,
       color: 'from-blue-500 to-cyan-500',
-      features: ['Análisis FODA automático', 'Detección de riesgos contextuales', 'Monitoreo de tendencias'],
+      features: [
+        t('settings.aiModules.modules.sca.features.swot'),
+        t('settings.aiModules.modules.sca.features.risks'),
+        t('settings.aiModules.modules.sca.features.trends'),
+      ],
       clause: '4.1'
     },
     {
       key: 'ai_sie_enabled',
-      name: 'Stakeholder Intelligence Engine (SIE)',
-      description: 'Identifica y monitorea las partes interesadas y sus expectativas según ISO 4.2',
+      name: t('settings.aiModules.modules.sie.name'),
+      description: t('settings.aiModules.modules.sie.description'),
       icon: Users,
       color: 'from-violet-500 to-purple-500',
-      features: ['Matriz poder/interés', 'Seguimiento de expectativas', 'Alertas de cambios'],
+      features: [
+        t('settings.aiModules.modules.sie.features.matrix'),
+        t('settings.aiModules.modules.sie.features.expectations'),
+        t('settings.aiModules.modules.sie.features.alerts'),
+      ],
       clause: '4.2'
     },
     {
       key: 'ai_asb_enabled',
-      name: 'AI Scope Builder (ASB)',
-      description: 'Define y audita automáticamente el alcance del SGC según ISO 4.3',
+      name: t('settings.aiModules.modules.asb.name'),
+      description: t('settings.aiModules.modules.asb.description'),
       icon: Target,
       color: 'from-emerald-500 to-teal-500',
-      features: ['Definición de alcance', 'Evaluación de requisitos', 'Gestión de exclusiones'],
+      features: [
+        t('settings.aiModules.modules.asb.features.scope'),
+        t('settings.aiModules.modules.asb.features.requirements'),
+        t('settings.aiModules.modules.asb.features.exclusions'),
+      ],
       clause: '4.3'
     },
     {
       key: 'ai_spm_enabled',
-      name: 'Smart Process Mapper (SPM)',
-      description: 'Genera y mantiene mapas de procesos con KPIs y riesgos según ISO 4.4',
+      name: t('settings.aiModules.modules.spm.name'),
+      description: t('settings.aiModules.modules.spm.description'),
       icon: GitBranch,
       color: 'from-amber-500 to-orange-500',
-      features: ['Mapeo de procesos', 'Identificación de KPIs', 'Análisis de interacciones'],
+      features: [
+        t('settings.aiModules.modules.spm.features.mapping'),
+        t('settings.aiModules.modules.spm.features.kpis'),
+        t('settings.aiModules.modules.spm.features.interactions'),
+      ],
       clause: '4.4'
     },
   ];
 
   const frequencyOptions = [
-    { value: 'daily', label: 'Diario', description: 'Ejecutar análisis cada día' },
-    { value: 'weekly', label: 'Semanal', description: 'Ejecutar análisis cada semana' },
-    { value: 'monthly', label: 'Mensual', description: 'Ejecutar análisis cada mes' },
-    { value: 'manual', label: 'Manual', description: 'Solo ejecutar cuando se solicite' },
+    {
+      value: 'daily',
+      label: t('settings.aiModules.frequency.daily.label'),
+      description: t('settings.aiModules.frequency.daily.description'),
+    },
+    {
+      value: 'weekly',
+      label: t('settings.aiModules.frequency.weekly.label'),
+      description: t('settings.aiModules.frequency.weekly.description'),
+    },
+    {
+      value: 'monthly',
+      label: t('settings.aiModules.frequency.monthly.label'),
+      description: t('settings.aiModules.frequency.monthly.description'),
+    },
+    {
+      value: 'manual',
+      label: t('settings.aiModules.frequency.manual.label'),
+      description: t('settings.aiModules.frequency.manual.description'),
+    },
   ];
 
   const handleToggle = (key) => {
@@ -83,7 +115,7 @@ const AIModulesSettings = ({ settings, onUpdate, organizationId }) => {
       
       setTimeout(() => setSuccess(false), 3000);
     } catch (err) {
-      setError('Error al guardar la configuración');
+      setError(t('settings.aiModules.messages.errorSaving'));
       console.error(err);
     } finally {
       setSaving(false);
@@ -106,10 +138,10 @@ const AIModulesSettings = ({ settings, onUpdate, organizationId }) => {
         </div>
         <div>
           <h2 className="text-xl font-bold text-slate-800 dark:text-white">
-            Módulos de Inteligencia Artificial
+            {t('settings.aiModules.title')}
           </h2>
           <p className="text-sm text-slate-500 dark:text-slate-400">
-            Configura los módulos de IA que potencian tu SGC
+            {t('settings.aiModules.subtitle')}
           </p>
         </div>
       </div>
@@ -138,10 +170,10 @@ const AIModulesSettings = ({ settings, onUpdate, organizationId }) => {
             </div>
             <div>
               <p className="font-semibold text-slate-800 dark:text-white">
-                {enabledCount} de 4 módulos activos
+                {t('settings.aiModules.banner.activeModules').replace('{count}', enabledCount)}
               </p>
               <p className="text-sm text-slate-500 dark:text-slate-400">
-                Cobertura ISO 9001 Cláusula 4: {Math.round((enabledCount / 4) * 100)}%
+                {t('settings.aiModules.banner.clauseCoverage').replace('{percentage}', Math.round((enabledCount / 4) * 100))}
               </p>
             </div>
           </div>
@@ -229,7 +261,7 @@ const AIModulesSettings = ({ settings, onUpdate, organizationId }) => {
       <div className="p-6 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-700/30 dark:to-slate-800/30 rounded-2xl border border-slate-200 dark:border-slate-700 mb-8">
         <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-4 flex items-center gap-2">
           <Settings2 className="w-5 h-5 text-indigo-500" />
-          Configuración de Automatización
+          {t('settings.aiModules.automation.title')}
         </h3>
         
         {/* Auto Analysis Toggle */}
@@ -241,7 +273,7 @@ const AIModulesSettings = ({ settings, onUpdate, organizationId }) => {
             <div>
               <p className="font-semibold text-slate-800 dark:text-white">{t('settings.aiModules.autoAnalysis')}</p>
               <p className="text-sm text-slate-500 dark:text-slate-400">
-                Ejecutar análisis de IA automáticamente según la frecuencia configurada
+                {t('settings.aiModules.automation.autoAnalysisDescription')}
               </p>
             </div>
           </div>
@@ -259,7 +291,7 @@ const AIModulesSettings = ({ settings, onUpdate, organizationId }) => {
           <div className="mt-4">
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-3 flex items-center gap-2">
               <Clock className="w-4 h-4" />
-              Frecuencia de Análisis
+              {t('settings.aiModules.automation.frequencyLabel')}
             </label>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {frequencyOptions.map((option) => (
@@ -290,8 +322,7 @@ const AIModulesSettings = ({ settings, onUpdate, organizationId }) => {
         <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl flex items-start gap-3">
           <Info className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
           <p className="text-sm text-blue-700 dark:text-blue-300">
-            Los análisis automáticos se ejecutan en segundo plano y actualizan los dashboards con información fresca. 
-            Puedes ejecutar análisis manuales en cualquier momento desde cada módulo.
+            {t('settings.aiModules.automation.infoDescription')}
           </p>
         </div>
       </div>
@@ -306,12 +337,12 @@ const AIModulesSettings = ({ settings, onUpdate, organizationId }) => {
           {saving ? (
             <>
               <Loader2 className="w-5 h-5 animate-spin" />
-              Guardando...
+              {t('common.messages.saving')}
             </>
           ) : (
             <>
               <Save className="w-5 h-5" />
-              Guardar Configuración
+              {t('settings.aiModules.actions.saveConfiguration')}
             </>
           )}
         </button>

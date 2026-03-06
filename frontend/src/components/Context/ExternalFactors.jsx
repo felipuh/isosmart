@@ -59,7 +59,7 @@ const ExternalFactors = ({ factors, loading }) => {
     <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
       <h3 className="text-xl font-semibold dark:text-white mb-6 flex items-center">
         <Globe className="mr-2 h-6 w-6 text-blue-500" />
-        Factores Externos
+        {t('externalFactors.title')}
       </h3>
 
       {!factors || factors.length === 0 ? (

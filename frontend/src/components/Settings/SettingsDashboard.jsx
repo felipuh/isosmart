@@ -30,51 +30,51 @@ const SettingsDashboard = () => {
   const tabs = [
     { 
       id: 'organization', 
-      label: 'Organización', 
+      label: t('settings.dashboard.tabs.organization.label'), 
       icon: Building2,
-      description: 'Información de la empresa'
+      description: t('settings.dashboard.tabs.organization.description')
     },
     { 
       id: 'users', 
-      label: 'Usuarios', 
+      label: t('settings.dashboard.tabs.users.label'), 
       icon: Users,
-      description: 'Gestión de usuarios y roles'
+      description: t('settings.dashboard.tabs.users.description')
     },
     { 
       id: 'ai-modules', 
-      label: 'Módulos IA', 
+      label: t('settings.dashboard.tabs.aiModules.label'), 
       icon: Brain,
-      description: 'Configurar módulos de inteligencia artificial'
+      description: t('settings.dashboard.tabs.aiModules.description')
     },
     { 
       id: 'notifications', 
-      label: 'Notificaciones', 
+      label: t('settings.dashboard.tabs.notifications.label'), 
       icon: Bell,
-      description: 'Alertas y notificaciones'
+      description: t('settings.dashboard.tabs.notifications.description')
     },
     {
       id: 'billing',
-      label: 'Facturación',
+      label: t('settings.dashboard.tabs.billing.label'),
       icon: CreditCard,
-      description: 'Cobros, pagos y estado de cuenta'
+      description: t('settings.dashboard.tabs.billing.description')
     },
     { 
       id: 'backup', 
-      label: 'Backup y Exportación', 
+      label: t('settings.dashboard.tabs.backup.label'), 
       icon: Database,
-      description: 'Respaldos y exportar datos'
+      description: t('settings.dashboard.tabs.backup.description')
     },
     { 
       id: 'iso', 
-      label: 'Parámetros ISO', 
+      label: t('settings.dashboard.tabs.iso.label'), 
       icon: FileCheck,
-      description: 'Configuración de cláusulas ISO'
+      description: t('settings.dashboard.tabs.iso.description')
     },
     { 
       id: 'theme', 
-      label: 'Apariencia', 
+      label: t('settings.dashboard.tabs.theme.label'), 
       icon: Palette,
-      description: 'Tema y personalización visual'
+      description: t('settings.dashboard.tabs.theme.description')
     },
   ];
 
@@ -101,11 +101,11 @@ const SettingsDashboard = () => {
       
     } catch (err) {
       console.error('Error cargando configuración:', err);
-      setError('Error al cargar la configuración');
+      setError(t('settings.dashboard.messages.errorLoading'));
     } finally {
       setLoading(false);
     }
-  }, [organizationId]);
+  }, [organizationId, t]);
 
   useEffect(() => {
     if (organizationId) {
@@ -202,7 +202,7 @@ const SettingsDashboard = () => {
                   {t('settings.title')}
                 </h1>
                 <p className="text-sm text-slate-500 dark:text-slate-400">
-                  Gestiona tu organización y sistema ISO Smart
+                  {t('settings.dashboard.subtitle')}
                 </p>
               </div>
             </div>
@@ -213,13 +213,13 @@ const SettingsDashboard = () => {
                 <div className="flex items-center gap-2 px-4 py-2 bg-emerald-50 dark:bg-emerald-900/30 rounded-lg">
                   <Server className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                   <span className="text-sm font-medium text-emerald-700 dark:text-emerald-300">
-                    Sistema Activo
+                    {t('settings.dashboard.stats.systemActive')}
                   </span>
                 </div>
                 <div className="flex items-center gap-2 px-4 py-2 bg-blue-50 dark:bg-blue-900/30 rounded-lg">
                   <Users className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                   <span className="text-sm font-medium text-blue-700 dark:text-blue-300">
-                    {stats.users_count || 0} usuarios
+                    {t('settings.dashboard.stats.usersCount').replace('{count}', stats.users_count || 0)}
                   </span>
                 </div>
               </div>
@@ -242,7 +242,7 @@ const SettingsDashboard = () => {
               <div className="p-4 border-b border-slate-200/50 dark:border-slate-700/50">
                 <h2 className="font-semibold text-slate-700 dark:text-slate-200 flex items-center gap-2">
                   <Shield className="w-4 h-4" />
-                  Configuración del Sistema
+                  {t('settings.dashboard.sidebarTitle')}
                 </h2>
               </div>
               
@@ -298,14 +298,16 @@ const SettingsDashboard = () => {
                         {organization.name}
                       </p>
                       <p className="text-xs text-slate-500 dark:text-slate-400">
-                        Plan {organization.plan_type}
+                        {t('settings.dashboard.organizationCard.planPrefix')} {organization.plan_type}
                       </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <Activity className="w-3 h-3 text-emerald-500" />
                     <span className="text-xs text-slate-500 dark:text-slate-400">
-                      {organization.is_active ? 'Cuenta activa' : 'Cuenta inactiva'}
+                      {organization.is_active
+                        ? t('settings.dashboard.organizationCard.accountActive')
+                        : t('settings.dashboard.organizationCard.accountInactive')}
                     </span>
                   </div>
                 </div>

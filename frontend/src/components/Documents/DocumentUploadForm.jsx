@@ -8,7 +8,7 @@ const DocumentUploadForm = ({ onUpload, onCancel, uploading }) => {
     title: '',
     content: '',
     document_type: 'otro',
-    source: 'Usuario'
+    source: ''
   });
   const [selectedFile, setSelectedFile] = useState(null);
   const [error, setError] = useState('');
@@ -18,7 +18,7 @@ const DocumentUploadForm = ({ onUpload, onCancel, uploading }) => {
     if (file) {
       // Validar tamaño (10MB)
       if (file.size > 10 * 1024 * 1024) {
-        setError('El archivo es demasiado grande. Tamaño máximo: 10MB');
+        setError(t('documentsManager.upload.errors.fileTooLarge').replace('{size}', '10MB'));
         return;
       }
 
@@ -26,7 +26,9 @@ const DocumentUploadForm = ({ onUpload, onCancel, uploading }) => {
       const validExtensions = ['pdf', 'docx', 'doc', 'txt', 'xlsx', 'xls'];
       const extension = file.name.split('.').pop().toLowerCase();
       if (!validExtensions.includes(extension)) {
-        setError(`Tipo de archivo no permitido. Extensiones válidas: ${validExtensions.join(', ')}`);
+        setError(
+          t('documentsManager.upload.errors.invalidType').replace('{extensions}', validExtensions.join(', '))
+        );
         return;
       }
 
@@ -47,12 +49,12 @@ const DocumentUploadForm = ({ onUpload, onCancel, uploading }) => {
     e.preventDefault();
     
     if (!selectedFile) {
-      setError('Por favor selecciona un archivo');
+      setError(t('documentsManager.upload.errors.fileRequired'));
       return;
     }
 
     if (!formData.title.trim()) {
-      setError('Por favor ingresa un título');
+      setError(t('documentsManager.upload.errors.titleRequired'));
       return;
     }
 
@@ -61,7 +63,7 @@ const DocumentUploadForm = ({ onUpload, onCancel, uploading }) => {
     uploadData.append('title', formData.title);
     uploadData.append('content', formData.content);
     uploadData.append('document_type', formData.document_type);
-    uploadData.append('source', formData.source);
+    uploadData.append('source', formData.source || t('documentsManager.upload.defaults.source'));
 
     onUpload(uploadData);
   };
@@ -84,7 +86,7 @@ const DocumentUploadForm = ({ onUpload, onCancel, uploading }) => {
         {/* Selector de archivo */}
         <div>
           <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2 transition-colors">
-            Archivo *
+            {t('documentsManager.upload.fields.fileRequired')}
           </label>
           <div className="flex items-center justify-center w-full">
             <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 dark:border-slate-600 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-slate-700/50 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors">
@@ -104,7 +106,7 @@ const DocumentUploadForm = ({ onUpload, onCancel, uploading }) => {
                       <span className="font-semibold">{t('documentsManager.upload.clickToUpload')}</span> {t('documentsManager.upload.orDrag')}
                     </p>
                     <p className="text-xs text-gray-500 dark:text-slate-500">
-                      PDF, DOCX, TXT, XLSX (máx. 10MB)
+                      {t('documentsManager.upload.supportedFormats').replace('{size}', '10MB')}
                     </p>
                   </>
                 )}
@@ -122,14 +124,14 @@ const DocumentUploadForm = ({ onUpload, onCancel, uploading }) => {
         {/* Título */}
         <div>
           <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2 transition-colors">
-            Título *
+            {t('documentsManager.upload.fields.titleRequired')}
           </label>
           <input
             type="text"
             value={formData.title}
             onChange={(e) => setFormData({ ...formData, title: e.target.value })}
             className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-            placeholder="Nombre del documento"
+            placeholder={t('documentsManager.upload.placeholders.title')}
             required
           />
         </div>
@@ -137,21 +139,21 @@ const DocumentUploadForm = ({ onUpload, onCancel, uploading }) => {
         {/* Descripción */}
         <div>
           <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2 transition-colors">
-            Contenido
+            {t('documentsManager.upload.fields.content')}
           </label>
           <textarea
             value={formData.content}
             onChange={(e) => setFormData({ ...formData, content: e.target.value })}
             className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
             rows="3"
-            placeholder="Descripción breve del documento (opcional)"
+            placeholder={t('documentsManager.upload.placeholders.content')}
           />
         </div>
 
         {/* Tipo de documento */}
         <div>
           <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2 transition-colors">
-            Tipo de Documento *
+            {t('documentsManager.upload.fields.documentTypeRequired')}
           </label>
           <select
             value={formData.document_type}
@@ -170,14 +172,14 @@ const DocumentUploadForm = ({ onUpload, onCancel, uploading }) => {
         {/* Fuente/Origen */}
         <div>
           <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2 transition-colors">
-            Fuente/Origen
+            {t('documentsManager.upload.fields.source')}
           </label>
           <input
             type="text"
             value={formData.source}
             onChange={(e) => setFormData({ ...formData, source: e.target.value })}
             className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-            placeholder="Origen del documento"
+            placeholder={t('documentsManager.upload.placeholders.source')}
           />
         </div>
 
@@ -197,7 +199,7 @@ const DocumentUploadForm = ({ onUpload, onCancel, uploading }) => {
               onClick={onCancel}
               className="px-4 py-2 border border-gray-300 dark:border-slate-600 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors"
             >
-              Cancelar
+              {t('common.buttons.cancel')}
             </button>
           )}
           <button
@@ -208,12 +210,12 @@ const DocumentUploadForm = ({ onUpload, onCancel, uploading }) => {
             {uploading ? (
               <>
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                Subiendo...
+                {t('documentsManager.upload.actions.uploading')}
               </>
             ) : (
               <>
                 <Upload className="h-4 w-4 mr-2" />
-                Subir Documento
+                {t('documentsManager.upload.actions.uploadDocument')}
               </>
             )}
           </button>

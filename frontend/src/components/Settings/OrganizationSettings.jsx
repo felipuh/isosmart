@@ -55,7 +55,7 @@ const OrganizationSettings = ({ organization: propOrganization, onUpdate }) => {
 
     // Validar tipo de archivo
     if (!file.type.startsWith('image/')) {
-      setError('Por favor selecciona una imagen válida');
+      setError(t('settings.organization.messages.invalidImage'));
       return;
     }
 
@@ -71,7 +71,7 @@ const OrganizationSettings = ({ organization: propOrganization, onUpdate }) => {
       onUpdate({ logo: result.logo });
       setSuccess(true);
     } catch (err) {
-      setError('Error al subir el logo');
+      setError(t('settings.organization.messages.uploadError'));
       console.error(err);
     } finally {
       setUploadingLogo(false);
@@ -91,7 +91,7 @@ const OrganizationSettings = ({ organization: propOrganization, onUpdate }) => {
       
       setTimeout(() => setSuccess(false), 3000);
     } catch (err) {
-      setError('Error al guardar los cambios');
+      setError(t('settings.organization.messages.saveError'));
       console.error(err);
     } finally {
       setSaving(false);
@@ -107,10 +107,10 @@ const OrganizationSettings = ({ organization: propOrganization, onUpdate }) => {
         </div>
         <div>
           <h2 className="text-xl font-bold text-slate-800 dark:text-white">
-            Información de la Organización
+            {t('settings.organization.headerTitle')}
           </h2>
           <p className="text-sm text-slate-500 dark:text-slate-400">
-            Datos generales y de contacto de tu empresa
+            {t('settings.organization.headerSubtitle')}
           </p>
         </div>
       </div>
@@ -137,7 +137,7 @@ const OrganizationSettings = ({ organization: propOrganization, onUpdate }) => {
             {logoPreview ? (
               <img 
                 src={logoPreview} 
-                alt="Logo"
+                alt={t('settings.organization.logoAlt')}
                 className="w-32 h-32 rounded-2xl object-cover border-4 border-white dark:border-slate-600 shadow-xl"
               />
             ) : (
@@ -171,7 +171,7 @@ const OrganizationSettings = ({ organization: propOrganization, onUpdate }) => {
           <div className="flex-1">
             <h3 className="font-semibold text-slate-800 dark:text-white mb-2">{t('settings.organization.logoTitle')}</h3>
             <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
-              Sube el logo de tu empresa. Formatos recomendados: PNG o JPG. Tamaño máximo: 2MB.
+              {t('settings.organization.logoHelp')}
             </p>
             <button
               type="button"
@@ -179,7 +179,7 @@ const OrganizationSettings = ({ organization: propOrganization, onUpdate }) => {
               className="px-4 py-2 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-600 transition-colors flex items-center gap-2"
             >
               <Upload className="w-4 h-4" />
-              Cambiar Logo
+              {t('settings.organization.changeLogo')}
             </button>
           </div>
         </div>
@@ -188,7 +188,7 @@ const OrganizationSettings = ({ organization: propOrganization, onUpdate }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-              Nombre de la Organización *
+              {t('settings.organization.fields.organizationNameRequired')}
             </label>
             <div className="relative">
               <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
@@ -199,14 +199,14 @@ const OrganizationSettings = ({ organization: propOrganization, onUpdate }) => {
                 onChange={handleChange}
                 required
                 className="w-full pl-12 pr-4 py-3 bg-white dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-slate-800 dark:text-white placeholder-slate-400"
-                placeholder="Mi Empresa S.A."
+                placeholder={t('settings.organization.placeholders.organizationName')}
               />
             </div>
           </div>
 
           <div className="space-y-2">
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-              Razón Social
+              {t('settings.organization.fields.legalName')}
             </label>
             <div className="relative">
               <FileText className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
@@ -216,14 +216,14 @@ const OrganizationSettings = ({ organization: propOrganization, onUpdate }) => {
                 value={formData.legal_name}
                 onChange={handleChange}
                 className="w-full pl-12 pr-4 py-3 bg-white dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-slate-800 dark:text-white placeholder-slate-400"
-                placeholder="Mi Empresa Sociedad Anónima"
+                placeholder={t('settings.organization.placeholders.legalName')}
               />
             </div>
           </div>
 
           <div className="space-y-2">
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-              NIT / RUC / RFC
+              {t('settings.organization.fields.taxId')}
             </label>
             <div className="relative">
               <FileText className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
@@ -233,14 +233,14 @@ const OrganizationSettings = ({ organization: propOrganization, onUpdate }) => {
                 value={formData.tax_id}
                 onChange={handleChange}
                 className="w-full pl-12 pr-4 py-3 bg-white dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-slate-800 dark:text-white placeholder-slate-400"
-                placeholder="123456789-0"
+                placeholder={t('settings.organization.placeholders.taxId')}
               />
             </div>
           </div>
 
           <div className="space-y-2">
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-              Sitio Web
+              {t('settings.organization.fields.website')}
             </label>
             <div className="relative">
               <Globe className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
@@ -250,7 +250,7 @@ const OrganizationSettings = ({ organization: propOrganization, onUpdate }) => {
                 value={formData.website}
                 onChange={handleChange}
                 className="w-full pl-12 pr-4 py-3 bg-white dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-slate-800 dark:text-white placeholder-slate-400"
-                placeholder="https://www.miempresa.com"
+                placeholder={t('settings.organization.placeholders.website')}
               />
             </div>
           </div>
@@ -260,13 +260,13 @@ const OrganizationSettings = ({ organization: propOrganization, onUpdate }) => {
         <div>
           <h3 className="text-lg font-semibold text-slate-800 dark:text-white mb-4 flex items-center gap-2">
             <Mail className="w-5 h-5 text-indigo-500" />
-            Información de Contacto
+            {t('settings.organization.fields.contactInfo')}
           </h3>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-                Email de Contacto
+                {t('settings.organization.fields.contactEmail')}
               </label>
               <div className="relative">
                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
@@ -276,14 +276,14 @@ const OrganizationSettings = ({ organization: propOrganization, onUpdate }) => {
                   value={formData.email}
                   onChange={handleChange}
                   className="w-full pl-12 pr-4 py-3 bg-white dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-slate-800 dark:text-white placeholder-slate-400"
-                  placeholder="contacto@miempresa.com"
+                  placeholder={t('settings.organization.placeholders.contactEmail')}
                 />
               </div>
             </div>
 
             <div className="space-y-2">
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-                Teléfono
+                {t('settings.organization.fields.phone')}
               </label>
               <div className="relative">
                 <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
@@ -293,14 +293,14 @@ const OrganizationSettings = ({ organization: propOrganization, onUpdate }) => {
                   value={formData.phone}
                   onChange={handleChange}
                   className="w-full pl-12 pr-4 py-3 bg-white dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-slate-800 dark:text-white placeholder-slate-400"
-                  placeholder="+506 2222-3333"
+                  placeholder={t('settings.organization.placeholders.phone')}
                 />
               </div>
             </div>
 
             <div className="md:col-span-2 space-y-2">
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-                Dirección
+                {t('settings.organization.fields.address')}
               </label>
               <div className="relative">
                 <MapPin className="absolute left-4 top-4 w-5 h-5 text-slate-400" />
@@ -310,7 +310,7 @@ const OrganizationSettings = ({ organization: propOrganization, onUpdate }) => {
                   onChange={handleChange}
                   rows={3}
                   className="w-full pl-12 pr-4 py-3 bg-white dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-slate-800 dark:text-white placeholder-slate-400 resize-none"
-                  placeholder="Calle Principal #123, Ciudad, País"
+                  placeholder={t('settings.organization.placeholders.address')}
                 />
               </div>
             </div>
@@ -332,7 +332,7 @@ const OrganizationSettings = ({ organization: propOrganization, onUpdate }) => {
             })}
             className="px-6 py-3 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl transition-colors font-medium"
           >
-            Cancelar
+            {t('settings.organization.actions.cancel')}
           </button>
           
           <button
@@ -343,12 +343,12 @@ const OrganizationSettings = ({ organization: propOrganization, onUpdate }) => {
             {saving ? (
               <>
                 <Loader2 className="w-5 h-5 animate-spin" />
-                Guardando...
+                {t('settings.organization.actions.saving')}
               </>
             ) : (
               <>
                 <Save className="w-5 h-5" />
-                Guardar Cambios
+                {t('settings.organization.actions.saveChanges')}
               </>
             )}
           </button>

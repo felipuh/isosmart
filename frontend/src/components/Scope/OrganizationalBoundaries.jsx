@@ -34,10 +34,10 @@ const OrganizationalBoundaries = ({ boundaries, loading }) => {
 
   const getBoundaryTitle = (type) => {
     switch (type) {
-      case 'geographic': return 'Límites Geográficos';
-      case 'functional': return 'Límites Funcionales';
-      case 'product_lines': return 'Líneas de Producto/Servicio';
-      case 'organizational_units': return 'Unidades Organizacionales';
+      case 'geographic': return t('organizationalBoundaries.types.geographic');
+      case 'functional': return t('organizationalBoundaries.types.functional');
+      case 'product_lines': return t('organizationalBoundaries.types.productLines');
+      case 'organizational_units': return t('organizationalBoundaries.types.organizationalUnits');
       default: return type;
     }
   };

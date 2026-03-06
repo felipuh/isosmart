@@ -48,7 +48,7 @@ const IdentifiedRisks = ({ riesgos, loading }) => {
     <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
       <h3 className="text-xl font-semibold dark:text-white mb-6 flex items-center">
         <AlertTriangle className="mr-2 h-6 w-6 text-red-500" />
-        Riesgos Identificados ({riesgos?.length || 0})
+        {t('identifiedRisks.title').replace('{count}', riesgos?.length || 0)}
       </h3>
 
       {!riesgos || riesgos.length === 0 ? (
@@ -92,7 +92,7 @@ const IdentifiedRisks = ({ riesgos, loading }) => {
               {riesgo.categoria && (
                 <div className="mt-3 ml-7">
                   <span className="text-xs bg-white dark:bg-slate-700 bg-opacity-50 px-2 py-1 rounded dark:text-slate-300">
-                    Categoría: {riesgo.categoria}
+                    {t('identifiedRisks.categoryPrefix').replace('{category}', riesgo.categoria)}
                   </span>
                 </div>
               )}

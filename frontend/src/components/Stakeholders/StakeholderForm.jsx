@@ -27,37 +27,37 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
   const [saving, setSaving] = useState(false);
 
   const STAKEHOLDER_TYPES = [
-    { value: 'cliente', label: 'Cliente' },
-    { value: 'proveedor', label: 'Proveedor' },
-    { value: 'empleado', label: 'Empleado' },
-    { value: 'acciónista', label: 'Acciónista' },
-    { value: 'regulador', label: 'Entidad Reguladora' },
-    { value: 'comunidad', label: 'Comunidad Local' },
-    { value: 'socio', label: 'Socio Estratégico' },
-    { value: 'competidor', label: 'Competidor' },
-    { value: 'otro', label: 'Otro' }
+    { value: 'cliente', label: t('stakeholderForm.options.types.cliente') },
+    { value: 'proveedor', label: t('stakeholderForm.options.types.proveedor') },
+    { value: 'empleado', label: t('stakeholderForm.options.types.empleado') },
+    { value: 'acciónista', label: t('stakeholderForm.options.types.accionista') },
+    { value: 'regulador', label: t('stakeholderForm.options.types.regulador') },
+    { value: 'comunidad', label: t('stakeholderForm.options.types.comunidad') },
+    { value: 'socio', label: t('stakeholderForm.options.types.socio') },
+    { value: 'competidor', label: t('stakeholderForm.options.types.competidor') },
+    { value: 'otro', label: t('stakeholderForm.options.types.otro') }
   ];
 
   const POWER_LEVELS = [
-    { value: 'bajo', label: 'Bajo' },
-    { value: 'medio', label: 'Medio' },
-    { value: 'alto', label: 'Alto' }
+    { value: 'bajo', label: t('stakeholderForm.options.powerLevels.bajo') },
+    { value: 'medio', label: t('stakeholderForm.options.powerLevels.medio') },
+    { value: 'alto', label: t('stakeholderForm.options.powerLevels.alto') }
   ];
 
   const INTEREST_LEVELS = [
-    { value: 'bajo', label: 'Bajo' },
-    { value: 'medio', label: 'Medio' },
-    { value: 'alto', label: 'Alto' }
+    { value: 'bajo', label: t('stakeholderForm.options.interestLevels.bajo') },
+    { value: 'medio', label: t('stakeholderForm.options.interestLevels.medio') },
+    { value: 'alto', label: t('stakeholderForm.options.interestLevels.alto') }
   ];
 
   const COMMUNICATION_FREQUENCY = [
-    { value: 'diaria', label: 'Diaria' },
-    { value: 'semanal', label: 'Semanal' },
-    { value: 'quincenal', label: 'Quincenal' },
-    { value: 'mensual', label: 'Mensual' },
-    { value: 'trimestral', label: 'Trimestral' },
-    { value: 'semestral', label: 'Semestral' },
-    { value: 'anual', label: 'Anual' }
+    { value: 'diaria', label: t('stakeholderForm.options.communicationFrequency.diaria') },
+    { value: 'semanal', label: t('stakeholderForm.options.communicationFrequency.semanal') },
+    { value: 'quincenal', label: t('stakeholderForm.options.communicationFrequency.quincenal') },
+    { value: 'mensual', label: t('stakeholderForm.options.communicationFrequency.mensual') },
+    { value: 'trimestral', label: t('stakeholderForm.options.communicationFrequency.trimestral') },
+    { value: 'semestral', label: t('stakeholderForm.options.communicationFrequency.semestral') },
+    { value: 'anual', label: t('stakeholderForm.options.communicationFrequency.anual') }
   ];
 
   useEffect(() => {
@@ -160,14 +160,14 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.name.trim()) {
-      alert('El nombre es requerido');
+      alert(t('stakeholderForm.messages.nameRequired'));
       return;
     }
     setSaving(true);
     try {
       await onSave(formData);
     } catch (error) {
-      console.error('Error guardando:', error);
+      console.error('Error saving stakeholder:', error);
     } finally {
       setSaving(false);
     }
@@ -187,7 +187,7 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
       <div className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-md rounded-lg shadow-2xl dark:shadow-slate-900/70 w-full max-w-3xl max-h-[90vh] flex flex-col border border-white/20 dark:border-slate-700/30 transition-all duration-300">
         <div className="flex-shrink-0 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md border-b border-slate-200/50 dark:border-slate-700/50 px-6 py-4 flex items-center justify-between transition-all duration-300">
           <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-            {stakeholder ? 'Editar Stakeholder' : 'Nuevo Stakeholder'}
+            {stakeholder ? t('stakeholderForm.titleEdit') : t('stakeholderForm.titleCreate')}
           </h2>
           <button type="button" onClick={onClose} className="text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-300 transition-colors">
             <X className="h-6 w-6" />
@@ -201,7 +201,7 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
-                  Nombre *
+                  {t('stakeholderForm.fields.nameRequired')}
                 </label>
                 <input
                   type="text"
@@ -210,13 +210,13 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
                   onChange={handleChange}
                   required
                   className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
-                  placeholder="Nombre del stakeholder"
+                  placeholder={t('stakeholderForm.placeholders.name')}
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
-                  Tipo de Stakeholder *
+                  {t('stakeholderForm.fields.typeRequired')}
                 </label>
                 <select
                   name="stakeholder_type"
@@ -232,7 +232,7 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
-                  Organización
+                  {t('stakeholderForm.fields.organization')}
                 </label>
                 <input
                   type="text"
@@ -240,13 +240,13 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
                   value={formData.organization}
                   onChange={handleChange}
                   className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
-                  placeholder="Empresa u organización"
+                  placeholder={t('stakeholderForm.placeholders.organization')}
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
-                  Persona de Contacto
+                  {t('stakeholderForm.fields.contactPerson')}
                 </label>
                 <input
                   type="text"
@@ -254,7 +254,7 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
                   value={formData.contact_person}
                   onChange={handleChange}
                   className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
-                  placeholder="Nombre del contacto"
+                  placeholder={t('stakeholderForm.placeholders.contactPerson')}
                 />
               </div>
 
@@ -268,13 +268,13 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
                   value={formData.email}
                   onChange={handleChange}
                   className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
-                  placeholder="correo@ejemplo.com"
+                  placeholder={t('stakeholderForm.placeholders.email')}
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
-                  Teléfono
+                  {t('stakeholderForm.fields.phone')}
                 </label>
                 <input
                   type="text"
@@ -282,7 +282,7 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
                   value={formData.phone}
                   onChange={handleChange}
                   className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
-                  placeholder="+506 8888-8888"
+                  placeholder={t('stakeholderForm.placeholders.phone')}
                 />
               </div>
             </div>
@@ -294,7 +294,7 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
-                  Nivel de Poder
+                  {t('stakeholderForm.fields.powerLevel')}
                 </label>
                 <select
                   name="power"
@@ -310,7 +310,7 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
-                  Nivel de Interés
+                  {t('stakeholderForm.fields.interestLevel')}
                 </label>
                 <select
                   name="interest"
@@ -326,7 +326,7 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
-                  Satisfacción (0-10)
+                  {t('stakeholderForm.fields.satisfactionRange')}
                 </label>
                 <input
                   type="number"
@@ -348,7 +348,7 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
-                  Frecuencia de Comunicación
+                  {t('stakeholderForm.fields.communicationFrequency')}
                 </label>
                 <select
                   name="communication_frequency"
@@ -364,7 +364,7 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
-                  Canal Preferido
+                  {t('stakeholderForm.fields.preferredChannel')}
                 </label>
                 <input
                   type="text"
@@ -372,7 +372,7 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
                   value={formData.preferred_channel}
                   onChange={handleChange}
                   className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
-                  placeholder="Email, Teléfono, Reunión, etc."
+                  placeholder={t('stakeholderForm.placeholders.preferredChannel')}
                 />
               </div>
             </div>
@@ -388,7 +388,7 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
                 onChange={(e) => setNewExpectation(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddExpectation())}
                 className="flex-1 px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
-                placeholder="Agregar expectativa..."
+                placeholder={t('stakeholderForm.placeholders.addExpectation')}
               />
               <button
                 type="button"
@@ -401,7 +401,7 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
             <div className="space-y-2">
               {formData.expectations.length === 0 ? (
                 <p className="text-sm text-gray-500 dark:text-slate-400 italic text-center py-3">
-                  No hay expectativas definidas. Agrega una usando el campo de arriba.
+                  {t('stakeholderForm.empty.expectations')}
                 </p>
               ) : (
                 formData.expectations.map((exp, index) => (
@@ -411,7 +411,7 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
                       type="button"
                       onClick={() => handleRemoveExpectation(index)}
                       className="text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors"
-                      aria-label="Eliminar expectativa"
+                      aria-label={t('stakeholderForm.aria.deleteExpectation')}
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>
@@ -431,7 +431,7 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
                 onChange={(e) => setNewRequirement(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddRequirement())}
                 className="flex-1 px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
-                placeholder="Agregar requisito..."
+                placeholder={t('stakeholderForm.placeholders.addRequirement')}
               />
               <button
                 type="button"
@@ -444,7 +444,7 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
             <div className="space-y-2">
               {formData.requirements.length === 0 ? (
                 <p className="text-sm text-gray-500 dark:text-slate-400 italic text-center py-3">
-                  No hay requisitos definidos. Agrega uno usando el campo de arriba.
+                  {t('stakeholderForm.empty.requirements')}
                 </p>
               ) : (
                 formData.requirements.map((req, index) => (
@@ -454,7 +454,7 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
                       type="button"
                       onClick={() => handleRemoveRequirement(index)}
                       className="text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors"
-                      aria-label="Eliminar requisito"
+                      aria-label={t('stakeholderForm.aria.deleteRequirement')}
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>
@@ -467,7 +467,7 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
           {/* Notas */}
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
-              Notas Adicionales
+              {t('stakeholderForm.fields.additionalNotes')}
             </label>
             <textarea
               name="notes"
@@ -475,7 +475,7 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
               onChange={handleChange}
               rows={3}
               className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
-              placeholder="Observaciones o notas relevantes..."
+              placeholder={t('stakeholderForm.placeholders.notes')}
             />
           </div>
 
@@ -489,7 +489,7 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
               className="h-4 w-4 text-blue-600 dark:text-blue-500 border-gray-300 dark:border-slate-600 rounded dark:bg-slate-700 focus:ring-blue-500 dark:focus:ring-blue-400"
             />
             <label className="ml-2 text-sm text-gray-700 dark:text-slate-300">
-              Stakeholder Activo
+              {t('stakeholderForm.fields.activeStakeholder')}
             </label>
           </div>
 
@@ -502,7 +502,7 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
             onClick={onClose}
             className="px-4 py-2 text-gray-700 dark:text-slate-300 bg-gray-100 dark:bg-slate-700 rounded-lg hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors"
           >
-            Cancelar
+            {t('common.buttons.cancel')}
           </button>
           <button
             type="submit"

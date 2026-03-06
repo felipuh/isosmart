@@ -9,7 +9,7 @@ import ProcessRecommendations from './ProcessRecommendations';
 import ProcessForm from './ProcessForm';
 
 const ProcessDashboard = () => {
-  const { t } = useI18n();
+  const { t, language } = useI18n();
   const { currentOrganization } = useAuth();
   const [processMap, setProcessMap] = useState(null);
   const [processes, setProcesses] = useState([]);
@@ -57,31 +57,33 @@ const ProcessDashboard = () => {
   }, [currentOrganization?.id, loadData]);
 
   const handleRunMapping = async () => {
-    if (!window.confirm('¿Ejecutar mapeo automático de procesos?\n\nEsto creará un nuevo mapa basado en el contexto y alcance del sistema.')) {
+    if (!window.confirm(t('processDashboard.messages.confirmRunMapping'))) {
       return;
     }
 
     setAnalyzing(true);
     try {
       const result = await processService.runMapping({});
-      console.log('Mapeo completado:', result);
+      console.log('Process mapping completed:', result);
 
       if (result.status === 'success') {
         await loadData();
-        
-        alert('Mapeo de procesos completado!\n\n' +
-              'Total procesos: ' + result.total_processes + '\n' +
-              'Estratégicos: ' + result.strategic_count + '\n' +
-              'Operativos: ' + result.operational_count + '\n' +
-              'Apoyo: ' + result.support_count + '\n' +
-              'Interacciones: ' + result.total_interactions + '\n' +
-              'Procesos críticos: ' + result.critical_processes_count);
+
+        alert(
+          t('processDashboard.messages.mappingCompleted')
+            .replace('{total}', result.total_processes || 0)
+            .replace('{strategic}', result.strategic_count || 0)
+            .replace('{operational}', result.operational_count || 0)
+            .replace('{support}', result.support_count || 0)
+            .replace('{interactions}', result.total_interactions || 0)
+            .replace('{critical}', result.critical_processes_count || 0)
+        );
       } else {
         alert(result.message);
       }
     } catch (error) {
-      console.error('Error ejecutando mapeo:', error);
-      alert('Error al ejecutar el mapeo de procesos');
+      console.error('Error running process mapping:', error);
+      alert(t('processDashboard.messages.mappingError'));
     } finally {
       setAnalyzing(false);
     }
@@ -101,38 +103,40 @@ const ProcessDashboard = () => {
     try {
       if (editingProcess) {
         await processService.updateProcess(editingProcess.id, formData);
-        alert('Proceso actualizado exitosamente');
+        alert(t('processDashboard.messages.processUpdated'));
       } else {
         await processService.createProcess(formData);
-        alert('Proceso creado exitosamente');
+        alert(t('processDashboard.messages.processCreated'));
       }
       setShowForm(false);
       setEditingProcess(null);
       await loadData();
     } catch (error) {
-      console.error('Error guardando proceso:', error);
-      alert('Error al guardar el proceso');
+      console.error('Error saving process:', error);
+      alert(t('processDashboard.messages.processSaveError'));
       throw error;
     }
   };
 
   const handleDeleteProcess = async (process) => {
-    if (!window.confirm('¿Estás seguro de eliminar el proceso "' + process.name + '"?')) {
+    const processLabel = process?.name || process?.code || process?.id || '-';
+    if (!window.confirm(t('processDashboard.messages.confirmDeleteProcess').replace('{name}', processLabel))) {
       return;
     }
     try {
       await processService.deleteProcess(process.id);
-      alert('Proceso eliminado exitosamente');
+      alert(t('processDashboard.messages.processDeleted'));
       await loadData();
     } catch (error) {
-      console.error('Error eliminando proceso:', error);
-      alert('Error al eliminar el proceso');
+      console.error('Error deleting process:', error);
+      alert(t('processDashboard.messages.processDeleteError'));
     }
   };
 
   const formatDate = (date) => {
-    if (!date) return 'No disponible';
-    return new Intl.DateTimeFormat('es-ES', {
+    if (!date) return t('processDashboard.notAvailable');
+    const locale = language === 'es-LATAM' ? 'es-ES' : language;
+    return new Intl.DateTimeFormat(locale, {
       day: '2-digit',
       month: 'long',
       year: 'numeric'
@@ -144,10 +148,10 @@ const ProcessDashboard = () => {
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-          Mapa de Procesos del SGC
+          {t('processDashboard.title')}
         </h1>
         <p className="text-slate-600 dark:text-slate-400">
-          ISO 4.4 - Sistema de gestión de calidad y sus procesos
+          {t('processDashboard.subtitle')}
         </p>
       </div>
 
@@ -212,7 +216,7 @@ const ProcessDashboard = () => {
               className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-blue-300 transition-colors"
             >
               <PlayCircle className={'mr-2 h-4 w-4 ' + (analyzing ? 'animate-spin' : '')} />
-              {analyzing ? 'Mapeando...' : 'Mapear Procesos con IA'}
+              {analyzing ? t('processDashboard.actions.mapping') : t('processDashboard.actions.mapWithAi')}
             </button>
 
             <button
@@ -221,7 +225,7 @@ const ProcessDashboard = () => {
               className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-gray-300 transition-colors"
             >
               <Plus className="mr-2 h-4 w-4" />
-              Nuevo Proceso
+              {t('processDashboard.actions.newProcess')}
             </button>
 
             <button
@@ -229,17 +233,17 @@ const ProcessDashboard = () => {
               className="flex items-center px-4 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
             >
               <RefreshCw className="mr-2 h-4 w-4" />
-              Actualizar
+              {t('common.update')}
             </button>
           </div>
 
           <div className="flex items-center space-x-4">
             <span className="text-sm text-slate-600 dark:text-slate-400">
-              Última actualización: {formatDate(processMap?.updated_at)}
+              {t('processDashboard.lastUpdate')}: {formatDate(processMap?.updated_at)}
             </span>
             <button className="flex items-center px-4 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
               <Download className="mr-2 h-4 w-4" />
-              Exportar
+              {t('common.export')}
             </button>
           </div>
         </div>
@@ -274,10 +278,10 @@ const ProcessDashboard = () => {
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-12 text-center transition-colors">
           <Network className="h-16 w-16 text-slate-400 dark:text-slate-600 mx-auto mb-4" />
           <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-2">
-            No hay mapa de procesos disponible
+            {t('processDashboard.empty.title')}
           </h3>
           <p className="text-slate-600 dark:text-slate-400 mb-6">
-            Ejecuta el mapeo automático para crear tu mapa de procesos del SGC
+            {t('processDashboard.empty.description')}
           </p>
           <button
             onClick={handleRunMapping}
@@ -285,7 +289,7 @@ const ProcessDashboard = () => {
             className="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-blue-300 transition-colors"
           >
             <PlayCircle className={'mr-2 h-5 w-5 ' + (analyzing ? 'animate-spin' : '')} />
-            {analyzing ? 'Mapeando...' : 'Mapear Procesos con IA'}
+            {analyzing ? t('processDashboard.actions.mapping') : t('processDashboard.actions.mapWithAi')}
           </button>
         </div>
       )}

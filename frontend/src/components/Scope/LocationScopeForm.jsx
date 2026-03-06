@@ -20,12 +20,12 @@ const LocationScopeForm = ({ location, scopeId, onSave, onClose }) => {
   const [saving, setSaving] = useState(false);
 
   const LOCATION_TYPES = [
-    { value: 'headquarters', label: 'Sede Principal' },
-    { value: 'branch', label: 'Sucursal' },
-    { value: 'warehouse', label: 'Almacén/Bodega' },
-    { value: 'plant', label: 'Planta de Producción' },
-    { value: 'office', label: 'Oficina' },
-    { value: 'remote', label: 'Trabajo Remoto' }
+    { value: 'headquarters', label: t('locationScopeForm.locationTypes.headquarters') },
+    { value: 'branch', label: t('locationScopeForm.locationTypes.branch') },
+    { value: 'warehouse', label: t('locationScopeForm.locationTypes.warehouse') },
+    { value: 'plant', label: t('locationScopeForm.locationTypes.plant') },
+    { value: 'office', label: t('locationScopeForm.locationTypes.office') },
+    { value: 'remote', label: t('locationScopeForm.locationTypes.remote') }
   ];
 
   useEffect(() => {
@@ -72,18 +72,18 @@ const LocationScopeForm = ({ location, scopeId, onSave, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.location_name.trim()) {
-      alert('El nombre de la ubicación es requerido');
+      alert(t('locationScopeForm.messages.locationNameRequired'));
       return;
     }
     if (!formData.city.trim()) {
-      alert('La ciudad es requerida');
+      alert(t('locationScopeForm.messages.cityRequired'));
       return;
     }
     setSaving(true);
     try {
       await onSave(formData);
     } catch (error) {
-      console.error('Error guardando:', error);
+      console.error('Error saving location scope:', error);
     } finally {
       setSaving(false);
     }
@@ -94,7 +94,7 @@ const LocationScopeForm = ({ location, scopeId, onSave, onClose }) => {
       <div className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-md rounded-lg shadow-2xl dark:shadow-slate-900/70 w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-white/20 dark:border-slate-700/30 transition-all duration-300">
         <div className="sticky top-0 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md border-b border-slate-200/50 dark:border-slate-700/50 px-6 py-4 flex items-center justify-between transition-all duration-300">
           <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-            {location ? 'Editar Ubicación' : 'Nueva Ubicación en Alcance'}
+            {location ? t('locationScopeForm.titleEdit') : t('locationScopeForm.titleCreate')}
           </h2>
           <button onClick={onClose} className="text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-300 transition-colors">
             <X className="h-6 w-6" />
@@ -108,7 +108,7 @@ const LocationScopeForm = ({ location, scopeId, onSave, onClose }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
-                  Nombre de la Ubicación *
+                  {t('locationScopeForm.fields.locationNameRequired')}
                 </label>
                 <input
                   type="text"
@@ -117,13 +117,13 @@ const LocationScopeForm = ({ location, scopeId, onSave, onClose }) => {
                   onChange={handleChange}
                   required
                   className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors"
-                  placeholder="Ej: Oficina Central San José"
+                  placeholder={t('locationScopeForm.placeholders.locationName')}
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
-                  Tipo de Ubicación *
+                  {t('locationScopeForm.fields.locationTypeRequired')}
                 </label>
                 <select
                   name="location_type"
@@ -139,7 +139,7 @@ const LocationScopeForm = ({ location, scopeId, onSave, onClose }) => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
-                  Número de Empleados
+                  {t('locationScopeForm.fields.employeeCount')}
                 </label>
                 <input
                   type="number"
@@ -153,7 +153,7 @@ const LocationScopeForm = ({ location, scopeId, onSave, onClose }) => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
-                  País *
+                  {t('locationScopeForm.fields.countryRequired')}
                 </label>
                 <input
                   type="text"
@@ -162,13 +162,13 @@ const LocationScopeForm = ({ location, scopeId, onSave, onClose }) => {
                   onChange={handleChange}
                   required
                   className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors"
-                  placeholder="Costa Rica"
+                  placeholder={t('locationScopeForm.placeholders.country')}
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
-                  Ciudad *
+                  {t('locationScopeForm.fields.cityRequired')}
                 </label>
                 <input
                   type="text"
@@ -177,13 +177,13 @@ const LocationScopeForm = ({ location, scopeId, onSave, onClose }) => {
                   onChange={handleChange}
                   required
                   className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors"
-                  placeholder="San José"
+                  placeholder={t('locationScopeForm.placeholders.city')}
                 />
               </div>
 
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
-                  Dirección Completa
+                  {t('locationScopeForm.fields.fullAddress')}
                 </label>
                 <textarea
                   name="address"
@@ -191,7 +191,7 @@ const LocationScopeForm = ({ location, scopeId, onSave, onClose }) => {
                   onChange={handleChange}
                   rows={2}
                   className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors"
-                  placeholder="Dirección física de la ubicación..."
+                  placeholder={t('locationScopeForm.placeholders.address')}
                 />
               </div>
             </div>
@@ -207,7 +207,7 @@ const LocationScopeForm = ({ location, scopeId, onSave, onClose }) => {
                 onChange={(e) => setNewActivity(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddActivity())}
                 className="flex-1 px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white transition-colors"
-                placeholder="Agregar actividad..."
+                placeholder={t('locationScopeForm.placeholders.addActivity')}
               />
               <button
                 type="button"
@@ -239,7 +239,7 @@ const LocationScopeForm = ({ location, scopeId, onSave, onClose }) => {
               className="h-4 w-4 text-blue-600 dark:text-blue-500 border-gray-300 dark:border-slate-600 dark:bg-slate-700 rounded transition-colors"
             />
             <label className="ml-2 text-sm text-gray-700 dark:text-slate-300">
-              Incluida en el Alcance del SGC
+              {t('locationScopeForm.fields.includedInScope')}
             </label>
           </div>
 
@@ -250,7 +250,7 @@ const LocationScopeForm = ({ location, scopeId, onSave, onClose }) => {
               onClick={onClose}
               className="px-4 py-2 text-gray-700 dark:text-slate-300 bg-gray-100 dark:bg-slate-700 rounded-lg hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors"
             >
-              Cancelar
+              {t('common.buttons.cancel')}
             </button>
             <button
               type="submit"

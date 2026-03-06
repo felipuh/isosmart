@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Save, Plus, Trash2 } from 'lucide-react';
+import { X, Save, Plus } from 'lucide-react';
 import { useI18n } from '../../context/I18nContext';
 
 const ProcessScopeForm = ({ process, scopeId, onSave, onClose }) => {
@@ -24,9 +24,9 @@ const ProcessScopeForm = ({ process, scopeId, onSave, onClose }) => {
   const [saving, setSaving] = useState(false);
 
   const PROCESS_TYPES = [
-    { value: 'strategic', label: 'Estratégico' },
-    { value: 'operational', label: 'Operativo' },
-    { value: 'support', label: 'Apoyo' }
+    { value: 'strategic', label: t('processScopeForm.processTypes.strategic') },
+    { value: 'operational', label: t('processScopeForm.processTypes.operational') },
+    { value: 'support', label: t('processScopeForm.processTypes.support') }
   ];
 
   useEffect(() => {
@@ -75,14 +75,14 @@ const ProcessScopeForm = ({ process, scopeId, onSave, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.process_name.trim()) {
-      alert('El nombre del proceso es requerido');
+      alert(t('processScopeForm.messages.nameRequired'));
       return;
     }
     setSaving(true);
     try {
       await onSave(formData);
     } catch (error) {
-      console.error('Error guardando:', error);
+      console.error('Error saving process scope:', error);
     } finally {
       setSaving(false);
     }
@@ -93,7 +93,7 @@ const ProcessScopeForm = ({ process, scopeId, onSave, onClose }) => {
       <div className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-md rounded-lg shadow-2xl dark:shadow-slate-900/70 w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-white/20 dark:border-slate-700/30 transition-all duration-300">
         <div className="sticky top-0 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md border-b border-slate-200/50 dark:border-slate-700/50 px-6 py-4 flex items-center justify-between transition-all duration-300">
           <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-            {process ? 'Editar Proceso' : 'Nuevo Proceso en Alcance'}
+            {process ? t('processScopeForm.titleEdit') : t('processScopeForm.titleCreate')}
           </h2>
           <button onClick={onClose} className="text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-300 transition-colors">
             <X className="h-6 w-6" />
@@ -107,7 +107,7 @@ const ProcessScopeForm = ({ process, scopeId, onSave, onClose }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
-                  Nombre del Proceso *
+                  {t('processScopeForm.fields.processNameRequired')}
                 </label>
                 <input
                   type="text"
@@ -116,13 +116,13 @@ const ProcessScopeForm = ({ process, scopeId, onSave, onClose }) => {
                   onChange={handleChange}
                   required
                   className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors"
-                  placeholder="Ej: Gestión de Producción"
+                  placeholder={t('processScopeForm.placeholders.processName')}
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
-                  Código del Proceso
+                  {t('processScopeForm.fields.processCode')}
                 </label>
                 <input
                   type="text"
@@ -130,13 +130,13 @@ const ProcessScopeForm = ({ process, scopeId, onSave, onClose }) => {
                   value={formData.process_code}
                   onChange={handleChange}
                   className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors"
-                  placeholder="Ej: PRO-001"
+                  placeholder={t('processScopeForm.placeholders.processCode')}
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
-                  Tipo de Proceso *
+                  {t('processScopeForm.fields.processTypeRequired')}
                 </label>
                 <select
                   name="process_type"
@@ -152,7 +152,7 @@ const ProcessScopeForm = ({ process, scopeId, onSave, onClose }) => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
-                  Responsable
+                  {t('processScopeForm.fields.owner')}
                 </label>
                 <input
                   type="text"
@@ -160,13 +160,13 @@ const ProcessScopeForm = ({ process, scopeId, onSave, onClose }) => {
                   value={formData.owner}
                   onChange={handleChange}
                   className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors"
-                  placeholder="Nombre del responsable"
+                  placeholder={t('processScopeForm.placeholders.owner')}
                 />
               </div>
 
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
-                  Descripción
+                  {t('processScopeForm.fields.description')}
                 </label>
                 <textarea
                   name="description"
@@ -174,7 +174,7 @@ const ProcessScopeForm = ({ process, scopeId, onSave, onClose }) => {
                   onChange={handleChange}
                   rows={2}
                   className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors"
-                  placeholder="Descripción del proceso..."
+                  placeholder={t('processScopeForm.placeholders.description')}
                 />
               </div>
             </div>
@@ -190,7 +190,7 @@ const ProcessScopeForm = ({ process, scopeId, onSave, onClose }) => {
                 onChange={(e) => setNewInput(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddItem('inputs', newInput, setNewInput))}
                 className="flex-1 px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white transition-colors"
-                placeholder="Agregar entrada..."
+                placeholder={t('processScopeForm.placeholders.addInput')}
               />
               <button
                 type="button"
@@ -222,7 +222,7 @@ const ProcessScopeForm = ({ process, scopeId, onSave, onClose }) => {
                 onChange={(e) => setNewOutput(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddItem('outputs', newOutput, setNewOutput))}
                 className="flex-1 px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white transition-colors"
-                placeholder="Agregar salida..."
+                placeholder={t('processScopeForm.placeholders.addOutput')}
               />
               <button
                 type="button"
@@ -254,7 +254,7 @@ const ProcessScopeForm = ({ process, scopeId, onSave, onClose }) => {
                 onChange={(e) => setNewKpi(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddItem('kpis', newKpi, setNewKpi))}
                 className="flex-1 px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white transition-colors"
-                placeholder="Agregar KPI..."
+                placeholder={t('processScopeForm.placeholders.addKpi')}
               />
               <button
                 type="button"
@@ -287,13 +287,13 @@ const ProcessScopeForm = ({ process, scopeId, onSave, onClose }) => {
                 className="h-4 w-4 text-blue-600 dark:text-blue-500 border-gray-300 dark:border-slate-600 dark:bg-slate-700 rounded transition-colors"
               />
               <label className="ml-2 text-sm font-medium text-gray-700 dark:text-slate-300">
-                Incluido en el Alcance del SGC
+                {t('processScopeForm.fields.includedInScope')}
               </label>
             </div>
             {!formData.is_included && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
-                  Razón de Exclusión
+                  {t('processScopeForm.fields.exclusionReason')}
                 </label>
                 <textarea
                   name="exclusion_reason"
@@ -301,7 +301,7 @@ const ProcessScopeForm = ({ process, scopeId, onSave, onClose }) => {
                   onChange={handleChange}
                   rows={2}
                   className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white transition-colors"
-                  placeholder="Justifique la exclusión..."
+                  placeholder={t('processScopeForm.placeholders.exclusionReason')}
                 />
               </div>
             )}
@@ -314,7 +314,7 @@ const ProcessScopeForm = ({ process, scopeId, onSave, onClose }) => {
               onClick={onClose}
               className="px-4 py-2 text-gray-700 dark:text-slate-300 bg-gray-100 dark:bg-slate-700 rounded-lg hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors"
             >
-              Cancelar
+              {t('common.buttons.cancel')}
             </button>
             <button
               type="submit"

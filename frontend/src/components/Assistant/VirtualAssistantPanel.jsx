@@ -7,27 +7,27 @@ import { useI18n } from '../../context/I18nContext';
 const KNOWLEDGE_BASE = [
   {
     match: ['riesgo', 'risk'],
-    answer: 'Para gestionar riesgos ve a Planificación > Riesgos y Oportunidades. Registra probabilidad, impacto y tratamiento.',
+    answerKey: 'assistantPanel.answers.risks',
   },
   {
     match: ['auditor', 'audit', '9.2'],
-    answer: 'Las auditorías internas están en Desempeño > Auditorías. Desde allí puedes crear hallazgos y dar seguimiento.',
+    answerKey: 'assistantPanel.answers.audits',
   },
   {
     match: ['no conform', '10.2', 'incidencia'],
-    answer: 'Las no conformidades operativas se registran en Operación y se sincronizan con Mejora para acciones correctivas.',
+    answerKey: 'assistantPanel.answers.nonconformities',
   },
   {
     match: ['onboarding', 'configuración inicial'],
-    answer: 'El onboarding se completa una vez por organización y permite definir idioma y estándares aplicables.',
+    answerKey: 'assistantPanel.answers.onboarding',
   },
   {
     match: ['iso 42001', 'ia'],
-    answer: 'ISO/IEC 42001 está disponible en configuración de estándares. Inicializa sus cláusulas desde Ajustes > Parámetros ISO.',
+    answerKey: 'assistantPanel.answers.iso42001',
   },
 ];
 
-const defaultAnswer = 'Puedo ayudarte con navegación ISO Smart (riesgos, auditorías, no conformidades, estándares, onboarding). Formula tu pregunta con el módulo o cláusula.';
+const DEFAULT_ANSWER_KEY = 'assistantPanel.answers.default';
 
 const VirtualAssistantPanel = () => {
   const { t } = useI18n();
@@ -38,19 +38,23 @@ const VirtualAssistantPanel = () => {
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
-      content: 'Soy tu asistente virtual de ISO Smart. Te ayudo a ubicar flujos y módulos clave.',
+      content: t('assistantPanel.initialMessage'),
     },
   ]);
 
   const suggestions = useMemo(
-    () => ['¿Dónde registro auditorías?', '¿Cómo inicializo ISO 27001?', '¿Dónde cargo riesgos?'],
-    []
+    () => [
+      t('assistantPanel.suggestions.audits'),
+      t('assistantPanel.suggestions.iso27001'),
+      t('assistantPanel.suggestions.risks'),
+    ],
+    [t]
   );
 
   const resolveAnswer = (question) => {
     const normalized = question.toLowerCase();
     const hit = KNOWLEDGE_BASE.find((entry) => entry.match.some((key) => normalized.includes(key)));
-    return hit?.answer || defaultAnswer;
+    return hit ? t(hit.answerKey) : t(DEFAULT_ANSWER_KEY);
   };
 
   const sendQuestion = (questionText) => {
@@ -98,7 +102,7 @@ const VirtualAssistantPanel = () => {
       <button
         onClick={() => setOpen((prev) => !prev)}
         className="fixed bottom-6 right-6 z-50 h-12 w-12 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg flex items-center justify-center"
-        aria-label="Abrir asistente virtual"
+        aria-label={t('assistantPanel.openAriaLabel')}
       >
         {open ? <X className="w-5 h-5" /> : <MessageCircle className="w-5 h-5" />}
       </button>
@@ -144,7 +148,7 @@ const VirtualAssistantPanel = () => {
                 onKeyDown={(event) => {
                   if (event.key === 'Enter') sendQuestion(input);
                 }}
-                placeholder="Escribe tu consulta..."
+                placeholder={t('assistantPanel.inputPlaceholder')}
                 disabled={sending}
                 className="flex-1 px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100"
               />
@@ -152,7 +156,7 @@ const VirtualAssistantPanel = () => {
                 onClick={() => sendQuestion(input)}
                 disabled={sending}
                 className="h-9 w-9 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-center"
-                aria-label="Enviar"
+                aria-label={t('assistantPanel.sendAriaLabel')}
               >
                 <Send className="w-4 h-4" />
               </button>

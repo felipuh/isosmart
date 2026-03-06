@@ -83,7 +83,7 @@ const UserMenu = () => {
             {user.first_name} {user.last_name}
           </p>
           <p className="text-xs text-slate-400">
-            {currentOrganization?.name || 'Sin organización'}
+            {currentOrganization?.name || t('auth.userMenu.noOrganization')}
           </p>
         </div>
 

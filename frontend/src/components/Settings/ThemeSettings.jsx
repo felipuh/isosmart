@@ -19,8 +19,8 @@ const ThemeSettings = () => {
   const themeOptions = [
     {
       id: 'light',
-      name: 'Modo Claro',
-      description: 'Interfaz clara y brillante para ambientes luminosos',
+      nameKey: 'settings.theme.lightMode',
+      descriptionKey: 'settings.theme.optionDescriptions.light',
       icon: Sun,
       preview: {
         bg: 'bg-white',
@@ -31,8 +31,8 @@ const ThemeSettings = () => {
     },
     {
       id: 'dark',
-      name: 'Modo Oscuro',
-      description: 'Reduce la fatiga visual en ambientes con poca luz',
+      nameKey: 'settings.theme.darkMode',
+      descriptionKey: 'settings.theme.optionDescriptions.dark',
       icon: Moon,
       preview: {
         bg: 'bg-slate-900',
@@ -43,8 +43,8 @@ const ThemeSettings = () => {
     },
     {
       id: 'system',
-      name: 'Automático',
-      description: 'Se adapta automáticamente según tu sistema operativo',
+      nameKey: 'settings.theme.systemMode',
+      descriptionKey: 'settings.theme.optionDescriptions.system',
       icon: Monitor,
       preview: {
         bg: 'bg-gradient-to-r from-white to-slate-900',
@@ -67,6 +67,25 @@ const ThemeSettings = () => {
 
   const currentThemeSetting = localStorage.getItem('isosmart-theme') || theme;
 
+  const languageOptions = [
+    { code: 'es-LATAM', name: t('settings.theme.languageOptions.esLatam'), flag: '🇪🇸' },
+    { code: 'en', name: t('settings.theme.languageOptions.en'), flag: '🇺🇸' },
+    { code: 'pt', name: t('settings.theme.languageOptions.pt'), flag: '🇧🇷' },
+  ];
+
+  const paletteItems = [
+    { color: 'bg-indigo-500', name: t('settings.theme.palette.primary') },
+    { color: 'bg-purple-500', name: t('settings.theme.palette.secondary') },
+    { color: 'bg-emerald-500', name: t('settings.theme.palette.success') },
+    { color: 'bg-amber-500', name: t('settings.theme.palette.warning') },
+    { color: 'bg-red-500', name: t('settings.theme.palette.error') },
+    { color: 'bg-blue-500', name: t('settings.theme.palette.info') },
+    { color: 'bg-teal-500', name: t('settings.theme.palette.accent') },
+    { color: 'bg-pink-500', name: t('settings.theme.palette.pink') },
+    { color: 'bg-slate-500', name: t('settings.theme.palette.neutral') },
+    { color: 'bg-violet-500', name: t('settings.theme.palette.violet') },
+  ];
+
   return (
     <div className="p-6 lg:p-8">
       {/* Header */}
@@ -76,10 +95,10 @@ const ThemeSettings = () => {
         </div>
         <div>
           <h2 className="text-xl font-bold text-slate-800 dark:text-white">
-            Configuración de Apariencia
+            {t('settings.theme.title')}
           </h2>
           <p className="text-sm text-slate-500 dark:text-slate-400">
-            Personaliza la apariencia visual del sistema
+            {t('settings.theme.subtitle')}
           </p>
         </div>
       </div>
@@ -88,7 +107,7 @@ const ThemeSettings = () => {
       <div className="mb-8">
         <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-4 flex items-center gap-2">
           <Eye className="w-5 h-5 text-pink-500" />
-          Tema de Color
+          {t('settings.theme.colorThemeTitle')}
         </h3>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -134,12 +153,12 @@ const ThemeSettings = () => {
                     <Icon className={`w-5 h-5 ${isSelected ? 'text-pink-500' : 'text-slate-500 dark:text-slate-400'}`} />
                   </div>
                   <h4 className="font-semibold text-slate-800 dark:text-white">
-                    {option.name}
+                    {t(option.nameKey)}
                   </h4>
                 </div>
                 
                 <p className="text-sm text-slate-500 dark:text-slate-400">
-                  {option.description}
+                  {t(option.descriptionKey)}
                 </p>
               </button>
             );
@@ -159,12 +178,12 @@ const ThemeSettings = () => {
           </div>
           <div>
             <p className="font-semibold text-slate-800 dark:text-white">
-              Tema actual: {isDark ? 'Modo Oscuro' : 'Modo Claro'}
+              {t('settings.theme.currentThemeLabel').replace('{theme}', isDark ? t('settings.theme.darkMode') : t('settings.theme.lightMode'))}
             </p>
             <p className="text-sm text-slate-500 dark:text-slate-400">
               {currentThemeSetting === 'system' 
-                ? 'Siguiendo la configuración de tu sistema' 
-                : 'Configuración manual'
+                ? t('settings.theme.systemFollowing')
+                : t('settings.theme.manualConfiguration')
               }
             </p>
           </div>
@@ -175,15 +194,11 @@ const ThemeSettings = () => {
       <div className="space-y-4 mb-8">
         <h3 className="text-lg font-bold text-slate-800 dark:text-white flex items-center gap-2">
           <Globe className="w-5 h-5 text-blue-500" />
-          Idioma
+          {t('settings.theme.language')}
         </h3>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {[
-            { code: 'es-LATAM', name: 'Español (LATAM)', flag: '🇪🇸' },
-            { code: 'en', name: 'English', flag: '🇺🇸' },
-            { code: 'pt', name: 'Português', flag: '🇧🇷' },
-          ].map((lang) => (
+          {languageOptions.map((lang) => (
             <button
               key={lang.code}
               onClick={async () => {
@@ -192,11 +207,11 @@ const ThemeSettings = () => {
                   setError(null);
                   await settingsService.updateLanguage(currentOrganization?.id, lang.code);
                   setLanguage(lang.code);
-                  setSuccess(`Idioma cambiado a ${lang.name}`);
+                  setSuccess(t('settings.theme.messages.languageChanged').replace('{language}', lang.name));
                   setTimeout(() => setSuccess(null), 3000);
                 } catch (err) {
-                  console.error('Error al cambiar idioma:', err);
-                  setError('Error al cambiar el idioma');
+                  console.error('Error changing language:', err);
+                  setError(t('settings.theme.messages.languageChangeError'));
                 } finally {
                   setSaving(false);
                 }
@@ -246,7 +261,7 @@ const ThemeSettings = () => {
       <div className="space-y-4">
         <h3 className="text-lg font-bold text-slate-800 dark:text-white flex items-center gap-2">
           <Sparkles className="w-5 h-5 text-pink-500" />
-          Características Visuales
+          {t('settings.theme.visualFeaturesTitle')}
         </h3>
         
         <div className="p-4 bg-white dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700">
@@ -258,7 +273,7 @@ const ThemeSettings = () => {
               <div>
                 <p className="font-semibold text-slate-800 dark:text-white">{t('settings.theme.features.glassmorphism')}</p>
                 <p className="text-sm text-slate-500 dark:text-slate-400">
-                  Efectos de transparencia y blur en las tarjetas
+                  {t('settings.theme.features.glassmorphismDescription')}
                 </p>
               </div>
             </div>
@@ -277,7 +292,7 @@ const ThemeSettings = () => {
               <div>
                 <p className="font-semibold text-slate-800 dark:text-white">{t('settings.theme.features.animations')}</p>
                 <p className="text-sm text-slate-500 dark:text-slate-400">
-                  Transiciones suaves y micro-interacciones
+                  {t('settings.theme.features.animationsDescription')}
                 </p>
               </div>
             </div>
@@ -296,12 +311,12 @@ const ThemeSettings = () => {
               <div>
                 <p className="font-semibold text-slate-800 dark:text-white">{t('settings.theme.features.typography')}</p>
                 <p className="text-sm text-slate-500 dark:text-slate-400">
-                  Inter - Moderna y legible
+                  {t('settings.theme.features.typographyDescription')}
                 </p>
               </div>
             </div>
             <span className="text-sm text-slate-500 dark:text-slate-400">
-              Por defecto
+              {t('settings.theme.defaultLabel')}
             </span>
           </div>
         </div>
@@ -310,22 +325,11 @@ const ThemeSettings = () => {
       {/* Color Palette Preview */}
       <div className="mt-8">
         <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-4">
-          Paleta de Colores del Sistema
+          {t('settings.theme.paletteTitle')}
         </h3>
         
         <div className="grid grid-cols-5 md:grid-cols-10 gap-2">
-          {[
-            { color: 'bg-indigo-500', name: 'Principal' },
-            { color: 'bg-purple-500', name: 'Secundario' },
-            { color: 'bg-emerald-500', name: 'Éxito' },
-            { color: 'bg-amber-500', name: 'Advertencia' },
-            { color: 'bg-red-500', name: 'Error' },
-            { color: 'bg-blue-500', name: 'Info' },
-            { color: 'bg-teal-500', name: 'Accent' },
-            { color: 'bg-pink-500', name: 'Rosa' },
-            { color: 'bg-slate-500', name: 'Neutral' },
-            { color: 'bg-violet-500', name: 'Violeta' },
-          ].map((item, i) => (
+          {paletteItems.map((item, i) => (
             <div key={i} className="text-center">
               <div className={`w-full aspect-square ${item.color} rounded-lg shadow-md mb-1`}></div>
               <span className="text-xs text-slate-500 dark:text-slate-400">{item.name}</span>

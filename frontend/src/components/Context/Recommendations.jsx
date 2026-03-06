@@ -49,7 +49,7 @@ const Recommendations = ({ recomendaciones, loading }) => {
     <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
       <h3 className="text-xl font-semibold mb-6 flex items-center dark:text-white">
         <Lightbulb className="mr-2 h-6 w-6 text-yellow-500" />
-        Recomendaciones de IA ({recomendaciones?.length || 0})
+        {t('contextRecommendations.title').replace('{count}', recomendaciones?.length || 0)}
       </h3>
 
       {!recomendaciones || recomendaciones.length === 0 ? (
@@ -70,7 +70,7 @@ const Recommendations = ({ recomendaciones, loading }) => {
                   <div className="flex items-center mb-2">
                     <Lightbulb className="h-4 w-4 text-yellow-600 mr-2" />
                     <span className={`text-xs px-2 py-1 rounded border font-semibold ${getPriorityBadge(rec.prioridad)}`}>
-                      {rec.prioridad?.toUpperCase() || 'MEDIA'}
+                      {rec.prioridad?.toUpperCase() || t('contextRecommendations.defaultPriority')}
                     </span>
                   </div>
                   <p className="text-sm font-medium text-slate-900 dark:text-slate-100 mb-2">

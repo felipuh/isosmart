@@ -9,7 +9,7 @@ import settingsService from '../../services/settingsService';
 import { useI18n } from '../../context/I18nContext';
 
 const BackupExportSettings = ({ settings, onUpdate, organizationId }) => {
-  const { t } = useI18n();
+  const { t, language } = useI18n();
   const [autoBackup, setAutoBackup] = useState(settings?.auto_backup_enabled ?? false);
   const [backupFrequency, setBackupFrequency] = useState(settings?.backup_frequency ?? 'weekly');
   const [exporting, setExporting] = useState(null);
@@ -20,45 +20,45 @@ const BackupExportSettings = ({ settings, onUpdate, organizationId }) => {
   const exportOptions = [
     {
       id: 'all',
-      title: 'Exportación Completa',
-      description: 'Todos los datos del sistema (riesgos, objetivos, stakeholders, documentos, procesos)',
+      title: t('settings.backup.exportOptions.all.title'),
+      description: t('settings.backup.exportOptions.all.description'),
       icon: Archive,
       color: 'from-indigo-500 to-purple-500'
     },
     {
       id: 'risks',
-      title: 'Matriz de Riesgos',
-      description: 'Todos los riesgos identificados y su estado actual',
+      title: t('settings.backup.exportOptions.risks.title'),
+      description: t('settings.backup.exportOptions.risks.description'),
       icon: Shield,
       color: 'from-red-500 to-rose-500'
     },
     {
       id: 'objectives',
-      title: 'Objetivos de Calidad',
-      description: 'Objetivos, indicadores y progreso',
+      title: t('settings.backup.exportOptions.objectives.title'),
+      description: t('settings.backup.exportOptions.objectives.description'),
       icon: FileJson,
       color: 'from-emerald-500 to-teal-500'
     },
     {
       id: 'stakeholders',
-      title: 'Partes Interesadas',
-      description: 'Perfiles de stakeholders y expectativas',
+      title: t('settings.backup.exportOptions.stakeholders.title'),
+      description: t('settings.backup.exportOptions.stakeholders.description'),
       icon: FileSpreadsheet,
       color: 'from-violet-500 to-purple-500'
     },
     {
       id: 'processes',
-      title: 'Mapas de Procesos',
-      description: 'Procesos, KPIs y diagramas',
+      title: t('settings.backup.exportOptions.processes.title'),
+      description: t('settings.backup.exportOptions.processes.description'),
       icon: FileJson,
       color: 'from-amber-500 to-orange-500'
     },
   ];
 
   const frequencyOptions = [
-    { value: 'daily', label: 'Diario' },
-    { value: 'weekly', label: 'Semanal' },
-    { value: 'monthly', label: 'Mensual' },
+    { value: 'daily', label: t('settings.backup.frequencyOptions.daily') },
+    { value: 'weekly', label: t('settings.backup.frequencyOptions.weekly') },
+    { value: 'monthly', label: t('settings.backup.frequencyOptions.monthly') },
   ];
 
   const handleExport = async (type) => {
@@ -68,10 +68,11 @@ const BackupExportSettings = ({ settings, onUpdate, organizationId }) => {
       
       await settingsService.downloadExport(type);
       
-      setSuccess(`Datos exportados correctamente (${type})`);
+      const selectedType = t(`settings.backup.exportOptions.${type}.title`);
+      setSuccess(t('settings.backup.messages.exportSuccess').replace('{type}', selectedType));
       setTimeout(() => setSuccess(null), 3000);
     } catch (err) {
-      setError('Error al exportar datos');
+      setError(t('settings.backup.messages.exportError'));
       console.error(err);
     } finally {
       setExporting(null);
@@ -86,10 +87,10 @@ const BackupExportSettings = ({ settings, onUpdate, organizationId }) => {
       const result = await settingsService.triggerBackup(organizationId);
       onUpdate({ last_backup_at: result.last_backup_at });
       
-      setSuccess('Backup realizado correctamente');
+      setSuccess(t('settings.backup.messages.backupSuccess'));
       setTimeout(() => setSuccess(null), 3000);
     } catch (err) {
-      setError('Error al realizar backup');
+      setError(t('settings.backup.messages.backupError'));
       console.error(err);
     } finally {
       setBackingUp(false);
@@ -97,8 +98,9 @@ const BackupExportSettings = ({ settings, onUpdate, organizationId }) => {
   };
 
   const formatDate = (dateString) => {
-    if (!dateString) return 'Nunca';
-    return new Date(dateString).toLocaleString('es', {
+    if (!dateString) return t('settings.backup.never');
+    const locale = language === 'es-LATAM' ? 'es-ES' : language;
+    return new Date(dateString).toLocaleString(locale, {
       dateStyle: 'medium',
       timeStyle: 'short'
     });
@@ -113,10 +115,10 @@ const BackupExportSettings = ({ settings, onUpdate, organizationId }) => {
         </div>
         <div>
           <h2 className="text-xl font-bold text-slate-800 dark:text-white">
-            Backup y Exportación
+            {t('settings.backup.title')}
           </h2>
           <p className="text-sm text-slate-500 dark:text-slate-400">
-            Respalda y exporta los datos de tu sistema
+            {t('settings.backup.subtitle')}
           </p>
         </div>
       </div>
@@ -140,7 +142,7 @@ const BackupExportSettings = ({ settings, onUpdate, organizationId }) => {
       <div className="mb-8 p-6 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-700/30 dark:to-slate-800/30 rounded-2xl border border-slate-200 dark:border-slate-700">
         <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-4 flex items-center gap-2">
           <HardDrive className="w-5 h-5 text-emerald-500" />
-          Configuración de Backup
+          {t('settings.backup.backupConfigTitle')}
         </h3>
         
         {/* Last Backup Info */}
@@ -164,12 +166,12 @@ const BackupExportSettings = ({ settings, onUpdate, organizationId }) => {
             {backingUp ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
-                Respaldando...
+                {t('settings.backup.actions.backingUp')}
               </>
             ) : (
               <>
                 <RefreshCw className="w-4 h-4" />
-                Backup Ahora
+                {t('settings.backup.actions.backupNow')}
               </>
             )}
           </button>
@@ -184,7 +186,7 @@ const BackupExportSettings = ({ settings, onUpdate, organizationId }) => {
             <div>
               <p className="font-semibold text-slate-800 dark:text-white">{t('settings.backup.autoBackup')}</p>
               <p className="text-sm text-slate-500 dark:text-slate-400">
-                Realizar respaldos automáticamente
+                {t('settings.backup.autoBackupDescription')}
               </p>
             </div>
           </div>
@@ -201,7 +203,7 @@ const BackupExportSettings = ({ settings, onUpdate, organizationId }) => {
         {autoBackup && (
           <div className="mt-4">
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">
-              Frecuencia de Backup
+              {t('settings.backup.backupFrequency')}
             </label>
             <div className="flex gap-3">
               {frequencyOptions.map((option) => (
@@ -228,11 +230,11 @@ const BackupExportSettings = ({ settings, onUpdate, organizationId }) => {
       <div className="mb-8">
         <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-4 flex items-center gap-2">
           <Download className="w-5 h-5 text-indigo-500" />
-          Exportar Datos
+          {t('settings.backup.exportData')}
         </h3>
         
         <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
-          Descarga los datos en formato JSON para análisis externo o migración.
+          {t('settings.backup.exportDescription')}
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -264,12 +266,12 @@ const BackupExportSettings = ({ settings, onUpdate, organizationId }) => {
                       {isExporting ? (
                         <>
                           <Loader2 className="w-4 h-4 animate-spin" />
-                          Exportando...
+                          {t('settings.backup.actions.exporting')}
                         </>
                       ) : (
                         <>
                           <Download className="w-4 h-4" />
-                          Descargar JSON
+                          {t('settings.backup.actions.downloadJson')}
                         </>
                       )}
                     </button>
@@ -287,8 +289,7 @@ const BackupExportSettings = ({ settings, onUpdate, organizationId }) => {
         <div className="text-sm text-blue-700 dark:text-blue-300">
           <p className="font-medium mb-1">{t('settings.backup.aboutBackups')}</p>
           <p>
-            Los backups se almacenan de forma segura en el servidor. Te recomendamos realizar 
-            backups regulares y descargar una copia local periódicamente para mayor seguridad.
+            {t('settings.backup.infoDescription')}
           </p>
         </div>
       </div>

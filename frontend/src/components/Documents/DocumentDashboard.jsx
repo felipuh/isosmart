@@ -29,7 +29,7 @@ const DocumentDashboard = () => {
       setStats(statsResponse);
     } catch (error) {
       console.error('Error cargando documentos:', error);
-      alert('Error al cargar los documentos');
+      alert(t('documentsManager.messages.errorLoading'));
     } finally {
       setLoading(false);
     }
@@ -45,33 +45,33 @@ const DocumentDashboard = () => {
     setUploading(true);
     try {
       await documentService.upload(formData);
-      
-      alert('✅ Documento subido exitosamente');
-      
+
+      alert(t('documentsManager.messages.uploadSuccess'));
+
       setShowUploadForm(false);
       await loadData();
     } catch (error) {
       console.error('Error subiendo documento:', error);
-      alert('❌ Error al subir el documento. Por favor intenta nuevamente.');
+      alert(t('documentsManager.messages.uploadError'));
     } finally {
       setUploading(false);
     }
   };
 
   const handleDelete = async (doc) => {
-    if (!window.confirm(`¿Estás seguro de eliminar "${doc.title}"?`)) {
+    if (!window.confirm(t('documentsManager.messages.confirmDelete').replace('{title}', doc.title))) {
       return;
     }
 
     try {
       await documentService.delete(doc.id);
-      
-      alert('✅ Documento eliminado exitosamente');
-      
+
+      alert(t('documentsManager.messages.deleteSuccess'));
+
       await loadData();
     } catch (error) {
       console.error('Error eliminando documento:', error);
-      alert('❌ Error al eliminar el documento');
+      alert(t('documentsManager.messages.deleteError'));
     }
   };
 
@@ -94,7 +94,7 @@ const DocumentDashboard = () => {
       window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error('Error descargando documento:', error);
-      alert('❌ Error al descargar el documento');
+      alert(t('documentsManager.messages.downloadError'));
     }
   };
 
@@ -234,16 +234,14 @@ const DocumentDashboard = () => {
             <FileText className="h-5 w-5 text-blue-500 dark:text-blue-400 mr-3 mt-0.5" />
             <div>
               <h4 className="text-sm font-semibold text-blue-900 dark:text-blue-300 mb-1">
-                Análisis Automático con IA
+                {t('documentsManager.info.title')}
               </h4>
               <p className="text-sm text-blue-700 dark:text-blue-200">
-                Los documentos subidos pueden ser analizados automáticamente por el módulo SCA 
-                (Smart Context Analyzer) para identificar fortalezas, debilidades, oportunidades 
-                y amenazas de tu organización.
+                {t('documentsManager.info.description')}
               </p>
               <a href="/context"
                 className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium mt-2 inline-block transition-colors">
-                Ir a Análisis de Contexto →
+                {t('documentsManager.info.goToContext')}
               </a>
             </div>
           </div>

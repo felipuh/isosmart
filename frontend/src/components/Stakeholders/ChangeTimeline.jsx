@@ -3,7 +3,7 @@ import { Clock, AlertCircle, TrendingDown, TrendingUp, Activity } from 'lucide-r
 import { useI18n } from '../../context/I18nContext';
 
 const ChangeTimeline = ({ changes, loading }) => {
-  const { t } = useI18n();
+  const { t, language } = useI18n();
   if (loading) {
     return (
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
@@ -24,7 +24,7 @@ const ChangeTimeline = ({ changes, loading }) => {
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
         <h3 className="text-lg font-semibold dark:text-white mb-4 flex items-center">
           <Clock className="mr-2 h-5 w-5" />
-          Cambios Recientes
+          {t('changeTimeline.titleRecent')}
         </h3>
         <p className="text-slate-500 dark:text-slate-400 text-center py-8">{t('changeTimeline.empty')}</p>
       </div>
@@ -56,17 +56,17 @@ const ChangeTimeline = ({ changes, loading }) => {
     const diffHours = Math.floor(diffMs / 3600000);
     const diffDays = Math.floor(diffMs / 86400000);
 
-    if (diffMins < 60) return `Hace ${diffMins} minutos`;
-    if (diffHours < 24) return `Hace ${diffHours} horas`;
-    if (diffDays < 7) return `Hace ${diffDays} días`;
-    return date.toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' });
+    if (diffMins < 60) return t('changeTimeline.timeAgoMinutes').replace('{count}', diffMins);
+    if (diffHours < 24) return t('changeTimeline.timeAgoHours').replace('{count}', diffHours);
+    if (diffDays < 7) return t('changeTimeline.timeAgoDays').replace('{count}', diffDays);
+    return date.toLocaleDateString(language === 'es-LATAM' ? 'es-ES' : language, { day: '2-digit', month: 'short', year: 'numeric' });
   };
 
   return (
     <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
       <h3 className="text-lg font-semibold dark:text-white mb-4 flex items-center">
         <Clock className="mr-2 h-5 w-5 text-blue-500" />
-        Cambios Recientes ({changes.length})
+        {t('changeTimeline.titleRecent')} ({changes.length})
       </h3>
 
       <div className="space-y-4">
@@ -112,7 +112,7 @@ const ChangeTimeline = ({ changes, loading }) => {
 
                   {change.recommendation && (
                     <div className="mt-2 p-2 bg-blue-50 dark:bg-blue-900/30 rounded text-sm dark:text-blue-300">
-                      💡 {change.recommendation}
+                      💡 {t('changeTimeline.recommendation')} {change.recommendation}
                     </div>
                   )}
                 </div>

@@ -95,13 +95,13 @@ const ProcessForm = ({ process, mapId, onSave, onClose }) => {
     try {
       await onSave(formData);
     } catch (error) {
-      console.error('Error guardando:', error);
+      console.error('Error saving process:', error);
     } finally {
       setSaving(false);
     }
   };
 
-  const renderListSection = (title, field, value, setter, color) => {
+  const renderListSection = (title, placeholder, field, value, setter, color) => {
     const colorMap = {
       'blue': 'bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-700 text-blue-900 dark:text-blue-300',
       'green': 'bg-green-50 dark:bg-green-900/30 border-green-200 dark:border-green-700 text-green-900 dark:text-green-300',
@@ -120,7 +120,7 @@ const ProcessForm = ({ process, mapId, onSave, onClose }) => {
           onChange={(e) => setter(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddItem(field, value, setter))}
           className="flex-1 px-3 py-2 border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg text-sm transition-colors"
-          placeholder={`Agregar ${title.toLowerCase()}...`}
+          placeholder={placeholder}
         />
         <button
           type="button"
@@ -170,7 +170,7 @@ const ProcessForm = ({ process, mapId, onSave, onClose }) => {
                   onChange={handleChange}
                   required
                   className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg transition-colors"
-                  placeholder="Ej: OPE-001"
+                  placeholder={t('processForm.placeholders.code')}
                 />
               </div>
 
@@ -197,7 +197,7 @@ const ProcessForm = ({ process, mapId, onSave, onClose }) => {
                   onChange={handleChange}
                   required
                   className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg transition-colors"
-                  placeholder="Nombre del proceso"
+                  placeholder={t('processForm.placeholders.name')}
                 />
               </div>
 
@@ -210,7 +210,7 @@ const ProcessForm = ({ process, mapId, onSave, onClose }) => {
                   onChange={handleChange}
                   required
                   className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg transition-colors"
-                  placeholder="Dueño del proceso"
+                  placeholder={t('processForm.placeholders.owner')}
                 />
               </div>
 
@@ -222,7 +222,7 @@ const ProcessForm = ({ process, mapId, onSave, onClose }) => {
                   value={formData.documented_in}
                   onChange={handleChange}
                   className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg transition-colors"
-                  placeholder="Referencia del documento"
+                  placeholder={t('processForm.placeholders.documentedIn')}
                 />
               </div>
 
@@ -234,7 +234,7 @@ const ProcessForm = ({ process, mapId, onSave, onClose }) => {
                   onChange={handleChange}
                   rows={2}
                   className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg transition-colors"
-                  placeholder="Objetivo del proceso..."
+                  placeholder={t('processForm.placeholders.objective')}
                 />
               </div>
 
@@ -246,7 +246,7 @@ const ProcessForm = ({ process, mapId, onSave, onClose }) => {
                   onChange={handleChange}
                   rows={2}
                   className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg transition-colors"
-                  placeholder="Descripción del proceso..."
+                  placeholder={t('processForm.placeholders.description')}
                 />
               </div>
             </div>
@@ -254,14 +254,42 @@ const ProcessForm = ({ process, mapId, onSave, onClose }) => {
 
           {/* Entradas y Salidas */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {renderListSection(t('processForm.listSections.inputs'), 'inputs', newInput, setNewInput, 'blue')}
-            {renderListSection(t('processForm.listSections.outputs'), 'outputs', newOutput, setNewOutput, 'green')}
+            {renderListSection(
+              t('processForm.listSections.inputs'),
+              t('processForm.placeholders.addInput'),
+              'inputs',
+              newInput,
+              setNewInput,
+              'blue'
+            )}
+            {renderListSection(
+              t('processForm.listSections.outputs'),
+              t('processForm.placeholders.addOutput'),
+              'outputs',
+              newOutput,
+              setNewOutput,
+              'green'
+            )}
           </div>
 
           {/* Recursos y KPIs */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {renderListSection(t('processForm.listSections.resources'), 'resources', newResource, setNewResource, 'purple')}
-            {renderListSection(t('processForm.listSections.kpis'), 'kpis', newKpi, setNewKpi, 'yellow')}
+            {renderListSection(
+              t('processForm.listSections.resources'),
+              t('processForm.placeholders.addResource'),
+              'resources',
+              newResource,
+              setNewResource,
+              'purple'
+            )}
+            {renderListSection(
+              t('processForm.listSections.kpis'),
+              t('processForm.placeholders.addKpi'),
+              'kpis',
+              newKpi,
+              setNewKpi,
+              'yellow'
+            )}
           </div>
 
           {/* Estado */}

@@ -58,13 +58,13 @@ const Dashboard = () => {
     if (!orgId) return;
 
     const clauseChecks = [
-      { id: '4', label: '4. Contexto de la Organización', checks: ['/context/history/', '/stakeholders/stakeholders/', '/scope/scopes/', '/processes/maps/'] },
-      { id: '5', label: '5. Liderazgo', checks: ['/leadership/policies/', '/leadership/commitments/', '/leadership/roles/'] },
-      { id: '6', label: '6. Planificación', checks: ['/planning/risks-opportunities/', '/planning/objectives/', '/planning/actions/'] },
-      { id: '7', label: '7. Apoyo', checks: ['/resources/resources/', '/resources/competences/', '/resources/trainings/'] },
-      { id: '8', label: '8. Operación', checks: ['/operations/requirements/', '/operations/providers/', '/operations/nonconformities/'] },
-      { id: '9', label: '9. Evaluación del Desempeño', checks: ['/performance/measurements/', '/performance/findings/', '/performance/reviews/'] },
-      { id: '10', label: '10. Mejora', checks: ['/improvement/nonconformities/', '/improvement/corrective-actions/', '/improvement/continual-improvements/'] },
+      { id: '4', labelKey: 'dashboard.main.clauseProgress.clause4', checks: ['/context/history/', '/stakeholders/stakeholders/', '/scope/scopes/', '/processes/maps/'] },
+      { id: '5', labelKey: 'dashboard.main.clauseProgress.clause5', checks: ['/leadership/policies/', '/leadership/commitments/', '/leadership/roles/'] },
+      { id: '6', labelKey: 'dashboard.main.clauseProgress.clause6', checks: ['/planning/risks-opportunities/', '/planning/objectives/', '/planning/actions/'] },
+      { id: '7', labelKey: 'dashboard.main.clauseProgress.clause7', checks: ['/resources/resources/', '/resources/competences/', '/resources/trainings/'] },
+      { id: '8', labelKey: 'dashboard.main.clauseProgress.clause8', checks: ['/operations/requirements/', '/operations/providers/', '/operations/nonconformities/'] },
+      { id: '9', labelKey: 'dashboard.main.clauseProgress.clause9', checks: ['/performance/measurements/', '/performance/findings/', '/performance/reviews/'] },
+      { id: '10', labelKey: 'dashboard.main.clauseProgress.clause10', checks: ['/improvement/nonconformities/', '/improvement/corrective-actions/', '/improvement/continual-improvements/'] },
     ];
 
     const [processCount, stakeholderCount, clauseResults] = await Promise.all([
@@ -281,10 +281,10 @@ const Dashboard = () => {
     },
     {
       id: 'sie',
-      name: 'Stakeholder Intelligence Engine',
+      nameKey: 'dashboard.main.modulesCatalog.sie.name',
       code: 'SIE',
       iso: 'ISO 4.2',
-      description: 'Gestión inteligente de partes interesadas',
+      descriptionKey: 'dashboard.main.modulesCatalog.sie.description',
       icon: Network,
       color: 'bg-green-500',
       bgColor: 'bg-green-50',
@@ -292,14 +292,18 @@ const Dashboard = () => {
       textColor: 'text-green-700',
       route: '/stakeholders',
       status: 'active',
-      features: ['Análisis de red', 'Matriz poder/interés', 'Stakeholders críticos']
+      featuresKey: [
+        'dashboard.main.modulesCatalog.sie.features.networkAnalysis',
+        'dashboard.main.modulesCatalog.sie.features.powerInterestMatrix',
+        'dashboard.main.modulesCatalog.sie.features.criticalStakeholders',
+      ]
     },
     {
       id: 'asb',
-      name: 'AI Scope Builder',
+      nameKey: 'dashboard.main.modulesCatalog.asb.name',
       code: 'ASB',
       iso: 'ISO 4.3',
-      description: 'Definición automática del alcance del SGC',
+      descriptionKey: 'dashboard.main.modulesCatalog.asb.description',
       icon: Target,
       color: 'bg-purple-500',
       bgColor: 'bg-purple-50',
@@ -307,14 +311,18 @@ const Dashboard = () => {
       textColor: 'text-purple-700',
       route: '/scope',
       status: 'active',
-      features: ['Alcance del SGC', 'Requisitos aplicables', 'Exclusiones justificadas']
+      featuresKey: [
+        'dashboard.main.modulesCatalog.asb.features.qmsScope',
+        'dashboard.main.modulesCatalog.asb.features.applicableRequirements',
+        'dashboard.main.modulesCatalog.asb.features.justifiedExclusions',
+      ]
     },
     {
       id: 'spm',
-      name: 'Smart Process Mapper',
+      nameKey: 'dashboard.main.modulesCatalog.spm.name',
       code: 'SPM',
       iso: 'ISO 4.4',
-      description: 'Mapeo inteligente de procesos organizacionales',
+      descriptionKey: 'dashboard.main.modulesCatalog.spm.description',
       icon: Workflow,
       color: 'bg-orange-500',
       bgColor: 'bg-orange-50',
@@ -322,35 +330,39 @@ const Dashboard = () => {
       textColor: 'text-orange-700',
       route: '/processes',
       status: 'active',
-      features: ['Mapa de procesos', 'Interacciones', 'Análisis de criticidad']
+      featuresKey: [
+        'dashboard.main.modulesCatalog.spm.features.processMap',
+        'dashboard.main.modulesCatalog.spm.features.interactions',
+        'dashboard.main.modulesCatalog.spm.features.criticalityAnalysis',
+      ]
     }
   ];
 
   const quickActions = [
     {
-      title: 'Analizar Contexto',
-      description: 'Ejecutar análisis de contexto organizacional',
+      title: t('dashboard.quickActions.analyzeContext'),
+      description: t('dashboard.quickActions.analyzeContextDesc'),
       icon: TrendingUp,
       route: '/context',
       color: 'bg-blue-500'
     },
     {
-      title: 'Gestionar Stakeholders',
-      description: 'Ver y analizar partes interesadas',
+      title: t('dashboard.quickActions.manageStakeholders'),
+      description: t('dashboard.quickActions.manageStakeholdersDesc'),
       icon: Network,
       route: '/stakeholders',
       color: 'bg-green-500'
     },
     {
-      title: 'Definir Alcance',
-      description: 'Revisar alcance del SGC',
+      title: t('dashboard.quickActions.defineScope'),
+      description: t('dashboard.quickActions.defineScopeDesc'),
       icon: Target,
       route: '/scope',
       color: 'bg-purple-500'
     },
     {
-      title: 'Mapear Procesos',
-      description: 'Ver mapa de procesos',
+      title: t('dashboard.quickActions.mapProcesses'),
+      description: t('dashboard.quickActions.mapProcessesDesc'),
       icon: Workflow,
       route: '/processes',
       color: 'bg-orange-500'
@@ -363,7 +375,7 @@ const Dashboard = () => {
       <div className="mb-8">
         <div className="flex items-center justify-between mb-2">
           <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
-            Sistema Inteligente de Gestión de Calidad
+            {t('dashboard.main.systemTitle')}
           </h1>
           {user && (
             <div className="text-right">
@@ -371,13 +383,13 @@ const Dashboard = () => {
                 {user.first_name} {user.last_name}
               </p>
               <p className="text-xs text-slate-500">
-                Último acceso: {new Date().toLocaleDateString('es-ES')}
+                {t('dashboard.lastAccessLabel')}: {new Date().toLocaleDateString(language === 'es-LATAM' ? 'es-ES' : language)}
               </p>
             </div>
           )}
         </div>
         <p className="text-slate-600 dark:text-slate-400">
-          {currentOrganization?.name || 'Cargando organización...'} | ISO 9001:2015 | ISO/IEC 42001:2023
+          {currentOrganization?.name || t('dashboard.noOrganization')} | ISO 9001:2015 | ISO/IEC 42001:2023
         </p>
       </div>
 
@@ -389,7 +401,7 @@ const Dashboard = () => {
               <h2 className="text-2xl font-bold">{t('dashboard.main.globalComplianceTitle')}</h2>
             </div>
             <p className="text-blue-100">
-              Progreso dinámico por cláusula según datos reales de cada módulo.
+              {t('dashboard.main.progressByClause')}
             </p>
           </div>
           <div className="text-right">
@@ -402,19 +414,19 @@ const Dashboard = () => {
       {onboardingInsights && (
         <div className="mb-8 bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-slate-900 dark:text-white">Resultados sesión inicial IA</h2>
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white">{t('dashboard.main.onboardingInsights.title')}</h2>
             <span className="text-xs px-2 py-1 rounded bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300">
               v{onboardingInsights.version}
             </span>
           </div>
 
           <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
-            {onboardingInsights.summary_output?.message || 'Se generaron recomendaciones iniciales de implementación.'}
+            {onboardingInsights.summary_output?.message || t('dashboard.main.onboardingInsights.defaultMessage')}
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="p-4 rounded-lg border border-slate-200 dark:border-slate-700">
-              <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-2">Quick Wins</p>
+              <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-2">{t('dashboard.main.onboardingInsights.quickWins')}</p>
               <ul className="text-xs text-slate-600 dark:text-slate-300 space-y-1">
                 {(onboardingInsights.impact_savings_output?.quick_wins || []).slice(0, 3).map((item, index) => (
                   <li key={`qw-${index}`}>• {item}</li>
@@ -423,7 +435,7 @@ const Dashboard = () => {
             </div>
 
             <div className="p-4 rounded-lg border border-slate-200 dark:border-slate-700">
-              <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-2">Big Bets</p>
+              <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-2">{t('dashboard.main.onboardingInsights.bigBets')}</p>
               <ul className="text-xs text-slate-600 dark:text-slate-300 space-y-1">
                 {(onboardingInsights.impact_savings_output?.big_bets || []).slice(0, 3).map((item, index) => (
                   <li key={`bb-${index}`}>• {item}</li>
@@ -432,7 +444,7 @@ const Dashboard = () => {
             </div>
 
             <div className="p-4 rounded-lg border border-slate-200 dark:border-slate-700">
-              <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-2">Siguiente foco</p>
+              <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-2">{t('dashboard.main.onboardingInsights.nextFocus')}</p>
               <ul className="text-xs text-slate-600 dark:text-slate-300 space-y-1">
                 {(onboardingInsights.summary_output?.top_priorities_today || []).slice(0, 3).map((item, index) => (
                   <li key={`tp-${index}`}>• {item}</li>
@@ -446,9 +458,9 @@ const Dashboard = () => {
       {onboardingIsoSkeleton && (
         <div className="mb-8 bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-slate-900 dark:text-white">Esqueleto ISO autogenerado</h2>
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white">{t('dashboard.main.isoSkeleton.title')}</h2>
             <span className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">
-              Sistema listo al {onboardingIsoSkeleton.system_readiness?.score_percentage || 0}%
+              {t('dashboard.main.isoSkeleton.systemReady').replace('{percentage}', onboardingIsoSkeleton.system_readiness?.score_percentage || 0)}
             </span>
           </div>
 
@@ -458,23 +470,29 @@ const Dashboard = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="p-4 rounded-lg border border-slate-200 dark:border-slate-700">
-              <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-2">Procesos iniciales</p>
+              <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-2">{t('dashboard.main.isoSkeleton.initialProcesses')}</p>
               <p className="text-xs text-slate-600 dark:text-slate-300">
-                {(onboardingIsoSkeleton.initial_process_map?.strategic || []).length} estratégicos · {(onboardingIsoSkeleton.initial_process_map?.operational || []).length} operativos · {(onboardingIsoSkeleton.initial_process_map?.support || []).length} soporte
+                {t('dashboard.main.isoSkeleton.processCounts')
+                  .replace('{strategic}', (onboardingIsoSkeleton.initial_process_map?.strategic || []).length)
+                  .replace('{operational}', (onboardingIsoSkeleton.initial_process_map?.operational || []).length)
+                  .replace('{support}', (onboardingIsoSkeleton.initial_process_map?.support || []).length)}
               </p>
             </div>
 
             <div className="p-4 rounded-lg border border-slate-200 dark:border-slate-700">
-              <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-2">Riesgos/Oportunidades</p>
+              <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-2">{t('dashboard.main.isoSkeleton.risksOpportunities')}</p>
               <p className="text-xs text-slate-600 dark:text-slate-300">
-                {(onboardingIsoSkeleton.top_5_risks || []).length} riesgos · {(onboardingIsoSkeleton.top_5_opportunities || []).length} oportunidades
+                {t('dashboard.main.isoSkeleton.risksOpportunitiesCounts')
+                  .replace('{risks}', (onboardingIsoSkeleton.top_5_risks || []).length)
+                  .replace('{opportunities}', (onboardingIsoSkeleton.top_5_opportunities || []).length)}
               </p>
             </div>
 
             <div className="p-4 rounded-lg border border-slate-200 dark:border-slate-700">
-              <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-2">Objetivos v1</p>
+              <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-2">{t('dashboard.main.isoSkeleton.objectivesV1')}</p>
               <p className="text-xs text-slate-600 dark:text-slate-300">
-                {(onboardingIsoSkeleton.quality_objectives_v1 || []).length} objetivos generados para validación
+                {t('dashboard.main.isoSkeleton.objectivesGenerated')
+                  .replace('{count}', (onboardingIsoSkeleton.quality_objectives_v1 || []).length)}
               </p>
             </div>
           </div>
@@ -484,7 +502,7 @@ const Dashboard = () => {
       {onboardingAdaptiveRoute && (
         <div className="mb-8 bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-slate-900 dark:text-white">Ruta adaptativa activa</h2>
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white">{t('dashboard.main.adaptiveRoute.title')}</h2>
             <span className="text-xs px-2 py-1 rounded bg-cyan-100 text-cyan-700 dark:bg-cyan-900/40 dark:text-cyan-300">
               {onboardingAdaptiveRoute.mode} · {onboardingAdaptiveRoute.cadence}
             </span>
@@ -494,7 +512,7 @@ const Dashboard = () => {
           <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">{onboardingAdaptiveRoute.description}</p>
 
           <div className="p-4 rounded-lg border border-slate-200 dark:border-slate-700">
-            <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-2">Acciones sugeridas</p>
+            <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-2">{t('dashboard.main.adaptiveRoute.suggestedActions')}</p>
             <ul className="text-xs text-slate-600 dark:text-slate-300 space-y-1">
               {(onboardingAdaptiveRoute.recommended_actions || []).slice(0, 4).map((item, index) => (
                 <li key={`ra-${index}`}>• {item}</li>
@@ -668,7 +686,7 @@ const Dashboard = () => {
                   </div>
                   <span className="flex items-center text-xs bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 px-2 py-1 rounded-full font-semibold">
                     <CheckCircle2 className="h-3 w-3 mr-1" />
-                    ACTIVO
+                    {t('common.labels.active').toUpperCase()}
                   </span>
                 </div>
                 
@@ -685,7 +703,7 @@ const Dashboard = () => {
 
                 <div className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700 flex items-center justify-between">
                   <span className={`text-sm font-semibold ${module.textColor}`}>
-                    Ver Dashboard
+                    {t('dashboard.main.viewDashboard')}
                   </span>
                   <ArrowRight className={`h-5 w-5 ${module.textColor}`} />
                 </div>
@@ -723,13 +741,13 @@ const Dashboard = () => {
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center">
             <BarChart3 className="h-5 w-5 mr-2 text-blue-500" />
-            Progreso por Cláusula ISO 9001:2015
+            {t('dashboard.main.clauseProgress.title')}
           </h3>
           <div className="space-y-4">
             {clauseProgress.map((clause) => (
               <div key={clause.id}>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-slate-700 dark:text-slate-300">{clause.label}</span>
+                  <span className="text-sm font-medium text-slate-700 dark:text-slate-300">{t(clause.labelKey)}</span>
                   <span className="text-sm font-bold text-blue-600 dark:text-blue-400">{clause.progress}%</span>
                 </div>
                 <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-3">
@@ -743,7 +761,7 @@ const Dashboard = () => {
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center">
             <FileText className="h-5 w-5 mr-2 text-purple-500" />
-            Resumen del Sistema
+            {t('dashboard.main.summary.title')}
           </h3>
           <div className="space-y-3">
             <div className="flex items-center justify-between py-2 border-b border-slate-100 dark:border-slate-700">
@@ -776,13 +794,13 @@ const Dashboard = () => {
           <div>
             <h3 className="font-semibold text-gray-900 dark:text-white mb-1">{t('dashboard.main.footer.version')}</h3>
             <p className="text-sm text-gray-600 dark:text-slate-400">
-              Sistema Inteligente de Gestión de Calidad con IA
+              {t('dashboard.main.footer.subtitle')}
             </p>
           </div>
           <div className="text-right">
             <p className="text-sm text-gray-600 dark:text-slate-400">{t('dashboard.executive.lastUpdate')}</p>
             <p className="text-sm font-medium text-gray-900 dark:text-slate-500">
-              {new Date(stats.lastUpdate).toLocaleDateString('es-ES', {
+              {new Date(stats.lastUpdate).toLocaleDateString(language === 'es-LATAM' ? 'es-ES' : language, {
                 day: '2-digit',
                 month: 'long',
                 year: 'numeric'

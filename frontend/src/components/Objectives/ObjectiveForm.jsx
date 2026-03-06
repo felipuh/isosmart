@@ -22,25 +22,35 @@ const ObjectiveForm = ({ objective, onSubmit, onCancel }) => {
   const [loading, setLoading] = useState(false);
 
   const frequencyOptions = [
-    { value: 'diario', label: 'Diario' },
-    { value: 'semanal', label: 'Semanal' },
-    { value: 'quincenal', label: 'Quincenal' },
-    { value: 'mensual', label: 'Mensual' },
-    { value: 'bimestral', label: 'Bimestral' },
-    { value: 'trimestral', label: 'Trimestral' },
-    { value: 'semestral', label: 'Semestral' },
-    { value: 'anual', label: 'Anual' },
+    { value: 'diario', label: t('objectiveForm.frequencies.diario') },
+    { value: 'semanal', label: t('objectiveForm.frequencies.semanal') },
+    { value: 'quincenal', label: t('objectiveForm.frequencies.quincenal') },
+    { value: 'mensual', label: t('objectiveForm.frequencies.mensual') },
+    { value: 'bimestral', label: t('objectiveForm.frequencies.bimestral') },
+    { value: 'trimestral', label: t('objectiveForm.frequencies.trimestral') },
+    { value: 'semestral', label: t('objectiveForm.frequencies.semestral') },
+    { value: 'anual', label: t('objectiveForm.frequencies.anual') },
   ];
 
   const statusOptions = [
-    { value: 'active', label: 'Activo' },
-    { value: 'in_progress', label: 'En Progreso' },
-    { value: 'achieved', label: 'Logrado' },
-    { value: 'delayed', label: 'Retrasado' },
-    { value: 'cancelled', label: 'Cancelado' },
+    { value: 'active', label: t('objectivesList.status.active') },
+    { value: 'in_progress', label: t('objectivesList.status.in_progress') },
+    { value: 'achieved', label: t('objectivesList.status.achieved') },
+    { value: 'delayed', label: t('objectivesList.status.delayed') },
+    { value: 'cancelled', label: t('objectivesList.status.cancelled') },
   ];
 
-  const unitSuggestións = ['%', 'unidades', 'horas', 'días', 'puntos', 'USD', 'clientes', 'productos', 'defectos'];
+  const unitSuggestions = [
+    '%',
+    t('objectiveForm.unitSuggestions.units'),
+    t('objectiveForm.unitSuggestions.hours'),
+    t('objectiveForm.unitSuggestions.days'),
+    t('objectiveForm.unitSuggestions.points'),
+    'USD',
+    t('objectiveForm.unitSuggestions.customers'),
+    t('objectiveForm.unitSuggestions.products'),
+    t('objectiveForm.unitSuggestions.defects'),
+  ];
 
   useEffect(() => {
     if (objective) {
@@ -70,13 +80,13 @@ const ObjectiveForm = ({ objective, onSubmit, onCancel }) => {
 
   const validate = () => {
     const newErrors = {};
-    if (!formData.indicator_name.trim()) newErrors.indicator_name = 'El nombre del indicador es requerido';
-    if (!formData.objective_description.trim()) newErrors.objective_description = 'La descripción es requerida';
-    if (!formData.measurement_unit.trim()) newErrors.measurement_unit = 'La unidad de medida es requerida';
-    if (formData.baseline_value === '') newErrors.baseline_value = 'El valor base es requerido';
-    if (formData.target_value === '') newErrors.target_value = 'El valor meta es requerido';
-    if (!formData.responsible.trim()) newErrors.responsible = 'El responsable es requerido';
-    if (!formData.deadline) newErrors.deadline = 'La fecha límite es requerida';
+    if (!formData.indicator_name.trim()) newErrors.indicator_name = t('objectiveForm.errors.indicatorNameRequired');
+    if (!formData.objective_description.trim()) newErrors.objective_description = t('objectiveForm.errors.objectiveDescriptionRequired');
+    if (!formData.measurement_unit.trim()) newErrors.measurement_unit = t('objectiveForm.errors.measurementUnitRequired');
+    if (formData.baseline_value === '') newErrors.baseline_value = t('objectiveForm.errors.baselineValueRequired');
+    if (formData.target_value === '') newErrors.target_value = t('objectiveForm.errors.targetValueRequired');
+    if (!formData.responsible.trim()) newErrors.responsible = t('objectiveForm.errors.responsibleRequired');
+    if (!formData.deadline) newErrors.deadline = t('objectiveForm.errors.deadlineRequired');
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -106,7 +116,7 @@ const ObjectiveForm = ({ objective, onSubmit, onCancel }) => {
       <div className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-md rounded-xl shadow-2xl dark:shadow-slate-900/70 max-w-3xl w-full max-h-[90vh] overflow-hidden border border-white/20 dark:border-slate-700/30 transition-all duration-300">
         <div className="px-6 py-4 border-b border-slate-200/50 dark:border-slate-700/50 flex justify-between items-center bg-white/80 dark:bg-slate-800/80 backdrop-blur-md transition-all duration-300">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-            {objective ? 'Editar Objetivo' : 'Nuevo Objetivo de Calidad'}
+            {objective ? t('objectiveForm.titleEdit') : t('objectiveForm.titleCreate')}
           </h2>
           <button onClick={onCancel} className="text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:hover:text-slate-400 transition-colors">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -124,7 +134,7 @@ const ObjectiveForm = ({ objective, onSubmit, onCancel }) => {
             {/* Indicator Name */}
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
-                Nombre del Indicador <span className="text-red-500">*</span>
+                {t('objectiveForm.fields.indicatorNameRequired')} <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -132,7 +142,7 @@ const ObjectiveForm = ({ objective, onSubmit, onCancel }) => {
                 value={formData.indicator_name}
                 onChange={handleChange}
                 className={`w-full rounded-lg shadow-sm dark:bg-slate-700 dark:text-white dark:focus:ring-blue-400 focus:ring-blue-500 focus:border-blue-500 transition-colors ${errors.indicator_name ? 'border-red-300 dark:border-red-800' : 'border-gray-300 dark:border-slate-600'}`}
-                placeholder="Ej: Índice de Satisfacción del Cliente"
+                placeholder={t('objectiveForm.placeholders.indicatorName')}
               />
               {errors.indicator_name && <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.indicator_name}</p>}
             </div>
@@ -140,7 +150,7 @@ const ObjectiveForm = ({ objective, onSubmit, onCancel }) => {
             {/* Description */}
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
-                Descripción del Objetivo <span className="text-red-500">*</span>
+                {t('objectiveForm.fields.objectiveDescriptionRequired')} <span className="text-red-500">*</span>
               </label>
               <textarea
                 name="objective_description"
@@ -148,7 +158,7 @@ const ObjectiveForm = ({ objective, onSubmit, onCancel }) => {
                 onChange={handleChange}
                 rows={3}
                 className={`w-full rounded-lg shadow-sm dark:bg-slate-700 dark:text-white dark:focus:ring-blue-400 focus:ring-blue-500 focus:border-blue-500 transition-colors ${errors.objective_description ? 'border-red-300 dark:border-red-800' : 'border-gray-300 dark:border-slate-600'}`}
-                placeholder="Describa el objetivo de calidad..."
+                placeholder={t('objectiveForm.placeholders.objectiveDescription')}
               />
               {errors.objective_description && <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.objective_description}</p>}
             </div>
@@ -157,7 +167,7 @@ const ObjectiveForm = ({ objective, onSubmit, onCancel }) => {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
-                  Línea Base <span className="text-red-500">*</span>
+                  {t('objectiveForm.fields.baselineRequired')} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="number"
@@ -172,7 +182,7 @@ const ObjectiveForm = ({ objective, onSubmit, onCancel }) => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
-                  Meta <span className="text-red-500">*</span>
+                  {t('objectiveForm.fields.targetRequired')} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="number"
@@ -199,19 +209,19 @@ const ObjectiveForm = ({ objective, onSubmit, onCancel }) => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
-                  Unidad <span className="text-red-500">*</span>
+                  {t('objectiveForm.fields.measurementUnitRequired')} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   name="measurement_unit"
                   value={formData.measurement_unit}
                   onChange={handleChange}
-                  list="unit-suggestións"
+                  list="unit-suggestions"
                   className={`w-full rounded-lg shadow-sm dark:bg-slate-700 dark:text-white dark:focus:ring-blue-400 focus:ring-blue-500 focus:border-blue-500 transition-colors ${errors.measurement_unit ? 'border-red-300 dark:border-red-800' : 'border-gray-300 dark:border-slate-600'}`}
                   placeholder="%"
                 />
-                <datalist id="unit-suggestións">
-                  {unitSuggestións.map(unit => <option key={unit} value={unit} />)}
+                <datalist id="unit-suggestions">
+                  {unitSuggestions.map((unit) => <option key={unit} value={unit} />)}
                 </datalist>
                 {errors.measurement_unit && <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.measurement_unit}</p>}
               </div>
@@ -232,7 +242,7 @@ const ObjectiveForm = ({ objective, onSubmit, onCancel }) => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
-                  Responsable <span className="text-red-500">*</span>
+                  {t('objectiveForm.fields.responsibleRequired')} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -240,7 +250,7 @@ const ObjectiveForm = ({ objective, onSubmit, onCancel }) => {
                   value={formData.responsible}
                   onChange={handleChange}
                   className={`w-full rounded-lg shadow-sm dark:bg-slate-700 dark:text-white dark:focus:ring-blue-400 focus:ring-blue-500 focus:border-blue-500 transition-colors ${errors.responsible ? 'border-red-300 dark:border-red-800' : 'border-gray-300 dark:border-slate-600'}`}
-                  placeholder="Nombre del responsable"
+                  placeholder={t('objectiveForm.placeholders.responsible')}
                 />
                 {errors.responsible && <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.responsible}</p>}
               </div>
@@ -250,7 +260,7 @@ const ObjectiveForm = ({ objective, onSubmit, onCancel }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
-                  Fecha Límite <span className="text-red-500">*</span>
+                  {t('objectiveForm.fields.deadlineRequired')} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="date"
@@ -283,7 +293,7 @@ const ObjectiveForm = ({ objective, onSubmit, onCancel }) => {
                 value={formData.process_id}
                 onChange={handleChange}
                 className="w-full rounded-lg border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white shadow-sm dark:focus:ring-blue-400 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                placeholder="Ej: PROC-001"
+                placeholder={t('objectiveForm.placeholders.processId')}
               />
             </div>
           </div>
@@ -294,14 +304,18 @@ const ObjectiveForm = ({ objective, onSubmit, onCancel }) => {
               onClick={onCancel}
               className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-slate-300 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors"
             >
-              Cancelar
+              {t('common.buttons.cancel')}
             </button>
             <button
               type="submit"
               disabled={loading}
               className="px-4 py-2 text-sm font-medium text-white bg-blue-600 dark:bg-blue-700 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-800 disabled:opacity-50 transition-colors"
             >
-              {loading ? t('common.messages.saving') : (objective ? t('common.buttons.update') : t('common.buttons.create'))} Objetivo
+              {loading
+                ? t('common.messages.saving')
+                : (objective
+                  ? t('objectiveForm.actions.updateObjective')
+                  : t('objectiveForm.actions.createObjective'))}
             </button>
           </div>
         </form>

@@ -86,7 +86,7 @@ const ScopeStatement = ({ scopeData, loading }) => {
         <div className="mb-6">
           <h4 className="font-semibold text-slate-900 dark:text-white mb-3 flex items-center">
             <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
-            Productos y Servicios ({scopeData.products_services.length})
+            {t('scopeInsights.statement.productsServicesTitle').replace('{count}', scopeData.products_services.length)}
           </h4>
           <ul className="space-y-2">
             {scopeData.products_services.map((product, idx) => (
@@ -104,13 +104,13 @@ const ScopeStatement = ({ scopeData, loading }) => {
         <div>
           <h4 className="font-semibold text-slate-900 dark:text-white mb-3 flex items-center">
             <XCircle className="h-5 w-5 text-orange-500 mr-2" />
-            Exclusiones Permitidas ({scopeData.exclusions.length})
+            {t('scopeInsights.statement.permittedExclusionsTitle').replace('{count}', scopeData.exclusions.length)}
           </h4>
           <div className="space-y-3">
             {scopeData.exclusions.map((exclusion, idx) => (
               <div key={idx} className="bg-orange-50 dark:bg-orange-900/30 border-l-4 border-orange-400 dark:border-orange-600 p-3 rounded transition-colors">
                 <p className="font-medium text-orange-900 dark:text-orange-300">
-                  Cláusula {exclusion.clause}: {exclusion.title}
+                  {t('scopeInsights.statement.clauseLabel').replace('{clause}', exclusion.clause).replace('{title}', exclusion.title)}
                 </p>
                 <p className="text-sm text-orange-700 dark:text-orange-400 mt-1">
                   <span className="font-medium">{t('scopeInsights.statement.reason')}:</span> {exclusion.reason}

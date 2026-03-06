@@ -12,7 +12,7 @@ import ProcessScopeForm from './ProcessScopeForm';
 import LocationScopeForm from './LocationScopeForm';
 
 const ScopeDashboard = () => {
-  const { t } = useI18n();
+  const { t, language } = useI18n();
   const { currentOrganization } = useAuth();
   const [scopeData, setScopeData] = useState(null);
   const [stats, setStats] = useState(null);
@@ -211,7 +211,8 @@ const ScopeDashboard = () => {
 
   const formatDate = (date) => {
     if (!date) return t('scopeInsights.statement.notAvailable');
-    return new Intl.DateTimeFormat('es-ES', {
+    const locale = language === 'es-LATAM' ? 'es-ES' : language;
+    return new Intl.DateTimeFormat(locale, {
       day: '2-digit',
       month: 'long',
       year: 'numeric'
