@@ -57,7 +57,7 @@ const Sidebar = ({ isOpen = true }) => {
       {isOpen && (
         <div className="p-4 border-t border-slate-800 dark:border-slate-800">
           <p className="text-xs text-slate-400 dark:text-slate-500 text-center">
-            ISO 9001:2015 | ISO/IEC 42001:2023
+            {t('dashboard.main.standardsLine')}
           </p>
         </div>
       )}

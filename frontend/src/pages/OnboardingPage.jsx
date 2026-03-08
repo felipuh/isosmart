@@ -6,16 +6,22 @@ import { useI18n } from '../context/I18nContext';
 import settingsService from '../services/settingsService';
 
 const STANDARD_OPTIONS = [
-  { code: 'ISO9001_2015', label: 'ISO 9001:2015', required: true },
-  { code: 'ISO42001_2023', label: 'ISO/IEC 42001:2023' },
-  { code: 'ISO27001_2022', label: 'ISO 27001:2022' },
-  { code: 'ISO14001_2015', label: 'ISO 14001:2015' },
-  { code: 'ISO45001_2018', label: 'ISO 45001:2018' },
+  { code: 'ISO9001_2015', required: true },
+  { code: 'ISO42001_2023' },
+  { code: 'ISO27001_2022' },
+  { code: 'ISO14001_2015' },
+  { code: 'ISO45001_2018' },
 ];
 
 const ROLE_OPTIONS = ['owner_founder', 'general_manager', 'operations_manager', 'quality_manager', 'external_consultant', 'other'];
 const EXPERTISE_OPTIONS = ['none', 'beginner', 'intermediate', 'expert', 'ninja'];
-const COMPANY_SIZE_OPTIONS = ['10-50', '51-200', '201-500', '501-2000', '2000+'];
+const COMPANY_SIZE_OPTIONS = [
+  { value: '10-50', labelKey: 'onboarding.companySizeRanges.range10to50' },
+  { value: '51-200', labelKey: 'onboarding.companySizeRanges.range51to200' },
+  { value: '201-500', labelKey: 'onboarding.companySizeRanges.range201to500' },
+  { value: '501-2000', labelKey: 'onboarding.companySizeRanges.range501to2000' },
+  { value: '2000+', labelKey: 'onboarding.companySizeRanges.range2000plus' },
+];
 const CERTIFICATION_OPTIONS = ['first_time', 'already_certified', 'in_transition'];
 const TONE_OPTIONS = ['manager', 'technical'];
 
@@ -154,7 +160,7 @@ const OnboardingPage = () => {
                       disabled={Boolean(standard.required)}
                       onChange={() => toggleStandard(standard.code, standard.required)}
                     />
-                    <span>{standard.label}</span>
+                    <span>{t(`onboarding.standards.${standard.code}`)}</span>
                   </label>
                 );
               })}
@@ -201,7 +207,7 @@ const OnboardingPage = () => {
                   className="mt-1 w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700"
                 >
                   {COMPANY_SIZE_OPTIONS.map((option) => (
-                    <option key={option} value={option}>{option}</option>
+                    <option key={option.value} value={option.value}>{t(option.labelKey)}</option>
                   ))}
                 </select>
               </label>

@@ -267,7 +267,7 @@ const Dashboard = () => {
       id: 'sca',
       nameKey: 'dashboard.main.modulesCatalog.sca.name',
       code: 'SCA',
-      iso: 'ISO 4.1',
+      isoKey: 'dashboard.main.modulesCatalog.sca.iso',
       descriptionKey: 'dashboard.main.modulesCatalog.sca.description',
       icon: TrendingUp,
       color: 'bg-blue-500',
@@ -286,7 +286,7 @@ const Dashboard = () => {
       id: 'sie',
       nameKey: 'dashboard.main.modulesCatalog.sie.name',
       code: 'SIE',
-      iso: 'ISO 4.2',
+      isoKey: 'dashboard.main.modulesCatalog.sie.iso',
       descriptionKey: 'dashboard.main.modulesCatalog.sie.description',
       icon: Network,
       color: 'bg-green-500',
@@ -305,7 +305,7 @@ const Dashboard = () => {
       id: 'asb',
       nameKey: 'dashboard.main.modulesCatalog.asb.name',
       code: 'ASB',
-      iso: 'ISO 4.3',
+      isoKey: 'dashboard.main.modulesCatalog.asb.iso',
       descriptionKey: 'dashboard.main.modulesCatalog.asb.description',
       icon: Target,
       color: 'bg-purple-500',
@@ -324,7 +324,7 @@ const Dashboard = () => {
       id: 'spm',
       nameKey: 'dashboard.main.modulesCatalog.spm.name',
       code: 'SPM',
-      iso: 'ISO 4.4',
+      isoKey: 'dashboard.main.modulesCatalog.spm.iso',
       descriptionKey: 'dashboard.main.modulesCatalog.spm.description',
       icon: Workflow,
       color: 'bg-orange-500',
@@ -392,7 +392,7 @@ const Dashboard = () => {
           )}
         </div>
         <p className="text-slate-600 dark:text-slate-400">
-          {currentOrganization?.name || t('dashboard.noOrganization')} | ISO 9001:2015 | ISO/IEC 42001:2023
+          {currentOrganization?.name || t('dashboard.noOrganization')} | {t('dashboard.main.standardsLine')}
         </p>
       </div>
 
@@ -666,6 +666,7 @@ const Dashboard = () => {
             const Icon = module.icon;
             const moduleName = module.nameKey ? t(module.nameKey) : module.name;
             const moduleDescription = module.descriptionKey ? t(module.descriptionKey) : module.description;
+            const moduleIso = module.isoKey ? t(module.isoKey) : module.iso;
             const moduleFeatures = Array.isArray(module.features)
               ? module.features
               : Array.isArray(module.featuresKey)
@@ -684,7 +685,7 @@ const Dashboard = () => {
                     </div>
                     <div>
                       <h3 className="text-lg font-bold text-slate-900 dark:text-white">{moduleName}</h3>
-                      <p className="text-sm text-slate-600 dark:text-slate-400">{module.code} • {module.iso}</p>
+                      <p className="text-sm text-slate-600 dark:text-slate-400">{module.code} • {moduleIso}</p>
                     </div>
                   </div>
                   <span className="flex items-center text-xs bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 px-2 py-1 rounded-full font-semibold">

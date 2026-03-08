@@ -126,7 +126,7 @@ const LoginPage = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   className="w-full pl-10 pr-12 py-3 bg-slate-700/50 border border-slate-600/50 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 transition-all"
-                  placeholder="••••••••"
+                  placeholder={t('auth.loginPage.form.passwordPlaceholder')}
                 />
                 <button
                   type="button"

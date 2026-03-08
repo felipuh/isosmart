@@ -7,6 +7,7 @@
 
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import api from '../services/api';
+import { useI18n } from './I18nContext';
 
 const getTokenPayload = (token) => {
   if (!token) return null;
@@ -39,6 +40,7 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
+  const { t } = useI18n();
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
   const [organizations, setOrganizations] = useState([]);
@@ -145,12 +147,12 @@ export const AuthProvider = ({ children }) => {
         null;
 
       const networkMessage = !error.response
-        ? 'No se pudo conectar al servidor de autenticación. Verifica backend/proxy y vuelve a intentar.'
+        ? t('auth.errors.connectionFailed')
         : null;
 
       return {
         success: false,
-        error: backendMessage || networkMessage || 'Error al iniciar sesión. Verifica tus credenciales.',
+        error: backendMessage || networkMessage || t('auth.errors.loginFailed'),
       };
     }
   };
@@ -240,7 +242,7 @@ export const AuthProvider = ({ children }) => {
       console.error('Error cambiando organización:', error);
       return {
         success: false,
-        error: error.response?.data?.detail || 'Error al cambiar de organización.',
+        error: error.response?.data?.detail || t('auth.errors.switchOrganizationFailed'),
       };
     }
   };
@@ -261,7 +263,7 @@ export const AuthProvider = ({ children }) => {
         error: error.response?.data?.detail || 
                error.response?.data?.current_password?.[0] ||
                error.response?.data?.new_password?.[0] ||
-               'Error al cambiar la contraseña.',
+               t('auth.errors.changePasswordFailed'),
       };
     }
   };

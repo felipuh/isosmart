@@ -3,7 +3,6 @@ import { TrendingUp, AlertTriangle, Target, Users, Activity } from 'lucide-react
 import { useI18n } from '../../context/I18nContext';
 
 const MetricCard = ({ title, value, subtitle, icon, trend, color, borderColor }) => {
-  const { t } = useI18n();
   return (
     <div className={`metric-card ${borderColor}`}>
       <div className="flex items-start justify-between mb-4">
@@ -28,6 +27,8 @@ const MetricCard = ({ title, value, subtitle, icon, trend, color, borderColor })
 };
 
 const MetricsGrid = ({ data, loading }) => {
+  const { t } = useI18n();
+
   if (loading || !data) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -46,35 +47,47 @@ const MetricsGrid = ({ data, loading }) => {
 
   const metrics = [
     {
-      title: 'Riesgos Identificados',
+      title: t('dashboard.metricsGrid.risksIdentified.title'),
       value: data.total_risks || 0,
-      subtitle: `${data.risks_by_level?.critical || 0} críticos`,
+      subtitle: t('dashboard.metricsGrid.risksIdentified.subtitle').replace(
+        '{count}',
+        String(data.risks_by_level?.critical || 0)
+      ),
       icon: AlertTriangle,
       color: 'bg-gradient-to-br from-red-500 to-red-600',
       borderColor: 'border-l-red-500',
       trend: -12,
     },
     {
-      title: 'Objetivos de Calidad',
+      title: t('dashboard.metricsGrid.qualityObjectives.title'),
       value: data.total_objectives || 0,
-      subtitle: `${Math.round(data.objectives_progress || 0)}% cumplimiento`,
+      subtitle: t('dashboard.metricsGrid.qualityObjectives.subtitle').replace(
+        '{percentage}',
+        String(Math.round(data.objectives_progress || 0))
+      ),
       icon: Target,
       color: 'bg-gradient-to-br from-green-500 to-green-600',
       borderColor: 'border-l-green-500',
       trend: 8,
     },
     {
-      title: 'Partes Interesadas',
+      title: t('dashboard.metricsGrid.stakeholders.title'),
       value: data.total_stakeholders || 0,
-      subtitle: `${data.high_influence_stakeholders || 0} alta influencia`,
+      subtitle: t('dashboard.metricsGrid.stakeholders.subtitle').replace(
+        '{count}',
+        String(data.high_influence_stakeholders || 0)
+      ),
       icon: Users,
       color: 'bg-gradient-to-br from-blue-500 to-blue-600',
       borderColor: 'border-l-blue-500',
     },
     {
-      title: 'Cobertura de Procesos',
+      title: t('dashboard.metricsGrid.processCoverage.title'),
       value: `${Math.round(data.process_coverage || 0)}%`,
-      subtitle: `${data.total_processes || 0} procesos mapeados`,
+      subtitle: t('dashboard.metricsGrid.processCoverage.subtitle').replace(
+        '{count}',
+        String(data.total_processes || 0)
+      ),
       icon: Activity,
       color: 'bg-gradient-to-br from-purple-500 to-purple-600',
       borderColor: 'border-l-purple-500',

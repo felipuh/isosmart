@@ -73,3 +73,6 @@ logs/ai/celery_worker.log
 logs/ai/frontend-out-0.log
 data/chromadb/chroma.sqlite3
 data/chromadb/chroma.sqlite3
+data/chromadb/chroma.sqlite3
+frontend/.tmp-pw/isosmart_i18n_runtime_qa.spec.mjs
+frontend/.tmp-pw/pw-i18n-runtime.config.cjs

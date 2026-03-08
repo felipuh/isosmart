@@ -538,6 +538,24 @@ const MESSAGES = {
         risks: 'Riesgos',
         nonconformities: 'No Conformidades',
       },
+      metricsGrid: {
+        risksIdentified: {
+          title: 'Riesgos Identificados',
+          subtitle: '{count} críticos',
+        },
+        qualityObjectives: {
+          title: 'Objetivos de Calidad',
+          subtitle: '{percentage}% cumplimiento',
+        },
+        stakeholders: {
+          title: 'Partes Interesadas',
+          subtitle: '{count} alta influencia',
+        },
+        processCoverage: {
+          title: 'Cobertura de Procesos',
+          subtitle: '{count} procesos mapeados',
+        },
+      },
       billing: {
         title: 'Resumen de facturación',
         subtitle: 'Visibilidad rápida del estado de suscripción y cobros',
@@ -622,6 +640,7 @@ const MESSAGES = {
         progressByClause: 'Progreso dinámico por cláusula según datos reales de cada módulo.',
         averageClauses: 'Promedio cláusulas 4-10',
         modulesTitle: 'Módulos del Sistema',
+        standardsLine: 'ISO 9001:2015 | ISO/IEC 42001:2023',
         viewDashboard: 'Ver dashboard',
         clauseProgress: {
           title: 'Progreso por Cláusula ISO 9001:2015',
@@ -636,6 +655,7 @@ const MESSAGES = {
         modulesCatalog: {
           sca: {
             name: 'Smart Context Analyzer',
+            iso: 'ISO 4.1',
             description: 'Diagnóstico inteligente del contexto interno y externo de la organización.',
             features: {
               swot: 'Análisis FODA',
@@ -645,6 +665,7 @@ const MESSAGES = {
           },
           sie: {
             name: 'Smart Stakeholder Mapper',
+            iso: 'ISO 4.2',
             description: 'Mapeo inteligente y priorización de partes interesadas.',
             features: {
               networkAnalysis: 'Análisis de red',
@@ -654,6 +675,7 @@ const MESSAGES = {
           },
           asb: {
             name: 'Smart Scope Builder',
+            iso: 'ISO 4.3',
             description: 'Definición estratégica del alcance y fronteras del SGC.',
             features: {
               qmsScope: 'Alcance del SGC',
@@ -663,6 +685,7 @@ const MESSAGES = {
           },
           spm: {
             name: 'Smart Process Mapper',
+            iso: 'ISO 4.4',
             description: 'Diseño estructurado del mapa de procesos y sus interacciones.',
             features: {
               processMap: 'Mapa de procesos',
@@ -759,6 +782,13 @@ const MESSAGES = {
         expert: 'Experto',
         ninja: 'Ninja',
       },
+      companySizeRanges: {
+        range10to50: '10 a 50',
+        range51to200: '51 a 200',
+        range201to500: '201 a 500',
+        range501to2000: '501 a 2000',
+        range2000plus: '2000+',
+      },
       certificationOptions: {
         first_time: 'Primera vez (sin certificación previa)',
         already_certified: 'Ya certificada',
@@ -795,6 +825,7 @@ const MESSAGES = {
         },
         form: {
           emailPlaceholder: 'tu@email.com',
+          passwordPlaceholder: '••••••••',
           rememberMe: 'Recordarme',
           forgotPassword: '¿Olvidaste tu contraseña?',
         },
@@ -821,6 +852,12 @@ const MESSAGES = {
         noPermission: 'No tienes permisos para acceder a esta sección.',
         requiredRoles: 'Roles requeridos',
         backHome: 'Volver al Inicio',
+      },
+      errors: {
+        connectionFailed: 'No se pudo conectar al servidor de autenticación. Verifica backend/proxy y vuelve a intentar.',
+        loginFailed: 'Error al iniciar sesión. Verifica tus credenciales.',
+        switchOrganizationFailed: 'Error al cambiar de organización.',
+        changePasswordFailed: 'Error al cambiar la contraseña.',
       },
     },
     assistantPanel: {
@@ -981,6 +1018,7 @@ const MESSAGES = {
         titleEdit: 'Editar Riesgo',
         calculatedLevel: 'Nivel de Riesgo Calculado',
         selectCategory: 'Seleccionar categoría...',
+        isoClauseOption: 'ISO 9001 - Cláusula {clause}',
         fields: {
           description: 'Descripción del Riesgo',
           category: 'Categoría',
@@ -4321,6 +4359,24 @@ const MESSAGES = {
         risks: 'Risks',
         nonconformities: 'Nonconformities',
       },
+      metricsGrid: {
+        risksIdentified: {
+          title: 'Identified Risks',
+          subtitle: '{count} critical',
+        },
+        qualityObjectives: {
+          title: 'Quality Objectives',
+          subtitle: '{percentage}% compliance',
+        },
+        stakeholders: {
+          title: 'Stakeholders',
+          subtitle: '{count} high influence',
+        },
+        processCoverage: {
+          title: 'Process Coverage',
+          subtitle: '{count} mapped processes',
+        },
+      },
       billing: {
         title: 'Billing summary',
         subtitle: 'Quick visibility into subscription status and charges',
@@ -4405,6 +4461,7 @@ const MESSAGES = {
         progressByClause: 'Dynamic clause progress based on real data from each module.',
         averageClauses: 'Average clauses 4-10',
         modulesTitle: 'System Modules',
+        standardsLine: 'ISO 9001:2015 | ISO/IEC 42001:2023',
         viewDashboard: 'View dashboard',
         clauseProgress: {
           title: 'ISO 9001:2015 Clause Progress',
@@ -4419,6 +4476,7 @@ const MESSAGES = {
         modulesCatalog: {
           sca: {
             name: 'Smart Context Analyzer',
+            iso: 'ISO 4.1',
             description: 'Intelligent diagnosis of the organization\'s internal and external context.',
             features: {
               swot: 'SWOT analysis',
@@ -4428,6 +4486,7 @@ const MESSAGES = {
           },
           sie: {
             name: 'Smart Stakeholder Mapper',
+            iso: 'ISO 4.2',
             description: 'Intelligent mapping and prioritization of stakeholders.',
             features: {
               networkAnalysis: 'Network analysis',
@@ -4437,6 +4496,7 @@ const MESSAGES = {
           },
           asb: {
             name: 'Smart Scope Builder',
+            iso: 'ISO 4.3',
             description: 'Strategic definition of QMS scope and boundaries.',
             features: {
               qmsScope: 'QMS scope',
@@ -4446,6 +4506,7 @@ const MESSAGES = {
           },
           spm: {
             name: 'Smart Process Mapper',
+            iso: 'ISO 4.4',
             description: 'Structured process-map design and interaction modeling.',
             features: {
               processMap: 'Process map',
@@ -4541,6 +4602,13 @@ const MESSAGES = {
         expert: 'Expert',
         ninja: 'Ninja',
       },
+      companySizeRanges: {
+        range10to50: '10 to 50',
+        range51to200: '51 to 200',
+        range201to500: '201 to 500',
+        range501to2000: '501 to 2000',
+        range2000plus: '2000+',
+      },
       certificationOptions: {
         first_time: 'First time (no previous certification)',
         already_certified: 'Already certified',
@@ -4577,6 +4645,7 @@ const MESSAGES = {
         },
         form: {
           emailPlaceholder: 'your@email.com',
+          passwordPlaceholder: '••••••••',
           rememberMe: 'Remember me',
           forgotPassword: 'Forgot your password?',
         },
@@ -4603,6 +4672,12 @@ const MESSAGES = {
         noPermission: 'You do not have permission to access this section.',
         requiredRoles: 'Required roles',
         backHome: 'Back to Home',
+      },
+      errors: {
+        connectionFailed: 'Could not connect to the authentication server. Verify backend/proxy and try again.',
+        loginFailed: 'Error signing in. Check your credentials.',
+        switchOrganizationFailed: 'Error switching organization.',
+        changePasswordFailed: 'Error changing password.',
       },
     },
     assistantPanel: {
@@ -4763,6 +4838,7 @@ const MESSAGES = {
         titleEdit: 'Edit Risk',
         calculatedLevel: 'Calculated Risk Level',
         selectCategory: 'Select category...',
+        isoClauseOption: 'ISO 9001 - Clause {clause}',
         fields: {
           description: 'Risk Description',
           category: 'Category',
@@ -8094,6 +8170,24 @@ const MESSAGES = {
         risks: 'Riscos',
         nonconformities: 'Não Conformidades',
       },
+      metricsGrid: {
+        risksIdentified: {
+          title: 'Riscos Identificados',
+          subtitle: '{count} críticos',
+        },
+        qualityObjectives: {
+          title: 'Objetivos da Qualidade',
+          subtitle: '{percentage}% conformidade',
+        },
+        stakeholders: {
+          title: 'Partes Interessadas',
+          subtitle: '{count} alta influência',
+        },
+        processCoverage: {
+          title: 'Cobertura de Processos',
+          subtitle: '{count} processos mapeados',
+        },
+      },
       billing: {
         title: 'Resumo de faturamento',
         subtitle: 'Visibilidade rápida do status da assinatura e cobranças',
@@ -8178,6 +8272,7 @@ const MESSAGES = {
         progressByClause: 'Progresso dinâmico por cláusula com base em dados reais de cada módulo.',
         averageClauses: 'Média das cláusulas 4-10',
         modulesTitle: 'Módulos do Sistema',
+        standardsLine: 'ISO 9001:2015 | ISO/IEC 42001:2023',
         viewDashboard: 'Ver painel',
         clauseProgress: {
           title: 'Progresso por Cláusula ISO 9001:2015',
@@ -8192,6 +8287,7 @@ const MESSAGES = {
         modulesCatalog: {
           sca: {
             name: 'Smart Context Analyzer',
+            iso: 'ISO 4.1',
             description: 'Diagnóstico inteligente do contexto interno e externo da organização.',
             features: {
               swot: 'Análise SWOT',
@@ -8201,6 +8297,7 @@ const MESSAGES = {
           },
           sie: {
             name: 'Smart Stakeholder Mapper',
+            iso: 'ISO 4.2',
             description: 'Mapeamento inteligente e priorização de partes interessadas.',
             features: {
               networkAnalysis: 'Análise de rede',
@@ -8210,6 +8307,7 @@ const MESSAGES = {
           },
           asb: {
             name: 'Smart Scope Builder',
+            iso: 'ISO 4.3',
             description: 'Definição estratégica do escopo e das fronteiras do SGQ.',
             features: {
               qmsScope: 'Escopo do SGQ',
@@ -8219,6 +8317,7 @@ const MESSAGES = {
           },
           spm: {
             name: 'Smart Process Mapper',
+            iso: 'ISO 4.4',
             description: 'Desenho estruturado do mapa de processos e suas interações.',
             features: {
               processMap: 'Mapa de processos',
@@ -8314,6 +8413,13 @@ const MESSAGES = {
         expert: 'Especialista',
         ninja: 'Ninja',
       },
+      companySizeRanges: {
+        range10to50: '10 a 50',
+        range51to200: '51 a 200',
+        range201to500: '201 a 500',
+        range501to2000: '501 a 2000',
+        range2000plus: '2000+',
+      },
       certificationOptions: {
         first_time: 'Primeira vez (sem certificação anterior)',
         already_certified: 'Já certificada',
@@ -8350,6 +8456,7 @@ const MESSAGES = {
         },
         form: {
           emailPlaceholder: 'seu@email.com',
+          passwordPlaceholder: '••••••••',
           rememberMe: 'Lembrar-me',
           forgotPassword: 'Esqueceu sua senha?',
         },
@@ -8376,6 +8483,12 @@ const MESSAGES = {
         noPermission: 'Você não tem permissão para acessar esta seção.',
         requiredRoles: 'Funções requeridas',
         backHome: 'Voltar ao Início',
+      },
+      errors: {
+        connectionFailed: 'Não foi possível conectar ao servidor de autenticação. Verifique backend/proxy e tente novamente.',
+        loginFailed: 'Erro ao iniciar sessão. Verifique suas credenciais.',
+        switchOrganizationFailed: 'Erro ao trocar de organização.',
+        changePasswordFailed: 'Erro ao alterar a senha.',
       },
     },
     assistantPanel: {
@@ -8536,6 +8649,7 @@ const MESSAGES = {
         titleEdit: 'Editar Risco',
         calculatedLevel: 'Nível de Risco Calculado',
         selectCategory: 'Selecionar categoria...',
+        isoClauseOption: 'ISO 9001 - Cláusula {clause}',
         fields: {
           description: 'Descrição do Risco',
           category: 'Categoria',

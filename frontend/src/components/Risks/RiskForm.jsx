@@ -181,7 +181,11 @@ const RiskForm = ({ risk, onSubmit, onCancel }) => {
               <div>
                 <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 transition-colors">{t('riskManagement.form.fields.isoClause')}</label>
                 <select name="iso_clause" value={formData.iso_clause} onChange={handleChange} className="w-full border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 transition-colors">
-                  {isoClauseOptions.map(clause => <option key={clause} value={clause}>{`ISO 9001 - ${clause}`}</option>)}
+                  {isoClauseOptions.map((clause) => (
+                    <option key={clause} value={clause}>
+                      {t('riskManagement.form.isoClauseOption').replace('{clause}', clause)}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
