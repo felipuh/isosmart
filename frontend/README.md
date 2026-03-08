@@ -14,3 +14,25 @@ The React Compiler is not enabled on this template because of its impact on dev 
 ## Expanding the ESLint configuration
 
 If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+
+## E2E I18N Smoke
+
+Runtime multilingual smoke test for login, dashboard, and onboarding:
+
+```bash
+npm run test:i18n:smoke
+```
+
+Expected environment:
+
+- Frontend reachable at `BASE_URL` (default `http://127.0.0.1:3001`)
+- Backend auth endpoints available through `/api` proxy
+- Credentials via env vars (defaults):
+	- `TEST_EMAIL=admin@isosmart.local`
+	- `TEST_PASSWORD=Admin@123456`
+
+Install Playwright browser if needed:
+
+```bash
+npm run test:e2e:install
+```

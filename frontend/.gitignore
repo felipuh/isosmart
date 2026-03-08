@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Playwright artifacts
+playwright-report/
+test-results/
+
+# Temporary QA workspace
+.tmp-pw/
