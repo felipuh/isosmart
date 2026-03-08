@@ -1,11 +1,10 @@
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, action, permission_classes
 from rest_framework.response import Response
 from rest_framework import viewsets, status
-from rest_framework.decorators import action
+from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from rest_framework.permissions import IsAuthenticated
 from django.http import FileResponse, Http404
-from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.utils import timezone
 from django.db.models import Count, Avg, Q
@@ -16,24 +15,68 @@ from .models import (
     StakeholderProfile, ProcessMap, Document
 )
 from .serializers import DocumentSerializer, DocumentUploadSerializer, RiskMatrixSerializer, QualityObjectiveSerializer, QualityObjectiveSerializer
+from authentication.models import UserProfile
+from .organization_scoping import OrganizationScopedViewSetMixin
 import logging
 import os
 
 logger = logging.getLogger(__name__)
 
 
+def _parse_org_id(value):
+    if value in (None, ''):
+        return None
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        raise ValidationError({'organization_id': 'organization_id invalido'})
+
+
+def _allowed_org_ids_for_request(request):
+    user = getattr(request, 'user', None)
+    if not user or not user.is_authenticated:
+        return set()
+    if user.is_superuser:
+        return None
+    return set(
+        UserProfile.objects.filter(user=user, is_active=True).values_list('organization_id', flat=True)
+    )
+
+
+def _resolve_scoped_org_id(request):
+    query_org_id = _parse_org_id(
+        request.query_params.get('organization_id') or request.query_params.get('organization')
+    )
+    token_org_id = _parse_org_id(getattr(request, 'organization_id', None))
+
+    if query_org_id and token_org_id and query_org_id != token_org_id:
+        raise PermissionDenied('organization_id no coincide con el token activo')
+
+    organization_id = query_org_id or token_org_id
+    if not organization_id:
+        raise ValidationError({'organization_id': 'organization_id requerido'})
+
+    allowed_org_ids = _allowed_org_ids_for_request(request)
+    if allowed_org_ids is not None and organization_id not in allowed_org_ids:
+        raise PermissionDenied('No autorizado para esta organizacion')
+
+    return organization_id
+
+
 @api_view(['GET'])
-@csrf_exempt
+@permission_classes([IsAuthenticated])
 def dashboard_summary(request):
     """Resumen ejecutivo del dashboard"""
+    organization_id = _resolve_scoped_org_id(request)
     
     # Riesgos por nivel
     risks_by_level = RiskMatrix.objects.filter(
+        organization_id=organization_id,
         status__in=['identified', 'under_analysis']
     ).values('risk_level').annotate(count=Count('id'))
     
     # Objetivos de calidad
-    objectives = QualityObjective.objects.filter(status='active')
+    objectives = QualityObjective.objects.filter(organization_id=organization_id, status='active')
     objectives_data = []
     for obj in objectives:
         objectives_data.append({
@@ -47,23 +90,26 @@ def dashboard_summary(request):
         })
     
     # Stakeholders
-    stakeholders_count = StakeholderProfile.objects.filter(is_active=True).count()
+    stakeholders_count = StakeholderProfile.objects.filter(organization_id=organization_id, is_active=True).count()
     high_influence = StakeholderProfile.objects.filter(
+        organization_id=organization_id,
         is_active=True, 
         influence_score__gte=0.8
     ).count()
     
     # Procesos
-    processes = ProcessMap.objects.all()
+    processes = ProcessMap.objects.filter(organization_id=organization_id)
     process_health = processes.values('health_status').annotate(count=Count('id'))
     
     # Último análisis de contexto
     last_analysis = ContextAnalysis.objects.filter(
+        organization_id=organization_id,
         status='completed'
     ).order_by('-timestamp').first()
     
     return Response({
-        'total_risks': RiskMatrix.objects.filter(status__in=['identified', 'under_analysis']).count(),
+        'organization_id': organization_id,
+        'total_risks': RiskMatrix.objects.filter(organization_id=organization_id, status__in=['identified', 'under_analysis']).count(),
         'risks_by_level': {
             'critical': next((r['count'] for r in risks_by_level if r['risk_level'] == 'critico'), 0),
             'high': next((r['count'] for r in risks_by_level if r['risk_level'] == 'alto'), 0),
@@ -92,13 +138,14 @@ def dashboard_summary(request):
 
 
 @api_view(['GET'])
-@csrf_exempt
+@permission_classes([IsAuthenticated])
 def risk_matrix_list(request):
     """Lista consolidada de riesgos"""
+    organization_id = _resolve_scoped_org_id(request)
     source = request.query_params.get('source', None)
     level = request.query_params.get('level', None)
     
-    risks = RiskMatrix.objects.all()
+    risks = RiskMatrix.objects.filter(organization_id=organization_id)
     
     if source:
         risks = risks.filter(source_module=source)
@@ -122,25 +169,30 @@ def risk_matrix_list(request):
         })
     
     return Response({
+        'organization_id': organization_id,
         'total': risks.count(),
         'risks': risks_data
     })
 
 
 @api_view(['GET'])
-@csrf_exempt
+@permission_classes([IsAuthenticated])
 def context_analysis_latest(request):
     """Obtiene el último análisis de contexto"""
+    organization_id = _resolve_scoped_org_id(request)
     analysis = ContextAnalysis.objects.filter(
+        organization_id=organization_id,
         status='completed'
     ).order_by('-timestamp').first()
     
     if not analysis:
         return Response({
+            'organization_id': organization_id,
             'message': 'No hay análisis completados'
         }, status=status.HTTP_404_NOT_FOUND)
     
     return Response({
+        'organization_id': organization_id,
         'id': analysis.id,
         'timestamp': analysis.timestamp.isoformat(),
         'status': analysis.status,
@@ -152,7 +204,6 @@ def context_analysis_latest(request):
 
 
 @api_view(['GET'])
-@csrf_exempt
 def health_check(request):
     """Health check endpoint"""
     from django.db import connection
@@ -176,13 +227,14 @@ def health_check(request):
         }, status=status.HTTP_503_SERVICE_UNAVAILABLE)
 
 
-class DocumentViewSet(viewsets.ModelViewSet):
+class DocumentViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
     """
     ViewSet para gestión de documentos
     """
     queryset = Document.objects.all().order_by('-created_at')
     serializer_class = DocumentSerializer
     parser_classes = (MultiPartParser, FormParser)
+    permission_classes = [IsAuthenticated]
     
     def get_queryset(self):
         """Filtrar documentos por tipo si se especifica"""
@@ -197,6 +249,7 @@ class DocumentViewSet(viewsets.ModelViewSet):
     
     def create(self, request, *args, **kwargs):
         """Crear nuevo documento con archivo"""
+        organization_id = self.get_organization_id()
         serializer = DocumentUploadSerializer(data=request.data)
         
         if serializer.is_valid():
@@ -211,6 +264,7 @@ class DocumentViewSet(viewsets.ModelViewSet):
                 
                 # Crear documento
                 document = Document.objects.create(
+                    organization_id=organization_id,
                     title=title,
                     content=content,
                     document_type=doc_type,
@@ -294,11 +348,12 @@ class DocumentViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def stats(self, request):
         """Obtener estadísticas de documentos"""
-        total = Document.objects.all().count()
+        queryset = self.get_queryset()
+        total = queryset.count()
         by_type = {}
         
         for doc_type, _ in Document.TYPE_CHOICES:
-            count = Document.objects.filter(
+            count = queryset.filter(
                 document_type=doc_type
             ).count()
             by_type[doc_type] = count
@@ -308,12 +363,13 @@ class DocumentViewSet(viewsets.ModelViewSet):
             'by_type': by_type
         })
 
-class RiskMatrixViewSet(viewsets.ModelViewSet):
+class RiskMatrixViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
     """
     ViewSet para gestión de la matriz de riesgos
     """
     queryset = RiskMatrix.objects.all().order_by('-detection_date')
     serializer_class = RiskMatrixSerializer
+    permission_classes = [IsAuthenticated]
     
     def get_queryset(self):
         """Filtrar riesgos según parámetros"""
@@ -350,7 +406,7 @@ class RiskMatrixViewSet(viewsets.ModelViewSet):
         
         serializer = self.get_serializer(data=data)
         if serializer.is_valid():
-            serializer.save()
+            self.perform_create(serializer)
             logger.info(f"Riesgo creado: ID {serializer.data['id']}")
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -386,9 +442,10 @@ class RiskMatrixViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def by_level(self, request):
         """Obtener riesgos agrupados por nivel"""
+        base_queryset = self.get_queryset()
         levels = {}
         for level_code, level_name in RiskMatrix.LEVEL_CHOICES:
-            risks = RiskMatrix.objects.filter(
+            risks = base_queryset.filter(
                 risk_level=level_code,
                 status__in=['identified', 'under_analysis']
             )
@@ -402,6 +459,7 @@ class RiskMatrixViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def matrix_data(self, request):
         """Obtener datos para la matriz visual de riesgos"""
+        base_queryset = self.get_queryset()
         # Crear matriz 5x5 (probabilidad x impacto)
         matrix = {}
         
@@ -411,7 +469,7 @@ class RiskMatrixViewSet(viewsets.ModelViewSet):
         for prob in prob_values:
             matrix[prob] = {}
             for impact in impact_values:
-                risks = RiskMatrix.objects.filter(
+                risks = base_queryset.filter(
                     probability=prob,
                     impact=impact,
                     status__in=['identified', 'under_analysis']
@@ -430,30 +488,33 @@ class RiskMatrixViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def categories(self, request):
         """Obtener lista de categorías únicas"""
-        categories = RiskMatrix.objects.values_list(
+        categories = self.get_queryset().values_list(
             'risk_category', flat=True
         ).distinct()
         return Response(list(categories))
 
 
 @api_view(['GET'])
-@csrf_exempt
+@permission_classes([IsAuthenticated])
 def risk_stats(request):
     """Estadísticas de riesgos"""
-    total = RiskMatrix.objects.count()
-    active = RiskMatrix.objects.filter(status__in=['identified', 'under_analysis']).count()
+    organization_id = _resolve_scoped_org_id(request)
+    scoped_risks = RiskMatrix.objects.filter(organization_id=organization_id)
+    total = scoped_risks.count()
+    active = scoped_risks.filter(status__in=['identified', 'under_analysis']).count()
     
-    by_level = RiskMatrix.objects.filter(
+    by_level = scoped_risks.filter(
         status__in=['identified', 'under_analysis']
     ).values('risk_level').annotate(count=Count('id'))
     
-    by_source = RiskMatrix.objects.values('source_module').annotate(count=Count('id'))
+    by_source = scoped_risks.values('source_module').annotate(count=Count('id'))
     
-    by_status = RiskMatrix.objects.values('status').annotate(count=Count('id'))
+    by_status = scoped_risks.values('status').annotate(count=Count('id'))
     
-    by_category = RiskMatrix.objects.values('risk_category').annotate(count=Count('id'))
+    by_category = scoped_risks.values('risk_category').annotate(count=Count('id'))
     
     return Response({
+        'organization_id': organization_id,
         'total_risks': total,
         'active_risks': active,
         'by_level': {item['risk_level']: item['count'] for item in by_level},
@@ -463,12 +524,13 @@ def risk_stats(request):
     })
 
 
-class QualityObjectiveViewSet(viewsets.ModelViewSet):
+class QualityObjectiveViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
     """
     ViewSet para gestión de objetivos de calidad
     """
     queryset = QualityObjective.objects.all().order_by('-created_at')
     serializer_class = QualityObjectiveSerializer
+    permission_classes = [IsAuthenticated]
     
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -490,7 +552,7 @@ class QualityObjectiveViewSet(viewsets.ModelViewSet):
         
         serializer = self.get_serializer(data=data)
         if serializer.is_valid():
-            serializer.save()
+            self.perform_create(serializer)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
@@ -521,25 +583,26 @@ class QualityObjectiveViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def stats(self, request):
         """Estadísticas de objetivos"""
-        total = QualityObjective.objects.count()
+        queryset = self.get_queryset()
+        total = queryset.count()
         
         by_status = {}
         for status_code, status_name in QualityObjective.STATUS_CHOICES:
-            by_status[status_code] = QualityObjective.objects.filter(status=status_code).count()
+            by_status[status_code] = queryset.filter(status=status_code).count()
         
         by_source = {}
         for source_code, source_name in QualityObjective.SOURCE_CHOICES:
-            by_source[source_code] = QualityObjective.objects.filter(source_module=source_code).count()
+            by_source[source_code] = queryset.filter(source_module=source_code).count()
         
         # Calcular progreso promedio
-        objectives = QualityObjective.objects.filter(status__in=['active', 'in_progress'])
+        objectives = queryset.filter(status__in=['active', 'in_progress'])
         avg_progress = 0
         if objectives.exists():
             total_progress = sum([obj.progress_percentage for obj in objectives])
             avg_progress = total_progress / objectives.count()
         
-        achieved = QualityObjective.objects.filter(status='achieved').count()
-        delayed = QualityObjective.objects.filter(status='delayed').count()
+        achieved = queryset.filter(status='achieved').count()
+        delayed = queryset.filter(status='delayed').count()
         
         return Response({
             'total_objectives': total,
@@ -554,7 +617,7 @@ class QualityObjectiveViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def dashboard_data(self, request):
         """Datos para el dashboard de objetivos"""
-        objectives = QualityObjective.objects.all()[:10]
+        objectives = self.get_queryset()[:10]
         
         data = []
         for obj in objectives:
@@ -588,7 +651,6 @@ from .models import (
     BillingSubscription,
     BillingPayment,
 )
-from authentication.models import UserProfile
 from .serializers import (
     OrganizationSerializer, UserProfileSerializer, UserCreateSerializer,
     OrganizationSettingsSerializer, ISOClauseConfigSerializer, AuditLogSerializer,
@@ -646,9 +708,9 @@ class OrganizationViewSet(viewsets.ModelViewSet):
         return Response({
             'organization': OrganizationSerializer(org).data,
             'users_count': org.members.filter(is_active=True).count(),
-            'total_documents': Document.objects.count(),
-            'total_risks': RiskMatrix.objects.count(),
-            'total_objectives': QualityObjective.objects.count(),
+            'total_documents': Document.objects.filter(organization=org).count(),
+            'total_risks': RiskMatrix.objects.filter(organization=org).count(),
+            'total_objectives': QualityObjective.objects.filter(organization=org).count(),
         })
 
 
@@ -1558,28 +1620,31 @@ class AuditLogViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def export_data(request):
     """Exportar datos del sistema"""
+    organization_id = _resolve_scoped_org_id(request)
     export_type = request.query_params.get('type', 'all')
     
     data = {}
     
     if export_type in ['all', 'risks']:
-        data['risks'] = list(RiskMatrix.objects.values())
+        data['risks'] = list(RiskMatrix.objects.filter(organization_id=organization_id).values())
     
     if export_type in ['all', 'objectives']:
-        data['objectives'] = list(QualityObjective.objects.values())
+        data['objectives'] = list(QualityObjective.objects.filter(organization_id=organization_id).values())
     
     if export_type in ['all', 'stakeholders']:
-        data['stakeholders'] = list(StakeholderProfile.objects.values())
+        data['stakeholders'] = list(StakeholderProfile.objects.filter(organization_id=organization_id).values())
     
     if export_type in ['all', 'documents']:
-        data['documents'] = list(Document.objects.values('id', 'title', 'document_type', 'source', 'created_at'))
+        data['documents'] = list(Document.objects.filter(organization_id=organization_id).values('id', 'title', 'document_type', 'source', 'created_at'))
     
     if export_type in ['all', 'processes']:
-        data['processes'] = list(ProcessMap.objects.values())
+        data['processes'] = list(ProcessMap.objects.filter(organization_id=organization_id).values())
     
     return Response({
+        'organization_id': organization_id,
         'export_date': timezone.now().isoformat(),
         'export_type': export_type,
         'data': data

@@ -29,6 +29,7 @@ class StakeholderAnalyzer(AIModuleBase):
     def __init__(self):
         super().__init__('SIE')
         self.engine = StakeholderIntelligenceEngine()
+        self.organization_id = None
     
     def process(self, data: Dict[str, Any] = None) -> Dict[str, Any]:
         """
@@ -38,6 +39,8 @@ class StakeholderAnalyzer(AIModuleBase):
             Dict con resultados del análisis completo
         """
         start_time = datetime.now()
+        payload = data or {}
+        self.organization_id = payload.get('organization_id') or payload.get('organization')
         
         try:
             # 1. Obtener stakeholders de la BD
@@ -121,11 +124,14 @@ class StakeholderAnalyzer(AIModuleBase):
     def _load_stakeholders(self) -> List[Dict]:
         """Carga stakeholders activos desde la BD"""
         stakeholders_qs = StakeholderProfile.objects.filter(is_active=True)
+        if self.organization_id:
+            stakeholders_qs = stakeholders_qs.filter(organization_id=self.organization_id)
         
         stakeholders = []
         for sh in stakeholders_qs:
             stakeholders.append({
                 'id': sh.id,
+                'organization_id': sh.organization_id,
                 'name': sh.name,
                 'stakeholder_type': sh.stakeholder_type,
                 'influence_score': sh.influence_score,
@@ -142,7 +148,10 @@ class StakeholderAnalyzer(AIModuleBase):
         """Actualiza los scores de influencia en la BD"""
         for stakeholder_id, metric_data in metrics.items():
             try:
-                sh = StakeholderProfile.objects.get(id=stakeholder_id)
+                queryset = StakeholderProfile.objects
+                if self.organization_id:
+                    queryset = queryset.filter(organization_id=self.organization_id)
+                sh = queryset.get(id=stakeholder_id)
                 
                 # Actualizar score compuesto
                 sh.influence_score = metric_data['composite_influence_score']
@@ -163,8 +172,12 @@ class StakeholderAnalyzer(AIModuleBase):
         
         # Obtener registros de los últimos 6 meses
         six_months_ago = timezone.now() - timedelta(days=180)
-        
-        for sh in StakeholderProfile.objects.filter(is_active=True):
+
+        stakeholders_qs = StakeholderProfile.objects.filter(is_active=True)
+        if self.organization_id:
+            stakeholders_qs = stakeholders_qs.filter(organization_id=self.organization_id)
+
+        for sh in stakeholders_qs:
             # Historial simple: registro actual + cambios registrados
             history = [{
                 'name': sh.name,
@@ -195,7 +208,10 @@ class StakeholderAnalyzer(AIModuleBase):
         """Registra cambios detectados en la BD"""
         for change in changes:
             try:
-                sh = StakeholderProfile.objects.get(id=change['stakeholder_id'])
+                queryset = StakeholderProfile.objects
+                if self.organization_id:
+                    queryset = queryset.filter(organization_id=self.organization_id)
+                sh = queryset.get(id=change['stakeholder_id'])
                 
                 # Crear registro de cambio
                 StakeholderChangeLog.objects.create(
@@ -225,11 +241,13 @@ class StakeholderAnalyzer(AIModuleBase):
     def _create_stakeholder_risks(self, critical_stakeholders: List[Dict]):
         """Crea riesgos automáticos para stakeholders críticos con problemas"""
         for sh_data in critical_stakeholders:
+            organization_id = sh_data.get('organization_id') or self.organization_id
             # Solo crear riesgo si hay problemas
             if sh_data['risk_level'] in ['CRÍTICO', 'ALTO']:
                 
                 # Verificar que no exista ya un riesgo similar
                 existing = RiskMatrix.objects.filter(
+                    organization_id=organization_id,
                     source_module='SIE',
                     source_id=sh_data['stakeholder_id'],
                     status__in=['identified', 'under_analysis']
@@ -244,6 +262,7 @@ class StakeholderAnalyzer(AIModuleBase):
                     }
                     
                     RiskMatrix.objects.create(
+                        organization_id=organization_id,
                         source_module='SIE',
                         source_id=sh_data['stakeholder_id'],
                         risk_description=(
@@ -327,16 +346,21 @@ class ContextAnalyzer(AIModuleBase):
             Dict con resultados del análisis completo
         """
         start_time = datetime.now()
+        payload = data or {}
+        organization_id = payload.get('organization_id') or payload.get('organization')
         
         try:
             # 1. Obtener documentos
             documents = Document.objects.all()
+            if organization_id:
+                documents = documents.filter(organization_id=organization_id)
             
             if documents.count() == 0:
                 logger.warning("No hay documentos para analizar")
                 return {
                     'status': 'error',
                     'error': 'No hay documentos disponibles para analizar. Por favor, sube documentos primero.',
+                    'organization_id': organization_id,
                     'total_documents': 0
                 }
             
@@ -345,9 +369,10 @@ class ContextAnalyzer(AIModuleBase):
             external_insights = self._analyze_external_factors(documents)
             
             # 3. Crear o actualizar registro de análisis
-            existing_analysis = ContextAnalysis.objects.filter(
-                status='completed'
-            ).order_by('-timestamp').first()
+            existing_analysis_qs = ContextAnalysis.objects.filter(status='completed')
+            if organization_id:
+                existing_analysis_qs = existing_analysis_qs.filter(organization_id=organization_id)
+            existing_analysis = existing_analysis_qs.order_by('-timestamp').first()
             
             if existing_analysis:
                 # Actualizar análisis existente
@@ -360,6 +385,7 @@ class ContextAnalyzer(AIModuleBase):
             else:
                 # Crear nuevo análisis
                 analysis = ContextAnalysis.objects.create(
+                    organization_id=organization_id,
                     status='completed',
                     total_documents_processed=documents.count(),
                     internal_insights=internal_insights,
@@ -373,6 +399,7 @@ class ContextAnalyzer(AIModuleBase):
                 'status': 'completed',
                 'module': 'SCA',
                 'iso_clause': '4.1',
+                'organization_id': organization_id,
                 'execution_time': execution_time,
                 'total_documents': documents.count(),
                 'analysis_id': analysis.id,
@@ -395,6 +422,7 @@ class ContextAnalyzer(AIModuleBase):
             return {
                 'status': 'error',
                 'error': str(e),
+                'organization_id': organization_id,
                 'total_documents': 0
             }
     

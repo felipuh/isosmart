@@ -25,14 +25,16 @@ const contextService = {
   },
 
   // Obtener resumen del dashboard
-  getDashboardSummary: async () => {
-    const response = await api.get('/dashboard/');
+  getDashboardSummary: async (organizationId = null) => {
+    const params = organizationId ? { organization_id: organizationId } : {};
+    const response = await api.get('/dashboard/', { params });
     return response.data;
   },
 
   // Obtener matriz de riesgos
-  getRiskMatrix: async () => {
-    const response = await api.get('/risks/');
+  getRiskMatrix: async (organizationId = null) => {
+    const params = organizationId ? { organization_id: organizationId } : {};
+    const response = await api.get('/risks/', { params });
     return response.data.results || response.data;
   }
 };

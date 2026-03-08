@@ -17,7 +17,10 @@ class OrganizationScopedViewSetMixin:
             raise ValidationError({'organization_id': 'organization_id inválido'})
 
     def get_organization_id(self):
-        query_org_id = self._parse_org_id(self.request.query_params.get('organization_id'))
+        query_org_id = self._parse_org_id(
+            self.request.query_params.get('organization_id')
+            or self.request.query_params.get('organization')
+        )
         token_org_id = self._parse_org_id(getattr(self.request, 'organization_id', None))
 
         if query_org_id and token_org_id and query_org_id != token_org_id:
@@ -40,7 +43,10 @@ class OrganizationScopedViewSetMixin:
         organization_id = self.get_organization_id()
 
         if self.organization_write_field:
-            payload_org_id = self._parse_org_id(self.request.data.get(self.organization_write_field))
+            payload_org_id = self._parse_org_id(
+                self.request.data.get(self.organization_write_field)
+                or self.request.data.get('organization')
+            )
             if payload_org_id and payload_org_id != organization_id:
                 raise PermissionDenied('No puede crear registros para otra organización')
             serializer.save(**{self.organization_write_field: organization_id})
@@ -52,7 +58,10 @@ class OrganizationScopedViewSetMixin:
         organization_id = self.get_organization_id()
 
         if self.organization_write_field:
-            payload_org_id = self._parse_org_id(self.request.data.get(self.organization_write_field))
+            payload_org_id = self._parse_org_id(
+                self.request.data.get(self.organization_write_field)
+                or self.request.data.get('organization')
+            )
             if payload_org_id and payload_org_id != organization_id:
                 raise PermissionDenied('No puede mover registros entre organizaciones')
 

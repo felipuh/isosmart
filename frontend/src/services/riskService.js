@@ -47,20 +47,49 @@ const riskService = {
   },
 
   // Obtener estadísticas
-  getStats: async () => {
-    const response = await api.get('/risks/stats/');
+  getStats: async (organizationId = null) => {
+    const params = organizationId ? { organization_id: organizationId } : {};
+    const response = await api.get('/risks/stats/', { params });
     return response.data;
   },
 
   // Obtener matriz de riesgos
-  getMatrix: async () => {
-    const response = await api.get('/risks/matrix/');
+  getMatrix: async (organizationId = null) => {
+    const params = organizationId ? { organization_id: organizationId } : {};
+    const response = await api.get('/risks/matrix/', { params });
     return response.data;
   },
 
   // Evaluar riesgo
   evaluate: async (id) => {
     const response = await api.post(`/risks/${id}/evaluate/`);
+    return response.data;
+  },
+
+  // Aliases de compatibilidad con componentes legacy
+  getMatrixData: async (organizationId = null) => {
+    const params = organizationId ? { organization_id: organizationId } : {};
+    const response = await api.get('/risks/matrix/', { params });
+    return response.data;
+  },
+
+  createRisk: async (data) => {
+    const response = await api.post('/risks/', data);
+    return response.data;
+  },
+
+  updateRisk: async (id, data) => {
+    const response = await api.put(`/risks/${id}/`, data);
+    return response.data;
+  },
+
+  deleteRisk: async (id) => {
+    const response = await api.delete(`/risks/${id}/`);
+    return response.data;
+  },
+
+  changeStatus: async (id, status) => {
+    const response = await api.post(`/risks/${id}/change_status/`, { status });
     return response.data;
   }
 };

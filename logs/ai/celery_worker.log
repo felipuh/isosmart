@@ -34,3 +34,62 @@
 [2026-03-05 18:02:24,551: INFO/MainProcess] mingle: searching for neighbors
 [2026-03-05 18:02:25,594: INFO/MainProcess] mingle: all alone
 [2026-03-05 18:02:25,671: INFO/MainProcess] celery@localhost.localdomain ready.
+[2026-03-08 13:43:08,011: WARNING/MainProcess] consumer: Connection to broker lost. Trying to re-establish the connection...
+Traceback (most recent call last):
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/celery/worker/consumer/consumer.py", line 340, in start
+    blueprint.start(self)
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/celery/bootsteps.py", line 116, in start
+    step.start(parent)
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/celery/worker/consumer/consumer.py", line 742, in start
+    c.loop(*c.loop_args())
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/celery/worker/loops.py", line 97, in asynloop
+    next(loop)
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/kombu/asynchronous/hub.py", line 373, in create_loop
+    cb(*cbargs)
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/kombu/transport/redis.py", line 1359, in on_readable
+    self.cycle.on_readable(fileno)
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/kombu/transport/redis.py", line 576, in on_readable
+    chan.handlers[type]()
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/kombu/transport/redis.py", line 925, in _receive
+    ret.append(self._receive_one(c))
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/kombu/transport/redis.py", line 935, in _receive_one
+    response = c.parse_response()
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/redis/client.py", line 824, in parse_response
+    response = self._execute(conn, try_read)
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/redis/client.py", line 800, in _execute
+    return conn.retry.call_with_retry(
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/redis/retry.py", line 49, in call_with_retry
+    fail(error)
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/redis/client.py", line 802, in <lambda>
+    lambda error: self._disconnect_raise_connect(conn, error),
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/redis/client.py", line 789, in _disconnect_raise_connect
+    raise error
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/redis/retry.py", line 46, in call_with_retry
+    return do()
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/redis/client.py", line 801, in <lambda>
+    lambda: command(*args, **kwargs),
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/redis/client.py", line 822, in try_read
+    return conn.read_response(disconnect_on_error=False, push_request=True)
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/redis/connection.py", line 500, in read_response
+    response = self._parser.read_response(disable_decoding=disable_decoding)
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/redis/_parsers/resp2.py", line 15, in read_response
+    result = self._read_response(disable_decoding=disable_decoding)
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/redis/_parsers/resp2.py", line 25, in _read_response
+    raw = self._buffer.readline()
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/redis/_parsers/socket.py", line 115, in readline
+    self._read_from_socket()
+  File "/home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/redis/_parsers/socket.py", line 68, in _read_from_socket
+    raise ConnectionError(SERVER_CLOSED_CONNECTION_ERROR)
+redis.exceptions.ConnectionError: Connection closed by server.
+[2026-03-08 13:43:09,003: WARNING/MainProcess] /home/aplicacion/projects/isosmart/backend/venv_ai/lib64/python3.9/site-packages/celery/worker/consumer/consumer.py:391: CPendingDeprecationWarning: 
+In Celery 5.1 we introduced an optional breaking change which
+on connection loss cancels all currently executed tasks with late acknowledgement enabled.
+These tasks cannot be acknowledged as the connection is gone, and the tasks are automatically redelivered
+back to the queue. You can enable this behavior using the worker_cancel_long_running_tasks_on_connection_loss
+setting. In Celery 5.1 it is set to False by default. The setting will be set to True by default in Celery 6.0.
+
+  warnings.warn(CANCEL_TASKS_BY_DEFAULT, CPendingDeprecationWarning)
+
+[2026-03-08 13:43:09,993: INFO/MainProcess] Connected to redis://localhost:6379/1
+[2026-03-08 13:43:10,076: INFO/MainProcess] mingle: searching for neighbors
+[2026-03-08 13:43:11,402: INFO/MainProcess] mingle: all alone

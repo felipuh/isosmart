@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import riskService from '../../services/riskService';
 import { useI18n } from '../../context/I18nContext';
+import { useAuth } from '../../context/AuthContext';
 
 const RiskMatrixVisual = ({ onRiskClick }) => {
   const { t } = useI18n();
+  const { currentOrganization } = useAuth();
   const [matrixData, setMatrixData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -52,12 +54,12 @@ const RiskMatrixVisual = ({ onRiskClick }) => {
 
   useEffect(() => {
     loadMatrixData();
-  }, []);
+  }, [currentOrganization?.id]);
 
   const loadMatrixData = async () => {
     setLoading(true);
     try {
-      const data = await riskService.getMatrixData();
+      const data = await riskService.getMatrixData(currentOrganization?.id || null);
       setMatrixData(data);
     } catch (err) {
       setError(err.message);

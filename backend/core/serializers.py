@@ -44,14 +44,14 @@ class QualityObjectiveSerializer(serializers.ModelSerializer):
     class Meta:
         model = QualityObjective
         fields = '__all__'
-        read_only_fields = ['id', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'organization', 'created_at', 'updated_at']
 
 
 class DocumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Document
         fields = '__all__'
-        read_only_fields = ['id', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'organization', 'created_at', 'updated_at']
 
 
 class DocumentUploadSerializer(serializers.Serializer):

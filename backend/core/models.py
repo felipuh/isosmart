@@ -21,6 +21,7 @@ class ContextAnalysis(models.Model):
     ]
     
     id = models.AutoField(primary_key=True)
+    organization = models.ForeignKey('Organization', on_delete=models.CASCADE, related_name='context_analyses', null=True, blank=True)
     timestamp = models.DateTimeField(auto_now_add=True, db_index=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     internal_insights = models.JSONField(default=dict, blank=True)
@@ -52,6 +53,7 @@ class Document(models.Model):
     ]
     
     id = models.AutoField(primary_key=True)
+    organization = models.ForeignKey('Organization', on_delete=models.CASCADE, related_name='documents', null=True, blank=True)
     title = models.CharField(max_length=255)
     document_type = models.CharField(max_length=50, choices=TYPE_CHOICES)
     content = models.TextField()
@@ -99,6 +101,7 @@ class StakeholderProfile(models.Model):
     ]
     
     id = models.AutoField(primary_key=True)
+    organization = models.ForeignKey('Organization', on_delete=models.CASCADE, related_name='stakeholders', null=True, blank=True)
     name = models.CharField(max_length=255)
     stakeholder_type = models.CharField(max_length=50, choices=TYPE_CHOICES)
     influence_score = models.FloatField(default=0.0)
@@ -209,6 +212,7 @@ class ProcessMap(models.Model):
     ]
     
     id = models.AutoField(primary_key=True)
+    organization = models.ForeignKey('Organization', on_delete=models.CASCADE, related_name='process_maps', null=True, blank=True)
     process_id = models.CharField(max_length=50, unique=True)
     process_name = models.CharField(max_length=200)
     process_data = models.JSONField(default=dict)
@@ -275,6 +279,7 @@ class RiskMatrix(models.Model):
     ]
     
     id = models.AutoField(primary_key=True)
+    organization = models.ForeignKey('Organization', on_delete=models.CASCADE, related_name='risk_matrices', null=True, blank=True)
     source_module = models.CharField(max_length=10, choices=SOURCE_CHOICES)
     source_id = models.IntegerField(null=True, blank=True)
     risk_description = models.TextField()
@@ -324,6 +329,7 @@ class QualityObjective(models.Model):
     ]
     
     id = models.AutoField(primary_key=True)
+    organization = models.ForeignKey('Organization', on_delete=models.CASCADE, related_name='quality_objectives', null=True, blank=True)
     source_module = models.CharField(max_length=10, choices=SOURCE_CHOICES, default='MANUAL')
     objective_description = models.TextField()
     indicator_name = models.CharField(max_length=255)
