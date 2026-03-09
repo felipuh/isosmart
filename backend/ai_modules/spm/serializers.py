@@ -100,6 +100,7 @@ class ProcessMapSerializer(serializers.ModelSerializer):
         model = ProcessMap
         fields = [
             'id',
+            'organization_id',
             'title',
             'version',
             'effective_date',
@@ -123,6 +124,7 @@ class ProcessMapSerializer(serializers.ModelSerializer):
 
 class ProcessMapCreateSerializer(serializers.Serializer):
     """Serializer para crear nuevo mapa de procesos"""
+    organization_id = serializers.IntegerField(required=False)
     created_by = serializers.CharField(
         max_length=100,
         required=False,

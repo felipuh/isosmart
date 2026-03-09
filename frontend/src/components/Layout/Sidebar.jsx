@@ -18,6 +18,7 @@ const Sidebar = ({ isOpen = true }) => {
     { name: t('navigation.objectives'), path: '/objectives', icon: Award },
     { name: t('navigation.planning'), path: '/planning', icon: ClipboardList },
     { name: t('navigation.resources'), path: '/resources', icon: Package },
+    { name: t('navigation.operations'), path: '/operations', icon: Activity },
     { name: t('navigation.improvement'), path: '/improvement', icon: Zap },
     { name: t('navigation.performance'), path: '/performance', icon: LineChart },
     { name: t('navigation.leadership'), path: '/leadership', icon: Users },

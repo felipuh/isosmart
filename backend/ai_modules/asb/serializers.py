@@ -68,6 +68,7 @@ class ScopeDefinitionSerializer(serializers.ModelSerializer):
         model = ScopeDefinition
         fields = [
             'id',
+            'organization_id',
             'title',
             'version',
             'effective_date',
@@ -92,6 +93,7 @@ class ScopeDefinitionSerializer(serializers.ModelSerializer):
 
 class ScopeDefinitionCreateSerializer(serializers.Serializer):
     """Serializer para crear nueva definición de alcance"""
+    organization_id = serializers.IntegerField(required=False)
     products_services = serializers.ListField(
         child=serializers.CharField(max_length=200),
         required=False,

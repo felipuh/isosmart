@@ -35,8 +35,8 @@ const ProcessDashboard = () => {
         // Cargar procesos
         if (latestResponse.data?.id) {
           const [procs, processesByTypeData] = await Promise.all([
-            processService.getProcesses(latestResponse.data.id),
-            processService.getProcessesByType(latestResponse.data.id)
+            processService.getProcesses(latestResponse.data.id, currentOrganization.id),
+            processService.getProcessesByType(latestResponse.data.id, currentOrganization.id)
           ]);
           setProcesses(Array.isArray(procs) ? procs : procs.results || []);
           setProcessesByType(processesByTypeData);
@@ -63,7 +63,7 @@ const ProcessDashboard = () => {
 
     setAnalyzing(true);
     try {
-      const result = await processService.runMapping({});
+      const result = await processService.runMapping({}, currentOrganization?.id);
       console.log('Process mapping completed:', result);
 
       if (result.status === 'success') {
@@ -102,10 +102,10 @@ const ProcessDashboard = () => {
   const handleSaveProcess = async (formData) => {
     try {
       if (editingProcess) {
-        await processService.updateProcess(editingProcess.id, formData);
+        await processService.updateProcess(editingProcess.id, formData, currentOrganization?.id);
         alert(t('processDashboard.messages.processUpdated'));
       } else {
-        await processService.createProcess(formData);
+        await processService.createProcess(formData, currentOrganization?.id);
         alert(t('processDashboard.messages.processCreated'));
       }
       setShowForm(false);
@@ -124,7 +124,7 @@ const ProcessDashboard = () => {
       return;
     }
     try {
-      await processService.deleteProcess(process.id);
+      await processService.deleteProcess(process.id, currentOrganization?.id);
       alert(t('processDashboard.messages.processDeleted'));
       await loadData();
     } catch (error) {

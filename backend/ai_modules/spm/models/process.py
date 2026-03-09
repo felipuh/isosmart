@@ -12,6 +12,13 @@ class ProcessMap(models.Model):
     """
     Mapa general de procesos de la organización
     """
+
+    organization_id = models.IntegerField(
+        null=True,
+        blank=True,
+        db_index=True,
+        verbose_name="ID de Organización"
+    )
     
     title = models.CharField(
         max_length=255,

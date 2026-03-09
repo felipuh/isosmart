@@ -1,7 +1,12 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import api_view, action
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import permission_classes
+from rest_framework.exceptions import PermissionDenied, ValidationError
 from django.db.models import Count
+from authentication.models import UserProfile
+from core.organization_scoping import OrganizationScopedViewSetMixin
 
 from .models import ScopeDefinition, ProcessScope, LocationScope
 from .serializers import (
@@ -17,12 +22,56 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class ScopeDefinitionViewSet(viewsets.ModelViewSet):
+def _parse_org_id(value):
+    if value in (None, ''):
+        return None
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        raise ValidationError({'organization_id': 'organization_id invalido'})
+
+
+def _allowed_org_ids_for_request(request):
+    user = getattr(request, 'user', None)
+    if not user or not user.is_authenticated:
+        return set()
+    if user.is_superuser:
+        return None
+    return set(
+        UserProfile.objects.filter(user=user, is_active=True).values_list('organization_id', flat=True)
+    )
+
+
+def _resolve_scoped_org_id(request):
+    query_org_id = _parse_org_id(
+        request.query_params.get('organization_id')
+        or request.query_params.get('organization')
+        or request.data.get('organization_id')
+        or request.data.get('organization')
+    )
+    token_org_id = _parse_org_id(getattr(request, 'organization_id', None))
+
+    if query_org_id and token_org_id and query_org_id != token_org_id:
+        raise PermissionDenied('organization_id no coincide con el token activo')
+
+    organization_id = query_org_id or token_org_id
+    if not organization_id:
+        raise ValidationError({'organization_id': 'organization_id requerido'})
+
+    allowed_org_ids = _allowed_org_ids_for_request(request)
+    if allowed_org_ids is not None and organization_id not in allowed_org_ids:
+        raise PermissionDenied('No autorizado para esta organizacion')
+
+    return organization_id
+
+
+class ScopeDefinitionViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
     """
     ViewSet para gestión de definiciones de alcance
     """
     queryset = ScopeDefinition.objects.all().order_by('-created_at')
     serializer_class = ScopeDefinitionSerializer
+    permission_classes = [IsAuthenticated]
     
     def get_queryset(self):
         """Filtrar por estado si se especifica"""
@@ -61,7 +110,10 @@ class ScopeDefinitionViewSet(viewsets.ModelViewSet):
             scope = self.get_object()
             
             # Desactivar todas las demás
-            ScopeDefinition.objects.filter(status='active').update(status='superseded')
+            ScopeDefinition.objects.filter(
+                status='active',
+                organization_id=scope.organization_id
+            ).exclude(id=scope.id).update(status='superseded')
             
             # Activar esta
             scope.status = 'active'
@@ -83,7 +135,7 @@ class ScopeDefinitionViewSet(viewsets.ModelViewSet):
     def active(self, request):
         """Obtener la definición de alcance activa"""
         try:
-            scope = ScopeDefinition.objects.filter(status='active').first()
+            scope = self.get_queryset().filter(status='active').first()
             
             if not scope:
                 return Response(
@@ -105,12 +157,13 @@ class ScopeDefinitionViewSet(viewsets.ModelViewSet):
     def stats(self, request):
         """Estadísticas de alcances"""
         try:
-            total = ScopeDefinition.objects.count()
-            by_status = ScopeDefinition.objects.values('status').annotate(
+            scoped = self.get_queryset()
+            total = scoped.count()
+            by_status = scoped.values('status').annotate(
                 count=Count('id')
             )
             
-            active_scope = ScopeDefinition.objects.filter(status='active').first()
+            active_scope = scoped.filter(status='active').first()
             
             stats = {
                 'total_definitions': total,
@@ -135,6 +188,7 @@ class ScopeDefinitionViewSet(viewsets.ModelViewSet):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def run_scope_analysis(request):
     """
     Ejecutar análisis de alcance con IA
@@ -152,8 +206,11 @@ def run_scope_analysis(request):
             )
         
         # Ejecutar análisis
+        organization_id = _resolve_scoped_org_id(request)
         analyzer = ScopeAnalyzer()
-        result = analyzer.process(data=serializer.validated_data)
+        payload = dict(serializer.validated_data)
+        payload['organization_id'] = organization_id
+        result = analyzer.process(data=payload)
         
         logger.info(f"Análisis de alcance completado: {result.get('status')}")
         
@@ -176,6 +233,8 @@ def run_scope_analysis(request):
                 'message': result.get('message', result.get('error'))
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
+    except (ValidationError, PermissionDenied):
+        raise
     except Exception as e:
         logger.error(f"Error en análisis de alcance: {str(e)}", exc_info=True)
         return Response({
@@ -185,13 +244,14 @@ def run_scope_analysis(request):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_latest_scope(request):
     """
     Obtener la última definición de alcance
     """
     try:
-        # ⭐ CORREGIDO: usar created_at del modelo ScopeDefinition (que SÍ existe)
-        latest = ScopeDefinition.objects.order_by('-created_at').first()
+        organization_id = _resolve_scoped_org_id(request)
+        latest = ScopeDefinition.objects.filter(organization_id=organization_id).order_by('-created_at').first()
         
         if not latest:
             return Response({
@@ -205,6 +265,8 @@ def get_latest_scope(request):
             'data': serializer.data
         })
         
+    except (ValidationError, PermissionDenied):
+        raise
     except Exception as e:
         logger.error(f"Error obteniendo último alcance: {str(e)}", exc_info=True)
         return Response({
@@ -214,12 +276,14 @@ def get_latest_scope(request):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_scope_statement(request):
     """
     Obtener la declaración de alcance más reciente
     """
     try:
-        latest = ScopeDefinition.objects.order_by('-created_at').first()
+        organization_id = _resolve_scoped_org_id(request)
+        latest = ScopeDefinition.objects.filter(organization_id=organization_id).order_by('-created_at').first()
 
         if not latest:
             return Response({
@@ -235,6 +299,8 @@ def get_scope_statement(request):
             'scope_statement': latest.scope_statement or ''
         })
 
+    except (ValidationError, PermissionDenied):
+        raise
     except Exception as e:
         logger.error(f"Error obteniendo declaración de alcance: {str(e)}", exc_info=True)
         return Response({
@@ -244,12 +310,14 @@ def get_scope_statement(request):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def run_scope_audit(request):
     """
     Ejecutar auditoría básica del alcance (validaciones mínimas)
     """
     try:
-        latest = ScopeDefinition.objects.order_by('-created_at').first()
+        organization_id = _resolve_scoped_org_id(request)
+        latest = ScopeDefinition.objects.filter(organization_id=organization_id).order_by('-created_at').first()
 
         if not latest:
             return Response({
@@ -276,6 +344,8 @@ def run_scope_audit(request):
             'issues': issues
         })
 
+    except (ValidationError, PermissionDenied):
+        raise
     except Exception as e:
         logger.error(f"Error en auditoría de alcance: {str(e)}", exc_info=True)
         return Response({
@@ -284,12 +354,15 @@ def run_scope_audit(request):
         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-class ProcessScopeViewSet(viewsets.ModelViewSet):
+class ProcessScopeViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
     """
     ViewSet para gestión de procesos en alcance
     """
+    organization_lookup_field = 'scope_definition__organization_id'
+    organization_write_field = None
     queryset = ProcessScope.objects.all()
     serializer_class = ProcessScopeSerializer
+    permission_classes = [IsAuthenticated]
     
     def get_queryset(self):
         """Filtrar por definición de alcance si se especifica"""
@@ -301,13 +374,30 @@ class ProcessScopeViewSet(viewsets.ModelViewSet):
         
         return queryset
 
+    def perform_create(self, serializer):
+        organization_id = self.get_organization_id()
+        scope_definition = serializer.validated_data.get('scope_definition')
+        if scope_definition and scope_definition.organization_id != organization_id:
+            raise PermissionDenied('La definicion de alcance no pertenece a la organizacion activa')
+        serializer.save()
 
-class LocationScopeViewSet(viewsets.ModelViewSet):
+    def perform_update(self, serializer):
+        organization_id = self.get_organization_id()
+        scope_definition = serializer.validated_data.get('scope_definition') or getattr(serializer.instance, 'scope_definition', None)
+        if scope_definition and scope_definition.organization_id != organization_id:
+            raise PermissionDenied('No puede mover registros fuera de la organizacion activa')
+        serializer.save()
+
+
+class LocationScopeViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
     """
     ViewSet para gestión de ubicaciones en alcance
     """
+    organization_lookup_field = 'scope_definition__organization_id'
+    organization_write_field = None
     queryset = LocationScope.objects.all()
     serializer_class = LocationScopeSerializer
+    permission_classes = [IsAuthenticated]
     
     def get_queryset(self):
         """Filtrar por definición de alcance si se especifica"""
@@ -318,3 +408,17 @@ class LocationScopeViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(scope_definition_id=scope_id)
         
         return queryset
+
+    def perform_create(self, serializer):
+        organization_id = self.get_organization_id()
+        scope_definition = serializer.validated_data.get('scope_definition')
+        if scope_definition and scope_definition.organization_id != organization_id:
+            raise PermissionDenied('La definicion de alcance no pertenece a la organizacion activa')
+        serializer.save()
+
+    def perform_update(self, serializer):
+        organization_id = self.get_organization_id()
+        scope_definition = serializer.validated_data.get('scope_definition') or getattr(serializer.instance, 'scope_definition', None)
+        if scope_definition and scope_definition.organization_id != organization_id:
+            raise PermissionDenied('No puede mover registros fuera de la organizacion activa')
+        serializer.save()

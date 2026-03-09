@@ -1,7 +1,12 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import api_view, action
 from rest_framework.response import Response
-from django.db.models import Count, Q
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import permission_classes
+from rest_framework.exceptions import PermissionDenied, ValidationError
+from django.db.models import Count
+from authentication.models import UserProfile
+from core.organization_scoping import OrganizationScopedViewSetMixin
 
 from .models import ProcessMap, Process, ProcessInteraction, ProcessActivity
 from .serializers import (
@@ -18,12 +23,56 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class ProcessMapViewSet(viewsets.ModelViewSet):
+def _parse_org_id(value):
+    if value in (None, ''):
+        return None
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        raise ValidationError({'organization_id': 'organization_id invalido'})
+
+
+def _allowed_org_ids_for_request(request):
+    user = getattr(request, 'user', None)
+    if not user or not user.is_authenticated:
+        return set()
+    if user.is_superuser:
+        return None
+    return set(
+        UserProfile.objects.filter(user=user, is_active=True).values_list('organization_id', flat=True)
+    )
+
+
+def _resolve_scoped_org_id(request):
+    query_org_id = _parse_org_id(
+        request.query_params.get('organization_id')
+        or request.query_params.get('organization')
+        or request.data.get('organization_id')
+        or request.data.get('organization')
+    )
+    token_org_id = _parse_org_id(getattr(request, 'organization_id', None))
+
+    if query_org_id and token_org_id and query_org_id != token_org_id:
+        raise PermissionDenied('organization_id no coincide con el token activo')
+
+    organization_id = query_org_id or token_org_id
+    if not organization_id:
+        raise ValidationError({'organization_id': 'organization_id requerido'})
+
+    allowed_org_ids = _allowed_org_ids_for_request(request)
+    if allowed_org_ids is not None and organization_id not in allowed_org_ids:
+        raise PermissionDenied('No autorizado para esta organizacion')
+
+    return organization_id
+
+
+class ProcessMapViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
     """
     ViewSet para gestión de mapas de procesos
     """
     queryset = ProcessMap.objects.all().order_by('-created_at')
     serializer_class = ProcessMapSerializer
+    permission_classes = [IsAuthenticated]
     
     def get_queryset(self):
         """Filtrar por estado si se especifica"""
@@ -62,7 +111,10 @@ class ProcessMapViewSet(viewsets.ModelViewSet):
             process_map = self.get_object()
             
             # Desactivar todos los demás
-            ProcessMap.objects.filter(status='active').update(status='approved')
+            ProcessMap.objects.filter(
+                status='active',
+                organization_id=process_map.organization_id
+            ).exclude(id=process_map.id).update(status='approved')
             
             # Activar este
             process_map.status = 'active'
@@ -84,7 +136,7 @@ class ProcessMapViewSet(viewsets.ModelViewSet):
     def active(self, request):
         """Obtener el mapa de procesos activo"""
         try:
-            process_map = ProcessMap.objects.filter(status='active').first()
+            process_map = self.get_queryset().filter(status='active').first()
             
             if not process_map:
                 return Response(
@@ -106,12 +158,13 @@ class ProcessMapViewSet(viewsets.ModelViewSet):
     def stats(self, request):
         """Estadísticas de mapas de procesos"""
         try:
-            total = ProcessMap.objects.count()
-            by_status = ProcessMap.objects.values('status').annotate(
+            scoped = self.get_queryset()
+            total = scoped.count()
+            by_status = scoped.values('status').annotate(
                 count=Count('id')
             )
             
-            active_map = ProcessMap.objects.filter(status='active').first()
+            active_map = scoped.filter(status='active').first()
             
             stats = {
                 'total_maps': total,
@@ -153,12 +206,15 @@ class ProcessMapViewSet(viewsets.ModelViewSet):
             )
 
 
-class ProcessViewSet(viewsets.ModelViewSet):
+class ProcessViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
     """
     ViewSet para gestión de procesos individuales
     """
+    organization_lookup_field = 'process_map__organization_id'
+    organization_write_field = None
     queryset = Process.objects.all().select_related('process_map')
     serializer_class = ProcessSerializer
+    permission_classes = [IsAuthenticated]
     
     def get_queryset(self):
         """Filtrar por mapa o tipo si se especifica"""
@@ -177,6 +233,20 @@ class ProcessViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(is_critical=True)
         
         return queryset
+
+    def perform_create(self, serializer):
+        organization_id = self.get_organization_id()
+        process_map = serializer.validated_data.get('process_map')
+        if process_map and process_map.organization_id != organization_id:
+            raise PermissionDenied('El mapa no pertenece a la organizacion activa')
+        serializer.save()
+
+    def perform_update(self, serializer):
+        organization_id = self.get_organization_id()
+        process_map = serializer.validated_data.get('process_map') or getattr(serializer.instance, 'process_map', None)
+        if process_map and process_map.organization_id != organization_id:
+            raise PermissionDenied('No puede mover procesos fuera de la organizacion activa')
+        serializer.save()
     
     @action(detail=False, methods=['get'])
     def by_type(self, request):
@@ -213,15 +283,18 @@ class ProcessViewSet(viewsets.ModelViewSet):
             )
 
 
-class ProcessInteractionViewSet(viewsets.ModelViewSet):
+class ProcessInteractionViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
     """
     ViewSet para gestión de interacciones entre procesos
     """
+    organization_lookup_field = 'process_map__organization_id'
+    organization_write_field = None
     queryset = ProcessInteraction.objects.all().select_related(
         'source_process', 
         'target_process'
     )
     serializer_class = ProcessInteractionSerializer
+    permission_classes = [IsAuthenticated]
     
     def get_queryset(self):
         """Filtrar por mapa si se especifica"""
@@ -233,13 +306,48 @@ class ProcessInteractionViewSet(viewsets.ModelViewSet):
         
         return queryset
 
+    def perform_create(self, serializer):
+        organization_id = self.get_organization_id()
+        process_map = serializer.validated_data.get('process_map')
+        source_process = serializer.validated_data.get('source_process')
+        target_process = serializer.validated_data.get('target_process')
 
-class ProcessActivityViewSet(viewsets.ModelViewSet):
+        if process_map and process_map.organization_id != organization_id:
+            raise PermissionDenied('El mapa no pertenece a la organizacion activa')
+
+        if source_process and process_map and source_process.process_map_id != process_map.id:
+            raise ValidationError({'source_process': 'Debe pertenecer al mapa seleccionado'})
+        if target_process and process_map and target_process.process_map_id != process_map.id:
+            raise ValidationError({'target_process': 'Debe pertenecer al mapa seleccionado'})
+
+        serializer.save()
+
+    def perform_update(self, serializer):
+        organization_id = self.get_organization_id()
+        process_map = serializer.validated_data.get('process_map') or getattr(serializer.instance, 'process_map', None)
+        source_process = serializer.validated_data.get('source_process') or getattr(serializer.instance, 'source_process', None)
+        target_process = serializer.validated_data.get('target_process') or getattr(serializer.instance, 'target_process', None)
+
+        if process_map and process_map.organization_id != organization_id:
+            raise PermissionDenied('No puede mover interacciones fuera de la organizacion activa')
+
+        if source_process and process_map and source_process.process_map_id != process_map.id:
+            raise ValidationError({'source_process': 'Debe pertenecer al mapa seleccionado'})
+        if target_process and process_map and target_process.process_map_id != process_map.id:
+            raise ValidationError({'target_process': 'Debe pertenecer al mapa seleccionado'})
+
+        serializer.save()
+
+
+class ProcessActivityViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
     """
     ViewSet para gestión de actividades de procesos
     """
+    organization_lookup_field = 'process__process_map__organization_id'
+    organization_write_field = None
     queryset = ProcessActivity.objects.all().select_related('process')
     serializer_class = ProcessActivitySerializer
+    permission_classes = [IsAuthenticated]
     
     def get_queryset(self):
         """Filtrar por proceso si se especifica"""
@@ -251,8 +359,23 @@ class ProcessActivityViewSet(viewsets.ModelViewSet):
         
         return queryset
 
+    def perform_create(self, serializer):
+        organization_id = self.get_organization_id()
+        process = serializer.validated_data.get('process')
+        if process and process.process_map.organization_id != organization_id:
+            raise PermissionDenied('El proceso no pertenece a la organizacion activa')
+        serializer.save()
+
+    def perform_update(self, serializer):
+        organization_id = self.get_organization_id()
+        process = serializer.validated_data.get('process') or getattr(serializer.instance, 'process', None)
+        if process and process.process_map.organization_id != organization_id:
+            raise PermissionDenied('No puede mover actividades fuera de la organizacion activa')
+        serializer.save()
+
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def run_process_mapping(request):
     """
     Ejecutar mapeo de procesos con IA
@@ -270,8 +393,11 @@ def run_process_mapping(request):
             )
         
         # Ejecutar análisis
+        organization_id = _resolve_scoped_org_id(request)
         analyzer = ProcessAnalyzer()
-        result = analyzer.process(data=serializer.validated_data)
+        payload = dict(serializer.validated_data)
+        payload['organization_id'] = organization_id
+        result = analyzer.process(data=payload)
         
         logger.info(f"Mapeo de procesos completado: {result.get('status')}")
         
@@ -295,6 +421,8 @@ def run_process_mapping(request):
                 'message': result.get('message', result.get('error'))
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
+    except (ValidationError, PermissionDenied):
+        raise
     except Exception as e:
         logger.error(f"Error en mapeo de procesos: {str(e)}", exc_info=True)
         return Response({
@@ -304,12 +432,14 @@ def run_process_mapping(request):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_latest_map(request):
     """
     Obtener el último mapa de procesos
     """
     try:
-        latest = ProcessMap.objects.order_by('-created_at').first()
+        organization_id = _resolve_scoped_org_id(request)
+        latest = ProcessMap.objects.filter(organization_id=organization_id).order_by('-created_at').first()
         
         if not latest:
             return Response({
@@ -323,6 +453,8 @@ def get_latest_map(request):
             'data': serializer.data
         })
         
+    except (ValidationError, PermissionDenied):
+        raise
     except Exception as e:
         logger.error(f"Error obteniendo último mapa: {str(e)}", exc_info=True)
         return Response({

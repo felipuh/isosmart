@@ -26,6 +26,7 @@ class ProcessAnalyzer(AIModuleBase):
     def __init__(self):
         super().__init__('SPM')
         self.engine = ProcessMapperEngine()
+        self.organization_id = None
     
     def process(self, data: Dict[str, Any] = None) -> Dict[str, Any]:
         """
@@ -35,16 +36,23 @@ class ProcessAnalyzer(AIModuleBase):
             Dict con resultados del análisis completo
         """
         start_time = datetime.now()
+        payload = data or {}
+        self.organization_id = payload.get('organization_id') or payload.get('organization')
         
         try:
             # 1. Obtener contexto y alcance previos
-            context_analysis = ContextAnalysis.objects.filter(
-                status='completed'
-            ).order_by('-timestamp').first()
-            
-            scope_definition = ScopeDefinition.objects.filter(
-                status__in=['active', 'approved']
-            ).order_by('-created_at').first()
+            context_qs = ContextAnalysis.objects.filter(status='completed')
+            if self.organization_id:
+                context_qs = context_qs.filter(organization_id=self.organization_id)
+            context_analysis = context_qs.order_by('-timestamp').first()
+
+            scope_qs = ScopeDefinition.objects.filter(status__in=['active', 'approved'])
+            if self.organization_id:
+                scope_qs = scope_qs.filter(organization_id=self.organization_id)
+            scope_definition = scope_qs.order_by('-created_at').first()
+
+            if scope_definition and not self.organization_id:
+                self.organization_id = scope_definition.organization_id
             
             if not context_analysis:
                 return {
@@ -99,9 +107,10 @@ class ProcessAnalyzer(AIModuleBase):
             )
             
             # 7. Crear o actualizar mapa de procesos en BD
-            existing_map = ProcessMap.objects.filter(
-                status__in=['draft', 'active']
-            ).order_by('-created_at').first()
+            existing_map_qs = ProcessMap.objects.filter(status__in=['draft', 'active'])
+            if self.organization_id:
+                existing_map_qs = existing_map_qs.filter(organization_id=self.organization_id)
+            existing_map = existing_map_qs.order_by('-created_at').first()
             
             if existing_map:
                 # Actualizar mapa existente
@@ -114,6 +123,8 @@ class ProcessAnalyzer(AIModuleBase):
                 existing_map.critical_processes = [p['code'] for p in processes_data if p.get('is_critical')]
                 existing_map.recommendations = recommendations
                 existing_map.scope_definition = scope_definition
+                if self.organization_id:
+                    existing_map.organization_id = self.organization_id
                 existing_map.save()
                 
                 # Eliminar procesos e interacciones anteriores del mapa
@@ -135,7 +146,8 @@ class ProcessAnalyzer(AIModuleBase):
                     critical_processes=[p['code'] for p in processes_data if p.get('is_critical')],
                     recommendations=recommendations,
                     status='draft',
-                    scope_definition=scope_definition
+                    scope_definition=scope_definition,
+                    organization_id=self.organization_id
                 )
                 self.logger.info(f"Nuevo mapa de procesos creado: ID {process_map.id}")
             

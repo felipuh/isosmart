@@ -1,14 +1,62 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import permission_classes
+from rest_framework.exceptions import PermissionDenied, ValidationError
 from django.core.paginator import Paginator, EmptyPage
 from ai_modules.sca.services.context_analyzer import ContextAnalyzer
 from core.models import ContextAnalysis
+from authentication.models import UserProfile
 import logging
 
 logger = logging.getLogger(__name__)
 
+
+def _parse_org_id(value):
+    if value in (None, ''):
+        return None
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        raise ValidationError({'organization_id': 'organization_id invalido'})
+
+
+def _allowed_org_ids_for_request(request):
+    user = getattr(request, 'user', None)
+    if not user or not user.is_authenticated:
+        return set()
+    if user.is_superuser:
+        return None
+    return set(
+        UserProfile.objects.filter(user=user, is_active=True).values_list('organization_id', flat=True)
+    )
+
+
+def _resolve_scoped_org_id(request):
+    query_org_id = _parse_org_id(
+        request.query_params.get('organization_id')
+        or request.query_params.get('organization')
+        or request.data.get('organization_id')
+        or request.data.get('organization')
+    )
+    token_org_id = _parse_org_id(getattr(request, 'organization_id', None))
+
+    if query_org_id and token_org_id and query_org_id != token_org_id:
+        raise PermissionDenied('organization_id no coincide con el token activo')
+
+    organization_id = query_org_id or token_org_id
+    if not organization_id:
+        raise ValidationError({'organization_id': 'organization_id requerido'})
+
+    allowed_org_ids = _allowed_org_ids_for_request(request)
+    if allowed_org_ids is not None and organization_id not in allowed_org_ids:
+        raise PermissionDenied('No autorizado para esta organizacion')
+
+    return organization_id
+
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def trigger_analysis(request):
     """
     Endpoint para ejecutar análisis de contexto manualmente
@@ -20,7 +68,8 @@ def trigger_analysis(request):
         analyzer = ContextAnalyzer()
         
         # Ejecutar análisis
-        result = analyzer.process()
+        organization_id = _resolve_scoped_org_id(request)
+        result = analyzer.process({'organization_id': organization_id})
         
         logger.info(f"Análisis completado: {result.get('status')}")
         
@@ -40,6 +89,8 @@ def trigger_analysis(request):
                 'message': result.get('error', 'Error desconocido en el análisis')
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
+    except (ValidationError, PermissionDenied):
+        raise
     except Exception as e:
         logger.error(f"Error en trigger_analysis: {str(e)}", exc_info=True)
         return Response({
@@ -49,12 +100,15 @@ def trigger_analysis(request):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_latest_analysis(request):
     """
     Obtener el último análisis de contexto
     """
     try:
+        organization_id = _resolve_scoped_org_id(request)
         latest = ContextAnalysis.objects.filter(
+            organization_id=organization_id,
             status='completed'
         ).order_by('-timestamp').first()
         
@@ -84,6 +138,8 @@ def get_latest_analysis(request):
             'external_insights': latest.external_insights
         })
         
+    except (ValidationError, PermissionDenied):
+        raise
     except Exception as e:
         logger.error(f"Error en get_latest_analysis: {str(e)}", exc_info=True)
         return Response({
@@ -92,15 +148,17 @@ def get_latest_analysis(request):
         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_analysis_history(request):
     """
     Obtener historial de análisis de contexto (paginado)
     """
     try:
+        organization_id = _resolve_scoped_org_id(request)
         page = int(request.query_params.get('page', 1))
         page_size = int(request.query_params.get('page_size', 10))
 
-        queryset = ContextAnalysis.objects.order_by('-timestamp')
+        queryset = ContextAnalysis.objects.filter(organization_id=organization_id).order_by('-timestamp')
         paginator = Paginator(queryset, page_size)
 
         try:
@@ -130,6 +188,8 @@ def get_analysis_history(request):
             'results': results
         })
 
+    except (ValidationError, PermissionDenied):
+        raise
     except Exception as e:
         logger.error(f"Error en get_analysis_history: {str(e)}", exc_info=True)
         return Response({

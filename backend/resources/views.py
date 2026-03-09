@@ -8,6 +8,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django_filters.rest_framework import DjangoFilterBackend
+from core.organization_scoping import OrganizationScopedViewSetMixin
 
 from .models import (
     Resource,
@@ -29,7 +30,7 @@ from .serializers import (
 )
 
 
-class ResourceViewSet(viewsets.ModelViewSet):
+class ResourceViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
     """ViewSet para Recursos"""
     queryset = Resource.objects.all()
     serializer_class = ResourceSerializer
@@ -43,11 +44,7 @@ class ResourceViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def by_type(self, request):
         """Recursos agrupados por tipo"""
-        organization_id = request.query_params.get('organization_id')
-        if not organization_id:
-            return Response({'error': 'organization_id required'}, status=status.HTTP_400_BAD_REQUEST)
-        
-        resources = self.queryset.filter(organization_id=organization_id, is_active=True)
+        resources = self.get_queryset().filter(is_active=True)
         
         result = {}
         for resource_type, _ in Resource.RESOURCE_TYPE_CHOICES:
@@ -59,7 +56,7 @@ class ResourceViewSet(viewsets.ModelViewSet):
         return Response(result)
 
 
-class InfrastructureViewSet(viewsets.ModelViewSet):
+class InfrastructureViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
     """ViewSet para Infraestructura"""
     queryset = Infrastructure.objects.all()
     serializer_class = InfrastructureSerializer
@@ -74,14 +71,12 @@ class InfrastructureViewSet(viewsets.ModelViewSet):
     def maintenance_due(self, request):
         """Infraestructura con mantenimiento próximo"""
         from datetime import date, timedelta
-        
-        organization_id = request.query_params.get('organization_id')
+
         days = int(request.query_params.get('days', 30))
-        
+
         future_date = date.today() + timedelta(days=days)
-        
-        queryset = self.queryset.filter(
-            organization_id=organization_id,
+
+        queryset = self.get_queryset().filter(
             is_active=True,
             next_maintenance_date__lte=future_date,
             next_maintenance_date__gte=date.today()
@@ -91,7 +86,7 @@ class InfrastructureViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class WorkEnvironmentViewSet(viewsets.ModelViewSet):
+class WorkEnvironmentViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
     """ViewSet para Ambientes de Trabajo"""
     queryset = WorkEnvironment.objects.all()
     serializer_class = WorkEnvironmentSerializer
@@ -103,7 +98,7 @@ class WorkEnvironmentViewSet(viewsets.ModelViewSet):
     ordering = ['area_name']
 
 
-class CompetenceViewSet(viewsets.ModelViewSet):
+class CompetenceViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
     """ViewSet para Competencias"""
     queryset = Competence.objects.all()
     serializer_class = CompetenceSerializer
@@ -117,10 +112,7 @@ class CompetenceViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def gaps(self, request):
         """Competencias con brecha (gap)"""
-        organization_id = request.query_params.get('organization_id')
-        
-        queryset = self.queryset.filter(
-            organization_id=organization_id,
+        queryset = self.get_queryset().filter(
             is_active=True
         )
         
@@ -133,11 +125,9 @@ class CompetenceViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def by_user(self, request):
         """Competencias agrupadas por usuario"""
-        organization_id = request.query_params.get('organization_id')
         user_id = request.query_params.get('user_id')
-        
-        queryset = self.queryset.filter(
-            organization_id=organization_id,
+
+        queryset = self.get_queryset().filter(
             user_id=user_id,
             is_active=True
         )
@@ -146,7 +136,7 @@ class CompetenceViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class TrainingViewSet(viewsets.ModelViewSet):
+class TrainingViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
     """ViewSet para Capacitaciones"""
     queryset = Training.objects.all()
     serializer_class = TrainingSerializer
@@ -161,11 +151,8 @@ class TrainingViewSet(viewsets.ModelViewSet):
     def upcoming(self, request):
         """Capacitaciones próximas"""
         from datetime import date
-        
-        organization_id = request.query_params.get('organization_id')
-        
-        queryset = self.queryset.filter(
-            organization_id=organization_id,
+
+        queryset = self.get_queryset().filter(
             start_date__gte=date.today(),
             status__in=['planned', 'in_progress']
         ).order_by('start_date')
@@ -193,7 +180,7 @@ class TrainingViewSet(viewsets.ModelViewSet):
             return Response({'error': 'Usuario no encontrado'}, status=status.HTTP_404_NOT_FOUND)
 
 
-class AwarenessViewSet(viewsets.ModelViewSet):
+class AwarenessViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
     """ViewSet para Actividades de Conciencia"""
     queryset = Awareness.objects.all()
     serializer_class = AwarenessSerializer
@@ -224,7 +211,7 @@ class AwarenessViewSet(viewsets.ModelViewSet):
             return Response({'error': 'Usuario no encontrado'}, status=status.HTTP_404_NOT_FOUND)
 
 
-class CommunicationViewSet(viewsets.ModelViewSet):
+class CommunicationViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
     """ViewSet para Comunicaciones"""
     queryset = Communication.objects.all()
     serializer_class = CommunicationSerializer
@@ -238,10 +225,8 @@ class CommunicationViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def pending(self, request):
         """Comunicaciones pendientes"""
-        organization_id = request.query_params.get('organization_id')
-        
-        queryset = self.queryset.filter(
-            organization_id=organization_id,
+
+        queryset = self.get_queryset().filter(
             status='planned',
             is_active=True
         ).order_by('scheduled_date')

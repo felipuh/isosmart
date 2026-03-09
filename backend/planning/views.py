@@ -8,6 +8,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django_filters.rest_framework import DjangoFilterBackend
+from core.organization_scoping import OrganizationScopedViewSetMixin
 
 from .models import (
     RiskOpportunity,
@@ -23,7 +24,7 @@ from .serializers import (
 )
 
 
-class RiskOpportunityViewSet(viewsets.ModelViewSet):
+class RiskOpportunityViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
     """ViewSet para Riesgos y Oportunidades"""
     queryset = RiskOpportunity.objects.all()
     serializer_class = RiskOpportunitySerializer
@@ -37,11 +38,7 @@ class RiskOpportunityViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def risks(self, request):
         """Solo riesgos"""
-        organization_id = request.query_params.get('organization_id')
-        if not organization_id:
-            return Response({'error': 'organization_id required'}, status=status.HTTP_400_BAD_REQUEST)
-        queryset = self.queryset.filter(
-            organization_id=organization_id,
+        queryset = self.get_queryset().filter(
             item_type='risk',
             is_active=True
         ).order_by('-risk_level')
@@ -52,11 +49,7 @@ class RiskOpportunityViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def opportunities(self, request):
         """Solo oportunidades"""
-        organization_id = request.query_params.get('organization_id')
-        if not organization_id:
-            return Response({'error': 'organization_id required'}, status=status.HTTP_400_BAD_REQUEST)
-        queryset = self.queryset.filter(
-            organization_id=organization_id,
+        queryset = self.get_queryset().filter(
             item_type='opportunity',
             is_active=True
         ).order_by('-opportunity_score')
@@ -67,11 +60,7 @@ class RiskOpportunityViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def high_priority(self, request):
         """Riesgos de alta prioridad (nivel >= 15)"""
-        organization_id = request.query_params.get('organization_id')
-        if not organization_id:
-            return Response({'error': 'organization_id required'}, status=status.HTTP_400_BAD_REQUEST)
-        queryset = self.queryset.filter(
-            organization_id=organization_id,
+        queryset = self.get_queryset().filter(
             item_type='risk',
             risk_level__gte=15,
             is_active=True
@@ -81,7 +70,7 @@ class RiskOpportunityViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class QualityObjectiveViewSet(viewsets.ModelViewSet):
+class QualityObjectiveViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
     """ViewSet para Objetivos de Calidad"""
     queryset = QualityObjective.objects.all()
     serializer_class = QualityObjectiveSerializer
@@ -95,11 +84,7 @@ class QualityObjectiveViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def active(self, request):
         """Objetivos activos"""
-        organization_id = request.query_params.get('organization_id')
-        if not organization_id:
-            return Response({'error': 'organization_id required'}, status=status.HTTP_400_BAD_REQUEST)
-        queryset = self.queryset.filter(
-            organization_id=organization_id,
+        queryset = self.get_queryset().filter(
             status='in_progress',
             is_active=True
         )
@@ -110,11 +95,7 @@ class QualityObjectiveViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def smart_compliant(self, request):
         """Objetivos que cumplen SMART"""
-        organization_id = request.query_params.get('organization_id')
-        if not organization_id:
-            return Response({'error': 'organization_id required'}, status=status.HTTP_400_BAD_REQUEST)
-        queryset = self.queryset.filter(
-            organization_id=organization_id,
+        queryset = self.get_queryset().filter(
             is_specific=True,
             is_measurable=True,
             is_achievable=True,
@@ -130,14 +111,10 @@ class QualityObjectiveViewSet(viewsets.ModelViewSet):
     def at_risk(self, request):
         """Objetivos en riesgo (progreso < 50% y fecha meta cercana)"""
         from datetime import date, timedelta
-        
-        organization_id = request.query_params.get('organization_id')
-        if not organization_id:
-            return Response({'error': 'organization_id required'}, status=status.HTTP_400_BAD_REQUEST)
+
         threshold_date = date.today() + timedelta(days=30)
-        
-        queryset = self.queryset.filter(
-            organization_id=organization_id,
+
+        queryset = self.get_queryset().filter(
             status='in_progress',
             progress_percentage__lt=50,
             target_date__lte=threshold_date,
@@ -148,7 +125,7 @@ class QualityObjectiveViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class ObjectiveActionViewSet(viewsets.ModelViewSet):
+class ObjectiveActionViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
     """ViewSet para Acciones de Objetivos"""
     queryset = ObjectiveAction.objects.all()
     serializer_class = ObjectiveActionSerializer
@@ -163,12 +140,8 @@ class ObjectiveActionViewSet(viewsets.ModelViewSet):
     def overdue(self, request):
         """Acciones vencidas"""
         from datetime import date
-        
-        organization_id = request.query_params.get('organization_id')
-        if not organization_id:
-            return Response({'error': 'organization_id required'}, status=status.HTTP_400_BAD_REQUEST)
-        queryset = self.queryset.filter(
-            organization_id=organization_id,
+
+        queryset = self.get_queryset().filter(
             due_date__lt=date.today(),
             status__in=['planned', 'in_progress']
         )
@@ -177,7 +150,7 @@ class ObjectiveActionViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class ChangeControlViewSet(viewsets.ModelViewSet):
+class ChangeControlViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
     """ViewSet para Control de Cambios"""
     queryset = ChangeControl.objects.all()
     serializer_class = ChangeControlSerializer
@@ -206,11 +179,7 @@ class ChangeControlViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def pending_approval(self, request):
         """Cambios pendientes de aprobación"""
-        organization_id = request.query_params.get('organization_id')
-        if not organization_id:
-            return Response({'error': 'organization_id required'}, status=status.HTTP_400_BAD_REQUEST)
-        queryset = self.queryset.filter(
-            organization_id=organization_id,
+        queryset = self.get_queryset().filter(
             status__in=['submitted', 'under_review']
         ).order_by('urgency', 'planned_date')
         

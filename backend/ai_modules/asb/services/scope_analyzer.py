@@ -25,6 +25,7 @@ class ScopeAnalyzer(AIModuleBase):
     def __init__(self):
         super().__init__('ASB')
         self.engine = ScopeBuilderEngine()
+        self.organization_id = None
     
     def process(self, data: Dict[str, Any] = None) -> Dict[str, Any]:
         """
@@ -34,12 +35,15 @@ class ScopeAnalyzer(AIModuleBase):
             Dict con resultados del análisis completo
         """
         start_time = datetime.now()
+        payload = data or {}
+        self.organization_id = payload.get('organization_id') or payload.get('organization')
         
         try:
             # 1. Obtener último análisis de contexto
-            context_analysis = ContextAnalysis.objects.filter(
-                status='completed'
-            ).order_by('-timestamp').first()
+            context_qs = ContextAnalysis.objects.filter(status='completed')
+            if self.organization_id:
+                context_qs = context_qs.filter(organization_id=self.organization_id)
+            context_analysis = context_qs.order_by('-timestamp').first()
             
             if not context_analysis:
                 return {
@@ -58,11 +62,11 @@ class ScopeAnalyzer(AIModuleBase):
             boundaries = self.engine.analyze_organizational_boundaries(context_data)
             
             # 3. Definir productos y servicios (puede venir de data o ser automático)
-            products_services = data.get('products_services', [
+            products_services = payload.get('products_services', [
                 'Servicios de consultoría en gestión de calidad',
                 'Auditorías internas y externas ISO 9001',
                 'Capacitación en sistemas de gestión'
-            ]) if data else [
+            ]) if payload else [
                 'Servicios de consultoría en gestión de calidad',
                 'Auditorías internas y externas ISO 9001',
                 'Capacitación en sistemas de gestión'
@@ -72,7 +76,7 @@ class ScopeAnalyzer(AIModuleBase):
             scope_data = {
                 'products_services': products_services,
                 'boundaries': boundaries,
-                'has_design_activities': data.get('has_design', False) if data else False
+                'has_design_activities': payload.get('has_design', False) if payload else False
             }
             
             self.logger.info("Evaluando requisitos ISO 9001:2015...")
@@ -95,9 +99,10 @@ class ScopeAnalyzer(AIModuleBase):
             scope_statement = self.engine.generate_scope_statement(full_scope_data)
             
             # 7. Crear o actualizar definición de alcance en BD
-            existing_scope = ScopeDefinition.objects.filter(
-                status__in=['draft', 'active']
-            ).order_by('-created_at').first()
+            existing_scope_qs = ScopeDefinition.objects.filter(status__in=['draft', 'active'])
+            if self.organization_id:
+                existing_scope_qs = existing_scope_qs.filter(organization_id=self.organization_id)
+            existing_scope = existing_scope_qs.order_by('-created_at').first()
             
             if existing_scope:
                 # Actualizar alcance existente
@@ -112,6 +117,8 @@ class ScopeAnalyzer(AIModuleBase):
                 existing_scope.scope_statement = scope_statement
                 existing_scope.coverage_analysis = coverage
                 existing_scope.context_analysis = context_analysis
+                if self.organization_id:
+                    existing_scope.organization_id = self.organization_id
                 existing_scope.save()
                 
                 # Eliminar ubicaciones anteriores y recrear
@@ -134,7 +141,8 @@ class ScopeAnalyzer(AIModuleBase):
                     scope_statement=scope_statement,
                     coverage_analysis=coverage,
                     status='draft',
-                    context_analysis=context_analysis
+                    context_analysis=context_analysis,
+                    organization_id=self.organization_id
                 )
                 self.logger.info(f"Nuevo alcance creado: ID {scope_definition.id}")
             

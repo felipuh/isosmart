@@ -44,8 +44,8 @@ const ScopeDashboard = () => {
         // Cargar procesos y ubicaciones si hay un scope activo
         if (latestResponse.data?.id) {
           const [procs, locs] = await Promise.all([
-            scopeService.getProcesses(latestResponse.data.id),
-            scopeService.getLocations(latestResponse.data.id)
+            scopeService.getProcesses(latestResponse.data.id, currentOrganization.id),
+            scopeService.getLocations(latestResponse.data.id, currentOrganization.id)
           ]);
           setProcesses(Array.isArray(procs) ? procs : procs.results || []);
           setLocations(Array.isArray(locs) ? locs : locs.results || []);
@@ -78,7 +78,7 @@ const ScopeDashboard = () => {
       const result = await scopeService.runAnalysis({
         products_services: cleanProducts,
         has_design: analysisConfig.has_design
-      });
+      }, currentOrganization?.id);
 
       if (result.status === 'success') {
         await loadData();
@@ -114,10 +114,10 @@ const ScopeDashboard = () => {
   const handleSaveProcess = async (formData) => {
     try {
       if (editingProcess) {
-        await scopeService.updateProcess(editingProcess.id, formData);
+        await scopeService.updateProcess(editingProcess.id, formData, currentOrganization?.id);
         alert(t('scopeDashboard.alerts.processUpdated'));
       } else {
-        await scopeService.createProcess(formData);
+        await scopeService.createProcess(formData, currentOrganization?.id);
         alert(t('scopeDashboard.alerts.processCreated'));
       }
       setShowProcessForm(false);
@@ -135,7 +135,7 @@ const ScopeDashboard = () => {
       return;
     }
     try {
-      await scopeService.deleteProcess(process.id);
+      await scopeService.deleteProcess(process.id, currentOrganization?.id);
       alert(t('scopeDashboard.alerts.processDeleted'));
       await loadData();
     } catch (error) {
@@ -158,10 +158,10 @@ const ScopeDashboard = () => {
   const handleSaveLocation = async (formData) => {
     try {
       if (editingLocation) {
-        await scopeService.updateLocation(editingLocation.id, formData);
+        await scopeService.updateLocation(editingLocation.id, formData, currentOrganization?.id);
         alert(t('scopeDashboard.alerts.locationUpdated'));
       } else {
-        await scopeService.createLocation(formData);
+        await scopeService.createLocation(formData, currentOrganization?.id);
         alert(t('scopeDashboard.alerts.locationCreated'));
       }
       setShowLocationForm(false);
@@ -179,7 +179,7 @@ const ScopeDashboard = () => {
       return;
     }
     try {
-      await scopeService.deleteLocation(location.id);
+      await scopeService.deleteLocation(location.id, currentOrganization?.id);
       alert(t('scopeDashboard.alerts.locationDeleted'));
       await loadData();
     } catch (error) {

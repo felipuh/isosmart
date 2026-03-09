@@ -12,6 +12,13 @@ class ScopeDefinition(models.Model):
     """
     Definición del Alcance del SGC
     """
+
+    organization_id = models.IntegerField(
+        null=True,
+        blank=True,
+        db_index=True,
+        verbose_name="ID de Organización"
+    )
     
     # Información básica
     title = models.CharField(
