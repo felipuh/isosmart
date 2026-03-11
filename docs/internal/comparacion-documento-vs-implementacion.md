@@ -1,6 +1,6 @@
 # Comparacion documento vs implementacion
 
-Fecha: 2026-03-09
+Fecha: 2026-03-11
 Base documental comparada:
 - `docs/internal/manual-operacion-por-roles.md`
 - `docs/internal/arquitectura-integraciones-multitenancy.md`
@@ -31,9 +31,8 @@ Base documental comparada:
 - Referencia documental: checklist multitenancy operativo.
 - Evidencia previa: `permission_classes` comentado en viewsets y querysets sin aislamiento por organizacion.
 - Riesgo: exposicion de registros entre organizaciones.
-- Accion aplicada: `IsAuthenticated` activo, filtrado por organizacion activa (no superuser), y escritura forzada de organizacion en create/update.
-- Estado: resuelta parcialmente.
-- Nota: el modelo SIE usa `organization` textual (no FK/`organization_id`), por lo que el aislamiento depende de consistencia del nombre de organizacion.
+- Accion aplicada: `IsAuthenticated` activo + migracion a `organization_id` en `StakeholderProfile` con backfill + filtrado por `organization_id` en los 4 viewsets SIE + escritura forzada de `organization_id` en create/update.
+- Estado: resuelta.
 
 ### B4 - Contrato frontend/backend en carga de documentos
 - Referencia documental: operacion diaria de modulo Documentos.
