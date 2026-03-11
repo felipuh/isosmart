@@ -97,9 +97,9 @@ const settingsService = {
     return response.data;
   },
 
-  downloadExport: async (type = 'all') => {
+  downloadExport: async (type = 'all', organizationId) => {
     const response = await api.get('/export/', {
-      params: { type },
+      params: withOrg(organizationId, { type }),
       responseType: 'blob',
     });
 
@@ -276,29 +276,22 @@ const settingsService = {
   },
 
   // Exportar datos
-  exportData: async (format = 'json') => {
+  exportData: async (organizationId, type = 'all') => {
     const response = await api.get('/export/', {
-      params: { format },
-      responseType: format === 'json' ? 'json' : 'blob',
+      params: withOrg(organizationId, { type }),
     });
     return response.data;
   },
 
   // Crear backup (alias de triggerBackup)
   createBackup: async (organizationId) => {
-    const response = await api.post('/settings/trigger_backup/', {
-      organization_id: organizationId,
-    });
-    return response.data;
+    return settingsService.triggerBackup(organizationId);
   },
 
   // Obtener historial de backups
-  getBackupHistory: async (organizationId, limit = 20) => {
-    const response = await api.get('/settings/backup_history/', {
-      params: {
-        ...withOrg(organizationId),
-        limit,
-      },
+  getBackupHistory: async (organizationId, limit = 10) => {
+    const response = await api.get('/settings/backups/', {
+      params: withOrg(organizationId, { limit }),
     });
     return response.data;
   }

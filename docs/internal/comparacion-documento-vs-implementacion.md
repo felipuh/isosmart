@@ -57,8 +57,8 @@ Base documental comparada:
 ### B7 - Endpoints inexistentes referenciados desde settingsService.js
 - Referencia documental: N/A (brecha detectada en revision de codigo).
 - Evidencia: `exportData` llamaba `GET /settings/export/` (sin endpoint); `createBackup` llamaba `POST /settings/backup/` (sin endpoint); `getBackupHistory` llamaba `GET /settings/backups/` (sin endpoint).
-- Endpoints actuales: `POST /settings/trigger_backup/`, `GET /settings/backup_history/` (actions detail=False en SettingsViewSet), y `GET /export/` (FBV en core/urls.py).
-- Accion aplicada: `exportData` redirigida a `/export/`; `createBackup` redirigida a `/settings/trigger_backup/`; `getBackupHistory` ahora consume `/settings/backup_history/` con datos reales desde `AuditLog`.
+- Endpoints reales: `POST /settings/trigger_backup/` (action detail=False en SettingsViewSet); `GET /export/` (FBV en core/urls.py); `GET /settings/backups/` implementado sobre `AuditLog`.
+- Accion aplicada: `exportData` alineada a `/export/` con contrato `type`; `createBackup` redirigida a `/settings/trigger_backup/`; `getBackupHistory` conectado a historial real y visible en UI.
 - Estado: resuelta.
 
 ## Validacion de flujos documentados (impacto)

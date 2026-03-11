@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
   Database, Download, Upload, HardDrive, Clock, 
   FileJson, FileSpreadsheet, Calendar, Save, Loader2, 
@@ -14,6 +14,8 @@ const BackupExportSettings = ({ settings, onUpdate, organizationId }) => {
   const [backupFrequency, setBackupFrequency] = useState(settings?.backup_frequency ?? 'weekly');
   const [exporting, setExporting] = useState(null);
   const [backingUp, setBackingUp] = useState(false);
+  const [backupHistory, setBackupHistory] = useState([]);
+  const [historyLoading, setHistoryLoading] = useState(false);
   const [success, setSuccess] = useState(null);
   const [error, setError] = useState(null);
 
@@ -61,12 +63,43 @@ const BackupExportSettings = ({ settings, onUpdate, organizationId }) => {
     { value: 'monthly', label: t('settings.backup.frequencyOptions.monthly') },
   ];
 
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadBackupHistory = async () => {
+      if (!organizationId) return;
+
+      try {
+        setHistoryLoading(true);
+        const response = await settingsService.getBackupHistory(organizationId, 5);
+        if (!cancelled) {
+          setBackupHistory(response.results || []);
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setError(t('settings.backup.messages.historyError'));
+        }
+        console.error(err);
+      } finally {
+        if (!cancelled) {
+          setHistoryLoading(false);
+        }
+      }
+    };
+
+    loadBackupHistory();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [organizationId, t]);
+
   const handleExport = async (type) => {
     try {
       setExporting(type);
       setError(null);
       
-      await settingsService.downloadExport(type);
+      await settingsService.downloadExport(type, organizationId);
       
       const selectedType = t(`settings.backup.exportOptions.${type}.title`);
       setSuccess(t('settings.backup.messages.exportSuccess').replace('{type}', selectedType));
@@ -86,6 +119,9 @@ const BackupExportSettings = ({ settings, onUpdate, organizationId }) => {
       
       const result = await settingsService.triggerBackup(organizationId);
       onUpdate({ last_backup_at: result.last_backup_at });
+      if (result.history_entry) {
+        setBackupHistory((prev) => [result.history_entry, ...prev.filter((entry) => entry.id !== result.history_entry.id)].slice(0, 5));
+      }
       
       setSuccess(t('settings.backup.messages.backupSuccess'));
       setTimeout(() => setSuccess(null), 3000);
@@ -161,6 +197,7 @@ const BackupExportSettings = ({ settings, onUpdate, organizationId }) => {
           <button
             onClick={handleBackup}
             disabled={backingUp}
+            data-testid="settings-backup-now"
             className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-medium flex items-center gap-2 transition-colors disabled:opacity-50"
           >
             {backingUp ? (
@@ -226,6 +263,51 @@ const BackupExportSettings = ({ settings, onUpdate, organizationId }) => {
         )}
       </div>
 
+      <div className="mb-8">
+        <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-4 flex items-center gap-2">
+          <Clock className="w-5 h-5 text-blue-500" />
+          {t('settings.backup.historyTitle')}
+        </h3>
+
+        <div className="p-4 bg-white dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700">
+          {historyLoading ? (
+            <p className="text-sm text-slate-500 dark:text-slate-400">
+              {t('settings.backup.loadingHistory')}
+            </p>
+          ) : backupHistory.length === 0 ? (
+            <div>
+              <p className="font-medium text-slate-700 dark:text-slate-200">
+                {t('settings.backup.historyEmpty')}
+              </p>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                {t('settings.backup.historyEmptyDescription')}
+              </p>
+            </div>
+          ) : (
+            <ul className="space-y-3" data-testid="settings-backup-history">
+              {backupHistory.map((entry) => (
+                <li
+                  key={entry.id}
+                  className="flex items-start justify-between gap-4 border-b border-slate-100 dark:border-slate-700/60 pb-3 last:border-b-0 last:pb-0"
+                >
+                  <div>
+                    <p className="font-medium text-slate-800 dark:text-white">
+                      {entry.description}
+                    </p>
+                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                      {entry.user_name || 'Sistema'}
+                    </p>
+                  </div>
+                  <span className="text-sm text-slate-500 dark:text-slate-400 whitespace-nowrap">
+                    {formatDate(entry.created_at)}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+
       {/* Export Section */}
       <div className="mb-8">
         <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-4 flex items-center gap-2">
@@ -261,6 +343,7 @@ const BackupExportSettings = ({ settings, onUpdate, organizationId }) => {
                     <button
                       onClick={() => handleExport(option.id)}
                       disabled={isExporting}
+                      data-testid={`settings-export-${option.id}`}
                       className="px-3 py-1.5 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors disabled:opacity-50"
                     >
                       {isExporting ? (

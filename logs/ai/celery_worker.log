@@ -93,3 +93,11 @@ setting. In Celery 5.1 it is set to False by default. The setting will be set to
 [2026-03-08 13:43:09,993: INFO/MainProcess] Connected to redis://localhost:6379/1
 [2026-03-08 13:43:10,076: INFO/MainProcess] mingle: searching for neighbors
 [2026-03-08 13:43:11,402: INFO/MainProcess] mingle: all alone
+[2026-03-11 15:55:21,877: INFO/MainProcess] Connected to redis://localhost:6379/1
+[2026-03-11 15:55:21,945: INFO/MainProcess] mingle: searching for neighbors
+[2026-03-11 15:55:23,147: INFO/MainProcess] mingle: all alone
+[2026-03-11 15:55:23,324: INFO/MainProcess] celery@localhost.localdomain ready.
+[2026-03-11 16:07:44,337: INFO/MainProcess] Connected to redis://localhost:6379/1
+[2026-03-11 16:07:44,412: INFO/MainProcess] mingle: searching for neighbors
+[2026-03-11 16:07:45,525: INFO/MainProcess] mingle: all alone
+[2026-03-11 16:07:45,597: INFO/MainProcess] celery@localhost.localdomain ready.

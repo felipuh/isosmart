@@ -219,13 +219,14 @@ class LegacyScopedEndpointsTests(TestCase):
 class SettingsBackupHistoryTests(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.auth_client = APIClient()
 
         user_model = get_user_model()
         self.user = user_model.objects.create_user(
             username='settings_user',
             email='settings_user@isosmart.local',
             password='StrongPass@123',
+            first_name='Settings',
+            last_name='Admin',
         )
 
         self.org_a = Organization.objects.create(
@@ -246,35 +247,37 @@ class SettingsBackupHistoryTests(TestCase):
             is_active=True,
         )
 
-        self.auth_client.force_authenticate(user=self.user)
+        OrganizationSettings.objects.create(organization=self.org_a)
+        OrganizationSettings.objects.create(organization=self.org_b)
 
-    def test_trigger_backup_creates_settings_and_audit_log(self):
-        response = self.auth_client.post(
+        self.client.force_authenticate(user=self.user)
+
+    def test_trigger_backup_updates_settings_and_creates_audit_log(self):
+        response = self.client.post(
             reverse('settings-trigger-backup'),
             {'organization_id': self.org_a.id},
             format='json',
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertIn('last_backup_at', response.data)
-        self.assertIn('backup_id', response.data)
+        self.assertIsNotNone(response.data.get('last_backup_at'))
+        self.assertIn('history_entry', response.data)
 
-        settings = OrganizationSettings.objects.filter(organization=self.org_a).first()
-        self.assertIsNotNone(settings)
+        settings = OrganizationSettings.objects.get(organization=self.org_a)
         self.assertIsNotNone(settings.last_backup_at)
 
-        log = AuditLog.objects.filter(organization=self.org_a, action='backup', module='settings').first()
-        self.assertIsNotNone(log)
-        self.assertEqual(log.user, self.user)
+        audit_log = AuditLog.objects.get(organization=self.org_a, action='backup', module='settings')
+        self.assertEqual(audit_log.user, self.user)
+        self.assertEqual(audit_log.description, 'Backup manual ejecutado desde configuracion')
+        self.assertEqual(response.data['history_entry']['id'], audit_log.id)
 
-    def test_backup_history_returns_only_current_organization(self):
+    def test_backups_action_returns_only_requested_organization_history(self):
         AuditLog.objects.create(
             organization=self.org_a,
             user=self.user,
             action='backup',
             module='settings',
             description='Backup org A',
-            new_values={'status': 'completed', 'source': 'manual_trigger'},
         )
         AuditLog.objects.create(
             organization=self.org_b,
@@ -282,22 +285,25 @@ class SettingsBackupHistoryTests(TestCase):
             action='backup',
             module='settings',
             description='Backup org B',
-            new_values={'status': 'completed', 'source': 'manual_trigger'},
         )
 
-        response = self.auth_client.get(
-            reverse('settings-backup-history'),
-            {'organization_id': self.org_a.id},
-        )
+        response = self.client.get(reverse('settings-backups'), {'organization_id': self.org_a.id})
 
         self.assertEqual(response.status_code, 200)
-        self.assertGreaterEqual(response.data.get('count', 0), 1)
-        for item in response.data.get('results', []):
-            self.assertEqual(item.get('organization_id'), self.org_a.id)
+        self.assertEqual(response.data['count'], 1)
+        self.assertEqual(len(response.data['results']), 1)
+        self.assertEqual(response.data['results'][0]['description'], 'Backup org A')
+        self.assertEqual(response.data['results'][0]['organization'], self.org_a.id)
 
-    def test_backup_history_forbidden_for_foreign_organization(self):
-        response = self.auth_client.get(
-            reverse('settings-backup-history'),
-            {'organization_id': self.org_b.id},
-        )
+    def test_settings_actions_reject_foreign_organization(self):
+        response = self.client.get(reverse('settings-backups'), {'organization_id': self.org_b.id})
         self.assertEqual(response.status_code, 403)
+
+    def test_export_data_creates_export_audit_log(self):
+        response = self.client.get(reverse('export-data'), {'organization_id': self.org_a.id, 'type': 'all'})
+
+        self.assertEqual(response.status_code, 200)
+        audit_log = AuditLog.objects.get(organization=self.org_a, action='export', module='settings')
+        self.assertEqual(audit_log.user, self.user)
+        self.assertEqual(audit_log.new_values['export_type'], 'all')
+
