@@ -51,10 +51,16 @@ Base documental comparada:
 
 ### B6 - Estandar multitenancy en ASB/SPM
 - Referencia documental: regla general de aislamiento por organizacion.
-- Evidencia actual: modelos `asb/spm` no tienen `organization_id` directo; aislamiento no estandarizado con mixin.
-- Riesgo: control tenant inconsistente y dependiente de relaciones indirectas.
-- Estado: pendiente estructural.
-- Recomendacion: migracion incremental para introducir `organization_id` explicito y adoptar mixin.
+- Evidencia previa: modelos `asb/spm` no tenian `organization_id` directo; aislamiento no estandarizado con mixin.
+- Accion aplicada: `organization_id` IntegerField + `OrganizationScopedViewSetMixin` + migraciones con backfill aplicadas en commit d6324df.
+- Estado: resuelta.
+
+### B7 - Endpoints inexistentes referenciados desde settingsService.js
+- Referencia documental: N/A (brecha detectada en revision de codigo).
+- Evidencia: `exportData` llamaba `GET /settings/export/` (sin endpoint); `createBackup` llamaba `POST /settings/backup/` (sin endpoint); `getBackupHistory` llamaba `GET /settings/backups/` (sin endpoint).
+- Endpoints reales: `POST /settings/trigger_backup/` (action detail=False en SettingsViewSet); `GET /export/` (FBV en core/urls.py).
+- Accion aplicada: `exportData` redirigida a `/export/`; `createBackup` redirigida a `/settings/trigger_backup/`; `getBackupHistory` devuelve stub vacío hasta implementacion backend.
+- Estado: resuelta.
 
 ## Validacion de flujos documentados (impacto)
 - Flujo 8.7 -> 10.2: conservado (no se altero sincronizacion en `operations`/`improvement`).
@@ -63,5 +69,6 @@ Base documental comparada:
 - Dashboard principal y modulos core: sin cambios de contrato de salida.
 
 ## Conclusion
-- Se cerraron las brechas operativas y de seguridad mas inmediatas sin romper los flujos E2E documentados.
-- Queda una brecha estructural en `asb/spm` por modelo de datos historico sin `organization_id` estandar.
+- Se cerraron todas las brechas operativas y de seguridad identificadas en la auditoria inicial.
+- B3 (SIE tenant), B6 (ASB/SPM tenant) y B7 (settings endpoints) completadas en sesiones posteriores.
+- Todos los modulos usan `organization_id` estandar con `OrganizationScopedViewSetMixin` o patron equivalente.

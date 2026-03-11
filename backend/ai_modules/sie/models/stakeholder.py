@@ -48,10 +48,18 @@ class StakeholderProfile(models.Model):
         ('anual', 'Anual'),
     ]
     
+    # Tenant
+    organization_id = models.IntegerField(
+        null=True,
+        blank=True,
+        db_index=True,
+        verbose_name="ID de Organización"
+    )
+
     # Información básica
     name = models.CharField(max_length=200, verbose_name="Nombre")
     stakeholder_type = models.CharField(
-        max_length=20, 
+        max_length=20,
         choices=STAKEHOLDER_TYPES,
         verbose_name="Tipo de Stakeholder"
     )

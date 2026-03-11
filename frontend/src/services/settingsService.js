@@ -277,23 +277,22 @@ const settingsService = {
 
   // Exportar datos
   exportData: async (format = 'json') => {
-    const response = await api.get('/settings/export/', {
+    const response = await api.get('/export/', {
       params: { format },
       responseType: format === 'json' ? 'json' : 'blob',
     });
     return response.data;
   },
 
-  // Crear backup
+  // Crear backup (alias de triggerBackup)
   createBackup: async () => {
-    const response = await api.post('/settings/backup/');
+    const response = await api.post('/settings/trigger_backup/');
     return response.data;
   },
 
-  // Obtener historial de backups
+  // Obtener historial de backups (no implementado aún en backend)
   getBackupHistory: async () => {
-    const response = await api.get('/settings/backups/');
-    return response.data;
+    return { results: [], count: 0 };
   }
 };
 

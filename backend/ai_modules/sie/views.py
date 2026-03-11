@@ -48,30 +48,35 @@ class StakeholderProfileViewSet(viewsets.ModelViewSet):
     serializer_class = StakeholderProfileSerializer
     permission_classes = [IsAuthenticated]
 
-    def _active_org_name(self):
+    def _active_org_id(self):
         if getattr(self.request.user, 'is_superuser', False):
-            return self.request.query_params.get('organization')
-
+            org_param = self.request.query_params.get('organization_id')
+            if org_param:
+                try:
+                    return int(org_param)
+                except (ValueError, TypeError):
+                    pass
+            return None
         profile = getattr(self.request, 'user_profile', None)
-        if profile and getattr(profile, 'organization', None):
-            return profile.organization.name
+        if profile and getattr(profile, 'organization_id', None):
+            return profile.organization_id
         return None
 
     def perform_create(self, serializer):
-        org_name = self._active_org_name()
+        org_id = self._active_org_id()
         if not getattr(self.request.user, 'is_superuser', False):
-            if not org_name:
+            if not org_id:
                 raise PermissionDenied('No se pudo resolver la organizacion activa')
-            serializer.save(organization=org_name)
+            serializer.save(organization_id=org_id)
             return
         serializer.save()
 
     def perform_update(self, serializer):
-        org_name = self._active_org_name()
+        org_id = self._active_org_id()
         if not getattr(self.request.user, 'is_superuser', False):
-            if not org_name:
+            if not org_id:
                 raise PermissionDenied('No se pudo resolver la organizacion activa')
-            serializer.save(organization=org_name)
+            serializer.save(organization_id=org_id)
             return
         serializer.save()
     
@@ -85,13 +90,13 @@ class StakeholderProfileViewSet(viewsets.ModelViewSet):
         """Permite filtrar por tipo y estado"""
         queryset = StakeholderProfile.objects.all()
 
-        org_name = self._active_org_name()
+        org_id = self._active_org_id()
         if not getattr(self.request.user, 'is_superuser', False):
-            if not org_name:
+            if not org_id:
                 return queryset.none()
-            queryset = queryset.filter(organization=org_name)
-        elif org_name:
-            queryset = queryset.filter(organization=org_name)
+            queryset = queryset.filter(organization_id=org_id)
+        elif org_id:
+            queryset = queryset.filter(organization_id=org_id)
         
         stakeholder_type = self.request.query_params.get('type', None)
         is_active = self.request.query_params.get('active', None)
@@ -300,26 +305,31 @@ class StakeholderChangeLogViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = StakeholderChangeLogSerializer
     permission_classes = [IsAuthenticated]
 
-    def _active_org_name(self):
+    def _active_org_id(self):
         if getattr(self.request.user, 'is_superuser', False):
-            return self.request.query_params.get('organization')
-
+            org_param = self.request.query_params.get('organization_id')
+            if org_param:
+                try:
+                    return int(org_param)
+                except (ValueError, TypeError):
+                    pass
+            return None
         profile = getattr(self.request, 'user_profile', None)
-        if profile and getattr(profile, 'organization', None):
-            return profile.organization.name
+        if profile and getattr(profile, 'organization_id', None):
+            return profile.organization_id
         return None
     
     def get_queryset(self):
         """Permite filtrar por stakeholder y tipo de cambio"""
         queryset = StakeholderChangeLog.objects.select_related('stakeholder').all()
 
-        org_name = self._active_org_name()
+        org_id = self._active_org_id()
         if not getattr(self.request.user, 'is_superuser', False):
-            if not org_name:
+            if not org_id:
                 return queryset.none()
-            queryset = queryset.filter(stakeholder__organization=org_name)
-        elif org_name:
-            queryset = queryset.filter(stakeholder__organization=org_name)
+            queryset = queryset.filter(stakeholder__organization_id=org_id)
+        elif org_id:
+            queryset = queryset.filter(stakeholder__organization_id=org_id)
         
         stakeholder_id = self.request.query_params.get('stakeholder', None)
         change_type = self.request.query_params.get('type', None)
@@ -366,31 +376,36 @@ class StakeholderRelationshipViewSet(viewsets.ModelViewSet):
     serializer_class = StakeholderRelationshipSerializer
     permission_classes = [IsAuthenticated]
 
-    def _active_org_name(self):
+    def _active_org_id(self):
         if getattr(self.request.user, 'is_superuser', False):
-            return self.request.query_params.get('organization')
-
+            org_param = self.request.query_params.get('organization_id')
+            if org_param:
+                try:
+                    return int(org_param)
+                except (ValueError, TypeError):
+                    pass
+            return None
         profile = getattr(self.request, 'user_profile', None)
-        if profile and getattr(profile, 'organization', None):
-            return profile.organization.name
+        if profile and getattr(profile, 'organization_id', None):
+            return profile.organization_id
         return None
     
     def get_queryset(self):
         """Filtra por stakeholder"""
         queryset = StakeholderRelationship.objects.select_related('from_stakeholder', 'to_stakeholder').all()
 
-        org_name = self._active_org_name()
+        org_id = self._active_org_id()
         if not getattr(self.request.user, 'is_superuser', False):
-            if not org_name:
+            if not org_id:
                 return queryset.none()
             queryset = queryset.filter(
-                Q(from_stakeholder__organization=org_name)
-                | Q(to_stakeholder__organization=org_name)
+                Q(from_stakeholder__organization_id=org_id)
+                | Q(to_stakeholder__organization_id=org_id)
             )
-        elif org_name:
+        elif org_id:
             queryset = queryset.filter(
-                Q(from_stakeholder__organization=org_name)
-                | Q(to_stakeholder__organization=org_name)
+                Q(from_stakeholder__organization_id=org_id)
+                | Q(to_stakeholder__organization_id=org_id)
             )
         
         stakeholder_id = self.request.query_params.get('stakeholder', None)
@@ -421,26 +436,31 @@ class StakeholderEngagementPlanViewSet(viewsets.ModelViewSet):
     serializer_class = StakeholderEngagementPlanSerializer
     permission_classes = [IsAuthenticated]
 
-    def _active_org_name(self):
+    def _active_org_id(self):
         if getattr(self.request.user, 'is_superuser', False):
-            return self.request.query_params.get('organization')
-
+            org_param = self.request.query_params.get('organization_id')
+            if org_param:
+                try:
+                    return int(org_param)
+                except (ValueError, TypeError):
+                    pass
+            return None
         profile = getattr(self.request, 'user_profile', None)
-        if profile and getattr(profile, 'organization', None):
-            return profile.organization.name
+        if profile and getattr(profile, 'organization_id', None):
+            return profile.organization_id
         return None
     
     def get_queryset(self):
         """Filtra por stakeholder y estado"""
         queryset = StakeholderEngagementPlan.objects.select_related('stakeholder').all()
 
-        org_name = self._active_org_name()
+        org_id = self._active_org_id()
         if not getattr(self.request.user, 'is_superuser', False):
-            if not org_name:
+            if not org_id:
                 return queryset.none()
-            queryset = queryset.filter(stakeholder__organization=org_name)
-        elif org_name:
-            queryset = queryset.filter(stakeholder__organization=org_name)
+            queryset = queryset.filter(stakeholder__organization_id=org_id)
+        elif org_id:
+            queryset = queryset.filter(stakeholder__organization_id=org_id)
         
         stakeholder_id = self.request.query_params.get('stakeholder', None)
         plan_status = self.request.query_params.get('status', None)
