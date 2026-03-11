@@ -26,7 +26,9 @@ Fecha: 2026-03-11
 - `d6324df` multitenancy ASB/SPM
 - `9d7925b` smoke E2E scope/processes
 - `eb3359b` SIE `organization_id` + fixes de settings
-- Pendiente en esta misma rama: follow-up de historial real de backups, pruebas y nota de cierre
+- `bef1e80` endpoint `GET /settings/backups/` + auditoria de export/backup
+- `31a92a0` UI de historial de backups + prueba runtime de settings
+- `fe3fe1b` alineacion final del documento comparativo
 
 ## Nota operativa
 - El disparo de backup manual sigue siendo un evento de aplicacion con trazabilidad completa en `AuditLog`; no genera todavia un artefacto externo versionado fuera del sistema.
