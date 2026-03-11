@@ -844,15 +844,24 @@ class SettingsViewSet(viewsets.ModelViewSet):
         return queryset.none()
 
     def _resolve_org(self, request, key='organization'):
-        org_id = (
+        request_org_id = _parse_org_id(
             request.query_params.get(key)
             or request.query_params.get(f'{key}_id')
             or request.data.get(f'{key}_id')
             or request.data.get(key)
-            or getattr(request, 'organization_id', None)
         )
+        token_org_id = _parse_org_id(getattr(request, 'organization_id', None))
+
+        if request_org_id and token_org_id and request_org_id != token_org_id:
+            raise PermissionDenied('organization_id no coincide con el token activo')
+
+        org_id = request_org_id or token_org_id
         if org_id:
+            allowed_org_ids = _allowed_org_ids_for_request(request)
+            if allowed_org_ids is not None and org_id not in allowed_org_ids:
+                raise PermissionDenied('No autorizado para esta organizacion')
             return Organization.objects.get(id=org_id)
+
         profile = UserProfile.objects.filter(user=request.user, is_active=True).select_related('organization').first()
         if profile:
             return profile.organization
@@ -924,10 +933,87 @@ class SettingsViewSet(viewsets.ModelViewSet):
         settings.save()
         
         # Aquí iría la lógica real de backup
+        backup_log = AuditLog.objects.create(
+            organization=org,
+            user=request.user if request.user and request.user.is_authenticated else None,
+            action='backup',
+            module='settings',
+            description='Ejecución manual de backup desde configuración.',
+            ip_address=request.META.get('REMOTE_ADDR'),
+            user_agent=request.META.get('HTTP_USER_AGENT', ''),
+            new_values={
+                'status': 'completed',
+                'source': 'manual_trigger',
+                'backup_frequency': settings.backup_frequency,
+                'last_backup_at': settings.last_backup_at.isoformat() if settings.last_backup_at else None,
+            },
+        )
         
         return Response({
             'message': 'Backup iniciado correctamente',
-            'last_backup_at': settings.last_backup_at
+            'last_backup_at': settings.last_backup_at,
+            'backup_id': backup_log.id,
+        })
+
+    @action(detail=False, methods=['get'])
+    def backup_history(self, request):
+        """Obtener historial de backups manuales por organización"""
+        org = self._resolve_org(request)
+
+        try:
+            limit = int(request.query_params.get('limit', 20))
+        except (TypeError, ValueError):
+            limit = 20
+        limit = max(1, min(limit, 100))
+
+        logs = (
+            AuditLog.objects.filter(
+                organization=org,
+                action='backup',
+                module='settings',
+            )
+            .select_related('user')
+            .order_by('-created_at')[:limit]
+        )
+
+        results = []
+        for log in logs:
+            if log.user:
+                user_name = log.user.get_full_name().strip() or log.user.username
+            else:
+                user_name = 'Sistema'
+
+            results.append({
+                'id': log.id,
+                'organization_id': org.id,
+                'action': log.action,
+                'module': log.module,
+                'description': log.description,
+                'status': (log.new_values or {}).get('status', 'completed'),
+                'source': (log.new_values or {}).get('source', 'manual_trigger'),
+                'triggered_by': user_name,
+                'triggered_at': log.created_at.isoformat() if log.created_at else None,
+                'last_backup_at': (log.new_values or {}).get('last_backup_at'),
+            })
+
+        settings = OrganizationSettings.objects.filter(organization=org).first()
+        if not results and settings and settings.last_backup_at:
+            results.append({
+                'id': None,
+                'organization_id': org.id,
+                'action': 'backup',
+                'module': 'settings',
+                'description': 'Backup registrado desde marca temporal histórica.',
+                'status': 'completed',
+                'source': 'legacy_timestamp',
+                'triggered_by': 'Sistema',
+                'triggered_at': settings.last_backup_at.isoformat(),
+                'last_backup_at': settings.last_backup_at.isoformat(),
+            })
+
+        return Response({
+            'count': len(results),
+            'results': results,
         })
     
     @action(detail=False, methods=['post'])
@@ -1642,6 +1728,23 @@ def export_data(request):
     
     if export_type in ['all', 'processes']:
         data['processes'] = list(ProcessMap.objects.filter(organization_id=organization_id).values())
+
+    try:
+        AuditLog.objects.create(
+            organization_id=organization_id,
+            user=request.user if request.user and request.user.is_authenticated else None,
+            action='export',
+            module='settings',
+            description='Exportación de datos desde endpoint /api/export/.',
+            ip_address=request.META.get('REMOTE_ADDR'),
+            user_agent=request.META.get('HTTP_USER_AGENT', ''),
+            new_values={
+                'export_type': export_type,
+                'sections': list(data.keys()),
+            },
+        )
+    except Exception:
+        logger.exception('No se pudo registrar AuditLog para export_data')
     
     return Response({
         'organization_id': organization_id,

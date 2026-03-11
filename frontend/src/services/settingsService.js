@@ -285,14 +285,22 @@ const settingsService = {
   },
 
   // Crear backup (alias de triggerBackup)
-  createBackup: async () => {
-    const response = await api.post('/settings/trigger_backup/');
+  createBackup: async (organizationId) => {
+    const response = await api.post('/settings/trigger_backup/', {
+      organization_id: organizationId,
+    });
     return response.data;
   },
 
-  // Obtener historial de backups (no implementado aún en backend)
-  getBackupHistory: async () => {
-    return { results: [], count: 0 };
+  // Obtener historial de backups
+  getBackupHistory: async (organizationId, limit = 20) => {
+    const response = await api.get('/settings/backup_history/', {
+      params: {
+        ...withOrg(organizationId),
+        limit,
+      },
+    });
+    return response.data;
   }
 };
 
