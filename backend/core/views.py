@@ -1195,7 +1195,8 @@ class SettingsViewSet(viewsets.ModelViewSet):
 
         latest = queryset.first()
         if latest is None:
-            return Response({'detail': 'No hay insights de onboarding generados aún.'}, status=status.HTTP_404_NOT_FOUND)
+            # Empty state is expected until onboarding orchestration runs.
+            return Response(None)
         return Response(OnboardingInsightSnapshotSerializer(latest).data)
 
     @action(detail=False, methods=['get'])
@@ -1204,17 +1205,19 @@ class SettingsViewSet(viewsets.ModelViewSet):
         org = self._resolve_org(request)
         latest = OnboardingInsightSnapshot.objects.filter(organization=org).first()
         if latest is None:
-            return Response({'detail': 'No hay snapshot de onboarding disponible.'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({
+                'organization_id': org.id,
+                'snapshot_version': None,
+                'generated_at': None,
+                'iso_skeleton': None,
+            })
 
         iso_skeleton = (latest.summary_output or {}).get('iso_skeleton')
-        if not iso_skeleton:
-            return Response({'detail': 'El snapshot no contiene Esqueleto ISO generado.'}, status=status.HTTP_404_NOT_FOUND)
-
         return Response({
             'organization_id': org.id,
             'snapshot_version': latest.version,
             'generated_at': latest.created_at,
-            'iso_skeleton': iso_skeleton,
+            'iso_skeleton': iso_skeleton or None,
         })
 
     @action(detail=False, methods=['get'])
@@ -1223,17 +1226,19 @@ class SettingsViewSet(viewsets.ModelViewSet):
         org = self._resolve_org(request)
         latest = OnboardingInsightSnapshot.objects.filter(organization=org).first()
         if latest is None:
-            return Response({'detail': 'No hay snapshot de onboarding disponible.'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({
+                'organization_id': org.id,
+                'snapshot_version': None,
+                'generated_at': None,
+                'adaptive_route': None,
+            })
 
         adaptive_route = (latest.summary_output or {}).get('adaptive_route')
-        if not adaptive_route:
-            return Response({'detail': 'El snapshot no contiene ruta adaptativa.'}, status=status.HTTP_404_NOT_FOUND)
-
         return Response({
             'organization_id': org.id,
             'snapshot_version': latest.version,
             'generated_at': latest.created_at,
-            'adaptive_route': adaptive_route,
+            'adaptive_route': adaptive_route or None,
         })
 
 

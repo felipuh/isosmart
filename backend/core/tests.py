@@ -9,6 +9,7 @@ from authentication.models import UserProfile
 from core.models import (
     AuditLog,
     ContextAnalysis,
+    OnboardingInsightSnapshot,
     Organization,
     OrganizationSettings,
     ProcessMap,
@@ -306,4 +307,52 @@ class SettingsBackupHistoryTests(TestCase):
         audit_log = AuditLog.objects.get(organization=self.org_a, action='export', module='settings')
         self.assertEqual(audit_log.user, self.user)
         self.assertEqual(audit_log.new_values['export_type'], 'all')
+
+    def test_onboarding_endpoints_return_empty_payloads_when_no_snapshot(self):
+        insights = self.client.get(reverse('settings-onboarding-insights'), {'organization_id': self.org_a.id})
+        self.assertEqual(insights.status_code, 200)
+        self.assertIsNone(insights.data)
+
+        iso_skeleton = self.client.get(reverse('settings-onboarding-iso-skeleton'), {'organization_id': self.org_a.id})
+        self.assertEqual(iso_skeleton.status_code, 200)
+        self.assertEqual(iso_skeleton.data['organization_id'], self.org_a.id)
+        self.assertIsNone(iso_skeleton.data['snapshot_version'])
+        self.assertIsNone(iso_skeleton.data['iso_skeleton'])
+
+        adaptive_route = self.client.get(reverse('settings-onboarding-adaptive-route'), {'organization_id': self.org_a.id})
+        self.assertEqual(adaptive_route.status_code, 200)
+        self.assertEqual(adaptive_route.data['organization_id'], self.org_a.id)
+        self.assertIsNone(adaptive_route.data['snapshot_version'])
+        self.assertIsNone(adaptive_route.data['adaptive_route'])
+
+    def test_onboarding_endpoints_return_snapshot_data_when_available(self):
+        OnboardingInsightSnapshot.objects.create(
+            organization=self.org_a,
+            generated_by=self.user,
+            version=1,
+            summary_output={
+                'iso_skeleton': {'scope_draft': 'Scope draft example'},
+                'adaptive_route': {
+                    'mode': 'guided',
+                    'cadence': 'weekly',
+                    'title': 'Ruta guiada',
+                    'description': 'Descripcion de ruta',
+                    'recommended_actions': ['Accion 1'],
+                },
+            },
+        )
+
+        insights = self.client.get(reverse('settings-onboarding-insights'), {'organization_id': self.org_a.id})
+        self.assertEqual(insights.status_code, 200)
+        self.assertEqual(insights.data['version'], 1)
+
+        iso_skeleton = self.client.get(reverse('settings-onboarding-iso-skeleton'), {'organization_id': self.org_a.id})
+        self.assertEqual(iso_skeleton.status_code, 200)
+        self.assertEqual(iso_skeleton.data['snapshot_version'], 1)
+        self.assertEqual(iso_skeleton.data['iso_skeleton']['scope_draft'], 'Scope draft example')
+
+        adaptive_route = self.client.get(reverse('settings-onboarding-adaptive-route'), {'organization_id': self.org_a.id})
+        self.assertEqual(adaptive_route.status_code, 200)
+        self.assertEqual(adaptive_route.data['snapshot_version'], 1)
+        self.assertEqual(adaptive_route.data['adaptive_route']['mode'], 'guided')
 
