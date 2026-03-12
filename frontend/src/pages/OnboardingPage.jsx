@@ -6,6 +6,7 @@ import {
   Building2,
   CheckCircle2,
   Globe,
+  Info,
   Loader2,
   ShieldCheck,
   Sparkles,
@@ -246,7 +247,7 @@ const OnboardingPage = () => {
               </div>
             </div>
 
-            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+            <div className="mt-5 grid gap-3 lg:grid-cols-2">
               {STANDARD_OPTIONS.map((standard) => {
                 const checked = selectedStandards.includes(standard.code);
                 const standardLabel = t(`onboarding.standards.${standard.code}`);
@@ -255,7 +256,7 @@ const OnboardingPage = () => {
                 return (
                   <label
                     key={standard.code}
-                    className={`group relative flex min-h-[136px] cursor-pointer items-start gap-3 rounded-2xl border px-4 py-4 transition-all duration-200 ${checked
+                    className={`group relative flex min-h-[124px] cursor-pointer items-start gap-3 rounded-2xl border px-4 py-4 transition-all duration-200 ${checked
                       ? 'border-cyan-400 bg-gradient-to-br from-cyan-50/90 to-sky-50/70 shadow-[0_10px_28px_-22px_rgba(14,165,233,0.9)] dark:border-cyan-500/70 dark:from-cyan-500/12 dark:to-sky-500/8'
                       : 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm dark:border-slate-700 dark:bg-slate-950/70 dark:hover:border-slate-600'}`}
                   >
@@ -267,10 +268,20 @@ const OnboardingPage = () => {
                       className="mt-1 h-4 w-4 shrink-0 accent-cyan-500"
                     />
                     <span className="min-w-0 flex-1 text-sm text-slate-700 dark:text-slate-200">
-                      <span className="block break-words text-sm font-semibold leading-5 text-slate-900 dark:text-white">{title}</span>
-                      {description ? (
-                        <span className="mt-1 block break-words text-xs leading-5 text-slate-500 dark:text-slate-400">{description}</span>
-                      ) : null}
+                      <span className="flex items-start justify-between gap-2">
+                        <span className="block break-words text-sm font-semibold leading-5 text-slate-900 dark:text-white">{title}</span>
+                        {description ? (
+                          <span
+                            title={description}
+                            className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-slate-200 text-slate-400 dark:border-slate-600 dark:text-slate-400"
+                          >
+                            <Info className="h-3.5 w-3.5" />
+                          </span>
+                        ) : null}
+                      </span>
+                      <span className="mt-3 inline-flex rounded-full border border-slate-200 bg-slate-100 px-2.5 py-1 text-[11px] font-medium tracking-[0.04em] text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                        {standard.code}
+                      </span>
                     </span>
                     {checked ? (
                       <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-cyan-600 dark:text-cyan-300" />
