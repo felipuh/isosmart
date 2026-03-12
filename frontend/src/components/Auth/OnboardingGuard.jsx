@@ -97,10 +97,6 @@ const OnboardingGuard = ({ children }) => {
     return <Navigate to="/onboarding" replace />;
   }
 
-  if (completed && isOnboardingRoute) {
-    return <Navigate to="/" replace />;
-  }
-
   return children;
 };
 

@@ -238,7 +238,7 @@ const OnboardingPage = () => {
               </div>
             </div>
 
-            <div className="mt-4 grid gap-3 md:grid-cols-2">
+            <div className="mt-4 grid gap-3">
               {STANDARD_OPTIONS.map((standard) => {
                 const checked = selectedStandards.includes(standard.code);
                 return (
@@ -255,8 +255,8 @@ const OnboardingPage = () => {
                       onChange={() => toggleStandard(standard.code, standard.required)}
                       className="mt-1"
                     />
-                    <span className="text-sm text-slate-700 dark:text-slate-200">
-                      <span className="block font-medium text-slate-900 dark:text-white">{t(`onboarding.standards.${standard.code}`)}</span>
+                    <span className="min-w-0 flex-1 text-sm text-slate-700 dark:text-slate-200">
+                      <span className="block break-words font-medium leading-5 text-slate-900 dark:text-white">{t(`onboarding.standards.${standard.code}`)}</span>
                     </span>
                   </label>
                 );
