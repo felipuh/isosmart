@@ -1,13 +1,13 @@
 # Auditoría profesional del sistema ISO Smart
 
-Fecha: 2026-02-27
+Fecha: 2026-03-11 (actualizado)
 
 ## Resumen ejecutivo
 Se realizó revisión de profesionalización y simplicidad con foco en seguridad multi-organización, consistencia i18n, y mantenibilidad frontend/backend.
 
 ### Estado actual
 - Billing: sólido funcionalmente (suscripción, pagos, evidencia, notificaciones, timeline).
-- i18n: mejora considerable; aún hay deuda en módulos con `literals.*` en lugar de claves semánticas.
+- i18n: consolidado en módulos críticos; `performance/*` e `improvement/*` ya operan con claves semánticas y `common.*`.
 - Seguridad multi-tenant: se cerraron brechas críticas en esta iteración.
 
 ## Mejoras aplicadas en esta iteración
@@ -24,43 +24,25 @@ Impacto:
 
 ## Hallazgos prioritarios pendientes
 
-### P1 — i18n semántico al 100%
-Problema:
-- Aún existen vistas que usan `literals.*` como fallback principal o textos heredados no estructurados por módulo.
+### P1 — i18n semántico al 100% (resuelto en módulos críticos)
+Estado:
+- `performance/*` e `improvement/*` completaron migración a claves semánticas de módulo.
+- Se mantiene `common.*` para mensajes y acciones compartidas.
 
-Recomendación:
-- Migrar progresivamente a claves semánticas:
-  - `modules.performance.*`
-  - `modules.improvement.*`
-  - mantener `common.*` para botones/errores genéricos.
+### P1 — Consistencia de mensajes de error frontend (resuelto en performance/improvement)
+Estado:
+- Se estandarizó el patrón `setError(t('common.messages.errorTryAgain'))` en CRUDs críticos.
+- Se incorporó banner reusable (`CrudErrorBanner`) para feedback visual uniforme.
+- Pendiente: extender el mismo patrón al resto de módulos CRUD fuera de performance/improvement.
 
-### P1 — Consistencia de mensajes de error frontend
-Problema:
-- Varias vistas capturan error con `console.error` sin feedback uniforme al usuario.
+### P2 — Endpoints legacy sin scope fuerte (resuelto)
+Estado:
+- Endpoints `dashboard_summary`, `risk_matrix` y `context_latest` usan `IsAuthenticated` + `_resolve_scoped_org_id()` con enforcement tenant.
 
-Recomendación:
-- Estandarizar patrón:
-  - `setError(t('common.messages.errorTryAgain'))`
-  - banner reusable por módulo.
-
-### P2 — Endpoints legacy con `@csrf_exempt` y lógica sin scope fuerte
-Problema:
-- Existen funciones API legacy en `core/views.py` (summary/risk/context) que no siguen patrón DRF moderno por organización.
-
-Recomendación:
-- Migrarlas a ViewSet/APIView con `IsAuthenticated` y filtro por organización.
-
-### P2 — Estandarización visual de CRUDs
-Problema:
-- Distintas pantallas usan modal/tabla con variaciones de etiquetas y estructura.
-
-Recomendación:
-- Definir un mini-kit CRUD reutilizable para:
-  - Header + CTA
-  - Tabla
-  - Modal form
-  - Empty state
-  - Confirmación de delete
+### P2 — Estandarización visual de CRUDs (parcialmente resuelto)
+Estado:
+- Se implementó mini-kit reusable en front (`CrudPageHeader`, `CrudErrorBanner`, `CrudEmptyState`) y se aplicó en CRUDs de performance/improvement.
+- Pendiente: extender cobertura a otros módulos para uniformidad transversal total.
 
 ## Patrón oficial recomendado para nuevas pantallas
 1. `useI18n()` obligatorio.
@@ -73,5 +55,5 @@ Recomendación:
 1. ~~Migración i18n semántica completa en `performance/*`.~~ Resuelto: no quedan `literals.*` en uso activo.
 2. ~~Migración i18n semántica completa en `improvement/*`.~~ Resuelto: idem.
 3. ~~Refactor de endpoints legacy `dashboard_summary/risk_matrix/context_latest` a patrón DRF scoped.~~ Resuelto: ya usan `@permission_classes([IsAuthenticated])` y `_resolve_scoped_org_id()` con enforcement tenant.
-4. Unificación de manejo de errores visuales en CRUD frontend. (pendiente)
-5. Implementar mini-kit CRUD reutilizable (Header+CTA, Tabla, Modal form, Empty state, Confirmación delete). (pendiente)
+4. Extender el patrón de errores visuales unificado (`setError` + banner reusable) al resto de CRUDs fuera de performance/improvement.
+5. Extender el mini-kit CRUD reusable al resto de módulos para homogeneidad visual completa.
