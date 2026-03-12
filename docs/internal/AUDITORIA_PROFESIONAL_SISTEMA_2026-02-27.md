@@ -70,7 +70,8 @@ Recomendación:
 5. Build/check en cada lote.
 
 ## Próxima iteración sugerida (ordenada)
-1. Migración i18n semántica completa en `performance/*`.
-2. Migración i18n semántica completa en `improvement/*`.
-3. Refactor de endpoints legacy `dashboard_summary/risk_matrix/context_latest` a patrón DRF scoped.
-4. Unificación de manejo de errores visuales en CRUD frontend.
+1. ~~Migración i18n semántica completa en `performance/*`.~~ Resuelto: no quedan `literals.*` en uso activo.
+2. ~~Migración i18n semántica completa en `improvement/*`.~~ Resuelto: idem.
+3. ~~Refactor de endpoints legacy `dashboard_summary/risk_matrix/context_latest` a patrón DRF scoped.~~ Resuelto: ya usan `@permission_classes([IsAuthenticated])` y `_resolve_scoped_org_id()` con enforcement tenant.
+4. Unificación de manejo de errores visuales en CRUD frontend. (pendiente)
+5. Implementar mini-kit CRUD reutilizable (Header+CTA, Tabla, Modal form, Empty state, Confirmación delete). (pendiente)

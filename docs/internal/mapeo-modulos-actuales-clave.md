@@ -133,11 +133,11 @@ Objetivo: Inventariar el flujo real `ruta UI -> servicio frontend -> endpoint ba
 - Estado tenant: mixto. Hay resolucion de organizacion y checks por rol/permiso en endpoints sensibles, pero no todo usa el mixin estandar.
 
 ## Hallazgos transversales (priorizados)
-1. Alto (pendiente estructural): `asb/spm` no tienen `organization_id` estandar en modelo, lo que dificulta aplicar el mixin multitenant de forma uniforme.
-2. Medio (resuelto en esta iteracion): `planning` y `resources` migrados a `OrganizationScopedViewSetMixin`.
-3. Medio (resuelto en esta iteracion): upload de documentos alineado a `POST /documents/`.
-4. Medio (resuelto en esta iteracion): navegacion lateral incluye acceso a `/operations`.
-5. Bajo (pendiente): `settingsService` conserva metodos legacy sin endpoint backend evidente (`/settings/export/`, `/settings/backup/`, `/settings/backups/`).
+1. Alto (resuelto 2026-03-11): `asb/spm` migrados a `organization_id` estandar + `OrganizationScopedViewSetMixin` + migraciones con backfill (commit d6324df).
+2. Medio (resuelto): `planning` y `resources` migrados a `OrganizationScopedViewSetMixin`.
+3. Medio (resuelto): upload de documentos alineado a `POST /documents/`.
+4. Medio (resuelto): navegacion lateral incluye acceso a `/operations`.
+5. Bajo (resuelto 2026-03-11): `settingsService` alineado a endpoints reales; historial de backups implementado con `GET /settings/backups/` y persistencia en `AuditLog`.
 
 ## Criterio de cierre del hito 1
 - Completado el inventario de modulos y conexiones UI/API/backend.
