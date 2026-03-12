@@ -38,6 +38,14 @@ const inputClassName = 'mt-2 w-full rounded-2xl border border-slate-200 bg-white
 
 const sleep = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
 
+const splitStandardLabel = (label) => {
+  const [titlePart, ...descriptionParts] = String(label || '').split(' - ');
+  return {
+    title: titlePart?.trim() || label,
+    description: descriptionParts.join(' - ').trim(),
+  };
+};
+
 const OnboardingPage = () => {
   const navigate = useNavigate();
   const { currentOrganization } = useAuth();
@@ -205,8 +213,8 @@ const OnboardingPage = () => {
       </section>
 
       <section className="rounded-3xl border border-slate-200 bg-slate-50/90 p-5 dark:border-slate-700 dark:bg-slate-900/70 xl:col-span-2">
-        <div className="grid gap-5 lg:grid-cols-[minmax(0,220px),1fr]">
-          <div>
+        <div className="grid gap-6">
+          <div className="max-w-md">
             <div className="flex items-start gap-3">
               <div className="rounded-2xl bg-cyan-500/10 p-3 text-cyan-600 dark:text-cyan-300">
                 <Globe className="h-5 w-5" />
@@ -238,26 +246,35 @@ const OnboardingPage = () => {
               </div>
             </div>
 
-            <div className="mt-4 grid gap-3">
+            <div className="mt-5 grid gap-3 sm:grid-cols-2">
               {STANDARD_OPTIONS.map((standard) => {
                 const checked = selectedStandards.includes(standard.code);
+                const standardLabel = t(`onboarding.standards.${standard.code}`);
+                const { title, description } = splitStandardLabel(standardLabel);
+
                 return (
                   <label
                     key={standard.code}
-                    className={`flex cursor-pointer items-start gap-3 rounded-2xl border px-4 py-4 transition ${checked
-                      ? 'border-cyan-400 bg-cyan-50/80 dark:border-cyan-500/70 dark:bg-cyan-500/10'
-                      : 'border-slate-200 bg-white hover:border-slate-300 dark:border-slate-700 dark:bg-slate-950/70 dark:hover:border-slate-600'}`}
+                    className={`group relative flex min-h-[136px] cursor-pointer items-start gap-3 rounded-2xl border px-4 py-4 transition-all duration-200 ${checked
+                      ? 'border-cyan-400 bg-gradient-to-br from-cyan-50/90 to-sky-50/70 shadow-[0_10px_28px_-22px_rgba(14,165,233,0.9)] dark:border-cyan-500/70 dark:from-cyan-500/12 dark:to-sky-500/8'
+                      : 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm dark:border-slate-700 dark:bg-slate-950/70 dark:hover:border-slate-600'}`}
                   >
                     <input
                       type="checkbox"
                       checked={checked}
                       disabled={Boolean(standard.required)}
                       onChange={() => toggleStandard(standard.code, standard.required)}
-                      className="mt-1"
+                      className="mt-1 h-4 w-4 shrink-0 accent-cyan-500"
                     />
                     <span className="min-w-0 flex-1 text-sm text-slate-700 dark:text-slate-200">
-                      <span className="block break-words font-medium leading-5 text-slate-900 dark:text-white">{t(`onboarding.standards.${standard.code}`)}</span>
+                      <span className="block break-words text-sm font-semibold leading-5 text-slate-900 dark:text-white">{title}</span>
+                      {description ? (
+                        <span className="mt-1 block break-words text-xs leading-5 text-slate-500 dark:text-slate-400">{description}</span>
+                      ) : null}
                     </span>
+                    {checked ? (
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-cyan-600 dark:text-cyan-300" />
+                    ) : null}
                   </label>
                 );
               })}
