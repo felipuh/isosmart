@@ -4,6 +4,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import { useI18n } from '../../../context/I18nContext';
 import Modal from '../../../components/Common/Modal';
+import CrudErrorBanner from '../../../components/Common/CrudErrorBanner';
+import CrudPageHeader from '../../../components/Common/CrudPageHeader';
+import CrudEmptyState from '../../../components/Common/CrudEmptyState';
 import { getRisksOpportunities, createRiskOpportunity, updateRiskOpportunity, deleteRiskOpportunity } from '../api/planningApi';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
@@ -42,14 +45,17 @@ const RisksOpportunitiesPage = () => {
   const [saving, setSaving] = useState(false);
   const [filterType, setFilterType] = useState('all');
   const [showForm, setShowForm] = useState(false);
+  const [error, setError] = useState('');
 
   const loadData = useCallback(async () => {
     try {
       setLoading(true);
+      setError('');
       const data = await getRisksOpportunities({ organization_id: orgId });
       setItems(normalizeList(data));
     } catch (error) {
       console.error('Error:', error);
+      setError(t('common.messages.errorTryAgain'));
     } finally {
       setLoading(false);
     }
@@ -70,6 +76,7 @@ const RisksOpportunitiesPage = () => {
     e.preventDefault();
     try {
       setSaving(true);
+      setError('');
       const payload = {
         ...form,
         organization_id: orgId,
@@ -92,6 +99,7 @@ const RisksOpportunitiesPage = () => {
       }
     } catch (error) {
       console.error('Error:', error);
+      setError(t('common.messages.errorTryAgain'));
     } finally {
       setSaving(false);
     }
@@ -123,6 +131,7 @@ const RisksOpportunitiesPage = () => {
       await loadData();
     } catch (error) {
       console.error('Error:', error);
+      setError(t('common.messages.errorTryAgain'));
     }
   };
 
@@ -165,16 +174,13 @@ const RisksOpportunitiesPage = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">{t('modules.planning.risksOpportunitiesPage.title')}</h1>
-        <button
-          type="button"
-          onClick={openForm}
-          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
-        >
-          {t('modules.planning.risksOpportunitiesPage.new')}
-        </button>
-      </div>
+      <CrudPageHeader
+        title={t('modules.planning.risksOpportunitiesPage.title')}
+        actionLabel={t('modules.planning.risksOpportunitiesPage.new')}
+        onAction={openForm}
+      />
+
+      <CrudErrorBanner message={error} onClose={() => setError('')} />
 
       <div className="flex space-x-2">
         {['all', 'risk', 'opportunity'].map(type => (
@@ -238,7 +244,7 @@ const RisksOpportunitiesPage = () => {
             ))}
           </tbody>
         </table>
-        {filteredItems.length === 0 && <div className="text-center py-8 text-gray-400">{t('modules.planning.risksOpportunitiesPage.empty')}</div>}
+        {filteredItems.length === 0 && <CrudEmptyState message={t('modules.planning.risksOpportunitiesPage.empty')} />}
       </div>
 
       <Modal

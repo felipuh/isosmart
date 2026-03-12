@@ -3,6 +3,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import { useI18n } from '../../../context/I18nContext';
 import Modal from '../../../components/Common/Modal';
+import CrudErrorBanner from '../../../components/Common/CrudErrorBanner';
+import CrudPageHeader from '../../../components/Common/CrudPageHeader';
+import CrudEmptyState from '../../../components/Common/CrudEmptyState';
 import { getExternalProviders, createExternalProvider, updateExternalProvider, deleteExternalProvider, getUsers } from '../api/operationsApi';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
@@ -39,6 +42,7 @@ const ExternalProvidersPage = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [showForm, setShowForm] = useState(false);
+  const [error, setError] = useState('');
 
   const resetForm = useCallback(() => {
     setForm({
@@ -65,10 +69,12 @@ const ExternalProvidersPage = () => {
   const loadData = useCallback(async () => {
     try {
       setLoading(true);
+      setError('');
       const data = await getExternalProviders({ organization_id: orgId });
       setItems(normalizeList(data));
     } catch (error) {
       console.error('Error:', error);
+      setError(t('common.messages.errorTryAgain'));
     } finally {
       setLoading(false);
     }
@@ -80,6 +86,7 @@ const ExternalProvidersPage = () => {
       setUsers(normalizeList(data));
     } catch (error) {
       console.error('Error loading users:', error);
+      setError(t('common.messages.errorTryAgain'));
     }
   }, [orgId]);
 
@@ -107,6 +114,7 @@ const ExternalProvidersPage = () => {
     e.preventDefault();
     try {
       setSaving(true);
+      setError('');
       const payload = {
         ...form,
         organization_id: orgId,
@@ -128,6 +136,7 @@ const ExternalProvidersPage = () => {
       }
     } catch (error) {
       console.error('Error:', error);
+      setError(t('common.messages.errorTryAgain'));
     } finally {
       setSaving(false);
     }
@@ -163,6 +172,7 @@ const ExternalProvidersPage = () => {
       await loadData();
     } catch (error) {
       console.error('Error:', error);
+      setError(t('common.messages.errorTryAgain'));
     }
   };
 
@@ -183,16 +193,13 @@ const ExternalProvidersPage = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">{t('modules.operations.externalProvidersPage.title')}</h1>
-        <button
-          type="button"
-          onClick={openForm}
-          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
-        >
-          {t('modules.operations.externalProvidersPage.buttons.new')}
-        </button>
-      </div>
+      <CrudPageHeader
+        title={t('modules.operations.externalProvidersPage.title')}
+        actionLabel={t('modules.operations.externalProvidersPage.buttons.new')}
+        onAction={openForm}
+      />
+
+      <CrudErrorBanner message={error} onClose={() => setError('')} />
 
       <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg overflow-hidden">
         <table className="w-full">
@@ -220,7 +227,7 @@ const ExternalProvidersPage = () => {
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('modules.operations.externalProvidersPage.messages.empty')}</div>}
+        {items.length === 0 && <CrudEmptyState message={t('modules.operations.externalProvidersPage.messages.empty')} />}
       </div>
 
       <Modal
