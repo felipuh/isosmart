@@ -29,6 +29,16 @@ const isTokenExpired = (token) => {
   return payload.exp <= nowSeconds;
 };
 
+const clearOnboardingSessionFlags = () => {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  Object.keys(window.sessionStorage)
+    .filter((key) => key.startsWith('isosmart_onboarding_seen_'))
+    .forEach((key) => window.sessionStorage.removeItem(key));
+};
+
 const AuthContext = createContext(null);
 
 export const useAuth = () => {
@@ -175,6 +185,7 @@ export const AuthProvider = ({ children }) => {
   const clearAuth = () => {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
+    clearOnboardingSessionFlags();
     delete api.defaults.headers.common['Authorization'];
     setUser(null);
     setProfile(null);

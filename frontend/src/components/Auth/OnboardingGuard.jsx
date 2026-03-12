@@ -5,12 +5,20 @@ import { useAuth } from '../../context/AuthContext';
 import { useI18n } from '../../context/I18nContext';
 import settingsService from '../../services/settingsService';
 
+const getOnboardingSessionKey = (organizationId) => (
+  organizationId ? `isosmart_onboarding_seen_${organizationId}` : null
+);
+
 const OnboardingGuard = ({ children }) => {
   const { t } = useI18n();
   const { currentOrganization, isAuthenticated } = useAuth();
   const location = useLocation();
   const [loading, setLoading] = useState(true);
   const [completed, setCompleted] = useState(true);
+  const [shownInSession, setShownInSession] = useState(false);
+
+  const organizationId = currentOrganization?.id;
+  const isOnboardingRoute = location.pathname === '/onboarding';
 
   useEffect(() => {
     let mounted = true;
@@ -47,6 +55,36 @@ const OnboardingGuard = ({ children }) => {
     };
   }, [currentOrganization?.id, isAuthenticated]);
 
+  useEffect(() => {
+    const sessionKey = getOnboardingSessionKey(organizationId);
+    if (!sessionKey || typeof window === 'undefined') {
+      setShownInSession(false);
+      return;
+    }
+
+    setShownInSession(window.sessionStorage.getItem(sessionKey) === '1');
+  }, [organizationId, isAuthenticated]);
+
+  useEffect(() => {
+    const sessionKey = getOnboardingSessionKey(organizationId);
+    if (!sessionKey || typeof window === 'undefined') {
+      return;
+    }
+
+    if (completed) {
+      window.sessionStorage.removeItem(sessionKey);
+      if (shownInSession) {
+        setShownInSession(false);
+      }
+      return;
+    }
+
+    if (isOnboardingRoute && !shownInSession) {
+      window.sessionStorage.setItem(sessionKey, '1');
+      setShownInSession(true);
+    }
+  }, [completed, isOnboardingRoute, organizationId, shownInSession]);
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900">
@@ -55,9 +93,7 @@ const OnboardingGuard = ({ children }) => {
     );
   }
 
-  const isOnboardingRoute = location.pathname === '/onboarding';
-
-  if (!completed && !isOnboardingRoute) {
+  if (!completed && !isOnboardingRoute && !shownInSession) {
     return <Navigate to="/onboarding" replace />;
   }
 

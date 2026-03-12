@@ -71,6 +71,17 @@ function App() {
         }
       />
 
+      <Route
+        path="/onboarding"
+        element={
+          <ProtectedRoute>
+            <OnboardingGuard>
+              <OnboardingPage />
+            </OnboardingGuard>
+          </ProtectedRoute>
+        }
+      />
+
       {/* Rutas protegidas */}
       <Route
         element={
@@ -81,7 +92,6 @@ function App() {
           </ProtectedRoute>
         }
       >
-        <Route path="onboarding" element={<OnboardingPage />} />
         <Route index element={<Dashboard />} />
         <Route path="context" element={<ContextDashboard />} />
         <Route path="stakeholders" element={<StakeholderDashboard />} />

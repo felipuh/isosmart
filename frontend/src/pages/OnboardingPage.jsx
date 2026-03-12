@@ -1,6 +1,15 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CheckCircle2, Globe, Building2, ShieldCheck, Loader2 } from 'lucide-react';
+import {
+  ArrowLeft,
+  ArrowRight,
+  Building2,
+  CheckCircle2,
+  Globe,
+  Loader2,
+  ShieldCheck,
+  Sparkles,
+} from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useI18n } from '../context/I18nContext';
 import settingsService from '../services/settingsService';
@@ -25,6 +34,10 @@ const COMPANY_SIZE_OPTIONS = [
 const CERTIFICATION_OPTIONS = ['first_time', 'already_certified', 'in_transition'];
 const TONE_OPTIONS = ['manager', 'technical'];
 
+const inputClassName = 'mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-cyan-500 dark:focus:ring-cyan-500/20';
+
+const sleep = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
+
 const OnboardingPage = () => {
   const navigate = useNavigate();
   const { currentOrganization } = useAuth();
@@ -42,7 +55,9 @@ const OnboardingPage = () => {
     certification_status: 'first_time',
   });
   const [preferredTone, setPreferredTone] = useState('manager');
+  const [currentStep, setCurrentStep] = useState(0);
   const [saving, setSaving] = useState(false);
+  const [creationStage, setCreationStage] = useState(-1);
   const [error, setError] = useState('');
 
   const organizationId = currentOrganization?.id;
@@ -53,6 +68,50 @@ const OnboardingPage = () => {
     }
     return enabledStandards;
   }, [enabledStandards]);
+
+  const stepDefinitions = [
+    {
+      key: 'foundation',
+      title: t('onboarding.wizard.foundationTitle'),
+      description: t('onboarding.wizard.foundationDesc'),
+      icon: Building2,
+    },
+    {
+      key: 'profile',
+      title: t('onboarding.wizard.profileStepTitle'),
+      description: t('onboarding.wizard.profileStepDesc'),
+      icon: ShieldCheck,
+    },
+    {
+      key: 'context',
+      title: t('onboarding.wizard.contextStepTitle'),
+      description: t('onboarding.wizard.contextStepDesc'),
+      icon: Globe,
+    },
+    {
+      key: 'experience',
+      title: t('onboarding.wizard.experienceStepTitle'),
+      description: t('onboarding.wizard.experienceStepDesc'),
+      icon: Sparkles,
+    },
+  ];
+
+  const creationSteps = [
+    t('onboarding.wizard.creatingStandards'),
+    t('onboarding.wizard.creatingPreferences'),
+    t('onboarding.wizard.creatingWorkspace'),
+    t('onboarding.wizard.creatingReady'),
+  ];
+
+  const progressPercent = `${((currentStep + 1) / stepDefinitions.length) * 100}%`;
+  const creationPercent = creationStage >= 0
+    ? `${((Math.min(creationStage, creationSteps.length - 1) + 1) / creationSteps.length) * 100}%`
+    : '0%';
+  const isLastStep = currentStep === stepDefinitions.length - 1;
+  const activeStep = stepDefinitions[currentStep];
+  const wizardCounterLabel = t('onboarding.wizard.stepCounter')
+    .replace('{current}', String(currentStep + 1))
+    .replace('{total}', String(stepDefinitions.length));
 
   const toggleStandard = (code, required) => {
     if (required) return;
@@ -74,13 +133,26 @@ const OnboardingPage = () => {
     return Number.isNaN(parsed) ? null : parsed;
   };
 
+  const nextStep = () => {
+    setError('');
+    setCurrentStep((prev) => Math.min(prev + 1, stepDefinitions.length - 1));
+  };
+
+  const previousStep = () => {
+    setError('');
+    setCurrentStep((prev) => Math.max(prev - 1, 0));
+  };
+
   const handleFinish = async () => {
     if (!organizationId) return;
     setSaving(true);
+    setCreationStage(0);
     setError('');
 
     try {
       await settingsService.initializeStandards(organizationId, selectedStandards);
+      setCreationStage(1);
+
       await settingsService.completeOnboarding(organizationId, {
         enabled_standards: selectedStandards,
         preferred_language: language,
@@ -96,222 +168,470 @@ const OnboardingPage = () => {
         },
       });
 
+      setCreationStage(2);
+
       try {
         await settingsService.runOnboardingOrchestration(organizationId);
       } catch {
         // No bloquear el acceso al sistema si la orquestación falla
       }
 
+      setCreationStage(3);
+      await sleep(350);
       navigate('/', { replace: true });
     } catch (err) {
       setError(err?.response?.data?.detail || t('onboarding.errorComplete'));
-    } finally {
       setSaving(false);
+      setCreationStage(-1);
     }
   };
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-indigo-50 to-blue-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 p-6">
-      <div className="max-w-4xl mx-auto bg-white/90 dark:bg-slate-800/90 backdrop-blur border border-slate-200 dark:border-slate-700 rounded-2xl shadow-xl p-8">
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white">{t('onboarding.title')}</h1>
-          <p className="text-slate-600 dark:text-slate-300">{t('onboarding.subtitle')}</p>
+  const renderFoundationStep = () => (
+    <div className="grid gap-5 xl:grid-cols-3">
+      <section className="rounded-3xl border border-slate-200 bg-slate-50/90 p-5 dark:border-slate-700 dark:bg-slate-900/70 xl:col-span-1">
+        <div className="flex items-start gap-3">
+          <div className="rounded-2xl bg-cyan-500/10 p-3 text-cyan-600 dark:text-cyan-300">
+            <Building2 className="h-5 w-5" />
+          </div>
+          <div>
+            <h3 className="font-semibold text-slate-900 dark:text-white">{t('onboarding.step1Title')}</h3>
+            <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">{t('onboarding.step1Desc')}</p>
+          </div>
         </div>
+        <div className="mt-5 rounded-2xl border border-slate-200 bg-white px-4 py-5 dark:border-slate-700 dark:bg-slate-950/80">
+          <p className="text-xs font-medium uppercase tracking-[0.24em] text-slate-400 dark:text-slate-500">{t('onboarding.wizard.organizationLabel')}</p>
+          <p className="mt-3 text-lg font-semibold text-slate-900 dark:text-white">{currentOrganization?.name || '-'}</p>
+        </div>
+      </section>
 
-        <div className="grid gap-6 md:grid-cols-3 mb-8">
-          <section className="p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/80 dark:bg-slate-800/50">
-            <div className="flex items-center gap-2 mb-3 text-indigo-600 dark:text-indigo-400">
-              <Building2 className="w-5 h-5" />
-              <h2 className="font-semibold">{t('onboarding.step1Title')}</h2>
-            </div>
-            <p className="text-sm text-slate-600 dark:text-slate-300">{t('onboarding.step1Desc')}</p>
-            <p className="mt-3 text-sm font-medium text-slate-800 dark:text-slate-200">{currentOrganization?.name}</p>
-          </section>
-
-          <section className="p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/80 dark:bg-slate-800/50">
-            <div className="flex items-center gap-2 mb-3 text-indigo-600 dark:text-indigo-400">
-              <Globe className="w-5 h-5" />
-              <h2 className="font-semibold">{t('onboarding.step2Title')}</h2>
+      <section className="rounded-3xl border border-slate-200 bg-slate-50/90 p-5 dark:border-slate-700 dark:bg-slate-900/70 xl:col-span-2">
+        <div className="grid gap-5 lg:grid-cols-[minmax(0,220px),1fr]">
+          <div>
+            <div className="flex items-start gap-3">
+              <div className="rounded-2xl bg-cyan-500/10 p-3 text-cyan-600 dark:text-cyan-300">
+                <Globe className="h-5 w-5" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-slate-900 dark:text-white">{t('onboarding.step2Title')}</h3>
+                <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">{t('onboarding.step2Desc')}</p>
+              </div>
             </div>
             <select
               value={language}
               onChange={(event) => setLanguage(event.target.value)}
-              className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100"
+              className={inputClassName}
             >
               <option value="es-LATAM">{t('onboarding.languages.es-LATAM')}</option>
               <option value="en">{t('onboarding.languages.en')}</option>
               <option value="pt">{t('onboarding.languages.pt')}</option>
             </select>
-          </section>
+          </div>
 
-          <section className="p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/80 dark:bg-slate-800/50">
-            <div className="flex items-center gap-2 mb-3 text-indigo-600 dark:text-indigo-400">
-              <ShieldCheck className="w-5 h-5" />
-              <h2 className="font-semibold">{t('onboarding.step3Title')}</h2>
+          <div>
+            <div className="flex items-start gap-3">
+              <div className="rounded-2xl bg-cyan-500/10 p-3 text-cyan-600 dark:text-cyan-300">
+                <ShieldCheck className="h-5 w-5" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-slate-900 dark:text-white">{t('onboarding.step3Title')}</h3>
+                <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">{t('onboarding.step3Desc')}</p>
+              </div>
             </div>
-            <div className="space-y-2">
+
+            <div className="mt-4 grid gap-3 md:grid-cols-2">
               {STANDARD_OPTIONS.map((standard) => {
                 const checked = selectedStandards.includes(standard.code);
                 return (
-                  <label key={standard.code} className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-200">
+                  <label
+                    key={standard.code}
+                    className={`flex cursor-pointer items-start gap-3 rounded-2xl border px-4 py-4 transition ${checked
+                      ? 'border-cyan-400 bg-cyan-50/80 dark:border-cyan-500/70 dark:bg-cyan-500/10'
+                      : 'border-slate-200 bg-white hover:border-slate-300 dark:border-slate-700 dark:bg-slate-950/70 dark:hover:border-slate-600'}`}
+                  >
                     <input
                       type="checkbox"
                       checked={checked}
                       disabled={Boolean(standard.required)}
                       onChange={() => toggleStandard(standard.code, standard.required)}
+                      className="mt-1"
                     />
-                    <span>{t(`onboarding.standards.${standard.code}`)}</span>
+                    <span className="text-sm text-slate-700 dark:text-slate-200">
+                      <span className="block font-medium text-slate-900 dark:text-white">{t(`onboarding.standards.${standard.code}`)}</span>
+                    </span>
                   </label>
                 );
               })}
             </div>
-            <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">{t('onboarding.requiredStandard')}</p>
-          </section>
+
+            <p className="mt-4 text-xs text-slate-500 dark:text-slate-400">{t('onboarding.requiredStandard')}</p>
+          </div>
         </div>
+      </section>
+    </div>
+  );
 
-        <div className="grid gap-6 md:grid-cols-2 mb-8">
-          <section className="p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/80 dark:bg-slate-800/50">
-            <h2 className="font-semibold text-slate-900 dark:text-slate-100 mb-3">{t('onboarding.profileTitle')}</h2>
-            <div className="space-y-3">
-              <label className="block text-sm text-slate-700 dark:text-slate-200">
-                {t('onboarding.primaryRole')}
-                <select
-                  value={onboardingProfile.primary_role}
-                  onChange={(event) => updateProfileField('primary_role', event.target.value)}
-                  className="mt-1 w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700"
-                >
-                  {ROLE_OPTIONS.map((option) => (
-                    <option key={option} value={option}>{t(`onboarding.roles.${option}`)}</option>
-                  ))}
-                </select>
-              </label>
+  const renderProfileStep = () => (
+    <div className="grid gap-4 md:grid-cols-2">
+      <label className="block text-sm text-slate-700 dark:text-slate-200">
+        {t('onboarding.primaryRole')}
+        <select
+          value={onboardingProfile.primary_role}
+          onChange={(event) => updateProfileField('primary_role', event.target.value)}
+          className={inputClassName}
+        >
+          {ROLE_OPTIONS.map((option) => (
+            <option key={option} value={option}>{t(`onboarding.roles.${option}`)}</option>
+          ))}
+        </select>
+      </label>
 
-              <label className="block text-sm text-slate-700 dark:text-slate-200">
-                {t('onboarding.expertise')}
-                <select
-                  value={onboardingProfile.iso_expertise}
-                  onChange={(event) => updateProfileField('iso_expertise', event.target.value)}
-                  className="mt-1 w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700"
-                >
-                  {EXPERTISE_OPTIONS.map((option) => (
-                    <option key={option} value={option}>{t(`onboarding.expertiseLevels.${option}`)}</option>
-                  ))}
-                </select>
-              </label>
+      <label className="block text-sm text-slate-700 dark:text-slate-200">
+        {t('onboarding.expertise')}
+        <select
+          value={onboardingProfile.iso_expertise}
+          onChange={(event) => updateProfileField('iso_expertise', event.target.value)}
+          className={inputClassName}
+        >
+          {EXPERTISE_OPTIONS.map((option) => (
+            <option key={option} value={option}>{t(`onboarding.expertiseLevels.${option}`)}</option>
+          ))}
+        </select>
+      </label>
 
-              <label className="block text-sm text-slate-700 dark:text-slate-200">
-                {t('onboarding.companySize')}
-                <select
-                  value={onboardingProfile.company_size_range}
-                  onChange={(event) => updateProfileField('company_size_range', event.target.value)}
-                  className="mt-1 w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700"
-                >
-                  {COMPANY_SIZE_OPTIONS.map((option) => (
-                    <option key={option.value} value={option.value}>{t(option.labelKey)}</option>
-                  ))}
-                </select>
-              </label>
+      <label className="block text-sm text-slate-700 dark:text-slate-200">
+        {t('onboarding.companySize')}
+        <select
+          value={onboardingProfile.company_size_range}
+          onChange={(event) => updateProfileField('company_size_range', event.target.value)}
+          className={inputClassName}
+        >
+          {COMPANY_SIZE_OPTIONS.map((option) => (
+            <option key={option.value} value={option.value}>{t(option.labelKey)}</option>
+          ))}
+        </select>
+      </label>
 
-              <label className="block text-sm text-slate-700 dark:text-slate-200">
-                {t('onboarding.industry')}
-                <input
-                  type="text"
-                  value={onboardingProfile.industry_sector}
-                  onChange={(event) => updateProfileField('industry_sector', event.target.value)}
-                  placeholder={t('onboarding.industryPlaceholder')}
-                  className="mt-1 w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700"
-                />
-              </label>
-            </div>
-          </section>
+      <label className="block text-sm text-slate-700 dark:text-slate-200">
+        {t('onboarding.industry')}
+        <input
+          type="text"
+          value={onboardingProfile.industry_sector}
+          onChange={(event) => updateProfileField('industry_sector', event.target.value)}
+          placeholder={t('onboarding.industryPlaceholder')}
+          className={inputClassName}
+        />
+      </label>
+    </div>
+  );
 
-          <section className="p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/80 dark:bg-slate-800/50">
-            <h2 className="font-semibold text-slate-900 dark:text-slate-100 mb-3">{t('onboarding.contextTitle')}</h2>
-            <div className="space-y-3">
-              <label className="block text-sm text-slate-700 dark:text-slate-200">
-                {t('onboarding.employeesCount')}
-                <input
-                  type="number"
-                  min="1"
-                  value={onboardingProfile.employees_count}
-                  onChange={(event) => updateProfileField('employees_count', event.target.value)}
-                  className="mt-1 w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700"
-                />
-              </label>
+  const renderContextStep = () => (
+    <div className="grid gap-4 md:grid-cols-2">
+      <label className="block text-sm text-slate-700 dark:text-slate-200">
+        {t('onboarding.employeesCount')}
+        <input
+          type="number"
+          min="1"
+          value={onboardingProfile.employees_count}
+          onChange={(event) => updateProfileField('employees_count', event.target.value)}
+          className={inputClassName}
+        />
+      </label>
 
-              <label className="block text-sm text-slate-700 dark:text-slate-200">
-                {t('onboarding.sitesCount')}
-                <input
-                  type="number"
-                  min="1"
-                  value={onboardingProfile.sites_count}
-                  onChange={(event) => updateProfileField('sites_count', event.target.value)}
-                  className="mt-1 w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700"
-                />
-              </label>
+      <label className="block text-sm text-slate-700 dark:text-slate-200">
+        {t('onboarding.sitesCount')}
+        <input
+          type="number"
+          min="1"
+          value={onboardingProfile.sites_count}
+          onChange={(event) => updateProfileField('sites_count', event.target.value)}
+          className={inputClassName}
+        />
+      </label>
 
-              <label className="block text-sm text-slate-700 dark:text-slate-200">
-                {t('onboarding.countries')}
-                <input
-                  type="text"
-                  value={onboardingProfile.countries}
-                  onChange={(event) => updateProfileField('countries', event.target.value)}
-                  placeholder={t('onboarding.countriesPlaceholder')}
-                  className="mt-1 w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700"
-                />
-              </label>
+      <label className="block text-sm text-slate-700 dark:text-slate-200 md:col-span-2">
+        {t('onboarding.countries')}
+        <input
+          type="text"
+          value={onboardingProfile.countries}
+          onChange={(event) => updateProfileField('countries', event.target.value)}
+          placeholder={t('onboarding.countriesPlaceholder')}
+          className={inputClassName}
+        />
+      </label>
 
-              <label className="block text-sm text-slate-700 dark:text-slate-200">
-                {t('onboarding.certification')}
-                <select
-                  value={onboardingProfile.certification_status}
-                  onChange={(event) => updateProfileField('certification_status', event.target.value)}
-                  className="mt-1 w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700"
-                >
-                  {CERTIFICATION_OPTIONS.map((option) => (
-                    <option key={option} value={option}>{t(`onboarding.certificationOptions.${option}`)}</option>
-                  ))}
-                </select>
-              </label>
-            </div>
-          </section>
+      <label className="block text-sm text-slate-700 dark:text-slate-200 md:col-span-2">
+        {t('onboarding.certification')}
+        <select
+          value={onboardingProfile.certification_status}
+          onChange={(event) => updateProfileField('certification_status', event.target.value)}
+          className={inputClassName}
+        >
+          {CERTIFICATION_OPTIONS.map((option) => (
+            <option key={option} value={option}>{t(`onboarding.certificationOptions.${option}`)}</option>
+          ))}
+        </select>
+      </label>
+    </div>
+  );
+
+  const renderExperienceStep = () => (
+    <div className="space-y-6">
+      <section>
+        <h3 className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-400 dark:text-slate-500">{t('onboarding.toneTitle')}</h3>
+        <div className="mt-4 grid gap-3 md:grid-cols-2">
+          {TONE_OPTIONS.map((option) => (
+            <label
+              key={option}
+              className={`flex cursor-pointer items-start gap-3 rounded-2xl border px-4 py-4 transition ${preferredTone === option
+                ? 'border-cyan-400 bg-cyan-50/80 dark:border-cyan-500/70 dark:bg-cyan-500/10'
+                : 'border-slate-200 bg-white hover:border-slate-300 dark:border-slate-700 dark:bg-slate-950/70 dark:hover:border-slate-600'}`}
+            >
+              <input
+                type="radio"
+                name="preferredTone"
+                checked={preferredTone === option}
+                onChange={() => setPreferredTone(option)}
+                className="mt-1"
+              />
+              <span>
+                <span className="block font-medium text-slate-900 dark:text-white">{t(`onboarding.tones.${option}.title`)}</span>
+                <span className="mt-1 block text-xs text-slate-500 dark:text-slate-400">{t(`onboarding.tones.${option}.desc`)}</span>
+              </span>
+            </label>
+          ))}
         </div>
+      </section>
 
-        <section className="mb-8 p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/80 dark:bg-slate-800/50">
-          <h2 className="font-semibold text-slate-900 dark:text-slate-100 mb-3">{t('onboarding.toneTitle')}</h2>
-          <div className="grid gap-2 md:grid-cols-2">
-            {TONE_OPTIONS.map((option) => (
-              <label key={option} className="flex items-start gap-2 text-sm text-slate-700 dark:text-slate-200 p-3 rounded-lg border border-slate-300 dark:border-slate-600">
-                <input
-                  type="radio"
-                  name="preferredTone"
-                  checked={preferredTone === option}
-                  onChange={() => setPreferredTone(option)}
-                />
-                <span>
-                  <span className="font-medium block">{t(`onboarding.tones.${option}.title`)}</span>
-                  <span className="text-xs text-slate-500 dark:text-slate-400">{t(`onboarding.tones.${option}.desc`)}</span>
+      <section className="rounded-3xl border border-slate-200 bg-slate-50/90 p-5 dark:border-slate-700 dark:bg-slate-900/70">
+        <h3 className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-400 dark:text-slate-500">{t('onboarding.wizard.reviewTitle')}</h3>
+        <div className="mt-4 grid gap-4 md:grid-cols-2">
+          <div className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-950/80">
+            <p className="text-xs uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">{t('onboarding.wizard.organizationLabel')}</p>
+            <p className="mt-2 text-base font-semibold text-slate-900 dark:text-white">{currentOrganization?.name || '-'}</p>
+          </div>
+          <div className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-950/80">
+            <p className="text-xs uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">{t('onboarding.wizard.languageLabel')}</p>
+            <p className="mt-2 text-base font-semibold text-slate-900 dark:text-white">{t(`onboarding.languages.${language}`)}</p>
+          </div>
+          <div className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-950/80 md:col-span-2">
+            <p className="text-xs uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">{t('onboarding.wizard.standardsLabel')}</p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {selectedStandards.map((standardCode) => (
+                <span
+                  key={standardCode}
+                  className="rounded-full bg-slate-900 px-3 py-1.5 text-xs font-medium text-white dark:bg-cyan-500/15 dark:text-cyan-100"
+                >
+                  {t(`onboarding.standards.${standardCode}`)}
                 </span>
-              </label>
-            ))}
+              ))}
+            </div>
           </div>
-        </section>
-
-        {error && (
-          <div className="mb-4 px-4 py-3 rounded-lg border border-red-200 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-300">
-            {error}
+          <div className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-950/80 md:col-span-2">
+            <p className="text-xs uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">{t('onboarding.wizard.toneLabel')}</p>
+            <p className="mt-2 text-base font-semibold text-slate-900 dark:text-white">{t(`onboarding.tones.${preferredTone}.title`)}</p>
+            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{t(`onboarding.tones.${preferredTone}.desc`)}</p>
           </div>
-        )}
+        </div>
+      </section>
+    </div>
+  );
 
-        <div className="flex justify-end">
-          <button
-            onClick={handleFinish}
-            disabled={saving || !organizationId}
-            className="px-5 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-medium disabled:opacity-50 inline-flex items-center gap-2"
-          >
-            {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle2 className="w-4 h-4" />}
-            {saving ? t('onboarding.saving') : t('onboarding.complete')}
-          </button>
+  const renderStepContent = () => {
+    if (activeStep.key === 'foundation') return renderFoundationStep();
+    if (activeStep.key === 'profile') return renderProfileStep();
+    if (activeStep.key === 'context') return renderContextStep();
+    return renderExperienceStep();
+  };
+
+  if (saving) {
+    return (
+      <div className="relative min-h-screen overflow-hidden bg-slate-950 text-white">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.22),_transparent_34%),radial-gradient(circle_at_bottom_right,_rgba(56,189,248,0.18),_transparent_28%)]" />
+        <div className="relative mx-auto flex min-h-screen max-w-3xl items-center justify-center p-6">
+          <div className="w-full rounded-[32px] border border-white/10 bg-white/8 p-8 shadow-2xl shadow-cyan-950/30 backdrop-blur-xl sm:p-10">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-2 text-xs font-medium uppercase tracking-[0.24em] text-cyan-100">
+              <Sparkles className="h-4 w-4" />
+              {t('onboarding.wizard.badge')}
+            </div>
+
+            <h1 className="mt-6 text-3xl font-semibold tracking-tight text-white sm:text-4xl">{t('onboarding.wizard.creatingTitle')}</h1>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300 sm:text-base">{t('onboarding.wizard.creatingDesc')}</p>
+
+            <div className="mt-8 h-2 overflow-hidden rounded-full bg-white/10">
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-cyan-400 via-sky-400 to-emerald-400 transition-all duration-500"
+                style={{ width: creationPercent }}
+              />
+            </div>
+
+            <div className="mt-8 space-y-3">
+              {creationSteps.map((label, index) => {
+                const completed = creationStage > index;
+                const active = creationStage === index;
+
+                return (
+                  <div
+                    key={label}
+                    className={`flex items-center gap-4 rounded-2xl border px-4 py-4 transition ${completed || active
+                      ? 'border-cyan-400/40 bg-cyan-400/10'
+                      : 'border-white/10 bg-white/5'}`}
+                  >
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10">
+                      {completed ? (
+                        <CheckCircle2 className="h-5 w-5 text-emerald-300" />
+                      ) : active ? (
+                        <Loader2 className="h-5 w-5 animate-spin text-cyan-200" />
+                      ) : (
+                        <div className="h-2.5 w-2.5 rounded-full bg-slate-500" />
+                      )}
+                    </div>
+                    <p className={`text-sm sm:text-base ${completed || active ? 'text-white' : 'text-slate-400'}`}>{label}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative min-h-screen overflow-hidden bg-[linear-gradient(135deg,#f8fafc_0%,#ecfeff_42%,#e0f2fe_100%)] dark:bg-[linear-gradient(135deg,#020617_0%,#082f49_48%,#0f172a_100%)]">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(56,189,248,0.12),_transparent_30%),radial-gradient(circle_at_bottom_right,_rgba(14,165,233,0.14),_transparent_28%)]" />
+
+      <div className="relative mx-auto flex min-h-screen max-w-6xl items-center justify-center p-4 sm:p-6 lg:p-10">
+        <div className="w-full overflow-hidden rounded-[32px] border border-slate-200/70 bg-white/92 shadow-[0_30px_90px_-40px_rgba(15,23,42,0.45)] backdrop-blur-xl dark:border-slate-700/70 dark:bg-slate-950/70">
+          <div className="grid lg:grid-cols-[340px,1fr]">
+            <aside className="bg-slate-950 px-6 py-8 text-white sm:px-8 lg:px-10 lg:py-10">
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-2 text-xs font-medium uppercase tracking-[0.24em] text-cyan-100">
+                <Sparkles className="h-4 w-4" />
+                {t('onboarding.wizard.badge')}
+              </div>
+
+              <h1 className="mt-6 text-3xl font-semibold tracking-tight sm:text-4xl">{t('onboarding.title')}</h1>
+              <p className="mt-3 text-sm leading-6 text-slate-300 sm:text-base">{t('onboarding.subtitle')}</p>
+
+              <div className="mt-8 space-y-3">
+                {stepDefinitions.map((step, index) => {
+                  const StepIcon = step.icon;
+                  const completed = index < currentStep;
+                  const active = index === currentStep;
+
+                  return (
+                    <div
+                      key={step.key}
+                      className={`rounded-2xl border px-4 py-4 transition ${active
+                        ? 'border-cyan-400/40 bg-cyan-400/12'
+                        : completed
+                          ? 'border-emerald-400/25 bg-emerald-400/10'
+                          : 'border-white/10 bg-white/5'}`}
+                    >
+                      <div className="flex items-start gap-3">
+                        <div className={`rounded-2xl p-3 ${active ? 'bg-cyan-400/15 text-cyan-100' : completed ? 'bg-emerald-400/15 text-emerald-100' : 'bg-white/10 text-slate-300'}`}>
+                          <StepIcon className="h-5 w-5" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold text-white">{step.title}</p>
+                          <p className="mt-1 text-xs leading-5 text-slate-300">{step.description}</p>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="mt-8 rounded-3xl border border-white/10 bg-white/5 p-5">
+                <h2 className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-400">{t('onboarding.wizard.reviewTitle')}</h2>
+                <div className="mt-4 space-y-4 text-sm">
+                  <div>
+                    <p className="text-slate-400">{t('onboarding.wizard.organizationLabel')}</p>
+                    <p className="mt-1 font-medium text-white">{currentOrganization?.name || '-'}</p>
+                  </div>
+                  <div>
+                    <p className="text-slate-400">{t('onboarding.wizard.languageLabel')}</p>
+                    <p className="mt-1 font-medium text-white">{t(`onboarding.languages.${language}`)}</p>
+                  </div>
+                  <div>
+                    <p className="text-slate-400">{t('onboarding.wizard.standardsLabel')}</p>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {selectedStandards.map((standardCode) => (
+                        <span key={standardCode} className="rounded-full border border-white/10 bg-white/10 px-3 py-1 text-xs text-cyan-100">
+                          {t(`onboarding.standards.${standardCode}`)}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </aside>
+
+            <section className="px-6 py-8 sm:px-8 lg:px-10 lg:py-10">
+              <div className="mb-8">
+                <div className="flex items-center justify-between gap-4">
+                  <div>
+                    <p className="text-xs font-medium uppercase tracking-[0.24em] text-slate-400 dark:text-slate-500">{wizardCounterLabel}</p>
+                    <h2 className="mt-3 text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">{activeStep.title}</h2>
+                    <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600 dark:text-slate-300">{activeStep.description}</p>
+                  </div>
+                  <div className="hidden rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 sm:inline-flex">
+                    {Math.round(((currentStep + 1) / stepDefinitions.length) * 100)}%
+                  </div>
+                </div>
+
+                <div className="mt-5 h-2 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-cyan-400 via-sky-400 to-emerald-400 transition-all duration-500"
+                    style={{ width: progressPercent }}
+                  />
+                </div>
+              </div>
+
+              <div className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-950/60 sm:p-6">
+                {renderStepContent()}
+              </div>
+
+              {error && (
+                <div className="mt-5 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-300">
+                  {error}
+                </div>
+              )}
+
+              <div className="mt-8 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <button
+                  type="button"
+                  onClick={previousStep}
+                  disabled={currentStep === 0 || saving}
+                  className="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200 px-5 py-3 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-700 dark:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-900"
+                >
+                  <ArrowLeft className="h-4 w-4" />
+                  {t('onboarding.wizard.back')}
+                </button>
+
+                {isLastStep ? (
+                  <button
+                    type="button"
+                    onClick={handleFinish}
+                    disabled={saving || !organizationId}
+                    className="inline-flex items-center justify-center gap-2 rounded-2xl bg-slate-950 px-5 py-3 text-sm font-medium text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-cyan-500 dark:text-slate-950 dark:hover:bg-cyan-400"
+                  >
+                    <CheckCircle2 className="h-4 w-4" />
+                    {t('onboarding.wizard.create')}
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={nextStep}
+                    disabled={!organizationId}
+                    className="inline-flex items-center justify-center gap-2 rounded-2xl bg-slate-950 px-5 py-3 text-sm font-medium text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-cyan-500 dark:text-slate-950 dark:hover:bg-cyan-400"
+                  >
+                    {t('onboarding.wizard.next')}
+                    <ArrowRight className="h-4 w-4" />
+                  </button>
+                )}
+              </div>
+            </section>
+          </div>
         </div>
       </div>
     </div>
