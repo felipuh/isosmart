@@ -3,6 +3,9 @@ import { useAuth } from '../../../context/AuthContext';
 import { useI18n } from '../../../context/I18nContext';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Modal from '../../../components/Common/Modal';
+import CrudErrorBanner from '../../../components/Common/CrudErrorBanner';
+import CrudPageHeader from '../../../components/Common/CrudPageHeader';
+import CrudEmptyState from '../../../components/Common/CrudEmptyState';
 import { getContinualImprovements, createContinualImprovement, updateContinualImprovement, deleteContinualImprovement } from '../api/improvementApi';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
@@ -25,6 +28,7 @@ const ImprovementContinualPage = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [showForm, setShowForm] = useState(false);
+  const [error, setError] = useState('');
 
   const improvementTypeLabels = useMemo(() => ({
     process: t('modules.improvement.continualPage.types.process'),
@@ -55,9 +59,9 @@ const ImprovementContinualPage = () => {
   }), [t]);
 
   const loadData = useCallback(async () => {
-    try { setLoading(true); const data = await getContinualImprovements({ organization_id: orgId }); setItems(normalizeList(data)); }
-    catch (error) { console.error('Error:', error); } finally { setLoading(false); }
-  }, [orgId]);
+    try { setLoading(true); setError(''); const data = await getContinualImprovements({ organization_id: orgId }); setItems(normalizeList(data)); }
+    catch (error) { console.error('Error:', error); setError(t('common.messages.errorTryAgain')); } finally { setLoading(false); }
+  }, [orgId, t]);
 
   useEffect(() => { if (orgId) loadData(); }, [orgId, loadData]);
   useEffect(() => { if (location.pathname.endsWith('/new')) { resetForm(); setShowForm(true); } }, [location.pathname]);
@@ -66,11 +70,12 @@ const ImprovementContinualPage = () => {
     e.preventDefault();
     try {
       setSaving(true);
+      setError('');
       const payload = { ...form, organization_id: orgId, organization_name: orgName, champion: user?.id || null, completion_percentage: Number(form.completion_percentage), estimated_investment: form.estimated_investment === '' ? null : Number(form.estimated_investment), estimated_savings: form.estimated_savings === '' ? null : Number(form.estimated_savings), expected_roi: form.expected_roi === '' ? null : Number(form.expected_roi) };
       if (editingId) { await updateContinualImprovement(editingId, payload); } else { await createContinualImprovement(payload); }
       resetForm(); await loadData(); setShowForm(false);
       if (location.pathname.endsWith('/new')) navigate(location.pathname.replace(/\/new$/, ''), { replace: true });
-    } catch (error) { console.error('Error:', error); } finally { setSaving(false); }
+    } catch (error) { console.error('Error:', error); setError(t('common.messages.errorTryAgain')); } finally { setSaving(false); }
   };
 
   const handleEdit = (item) => {
@@ -78,7 +83,7 @@ const ImprovementContinualPage = () => {
     setEditingId(item.id); setShowForm(true);
   };
 
-  const handleDelete = async (id) => { if (!confirm(t('modules.improvement.continualPage.deleteConfirm'))) return; try { await deleteContinualImprovement(id); await loadData(); } catch (error) { console.error('Error:', error); } };
+  const handleDelete = async (id) => { if (!confirm(t('modules.improvement.continualPage.deleteConfirm'))) return; try { setError(''); await deleteContinualImprovement(id); await loadData(); } catch (error) { console.error('Error:', error); setError(t('common.messages.errorTryAgain')); } };
   const resetForm = () => { setForm(initialForm); setEditingId(null); };
   const openForm = () => { resetForm(); setShowForm(true); };
   const closeForm = () => { resetForm(); setShowForm(false); if (location.pathname.endsWith('/new')) navigate(location.pathname.replace(/\/new$/, ''), { replace: true }); };
@@ -87,10 +92,14 @@ const ImprovementContinualPage = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div><h1 className="text-3xl font-bold text-white">{t('modules.improvement.continualPage.title')}</h1><p className="text-gray-400 mt-1">{t('modules.improvement.continualPage.isoClause')}</p></div>
-        <button type="button" onClick={openForm} className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">{t('modules.improvement.continualPage.new')}</button>
-      </div>
+      <CrudPageHeader
+        title={t('modules.improvement.continualPage.title')}
+        subtitle={t('modules.improvement.continualPage.isoClause')}
+        actionLabel={t('modules.improvement.continualPage.new')}
+        onAction={openForm}
+      />
+
+      <CrudErrorBanner message={error} onClose={() => setError('')} />
 
       <Modal
         title={editingId ? t('modules.improvement.continualPage.edit') : t('modules.improvement.continualPage.newDetailed')}
@@ -158,7 +167,7 @@ const ImprovementContinualPage = () => {
           </thead>
           <tbody className="divide-y divide-gray-700/30">
             {items.length === 0 ? (
-              <tr><td colSpan={7} className="px-6 py-8 text-center text-gray-400">{t('modules.improvement.continualPage.empty')}</td></tr>
+              <CrudEmptyState colSpan={7} message={t('modules.improvement.continualPage.empty')} />
             ) : items.map(item => (
               <tr key={item.id} className="hover:bg-gray-800/30">
                 <td className="px-6 py-4 text-sm font-mono text-blue-400">{item.initiative_number}</td>

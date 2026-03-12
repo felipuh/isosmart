@@ -2,6 +2,9 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import { useI18n } from '../../../context/I18nContext';
 import Modal from '../../../components/Common/Modal';
+import CrudErrorBanner from '../../../components/Common/CrudErrorBanner';
+import CrudPageHeader from '../../../components/Common/CrudPageHeader';
+import CrudEmptyState from '../../../components/Common/CrudEmptyState';
 import {
   getIndicators,
   getMeasurements,
@@ -31,6 +34,7 @@ const MeasurementsPage = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [showForm, setShowForm] = useState(false);
+  const [error, setError] = useState('');
 
   const statusLabels = useMemo(() => ({
     on_target: t('modules.performance.measurementsPage.statuses.onTarget'),
@@ -49,6 +53,7 @@ const MeasurementsPage = () => {
   const loadData = useCallback(async () => {
     try {
       setLoading(true);
+      setError('');
       const [indicatorsData, measurementsData] = await Promise.all([
         getIndicators({ organization_id: orgId }),
         getMeasurements({ organization_id: orgId })
@@ -57,10 +62,11 @@ const MeasurementsPage = () => {
       setItems(normalizeList(measurementsData));
     } catch (error) {
       console.error('Error loading measurements:', error);
+      setError(t('common.messages.errorTryAgain'));
     } finally {
       setLoading(false);
     }
-  }, [orgId]);
+  }, [orgId, t]);
 
   useEffect(() => {
     if (orgId) {
@@ -81,6 +87,7 @@ const MeasurementsPage = () => {
     event.preventDefault();
     try {
       setSaving(true);
+      setError('');
       const payload = {
         ...form,
         organization_id: orgId,
@@ -98,6 +105,7 @@ const MeasurementsPage = () => {
       setShowForm(false);
     } catch (error) {
       console.error('Error saving measurement:', error);
+      setError(t('common.messages.errorTryAgain'));
     } finally {
       setSaving(false);
     }
@@ -119,10 +127,12 @@ const MeasurementsPage = () => {
   const handleDelete = async (id) => {
     if (!confirm(t('modules.performance.measurementsPage.deleteConfirm'))) return;
     try {
+      setError('');
       await deleteMeasurement(id);
       await loadData();
     } catch (error) {
       console.error('Error deleting measurement:', error);
+      setError(t('common.messages.errorTryAgain'));
     }
   };
 
@@ -158,16 +168,13 @@ const MeasurementsPage = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">{t('modules.performance.measurementsPage.title')}</h1>
-        <button
-          type="button"
-          onClick={openForm}
-          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
-        >
-          {t('modules.performance.measurementsPage.new')}
-        </button>
-      </div>
+      <CrudPageHeader
+        title={t('modules.performance.measurementsPage.title')}
+        actionLabel={t('modules.performance.measurementsPage.new')}
+        onAction={openForm}
+      />
+
+      <CrudErrorBanner message={error} onClose={() => setError('')} />
 
       <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg overflow-hidden">
         <table className="w-full">
@@ -199,7 +206,7 @@ const MeasurementsPage = () => {
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('modules.performance.measurementsPage.empty')}</div>}
+        {items.length === 0 && <CrudEmptyState message={t('modules.performance.measurementsPage.empty')} />}
       </div>
 
       <Modal

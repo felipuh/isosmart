@@ -2,6 +2,9 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import { useI18n } from '../../../context/I18nContext';
 import Modal from '../../../components/Common/Modal';
+import CrudErrorBanner from '../../../components/Common/CrudErrorBanner';
+import CrudPageHeader from '../../../components/Common/CrudPageHeader';
+import CrudEmptyState from '../../../components/Common/CrudEmptyState';
 import {
   getAudits,
   getFindings,
@@ -33,6 +36,7 @@ const FindingsPage = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [showForm, setShowForm] = useState(false);
+  const [error, setError] = useState('');
 
   const findingTypeLabels = useMemo(() => ({
     nc_major: t('modules.performance.findingsPage.types.ncMajor'),
@@ -60,6 +64,7 @@ const FindingsPage = () => {
   const loadData = useCallback(async () => {
     try {
       setLoading(true);
+      setError('');
       const [auditsData, findingsData] = await Promise.all([
         getAudits({ organization_id: orgId }),
         getFindings({ organization_id: orgId })
@@ -68,10 +73,11 @@ const FindingsPage = () => {
       setItems(normalizeList(findingsData));
     } catch (error) {
       console.error('Error loading findings:', error);
+      setError(t('common.messages.errorTryAgain'));
     } finally {
       setLoading(false);
     }
-  }, [orgId]);
+  }, [orgId, t]);
 
   useEffect(() => {
     if (orgId) {
@@ -83,6 +89,7 @@ const FindingsPage = () => {
     event.preventDefault();
     try {
       setSaving(true);
+      setError('');
       const payload = {
         ...form,
         organization_id: orgId,
@@ -98,6 +105,7 @@ const FindingsPage = () => {
       setShowForm(false);
     } catch (error) {
       console.error('Error saving finding:', error);
+      setError(t('common.messages.errorTryAgain'));
     } finally {
       setSaving(false);
     }
@@ -121,10 +129,12 @@ const FindingsPage = () => {
   const handleDelete = async (id) => {
     if (!confirm(t('modules.performance.findingsPage.deleteConfirm'))) return;
     try {
+      setError('');
       await deleteFinding(id);
       await loadData();
     } catch (error) {
       console.error('Error deleting finding:', error);
+      setError(t('common.messages.errorTryAgain'));
     }
   };
 
@@ -162,16 +172,13 @@ const FindingsPage = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">{t('modules.performance.findingsPage.title')}</h1>
-        <button
-          type="button"
-          onClick={openForm}
-          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
-        >
-          {t('modules.performance.findingsPage.new')}
-        </button>
-      </div>
+      <CrudPageHeader
+        title={t('modules.performance.findingsPage.title')}
+        actionLabel={t('modules.performance.findingsPage.new')}
+        onAction={openForm}
+      />
+
+      <CrudErrorBanner message={error} onClose={() => setError('')} />
 
       <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg overflow-hidden">
         <table className="w-full">
@@ -201,7 +208,7 @@ const FindingsPage = () => {
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('modules.performance.findingsPage.empty')}</div>}
+        {items.length === 0 && <CrudEmptyState message={t('modules.performance.findingsPage.empty')} />}
       </div>
 
       <Modal

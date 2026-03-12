@@ -2,6 +2,9 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import { useI18n } from '../../../context/I18nContext';
 import Modal from '../../../components/Common/Modal';
+import CrudErrorBanner from '../../../components/Common/CrudErrorBanner';
+import CrudPageHeader from '../../../components/Common/CrudPageHeader';
+import CrudEmptyState from '../../../components/Common/CrudEmptyState';
 import {
   getAudits,
   createAudit,
@@ -32,6 +35,7 @@ const AuditsPage = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [showForm, setShowForm] = useState(false);
+  const [error, setError] = useState('');
 
   const auditTypeLabels = useMemo(() => ({
     system: t('modules.performance.auditsPage.types.system'),
@@ -51,14 +55,16 @@ const AuditsPage = () => {
   const loadAudits = useCallback(async () => {
     try {
       setLoading(true);
+      setError('');
       const data = await getAudits({ organization_id: orgId });
       setItems(normalizeList(data));
     } catch (error) {
       console.error('Error loading audits:', error);
+      setError(t('common.messages.errorTryAgain'));
     } finally {
       setLoading(false);
     }
-  }, [orgId]);
+  }, [orgId, t]);
 
   useEffect(() => {
     if (orgId) {
@@ -70,6 +76,7 @@ const AuditsPage = () => {
     event.preventDefault();
     try {
       setSaving(true);
+      setError('');
       const payload = { ...form, organization_id: orgId, organization_name: orgName };
       if (editingId) {
         await updateAudit(editingId, payload);
@@ -81,6 +88,7 @@ const AuditsPage = () => {
       setShowForm(false);
     } catch (error) {
       console.error('Error saving audit:', error);
+      setError(t('common.messages.errorTryAgain'));
     } finally {
       setSaving(false);
     }
@@ -104,10 +112,12 @@ const AuditsPage = () => {
   const handleDelete = async (id) => {
     if (!confirm(t('modules.performance.auditsPage.deleteConfirm'))) return;
     try {
+      setError('');
       await deleteAudit(id);
       await loadAudits();
     } catch (error) {
       console.error('Error deleting audit:', error);
+      setError(t('common.messages.errorTryAgain'));
     }
   };
 
@@ -145,16 +155,13 @@ const AuditsPage = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">{t('modules.performance.auditsPage.title')}</h1>
-        <button
-          type="button"
-          onClick={openForm}
-          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
-        >
-          {t('modules.performance.auditsPage.new')}
-        </button>
-      </div>
+      <CrudPageHeader
+        title={t('modules.performance.auditsPage.title')}
+        actionLabel={t('modules.performance.auditsPage.new')}
+        onAction={openForm}
+      />
+
+      <CrudErrorBanner message={error} onClose={() => setError('')} />
 
       <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg overflow-hidden">
         <table className="w-full">
@@ -184,7 +191,7 @@ const AuditsPage = () => {
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="text-center py-8 text-gray-400">{t('modules.performance.auditsPage.empty')}</div>}
+        {items.length === 0 && <CrudEmptyState message={t('modules.performance.auditsPage.empty')} />}
       </div>
 
       <Modal

@@ -3,6 +3,9 @@ import { useAuth } from '../../../context/AuthContext';
 import { useI18n } from '../../../context/I18nContext';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Modal from '../../../components/Common/Modal';
+import CrudErrorBanner from '../../../components/Common/CrudErrorBanner';
+import CrudPageHeader from '../../../components/Common/CrudPageHeader';
+import CrudEmptyState from '../../../components/Common/CrudEmptyState';
 import { getNonconformities, createNonconformity, updateNonconformity, deleteNonconformity } from '../api/improvementApi';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
@@ -26,6 +29,7 @@ const ImprovementNonconformitiesPage = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [showForm, setShowForm] = useState(false);
+  const [error, setError] = useState('');
 
   const sourceLabels = useMemo(() => ({
     internal_audit: t('modules.improvement.nonconformitiesPage.sources.internalAudit'),
@@ -54,10 +58,10 @@ const ImprovementNonconformitiesPage = () => {
   }), [t]);
 
   const loadData = useCallback(async () => {
-    try { setLoading(true); const data = await getNonconformities({ organization_id: orgId }); setItems(normalizeList(data)); }
-    catch (error) { console.error('Error:', error); }
+    try { setLoading(true); setError(''); const data = await getNonconformities({ organization_id: orgId }); setItems(normalizeList(data)); }
+    catch (error) { console.error('Error:', error); setError(t('common.messages.errorTryAgain')); }
     finally { setLoading(false); }
-  }, [orgId]);
+  }, [orgId, t]);
 
   useEffect(() => { if (orgId) loadData(); }, [orgId, loadData]);
   useEffect(() => { if (location.pathname.endsWith('/new')) { resetForm(); setShowForm(true); } }, [location.pathname]);
@@ -66,11 +70,12 @@ const ImprovementNonconformitiesPage = () => {
     e.preventDefault();
     try {
       setSaving(true);
+      setError('');
       const payload = { ...form, organization_id: orgId, organization_name: orgName, detected_by: user?.id || null, responsible: user?.id || null };
       if (editingId) { await updateNonconformity(editingId, payload); } else { await createNonconformity(payload); }
       resetForm(); await loadData(); setShowForm(false);
       if (location.pathname.endsWith('/new')) navigate(location.pathname.replace(/\/new$/, ''), { replace: true });
-    } catch (error) { console.error('Error:', error); } finally { setSaving(false); }
+    } catch (error) { console.error('Error:', error); setError(t('common.messages.errorTryAgain')); } finally { setSaving(false); }
   };
 
   const handleEdit = (item) => {
@@ -78,7 +83,7 @@ const ImprovementNonconformitiesPage = () => {
     setEditingId(item.id); setShowForm(true);
   };
 
-  const handleDelete = async (id) => { if (!confirm(t('modules.improvement.nonconformitiesPage.deleteConfirm'))) return; try { await deleteNonconformity(id); await loadData(); } catch (error) { console.error('Error:', error); } };
+  const handleDelete = async (id) => { if (!confirm(t('modules.improvement.nonconformitiesPage.deleteConfirm'))) return; try { setError(''); await deleteNonconformity(id); await loadData(); } catch (error) { console.error('Error:', error); setError(t('common.messages.errorTryAgain')); } };
   const resetForm = () => { setForm(initialForm); setEditingId(null); };
   const openForm = () => { resetForm(); setShowForm(true); };
   const closeForm = () => { resetForm(); setShowForm(false); if (location.pathname.endsWith('/new')) navigate(location.pathname.replace(/\/new$/, ''), { replace: true }); };
@@ -87,13 +92,14 @@ const ImprovementNonconformitiesPage = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-white">{t('modules.improvement.nonconformitiesPage.title')}</h1>
-          <p className="text-gray-400 mt-1">{t('modules.improvement.nonconformitiesPage.isoClause')}</p>
-        </div>
-        <button type="button" onClick={openForm} className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">{t('modules.improvement.nonconformitiesPage.new')}</button>
-      </div>
+      <CrudPageHeader
+        title={t('modules.improvement.nonconformitiesPage.title')}
+        subtitle={t('modules.improvement.nonconformitiesPage.isoClause')}
+        actionLabel={t('modules.improvement.nonconformitiesPage.new')}
+        onAction={openForm}
+      />
+
+      <CrudErrorBanner message={error} onClose={() => setError('')} />
 
       <Modal
         title={editingId ? t('modules.improvement.nonconformitiesPage.edit') : t('modules.improvement.nonconformitiesPage.new')}
@@ -176,7 +182,7 @@ const ImprovementNonconformitiesPage = () => {
           </thead>
           <tbody className="divide-y divide-gray-700/30">
             {items.length === 0 ? (
-              <tr><td colSpan={6} className="px-6 py-8 text-center text-gray-400">{t('modules.improvement.nonconformitiesPage.empty')}</td></tr>
+              <CrudEmptyState colSpan={6} message={t('modules.improvement.nonconformitiesPage.empty')} />
             ) : items.map(item => (
               <tr key={item.id} className="hover:bg-gray-800/30">
                 <td className="px-6 py-4 text-sm font-mono text-blue-400">{item.nc_number}</td>

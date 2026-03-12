@@ -3,6 +3,9 @@ import { useAuth } from '../../../context/AuthContext';
 import { useI18n } from '../../../context/I18nContext';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Modal from '../../../components/Common/Modal';
+import CrudErrorBanner from '../../../components/Common/CrudErrorBanner';
+import CrudPageHeader from '../../../components/Common/CrudPageHeader';
+import CrudEmptyState from '../../../components/Common/CrudEmptyState';
 import { getCorrectiveActions, createCorrectiveAction, updateCorrectiveAction, deleteCorrectiveAction, getNonconformities } from '../api/improvementApi';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
@@ -24,6 +27,7 @@ const ImprovementCorrectiveActionsPage = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [showForm, setShowForm] = useState(false);
+  const [error, setError] = useState('');
 
   const actionTypeLabels = useMemo(() => ({
     corrective: t('modules.improvement.correctiveActionsPage.types.corrective'),
@@ -44,11 +48,12 @@ const ImprovementCorrectiveActionsPage = () => {
   const loadData = useCallback(async () => {
     try {
       setLoading(true);
+      setError('');
       const [actionsData, ncsData] = await Promise.all([getCorrectiveActions({ organization_id: orgId }), getNonconformities({ organization_id: orgId })]);
       setItems(normalizeList(actionsData));
       setNcs(normalizeList(ncsData));
-    } catch (error) { console.error('Error:', error); } finally { setLoading(false); }
-  }, [orgId]);
+    } catch (error) { console.error('Error:', error); setError(t('common.messages.errorTryAgain')); } finally { setLoading(false); }
+  }, [orgId, t]);
 
   useEffect(() => { if (orgId) loadData(); }, [orgId, loadData]);
   useEffect(() => { if (location.pathname.endsWith('/new')) { resetForm(); setShowForm(true); } }, [location.pathname]);
@@ -57,11 +62,12 @@ const ImprovementCorrectiveActionsPage = () => {
     e.preventDefault();
     try {
       setSaving(true);
+      setError('');
       const payload = { ...form, organization_id: orgId, responsible: user?.id || null, completion_percentage: Number(form.completion_percentage), nonconformity: form.nonconformity || null };
       if (editingId) { await updateCorrectiveAction(editingId, payload); } else { await createCorrectiveAction(payload); }
       resetForm(); await loadData(); setShowForm(false);
       if (location.pathname.endsWith('/new')) navigate(location.pathname.replace(/\/new$/, ''), { replace: true });
-    } catch (error) { console.error('Error:', error); } finally { setSaving(false); }
+    } catch (error) { console.error('Error:', error); setError(t('common.messages.errorTryAgain')); } finally { setSaving(false); }
   };
 
   const handleEdit = (item) => {
@@ -69,7 +75,7 @@ const ImprovementCorrectiveActionsPage = () => {
     setEditingId(item.id); setShowForm(true);
   };
 
-  const handleDelete = async (id) => { if (!confirm(t('modules.improvement.correctiveActionsPage.deleteConfirm'))) return; try { await deleteCorrectiveAction(id); await loadData(); } catch (error) { console.error('Error:', error); } };
+  const handleDelete = async (id) => { if (!confirm(t('modules.improvement.correctiveActionsPage.deleteConfirm'))) return; try { setError(''); await deleteCorrectiveAction(id); await loadData(); } catch (error) { console.error('Error:', error); setError(t('common.messages.errorTryAgain')); } };
   const resetForm = () => { setForm(initialForm); setEditingId(null); };
   const openForm = () => { resetForm(); setShowForm(true); };
   const closeForm = () => { resetForm(); setShowForm(false); if (location.pathname.endsWith('/new')) navigate(location.pathname.replace(/\/new$/, ''), { replace: true }); };
@@ -78,10 +84,14 @@ const ImprovementCorrectiveActionsPage = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div><h1 className="text-3xl font-bold text-white">{t('modules.improvement.correctiveActionsPage.title')}</h1><p className="text-gray-400 mt-1">{t('modules.improvement.correctiveActionsPage.isoClause')}</p></div>
-        <button type="button" onClick={openForm} className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">{t('modules.improvement.correctiveActionsPage.new')}</button>
-      </div>
+      <CrudPageHeader
+        title={t('modules.improvement.correctiveActionsPage.title')}
+        subtitle={t('modules.improvement.correctiveActionsPage.isoClause')}
+        actionLabel={t('modules.improvement.correctiveActionsPage.new')}
+        onAction={openForm}
+      />
+
+      <CrudErrorBanner message={error} onClose={() => setError('')} />
 
       <Modal
         title={editingId ? t('modules.improvement.correctiveActionsPage.edit') : t('modules.improvement.correctiveActionsPage.new')}
@@ -146,7 +156,7 @@ const ImprovementCorrectiveActionsPage = () => {
           </thead>
           <tbody className="divide-y divide-gray-700/30">
             {items.length === 0 ? (
-              <tr><td colSpan={6} className="px-6 py-8 text-center text-gray-400">{t('modules.improvement.correctiveActionsPage.empty')}</td></tr>
+              <CrudEmptyState colSpan={6} message={t('modules.improvement.correctiveActionsPage.empty')} />
             ) : items.map(item => (
               <tr key={item.id} className="hover:bg-gray-800/30">
                 <td className="px-6 py-4 text-sm font-mono text-blue-400">{item.action_number}</td>
