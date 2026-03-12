@@ -1,6 +1,6 @@
 # Comparacion documento vs implementacion
 
-Fecha: 2026-03-11
+Fecha: 2026-03-12
 Base documental comparada:
 - `docs/internal/manual-operacion-por-roles.md`
 - `docs/internal/arquitectura-integraciones-multitenancy.md`
@@ -8,8 +8,8 @@ Base documental comparada:
 
 ## Resumen ejecutivo
 - Cobertura funcional por modulo: alta.
-- Riesgo principal detectado: inconsistencia de estandar multitenant en modulos AI historicos.
-- Estado tras correcciones de esta iteracion: se reducen brechas criticas en `planning`, `resources`, `sca`, compatibilidad de documentos y navegacion de operaciones.
+- Riesgo principal actual: deuda tecnica acotada en endpoints legacy de settings (sin brecha critica activa).
+- Estado tras correcciones de esta iteracion: brechas B1-B7 cerradas, onboarding dashboard estabilizado en primer uso (sin 404 por ausencia de snapshot).
 
 ## Matriz de brechas
 
@@ -71,3 +71,13 @@ Base documental comparada:
 - Se cerraron todas las brechas operativas y de seguridad identificadas en la auditoria inicial.
 - B3 (SIE tenant), B6 (ASB/SPM tenant) y B7 (settings endpoints) completadas en sesiones posteriores.
 - Todos los modulos usan `organization_id` estandar con `OrganizationScopedViewSetMixin` o patron equivalente.
+
+## Brechas residuales no bloqueantes
+1. Documentacion: algunos textos historicos aun mencionan estados tenant antiguos en documentos no operativos.
+2. Operacion local: archivos de logs y backups locales pueden ensuciar `git status` durante pruebas manuales.
+3. Settings legacy: existen acciones fuera del mixin estandar, aunque actualmente con validaciones de scope y permisos.
+
+## Propuesta de implementacion incremental (sin romper)
+1. Lote documental: normalizar wording restante en docs internas para eliminar estados ya resueltos.
+2. Lote de higiene operativa: formalizar exclusiones de artefactos locales (logs/backups temporales) para mantener arbol limpio en validaciones.
+3. Lote de hardening settings: converger acciones legacy de settings al patron comun de scoping para reducir variabilidad futura.

@@ -1,6 +1,6 @@
 # Mapeo de modulos actuales clave
 
-Fecha: 2026-03-09
+Fecha: 2026-03-12
 Objetivo: Inventariar el flujo real `ruta UI -> servicio frontend -> endpoint backend` y clasificar el estado de scoping multitenant por modulo.
 
 ## Fuentes revisadas
@@ -57,19 +57,19 @@ Objetivo: Inventariar el flujo real `ruta UI -> servicio frontend -> endpoint ba
 - Rutas UI: `/stakeholders`.
 - Servicio frontend: `frontend/src/services/stakeholderService.js` (`/sie/stakeholders/*` y aliases `/stakeholders/*`, `/change-logs/*`).
 - Backend: `backend/ai_modules/sie/urls.py`, `backend/ai_modules/sie/views.py`.
-- Estado tenant: medio. `IsAuthenticated` activo y filtrado por organizacion activa en querysets, pero basado en campo textual `organization` (sin FK/`organization_id`).
+- Estado tenant: fuerte. `IsAuthenticated` activo, `organization_id` estandar en `StakeholderProfile`, filtrado por organizacion activa en todos los viewsets y escritura forzada de `organization_id` en create/update.
 
 ### 5) Alcance (ASB)
 - Rutas UI: `/scope`.
 - Servicio frontend: `frontend/src/services/scopeService.js` (`/scope/scopes/*`, `/scope/generate`, `/scope/statement`, `/scope/audit`).
 - Backend: `backend/ai_modules/asb/urls.py`, `backend/ai_modules/asb/views.py`.
-- Estado tenant: debil. No hay scoping estricto por organizacion en ViewSets/FBVs.
+- Estado tenant: fuerte. ViewSets con `OrganizationScopedViewSetMixin`, modelo con `organization_id`, y FBVs con `_resolve_scoped_org_id()` y validaciones 400/403 por consistencia de token/organizacion.
 
 ### 6) Procesos (SPM)
 - Rutas UI: `/processes`.
 - Servicio frontend: `frontend/src/services/processService.js` (`/processes/maps/*`, `/processes/analyze`, `/processes/interactions`).
 - Backend: `backend/ai_modules/spm/urls.py`, `backend/ai_modules/spm/views.py`.
-- Estado tenant: debil. No hay filtro tenant estricto en `get_queryset()`.
+- Estado tenant: fuerte. ViewSets con `OrganizationScopedViewSetMixin`, modelo con `organization_id`, y enforcement de organizacion activa en endpoints de analisis e interacciones.
 
 ### 7) Documentos (core)
 - Rutas UI: `/documents`.
@@ -130,7 +130,7 @@ Objetivo: Inventariar el flujo real `ruta UI -> servicio frontend -> endpoint ba
 - Rutas UI: `/settings` (protegida por roles).
 - Servicio frontend: `frontend/src/services/settingsService.js`.
 - Backend: `OrganizationViewSet`, `UserManagementViewSet`, `SettingsViewSet`, `BillingViewSet`, `ISOClauseConfigViewSet`, `AuditLogViewSet`, `export_data` en `backend/core/views.py`.
-- Estado tenant: mixto. Hay resolucion de organizacion y checks por rol/permiso en endpoints sensibles, pero no todo usa el mixin estandar.
+- Estado tenant: medio-fuerte. Endpoints sensibles usan resolucion de organizacion activa, validaciones de permisos/roles y filtrado por organizaciones permitidas; persisten acciones legacy fuera del mixin estandar, aunque con enforcement aplicado.
 
 ## Hallazgos transversales (priorizados)
 1. Alto (resuelto 2026-03-11): `asb/spm` migrados a `organization_id` estandar + `OrganizationScopedViewSetMixin` + migraciones con backfill (commit d6324df).
@@ -138,8 +138,9 @@ Objetivo: Inventariar el flujo real `ruta UI -> servicio frontend -> endpoint ba
 3. Medio (resuelto): upload de documentos alineado a `POST /documents/`.
 4. Medio (resuelto): navegacion lateral incluye acceso a `/operations`.
 5. Bajo (resuelto 2026-03-11): `settingsService` alineado a endpoints reales; historial de backups implementado con `GET /settings/backups/` y persistencia en `AuditLog`.
+6. Operativo (sin brecha critica abierta): onboarding dashboard devuelve payload vacio con `200` cuando no hay snapshot, evitando ruido 404 en primer uso.
 
 ## Criterio de cierre del hito 1
 - Completado el inventario de modulos y conexiones UI/API/backend.
-- Identificados modulos con scoping fuerte vs parcial/debil.
-- Preparado insumo directo para el siguiente hito: comparar documento funcional esperado vs implementacion real y cuantificar brechas.
+- Reevaluados estados tenant tras remediaciones B1-B7 y actualizada la matriz a estado real 2026-03-12.
+- Sin brechas criticas abiertas en scoping multitenant ni contratos frontend/backend prioritarios.

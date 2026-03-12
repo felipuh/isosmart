@@ -11,6 +11,8 @@ Uso:
 from authentication.models import User, UserProfile
 from core.models import Organization
 
+INITIAL_ADMIN_PASSWORD = 'Admin@123456'
+
 # Verificar si ya existe un usuario admin
 if User.objects.filter(email='admin@isosmart.local').exists():
     print("✅ El usuario admin ya existe")
@@ -39,7 +41,7 @@ else:
     user = User.objects.create_user(
         username='admin_isosmart',  # Username requerido por la tabla auth_user
         email='admin@isosmart.local',
-        password='Admin123!',  # ⚠️ Cambiar después del primer login
+        password=INITIAL_ADMIN_PASSWORD,  # ⚠️ Cambiar después del primer login
         first_name='Administrador',
         last_name='Sistema',
         is_active=True,
@@ -62,7 +64,7 @@ else:
     print("CREDENCIALES DE ACCESO INICIAL")
     print("="*50)
     print(f"Email: admin@isosmart.local")
-    print(f"Password: Admin123!")
+    print(f"Password: {INITIAL_ADMIN_PASSWORD}")
     print("="*50)
     print("⚠️  Cambia la contraseña después del primer login!")
     print("="*50)
