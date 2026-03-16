@@ -4,6 +4,7 @@ from rest_framework import viewsets, status
 from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from rest_framework.permissions import IsAuthenticated
+from django.conf import settings as django_settings
 from django.http import FileResponse, Http404
 from django.utils.decorators import method_decorator
 from django.utils import timezone
@@ -22,23 +23,65 @@ import os
 
 logger = logging.getLogger(__name__)
 
-# Commercial rollout policy: only ISO 9001 is enabled for now.
-PRODUCTION_ENABLED_STANDARDS = ('ISO9001_2015',)
+# Commercial rollout policy (configurable):
+# - settings.COMMERCIAL_ENABLED_STANDARDS: global list
+# - settings.COMMERCIAL_ENABLED_STANDARDS_BY_ORG: per-org overrides
+STANDARD_CATALOG = (
+    'ISO9001_2015',
+    'ISO42001_2023',
+    'ISO27001_2022',
+    'ISO14001_2015',
+    'ISO45001_2018',
+)
 
 
-def _normalize_enabled_standards(raw_values):
+def _to_standard_candidates(raw_values):
     if isinstance(raw_values, (list, tuple, set)):
-        candidates = [str(value).strip() for value in raw_values if value not in (None, '')]
-    else:
-        candidates = []
+        return [str(value).strip() for value in raw_values if value not in (None, '')]
+    return []
+
+
+def _resolve_commercially_available_standards(organization_id=None):
+    global_candidates = _to_standard_candidates(
+        getattr(django_settings, 'COMMERCIAL_ENABLED_STANDARDS', ['ISO9001_2015'])
+    )
+    if not global_candidates:
+        global_candidates = ['ISO9001_2015']
+
+    overrides = getattr(django_settings, 'COMMERCIAL_ENABLED_STANDARDS_BY_ORG', {}) or {}
+    override_candidates = None
+    if organization_id is not None:
+        override_candidates = overrides.get(organization_id)
+        if override_candidates is None:
+            override_candidates = overrides.get(str(organization_id))
+
+    source_candidates = _to_standard_candidates(override_candidates) if override_candidates is not None else global_candidates
+
+    available = []
+    for code in source_candidates:
+        if code in STANDARD_CATALOG and code not in available:
+            available.append(code)
+
+    if 'ISO9001_2015' not in available:
+        available.insert(0, 'ISO9001_2015')
+
+    return available
+
+
+def _normalize_enabled_standards(raw_values, organization_id=None):
+    allowed = set(_resolve_commercially_available_standards(organization_id))
+    candidates = _to_standard_candidates(raw_values)
 
     normalized = []
     for code in candidates:
-        if code in PRODUCTION_ENABLED_STANDARDS and code not in normalized:
+        if code in allowed and code not in normalized:
             normalized.append(code)
 
-    if 'ISO9001_2015' not in normalized:
+    if 'ISO9001_2015' in allowed and 'ISO9001_2015' not in normalized:
         normalized.insert(0, 'ISO9001_2015')
+
+    if not normalized:
+        normalized = _resolve_commercially_available_standards(organization_id)[:1]
 
     return normalized
 
@@ -1031,7 +1074,7 @@ class SettingsViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        enabled_standards = _normalize_enabled_standards(enabled_standards)
+        enabled_standards = _normalize_enabled_standards(enabled_standards, org.id)
         
         settings.enabled_standards = enabled_standards
         settings.save()
@@ -1087,19 +1130,22 @@ class SettingsViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def onboarding_status(self, request):
         org = self._resolve_org(request)
+        commercially_available_standards = _resolve_commercially_available_standards(org.id)
         settings = OrganizationSettings.objects.filter(organization=org).first()
         if settings is None:
             return Response({
                 'organization_id': org.id,
                 'organization_name': org.name,
                 'onboarding_completed': False,
-                'enabled_standards': _normalize_enabled_standards([]),
+                'enabled_standards': _normalize_enabled_standards([], org.id),
+                'commercially_available_standards': commercially_available_standards,
             })
         return Response({
             'organization_id': org.id,
             'organization_name': org.name,
             'onboarding_completed': settings.onboarding_completed,
-            'enabled_standards': _normalize_enabled_standards(settings.enabled_standards),
+            'enabled_standards': _normalize_enabled_standards(settings.enabled_standards, org.id),
+            'commercially_available_standards': commercially_available_standards,
         })
 
     @action(detail=False, methods=['post'])
@@ -1110,7 +1156,8 @@ class SettingsViewSet(viewsets.ModelViewSet):
 
         # Obtener y guardar estándares ISO habilitados
         enabled_standards = _normalize_enabled_standards(
-            request.data.get('enabled_standards') or settings.enabled_standards
+            request.data.get('enabled_standards') or settings.enabled_standards,
+            org.id,
         )
         settings.enabled_standards = enabled_standards
         
@@ -1649,7 +1696,7 @@ class ISOClauseConfigViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['post'])
     def initialize_standards(self, request):
         org = self._resolve_org(request)
-        standard_codes = _normalize_enabled_standards(request.data.get('standards'))
+        standard_codes = _normalize_enabled_standards(request.data.get('standards'), org.id)
         clause_map = self._standard_clauses_map()
 
         created_count = 0
@@ -1670,7 +1717,8 @@ class ISOClauseConfigViewSet(viewsets.ModelViewSet):
 
         settings, _ = OrganizationSettings.objects.get_or_create(organization=org)
         settings.enabled_standards = _normalize_enabled_standards(
-            touched_standards or settings.enabled_standards
+            touched_standards or settings.enabled_standards,
+            org.id,
         )
         settings.save(update_fields=['enabled_standards'])
 

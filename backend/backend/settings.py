@@ -84,6 +84,15 @@ MODULE_URL_PATTERNS = {
     'LEAD': [r'^/api/leadership/'],
 }
 
+# Comercializacion de estandares ISO:
+# - Fase inicial: solo ISO9001_2015
+# - Para habilitar nuevas normas por organizacion, usar COMMERCIAL_ENABLED_STANDARDS_BY_ORG
+COMMERCIAL_ENABLED_STANDARDS = ['ISO9001_2015']
+COMMERCIAL_ENABLED_STANDARDS_BY_ORG = {
+    # Ejemplo futuro:
+    # 3: ['ISO9001_2015', 'ISO27001_2022'],
+}
+
 # Configuración de REST Framework
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [

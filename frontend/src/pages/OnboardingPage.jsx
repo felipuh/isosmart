@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ArrowLeft,
@@ -17,6 +17,10 @@ import settingsService from '../services/settingsService';
 
 const STANDARD_OPTIONS = [
   { code: 'ISO9001_2015', required: true },
+  { code: 'ISO42001_2023' },
+  { code: 'ISO27001_2022' },
+  { code: 'ISO14001_2015' },
+  { code: 'ISO45001_2018' },
 ];
 
 const ROLE_OPTIONS = ['owner_founder', 'general_manager', 'operations_manager', 'quality_manager', 'external_consultant', 'other'];
@@ -43,12 +47,33 @@ const splitStandardLabel = (label) => {
   };
 };
 
+const normalizeAvailableStandards = (standards) => {
+  const catalogCodes = new Set(STANDARD_OPTIONS.map((option) => option.code));
+  const input = Array.isArray(standards) ? standards : [];
+  const filtered = [];
+
+  input.forEach((code) => {
+    const normalizedCode = String(code || '').trim();
+    if (!normalizedCode || !catalogCodes.has(normalizedCode) || filtered.includes(normalizedCode)) {
+      return;
+    }
+    filtered.push(normalizedCode);
+  });
+
+  if (!filtered.includes('ISO9001_2015')) {
+    filtered.unshift('ISO9001_2015');
+  }
+
+  return filtered;
+};
+
 const OnboardingPage = () => {
   const navigate = useNavigate();
   const { currentOrganization } = useAuth();
   const { language, setLanguage, t } = useI18n();
 
   const [enabledStandards, setEnabledStandards] = useState(['ISO9001_2015']);
+  const [availableStandards, setAvailableStandards] = useState(['ISO9001_2015']);
   const [onboardingProfile, setOnboardingProfile] = useState({
     primary_role: 'quality_manager',
     iso_expertise: 'intermediate',
@@ -67,12 +92,58 @@ const OnboardingPage = () => {
 
   const organizationId = currentOrganization?.id;
 
+  const standardOptions = useMemo(
+    () => STANDARD_OPTIONS.filter((option) => availableStandards.includes(option.code)),
+    [availableStandards],
+  );
+
   const selectedStandards = useMemo(() => {
     if (!enabledStandards.includes('ISO9001_2015')) {
       return ['ISO9001_2015', ...enabledStandards];
     }
     return enabledStandards;
   }, [enabledStandards]);
+
+  useEffect(() => {
+    let mounted = true;
+
+    const loadAvailableStandards = async () => {
+      if (!organizationId) {
+        if (mounted) {
+          setAvailableStandards(['ISO9001_2015']);
+          setEnabledStandards(['ISO9001_2015']);
+        }
+        return;
+      }
+
+      try {
+        const standards = await settingsService.getCommerciallyAvailableStandards(organizationId);
+        const normalized = normalizeAvailableStandards(standards);
+
+        if (!mounted) return;
+
+        setAvailableStandards(normalized);
+        setEnabledStandards((previous) => {
+          const allowed = new Set(normalized);
+          const next = previous.filter((code) => allowed.has(code));
+          if (!next.includes('ISO9001_2015')) {
+            next.unshift('ISO9001_2015');
+          }
+          return Array.from(new Set(next));
+        });
+      } catch {
+        if (!mounted) return;
+        setAvailableStandards(['ISO9001_2015']);
+        setEnabledStandards(['ISO9001_2015']);
+      }
+    };
+
+    loadAvailableStandards();
+
+    return () => {
+      mounted = false;
+    };
+  }, [organizationId]);
 
   const stepDefinitions = [
     {
@@ -243,8 +314,8 @@ const OnboardingPage = () => {
               </div>
             </div>
 
-            <div className="mt-5 grid gap-3 lg:grid-cols-2">
-              {STANDARD_OPTIONS.map((standard) => {
+              <div className="mt-5 grid gap-3 lg:grid-cols-2">
+                {standardOptions.map((standard) => {
                 const checked = selectedStandards.includes(standard.code);
                 const standardLabel = t(`onboarding.standards.${standard.code}`);
                 const { title, description } = splitStandardLabel(standardLabel);

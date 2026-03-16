@@ -154,6 +154,15 @@ const settingsService = {
     return response.data;
   },
 
+  getCommerciallyAvailableStandards: async (organizationId) => {
+    const response = await api.get('/settings/onboarding_status/', { params: withOrg(organizationId) });
+    const standards = response.data?.commercially_available_standards;
+    if (Array.isArray(standards) && standards.length > 0) {
+      return standards;
+    }
+    return ['ISO9001_2015'];
+  },
+
   completeOnboarding: async (organizationId, payload) => {
     const response = await api.post('/settings/complete_onboarding/', {
       organization_id: organizationId,

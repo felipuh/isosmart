@@ -12,6 +12,7 @@ const ISOClausesSettings = () => {
   const { currentOrganization } = useAuth();
   const organizationId = currentOrganization?.id;
   const [selectedStandard, setSelectedStandard] = useState('ISO9001_2015');
+  const [availableStandards, setAvailableStandards] = useState(['ISO9001_2015']);
   const [clauses, setClauses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -39,6 +40,48 @@ const ISOClausesSettings = () => {
     '9': t('settings.iso.sectionNames.9'),
     '10': t('settings.iso.sectionNames.10'),
   };
+
+  useEffect(() => {
+    let mounted = true;
+
+    const loadAvailableStandards = async () => {
+      if (!organizationId) {
+        if (mounted) {
+          setAvailableStandards(['ISO9001_2015']);
+          setSelectedStandard('ISO9001_2015');
+        }
+        return;
+      }
+
+      try {
+        const standards = await settingsService.getCommerciallyAvailableStandards(organizationId);
+        const normalized = Array.isArray(standards) && standards.length > 0
+          ? Array.from(new Set(standards.map((code) => String(code || '').trim()).filter(Boolean)))
+          : ['ISO9001_2015'];
+
+        if (!normalized.includes('ISO9001_2015')) {
+          normalized.unshift('ISO9001_2015');
+        }
+
+        if (!mounted) return;
+
+        setAvailableStandards(normalized);
+        setSelectedStandard((previous) => (
+          normalized.includes(previous) ? previous : normalized[0]
+        ));
+      } catch {
+        if (!mounted) return;
+        setAvailableStandards(['ISO9001_2015']);
+        setSelectedStandard('ISO9001_2015');
+      }
+    };
+
+    loadAvailableStandards();
+
+    return () => {
+      mounted = false;
+    };
+  }, [organizationId]);
 
   const loadClauses = useCallback(async () => {
     try {
@@ -143,7 +186,11 @@ const ISOClausesSettings = () => {
             onChange={(event) => setSelectedStandard(event.target.value)}
             className="px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100"
           >
-            <option value="ISO9001_2015">{t('settings.iso.standards.ISO9001_2015')}</option>
+            {availableStandards.map((standardCode) => (
+              <option key={standardCode} value={standardCode}>
+                {t(`settings.iso.standards.${standardCode}`)}
+              </option>
+            ))}
           </select>
         
           {clauses.length === 0 && (

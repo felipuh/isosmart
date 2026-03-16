@@ -373,6 +373,41 @@ class SettingsBackupHistoryTests(TestCase):
         settings = OrganizationSettings.objects.get(organization=self.org_a)
         self.assertEqual(settings.enabled_standards, ['ISO9001_2015'])
 
+    def test_onboarding_status_exposes_commercially_available_standards(self):
+        response = self.client.get(reverse('settings-onboarding-status'), {'organization_id': self.org_a.id})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['commercially_available_standards'], ['ISO9001_2015'])
+
+    def test_update_standards_allows_org_specific_override(self):
+        with self.settings(
+            COMMERCIAL_ENABLED_STANDARDS=['ISO9001_2015'],
+            COMMERCIAL_ENABLED_STANDARDS_BY_ORG={
+                str(self.org_a.id): ['ISO9001_2015', 'ISO27001_2022'],
+            },
+        ):
+            response = self.client.post(
+                reverse('settings-update-standards'),
+                {
+                    'organization_id': self.org_a.id,
+                    'enabled_standards': ['ISO27001_2022'],
+                },
+                format='json',
+            )
+
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.data['enabled_standards'], ['ISO9001_2015', 'ISO27001_2022'])
+
+            status_response = self.client.get(
+                reverse('settings-onboarding-status'),
+                {'organization_id': self.org_a.id},
+            )
+            self.assertEqual(status_response.status_code, 200)
+            self.assertEqual(
+                status_response.data['commercially_available_standards'],
+                ['ISO9001_2015', 'ISO27001_2022'],
+            )
+
     def test_initialize_standards_enforces_iso9001_only(self):
         response = self.client.post(
             reverse('iso-clause-initialize-standards'),

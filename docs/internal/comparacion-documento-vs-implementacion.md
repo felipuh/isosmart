@@ -1,6 +1,6 @@
 # Comparacion documento vs implementacion
 
-Fecha: 2026-03-12
+Fecha: 2026-03-16
 Base documental comparada:
 - `docs/internal/manual-operacion-por-roles.md`
 - `docs/internal/arquitectura-integraciones-multitenancy.md`
@@ -9,7 +9,7 @@ Base documental comparada:
 ## Resumen ejecutivo
 - Cobertura funcional por modulo: alta.
 - Riesgo principal actual: deuda tecnica acotada en endpoints legacy de settings (sin brecha critica activa).
-- Estado tras correcciones de esta iteracion: brechas B1-B7 cerradas, onboarding dashboard estabilizado en primer uso (sin 404 por ausencia de snapshot).
+- Estado tras correcciones de esta iteracion: brechas B1-B7 cerradas, onboarding dashboard estabilizado en primer uso (sin 404 por ausencia de snapshot) y comercializacion inicial acotada a ISO 9001.
 
 ## Matriz de brechas
 
@@ -76,6 +76,14 @@ Base documental comparada:
 1. Documentacion: algunos textos historicos aun mencionan estados tenant antiguos en documentos no operativos.
 2. Operacion local: archivos de logs y backups locales pueden ensuciar `git status` durante pruebas manuales.
 3. Settings legacy: existen acciones fuera del mixin estandar, aunque actualmente con validaciones de scope y permisos.
+
+## Politica comercial vigente (marzo 2026)
+1. Alcance de comercializacion inicial: ISO 9001:2015 unicamente.
+2. Enforcement aplicado en backend y frontend para evitar activacion accidental de otras normas.
+3. Preparacion para expansion: habilitacion de normas configurable por entorno y por organizacion sin requerir recodificacion de UI.
+4. Variables de configuracion operativa:
+- `COMMERCIAL_ENABLED_STANDARDS` (global)
+- `COMMERCIAL_ENABLED_STANDARDS_BY_ORG` (override por organizacion)
 
 ## Propuesta de implementacion incremental (sin romper)
 1. Lote documental: normalizar wording restante en docs internas para eliminar estados ya resueltos.
