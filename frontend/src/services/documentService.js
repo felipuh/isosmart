@@ -64,12 +64,6 @@ const documentService = {
     const params = organizationId ? { organization: organizationId } : {};
     const response = await api.get('/documents/stats/', { params });
     return response.data;
-  },
-
-  // Procesar documento con IA
-  process: async (id) => {
-    const response = await api.post(`/documents/${id}/process/`);
-    return response.data;
   }
 };
 

@@ -88,12 +88,6 @@ const processService = {
     return response.data;
   },
 
-  // Analizar riesgos del proceso
-  analyzeRisks: async (processId, organizationId = null) => {
-    const response = await api.post(`/processes/maps/${processId}/analyze-risks/`, withOrgPayload(organizationId));
-    return response.data;
-  },
-
   // Procesos individuales
   getProcesses: async (mapId, organizationId = null) => {
     const response = await api.get('/processes/processes/', {

@@ -60,12 +60,6 @@ const riskService = {
     return response.data;
   },
 
-  // Evaluar riesgo
-  evaluate: async (id) => {
-    const response = await api.post(`/risks/${id}/evaluate/`);
-    return response.data;
-  },
-
   // Aliases de compatibilidad con componentes legacy
   getMatrixData: async (organizationId = null) => {
     const params = organizationId ? { organization_id: organizationId } : {};

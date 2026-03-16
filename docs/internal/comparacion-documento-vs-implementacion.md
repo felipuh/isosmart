@@ -9,7 +9,7 @@ Base documental comparada:
 ## Resumen ejecutivo
 - Cobertura funcional por modulo: alta.
 - Riesgo principal actual: deuda tecnica acotada en endpoints legacy de settings (sin brecha critica activa).
-- Estado tras correcciones de esta iteracion: brechas B1-B7 cerradas, onboarding dashboard estabilizado en primer uso (sin 404 por ausencia de snapshot) y comercializacion inicial acotada a ISO 9001.
+- Estado tras correcciones de esta iteracion: brechas B1-B7 cerradas, onboarding dashboard estabilizado en primer uso (sin 404 por ausencia de snapshot), comercializacion inicial acotada a ISO 9001 y superficie activa frontend/backend sin rutas API huerfanas en servicios vigentes.
 
 ## Matriz de brechas
 
@@ -71,6 +71,7 @@ Base documental comparada:
 - Se cerraron todas las brechas operativas y de seguridad identificadas en la auditoria inicial.
 - B3 (SIE tenant), B6 (ASB/SPM tenant) y B7 (settings endpoints) completadas en sesiones posteriores.
 - Todos los modulos usan `organization_id` estandar con `OrganizationScopedViewSetMixin` o patron equivalente.
+- Auditoria adicional de contratos frontend/backend sobre `frontend/src/services` y `frontend/src/features/*/api` sin rutas irresueltas tras eliminar 3 helpers legacy no utilizados.
 
 ## Brechas residuales no bloqueantes
 1. Documentacion: algunos textos historicos aun mencionan estados tenant antiguos en documentos no operativos.
