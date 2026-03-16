@@ -17,10 +17,6 @@ import settingsService from '../services/settingsService';
 
 const STANDARD_OPTIONS = [
   { code: 'ISO9001_2015', required: true },
-  { code: 'ISO42001_2023' },
-  { code: 'ISO27001_2022' },
-  { code: 'ISO14001_2015' },
-  { code: 'ISO45001_2018' },
 ];
 
 const ROLE_OPTIONS = ['owner_founder', 'general_manager', 'operations_manager', 'quality_manager', 'external_consultant', 'other'];

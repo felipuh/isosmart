@@ -9,6 +9,7 @@ from authentication.models import UserProfile
 from core.models import (
     AuditLog,
     ContextAnalysis,
+    ISOClauseConfig,
     OnboardingInsightSnapshot,
     Organization,
     OrganizationSettings,
@@ -355,4 +356,45 @@ class SettingsBackupHistoryTests(TestCase):
         self.assertEqual(adaptive_route.status_code, 200)
         self.assertEqual(adaptive_route.data['snapshot_version'], 1)
         self.assertEqual(adaptive_route.data['adaptive_route']['mode'], 'guided')
+
+    def test_update_standards_enforces_iso9001_only(self):
+        response = self.client.post(
+            reverse('settings-update-standards'),
+            {
+                'organization_id': self.org_a.id,
+                'enabled_standards': ['ISO27001_2022', 'ISO45001_2018'],
+            },
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['enabled_standards'], ['ISO9001_2015'])
+
+        settings = OrganizationSettings.objects.get(organization=self.org_a)
+        self.assertEqual(settings.enabled_standards, ['ISO9001_2015'])
+
+    def test_initialize_standards_enforces_iso9001_only(self):
+        response = self.client.post(
+            reverse('iso-clause-initialize-standards'),
+            {
+                'organization_id': self.org_a.id,
+                'standards': ['ISO27001_2022'],
+            },
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['standards'], ['ISO9001_2015'])
+        self.assertFalse(
+            ISOClauseConfig.objects.filter(
+                organization=self.org_a,
+                standard_code='ISO27001_2022',
+            ).exists()
+        )
+        self.assertTrue(
+            ISOClauseConfig.objects.filter(
+                organization=self.org_a,
+                standard_code='ISO9001_2015',
+            ).exists()
+        )
 

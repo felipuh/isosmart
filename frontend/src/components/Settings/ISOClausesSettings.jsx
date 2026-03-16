@@ -144,10 +144,6 @@ const ISOClausesSettings = () => {
             className="px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100"
           >
             <option value="ISO9001_2015">{t('settings.iso.standards.ISO9001_2015')}</option>
-            <option value="ISO42001_2023">{t('settings.iso.standards.ISO42001_2023')}</option>
-            <option value="ISO27001_2022">{t('settings.iso.standards.ISO27001_2022')}</option>
-            <option value="ISO14001_2015">{t('settings.iso.standards.ISO14001_2015')}</option>
-            <option value="ISO45001_2018">{t('settings.iso.standards.ISO45001_2018')}</option>
           </select>
         
           {clauses.length === 0 && (

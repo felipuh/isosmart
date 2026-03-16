@@ -22,6 +22,26 @@ import os
 
 logger = logging.getLogger(__name__)
 
+# Commercial rollout policy: only ISO 9001 is enabled for now.
+PRODUCTION_ENABLED_STANDARDS = ('ISO9001_2015',)
+
+
+def _normalize_enabled_standards(raw_values):
+    if isinstance(raw_values, (list, tuple, set)):
+        candidates = [str(value).strip() for value in raw_values if value not in (None, '')]
+    else:
+        candidates = []
+
+    normalized = []
+    for code in candidates:
+        if code in PRODUCTION_ENABLED_STANDARDS and code not in normalized:
+            normalized.append(code)
+
+    if 'ISO9001_2015' not in normalized:
+        normalized.insert(0, 'ISO9001_2015')
+
+    return normalized
+
 
 def _parse_org_id(value):
     if value in (None, ''):
@@ -1010,10 +1030,8 @@ class SettingsViewSet(viewsets.ModelViewSet):
                 {'error': 'Se requiere el campo enabled_standards'},
                 status=status.HTTP_400_BAD_REQUEST
             )
-        
-        # Asegurar que ISO 9001 siempre esté incluido
-        if 'ISO9001_2015' not in enabled_standards:
-            enabled_standards = ['ISO9001_2015'] + list(enabled_standards)
+
+        enabled_standards = _normalize_enabled_standards(enabled_standards)
         
         settings.enabled_standards = enabled_standards
         settings.save()
@@ -1075,13 +1093,13 @@ class SettingsViewSet(viewsets.ModelViewSet):
                 'organization_id': org.id,
                 'organization_name': org.name,
                 'onboarding_completed': False,
-                'enabled_standards': ['ISO9001_2015'],
+                'enabled_standards': _normalize_enabled_standards([]),
             })
         return Response({
             'organization_id': org.id,
             'organization_name': org.name,
             'onboarding_completed': settings.onboarding_completed,
-            'enabled_standards': settings.enabled_standards or ['ISO9001_2015'],
+            'enabled_standards': _normalize_enabled_standards(settings.enabled_standards),
         })
 
     @action(detail=False, methods=['post'])
@@ -1091,7 +1109,9 @@ class SettingsViewSet(viewsets.ModelViewSet):
         settings, _ = OrganizationSettings.objects.get_or_create(organization=org)
 
         # Obtener y guardar estándares ISO habilitados
-        enabled_standards = request.data.get('enabled_standards') or settings.enabled_standards or ['ISO9001_2015']
+        enabled_standards = _normalize_enabled_standards(
+            request.data.get('enabled_standards') or settings.enabled_standards
+        )
         settings.enabled_standards = enabled_standards
         
         # Obtener y guardar idioma preferido
@@ -1629,7 +1649,7 @@ class ISOClauseConfigViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['post'])
     def initialize_standards(self, request):
         org = self._resolve_org(request)
-        standard_codes = request.data.get('standards') or ['ISO9001_2015']
+        standard_codes = _normalize_enabled_standards(request.data.get('standards'))
         clause_map = self._standard_clauses_map()
 
         created_count = 0
@@ -1649,7 +1669,9 @@ class ISOClauseConfigViewSet(viewsets.ModelViewSet):
                     created_count += 1
 
         settings, _ = OrganizationSettings.objects.get_or_create(organization=org)
-        settings.enabled_standards = touched_standards or settings.enabled_standards or ['ISO9001_2015']
+        settings.enabled_standards = _normalize_enabled_standards(
+            touched_standards or settings.enabled_standards
+        )
         settings.save(update_fields=['enabled_standards'])
 
         return Response({
