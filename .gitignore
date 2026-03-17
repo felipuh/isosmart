@@ -22,8 +22,9 @@ backend/venv_ai/*
 
 # Cachés
 __pycache__/
-*.pyc
-*.pyo
+**/__pycache__/
+*.py[cod]
+*$py.class
 
 # Node modules
 node_modules/
