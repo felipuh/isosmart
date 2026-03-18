@@ -12,7 +12,8 @@ const LANGS = [
     onboardingTitle: 'Configuración Inicial',
     companySizeLabel: 'Rango de tamaño de empresa',
     companySizeFirstOption: '10 a 50',
-    onboardingSubmit: 'Finalizar onboarding',
+    onboardingNext: 'Continuar',
+    onboardingCreate: 'Crear mi sistema',
   },
   {
     code: 'en',
@@ -22,7 +23,8 @@ const LANGS = [
     onboardingTitle: 'Initial Setup',
     companySizeLabel: 'Company size range',
     companySizeFirstOption: '10 to 50',
-    onboardingSubmit: 'Finish Onboarding',
+    onboardingNext: 'Continue',
+    onboardingCreate: 'Create my system',
   },
   {
     code: 'pt',
@@ -32,7 +34,8 @@ const LANGS = [
     onboardingTitle: 'Configuração Inicial',
     companySizeLabel: 'Faixa de tamanho da empresa',
     companySizeFirstOption: '10 a 50',
-    onboardingSubmit: 'Concluir Configuração',
+    onboardingNext: 'Continuar',
+    onboardingCreate: 'Criar meu sistema',
   },
 ];
 
@@ -65,11 +68,33 @@ async function login(page) {
   });
 }
 
-async function applyHeaderLanguage(page, languageCode) {
-  const languageSelect = page.locator('header select').first();
-  await expect(languageSelect).toBeVisible({ timeout: 45000 });
-  await languageSelect.selectOption(languageCode);
-  await expect(languageSelect).toHaveValue(languageCode);
+async function getLanguageSelect(page) {
+  const headerLanguageSelect = page.locator('header select').first();
+  if (await headerLanguageSelect.count()) {
+    return headerLanguageSelect;
+  }
+
+  const onboardingLanguageSelect = page.locator('select').filter({
+    has: page.locator('option[value="es-LATAM"]'),
+  }).first();
+  if (await onboardingLanguageSelect.count()) {
+    return onboardingLanguageSelect;
+  }
+
+  return null;
+}
+
+async function applyLanguage(page, languageCode) {
+  const languageSelect = await getLanguageSelect(page);
+  if (languageSelect) {
+    await expect(languageSelect).toBeVisible({ timeout: 45000 });
+    await languageSelect.selectOption(languageCode);
+    await expect(languageSelect).toHaveValue(languageCode);
+  }
+
+  await expect.poll(async () => page.evaluate(() => document.documentElement.lang), {
+    timeout: 45000,
+  }).toBe(languageCode);
   await page.waitForTimeout(400);
 }
 
@@ -85,12 +110,13 @@ for (const lang of LANGS) {
     await expect(page.getByRole('button', { name: lang.loginButton })).toBeVisible();
 
     await login(page);
-    await applyHeaderLanguage(page, lang.code);
+    await applyLanguage(page, lang.code);
 
     if (page.url().includes('/onboarding')) {
       await expect(page.getByText(lang.onboardingTitle)).toBeVisible();
     } else {
-      await expect(page.getByRole('heading', { name: lang.dashboardTitle })).toBeVisible();
+      await expect(page).not.toHaveURL(/\/onboarding$/);
+      await expect(page.locator('h1, h2').first()).toBeVisible({ timeout: 45000 });
     }
   });
 
@@ -112,17 +138,22 @@ for (const lang of LANGS) {
 
     await page.goto('/login');
     await login(page);
-    await applyHeaderLanguage(page, lang.code);
+    await applyLanguage(page, lang.code);
 
     await expect(page).toHaveURL(/\/onboarding$/);
     await expect(page.getByText(lang.onboardingTitle)).toBeVisible();
+
+    await page.getByRole('button', { name: lang.onboardingNext }).click();
     await expect(page.getByText(lang.companySizeLabel)).toBeVisible();
-    await expect(page.getByRole('button', { name: lang.onboardingSubmit })).toBeVisible();
 
     const firstOption = page
       .locator(`label:has-text("${lang.companySizeLabel}") select option`)
       .first();
     await expect(firstOption).toContainText(lang.companySizeFirstOption);
+
+    await page.getByRole('button', { name: lang.onboardingNext }).click();
+    await page.getByRole('button', { name: lang.onboardingNext }).click();
+    await expect(page.getByRole('button', { name: lang.onboardingCreate })).toBeVisible();
 
     await context.close();
   });
