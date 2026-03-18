@@ -12047,12 +12047,18 @@ const BACKEND_STRINGS_TRANSLATIONS = {
     'Confirmar quick wins con responsables': 'Confirm quick wins with owners',
     'Aprobar objetivos de calidad iniciales': 'Approve initial quality objectives',
     'Modo Consultor (Ninja)': 'Consultant Mode (Ninja)',
+    'Gestión avanzada multiempresa con plantillas y estandarización.': 'Advanced multi-company management with templates and standardization.',
     'Gestion avanzada multiempresa con plantillas y estandarizacion.': 'Advanced multi-company management with templates and standardization.',
+    'Definir plantilla maestra de procesos y riesgos por sector': 'Define a master template of processes and risks by sector',
+    'Configurar estándares de evidencia y auditoría cruzada': 'Configure evidence standards and cross-audit controls',
     'Definir plantilla maestra de procesos y riesgos por sector': 'Define a master template of processes and risks by sector',
     'Configurar estandares de evidencia y auditoria cruzada': 'Configure evidence standards and cross-audit controls',
     'Asignar roadmap por organizacion con hitos trimestrales': 'Assign organization-specific roadmap with quarterly milestones',
+    'Asignar roadmap por organización con hitos trimestrales': 'Assign organization-specific roadmap with quarterly milestones',
     'Comparar desempeno inter-organizacional y replicar buenas practicas': 'Compare inter-organizational performance and replicate best practices',
+    'Comparar desempeño inter-organizacional y replicar buenas prácticas': 'Compare inter-organizational performance and replicate best practices',
     'personalizable': 'customizable',
+    'El Sistema de Gestión de la Quality aplica a los procesos estratégicos, operativos y de apoyo de la organización en el sector IT, incluyendo actividades en Costa Rica, con enfoque en cumplimiento de requisitos del cliente, mejora continua y gestión basada en riesgos.': 'The Quality Management System applies to the strategic, operational, and support processes of the organization in the IT sector, including activities in Costa Rica, with a focus on customer requirement compliance, continuous improvement, and risk-based management.',
     'El Sistema de Gestion de la Quality aplica a los procesos estrategicos, operativos y de apoyo de la organizacion en el sector IT, incluyendo actividades en Costa Rica, con enfoque en cumplimiento de requisitos del cliente, mejora continua y gestion basada en riesgos.': 'The Quality Management System applies to strategic, operational, and support processes in the IT sector organization, including activities in Costa Rica, focused on customer requirements compliance, continuous improvement, and risk-based management.',
   },
   pt: {
@@ -12085,12 +12091,17 @@ const BACKEND_STRINGS_TRANSLATIONS = {
     'Confirmar quick wins con responsables': 'Confirmar quick wins com responsaveis',
     'Aprobar objetivos de calidad iniciales': 'Aprovar objetivos iniciais de qualidade',
     'Modo Consultor (Ninja)': 'Modo Consultor (Ninja)',
+    'Gestión avanzada multiempresa con plantillas y estandarización.': 'Gestao avancada multiempresa com templates e padronizacao.',
     'Gestion avanzada multiempresa con plantillas y estandarizacion.': 'Gestao avancada multiempresa com templates e padronizacao.',
+    'Configurar estándares de evidencia y auditoría cruzada': 'Configurar padroes de evidencias e auditoria cruzada',
     'Definir plantilla maestra de procesos y riesgos por sector': 'Definir template mestre de processos e riscos por setor',
     'Configurar estandares de evidencia y auditoria cruzada': 'Configurar padroes de evidencias e auditoria cruzada',
     'Asignar roadmap por organizacion con hitos trimestrales': 'Definir roadmap por organizacao com marcos trimestrais',
+    'Asignar roadmap por organización con hitos trimestrales': 'Definir roadmap por organizacao com marcos trimestrais',
     'Comparar desempeno inter-organizacional y replicar buenas practicas': 'Comparar desempenho interorganizacional e replicar boas praticas',
+    'Comparar desempeño inter-organizacional y replicar buenas prácticas': 'Comparar desempenho interorganizacional e replicar boas praticas',
     'personalizable': 'personalizavel',
+    'El Sistema de Gestión de la Quality aplica a los procesos estratégicos, operativos y de apoyo de la organización en el sector IT, incluyendo actividades en Costa Rica, con enfoque en cumplimiento de requisitos del cliente, mejora continua y gestión basada en riesgos.': 'O Sistema de Gestao da Qualidade se aplica aos processos estrategicos, operacionais e de apoio da organizacao no setor de TI, incluindo atividades na Costa Rica, com foco no cumprimento dos requisitos do cliente, melhoria continua e gestao baseada em riscos.',
     'El Sistema de Gestion de la Quality aplica a los procesos estrategicos, operativos y de apoyo de la organizacion en el sector IT, incluyendo actividades en Costa Rica, con enfoque en cumplimiento de requisitos del cliente, mejora continua y gestion basada en riesgos.': 'O Sistema de Gestao da Qualidade se aplica aos processos estrategicos, operacionais e de apoio da organizacao no setor de TI, incluindo atividades na Costa Rica, com foco no cumprimento de requisitos do cliente, melhoria continua e gestao baseada em riscos.',
   },
 };
@@ -12123,6 +12134,9 @@ const buildBackendLookupCandidates = (value) => {
     normalizeBackendTranslationKey(trimmed),
     normalizeBackendTranslationKey(withoutBullet),
     normalizeBackendTranslationKey(withoutTrailingPunctuation),
+    normalizeBackendTranslationKey(trimmed).toLowerCase(),
+    normalizeBackendTranslationKey(withoutBullet).toLowerCase(),
+    normalizeBackendTranslationKey(withoutTrailingPunctuation).toLowerCase(),
   ].filter(Boolean);
 };
 
@@ -12131,7 +12145,10 @@ const translateByBackendDictionaryFragments = (value, language) => {
   if (!dictionary) return value;
 
   const normalizedEntries = Object.entries(dictionary)
-    .map(([source, target]) => [normalizeBackendTranslationKey(source), target])
+    .flatMap(([source, target]) => {
+      const normalized = normalizeBackendTranslationKey(source);
+      return [[normalized, target], [normalized.toLowerCase(), target]];
+    })
     .sort((a, b) => b[0].length - a[0].length);
 
   let translated = normalizeBackendTranslationKey(value);
