@@ -7,20 +7,14 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks(id) {
-          // Keep deterministic vendor buckets for better browser caching.
-          if (id.includes('node_modules/react/') || id.includes('node_modules/react-dom/') || id.includes('node_modules/react-router-dom/')) {
-            return 'vendor-react';
-          }
-          if (id.includes('node_modules/recharts/') || id.includes('node_modules/d3/')) {
-            return 'vendor-charts';
-          }
-          if (id.includes('node_modules/lucide-react/') || id.includes('node_modules/axios/')) {
-            return 'vendor-utils';
-          }
-
-          // Move the large translation catalog out of the app entry chunk.
+          // Keep i18n catalog out of the app entry chunk.
           if (id.includes('/src/context/I18nContext.jsx')) {
             return 'app-i18n';
+          }
+
+          // Use a single vendor bucket to avoid circular references between custom chunks.
+          if (id.includes('node_modules/')) {
+            return 'vendor';
           }
         },
       },
