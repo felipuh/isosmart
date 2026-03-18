@@ -500,6 +500,7 @@ const MESSAGES = {
       improvement: 'Mejora',
       planning: 'Planificación',
       performance: 'Desempeño',
+      operations: 'Operaciones',
       settings: 'Configuración',
     },
     // === DASHBOARD ===
@@ -4353,6 +4354,7 @@ const MESSAGES = {
       improvement: 'Improvement',
       planning: 'Planning',
       performance: 'Performance',
+      operations: 'Operations',
       settings: 'Settings',
     },
     dashboard: {
@@ -8195,6 +8197,7 @@ const MESSAGES = {
       improvement: 'Melhoria',
       planning: 'Planejamento',
       performance: 'Desempenho',
+      operations: 'Operações',
       settings: 'Configurações',
     },
     dashboard: {
