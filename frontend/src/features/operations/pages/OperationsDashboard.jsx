@@ -24,19 +24,19 @@ const OperationsDashboard = () => {
   const statColors = {
     blue: {
       card: 'from-blue-500/10 to-blue-600/5 border-blue-500/20 hover:shadow-blue-500/20',
-      value: 'text-blue-400'
+      value: 'text-blue-600 dark:text-blue-400'
     },
     purple: {
       card: 'from-purple-500/10 to-purple-600/5 border-purple-500/20 hover:shadow-purple-500/20',
-      value: 'text-purple-400'
+      value: 'text-purple-600 dark:text-purple-400'
     },
     green: {
       card: 'from-green-500/10 to-green-600/5 border-green-500/20 hover:shadow-green-500/20',
-      value: 'text-green-400'
+      value: 'text-green-600 dark:text-green-400'
     },
     red: {
       card: 'from-red-500/10 to-red-600/5 border-red-500/20 hover:shadow-red-500/20',
-      value: 'text-red-400'
+      value: 'text-red-600 dark:text-red-400'
     }
   };
 
@@ -117,15 +117,15 @@ const OperationsDashboard = () => {
     const palette = statColors[color] || statColors.blue;
     return (
       <Link to={link} className="block">
-        <div className={`bg-gradient-to-br ${palette.card} backdrop-blur-sm border rounded-lg p-6 hover:shadow-lg transition-all duration-300`}>
+        <div className={`bg-gradient-to-br ${palette.card} border rounded-lg p-6 hover:shadow-lg transition-all duration-300 bg-white dark:bg-slate-800 shadow dark:shadow-slate-900/50 border-slate-200 dark:border-slate-700`}>
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-medium text-gray-400">{title}</h3>
+            <h3 className="text-sm font-medium text-slate-600 dark:text-slate-300">{title}</h3>
             <span className="text-2xl">{icon}</span>
           </div>
           <div className="flex items-baseline">
             <p className={`text-3xl font-bold ${palette.value}`}>{value}</p>
           </div>
-          {subtitle && <p className="text-xs text-gray-500 mt-2">{subtitle}</p>}
+          {subtitle && <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">{subtitle}</p>}
         </div>
       </Link>
     );
@@ -140,11 +140,11 @@ const OperationsDashboard = () => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="p-6 bg-slate-50 dark:bg-slate-900 min-h-screen transition-colors duration-300 space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white">{t('modules.operations.dashboard.title')}</h1>
-          <p className="text-gray-400 mt-1">{t('modules.operations.dashboard.subtitle')}</p>
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">{t('modules.operations.dashboard.title')}</h1>
+          <p className="text-slate-600 dark:text-slate-400 mt-1">{t('modules.operations.dashboard.subtitle')}</p>
         </div>
       </div>
 
@@ -189,12 +189,12 @@ const OperationsDashboard = () => {
 
       {/* Alerts Section */}
       {stats.nonconformities.critical > 0 && (
-        <div className="bg-gradient-to-br from-red-500/10 to-red-600/5 backdrop-blur-sm border border-red-500/20 rounded-lg p-6">
+        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-500/20 rounded-lg p-6">
           <div className="flex items-center space-x-3 mb-2">
             <span className="text-2xl">🚨</span>
-            <h2 className="text-xl font-bold text-white">{t('modules.operations.dashboard.alerts.title')}</h2>
+            <h2 className="text-xl font-bold text-red-800 dark:text-red-100">{t('modules.operations.dashboard.alerts.title')}</h2>
           </div>
-          <p className="text-gray-300">
+          <p className="text-red-700 dark:text-red-200">
             {t('modules.operations.dashboard.alerts.messagePrefix')} {stats.nonconformities.critical} {t('modules.operations.dashboard.alerts.messageSuffix')}
           </p>
           <Link
@@ -207,8 +207,8 @@ const OperationsDashboard = () => {
       )}
 
       {/* Quick Actions */}
-      <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg p-6">
-        <h2 className="text-xl font-bold text-white mb-4">{t('modules.operations.dashboard.quickActions.title')}</h2>
+      <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-6 shadow dark:shadow-slate-900/50">
+        <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4">{t('modules.operations.dashboard.quickActions.title')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Link
             to="/operations/requirements/new"
@@ -216,8 +216,8 @@ const OperationsDashboard = () => {
           >
             <span className="text-2xl">📋</span>
             <div>
-              <p className="font-medium text-white">{t('modules.operations.dashboard.quickActions.newRequirement')}</p>
-              <p className="text-xs text-gray-400">{t('modules.operations.dashboard.quickActions.newRequirementDesc')}</p>
+              <p className="font-medium text-slate-900 dark:text-white">{t('modules.operations.dashboard.quickActions.newRequirement')}</p>
+              <p className="text-xs text-slate-600 dark:text-slate-400">{t('modules.operations.dashboard.quickActions.newRequirementDesc')}</p>
             </div>
           </Link>
 
@@ -227,8 +227,8 @@ const OperationsDashboard = () => {
           >
             <span className="text-2xl">⚠️</span>
             <div>
-              <p className="font-medium text-white">{t('modules.operations.dashboard.quickActions.reportNc')}</p>
-              <p className="text-xs text-gray-400">{t('modules.operations.dashboard.quickActions.reportNcDesc')}</p>
+              <p className="font-medium text-slate-900 dark:text-white">{t('modules.operations.dashboard.quickActions.reportNc')}</p>
+              <p className="text-xs text-slate-600 dark:text-slate-400">{t('modules.operations.dashboard.quickActions.reportNcDesc')}</p>
             </div>
           </Link>
 
@@ -238,8 +238,8 @@ const OperationsDashboard = () => {
           >
             <span className="text-2xl">✅</span>
             <div>
-              <p className="font-medium text-white">{t('modules.operations.dashboard.quickActions.releaseProduct')}</p>
-              <p className="text-xs text-gray-400">{t('modules.operations.dashboard.quickActions.releaseProductDesc')}</p>
+              <p className="font-medium text-slate-900 dark:text-white">{t('modules.operations.dashboard.quickActions.releaseProduct')}</p>
+              <p className="text-xs text-slate-600 dark:text-slate-400">{t('modules.operations.dashboard.quickActions.releaseProductDesc')}</p>
             </div>
           </Link>
         </div>
@@ -253,9 +253,9 @@ const OperationsDashboard = () => {
         >
           <div className="flex items-center space-x-3 mb-2">
             <span className="text-2xl">📦</span>
-            <h3 className="text-lg font-bold text-white">{t('modules.operations.dashboard.moduleLinks.releasesTitle')}</h3>
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white">{t('modules.operations.dashboard.moduleLinks.releasesTitle')}</h3>
           </div>
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-slate-600 dark:text-slate-400">
             {stats.releases.pending} {t('modules.operations.dashboard.moduleLinks.pendingReleasesSuffix')}
           </p>
         </Link>
@@ -266,9 +266,9 @@ const OperationsDashboard = () => {
         >
           <div className="flex items-center space-x-3 mb-2">
             <span className="text-2xl">⚙️</span>
-            <h3 className="text-lg font-bold text-white">{t('modules.operations.dashboard.moduleLinks.productionTitle')}</h3>
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white">{t('modules.operations.dashboard.moduleLinks.productionTitle')}</h3>
           </div>
-          <p className="text-sm text-gray-400">{t('modules.operations.dashboard.moduleLinks.productionSubtitle')}</p>
+          <p className="text-sm text-slate-600 dark:text-slate-400">{t('modules.operations.dashboard.moduleLinks.productionSubtitle')}</p>
         </Link>
       </div>
     </div>

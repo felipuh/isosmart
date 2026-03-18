@@ -12032,6 +12032,18 @@ const BACKEND_STRINGS_TRANSLATIONS = {
     'Pending': 'Pending',
     'In Progress': 'In Progress',
     'Completed': 'Completed',
+    // Onboarding summary and actions
+    'Sesion inicial analizada. Se generaron recomendaciones de perfil, impacto y alineacion.': 'Initial session analyzed. Profile, impact, and alignment recommendations were generated.',
+    'Estandarizar control de cambios operativos de alto impacto': 'Standardize high-impact operational change control',
+    'Cerrar no conformidades vencidas con verificacion de efectividad': 'Close overdue nonconformities with effectiveness verification',
+    'Definir tablero semanal de KPIs criticos de calidad y entrega': 'Define a weekly dashboard for critical quality and delivery KPIs',
+    'Proyecto de reduccion de reprocesos con enfoque Lean Six Sigma': 'Rework reduction project with a Lean Six Sigma approach',
+    'Rediseno de flujo de proveedores criticos con criterios de desempeno': 'Redesign the workflow for critical providers with performance criteria',
+    'Automatizacion de evidencias y trazabilidad documental': 'Automation of evidence and document traceability',
+    'Validar mapa de procesos sugerido': 'Validate suggested process map',
+    'Confirmar quick wins con responsables': 'Confirm quick wins with owners',
+    'Aprobar objetivos de calidad iniciales': 'Approve initial quality objectives',
+    'El Sistema de Gestion de la Quality aplica a los procesos estrategicos, operativos y de apoyo de la organizacion en el sector IT, incluyendo actividades en Costa Rica, con enfoque en cumplimiento de requisitos del cliente, mejora continua y gestion basada en riesgos.': 'The Quality Management System applies to strategic, operational, and support processes in the IT sector organization, including activities in Costa Rica, focused on customer requirements compliance, continuous improvement, and risk-based management.',
   },
   pt: {
     // Adaptive Route modes
@@ -12051,6 +12063,18 @@ const BACKEND_STRINGS_TRANSLATIONS = {
     'Pending': 'Pendente',
     'In Progress': 'Em Progresso',
     'Completed': 'Concluído',
+    // Onboarding summary and actions
+    'Sesion inicial analizada. Se generaron recomendaciones de perfil, impacto y alineacion.': 'Sessao inicial analisada. Foram geradas recomendacoes de perfil, impacto e alinhamento.',
+    'Estandarizar control de cambios operativos de alto impacto': 'Padronizar o controle de mudancas operacionais de alto impacto',
+    'Cerrar no conformidades vencidas con verificacion de efectividad': 'Encerrar nao conformidades vencidas com verificacao de efetividade',
+    'Definir tablero semanal de KPIs criticos de calidad y entrega': 'Definir painel semanal de KPIs criticos de qualidade e entrega',
+    'Proyecto de reduccion de reprocesos con enfoque Lean Six Sigma': 'Projeto de reducao de retrabalho com abordagem Lean Six Sigma',
+    'Rediseno de flujo de proveedores criticos con criterios de desempeno': 'Redesenhar o fluxo de fornecedores criticos com criterios de desempenho',
+    'Automatizacion de evidencias y trazabilidad documental': 'Automatizacao de evidencias e rastreabilidade documental',
+    'Validar mapa de procesos sugerido': 'Validar mapa de processos sugerido',
+    'Confirmar quick wins con responsables': 'Confirmar quick wins com responsaveis',
+    'Aprobar objetivos de calidad iniciales': 'Aprovar objetivos iniciais de qualidade',
+    'El Sistema de Gestion de la Quality aplica a los procesos estrategicos, operativos y de apoyo de la organizacion en el sector IT, incluyendo actividades en Costa Rica, con enfoque en cumplimiento de requisitos del cliente, mejora continua y gestion basada en riesgos.': 'O Sistema de Gestao da Qualidade se aplica aos processos estrategicos, operacionais e de apoio da organizacao no setor de TI, incluindo atividades na Costa Rica, com foco no cumprimento de requisitos do cliente, melhoria continua e gestao baseada em riscos.',
   },
 };
 
@@ -12058,6 +12082,15 @@ const I18nContext = createContext(null);
 
 const getValue = (obj, path) => {
   return path.split('.').reduce((acc, key) => (acc && acc[key] !== undefined ? acc[key] : undefined), obj);
+};
+
+const normalizeBackendTranslationKey = (value) => {
+  if (typeof value !== 'string') return value;
+  return value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
 };
 
 export const I18nProvider = ({ children }) => {
@@ -12098,9 +12131,12 @@ export const I18nProvider = ({ children }) => {
   const translateBackendString = useCallback(
     (backendString) => {
       if (!backendString || typeof backendString !== 'string') return backendString;
+      const normalizedBackendString = normalizeBackendTranslationKey(backendString);
 
       // Try backend strings dictionary first
-      const backendTranslated = BACKEND_STRINGS_TRANSLATIONS[language]?.[backendString];
+      const backendTranslated =
+        BACKEND_STRINGS_TRANSLATIONS[language]?.[backendString]
+        ?? BACKEND_STRINGS_TRANSLATIONS[language]?.[normalizedBackendString];
       if (backendTranslated !== undefined) return backendTranslated;
 
       // Fallback: try literal translations

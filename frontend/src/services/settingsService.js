@@ -178,26 +178,27 @@ const settingsService = {
     return response.data;
   },
 
-  getOnboardingInsights: async (organizationId, history = false) => {
+  getOnboardingInsights: async (organizationId, history = false, language = null) => {
     const response = await api.get('/settings/onboarding_insights/', {
       params: {
         ...withOrg(organizationId),
         history,
+        ...(language ? { language } : {}),
       },
     });
     return response.data;
   },
 
-  getOnboardingIsoSkeleton: async (organizationId) => {
+  getOnboardingIsoSkeleton: async (organizationId, language = null) => {
     const response = await api.get('/settings/onboarding_iso_skeleton/', {
-      params: withOrg(organizationId),
+      params: withOrg(organizationId, language ? { language } : {}),
     });
     return response.data;
   },
 
-  getOnboardingAdaptiveRoute: async (organizationId) => {
+  getOnboardingAdaptiveRoute: async (organizationId, language = null) => {
     const response = await api.get('/settings/onboarding_adaptive_route/', {
-      params: withOrg(organizationId),
+      params: withOrg(organizationId, language ? { language } : {}),
     });
     return response.data;
   },

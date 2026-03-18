@@ -18,15 +18,15 @@ const StatCard = ({ title, value, subtitle, icon, link, color = 'blue', statColo
   const palette = statColors[color] || statColors.blue;
   return (
     <Link to={link} className="block">
-      <div className={`bg-gradient-to-br ${palette.card} backdrop-blur-sm border rounded-lg p-6 hover:shadow-lg transition-all duration-300`}>
+      <div className={`bg-gradient-to-br ${palette.card} border rounded-lg p-6 hover:shadow-lg transition-all duration-300 bg-white dark:bg-slate-800 shadow dark:shadow-slate-900/50 border-slate-200 dark:border-slate-700`}>
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-medium text-gray-400">{title}</h3>
+          <h3 className="text-sm font-medium text-slate-600 dark:text-slate-300">{title}</h3>
           <span className="text-2xl">{icon}</span>
         </div>
         <div className="flex items-baseline">
           <p className={`text-3xl font-bold ${palette.value}`}>{value}</p>
         </div>
-        {subtitle && <p className="text-xs text-gray-500 mt-2">{subtitle}</p>}
+        {subtitle && <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">{subtitle}</p>}
       </div>
     </Link>
   );
@@ -40,19 +40,19 @@ const PerformanceDashboard = () => {
   const statColors = {
     blue: {
       card: 'from-blue-500/10 to-blue-600/5 border-blue-500/20 hover:shadow-blue-500/20',
-      value: 'text-blue-400'
+      value: 'text-blue-600 dark:text-blue-400'
     },
     green: {
       card: 'from-green-500/10 to-green-600/5 border-green-500/20 hover:shadow-green-500/20',
-      value: 'text-green-400'
+      value: 'text-green-600 dark:text-green-400'
     },
     orange: {
       card: 'from-orange-500/10 to-orange-600/5 border-orange-500/20 hover:shadow-orange-500/20',
-      value: 'text-orange-400'
+      value: 'text-orange-600 dark:text-orange-400'
     },
     red: {
       card: 'from-red-500/10 to-red-600/5 border-red-500/20 hover:shadow-red-500/20',
-      value: 'text-red-400'
+      value: 'text-red-600 dark:text-red-400'
     }
   };
 
@@ -135,11 +135,11 @@ const PerformanceDashboard = () => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="p-6 bg-slate-50 dark:bg-slate-900 min-h-screen transition-colors duration-300 space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white">{t('modules.performance.dashboard.title')}</h1>
-          <p className="text-gray-400 mt-1">{t('modules.performance.dashboard.subtitle')}</p>
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">{t('modules.performance.dashboard.title')}</h1>
+          <p className="text-slate-600 dark:text-slate-400 mt-1">{t('modules.performance.dashboard.subtitle')}</p>
         </div>
       </div>
 
@@ -187,8 +187,8 @@ const PerformanceDashboard = () => {
         />
       </div>
 
-      <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg p-6">
-        <h2 className="text-xl font-bold text-white mb-4">{t('modules.performance.dashboard.quickActions.title')}</h2>
+      <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-6 shadow dark:shadow-slate-900/50">
+        <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4">{t('modules.performance.dashboard.quickActions.title')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Link
             to="/performance/indicators"
@@ -196,8 +196,8 @@ const PerformanceDashboard = () => {
           >
             <span className="text-2xl">🎯</span>
             <div>
-              <p className="font-medium text-white">{t('modules.performance.dashboard.quickActions.newIndicator')}</p>
-              <p className="text-xs text-gray-400">{t('modules.performance.dashboard.quickActions.defineKpi')}</p>
+              <p className="font-medium text-slate-900 dark:text-white">{t('modules.performance.dashboard.quickActions.newIndicator')}</p>
+              <p className="text-xs text-slate-600 dark:text-slate-400">{t('modules.performance.dashboard.quickActions.defineKpi')}</p>
             </div>
           </Link>
 
@@ -207,8 +207,8 @@ const PerformanceDashboard = () => {
           >
             <span className="text-2xl">📈</span>
             <div>
-              <p className="font-medium text-white">{t('modules.performance.dashboard.quickActions.registerMeasurement')}</p>
-              <p className="text-xs text-gray-400">{t('modules.performance.dashboard.quickActions.captureResults')}</p>
+              <p className="font-medium text-slate-900 dark:text-white">{t('modules.performance.dashboard.quickActions.registerMeasurement')}</p>
+              <p className="text-xs text-slate-600 dark:text-slate-400">{t('modules.performance.dashboard.quickActions.captureResults')}</p>
             </div>
           </Link>
 
@@ -218,8 +218,8 @@ const PerformanceDashboard = () => {
           >
             <span className="text-2xl">🧾</span>
             <div>
-              <p className="font-medium text-white">{t('modules.performance.dashboard.quickActions.planAudit')}</p>
-              <p className="text-xs text-gray-400">{t('modules.performance.dashboard.quickActions.scheduleTracking')}</p>
+              <p className="font-medium text-slate-900 dark:text-white">{t('modules.performance.dashboard.quickActions.planAudit')}</p>
+              <p className="text-xs text-slate-600 dark:text-slate-400">{t('modules.performance.dashboard.quickActions.scheduleTracking')}</p>
             </div>
           </Link>
         </div>
@@ -232,9 +232,9 @@ const PerformanceDashboard = () => {
         >
           <div className="flex items-center space-x-3 mb-2">
             <span className="text-2xl">🧠</span>
-            <h3 className="text-lg font-bold text-white">{t('modules.performance.dashboard.cards.analysisTitle')}</h3>
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white">{t('modules.performance.dashboard.cards.analysisTitle')}</h3>
           </div>
-          <p className="text-sm text-gray-400">{t('modules.performance.dashboard.cards.analysisDesc')}</p>
+          <p className="text-sm text-slate-600 dark:text-slate-400">{t('modules.performance.dashboard.cards.analysisDesc')}</p>
         </Link>
 
         <Link
@@ -243,9 +243,9 @@ const PerformanceDashboard = () => {
         >
           <div className="flex items-center space-x-3 mb-2">
             <span className="text-2xl">📋</span>
-            <h3 className="text-lg font-bold text-white">{t('modules.performance.dashboard.cards.managementReviewTitle')}</h3>
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white">{t('modules.performance.dashboard.cards.managementReviewTitle')}</h3>
           </div>
-          <p className="text-sm text-gray-400">{t('modules.performance.dashboard.cards.managementReviewDesc')}</p>
+          <p className="text-sm text-slate-600 dark:text-slate-400">{t('modules.performance.dashboard.cards.managementReviewDesc')}</p>
         </Link>
 
         <Link
@@ -254,9 +254,9 @@ const PerformanceDashboard = () => {
         >
           <div className="flex items-center space-x-3 mb-2">
             <span className="text-2xl">🔎</span>
-            <h3 className="text-lg font-bold text-white">{t('modules.performance.dashboard.cards.findingsTitle')}</h3>
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white">{t('modules.performance.dashboard.cards.findingsTitle')}</h3>
           </div>
-          <p className="text-sm text-gray-400">{t('modules.performance.dashboard.cards.findingsDesc')}</p>
+          <p className="text-sm text-slate-600 dark:text-slate-400">{t('modules.performance.dashboard.cards.findingsDesc')}</p>
         </Link>
       </div>
     </div>

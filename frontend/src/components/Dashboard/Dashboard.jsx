@@ -109,7 +109,7 @@ const Dashboard = () => {
     const loadInsights = async () => {
       if (!orgId) return;
       try {
-        const data = await settingsService.getOnboardingInsights(orgId);
+        const data = await settingsService.getOnboardingInsights(orgId, false, language);
         if (mounted) setOnboardingInsights(data);
       } catch {
         if (mounted) setOnboardingInsights(null);
@@ -120,7 +120,7 @@ const Dashboard = () => {
     return () => {
       mounted = false;
     };
-  }, [orgId]);
+  }, [orgId, language]);
 
   useEffect(() => {
     let mounted = true;
@@ -230,7 +230,7 @@ const Dashboard = () => {
     const loadAdaptiveRoute = async () => {
       if (!orgId) return;
       try {
-        const data = await settingsService.getOnboardingAdaptiveRoute(orgId);
+        const data = await settingsService.getOnboardingAdaptiveRoute(orgId, language);
         if (mounted) setOnboardingAdaptiveRoute(data?.adaptive_route || null);
       } catch {
         if (mounted) setOnboardingAdaptiveRoute(null);
@@ -241,7 +241,7 @@ const Dashboard = () => {
     return () => {
       mounted = false;
     };
-  }, [orgId]);
+  }, [orgId, language]);
 
   useEffect(() => {
     let mounted = true;
@@ -249,7 +249,7 @@ const Dashboard = () => {
     const loadIsoSkeleton = async () => {
       if (!orgId) return;
       try {
-        const data = await settingsService.getOnboardingIsoSkeleton(orgId);
+        const data = await settingsService.getOnboardingIsoSkeleton(orgId, language);
         if (mounted) setOnboardingIsoSkeleton(data?.iso_skeleton || null);
       } catch {
         if (mounted) setOnboardingIsoSkeleton(null);
@@ -260,7 +260,7 @@ const Dashboard = () => {
     return () => {
       mounted = false;
     };
-  }, [orgId]);
+  }, [orgId, language]);
 
   const modules = [
     {

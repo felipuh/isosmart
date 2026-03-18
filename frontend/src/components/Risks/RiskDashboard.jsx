@@ -107,8 +107,8 @@ const RiskDashboard = () => {
     <div className="p-6 bg-slate-50 dark:bg-slate-900 min-h-screen transition-colors duration-300">
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">{t('riskManagement.dashboard.title')}</h1>
-        <p className="text-slate-500 dark:text-slate-400 mt-1">
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-white">{t('riskManagement.dashboard.title')}</h1>
+        <p className="text-slate-600 dark:text-slate-400 mt-1">
           {t('riskManagement.dashboard.subtitle')}
         </p>
       </div>

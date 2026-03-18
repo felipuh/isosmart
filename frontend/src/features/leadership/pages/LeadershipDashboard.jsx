@@ -60,25 +60,25 @@ const LeadershipDashboard = () => {
     blue: {
       gradient: 'from-blue-500/10 to-blue-600/5',
       border: 'border-blue-500/20',
-      text: 'text-blue-400',
+      text: 'text-blue-600 dark:text-blue-400',
       shadow: 'hover:shadow-blue-500/20'
     },
     purple: {
       gradient: 'from-purple-500/10 to-purple-600/5',
       border: 'border-purple-500/20',
-      text: 'text-purple-400',
+      text: 'text-purple-600 dark:text-purple-400',
       shadow: 'hover:shadow-purple-500/20'
     },
     green: {
       gradient: 'from-green-500/10 to-green-600/5',
       border: 'border-green-500/20',
-      text: 'text-green-400',
+      text: 'text-green-600 dark:text-green-400',
       shadow: 'hover:shadow-green-500/20'
     },
     orange: {
       gradient: 'from-orange-500/10 to-orange-600/5',
       border: 'border-orange-500/20',
-      text: 'text-orange-400',
+      text: 'text-orange-600 dark:text-orange-400',
       shadow: 'hover:shadow-orange-500/20'
     }
   };
@@ -88,16 +88,16 @@ const LeadershipDashboard = () => {
 
     return (
     <Link to={link} className="block">
-      <div className={`bg-gradient-to-br ${palette.gradient} backdrop-blur-sm border ${palette.border} rounded-lg p-6 hover:shadow-lg ${palette.shadow} transition-all duration-300`}>
+      <div className={`bg-gradient-to-br ${palette.gradient} border ${palette.border} rounded-lg p-6 hover:shadow-lg ${palette.shadow} transition-all duration-300 bg-white dark:bg-slate-800 shadow dark:shadow-slate-900/50 border-slate-200 dark:border-slate-700`}>
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-medium text-gray-400">{title}</h3>
+          <h3 className="text-sm font-medium text-slate-600 dark:text-slate-300">{title}</h3>
           <span className="text-2xl">{icon}</span>
         </div>
         <div className="flex items-baseline">
           <p className={`text-3xl font-bold ${palette.text}`}>{value}</p>
         </div>
         {subtitle && (
-          <p className="text-xs text-gray-500 mt-2">{subtitle}</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">{subtitle}</p>
         )}
       </div>
     </Link>
@@ -113,12 +113,12 @@ const LeadershipDashboard = () => {
   }
 
   return (
-    <div className="space-y-6" style={{ fontFamily: '"Sora", "Work Sans", sans-serif' }}>
+    <div className="p-6 bg-slate-50 dark:bg-slate-900 min-h-screen transition-colors duration-300 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white">{t('modules.leadership.dashboard.title')}</h1>
-          <p className="text-gray-400 mt-1">{t('modules.leadership.dashboard.subtitle')}</p>
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">{t('modules.leadership.dashboard.title')}</h1>
+          <p className="text-slate-600 dark:text-slate-400 mt-1">{t('modules.leadership.dashboard.subtitle')}</p>
         </div>
       </div>
 
@@ -162,8 +162,8 @@ const LeadershipDashboard = () => {
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg p-6">
-        <h2 className="text-xl font-bold text-white mb-4">{t('modules.leadership.dashboard.quickActions.title')}</h2>
+      <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-6 shadow dark:shadow-slate-900/50">
+        <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4">{t('modules.leadership.dashboard.quickActions.title')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Link
             to="/leadership/policies/new"
@@ -171,8 +171,8 @@ const LeadershipDashboard = () => {
           >
             <span className="text-2xl">📝</span>
             <div>
-              <p className="font-medium text-white">{t('modules.leadership.dashboard.quickActions.newPolicy')}</p>
-              <p className="text-xs text-gray-400">{t('modules.leadership.dashboard.quickActions.newPolicyDesc')}</p>
+              <p className="font-medium text-slate-900 dark:text-white">{t('modules.leadership.dashboard.quickActions.newPolicy')}</p>
+              <p className="text-xs text-slate-600 dark:text-slate-400">{t('modules.leadership.dashboard.quickActions.newPolicyDesc')}</p>
             </div>
           </Link>
           
@@ -182,8 +182,8 @@ const LeadershipDashboard = () => {
           >
             <span className="text-2xl">👤</span>
             <div>
-              <p className="font-medium text-white">{t('modules.leadership.dashboard.quickActions.newRole')}</p>
-              <p className="text-xs text-gray-400">{t('modules.leadership.dashboard.quickActions.newRoleDesc')}</p>
+              <p className="font-medium text-slate-900 dark:text-white">{t('modules.leadership.dashboard.quickActions.newRole')}</p>
+              <p className="text-xs text-slate-600 dark:text-slate-400">{t('modules.leadership.dashboard.quickActions.newRoleDesc')}</p>
             </div>
           </Link>
           
@@ -193,34 +193,34 @@ const LeadershipDashboard = () => {
           >
             <span className="text-2xl">📋</span>
             <div>
-              <p className="font-medium text-white">{t('modules.leadership.dashboard.quickActions.newRaci')}</p>
-              <p className="text-xs text-gray-400">{t('modules.leadership.dashboard.quickActions.newRaciDesc')}</p>
+              <p className="font-medium text-slate-900 dark:text-white">{t('modules.leadership.dashboard.quickActions.newRaci')}</p>
+              <p className="text-xs text-slate-600 dark:text-slate-400">{t('modules.leadership.dashboard.quickActions.newRaciDesc')}</p>
             </div>
           </Link>
         </div>
       </div>
 
       {/* Recent Activity */}
-      <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg p-6">
-        <h2 className="text-xl font-bold text-white mb-4">{t('modules.leadership.dashboard.recentActivity.title')}</h2>
+      <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-6 shadow dark:shadow-slate-900/50">
+        <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4">{t('modules.leadership.dashboard.recentActivity.title')}</h2>
         <div className="space-y-3">
-          <div className="flex items-center justify-between p-3 bg-gray-800/30 rounded-lg">
+          <div className="flex items-center justify-between p-3 bg-slate-100 dark:bg-slate-700/40 rounded-lg">
             <div className="flex items-center space-x-3">
               <span className="text-blue-400">📋</span>
               <div>
-                <p className="text-sm font-medium text-white">{t('modules.leadership.dashboard.recentActivity.policyTitle')}</p>
-                <p className="text-xs text-gray-400">{t('modules.leadership.dashboard.recentActivity.policyWhen')}</p>
+                <p className="text-sm font-medium text-slate-900 dark:text-white">{t('modules.leadership.dashboard.recentActivity.policyTitle')}</p>
+                <p className="text-xs text-slate-600 dark:text-slate-400">{t('modules.leadership.dashboard.recentActivity.policyWhen')}</p>
               </div>
             </div>
             <span className="px-2 py-1 bg-yellow-500/20 text-yellow-400 text-xs rounded">{t('modules.leadership.dashboard.recentActivity.draft')}</span>
           </div>
           
-          <div className="flex items-center justify-between p-3 bg-gray-800/30 rounded-lg">
+          <div className="flex items-center justify-between p-3 bg-slate-100 dark:bg-slate-700/40 rounded-lg">
             <div className="flex items-center space-x-3">
               <span className="text-purple-400">👥</span>
               <div>
-                <p className="text-sm font-medium text-white">{t('modules.leadership.dashboard.recentActivity.qualityDirector')}</p>
-                <p className="text-xs text-gray-400">{t('modules.leadership.dashboard.recentActivity.roleWhen')}</p>
+                <p className="text-sm font-medium text-slate-900 dark:text-white">{t('modules.leadership.dashboard.recentActivity.qualityDirector')}</p>
+                <p className="text-xs text-slate-600 dark:text-slate-400">{t('modules.leadership.dashboard.recentActivity.roleWhen')}</p>
               </div>
             </div>
             <span className="px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded">{t('modules.leadership.dashboard.recentActivity.active')}</span>

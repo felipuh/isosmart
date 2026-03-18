@@ -11,10 +11,10 @@ import {
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
 
 const statColors = {
-  red:    { card: 'from-red-500/10 to-red-600/5 border-red-500/20', value: 'text-red-400', shadow: 'shadow-red-500/10' },
-  orange: { card: 'from-orange-500/10 to-orange-600/5 border-orange-500/20', value: 'text-orange-400', shadow: 'shadow-orange-500/10' },
-  blue:   { card: 'from-blue-500/10 to-blue-600/5 border-blue-500/20', value: 'text-blue-400', shadow: 'shadow-blue-500/10' },
-  green:  { card: 'from-green-500/10 to-green-600/5 border-green-500/20', value: 'text-green-400', shadow: 'shadow-green-500/10' },
+  red:    { card: 'from-red-500/10 to-red-600/5 border-red-500/20', value: 'text-red-600 dark:text-red-400', shadow: 'shadow-red-500/10' },
+  orange: { card: 'from-orange-500/10 to-orange-600/5 border-orange-500/20', value: 'text-orange-600 dark:text-orange-400', shadow: 'shadow-orange-500/10' },
+  blue:   { card: 'from-blue-500/10 to-blue-600/5 border-blue-500/20', value: 'text-blue-600 dark:text-blue-400', shadow: 'shadow-blue-500/10' },
+  green:  { card: 'from-green-500/10 to-green-600/5 border-green-500/20', value: 'text-green-600 dark:text-green-400', shadow: 'shadow-green-500/10' },
 };
 
 const ImprovementDashboard = () => {
@@ -77,13 +77,13 @@ const ImprovementDashboard = () => {
     const palette = statColors[color] || statColors.blue;
     return (
       <Link to={link} className="block">
-        <div className={`bg-gradient-to-br ${palette.card} backdrop-blur-sm border rounded-lg p-6 hover:shadow-lg ${palette.shadow} transition-all duration-300`}>
+        <div className={`bg-gradient-to-br ${palette.card} border rounded-lg p-6 hover:shadow-lg ${palette.shadow} transition-all duration-300 bg-white dark:bg-slate-800 shadow dark:shadow-slate-900/50 border-slate-200 dark:border-slate-700`}>
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-medium text-gray-400">{title}</h3>
+            <h3 className="text-sm font-medium text-slate-600 dark:text-slate-300">{title}</h3>
             <span className="text-2xl">{icon}</span>
           </div>
           <p className={`text-3xl font-bold ${palette.value}`}>{value}</p>
-          {subtitle && <p className="text-xs text-gray-500 mt-2">{subtitle}</p>}
+          {subtitle && <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">{subtitle}</p>}
         </div>
       </Link>
     );
@@ -98,11 +98,11 @@ const ImprovementDashboard = () => {
   }
 
   return (
-    <div className="space-y-6" style={{ fontFamily: '"Sora", "Work Sans", sans-serif' }}>
+    <div className="p-6 bg-slate-50 dark:bg-slate-900 min-h-screen transition-colors duration-300 space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white">{t('modules.improvement.dashboard.title')}</h1>
-          <p className="text-gray-400 mt-1">{t('modules.improvement.dashboard.subtitle')}</p>
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">{t('modules.improvement.dashboard.title')}</h1>
+          <p className="text-slate-600 dark:text-slate-400 mt-1">{t('modules.improvement.dashboard.subtitle')}</p>
         </div>
       </div>
 
@@ -122,12 +122,12 @@ const ImprovementDashboard = () => {
       </div>
 
       {stats.nonconformities.critical > 0 && (
-        <div className="bg-gradient-to-br from-red-500/10 to-red-600/5 backdrop-blur-sm border border-red-500/20 rounded-lg p-6">
+        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-500/20 rounded-lg p-6">
           <div className="flex items-center space-x-3 mb-2">
             <span className="text-2xl">🚨</span>
-            <h2 className="text-xl font-bold text-white">{t('modules.improvement.dashboard.alerts.attentionRequired')}</h2>
+            <h2 className="text-xl font-bold text-red-800 dark:text-red-100">{t('modules.improvement.dashboard.alerts.attentionRequired')}</h2>
           </div>
-          <p className="text-gray-300">{t('modules.improvement.dashboard.alerts.criticalNcMessage').replace('{count}', stats.nonconformities.critical)}</p>
+          <p className="text-red-700 dark:text-red-200">{t('modules.improvement.dashboard.alerts.criticalNcMessage').replace('{count}', stats.nonconformities.critical)}</p>
           <Link to="/improvement/nonconformities" className="inline-block mt-4 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-all">
             {t('modules.improvement.dashboard.alerts.viewCriticalNc')}
           </Link>
@@ -135,32 +135,32 @@ const ImprovementDashboard = () => {
       )}
 
       {stats.corrective_actions.overdue > 0 && (
-        <div className="bg-gradient-to-br from-orange-500/10 to-orange-600/5 backdrop-blur-sm border border-orange-500/20 rounded-lg p-6">
+        <div className="bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-500/20 rounded-lg p-6">
           <div className="flex items-center space-x-3 mb-2">
             <span className="text-2xl">⏰</span>
-            <h2 className="text-xl font-bold text-white">{t('modules.improvement.dashboard.alerts.overdueActions')}</h2>
+            <h2 className="text-xl font-bold text-orange-800 dark:text-orange-100">{t('modules.improvement.dashboard.alerts.overdueActions')}</h2>
           </div>
-          <p className="text-gray-300">{t('modules.improvement.dashboard.alerts.overdueMessage').replace('{count}', stats.corrective_actions.overdue)}</p>
+          <p className="text-orange-700 dark:text-orange-200">{t('modules.improvement.dashboard.alerts.overdueMessage').replace('{count}', stats.corrective_actions.overdue)}</p>
           <Link to="/improvement/corrective-actions" className="inline-block mt-4 px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition-all">
             {t('modules.improvement.dashboard.alerts.viewOverdue')}
           </Link>
         </div>
       )}
 
-      <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg p-6">
-        <h2 className="text-xl font-bold text-white mb-4">{t('modules.improvement.dashboard.quickActions.title')}</h2>
+      <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-6 shadow dark:shadow-slate-900/50">
+        <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4">{t('modules.improvement.dashboard.quickActions.title')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Link to="/improvement/nonconformities/new" className="flex items-center space-x-3 p-4 bg-red-500/10 border border-red-500/20 rounded-lg hover:bg-red-500/20 transition-all">
             <span className="text-2xl">🚨</span>
-            <div><p className="font-medium text-white">{t('modules.improvement.dashboard.quickActions.reportNc')}</p><p className="text-xs text-gray-400">{t('modules.improvement.dashboard.quickActions.registerNc')}</p></div>
+            <div><p className="font-medium text-slate-900 dark:text-white">{t('modules.improvement.dashboard.quickActions.reportNc')}</p><p className="text-xs text-slate-600 dark:text-slate-400">{t('modules.improvement.dashboard.quickActions.registerNc')}</p></div>
           </Link>
           <Link to="/improvement/corrective-actions/new" className="flex items-center space-x-3 p-4 bg-orange-500/10 border border-orange-500/20 rounded-lg hover:bg-orange-500/20 transition-all">
             <span className="text-2xl">🔧</span>
-            <div><p className="font-medium text-white">{t('modules.improvement.dashboard.quickActions.newCorrectiveAction')}</p><p className="text-xs text-gray-400">{t('modules.improvement.dashboard.quickActions.createActionPlan')}</p></div>
+            <div><p className="font-medium text-slate-900 dark:text-white">{t('modules.improvement.dashboard.quickActions.newCorrectiveAction')}</p><p className="text-xs text-slate-600 dark:text-slate-400">{t('modules.improvement.dashboard.quickActions.createActionPlan')}</p></div>
           </Link>
           <Link to="/improvement/continual/new" className="flex items-center space-x-3 p-4 bg-green-500/10 border border-green-500/20 rounded-lg hover:bg-green-500/20 transition-all">
             <span className="text-2xl">📈</span>
-            <div><p className="font-medium text-white">{t('modules.improvement.dashboard.quickActions.improvementInitiative')}</p><p className="text-xs text-gray-400">{t('modules.improvement.dashboard.quickActions.proposeContinual')}</p></div>
+            <div><p className="font-medium text-slate-900 dark:text-white">{t('modules.improvement.dashboard.quickActions.improvementInitiative')}</p><p className="text-xs text-slate-600 dark:text-slate-400">{t('modules.improvement.dashboard.quickActions.proposeContinual')}</p></div>
           </Link>
         </div>
       </div>
@@ -169,16 +169,16 @@ const ImprovementDashboard = () => {
         <Link to="/improvement/nonconformities" className="p-6 bg-gradient-to-br from-red-500/10 to-red-600/5 border border-red-500/20 rounded-lg hover:shadow-lg transition-all">
           <div className="flex items-center space-x-3 mb-2">
             <span className="text-2xl">📋</span>
-            <h3 className="text-lg font-bold text-white">{t('modules.improvement.dashboard.cards.ncAndActionsTitle')}</h3>
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white">{t('modules.improvement.dashboard.cards.ncAndActionsTitle')}</h3>
           </div>
-          <p className="text-sm text-gray-400">{t('modules.improvement.dashboard.cards.ncAndActionsDesc')}</p>
+          <p className="text-sm text-slate-600 dark:text-slate-400">{t('modules.improvement.dashboard.cards.ncAndActionsDesc')}</p>
         </Link>
         <Link to="/improvement/continual" className="p-6 bg-gradient-to-br from-green-500/10 to-green-600/5 border border-green-500/20 rounded-lg hover:shadow-lg transition-all">
           <div className="flex items-center space-x-3 mb-2">
             <span className="text-2xl">🚀</span>
-            <h3 className="text-lg font-bold text-white">{t('modules.improvement.dashboard.cards.continualTitle')}</h3>
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white">{t('modules.improvement.dashboard.cards.continualTitle')}</h3>
           </div>
-          <p className="text-sm text-gray-400">{t('modules.improvement.dashboard.cards.continualDesc')}</p>
+          <p className="text-sm text-slate-600 dark:text-slate-400">{t('modules.improvement.dashboard.cards.continualDesc')}</p>
         </Link>
       </div>
     </div>
