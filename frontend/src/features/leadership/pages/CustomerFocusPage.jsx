@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import { useI18n } from '../../../context/I18nContext';
 import { getCustomerFocus, createCustomerFocus, updateCustomerFocus, deleteCustomerFocus } from '../api/leadershipApi';
@@ -35,7 +35,7 @@ const CustomerFocusPage = () => {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
-  const loadItems = async () => {
+  const loadItems = useCallback(async () => {
     try {
       setLoading(true);
       const data = await getCustomerFocus();
@@ -45,11 +45,11 @@ const CustomerFocusPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [t]);
 
   useEffect(() => {
     loadItems();
-  }, []);
+  }, [loadItems]);
 
   const resetForm = () => {
     setForm(initialForm);

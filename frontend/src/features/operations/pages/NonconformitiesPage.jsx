@@ -52,7 +52,7 @@ const NonconformitiesPage = () => {
       console.error('Error loading users:', error);
       setError(t('common.messages.errorTryAgain'));
     }
-  }, [orgId]);
+  }, [orgId, t]);
 
   const loadData = useCallback(async () => {
     try {
@@ -66,7 +66,7 @@ const NonconformitiesPage = () => {
     } finally {
       setLoading(false);
     }
-  }, [orgId]);
+  }, [orgId, t]);
 
   useEffect(() => {
     if (orgId) {

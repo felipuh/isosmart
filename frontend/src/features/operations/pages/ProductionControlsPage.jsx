@@ -72,7 +72,7 @@ const ProductionControlsPage = () => {
     } finally {
       setLoading(false);
     }
-  }, [orgId]);
+  }, [orgId, t]);
 
   const loadUsers = useCallback(async () => {
     try {
@@ -82,7 +82,7 @@ const ProductionControlsPage = () => {
       console.error('Error loading users:', error);
       setError(t('common.messages.errorTryAgain'));
     }
-  }, [orgId]);
+  }, [orgId, t]);
 
   useEffect(() => {
     if (orgId) {

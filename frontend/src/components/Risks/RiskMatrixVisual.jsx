@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import riskService from '../../services/riskService';
 import { useI18n } from '../../context/I18nContext';
 import { useAuth } from '../../context/AuthContext';
@@ -52,11 +52,7 @@ const RiskMatrixVisual = ({ onRiskClick }) => {
     return t('riskManagement.levels.bajo');
   };
 
-  useEffect(() => {
-    loadMatrixData();
-  }, [currentOrganization?.id]);
-
-  const loadMatrixData = async () => {
+  const loadMatrixData = useCallback(async () => {
     setLoading(true);
     try {
       const data = await riskService.getMatrixData(currentOrganization?.id || null);
@@ -66,7 +62,11 @@ const RiskMatrixVisual = ({ onRiskClick }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentOrganization?.id]);
+
+  useEffect(() => {
+    loadMatrixData();
+  }, [loadMatrixData]);
 
   const handleCellClick = (prob, impact) => {
     if (matrixData?.matrix?.[prob]?.[impact]?.count > 0) {

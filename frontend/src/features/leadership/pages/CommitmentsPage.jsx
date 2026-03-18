@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import { useI18n } from '../../../context/I18nContext';
 import { getCommitments, createCommitment, updateCommitment, deleteCommitment } from '../api/leadershipApi';
@@ -58,7 +58,7 @@ const CommitmentsPage = () => {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
-  const loadCommitments = async () => {
+  const loadCommitments = useCallback(async () => {
     try {
       setLoading(true);
       const data = await getCommitments();
@@ -68,11 +68,11 @@ const CommitmentsPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [t]);
 
   useEffect(() => {
     loadCommitments();
-  }, []);
+  }, [loadCommitments]);
 
   const resetForm = () => {
     setForm(initialForm);

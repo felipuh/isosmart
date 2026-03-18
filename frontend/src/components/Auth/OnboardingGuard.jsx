@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import { useI18n } from '../../context/I18nContext';
 import settingsService from '../../services/settingsService';
 
 const getOnboardingSessionKey = (organizationId) => (
@@ -10,7 +9,6 @@ const getOnboardingSessionKey = (organizationId) => (
 );
 
 const OnboardingGuard = ({ children }) => {
-  const { t } = useI18n();
   const { currentOrganization, isAuthenticated } = useAuth();
   const location = useLocation();
   const [loading, setLoading] = useState(true);

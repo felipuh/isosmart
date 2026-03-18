@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import { useI18n } from '../../../context/I18nContext';
 import {
@@ -37,7 +37,7 @@ const RoleAssignmentsPage = () => {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       setLoading(true);
       const [assignmentsData, rolesData] = await Promise.all([
@@ -51,9 +51,9 @@ const RoleAssignmentsPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [t]);
 
-  const loadUsers = async () => {
+  const loadUsers = useCallback(async () => {
     try {
       const data = await getUsers();
       setUsers(normalizeList(data));
@@ -61,12 +61,12 @@ const RoleAssignmentsPage = () => {
     } catch {
       setUserError(t('modules.leadership.roleAssignmentsPage.messages.usersLoadError'));
     }
-  };
+  }, [t]);
 
   useEffect(() => {
     loadData();
     loadUsers();
-  }, []);
+  }, [loadData, loadUsers]);
 
   const resetForm = () => {
     setForm(initialForm);

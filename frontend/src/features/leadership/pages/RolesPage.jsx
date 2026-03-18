@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import { useI18n } from '../../../context/I18nContext';
 import { getRoles, createRole, updateRole, deleteRole } from '../api/leadershipApi';
@@ -37,7 +37,7 @@ const RolesPage = () => {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
-  const loadRoles = async () => {
+  const loadRoles = useCallback(async () => {
     try {
       setLoading(true);
       const data = await getRoles();
@@ -47,11 +47,11 @@ const RolesPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [t]);
 
   useEffect(() => {
     loadRoles();
-  }, []);
+  }, [loadRoles]);
 
   const resetForm = () => {
     setForm(initialForm);

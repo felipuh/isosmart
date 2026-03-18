@@ -33,7 +33,7 @@ const DocumentDashboard = () => {
     } finally {
       setLoading(false);
     }
-  }, [currentOrganization?.id, filterType]);
+  }, [currentOrganization?.id, filterType, t]);
 
   useEffect(() => {
     if (currentOrganization?.id) {

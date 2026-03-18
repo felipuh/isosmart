@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import { useI18n } from '../../../context/I18nContext';
 import {
@@ -41,7 +41,7 @@ const PoliciesPage = () => {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
-  const loadPolicies = async () => {
+  const loadPolicies = useCallback(async () => {
     try {
       setLoading(true);
       const data = await getPolicies();
@@ -51,11 +51,11 @@ const PoliciesPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [t]);
 
   useEffect(() => {
     loadPolicies();
-  }, []);
+  }, [loadPolicies]);
 
   const resetForm = () => {
     setForm(initialForm);

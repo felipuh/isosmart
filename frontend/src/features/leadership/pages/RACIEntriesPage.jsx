@@ -47,7 +47,7 @@ const RACIEntriesPage = () => {
     } finally {
       setLoading(false);
     }
-  }, [matrixId]);
+  }, [matrixId, t]);
 
   useEffect(() => {
     loadData();

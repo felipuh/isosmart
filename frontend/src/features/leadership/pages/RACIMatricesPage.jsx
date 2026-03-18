@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import { useI18n } from '../../../context/I18nContext';
@@ -30,7 +30,7 @@ const RACIMatricesPage = () => {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
-  const loadMatrices = async () => {
+  const loadMatrices = useCallback(async () => {
     try {
       setLoading(true);
       const data = await getRACIMatrices();
@@ -40,11 +40,11 @@ const RACIMatricesPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [t]);
 
   useEffect(() => {
     loadMatrices();
-  }, []);
+  }, [loadMatrices]);
 
   const resetForm = () => {
     setForm(initialForm);

@@ -52,7 +52,7 @@ const ChangeControlPage = () => {
     } finally {
       setLoading(false);
     }
-  }, [orgId]);
+  }, [orgId, t]);
 
   useEffect(() => {
     if (orgId) loadData();

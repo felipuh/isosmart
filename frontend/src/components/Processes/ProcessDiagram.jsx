@@ -46,7 +46,7 @@ const ProcessDiagram = ({ diagramData, processes, loading }) => {
     
     // Si no hay procesos directos, usar datos del diagrama IA
     return diagramData;
-  }, [processes, diagramData]);
+  }, [diagramData, processes, t]);
 
   if (loading) {
     return (

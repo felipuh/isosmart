@@ -45,7 +45,7 @@ const AwarenessPage = () => {
     } finally {
       setLoading(false);
     }
-  }, [orgId]);
+  }, [orgId, t]);
 
   useEffect(() => {
     if (orgId) {

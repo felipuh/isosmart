@@ -68,7 +68,7 @@ const ObjectiveActionsPage = () => {
     } finally {
       setLoading(false);
     }
-  }, [orgId]);
+  }, [orgId, t]);
 
   const loadObjectives = useCallback(async () => {
     try {
@@ -78,7 +78,7 @@ const ObjectiveActionsPage = () => {
       console.error('Error loading objectives:', error);
       setError(t('common.messages.errorTryAgain'));
     }
-  }, [orgId]);
+  }, [orgId, t]);
 
   const loadUsers = useCallback(async () => {
     try {
@@ -88,7 +88,7 @@ const ObjectiveActionsPage = () => {
       console.error('Error loading users:', error);
       setError(t('common.messages.errorTryAgain'));
     }
-  }, [orgId]);
+  }, [orgId, t]);
 
   useEffect(() => {
     if (orgId) {

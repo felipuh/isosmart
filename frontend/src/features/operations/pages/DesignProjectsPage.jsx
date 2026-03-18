@@ -78,7 +78,7 @@ const DesignProjectsPage = () => {
     } finally {
       setLoading(false);
     }
-  }, [orgId]);
+  }, [orgId, t]);
 
   const loadUsers = useCallback(async () => {
     try {
@@ -88,7 +88,7 @@ const DesignProjectsPage = () => {
       console.error('Error loading users:', error);
       setError(t('common.messages.errorTryAgain'));
     }
-  }, [orgId]);
+  }, [orgId, t]);
 
   useEffect(() => {
     if (orgId) {
