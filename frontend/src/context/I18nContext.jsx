@@ -1589,6 +1589,7 @@ const MESSAGES = {
         typeRequired: 'Tipo de Stakeholder *',
         organization: 'Organización',
         contactPerson: 'Persona de Contacto',
+        email: 'Correo Electrónico',
         phone: 'Teléfono',
         powerLevel: 'Nivel de Poder',
         interestLevel: 'Nivel de Interés',
@@ -5441,6 +5442,7 @@ const MESSAGES = {
         typeRequired: 'Stakeholder Type *',
         organization: 'Organization',
         contactPerson: 'Contact Person',
+        email: 'Email',
         phone: 'Phone',
         powerLevel: 'Power Level',
         interestLevel: 'Interest Level',
@@ -9284,6 +9286,7 @@ const MESSAGES = {
         typeRequired: 'Tipo de Stakeholder *',
         organization: 'Organização',
         contactPerson: 'Pessoa de Contato',
+        email: 'E-mail',
         phone: 'Telefone',
         powerLevel: 'Nível de Poder',
         interestLevel: 'Nível de Interesse',
@@ -12093,6 +12096,40 @@ const normalizeBackendTranslationKey = (value) => {
     .trim();
 };
 
+const buildBackendLookupCandidates = (value) => {
+  const raw = typeof value === 'string' ? value : '';
+  const trimmed = raw.trim();
+  const withoutBullet = trimmed.replace(/^[-*•]\s*/, '');
+  const withoutTrailingPunctuation = withoutBullet.replace(/[.,;:!?]+$/g, '').trim();
+
+  return [
+    trimmed,
+    withoutBullet,
+    withoutTrailingPunctuation,
+    normalizeBackendTranslationKey(trimmed),
+    normalizeBackendTranslationKey(withoutBullet),
+    normalizeBackendTranslationKey(withoutTrailingPunctuation),
+  ].filter(Boolean);
+};
+
+const translateByBackendDictionaryFragments = (value, language) => {
+  const dictionary = BACKEND_STRINGS_TRANSLATIONS[language];
+  if (!dictionary) return value;
+
+  const normalizedEntries = Object.entries(dictionary)
+    .map(([source, target]) => [normalizeBackendTranslationKey(source), target])
+    .sort((a, b) => b[0].length - a[0].length);
+
+  let translated = normalizeBackendTranslationKey(value);
+
+  for (const [source, target] of normalizedEntries) {
+    if (!source) continue;
+    translated = translated.split(source).join(target);
+  }
+
+  return translated;
+};
+
 export const I18nProvider = ({ children }) => {
   const [language, setLanguageState] = useState(() => {
     const stored = localStorage.getItem('isosmart_language');
@@ -12131,21 +12168,31 @@ export const I18nProvider = ({ children }) => {
   const translateBackendString = useCallback(
     (backendString) => {
       if (!backendString || typeof backendString !== 'string') return backendString;
-      const normalizedBackendString = normalizeBackendTranslationKey(backendString);
+      const leadingPrefixMatch = backendString.match(/^\s*([-*•]\s*)/);
+      const leadingPrefix = leadingPrefixMatch ? leadingPrefixMatch[0] : '';
+      const stringBody = leadingPrefix ? backendString.slice(leadingPrefix.length) : backendString;
+
+      const candidates = buildBackendLookupCandidates(stringBody);
 
       // Try backend strings dictionary first
-      const backendTranslated =
-        BACKEND_STRINGS_TRANSLATIONS[language]?.[backendString]
-        ?? BACKEND_STRINGS_TRANSLATIONS[language]?.[normalizedBackendString];
-      if (backendTranslated !== undefined) return backendTranslated;
+      for (const candidate of candidates) {
+        const backendTranslated = BACKEND_STRINGS_TRANSLATIONS[language]?.[candidate];
+        if (backendTranslated !== undefined) return `${leadingPrefix}${backendTranslated}`;
+      }
+
+      // Try partial dictionary replacements for dynamic sentences/lists
+      const partialBackendTranslated = translateByBackendDictionaryFragments(stringBody, language);
+      if (partialBackendTranslated !== normalizeBackendTranslationKey(stringBody)) {
+        return `${leadingPrefix}${partialBackendTranslated}`;
+      }
 
       // Fallback: try literal translations
-      const literalTranslated = LITERAL_TRANSLATIONS[language]?.[backendString];
+      const literalTranslated = LITERAL_TRANSLATIONS[language]?.[stringBody];
       if (literalTranslated !== undefined) return literalTranslated;
 
       // Final fallback: try fallback translations
       if (language !== DEFAULT_LANGUAGE) {
-        return translateLiteralFallback(backendString, language);
+        return `${leadingPrefix}${translateLiteralFallback(stringBody, language)}`;
       }
 
       // Return original if no translation found

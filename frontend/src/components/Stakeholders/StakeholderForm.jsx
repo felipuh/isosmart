@@ -260,7 +260,7 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
-                  Email
+                  {t('stakeholderForm.fields.email')}
                 </label>
                 <input
                   type="email"
