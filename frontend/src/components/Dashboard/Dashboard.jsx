@@ -21,7 +21,7 @@ import settingsService from '../../services/settingsService';
 
 const Dashboard = () => {
   const { currentOrganization, user } = useAuth();
-  const { t, language } = useI18n();
+  const { t, language, translateBackendString } = useI18n();
   const orgId = currentOrganization?.id || null;
   const [stats, setStats] = useState({
     modulesActive: 0,
@@ -424,7 +424,7 @@ const Dashboard = () => {
           </div>
 
           <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
-            {onboardingInsights.summary_output?.message || t('dashboard.main.onboardingInsights.defaultMessage')}
+            {translateBackendString(onboardingInsights.summary_output?.message) || t('dashboard.main.onboardingInsights.defaultMessage')}
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -432,7 +432,7 @@ const Dashboard = () => {
               <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-2">{t('dashboard.main.onboardingInsights.quickWins')}</p>
               <ul className="text-xs text-slate-600 dark:text-slate-300 space-y-1">
                 {(onboardingInsights.impact_savings_output?.quick_wins || []).slice(0, 3).map((item, index) => (
-                  <li key={`qw-${index}`}>• {item}</li>
+                  <li key={`qw-${index}`}>• {translateBackendString(item)}</li>
                 ))}
               </ul>
             </div>
@@ -441,7 +441,7 @@ const Dashboard = () => {
               <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-2">{t('dashboard.main.onboardingInsights.bigBets')}</p>
               <ul className="text-xs text-slate-600 dark:text-slate-300 space-y-1">
                 {(onboardingInsights.impact_savings_output?.big_bets || []).slice(0, 3).map((item, index) => (
-                  <li key={`bb-${index}`}>• {item}</li>
+                  <li key={`bb-${index}`}>• {translateBackendString(item)}</li>
                 ))}
               </ul>
             </div>
@@ -450,7 +450,7 @@ const Dashboard = () => {
               <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-2">{t('dashboard.main.onboardingInsights.nextFocus')}</p>
               <ul className="text-xs text-slate-600 dark:text-slate-300 space-y-1">
                 {(onboardingInsights.summary_output?.top_priorities_today || []).slice(0, 3).map((item, index) => (
-                  <li key={`tp-${index}`}>• {item}</li>
+                  <li key={`tp-${index}`}>• {translateBackendString(item)}</li>
                 ))}
               </ul>
             </div>
@@ -468,7 +468,7 @@ const Dashboard = () => {
           </div>
 
           <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
-            {onboardingIsoSkeleton.scope_draft}
+            {translateBackendString(onboardingIsoSkeleton.scope_draft)}
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -507,18 +507,18 @@ const Dashboard = () => {
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-bold text-slate-900 dark:text-white">{t('dashboard.main.adaptiveRoute.title')}</h2>
             <span className="text-xs px-2 py-1 rounded bg-cyan-100 text-cyan-700 dark:bg-cyan-900/40 dark:text-cyan-300">
-              {onboardingAdaptiveRoute.mode} · {onboardingAdaptiveRoute.cadence}
+              {translateBackendString(onboardingAdaptiveRoute.mode)} · {translateBackendString(onboardingAdaptiveRoute.cadence)}
             </span>
           </div>
 
-          <p className="text-sm font-semibold text-slate-800 dark:text-slate-100 mb-1">{onboardingAdaptiveRoute.title}</p>
-          <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">{onboardingAdaptiveRoute.description}</p>
+          <p className="text-sm font-semibold text-slate-800 dark:text-slate-100 mb-1">{translateBackendString(onboardingAdaptiveRoute.title)}</p>
+          <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">{translateBackendString(onboardingAdaptiveRoute.description)}</p>
 
           <div className="p-4 rounded-lg border border-slate-200 dark:border-slate-700">
             <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-2">{t('dashboard.main.adaptiveRoute.suggestedActions')}</p>
             <ul className="text-xs text-slate-600 dark:text-slate-300 space-y-1">
               {(onboardingAdaptiveRoute.recommended_actions || []).slice(0, 4).map((item, index) => (
-                <li key={`ra-${index}`}>• {item}</li>
+                <li key={`ra-${index}`}>• {translateBackendString(item)}</li>
               ))}
             </ul>
           </div>

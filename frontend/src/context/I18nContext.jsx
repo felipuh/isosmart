@@ -12012,6 +12012,48 @@ const MESSAGES = {
   },
 };
 
+// Backend strings translations for dynamic content from API
+const BACKEND_STRINGS_TRANSLATIONS = {
+  en: {
+    // Adaptive Route modes
+    'Agile': 'Agile',
+    'Waterfall': 'Waterfall',
+    'Hybrid': 'Hybrid',
+    'Lean': 'Lean',
+    // Cadences
+    'Monthly': 'Monthly',
+    'Quarterly': 'Quarterly',
+    'Weekly': 'Weekly',
+    'Bi-weekly': 'Bi-weekly',
+    'Annual': 'Annual',
+    // Common backend strings
+    'Active': 'Active',
+    'Inactive': 'Inactive',
+    'Pending': 'Pending',
+    'In Progress': 'In Progress',
+    'Completed': 'Completed',
+  },
+  pt: {
+    // Adaptive Route modes
+    'Agile': 'Ágil',
+    'Waterfall': 'Cascata',
+    'Hybrid': 'Híbrido',
+    'Lean': 'Enxuto',
+    // Cadences
+    'Monthly': 'Mensalmente',
+    'Quarterly': 'Trimestralmente',
+    'Weekly': 'Semanalmente',
+    'Bi-weekly': 'Quinzenalmente',
+    'Annual': 'Anualmente',
+    // Common backend strings
+    'Active': 'Ativo',
+    'Inactive': 'Inativo',
+    'Pending': 'Pendente',
+    'In Progress': 'Em Progresso',
+    'Completed': 'Concluído',
+  },
+};
+
 const I18nContext = createContext(null);
 
 const getValue = (obj, path) => {
@@ -12052,14 +12094,39 @@ export const I18nProvider = ({ children }) => {
     [language]
   );
 
+  // Translate dynamic strings from backend API responses
+  const translateBackendString = useCallback(
+    (backendString) => {
+      if (!backendString || typeof backendString !== 'string') return backendString;
+
+      // Try backend strings dictionary first
+      const backendTranslated = BACKEND_STRINGS_TRANSLATIONS[language]?.[backendString];
+      if (backendTranslated !== undefined) return backendTranslated;
+
+      // Fallback: try literal translations
+      const literalTranslated = LITERAL_TRANSLATIONS[language]?.[backendString];
+      if (literalTranslated !== undefined) return literalTranslated;
+
+      // Final fallback: try fallback translations
+      if (language !== DEFAULT_LANGUAGE) {
+        return translateLiteralFallback(backendString, language);
+      }
+
+      // Return original if no translation found
+      return backendString;
+    },
+    [language]
+  );
+
   const value = useMemo(
     () => ({
       language,
       setLanguage,
       supportedLanguages: SUPPORTED_LANGUAGES,
       t,
+      translateBackendString,
     }),
-    [language, setLanguage, t]
+    [language, setLanguage, t, translateBackendString]
   );
 
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
