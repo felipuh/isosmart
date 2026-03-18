@@ -224,6 +224,24 @@ const Dashboard = () => {
     };
   };
 
+  const translateScopeDraft = useCallback((scopeDraft) => {
+    if (!scopeDraft || typeof scopeDraft !== 'string') return scopeDraft;
+
+    const normalized = scopeDraft
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .toLowerCase();
+
+    const knownPrefix = 'el sistema de gestion de la quality aplica a los procesos estrategicos';
+    if (normalized.startsWith(knownPrefix)) {
+      return t('dashboard.main.isoSkeleton.scopeDraftFallback', scopeDraft);
+    }
+
+    return translateBackendString(scopeDraft);
+  }, [t, translateBackendString]);
+
   useEffect(() => {
     let mounted = true;
 
@@ -468,7 +486,7 @@ const Dashboard = () => {
           </div>
 
           <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
-            {translateBackendString(onboardingIsoSkeleton.scope_draft)}
+            {translateScopeDraft(onboardingIsoSkeleton.scope_draft)}
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

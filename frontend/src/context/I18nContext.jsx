@@ -723,6 +723,7 @@ const MESSAGES = {
         isoSkeleton: {
           title: 'Esqueleto ISO autogenerado',
           systemReady: 'Sistema listo al {percentage}%',
+          scopeDraftFallback: 'El Sistema de Gestión de la Quality aplica a los procesos estratégicos, operativos y de apoyo de la organización en el sector IT, incluyendo actividades en Costa Rica, con enfoque en cumplimiento de requisitos del cliente, mejora continua y gestión basada en riesgos.',
           initialProcesses: 'Procesos iniciales',
           processCounts: '{strategic} estratégicos · {operational} operativos · {support} soporte',
           risksOpportunities: 'Riesgos/Oportunidades',
@@ -4577,6 +4578,7 @@ const MESSAGES = {
         isoSkeleton: {
           title: 'Auto-generated ISO skeleton',
           systemReady: 'System ready at {percentage}%',
+          scopeDraftFallback: 'The Quality Management System applies to the strategic, operational, and support processes of the organization in the IT sector, including activities in Costa Rica, with a focus on customer requirement compliance, continuous improvement, and risk-based management.',
           initialProcesses: 'Initial processes',
           processCounts: '{strategic} strategic · {operational} operational · {support} support',
           risksOpportunities: 'Risks/Opportunities',
@@ -8421,6 +8423,7 @@ const MESSAGES = {
         isoSkeleton: {
           title: 'Estrutura ISO autogerada',
           systemReady: 'Sistema pronto em {percentage}%',
+          scopeDraftFallback: 'O Sistema de Gestao da Qualidade se aplica aos processos estrategicos, operacionais e de apoio da organizacao no setor de TI, incluindo atividades na Costa Rica, com foco no cumprimento dos requisitos do cliente, melhoria continua e gestao baseada em riscos.',
           initialProcesses: 'Processos iniciais',
           processCounts: '{strategic} estratégicos · {operational} operacionais · {support} suporte',
           risksOpportunities: 'Riscos/Oportunidades',
