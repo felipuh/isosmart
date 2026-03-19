@@ -10,6 +10,7 @@
     "preview": "vite preview",
     "test:e2e:install": "playwright install chromium",
     "test:e2e": "playwright test --config=playwright.config.cjs",
+    "test:e2e:smoke": "playwright test tests/e2e/password-recovery-runtime.spec.js tests/e2e/settings-backup-runtime.spec.js tests/e2e/scope-process-runtime.spec.js tests/e2e/reports-runtime.spec.js --config=playwright.config.cjs --reporter=line",
     "test:i18n:smoke": "playwright test tests/e2e/i18n-runtime.spec.js --config=playwright.config.cjs --reporter=line"
   },
   "dependencies": {
