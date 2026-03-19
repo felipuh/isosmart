@@ -550,29 +550,6 @@ const MESSAGES = {
         },
         stakeholders: {
           title: 'Partes Interesadas',
-      passwordReset: {
-        backToLogin: 'Volver al inicio de sesión',
-        request: {
-          title: 'Recuperar contraseña',
-          subtitle: 'Te enviaremos un enlace seguro para restablecer tu acceso.',
-          submit: 'Enviar enlace de recuperación',
-          messages: {
-            success: 'Si el correo existe, recibirás instrucciones para restablecer tu contraseña.',
-            error: 'No fue posible procesar la solicitud. Intenta nuevamente.',
-          },
-        },
-        confirm: {
-          title: 'Restablecer contraseña',
-          subtitle: 'Define una nueva contraseña para tu cuenta.',
-          newPassword: 'Nueva contraseña',
-          submit: 'Restablecer contraseña',
-          messages: {
-            success: 'Contraseña restablecida correctamente. Redirigiendo al inicio de sesión...',
-            error: 'No fue posible restablecer la contraseña.',
-            invalidLink: 'El enlace de recuperación es inválido o está incompleto.',
-          },
-        },
-      },
           subtitle: '{count} alta influencia',
         },
         processCoverage: {
@@ -809,29 +786,6 @@ const MESSAGES = {
         reviewTitle: 'Resumen de activación',
         organizationLabel: 'Organización',
         languageLabel: 'Idioma',
-      passwordReset: {
-        backToLogin: 'Back to sign in',
-        request: {
-          title: 'Recover password',
-          subtitle: 'We will send you a secure link to restore your access.',
-          submit: 'Send recovery link',
-          messages: {
-            success: 'If the email exists, you will receive instructions to reset your password.',
-            error: 'The request could not be processed. Please try again.',
-          },
-        },
-        confirm: {
-          title: 'Reset password',
-          subtitle: 'Set a new password for your account.',
-          newPassword: 'New password',
-          submit: 'Reset password',
-          messages: {
-            success: 'Password reset successfully. Redirecting to sign in...',
-            error: 'The password could not be reset.',
-            invalidLink: 'The recovery link is invalid or incomplete.',
-          },
-        },
-      },
         standardsLabel: 'Estándares iniciales',
         toneLabel: 'Estilo de respuesta',
         creatingTitle: 'Estamos creando tu sistema',
@@ -910,31 +864,31 @@ const MESSAGES = {
         messages: {
           connectionError: 'Error de conexión. Intenta nuevamente.',
         },
+        footer: {
+          copyright: '© 2026 ISO Smart by Comtech',
+        },
+      },
       passwordReset: {
-        backToLogin: 'Voltar ao login',
+        backToLogin: 'Volver al inicio de sesión',
         request: {
-          title: 'Recuperar senha',
-          subtitle: 'Enviaremos um link seguro para restabelecer seu acesso.',
-          submit: 'Enviar link de recuperação',
+          title: 'Recuperar contraseña',
+          subtitle: 'Te enviaremos un enlace seguro para restablecer tu acceso.',
+          submit: 'Enviar enlace de recuperación',
           messages: {
-            success: 'Se o email existir, você receberá instruções para redefinir sua senha.',
-            error: 'Nao foi possivel processar a solicitacao. Tente novamente.',
+            success: 'Si el correo existe, recibirás instrucciones para restablecer tu contraseña.',
+            error: 'No fue posible procesar la solicitud. Intenta nuevamente.',
           },
         },
         confirm: {
-          title: 'Redefinir senha',
-          subtitle: 'Defina uma nova senha para sua conta.',
-          newPassword: 'Nova senha',
-          submit: 'Redefinir senha',
+          title: 'Restablecer contraseña',
+          subtitle: 'Define una nueva contraseña para tu cuenta.',
+          newPassword: 'Nueva contraseña',
+          submit: 'Restablecer contraseña',
           messages: {
-            success: 'Senha redefinida com sucesso. Redirecionando para o login...',
-            error: 'Nao foi possivel redefinir a senha.',
-            invalidLink: 'O link de recuperacao e invalido ou incompleto.',
+            success: 'Contraseña restablecida correctamente. Redirigiendo al inicio de sesión...',
+            error: 'No fue posible restablecer la contraseña.',
+            invalidLink: 'El enlace de recuperación es inválido o está incompleto.',
           },
-        },
-      },
-        footer: {
-          copyright: '© 2026 ISO Smart by Comtech',
         },
       },
       userMenu: {
@@ -4820,6 +4774,29 @@ const MESSAGES = {
           copyright: '© 2026 ISO Smart by Comtech',
         },
       },
+      passwordReset: {
+        backToLogin: 'Back to sign in',
+        request: {
+          title: 'Recover password',
+          subtitle: 'We will send you a secure link to restore your access.',
+          submit: 'Send recovery link',
+          messages: {
+            success: 'If the email exists, you will receive instructions to reset your password.',
+            error: 'The request could not be processed. Please try again.',
+          },
+        },
+        confirm: {
+          title: 'Reset password',
+          subtitle: 'Set a new password for your account.',
+          newPassword: 'New password',
+          submit: 'Reset password',
+          messages: {
+            success: 'Password reset successfully. Redirecting to sign in...',
+            error: 'The password could not be reset.',
+            invalidLink: 'The recovery link is invalid or incomplete.',
+          },
+        },
+      },
       userMenu: {
         settings: 'Settings',
         profile: 'My Profile',
@@ -8692,6 +8669,29 @@ const MESSAGES = {
         },
         footer: {
           copyright: '© 2026 ISO Smart by Comtech',
+        },
+      },
+      passwordReset: {
+        backToLogin: 'Voltar ao login',
+        request: {
+          title: 'Recuperar senha',
+          subtitle: 'Enviaremos um link seguro para restabelecer seu acesso.',
+          submit: 'Enviar link de recuperação',
+          messages: {
+            success: 'Se o email existir, você receberá instruções para redefinir sua senha.',
+            error: 'Nao foi possivel processar a solicitacao. Tente novamente.',
+          },
+        },
+        confirm: {
+          title: 'Redefinir senha',
+          subtitle: 'Defina uma nova senha para sua conta.',
+          newPassword: 'Nova senha',
+          submit: 'Redefinir senha',
+          messages: {
+            success: 'Senha redefinida com sucesso. Redirecionando para o login...',
+            error: 'Nao foi possivel redefinir a senha.',
+            invalidLink: 'O link de recuperacao e invalido ou incompleto.',
+          },
         },
       },
       userMenu: {
