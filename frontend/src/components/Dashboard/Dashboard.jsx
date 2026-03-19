@@ -227,20 +227,13 @@ const Dashboard = () => {
   const translateScopeDraft = useCallback((scopeDraft) => {
     if (!scopeDraft || typeof scopeDraft !== 'string') return scopeDraft;
 
-    const normalized = scopeDraft
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/\s+/g, ' ')
-      .trim()
-      .toLowerCase();
-
-    const knownPrefix = 'el sistema de gestion de la quality aplica a los procesos estrategicos';
-    if (normalized.startsWith(knownPrefix)) {
+    // Option 3: if not in Spanish, always render the fixed i18n key regardless of backend text
+    if (language !== 'es-LATAM') {
       return t('dashboard.main.isoSkeleton.scopeDraftFallback', scopeDraft);
     }
 
-    return translateBackendString(scopeDraft);
-  }, [t, translateBackendString]);
+    return scopeDraft;
+  }, [language, t]);
 
   useEffect(() => {
     let mounted = true;
