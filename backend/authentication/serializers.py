@@ -3,6 +3,7 @@ Serializers de Autenticación para ISO Smart
 """
 
 from rest_framework import serializers
+from django.conf import settings
 from django.contrib.auth import authenticate
 from django.contrib.auth.password_validation import validate_password
 from .models import PasswordResetToken, User, UserProfile
@@ -55,8 +56,21 @@ class LoginSerializer(serializers.Serializer):
         password = attrs.get('password')
         organization_id = attrs.get('organization_id')
         organization = None
-        
+
+        _INVALID_CREDENTIALS_MSG = 'Credenciales inválidas o cuenta temporalmente bloqueada.'
+        max_attempts = getattr(settings, 'LOGIN_MAX_ATTEMPTS', 5)
+        lockout_minutes = getattr(settings, 'LOGIN_LOCKOUT_MINUTES', 15)
+
         if email and password:
+            # Look up user for lockout check before calling authenticate()
+            try:
+                candidate = User.objects.get(email=email)
+            except User.DoesNotExist:
+                candidate = None
+
+            if candidate and candidate.is_locked():
+                raise serializers.ValidationError(_INVALID_CREDENTIALS_MSG, code='account_locked')
+
             if organization_id:
                 try:
                     organization = Organization.objects.get(id=int(organization_id))
@@ -71,18 +85,22 @@ class LoginSerializer(serializers.Serializer):
                 password=password,
                 organization_id=external_org_id
             )
-            
+
             if not user:
-                raise serializers.ValidationError(
-                    'Credenciales inválidas. Verifica tu email y contraseña.',
-                    code='authorization'
-                )
-            
+                if candidate:
+                    candidate.record_failed_login(
+                        max_attempts=max_attempts, lockout_minutes=lockout_minutes
+                    )
+                raise serializers.ValidationError(_INVALID_CREDENTIALS_MSG, code='authorization')
+
             if not user.is_active:
                 raise serializers.ValidationError(
                     'Esta cuenta ha sido desactivada.',
                     code='authorization'
                 )
+
+            # Successful authentication — clear any previous failures
+            user.reset_login_attempts()
             
             # Obtener perfil de organización
             profiles = UserProfile.objects.filter(user=user, is_active=True)

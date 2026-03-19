@@ -104,3 +104,79 @@ class PasswordResetFlowTests(TestCase):
         )
 
         self.assertEqual(response.status_code, 400)
+
+
+@override_settings(LOGIN_MAX_ATTEMPTS=3, LOGIN_LOCKOUT_MINUTES=15)
+class LoginLockoutTests(TestCase):
+    """Verify brute-force lockout: counter increments on failures and resets on success."""
+
+    def setUp(self):
+        self.client = APIClient()
+        user_model = get_user_model()
+        self.user = user_model.objects.create_user(
+            email='lockme@isosmart.local',
+            password='StrongPass@123',
+            first_name='Lock',
+            last_name='Test',
+        )
+        self.org = Organization.objects.create(
+            name='Lock Org', slug='lock-org', email='lock@org.com'
+        )
+        UserProfile.objects.create(
+            user=self.user, organization=self.org, role='user', is_active=True
+        )
+        self.url = reverse('authentication:login')
+
+    def _bad_login(self):
+        return self.client.post(
+            self.url,
+            {'email': self.user.email, 'password': 'WrongPass!'},
+            format='json',
+        )
+
+    def test_failed_attempt_increments_counter(self):
+        self._bad_login()
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.failed_login_attempts, 1)
+
+    def test_account_locks_after_max_attempts(self):
+        for _ in range(3):
+            self._bad_login()
+        self.user.refresh_from_db()
+        self.assertTrue(self.user.is_locked())
+        self.assertIsNotNone(self.user.account_locked_until)
+
+    def test_locked_account_rejected_even_with_correct_password(self):
+        for _ in range(3):
+            self._bad_login()
+        response = self.client.post(
+            self.url,
+            {'email': self.user.email, 'password': 'StrongPass@123'},
+            format='json',
+        )
+        self.assertEqual(response.status_code, 400)
+
+    def test_successful_login_resets_failed_counter(self):
+        self._bad_login()  # 1 failed attempt
+        self.client.post(
+            self.url,
+            {'email': self.user.email, 'password': 'StrongPass@123'},
+            format='json',
+        )
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.failed_login_attempts, 0)
+        self.assertIsNone(self.user.account_locked_until)
+
+    def test_expired_lockout_allows_login(self):
+        from django.utils import timezone
+        from datetime import timedelta
+
+        self.user.account_locked_until = timezone.now() - timedelta(seconds=1)
+        self.user.failed_login_attempts = 5
+        self.user.save()
+        response = self.client.post(
+            self.url,
+            {'email': self.user.email, 'password': 'StrongPass@123'},
+            format='json',
+        )
+        self.assertEqual(response.status_code, 200)

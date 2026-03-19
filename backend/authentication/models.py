@@ -67,6 +67,32 @@ class User(AbstractUser):
     def get_short_name(self):
         return self.first_name
 
+    # ── Login lockout ──────────────────────────────────────────────────────────
+    failed_login_attempts = models.PositiveSmallIntegerField(default=0)
+    account_locked_until = models.DateTimeField(null=True, blank=True)
+
+    def is_locked(self):
+        """Return True when the account is temporarily locked due to failed logins."""
+        return bool(self.account_locked_until and self.account_locked_until > timezone.now())
+
+    def record_failed_login(self, max_attempts=5, lockout_minutes=15):
+        """Increment the failed-login counter; lock the account when threshold is reached."""
+        from django.db.models import F
+        User.objects.filter(pk=self.pk).update(failed_login_attempts=F('failed_login_attempts') + 1)
+        self.refresh_from_db(fields=['failed_login_attempts'])
+        if self.failed_login_attempts >= max_attempts:
+            self.account_locked_until = timezone.now() + timedelta(minutes=lockout_minutes)
+            self.save(update_fields=['account_locked_until'])
+
+    def reset_login_attempts(self):
+        """Clear the failed-login counter and any lockout after a successful login."""
+        if self.failed_login_attempts or self.account_locked_until:
+            User.objects.filter(pk=self.pk).update(
+                failed_login_attempts=0, account_locked_until=None
+            )
+            self.failed_login_attempts = 0
+            self.account_locked_until = None
+
 
 class UserProfile(models.Model):
     """

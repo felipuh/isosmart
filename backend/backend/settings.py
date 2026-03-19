@@ -24,7 +24,7 @@ load_dotenv(BASE_DIR / '.env')
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-u7*jsa)d!to@r13ni5y_^5m!kkzy)vhh=xc@h%@#l9j8k=etd3'
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-u7*jsa)d!to@r13ni5y_^5m!kkzy)vhh=xc@h%@#l9j8k=etd3')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -220,6 +220,15 @@ PASSWORD_RESET_TOKEN_EXPIRY_MINUTES = int(os.getenv('PASSWORD_RESET_TOKEN_EXPIRY
 PASSWORD_RESET_WINDOW_MINUTES = int(os.getenv('PASSWORD_RESET_WINDOW_MINUTES', '60'))
 PASSWORD_RESET_MAX_REQUESTS_PER_HOUR = int(os.getenv('PASSWORD_RESET_MAX_REQUESTS_PER_HOUR', '5'))
 
+# Login brute-force / account-lockout policy
+LOGIN_MAX_ATTEMPTS = int(os.getenv('LOGIN_MAX_ATTEMPTS', '5'))
+LOGIN_LOCKOUT_MINUTES = int(os.getenv('LOGIN_LOCKOUT_MINUTES', '15'))
+
+# Security headers (enforced by Django SecurityMiddleware)
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
+SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
+
 # Configuración de Celery
 CELERY_BROKER_URL = 'redis://localhost:6379/1'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/2'
@@ -239,6 +248,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {'min_length': 10},
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
