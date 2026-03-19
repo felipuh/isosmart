@@ -216,3 +216,60 @@ Tomar decision formal basada en evidencia.
 ### Responsable del cierre
 - Responsable tecnico: Equipo ISOSmart.
 - Fecha objetivo de cierre formal Fase 6: 2026-03-21.
+
+### Plan operativo de cierre (pendientes obligatorios)
+1. Validacion formal en entorno similar a produccion
+- Responsable: QA Lead + Backend Lead.
+- Fecha compromiso: 2026-03-20.
+- Entregables:
+  - Evidencia de ejecucion (comandos, resultados, timestamps).
+  - Resultado de smoke suite y pruebas backend relevantes.
+  - Registro de incidencias encontradas (si aplica) y estado de cierre.
+2. Acta final de aprobacion de Go
+- Responsable: Responsable tecnico ISOSmart.
+- Fecha compromiso: 2026-03-21.
+- Entregables:
+  - Acta firmada digitalmente o aprobada por correo formal.
+  - Decision final (GO o NO-GO) con justificacion.
+
+### Formato de acta de aprobacion final (Fase 6)
+- Fecha:
+- Version/build evaluada:
+- Entorno validado:
+- Participantes:
+- Evidencia revisada:
+  - Pruebas backend:
+  - Smoke E2E:
+  - Seguridad operativa:
+  - Backup/restore:
+- Hallazgos abiertos (si existen):
+- Riesgos aceptados:
+- Decision:
+  - [ ] GO
+  - [ ] NO-GO
+- Condiciones adicionales (si aplica):
+- Responsable de aprobacion:
+- Firma/confirmacion:
+
+### Checklist ejecutable de preproduccion (una corrida)
+1. Preparacion de entorno
+- [ ] Variables de entorno cargadas y revisadas (incluye SECRET_KEY y credenciales).
+- [ ] Servicios dependientes activos (DB, Redis, colas, email/smtp de prueba).
+- [ ] Migraciones aplicadas sin errores.
+2. Validacion automatizada
+- [ ] Backend tests criticos en verde.
+- [ ] Smoke E2E critico en verde.
+- [ ] Verificacion de endpoints de auth, reportes, settings y permisos por rol.
+3. Seguridad y operacion
+- [ ] Lockout de login validado (umbral y desbloqueo por expiracion).
+- [ ] Politica de contrasena validada en alta/cambio/reset.
+- [ ] Headers de seguridad verificados en respuestas HTTP.
+- [ ] CORS/CSRF validados contra dominios permitidos.
+4. Respaldo y trazabilidad
+- [ ] Flujo de backup ejecutado y auditado.
+- [ ] Prueba de restore en entorno de prueba completada.
+- [ ] Logs de auditoria y logs operativos almacenados en carpeta de evidencia.
+5. Cierre
+- [ ] Semaforo final actualizado (Verde/Amarillo/Rojo por criterio global).
+- [ ] Acta de aprobacion completada.
+- [ ] Decision final comunicada al equipo.
