@@ -7,7 +7,7 @@ const withOrg = (organizationId, params = {}) => {
 
 const parseFilename = (contentDisposition, fallback = 'reporte-isosmart') => {
   if (!contentDisposition) return fallback;
-  const match = contentDisposition.match(/filename=\"?([^\";]+)\"?/i);
+  const match = contentDisposition.match(/filename="?([^";]+)"?/i);
   return match?.[1] || fallback;
 };
 

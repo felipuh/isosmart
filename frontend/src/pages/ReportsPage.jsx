@@ -1,36 +1,12 @@
 import React, { useMemo, useState } from 'react';
 import { Download, FileSpreadsheet, FileText, Loader2 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useI18n } from '../context/I18nContext';
 import reportService from '../services/reportService';
-
-const REPORT_TYPES = [
-  { value: 'sgq_executive', label: 'Estado SGQ Ejecutivo' },
-  { value: 'risks', label: 'Riesgos y Oportunidades' },
-  { value: 'objectives', label: 'Objetivos y Desempeno' },
-];
-
-const FILE_FORMATS = [
-  { value: 'pdf', label: 'PDF' },
-  { value: 'xlsx', label: 'XLSX' },
-  { value: 'csv', label: 'CSV' },
-];
-
-const STATUS_OPTIONS = [
-  { value: '', label: 'Todos' },
-  { value: 'identified', label: 'Identificado (riesgos)' },
-  { value: 'under_analysis', label: 'En analisis (riesgos)' },
-  { value: 'mitigated', label: 'Mitigado (riesgos)' },
-  { value: 'accepted', label: 'Aceptado (riesgos)' },
-  { value: 'closed', label: 'Cerrado (riesgos)' },
-  { value: 'active', label: 'Activo (objetivos)' },
-  { value: 'in_progress', label: 'En progreso (objetivos)' },
-  { value: 'achieved', label: 'Logrado (objetivos)' },
-  { value: 'delayed', label: 'Demorado (objetivos)' },
-  { value: 'cancelled', label: 'Cancelado (objetivos)' },
-];
 
 const ReportsPage = () => {
   const { currentOrganization } = useAuth();
+  const { t } = useI18n();
   const organizationId = currentOrganization?.id || null;
 
   const [reportType, setReportType] = useState('sgq_executive');
@@ -42,11 +18,37 @@ const ReportsPage = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
+  const reportTypes = useMemo(() => ([
+    { value: 'sgq_executive', label: t('reportsPage.reportTypes.sgqExecutive') },
+    { value: 'risks', label: t('reportsPage.reportTypes.risks') },
+    { value: 'objectives', label: t('reportsPage.reportTypes.objectives') },
+  ]), [t]);
+
+  const fileFormats = useMemo(() => ([
+    { value: 'pdf', label: 'PDF' },
+    { value: 'xlsx', label: 'XLSX' },
+    { value: 'csv', label: 'CSV' },
+  ]), []);
+
+  const statusOptions = useMemo(() => ([
+    { value: '', label: t('reportsPage.statusOptions.all') },
+    { value: 'identified', label: t('reportsPage.statusOptions.identified') },
+    { value: 'under_analysis', label: t('reportsPage.statusOptions.underAnalysis') },
+    { value: 'mitigated', label: t('reportsPage.statusOptions.mitigated') },
+    { value: 'accepted', label: t('reportsPage.statusOptions.accepted') },
+    { value: 'closed', label: t('reportsPage.statusOptions.closed') },
+    { value: 'active', label: t('reportsPage.statusOptions.active') },
+    { value: 'in_progress', label: t('reportsPage.statusOptions.inProgress') },
+    { value: 'achieved', label: t('reportsPage.statusOptions.achieved') },
+    { value: 'delayed', label: t('reportsPage.statusOptions.delayed') },
+    { value: 'cancelled', label: t('reportsPage.statusOptions.cancelled') },
+  ]), [t]);
+
   const canUseStatus = useMemo(() => reportType === 'risks' || reportType === 'objectives', [reportType]);
 
   const handleDownload = async () => {
     if (!organizationId) {
-      setError('No hay una organizacion activa seleccionada.');
+      setError(t('reportsPage.messages.noOrganization'));
       return;
     }
 
@@ -64,10 +66,10 @@ const ReportsPage = () => {
         status: canUseStatus ? (status || undefined) : undefined,
       });
 
-      setSuccess(`Reporte descargado: ${result.filename}`);
+      setSuccess(t('reportsPage.messages.success', { filename: result.filename }));
     } catch (err) {
-      const detail = err?.response?.data?.error || 'No fue posible generar el reporte.';
-      setError(typeof detail === 'string' ? detail : 'No fue posible generar el reporte.');
+      const detail = err?.response?.data?.error || t('reportsPage.messages.error');
+      setError(typeof detail === 'string' ? detail : t('reportsPage.messages.error'));
     } finally {
       setDownloading(false);
     }
@@ -79,41 +81,41 @@ const ReportsPage = () => {
         <div className="rounded-2xl border border-slate-200/80 dark:border-slate-700 bg-white/90 dark:bg-slate-900/80 shadow-xl p-8">
           <div className="flex items-center gap-3 mb-2">
             <FileText className="w-6 h-6 text-blue-600" />
-            <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-slate-100">Reportes de Negocio</h1>
+            <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-slate-100">{t('reportsPage.title')}</h1>
           </div>
           <p className="text-slate-600 dark:text-slate-300 mb-8">
-            Exporta reportes ejecutivos en PDF, XLSX o CSV con filtros por fecha, organizacion y estado.
+            {t('reportsPage.subtitle')}
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <label className="flex flex-col gap-2">
-              <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">Tipo de reporte</span>
+              <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">{t('reportsPage.fields.reportType')}</span>
               <select
                 value={reportType}
                 onChange={(e) => setReportType(e.target.value)}
                 className="rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 text-slate-800 dark:text-slate-100"
               >
-                {REPORT_TYPES.map((item) => (
+                {reportTypes.map((item) => (
                   <option key={item.value} value={item.value}>{item.label}</option>
                 ))}
               </select>
             </label>
 
             <label className="flex flex-col gap-2">
-              <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">Formato</span>
+              <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">{t('reportsPage.fields.format')}</span>
               <select
                 value={fileFormat}
                 onChange={(e) => setFileFormat(e.target.value)}
                 className="rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 text-slate-800 dark:text-slate-100"
               >
-                {FILE_FORMATS.map((item) => (
+                {fileFormats.map((item) => (
                   <option key={item.value} value={item.value}>{item.label}</option>
                 ))}
               </select>
             </label>
 
             <label className="flex flex-col gap-2">
-              <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">Desde</span>
+              <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">{t('reportsPage.fields.dateFrom')}</span>
               <input
                 type="date"
                 value={dateFrom}
@@ -123,7 +125,7 @@ const ReportsPage = () => {
             </label>
 
             <label className="flex flex-col gap-2">
-              <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">Hasta</span>
+              <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">{t('reportsPage.fields.dateTo')}</span>
               <input
                 type="date"
                 value={dateTo}
@@ -133,14 +135,14 @@ const ReportsPage = () => {
             </label>
 
             <label className="flex flex-col gap-2 md:col-span-2">
-              <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">Estado (opcional)</span>
+              <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">{t('reportsPage.fields.statusOptional')}</span>
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
                 disabled={!canUseStatus}
                 className="rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 text-slate-800 dark:text-slate-100 disabled:opacity-50"
               >
-                {STATUS_OPTIONS.map((item) => (
+                {statusOptions.map((item) => (
                   <option key={item.value || 'all'} value={item.value}>{item.label}</option>
                 ))}
               </select>
@@ -154,12 +156,12 @@ const ReportsPage = () => {
               className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold px-6 py-3 shadow-lg disabled:opacity-60"
             >
               {downloading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
-              {downloading ? 'Generando reporte...' : 'Descargar reporte'}
+              {downloading ? t('reportsPage.actions.generating') : t('reportsPage.actions.download')}
             </button>
 
             <div className="inline-flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
               <FileSpreadsheet className="w-4 h-4" />
-              Organizacion activa: <strong>{currentOrganization?.name || 'Sin organizacion'}</strong>
+              {t('reportsPage.activeOrganization')} <strong>{currentOrganization?.name || t('reportsPage.noOrganization')}</strong>
             </div>
           </div>
 
