@@ -171,3 +171,48 @@ Tomar decision formal basada en evidencia.
 - Responsable tecnico: Equipo ISOSmart.
 - Cadencia: revision diaria de avances + demo interna cada 2 dias.
 - Regla: no pasar a AdminApps con items P0 abiertos.
+
+---
+
+## Estado de ejecucion al 2026-03-19
+
+### Resumen por fase
+- Fase 0 (congelamiento de alcance): COMPLETADA.
+- Fase 1 (recuperacion de contrasena): COMPLETADA.
+- Fase 2 (notificaciones end-to-end): COMPLETADA en implementacion funcional.
+- Fase 3 (reportes de nivel negocio): COMPLETADA.
+- Fase 4 (endurecimiento QA): COMPLETADA para smoke critico y matriz de permisos.
+- Fase 5 (seguridad y operacion): COMPLETADA en hardening tecnico principal.
+- Fase 6 (Go/No-Go): EN CIERRE FORMAL.
+
+### Evidencia tecnica consolidada
+- Reportes PDF/CSV/XLSX en flujo funcional de negocio.
+- Endurecimiento de permisos por rol en backend con pruebas de matriz por endpoint.
+- Recuperacion de contrasena operativa con token temporal y auditoria.
+- Notificaciones operativas y de eventos criticos con trazabilidad.
+- Lockout de login por intentos fallidos y politicas de seguridad reforzadas.
+- Validacion automatizada vigente:
+  - Backend: 55/55 pruebas en verde.
+  - E2E smoke critico: verde en los escenarios definidos.
+
+### Checklist final Fase 6 (Go/No-Go)
+- [x] Password recovery productivo.
+- [x] Notificaciones criticas end-to-end.
+- [x] Reportes PDF/CSV/XLSX operativos.
+- [x] Suite E2E critica en verde.
+- [x] Sin errores severos abiertos en los flujos criticos endurecidos.
+- [ ] Validacion formal en entorno similar a produccion documentada y firmada.
+- [ ] Acta final de aprobacion de Go emitida por responsable tecnico.
+
+### Riesgos residuales (no bloqueantes, pero a cerrar)
+- Formalizar corrida de preproduccion con evidencia archivada (fecha, build, resultados).
+- Confirmar checklist de backup/restore en entorno de prueba con acta.
+- Consolidar evidencia de operacion (capturas/logs) en carpeta unica para auditoria interna.
+
+### Decision recomendada
+- Estado: GO CONDICIONADO.
+- Condicion para GO definitivo: completar los 2 items pendientes del checklist final de Fase 6.
+
+### Responsable del cierre
+- Responsable tecnico: Equipo ISOSmart.
+- Fecha objetivo de cierre formal Fase 6: 2026-03-21.
