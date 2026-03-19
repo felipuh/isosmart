@@ -47,8 +47,7 @@ const UserMenu = () => {
     if (result.success) {
       setShowOrgSelector(false);
       setIsOpen(false);
-      // Recargar página para actualizar datos
-      window.location.reload();
+      navigate('/', { replace: true });
     }
   };
 

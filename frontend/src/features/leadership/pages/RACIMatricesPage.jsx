@@ -33,14 +33,14 @@ const RACIMatricesPage = () => {
   const loadMatrices = useCallback(async () => {
     try {
       setLoading(true);
-      const data = await getRACIMatrices();
+      const data = await getRACIMatrices(orgId ? { organization_id: orgId } : {});
       setMatrices(normalizeList(data));
     } catch {
       setError(t('modules.leadership.raciMatricesPage.messages.loadError'));
     } finally {
       setLoading(false);
     }
-  }, [t]);
+  }, [orgId, t]);
 
   useEffect(() => {
     loadMatrices();

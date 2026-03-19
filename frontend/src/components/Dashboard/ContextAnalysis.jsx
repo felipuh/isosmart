@@ -1,35 +1,48 @@
 import React, { useState, useEffect } from 'react';
 import { Brain, TrendingUp, AlertCircle, FileText, RefreshCw } from 'lucide-react';
-import { apiService } from '../../services/api';
+import { useAuth } from '../../context/AuthContext';
+import contextService from '../../services/contextService';
 import { useI18n } from '../../context/I18nContext';
 
 const ContextAnalysis = () => {
-  const { t } = useI18n();
+  const { t, language } = useI18n();
+  const { currentOrganization } = useAuth();
+  const organizationId = currentOrganization?.id || null;
   const [contextData, setContextData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [triggering, setTriggering] = useState(false);
 
   useEffect(() => {
     loadContextAnalysis();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [organizationId]);
 
   const loadContextAnalysis = async () => {
+    if (!organizationId) {
+      setContextData(null);
+      setLoading(false);
+      return;
+    }
+
     try {
       setLoading(true);
-      const response = await apiService.getLatestContextAnalysis();
-      setContextData(response.data);
+      const data = await contextService.getLatest(organizationId);
+      setContextData(data);
     } catch (error) {
       console.error('Error loading context analysis:', error);
+      setContextData(null);
     } finally {
       setLoading(false);
     }
   };
 
   const triggerAnalysis = async () => {
+    if (!organizationId) return;
+
     try {
       setTriggering(true);
-      await apiService.triggerContextAnalysis();
-      
+      await contextService.triggerAnalysis(organizationId);
+
       // Esperar 5 segundos y recargar
       setTimeout(() => {
         loadContextAnalysis();
@@ -162,7 +175,7 @@ const ContextAnalysis = () => {
             {t('dashboard.contextAnalysis.documentsProcessed', { count: contextData.total_documents_processed || 0 })}
           </span>
           <span>
-            {t('dashboard.contextAnalysis.lastUpdate')}: {contextData.timestamp ? new Date(contextData.timestamp).toLocaleString('es-ES') : t('dashboard.contextAnalysis.notAvailable')}
+            {t('dashboard.contextAnalysis.lastUpdate')}: {contextData.timestamp ? new Date(contextData.timestamp).toLocaleString(language === 'es-LATAM' ? 'es-ES' : language) : t('dashboard.contextAnalysis.notAvailable')}
           </span>
         </div>
       </div>

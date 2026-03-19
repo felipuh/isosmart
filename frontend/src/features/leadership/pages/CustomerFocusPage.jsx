@@ -38,14 +38,14 @@ const CustomerFocusPage = () => {
   const loadItems = useCallback(async () => {
     try {
       setLoading(true);
-      const data = await getCustomerFocus();
+      const data = await getCustomerFocus(orgId ? { organization_id: orgId } : {});
       setItems(normalizeList(data));
     } catch {
       setError(t('modules.leadership.customerFocusPage.messages.loadError'));
     } finally {
       setLoading(false);
     }
-  }, [t]);
+  }, [orgId, t]);
 
   useEffect(() => {
     loadItems();

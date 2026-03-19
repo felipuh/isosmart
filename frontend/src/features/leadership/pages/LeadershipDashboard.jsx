@@ -2,10 +2,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getPolicies, getRoles, getCommitments } from '../api/leadershipApi';
+import { useAuth } from '../../../context/AuthContext';
 import { useI18n } from '../../../context/I18nContext';
 
 const LeadershipDashboard = () => {
   const { t } = useI18n();
+  const { currentOrganization } = useAuth();
+  const orgId = currentOrganization?.id || null;
   const [stats, setStats] = useState({
     policies: { total: 0, active: 0, draft: 0 },
     roles: { total: 0, assigned: 0 },
@@ -15,22 +18,35 @@ const LeadershipDashboard = () => {
 
   useEffect(() => {
     loadDashboardData();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orgId]);
 
   const loadDashboardData = async () => {
+    if (!orgId) {
+      setStats({
+        policies: { total: 0, active: 0, draft: 0 },
+        roles: { total: 0, assigned: 0 },
+        commitments: { total: 0, completed: 0, pending: 0 }
+      });
+      setLoading(false);
+      return;
+    }
+
     try {
       setLoading(true);
-      
+
+      const params = { organization_id: orgId };
+
       // Cargar políticas
-      const policiesData = await getPolicies();
+      const policiesData = await getPolicies(params);
       const policies = Array.isArray(policiesData) ? policiesData : policiesData.results || [];
-      
+
       // Cargar roles
-      const rolesData = await getRoles();
+      const rolesData = await getRoles(params);
       const roles = Array.isArray(rolesData) ? rolesData : rolesData.results || [];
-      
+
       // Cargar compromisos
-      const commitmentsData = await getCommitments();
+      const commitmentsData = await getCommitments(params);
       const commitments = Array.isArray(commitmentsData) ? commitmentsData : commitmentsData.results || [];
       
       setStats({

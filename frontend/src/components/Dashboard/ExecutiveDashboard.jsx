@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { RefreshCw, Download, Shield } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { apiService } from '../../services/api';
+import contextService from '../../services/contextService';
+import { useAuth } from '../../context/AuthContext';
 import { useI18n } from '../../context/I18nContext';
 import MetricsGrid from './MetricsGrid';
 import RiskMatrix from './RiskMatrix';
@@ -9,29 +10,37 @@ import QualityObjectives from './QualityObjectives';
 import ContextAnalysis from './ContextAnalysis';
 
 const ExecutiveDashboard = () => {
-  const { t } = useI18n();
+  const { t, language } = useI18n();
+  const { currentOrganization } = useAuth();
+  const orgId = currentOrganization?.id || null;
   const navigate = useNavigate();
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState(null);
 
+  const locale = useMemo(() => {
+    if (language === 'en') return 'en-US';
+    if (language === 'pt') return 'pt-BR';
+    return 'es-ES';
+  }, [language]);
+
   const loadDashboardData = useCallback(async () => {
     try {
-      const response = await apiService.getDashboardSummary();
-      setDashboardData(response.data);
+      const response = await contextService.getDashboardSummary(orgId);
+      setDashboardData(response);
       setLastUpdate(new Date());
       setLoading(false);
     } catch (error) {
       console.error('Error loading dashboard:', error);
       setLoading(false);
     }
-  }, []);
+  }, [orgId]);
 
   useEffect(() => {
     queueMicrotask(() => {
       void loadDashboardData();
     });
-    
+
     // Actualizar cada 2 minutos
     const interval = setInterval(() => {
       void loadDashboardData();
@@ -62,7 +71,7 @@ const ExecutiveDashboard = () => {
             <div className="flex items-center gap-4">
               {lastUpdate && (
                 <span className="text-sm text-slate-500 dark:text-slate-400">
-                  {t('dashboard.executive.lastUpdate')}: {lastUpdate.toLocaleTimeString('es-ES')}
+                  {t('dashboard.executive.lastUpdate')}: {lastUpdate.toLocaleTimeString(locale)}
                 </span>
               )}
               <button

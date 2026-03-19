@@ -783,6 +783,7 @@ const MESSAGES = {
       success: 'Onboarding completado correctamente',
       saving: 'Guardando configuración...',
       errorComplete: 'No fue posible completar el onboarding',
+      errorNoOrganization: 'No hay una organizacion activa para completar el onboarding.',
       wizard: {
         badge: 'Primer acceso',
         stepCounter: 'Paso {current} de {total}',
@@ -4764,6 +4765,7 @@ const MESSAGES = {
       success: 'Onboarding completed successfully',
       saving: 'Saving configuration...',
       errorComplete: 'Could not complete onboarding',
+      errorNoOrganization: 'There is no active organization to complete onboarding.',
       wizard: {
         badge: 'First access',
         stepCounter: 'Step {current} of {total}',
@@ -8736,6 +8738,7 @@ const MESSAGES = {
       success: 'Configuração concluída com sucesso',
       saving: 'Salvando configuração...',
       errorComplete: 'Não foi possível concluir a configuração inicial',
+      errorNoOrganization: 'Nao ha uma organizacao ativa para concluir o onboarding.',
       wizard: {
         badge: 'Primeiro acesso',
         stepCounter: 'Etapa {current} de {total}',

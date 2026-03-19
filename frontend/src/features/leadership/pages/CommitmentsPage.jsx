@@ -61,14 +61,14 @@ const CommitmentsPage = () => {
   const loadCommitments = useCallback(async () => {
     try {
       setLoading(true);
-      const data = await getCommitments();
+      const data = await getCommitments(orgId ? { organization_id: orgId } : {});
       setCommitments(normalizeList(data));
     } catch {
       setError(t('modules.leadership.commitmentsPage.messages.loadError'));
     } finally {
       setLoading(false);
     }
-  }, [t]);
+  }, [orgId, t]);
 
   useEffect(() => {
     loadCommitments();

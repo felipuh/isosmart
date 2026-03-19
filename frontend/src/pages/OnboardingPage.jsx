@@ -220,7 +220,10 @@ const OnboardingPage = () => {
   };
 
   const handleFinish = async () => {
-    if (!organizationId) return;
+    if (!organizationId) {
+      setError(t('onboarding.errorNoOrganization'));
+      return;
+    }
     setSaving(true);
     setCreationStage(0);
     setError('');

@@ -44,14 +44,14 @@ const PoliciesPage = () => {
   const loadPolicies = useCallback(async () => {
     try {
       setLoading(true);
-      const data = await getPolicies();
+      const data = await getPolicies(orgId ? { organization_id: orgId } : {});
       setPolicies(normalizeList(data));
     } catch {
       setError(t('modules.leadership.policiesPage.messages.loadError'));
     } finally {
       setLoading(false);
     }
-  }, [t]);
+  }, [orgId, t]);
 
   useEffect(() => {
     loadPolicies();

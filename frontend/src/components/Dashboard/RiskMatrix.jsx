@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { AlertTriangle, AlertCircle, Info, TrendingUp, Filter } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { apiService } from '../../services/api';
+import contextService from '../../services/contextService';
+import { useAuth } from '../../context/AuthContext';
 import { useI18n } from '../../context/I18nContext';
 
 const RiskBadge = ({ level }) => {
@@ -47,26 +48,35 @@ const ModuleBadge = ({ module }) => {
 };
 
 const RiskMatrix = () => {
-  const { t } = useI18n();
+  const { t, language } = useI18n();
+  const { currentOrganization } = useAuth();
+  const orgId = currentOrganization?.id || null;
   const [risks, setRisks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
 
-  useEffect(() => {
-    loadRisks();
-  }, []);
+  const locale = useMemo(() => {
+    if (language === 'en') return 'en-US';
+    if (language === 'pt') return 'pt-BR';
+    return 'es-ES';
+  }, [language]);
 
-  const loadRisks = async () => {
+  const loadRisks = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await apiService.getRiskMatrix();
-      setRisks(response.data.risks || []);
+      const response = await contextService.getRiskMatrix(orgId);
+      const normalized = Array.isArray(response) ? response : response?.results || [];
+      setRisks(normalized);
     } catch (error) {
       console.error('Error loading risks:', error);
     } finally {
       setLoading(false);
     }
-  };
+  }, [orgId]);
+
+  useEffect(() => {
+    void loadRisks();
+  }, [loadRisks]);
 
   // Datos para el gráfico
   const chartData = [
@@ -188,7 +198,7 @@ const RiskMatrix = () => {
                       <ModuleBadge module={risk.source_module} />
                       <RiskBadge level={risk.risk_level} />
                       <span className="text-xs text-gray-500">
-                        {risk.detection_date ? new Date(risk.detection_date).toLocaleDateString('es-ES') : '-'}
+                        {risk.detection_date ? new Date(risk.detection_date).toLocaleDateString(locale) : '-'}
                       </span>
                     </div>
                     <p className="text-gray-900 font-medium mb-2">

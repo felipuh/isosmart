@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { getRACIEntries, createRACIEntry, updateRACIEntry, deleteRACIEntry, getRoles } from '../api/leadershipApi';
+import { useAuth } from '../../../context/AuthContext';
 import { useI18n } from '../../../context/I18nContext';
 
 const normalizeList = (data) => (Array.isArray(data) ? data : data?.results || []);
@@ -24,6 +25,8 @@ const toggleItem = (list, value) => {
 
 const RACIEntriesPage = () => {
   const { t } = useI18n();
+  const { currentOrganization } = useAuth();
+  const orgId = currentOrganization?.id || null;
   const { matrixId } = useParams();
   const [entries, setEntries] = useState([]);
   const [roles, setRoles] = useState([]);
@@ -38,7 +41,7 @@ const RACIEntriesPage = () => {
       setLoading(true);
       const [entriesData, rolesData] = await Promise.all([
         getRACIEntries({ matrix: matrixId }),
-        getRoles()
+        getRoles(orgId ? { organization_id: orgId } : {})
       ]);
       setEntries(normalizeList(entriesData));
       setRoles(normalizeList(rolesData));
@@ -47,7 +50,7 @@ const RACIEntriesPage = () => {
     } finally {
       setLoading(false);
     }
-  }, [matrixId, t]);
+  }, [matrixId, orgId, t]);
 
   useEffect(() => {
     loadData();

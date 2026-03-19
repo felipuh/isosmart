@@ -40,9 +40,10 @@ const RoleAssignmentsPage = () => {
   const loadData = useCallback(async () => {
     try {
       setLoading(true);
+      const params = orgId ? { organization_id: orgId } : {};
       const [assignmentsData, rolesData] = await Promise.all([
-        getRoleAssignments(),
-        getRoles()
+        getRoleAssignments(params),
+        getRoles(params)
       ]);
       setAssignments(normalizeList(assignmentsData));
       setRoles(normalizeList(rolesData));
@@ -51,17 +52,17 @@ const RoleAssignmentsPage = () => {
     } finally {
       setLoading(false);
     }
-  }, [t]);
+  }, [orgId, t]);
 
   const loadUsers = useCallback(async () => {
     try {
-      const data = await getUsers();
+      const data = await getUsers(orgId ? { organization_id: orgId } : {});
       setUsers(normalizeList(data));
       setUserError('');
     } catch {
       setUserError(t('modules.leadership.roleAssignmentsPage.messages.usersLoadError'));
     }
-  }, [t]);
+  }, [orgId, t]);
 
   useEffect(() => {
     loadData();

@@ -40,14 +40,14 @@ const RolesPage = () => {
   const loadRoles = useCallback(async () => {
     try {
       setLoading(true);
-      const data = await getRoles();
+      const data = await getRoles(orgId ? { organization_id: orgId } : {});
       setRoles(normalizeList(data));
     } catch {
       setError(t('modules.leadership.rolesPage.messages.loadError'));
     } finally {
       setLoading(false);
     }
-  }, [t]);
+  }, [orgId, t]);
 
   useEffect(() => {
     loadRoles();
