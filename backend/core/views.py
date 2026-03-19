@@ -805,10 +805,41 @@ class UserManagementViewSet(viewsets.ModelViewSet):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
     permission_classes = [IsAuthenticated]
+
+    def _resolve_org_id(self, request):
+        return _parse_org_id(
+            request.query_params.get('organization')
+            or request.query_params.get('organization_id')
+            or request.data.get('organization_id')
+            or getattr(request, 'organization_id', None)
+        )
+
+    def _current_role(self, request, org_id=None):
+        if request.user and request.user.is_superuser:
+            return 'org_admin'
+
+        resolved_org_id = org_id or self._resolve_org_id(request)
+        queryset = UserProfile.objects.filter(user=request.user, is_active=True)
+        if resolved_org_id:
+            profile = queryset.filter(organization_id=resolved_org_id).first()
+        else:
+            profile = queryset.first()
+        return profile.role if profile else None
+
+    def _require_roles(self, request, allowed_roles, org_id=None):
+        role = self._current_role(request, org_id=org_id)
+        if role not in allowed_roles:
+            raise PermissionDenied('No autorizado para esta accion')
     
     def get_queryset(self):
+        self._require_roles(self.request, {'org_admin'}, org_id=self._resolve_org_id(self.request))
+
         queryset = super().get_queryset()
-        org_id = self.request.query_params.get('organization', None) or getattr(self.request, 'organization_id', None)
+        org_id = self._resolve_org_id(self.request)
+        allowed_org_ids = _allowed_org_ids_for_request(self.request)
+        if org_id and allowed_org_ids is not None and org_id not in allowed_org_ids:
+            raise PermissionDenied('No autorizado para esta organizacion')
+
         if org_id:
             queryset = queryset.filter(organization_id=org_id)
         else:
@@ -818,6 +849,8 @@ class UserManagementViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['post'])
     def create_user(self, request):
         """Crear nuevo usuario con perfil"""
+        self._require_roles(request, {'org_admin'}, org_id=self._resolve_org_id(request))
+
         serializer = UserCreateSerializer(data=request.data)
         if serializer.is_valid():
             data = serializer.validated_data
@@ -857,6 +890,8 @@ class UserManagementViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'])
     def change_role(self, request, pk=None):
         """Cambiar rol de usuario"""
+        self._require_roles(request, {'org_admin'}, org_id=self._resolve_org_id(request))
+
         profile = self.get_object()
         new_role = request.data.get('role')
         
@@ -871,6 +906,8 @@ class UserManagementViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'])
     def toggle_active(self, request, pk=None):
         """Activar/desactivar usuario"""
+        self._require_roles(request, {'org_admin'}, org_id=self._resolve_org_id(request))
+
         profile = self.get_object()
         profile.is_active = not profile.is_active
         profile.user.is_active = profile.is_active
@@ -882,6 +919,8 @@ class UserManagementViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'])
     def reset_password(self, request, pk=None):
         """Resetear contraseña de usuario"""
+        self._require_roles(request, {'org_admin'}, org_id=self._resolve_org_id(request))
+
         profile = self.get_object()
         new_password = request.data.get('password')
         
@@ -896,7 +935,12 @@ class UserManagementViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def stats(self, request):
         """Estadísticas de usuarios"""
-        org_id = request.query_params.get('organization')
+        org_id = self._resolve_org_id(request)
+        self._require_roles(request, {'org_admin'}, org_id=org_id)
+
+        allowed_org_ids = _allowed_org_ids_for_request(request)
+        if org_id and allowed_org_ids is not None and org_id not in allowed_org_ids:
+            raise PermissionDenied('No autorizado para esta organizacion')
         
         queryset = UserProfile.objects.all()
         if org_id:
@@ -921,6 +965,22 @@ class SettingsViewSet(viewsets.ModelViewSet):
     queryset = OrganizationSettings.objects.all()
     serializer_class = OrganizationSettingsSerializer
     permission_classes = [IsAuthenticated]
+
+    def _current_role(self, request, org=None):
+        if request.user and request.user.is_superuser:
+            return 'org_admin'
+
+        queryset = UserProfile.objects.filter(user=request.user, is_active=True)
+        if org is not None:
+            profile = queryset.filter(organization=org).first()
+        else:
+            profile = queryset.first()
+        return profile.role if profile else None
+
+    def _require_roles(self, request, allowed_roles, org=None):
+        role = self._current_role(request, org=org)
+        if role not in allowed_roles:
+            raise PermissionDenied('No autorizado para esta accion')
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -970,6 +1030,7 @@ class SettingsViewSet(viewsets.ModelViewSet):
     def update_ai_modules(self, request):
         """Actualizar configuración de módulos de IA"""
         org = self._resolve_org(request)
+        self._require_roles(request, {'org_admin', 'iso_manager'}, org=org)
         
         settings, _ = OrganizationSettings.objects.get_or_create(organization=org)
         
@@ -994,6 +1055,7 @@ class SettingsViewSet(viewsets.ModelViewSet):
     def update_notifications(self, request):
         """Actualizar configuración de notificaciones"""
         org = self._resolve_org(request)
+        self._require_roles(request, {'org_admin', 'iso_manager'}, org=org)
         
         settings, _ = OrganizationSettings.objects.get_or_create(organization=org)
         
@@ -1011,6 +1073,7 @@ class SettingsViewSet(viewsets.ModelViewSet):
     def trigger_backup(self, request):
         """Disparar backup manual"""
         org = self._resolve_org(request)
+        self._require_roles(request, {'org_admin', 'iso_manager'}, org=org)
         
         settings, _ = OrganizationSettings.objects.get_or_create(organization=org)
         previous_backup_at = settings.last_backup_at.isoformat() if settings.last_backup_at else None
@@ -1135,6 +1198,7 @@ class SettingsViewSet(viewsets.ModelViewSet):
     def update_standards(self, request):
         """Actualizar estándares ISO habilitados"""
         org = self._resolve_org(request)
+        self._require_roles(request, {'org_admin', 'iso_manager'}, org=org)
         
         settings, _ = OrganizationSettings.objects.get_or_create(organization=org)
         
@@ -1160,6 +1224,7 @@ class SettingsViewSet(viewsets.ModelViewSet):
     def update_language(self, request):
         """Actualizar idioma preferido de la organización"""
         org = self._resolve_org(request)
+        self._require_roles(request, {'org_admin', 'iso_manager'}, org=org)
         
         settings, _ = OrganizationSettings.objects.get_or_create(organization=org)
         
@@ -1224,6 +1289,7 @@ class SettingsViewSet(viewsets.ModelViewSet):
     def complete_onboarding(self, request):
         """Completar onboarding y guardar preferencias"""
         org = self._resolve_org(request)
+        self._require_roles(request, {'org_admin', 'iso_manager'}, org=org)
         settings, _ = OrganizationSettings.objects.get_or_create(organization=org)
 
         # Obtener y guardar estándares ISO habilitados
@@ -1287,6 +1353,7 @@ class SettingsViewSet(viewsets.ModelViewSet):
     def run_onboarding_orchestration(self, request):
         """Ejecuta motores Fase 2 y guarda snapshot versionado"""
         org = self._resolve_org(request)
+        self._require_roles(request, {'org_admin', 'iso_manager'}, org=org)
         settings, _ = OrganizationSettings.objects.get_or_create(organization=org)
 
         profile = settings.onboarding_profile or {}

@@ -791,3 +791,92 @@ class BusinessReportTests(TestCase):
         self.assertEqual(log.new_values['type'], 'risks')
         self.assertEqual(log.new_values['format'], 'xlsx')
 
+
+class BackendRoleAuthorizationTests(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        user_model = get_user_model()
+
+        self.admin = user_model.objects.create_user(
+            username='role_admin',
+            email='role_admin@isosmart.local',
+            password='StrongPass@123',
+        )
+        self.manager = user_model.objects.create_user(
+            username='role_manager',
+            email='role_manager@isosmart.local',
+            password='StrongPass@123',
+        )
+        self.viewer = user_model.objects.create_user(
+            username='role_viewer',
+            email='role_viewer@isosmart.local',
+            password='StrongPass@123',
+        )
+
+        self.org = Organization.objects.create(
+            name='Role Auth Org',
+            slug='role-auth-org',
+            is_active=True,
+        )
+
+        UserProfile.objects.create(user=self.admin, organization=self.org, role='org_admin', is_active=True)
+        UserProfile.objects.create(user=self.manager, organization=self.org, role='iso_manager', is_active=True)
+        UserProfile.objects.create(user=self.viewer, organization=self.org, role='viewer', is_active=True)
+
+        OrganizationSettings.objects.create(
+            organization=self.org,
+            notify_risk_critical=True,
+            notify_risk_high=True,
+        )
+
+    def test_settings_update_notifications_denied_for_viewer(self):
+        self.client.force_authenticate(user=self.viewer)
+        response = self.client.post(
+            reverse('settings-update-notifications'),
+            {
+                'organization_id': self.org.id,
+                'notify_risk_critical': False,
+            },
+            format='json',
+        )
+        self.assertEqual(response.status_code, 403)
+
+    def test_settings_update_notifications_allowed_for_manager(self):
+        self.client.force_authenticate(user=self.manager)
+        response = self.client.post(
+            reverse('settings-update-notifications'),
+            {
+                'organization_id': self.org.id,
+                'notify_risk_critical': False,
+            },
+            format='json',
+        )
+        self.assertEqual(response.status_code, 200)
+        settings = OrganizationSettings.objects.get(organization=self.org)
+        self.assertFalse(settings.notify_risk_critical)
+
+    def test_user_management_list_denied_for_manager(self):
+        self.client.force_authenticate(user=self.manager)
+        response = self.client.get(reverse('user-management-list'), {'organization': self.org.id})
+        self.assertEqual(response.status_code, 403)
+
+    def test_user_management_list_allowed_for_admin(self):
+        self.client.force_authenticate(user=self.admin)
+        response = self.client.get(reverse('user-management-list'), {'organization': self.org.id})
+        self.assertEqual(response.status_code, 200)
+
+    def test_user_management_create_denied_for_viewer(self):
+        self.client.force_authenticate(user=self.viewer)
+        response = self.client.post(
+            reverse('user-management-create-user'),
+            {
+                'organization_id': self.org.id,
+                'username': 'blocked_user',
+                'email': 'blocked_user@isosmart.local',
+                'password': 'StrongPass@123',
+                'role': 'user',
+            },
+            format='json',
+        )
+        self.assertEqual(response.status_code, 403)
+
