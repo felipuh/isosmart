@@ -6,6 +6,7 @@ from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from rest_framework.permissions import IsAuthenticated
 from django.conf import settings as django_settings
 from django.http import FileResponse, Http404
+from django.http import HttpResponse
 from django.utils.decorators import method_decorator
 from django.utils import timezone
 from django.db.models import Count, Avg, Q
@@ -1083,6 +1084,52 @@ class SettingsViewSet(viewsets.ModelViewSet):
             'count': total,
             'results': serializer.data,
         })
+
+    @action(detail=False, methods=['get'])
+    def business_report(self, request):
+        """Generar reporte de negocio en formato PDF, XLSX o CSV."""
+        from . import reports as report_module
+
+        org = self._resolve_org(request)
+        report_type = request.query_params.get('type', 'sgq_executive')
+        fmt = request.query_params.get('file_format') or request.query_params.get('fmt') or 'pdf'
+        date_from = request.query_params.get('date_from') or None
+        date_to = request.query_params.get('date_to') or None
+        status_filter = request.query_params.get('status') or None
+
+        user_name = (
+            request.user.get_full_name() or request.user.username
+            if request.user and request.user.is_authenticated else 'Sistema'
+        )
+
+        try:
+            buf, content_type, filename = report_module.generate_report(
+                organization=org,
+                report_type=report_type,
+                fmt=fmt,
+                date_from=date_from,
+                date_to=date_to,
+                status_filter=status_filter,
+                user_name=user_name,
+            )
+        except ValueError as exc:
+            return Response({'error': str(exc)}, status=400)
+        except Exception as exc:
+            logger.exception("Error generating business report: %s", exc)
+            return Response({'error': 'Error al generar el reporte.'}, status=500)
+
+        _create_audit_log(
+            request,
+            org,
+            action='export',
+            module='reports',
+            description=f'Reporte generado: tipo={report_type} formato={fmt}',
+            new_values={'type': report_type, 'format': fmt, 'date_from': date_from, 'date_to': date_to},
+        )
+
+        response = HttpResponse(buf.read(), content_type=content_type)
+        response['Content-Disposition'] = f'attachment; filename="{filename}"'
+        return response
     
     @action(detail=False, methods=['post'])
     def update_standards(self, request):

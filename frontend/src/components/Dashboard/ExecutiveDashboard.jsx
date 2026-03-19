@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { RefreshCw, Download, Shield } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { apiService } from '../../services/api';
 import { useI18n } from '../../context/I18nContext';
 import MetricsGrid from './MetricsGrid';
@@ -9,6 +10,7 @@ import ContextAnalysis from './ContextAnalysis';
 
 const ExecutiveDashboard = () => {
   const { t } = useI18n();
+  const navigate = useNavigate();
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState(null);
@@ -71,7 +73,10 @@ const ExecutiveDashboard = () => {
                 <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
                 {t('dashboard.executive.refresh')}
               </button>
-              <button className="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all shadow-md hover:shadow-lg flex items-center gap-2">
+              <button
+                onClick={() => navigate('/reports')}
+                className="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all shadow-md hover:shadow-lg flex items-center gap-2"
+              >
                 <Download className="w-4 h-4" />
                 {t('dashboard.executive.exportReport')}
               </button>

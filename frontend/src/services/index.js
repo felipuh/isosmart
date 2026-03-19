@@ -13,3 +13,4 @@ export { default as riskService } from './riskService';
 export { default as objectiveService } from './objectiveService';
 export { default as performanceService } from './performanceService';
 export { default as settingsService } from './settingsService';
+export { default as reportService } from './reportService';

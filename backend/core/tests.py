@@ -628,3 +628,166 @@ class SettingsBackupHistoryTests(TestCase):
             ).exists()
         )
 
+
+class BusinessReportTests(TestCase):
+    """Tests for GET /api/reports/ — PDF, XLSX, and CSV report generation."""
+
+    def setUp(self):
+        self.client = APIClient()
+        user_model = get_user_model()
+        self.user = user_model.objects.create_user(
+            username='report_user',
+            email='report_user@isosmart.local',
+            password='StrongPass@123',
+            first_name='Report',
+            last_name='User',
+        )
+        self.org = Organization.objects.create(
+            name='Report Test Org',
+            slug='report-test-org',
+            is_active=True,
+        )
+        from authentication.models import UserProfile
+        UserProfile.objects.update_or_create(
+            user=self.user,
+            defaults={'role': 'org_admin', 'organization': self.org},
+        )
+        self.client.force_authenticate(user=self.user)
+
+        # Seed a risk and objective so the reports have data
+        self.risk = RiskMatrix.objects.create(
+            organization=self.org,
+            source_module='MANUAL',
+            risk_description='Test critical risk',
+            risk_category='Operacional',
+            probability='alta',
+            impact='alto',
+            risk_level='critico',
+            mitigation_actions='Mitigar de inmediato',
+            responsible='Risk Owner',
+            iso_clause='6.1',
+            status='identified',
+        )
+        self.objective = QualityObjective.objects.create(
+            organization=self.org,
+            source_module='MANUAL',
+            objective_description='Test objective',
+            indicator_name='Coverage',
+            measurement_unit='%',
+            baseline_value=50,
+            target_value=100,
+            current_value=80,
+            measurement_frequency='monthly',
+            responsible='Quality Owner',
+            deadline=date.today() + timedelta(days=30),
+            status='in_progress',
+        )
+
+    def _get_report(self, report_type, fmt, **extra_params):
+        params = {'organization_id': self.org.id, 'type': report_type, 'file_format': fmt}
+        params.update(extra_params)
+        return self.client.get(reverse('settings-business-report'), params)
+
+    # --- PDF ---
+    def test_sgq_executive_pdf_returns_200_and_correct_content_type(self):
+        response = self._get_report('sgq_executive', 'pdf')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['Content-Type'], 'application/pdf')
+        self.assertIn('attachment', response['Content-Disposition'])
+        self.assertIn('.pdf', response['Content-Disposition'])
+        # PDF magic bytes
+        self.assertTrue(b'%PDF' in response.content[:10])
+
+    def test_risks_pdf_returns_200_and_valid_pdf(self):
+        response = self._get_report('risks', 'pdf')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['Content-Type'], 'application/pdf')
+        self.assertTrue(b'%PDF' in response.content[:10])
+
+    def test_objectives_pdf_returns_200_and_valid_pdf(self):
+        response = self._get_report('objectives', 'pdf')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['Content-Type'], 'application/pdf')
+        self.assertTrue(b'%PDF' in response.content[:10])
+
+    # --- XLSX ---
+    def test_sgq_executive_xlsx_returns_200_and_correct_content_type(self):
+        response = self._get_report('sgq_executive', 'xlsx')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('spreadsheetml', response['Content-Type'])
+        self.assertIn('.xlsx', response['Content-Disposition'])
+        # XLSX = ZIP format, starts with PK magic bytes
+        self.assertTrue(response.content[:2] == b'PK')
+
+    def test_risks_xlsx_returns_200_and_valid_xlsx(self):
+        response = self._get_report('risks', 'xlsx')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('spreadsheetml', response['Content-Type'])
+        self.assertTrue(response.content[:2] == b'PK')
+
+    def test_objectives_xlsx_returns_200_and_valid_xlsx(self):
+        response = self._get_report('objectives', 'xlsx')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('spreadsheetml', response['Content-Type'])
+        self.assertTrue(response.content[:2] == b'PK')
+
+    # --- CSV ---
+    def test_sgq_executive_csv_returns_200_and_correct_content_type(self):
+        response = self._get_report('sgq_executive', 'csv')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('text/csv', response['Content-Type'])
+        self.assertIn('.csv', response['Content-Disposition'])
+        content = response.content.decode('utf-8-sig')
+        self.assertIn('Organizaci', content)
+
+    def test_risks_csv_contains_risk_data(self):
+        response = self._get_report('risks', 'csv')
+        self.assertEqual(response.status_code, 200)
+        content = response.content.decode('utf-8-sig')
+        self.assertIn('Test critical risk', content)
+        self.assertIn('CRITICO', content)
+
+    def test_objectives_csv_contains_objective_data(self):
+        response = self._get_report('objectives', 'csv')
+        self.assertEqual(response.status_code, 200)
+        content = response.content.decode('utf-8-sig')
+        self.assertIn('Test objective', content)
+
+    # --- Validation ---
+    def test_invalid_format_returns_400(self):
+        response = self._get_report('risks', 'docx')
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('error', response.data)
+
+    def test_invalid_report_type_returns_400(self):
+        response = self._get_report('nonexistent', 'pdf')
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('error', response.data)
+
+    def test_date_filters_applied_correctly(self):
+        response = self._get_report('risks', 'csv',
+                                    date_from='2030-01-01', date_to='2030-12-31')
+        self.assertEqual(response.status_code, 200)
+        # Risks created today won't appear in the future range
+        content = response.content.decode('utf-8-sig')
+        self.assertNotIn('Test critical risk', content)
+
+    def test_unauthenticated_request_returns_401(self):
+        self.client.force_authenticate(user=None)
+        response = self.client.get(
+            reverse('settings-business-report'),
+            {'organization_id': self.org.id, 'type': 'risks', 'file_format': 'pdf'},
+        )
+        self.assertEqual(response.status_code, 401)
+
+    def test_report_creates_audit_log(self):
+        self._get_report('risks', 'xlsx')
+        log = AuditLog.objects.filter(
+            organization=self.org,
+            action='export',
+            module='reports',
+        ).first()
+        self.assertIsNotNone(log)
+        self.assertEqual(log.new_values['type'], 'risks')
+        self.assertEqual(log.new_values['format'], 'xlsx')
+
