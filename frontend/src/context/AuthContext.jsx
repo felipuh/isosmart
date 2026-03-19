@@ -279,6 +279,50 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const requestPasswordReset = async (email) => {
+    try {
+      await api.post('/auth/password-reset/request/', {
+        email: String(email || '').trim().toLowerCase(),
+      });
+      return {
+        success: true,
+        message: t('auth.passwordReset.request.messages.success'),
+      };
+    } catch (error) {
+      console.error('Error solicitando recuperación de contraseña:', error);
+      return {
+        success: false,
+        error: error.response?.data?.detail || t('auth.passwordReset.request.messages.error'),
+      };
+    }
+  };
+
+  const confirmPasswordReset = async (selector, token, newPassword, confirmPassword) => {
+    try {
+      await api.post('/auth/password-reset/confirm/', {
+        selector,
+        token,
+        new_password: newPassword,
+        confirm_password: confirmPassword,
+      });
+      return {
+        success: true,
+        message: t('auth.passwordReset.confirm.messages.success'),
+      };
+    } catch (error) {
+      console.error('Error confirmando recuperación de contraseña:', error);
+      return {
+        success: false,
+        error:
+          error.response?.data?.token?.[0] ||
+          error.response?.data?.new_password?.[0] ||
+          error.response?.data?.confirm_password?.[0] ||
+          error.response?.data?.detail ||
+          t('auth.passwordReset.confirm.messages.error'),
+      };
+    }
+  };
+
   // Helpers de permisos
   const hasRole = useCallback((roles) => {
     if (!profile) return false;
@@ -306,6 +350,8 @@ export const AuthProvider = ({ children }) => {
     checkAuth,
     switchOrganization,
     changePassword,
+    requestPasswordReset,
+    confirmPasswordReset,
     
     // Helpers
     hasRole,

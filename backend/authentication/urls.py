@@ -19,6 +19,8 @@ urlpatterns = [
     
     # Password management
     path('change-password/', views.ChangePasswordView.as_view(), name='change-password'),
+    path('password-reset/request/', views.PasswordResetRequestView.as_view(), name='password-reset-request'),
+    path('password-reset/confirm/', views.PasswordResetConfirmView.as_view(), name='password-reset-confirm'),
     
     # User management (org_admin only)
     path('users/', views.UserListView.as_view(), name='user-list'),

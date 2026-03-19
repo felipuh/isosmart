@@ -3,6 +3,8 @@ import { Routes, Route } from 'react-router-dom';
 import ProtectedRoute, { PublicRoute } from './components/Auth/ProtectedRoute'
 import OnboardingGuard from './components/Auth/OnboardingGuard';
 const LoginPage = lazy(() => import('./pages/LoginPage'));
+const ForgotPasswordPage = lazy(() => import('./pages/ForgotPasswordPage'));
+const ResetPasswordPage = lazy(() => import('./pages/ResetPasswordPage'));
 const OnboardingPage = lazy(() => import('./pages/OnboardingPage'));
 import Layout from './components/Layout/Layout'
 import { useI18n } from './context/I18nContext';
@@ -67,6 +69,24 @@ function App() {
         element={
           <PublicRoute>
             <LoginPage />
+          </PublicRoute>
+        }
+      />
+
+      <Route
+        path="/forgot-password"
+        element={
+          <PublicRoute>
+            <ForgotPasswordPage />
+          </PublicRoute>
+        }
+      />
+
+      <Route
+        path="/reset-password"
+        element={
+          <PublicRoute>
+            <ResetPasswordPage />
           </PublicRoute>
         }
       />

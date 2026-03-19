@@ -10,26 +10,64 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import TokenError
 from django.utils import timezone
 from django.conf import settings
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from datetime import timedelta
 import logging
+import secrets
 
-from .models import User, UserProfile, RefreshTokenBlacklist
-from core.models import Organization
+from .models import PasswordResetToken, User, UserProfile, RefreshTokenBlacklist
+from core.models import AuditLog, Organization
 from integration.client import admin_apps_client
 from integration.backends import ROLE_MAP
 from .serializers import (
+    ChangePasswordSerializer,
     LoginSerializer,
-    TokenResponseSerializer,
-    RefreshTokenSerializer,
     LogoutSerializer,
+    PasswordResetConfirmSerializer,
+    PasswordResetRequestSerializer,
+    RefreshTokenSerializer,
+    TokenResponseSerializer,
     UserSerializer,
     UserProfileSerializer,
-    ChangePasswordSerializer,
     SwitchOrganizationSerializer,
     UserRegistrationSerializer,
 )
 from .permissions import IsOrgAdmin
 
 logger = logging.getLogger(__name__)
+
+
+def _request_ip_address(request):
+    forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR', '')
+    if forwarded_for:
+        return forwarded_for.split(',')[0].strip()
+    return request.META.get('REMOTE_ADDR')
+
+
+def _audit_password_reset(user, action, request, description, details=None):
+    profile = UserProfile.objects.filter(user=user, is_active=True).select_related('organization').first()
+    if not profile:
+        return
+
+    AuditLog.objects.create(
+        organization=profile.organization,
+        user=user,
+        action='update',
+        module='authentication',
+        description=description,
+        ip_address=_request_ip_address(request),
+        user_agent=request.META.get('HTTP_USER_AGENT', ''),
+        new_values={
+            'event': action,
+            **(details or {}),
+        },
+    )
+
+
+def _password_reset_frontend_url(selector, raw_token):
+    base_url = getattr(settings, 'FRONTEND_BASE_URL', 'http://localhost:5173').rstrip('/')
+    return f"{base_url}/reset-password?selector={selector}&token={raw_token}"
 
 
 class LoginView(APIView):
@@ -305,6 +343,111 @@ class ChangePasswordView(APIView):
         return Response(
             {'detail': 'Contraseña actualizada exitosamente.'},
             status=status.HTTP_200_OK
+        )
+
+
+class PasswordResetRequestView(APIView):
+    """Solicita recuperacion de contrasena sin revelar existencia del email."""
+
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = PasswordResetRequestSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        email = serializer.validated_data['email'].strip().lower()
+        ip_address = _request_ip_address(request)
+        user_agent = request.META.get('HTTP_USER_AGENT', '')
+        now = timezone.now()
+        debug_recovery_mode = settings.DEBUG and (
+            request.META.get('HTTP_X_DEBUG_RECOVERY') == '1'
+            or request.query_params.get('debug_recovery') == '1'
+        )
+        window_minutes = getattr(settings, 'PASSWORD_RESET_WINDOW_MINUTES', 60)
+        max_requests = getattr(settings, 'PASSWORD_RESET_MAX_REQUESTS_PER_HOUR', 5)
+        window_start = now - timedelta(minutes=window_minutes)
+        user = None
+        reset_url = None
+
+        email_count = PasswordResetToken.objects.filter(email=email, requested_at__gte=window_start).count()
+        ip_count = PasswordResetToken.objects.filter(ip_address=ip_address, requested_at__gte=window_start).count() if ip_address else 0
+
+        if debug_recovery_mode or (email_count < max_requests and ip_count < max_requests):
+            user = User.objects.filter(email=email, is_active=True).first()
+            if user:
+                expiry_minutes = getattr(settings, 'PASSWORD_RESET_TOKEN_EXPIRY_MINUTES', 30)
+                reset_token, raw_token = PasswordResetToken.issue_for_user(
+                    user,
+                    ip_address=ip_address,
+                    user_agent=user_agent,
+                    expiry_minutes=expiry_minutes,
+                )
+                reset_url = _password_reset_frontend_url(reset_token.selector, raw_token)
+                from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'noreply@isosmart.local')
+                subject = 'ISO Smart - Recuperación de contraseña'
+                context = {
+                    'user': user,
+                    'reset_url': reset_url,
+                    'expiry_minutes': expiry_minutes,
+                }
+                if debug_recovery_mode:
+                    _audit_password_reset(user, 'password_reset_request', request, 'Solicitud de recuperacion de contrasena enviada')
+                else:
+                    message = render_to_string('authentication/emails/password_reset_email.txt', context)
+                    html_message = render_to_string('authentication/emails/password_reset_email.html', context)
+                    try:
+                        email_message = EmailMultiAlternatives(subject, message, from_email, [user.email])
+                        email_message.attach_alternative(html_message, 'text/html')
+                        email_message.send(fail_silently=False)
+                        _audit_password_reset(user, 'password_reset_request', request, 'Solicitud de recuperacion de contrasena enviada')
+                    except Exception:
+                        logger.exception('Fallo enviando correo de recuperacion para %s', user.email)
+                        reset_token.mark_used()
+            else:
+                PasswordResetToken.objects.create(
+                    user=None,
+                    email=email,
+                    selector=secrets.token_hex(8),
+                    token_hash=PasswordResetToken.hash_token(secrets.token_urlsafe(32)),
+                    ip_address=ip_address,
+                    user_agent=user_agent,
+                    expires_at=now,
+                    used_at=now,
+                )
+
+        response_payload = {
+            'detail': 'Si el correo existe, recibirás instrucciones para restablecer tu contraseña.'
+        }
+        if settings.DEBUG and user and reset_url:
+            response_payload['debug_reset_url'] = reset_url
+
+        return Response(response_payload, status=status.HTTP_200_OK)
+
+
+class PasswordResetConfirmView(APIView):
+    """Confirma una nueva contrasena a partir de un token de recuperacion."""
+
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = PasswordResetConfirmSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        reset_token = serializer.validated_data['reset_token']
+        user = reset_token.user
+        user.set_password(serializer.validated_data['new_password'])
+        user.save(update_fields=['password'])
+
+        reset_token.mark_used()
+        PasswordResetToken.objects.filter(
+            user=user,
+            used_at__isnull=True,
+        ).exclude(id=reset_token.id).update(used_at=timezone.now())
+        _audit_password_reset(user, 'password_reset_confirm', request, 'Contrasena restablecida mediante recovery')
+
+        return Response(
+            {'detail': 'Contraseña restablecida exitosamente.'},
+            status=status.HTTP_200_OK,
         )
 
 

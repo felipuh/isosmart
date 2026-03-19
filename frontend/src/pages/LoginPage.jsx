@@ -4,7 +4,7 @@
  */
 
 import { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useI18n } from '../context/I18nContext';
 
@@ -156,9 +156,9 @@ const LoginPage = () => {
                 />
                 <span>{t('auth.loginPage.form.rememberMe')}</span>
               </label>
-              <a href="#" className="text-cyan-400 hover:text-cyan-300 transition-colors">
+              <Link to="/forgot-password" className="text-cyan-400 hover:text-cyan-300 transition-colors">
                 {t('auth.loginPage.form.forgotPassword')}
-              </a>
+              </Link>
             </div>
 
             {/* Submit Button */}

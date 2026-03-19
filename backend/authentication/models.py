@@ -6,7 +6,10 @@ Sistema multitenancy con roles por organización
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.utils.translation import gettext_lazy as _
+from django.utils import timezone
+from datetime import timedelta
 import hashlib
+import secrets
 
 
 class UserManager(BaseUserManager):
@@ -174,3 +177,68 @@ class RefreshTokenBlacklist(models.Model):
     
     def __str__(self):
         return f"Blacklisted token for {self.user.email if self.user else 'unknown'} at {self.blacklisted_at}"
+
+
+class PasswordResetToken(models.Model):
+    """Token persistido de recuperacion de contrasena con un solo uso."""
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='password_reset_tokens',
+        null=True,
+        blank=True,
+    )
+    email = models.EmailField(db_index=True)
+    selector = models.CharField(max_length=32, unique=True, db_index=True)
+    token_hash = models.CharField(max_length=64)
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+    user_agent = models.TextField(blank=True)
+    requested_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField(db_index=True)
+    used_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        db_table = 'password_reset_tokens'
+        ordering = ['-requested_at']
+
+    @staticmethod
+    def hash_token(raw_token):
+        return hashlib.sha256(raw_token.encode('utf-8')).hexdigest()
+
+    @classmethod
+    def issue_for_user(cls, user, *, ip_address=None, user_agent='', expiry_minutes=30):
+        selector = secrets.token_hex(8)
+        raw_token = secrets.token_urlsafe(32)
+        expires_at = timezone.now() + timedelta(minutes=expiry_minutes)
+
+        cls.objects.filter(
+            user=user,
+            used_at__isnull=True,
+            expires_at__gt=timezone.now(),
+        ).update(used_at=timezone.now())
+
+        reset_token = cls.objects.create(
+            user=user,
+            email=user.email,
+            selector=selector,
+            token_hash=cls.hash_token(raw_token),
+            ip_address=ip_address,
+            user_agent=user_agent,
+            expires_at=expires_at,
+        )
+        return reset_token, raw_token
+
+    def is_expired(self):
+        return self.expires_at <= timezone.now()
+
+    def is_available(self):
+        return self.used_at is None and not self.is_expired()
+
+    def matches(self, raw_token):
+        return self.token_hash == self.hash_token(raw_token)
+
+    def mark_used(self):
+        if self.used_at is None:
+            self.used_at = timezone.now()
+            self.save(update_fields=['used_at'])

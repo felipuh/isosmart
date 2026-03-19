@@ -5,7 +5,7 @@ Serializers de Autenticación para ISO Smart
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 from django.contrib.auth.password_validation import validate_password
-from .models import User, UserProfile
+from .models import PasswordResetToken, User, UserProfile
 from core.models import Organization
 
 
@@ -195,6 +195,7 @@ class SwitchOrganizationSerializer(serializers.Serializer):
 class UserRegistrationSerializer(serializers.ModelSerializer):
     """Serializer para registro de usuarios (usado por admins)"""
     
+    phone = serializers.CharField(write_only=True, required=False, allow_blank=True)
     password = serializers.CharField(write_only=True, validators=[validate_password])
     confirm_password = serializers.CharField(write_only=True)
     organization_id = serializers.IntegerField(write_only=True)
@@ -217,6 +218,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         organization_id = validated_data.pop('organization_id')
         role = validated_data.pop('role')
+        phone = validated_data.pop('phone', '')
         validated_data.pop('confirm_password')
         
         user = User.objects.create_user(**validated_data)
@@ -226,7 +228,44 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             user=user,
             organization_id=organization_id,
             role=role,
-            is_primary=True
+            phone=phone,
         )
         
         return user
+
+
+class PasswordResetRequestSerializer(serializers.Serializer):
+    """Serializer para solicitar recuperacion de contrasena."""
+
+    email = serializers.EmailField()
+
+
+class PasswordResetConfirmSerializer(serializers.Serializer):
+    """Serializer para confirmar nueva contrasena mediante token."""
+
+    selector = serializers.CharField()
+    token = serializers.CharField(write_only=True)
+    new_password = serializers.CharField(write_only=True)
+    confirm_password = serializers.CharField(write_only=True)
+
+    def validate_new_password(self, value):
+        validate_password(value)
+        return value
+
+    def validate(self, attrs):
+        if attrs['new_password'] != attrs['confirm_password']:
+            raise serializers.ValidationError({
+                'confirm_password': 'Las contraseñas no coinciden.'
+            })
+
+        selector = attrs['selector'].strip()
+        raw_token = attrs['token'].strip()
+        reset_token = PasswordResetToken.objects.filter(selector=selector).select_related('user').first()
+
+        if not reset_token or not reset_token.is_available() or not reset_token.matches(raw_token):
+            raise serializers.ValidationError({
+                'token': 'El enlace de recuperación es inválido o ha expirado.'
+            })
+
+        attrs['reset_token'] = reset_token
+        return attrs

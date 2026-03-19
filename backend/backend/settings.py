@@ -214,6 +214,12 @@ AI_ASSISTANT_API_URL = os.getenv('AI_ASSISTANT_API_URL', 'https://api.openai.com
 AI_ASSISTANT_API_KEY = os.getenv('AI_ASSISTANT_API_KEY', '')
 AI_ASSISTANT_MODEL = os.getenv('AI_ASSISTANT_MODEL', 'gpt-4o-mini')
 
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'noreply@isosmart.local')
+FRONTEND_BASE_URL = os.getenv('FRONTEND_BASE_URL', 'http://localhost:5173')
+PASSWORD_RESET_TOKEN_EXPIRY_MINUTES = int(os.getenv('PASSWORD_RESET_TOKEN_EXPIRY_MINUTES', '30'))
+PASSWORD_RESET_WINDOW_MINUTES = int(os.getenv('PASSWORD_RESET_WINDOW_MINUTES', '60'))
+PASSWORD_RESET_MAX_REQUESTS_PER_HOUR = int(os.getenv('PASSWORD_RESET_MAX_REQUESTS_PER_HOUR', '5'))
+
 # Configuración de Celery
 CELERY_BROKER_URL = 'redis://localhost:6379/1'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/2'
