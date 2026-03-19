@@ -1,10 +1,8 @@
 import logging
 from typing import Optional
 
-from django.conf import settings
-from django.core.mail import send_mail
-
 from core.models import AuditLog, OrganizationSettings
+from core.services.notifications import send_email_notification
 
 logger = logging.getLogger(__name__)
 
@@ -41,17 +39,14 @@ def _billing_recipients(subscription):
 
 
 def _send_billing_email(subscription, subject: str, message: str):
-    recipients = _billing_recipients(subscription)
-    if not recipients:
-        return 0
-
-    from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'noreply@isosmart.local')
-    return send_mail(
+    return send_email_notification(
+        organization=subscription.organization,
+        event_type='billing_due_reminder',
+        event_key=f'billing:generic:{subscription.id}:{hash(subject + message)}',
         subject=subject,
         message=message,
-        from_email=from_email,
-        recipient_list=recipients,
-        fail_silently=True,
+        extra_emails=_billing_recipients(subscription),
+        metadata={'subscription_id': subscription.id},
     )
 
 
@@ -92,7 +87,15 @@ def notify_payment_registered(payment):
         f"Referencia: {payment.reference or '-'}\n"
         f"Vence: {payment.due_date or 'N/A'}"
     )
-    _send_billing_email(subscription, subject, message)
+    send_email_notification(
+        organization=subscription.organization,
+        event_type='billing_payment_registered',
+        event_key=f'billing:payment_registered:{payment.id}:{payment.status}',
+        subject=subject,
+        message=message,
+        extra_emails=_billing_recipients(subscription),
+        metadata={'payment_id': payment.id, 'subscription_id': subscription.id},
+    )
 
 
 def notify_payment_confirmed(payment):
@@ -105,7 +108,15 @@ def notify_payment_confirmed(payment):
         f"Método: {payment.payment_method}\n"
         f"Fecha de confirmación: {payment.paid_at or 'N/A'}"
     )
-    _send_billing_email(subscription, subject, message)
+    send_email_notification(
+        organization=subscription.organization,
+        event_type='billing_payment_confirmed',
+        event_key=f'billing:payment_confirmed:{payment.id}:{payment.status}',
+        subject=subject,
+        message=message,
+        extra_emails=_billing_recipients(subscription),
+        metadata={'payment_id': payment.id, 'subscription_id': subscription.id},
+    )
 
 
 def notify_payment_rejected(payment):
@@ -118,7 +129,15 @@ def notify_payment_rejected(payment):
         f"Referencia: {payment.reference or '-'}\n"
         f"Motivo: {payment.rejection_reason or 'No especificado'}"
     )
-    _send_billing_email(subscription, subject, message)
+    send_email_notification(
+        organization=subscription.organization,
+        event_type='billing_payment_rejected',
+        event_key=f'billing:payment_rejected:{payment.id}:{payment.status}',
+        subject=subject,
+        message=message,
+        extra_emails=_billing_recipients(subscription),
+        metadata={'payment_id': payment.id, 'subscription_id': subscription.id},
+    )
 
 
 def notify_subscription_status_change(subscription, previous_status: str, source: str = 'automatic'):
@@ -134,7 +153,15 @@ def notify_subscription_status_change(subscription, previous_status: str, source
         f"Origen: {source}\n"
         f"Próximo cobro: {subscription.next_due_date or 'N/A'}"
     )
-    _send_billing_email(subscription, subject, message)
+    send_email_notification(
+        organization=subscription.organization,
+        event_type='billing_status_changed',
+        event_key=f'billing:status_changed:{subscription.id}:{previous_status}:{subscription.status}:{source}',
+        subject=subject,
+        message=message,
+        extra_emails=_billing_recipients(subscription),
+        metadata={'subscription_id': subscription.id, 'previous_status': previous_status, 'source': source},
+    )
 
 
 def notify_due_reminder(subscription, days_to_due: int):
@@ -156,4 +183,12 @@ def notify_due_reminder(subscription, days_to_due: int):
         f"Fecha de cobro: {subscription.next_due_date or 'N/A'}\n"
         f"Días de gracia: {subscription.grace_days}"
     )
-    _send_billing_email(subscription, subject, message)
+    send_email_notification(
+        organization=subscription.organization,
+        event_type='billing_due_reminder',
+        event_key=f'billing:due_reminder:{subscription.id}:{subscription.next_due_date}:{days_to_due}',
+        subject=subject,
+        message=message,
+        extra_emails=_billing_recipients(subscription),
+        metadata={'subscription_id': subscription.id, 'days_to_due': days_to_due},
+    )

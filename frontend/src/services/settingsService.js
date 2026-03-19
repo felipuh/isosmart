@@ -92,6 +92,13 @@ const settingsService = {
     return response.data;
   },
 
+  getNotificationHistory: async (organizationId, limit = 10) => {
+    const response = await api.get('/settings/notification_history/', {
+      params: withOrg(organizationId, { limit }),
+    });
+    return response.data;
+  },
+
   triggerBackup: async (organizationId) => {
     const response = await api.post('/settings/trigger_backup/', { organization_id: organizationId });
     return response.data;

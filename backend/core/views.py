@@ -710,6 +710,7 @@ from .models import (
     OrganizationSettings,
     ISOClauseConfig,
     AuditLog,
+    NotificationDelivery,
     OnboardingInsightSnapshot,
     BillingSubscription,
     BillingPayment,
@@ -718,7 +719,7 @@ from .serializers import (
     OrganizationSerializer, UserProfileSerializer, UserCreateSerializer,
     OrganizationSettingsSerializer, ISOClauseConfigSerializer, AuditLogSerializer,
     UserSerializer, OnboardingInsightSnapshotSerializer,
-    BillingSubscriptionSerializer, BillingPaymentSerializer,
+    BillingSubscriptionSerializer, BillingPaymentSerializer, NotificationDeliverySerializer,
 )
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
@@ -1054,6 +1055,30 @@ class SettingsViewSet(viewsets.ModelViewSet):
 
         total = queryset.count()
         serializer = AuditLogSerializer(queryset[:limit], many=True)
+        return Response({
+            'count': total,
+            'results': serializer.data,
+        })
+
+    @action(detail=False, methods=['get'])
+    def notification_history(self, request):
+        """Obtener historial reciente de entregas de notificaciones."""
+        org = self._resolve_org(request)
+
+        limit = request.query_params.get('limit', '10')
+        try:
+            limit = min(max(int(limit), 1), 100)
+        except (TypeError, ValueError):
+            raise ValidationError({'limit': 'limit invalido'})
+
+        queryset = NotificationDelivery.objects.filter(organization=org).order_by('-created_at')
+
+        status_filter = request.query_params.get('status')
+        if status_filter:
+            queryset = queryset.filter(status=status_filter)
+
+        total = queryset.count()
+        serializer = NotificationDeliverySerializer(queryset[:limit], many=True)
         return Response({
             'count': total,
             'results': serializer.data,

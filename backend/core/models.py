@@ -658,6 +658,58 @@ class AuditLog(models.Model):
         return f"{self.action} - {self.module} - {self.created_at}"
 
 
+class NotificationDelivery(models.Model):
+    """Registro de entregas de notificaciones para trazabilidad operativa."""
+
+    CHANNEL_CHOICES = [
+        ('email', 'Email'),
+    ]
+
+    STATUS_CHOICES = [
+        ('pending', 'Pendiente'),
+        ('sent', 'Enviada'),
+        ('failed', 'Fallida'),
+        ('skipped', 'Omitida'),
+    ]
+
+    EVENT_TYPE_CHOICES = [
+        ('billing_payment_registered', 'Pago registrado'),
+        ('billing_payment_confirmed', 'Pago confirmado'),
+        ('billing_payment_rejected', 'Pago rechazado'),
+        ('billing_status_changed', 'Cambio de estado de facturacion'),
+        ('billing_due_reminder', 'Recordatorio de cobro'),
+        ('risk_critical', 'Riesgo critico'),
+        ('risk_high', 'Riesgo alto'),
+        ('objective_deadline', 'Vencimiento de objetivo o accion'),
+        ('stakeholder_change', 'Cambio de stakeholder'),
+    ]
+
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name='notification_deliveries')
+    event_type = models.CharField(max_length=50, choices=EVENT_TYPE_CHOICES)
+    channel = models.CharField(max_length=20, choices=CHANNEL_CHOICES, default='email')
+    event_key = models.CharField(max_length=255, unique=True)
+    recipients = models.JSONField(default=list, blank=True)
+    subject = models.CharField(max_length=255)
+    body = models.TextField(blank=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    error_message = models.TextField(blank=True)
+    metadata = models.JSONField(default=dict, blank=True)
+    sent_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'notification_deliveries'
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['organization', 'event_type']),
+            models.Index(fields=['status', '-created_at']),
+        ]
+
+    def __str__(self):
+        return f"{self.event_type} - {self.organization.name} - {self.status}"
+
+
 class OnboardingInsightSnapshot(models.Model):
     """Snapshot versionado de resultados del onboarding disruptivo"""
 

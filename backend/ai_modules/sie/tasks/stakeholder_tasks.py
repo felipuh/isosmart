@@ -127,8 +127,8 @@ def send_critical_alerts_task():
     Se ejecuta cada 6 horas
     """
     from ai_modules.sie.models.stakeholder import StakeholderChangeLog
-    from django.core.mail import send_mail
-    from django.conf import settings
+    from core.models import Organization, OrganizationSettings
+    from core.services.notifications import send_email_notification
     
     logger.info("Verificando alertas críticas...")
     
@@ -144,32 +144,49 @@ def send_critical_alerts_task():
         if critical_changes.count() == 0:
             return {'status': 'success', 'alerts_sent': 0}
         
-        # Preparar mensaje
-        message_lines = ['Cambios críticos detectados en stakeholders:\n']
-        for change in critical_changes:
-            message_lines.append(
-                f"- {change.stakeholder.name}: {change.get_change_type_display()}"
+        alerts_sent = 0
+
+        for change in critical_changes.select_related('stakeholder'):
+            organization = Organization.objects.filter(id=change.stakeholder.organization_id).first()
+            if not organization:
+                continue
+            org_settings = OrganizationSettings.objects.filter(organization=organization).first()
+            if org_settings and not org_settings.notify_stakeholder_change:
+                continue
+
+            subject = f"[ISO Smart] Cambio crítico de stakeholder - {organization.name}"
+            message = (
+                'Se detectó un cambio crítico en stakeholders.\n'
+                f'Organización: {organization.name}\n'
+                f'Stakeholder: {change.stakeholder.name}\n'
+                f'Tipo de cambio: {change.change_type}\n'
+                f'Fecha de detección: {change.detected_at.isoformat()}\n'
+                f'Similitud detectada: {change.similarity_score}'
             )
-        
-        message = '\n'.join(message_lines)
-        
-        # Enviar email (descomentar en producción con configuración SMTP)
-        # send_mail(
-        #     subject='[ISO Smart] Alertas Críticas de Stakeholders',
-        #     message=message,
-        #     from_email=settings.DEFAULT_FROM_EMAIL,
-        #     recipient_list=settings.ADMIN_EMAILS,
-        #     fail_silently=False,
-        # )
-        
-        # Marcar como enviadas
-        critical_changes.update(alert_sent=True)
-        
-        logger.info(f"{critical_changes.count()} alertas enviadas")
+
+            delivery = send_email_notification(
+                organization=organization,
+                event_type='stakeholder_change',
+                event_key=f'stakeholder_change:{change.id}',
+                subject=subject,
+                message=message,
+                metadata={
+                    'change_log_id': change.id,
+                    'stakeholder_id': change.stakeholder_id,
+                    'change_type': change.change_type,
+                },
+            )
+
+            if delivery.status in {'sent', 'skipped'}:
+                change.alert_sent = True
+                change.save(update_fields=['alert_sent'])
+                alerts_sent += 1
+
+        logger.info(f"{alerts_sent} alertas enviadas")
         
         return {
             'status': 'success',
-            'alerts_sent': critical_changes.count()
+            'alerts_sent': alerts_sent
         }
         
     except Exception as e:

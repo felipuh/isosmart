@@ -2,7 +2,8 @@ from django.contrib import admin
 from .models import (
     ContextAnalysis, Document, StakeholderProfile, StakeholderChangeLog,
     ScopeElement, ScopeAudit, ProcessMap, RiskMatrix, QualityObjective,
-    ChangeLog, AIModelVersion, AIAuditLog, BillingSubscription, BillingPayment
+    ChangeLog, AIModelVersion, AIAuditLog, BillingSubscription, BillingPayment,
+    NotificationDelivery,
 )
 
 @admin.register(ContextAnalysis)
@@ -101,3 +102,11 @@ class BillingPaymentAdmin(admin.ModelAdmin):
     list_filter = ['status', 'payment_method', 'currency', 'created_at']
     search_fields = ['subscription__organization__name', 'reference']
     readonly_fields = ['created_at', 'updated_at', 'evidence_uploaded_at']
+
+
+@admin.register(NotificationDelivery)
+class NotificationDeliveryAdmin(admin.ModelAdmin):
+    list_display = ['event_type', 'organization', 'channel', 'status', 'sent_at', 'created_at']
+    list_filter = ['event_type', 'channel', 'status', 'created_at']
+    search_fields = ['organization__name', 'subject', 'event_key']
+    readonly_fields = ['created_at', 'updated_at', 'sent_at']

@@ -1,15 +1,19 @@
 from datetime import date, timedelta
 
 from django.contrib.auth import get_user_model
+from django.core import mail
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework.test import APIClient
 
 from authentication.models import UserProfile
+from ai_modules.sie.models.stakeholder import StakeholderProfile as AIStakeholderProfile
+from ai_modules.sie.models.stakeholder import StakeholderChangeLog as AIStakeholderChangeLog
 from core.models import (
     AuditLog,
     ContextAnalysis,
     ISOClauseConfig,
+    NotificationDelivery,
     OnboardingInsightSnapshot,
     Organization,
     OrganizationSettings,
@@ -18,6 +22,12 @@ from core.models import (
     RiskMatrix,
     StakeholderProfile,
 )
+from core.services.billing_notifications import notify_payment_registered
+from core.services.notifications import send_email_notification
+from planning.models import ObjectiveAction as PlanningObjectiveAction
+from planning.models import QualityObjective as PlanningQualityObjective
+from planning.models import RiskOpportunity
+from backend.tasks import evaluate_operational_notifications_task
 
 
 class LegacyScopedEndpointsTests(TestCase):
@@ -216,6 +226,191 @@ class LegacyScopedEndpointsTests(TestCase):
             {'organization_id': self.org_a.id},
         )
         self.assertEqual(foreign_detail.status_code, 404)
+
+
+class NotificationFlowTests(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        user_model = get_user_model()
+        self.user = user_model.objects.create_user(
+            email='notify-user@isosmart.local',
+            password='StrongPass@123',
+            first_name='Notify',
+            last_name='User',
+        )
+        self.organization = Organization.objects.create(
+            name='Notify Org',
+            slug='notify-org',
+            email='org@isosmart.local',
+        )
+        self.settings = OrganizationSettings.objects.create(
+            organization=self.organization,
+            notification_email='alerts@isosmart.local',
+            notify_risk_critical=True,
+            notify_risk_high=True,
+            notify_objective_deadline=True,
+            notify_stakeholder_change=True,
+        )
+        UserProfile.objects.create(
+            user=self.user,
+            organization=self.organization,
+            role='org_admin',
+            is_active=True,
+            notifications_enabled=True,
+            email_notifications=True,
+        )
+        self.client.force_authenticate(user=self.user)
+
+    def test_send_email_notification_records_delivery(self):
+        delivery = send_email_notification(
+            organization=self.organization,
+            event_type='risk_critical',
+            event_key='risk:test:1',
+            subject='Critical risk',
+            message='Risk details',
+            users=[self.user],
+            metadata={'risk_id': 1},
+        )
+
+        self.assertEqual(delivery.status, 'sent')
+        self.assertEqual(NotificationDelivery.objects.count(), 1)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(sorted(mail.outbox[0].to), ['alerts@isosmart.local', 'notify-user@isosmart.local', 'org@isosmart.local'])
+
+    def test_send_email_notification_deduplicates_by_event_key(self):
+        first = send_email_notification(
+            organization=self.organization,
+            event_type='risk_high',
+            event_key='risk:test:dedupe',
+            subject='High risk',
+            message='First send',
+        )
+        second = send_email_notification(
+            organization=self.organization,
+            event_type='risk_high',
+            event_key='risk:test:dedupe',
+            subject='High risk duplicate',
+            message='Second send',
+        )
+
+        self.assertEqual(first.id, second.id)
+        self.assertEqual(NotificationDelivery.objects.count(), 1)
+        self.assertEqual(len(mail.outbox), 1)
+
+    def test_billing_notification_uses_tracked_delivery(self):
+        from core.models import BillingPayment, BillingSubscription
+
+        subscription = BillingSubscription.objects.create(
+            organization=self.organization,
+            payer_email='payer@isosmart.local',
+            monthly_price='99.00',
+            currency='USD',
+        )
+        payment = BillingPayment.objects.create(
+            subscription=subscription,
+            status='pending',
+            amount='99.00',
+            currency='USD',
+        )
+
+        notify_payment_registered(payment)
+
+        delivery = NotificationDelivery.objects.get(event_type='billing_payment_registered')
+        self.assertEqual(delivery.status, 'sent')
+        self.assertIn('payer@isosmart.local', delivery.recipients)
+        self.assertEqual(len(mail.outbox), 1)
+
+    def test_operational_notification_task_sends_risk_objective_and_stakeholder_alerts(self):
+        risk = RiskOpportunity.objects.create(
+            organization_id=self.organization.id,
+            organization_name=self.organization.name,
+            item_type='risk',
+            code='R-001',
+            title='Critical supplier disruption',
+            description='A key supplier may stop delivering.',
+            context='external',
+            category='operational',
+            probability=4,
+            impact=5,
+            owner=self.user,
+            status='identified',
+        )
+        objective = PlanningQualityObjective.objects.create(
+            organization_id=self.organization.id,
+            organization_name=self.organization.name,
+            code='OBJ-001',
+            title='Reduce complaints',
+            description='Reduce customer complaints by 20%.',
+            is_specific=True,
+            is_measurable=True,
+            is_achievable=True,
+            is_relevant=True,
+            is_time_bound=True,
+            alignment='customer',
+            metric='Complaints',
+            target='20.00',
+            owner=self.user,
+            start_date=date.today(),
+            target_date=date.today() + timedelta(days=3),
+            status='in_progress',
+            progress_percentage=40,
+        )
+        PlanningObjectiveAction.objects.create(
+            organization_id=self.organization.id,
+            objective=objective,
+            action_number=1,
+            description='Call key customers',
+            what_will_be_done='Reach out to affected customers',
+            responsible=self.user,
+            due_date=date.today() + timedelta(days=2),
+            status='planned',
+        )
+        stakeholder = AIStakeholderProfile.objects.create(
+            organization_id=self.organization.id,
+            name='Critical customer',
+            stakeholder_type='cliente',
+            influence_score=0.9,
+            power='alto',
+            interest='alto',
+            satisfaction_score=2.0,
+        )
+        AIStakeholderChangeLog.objects.create(
+            stakeholder=stakeholder,
+            change_type='expectation_alto',
+            previous_state={'expectation': 'stable'},
+            new_state={'expectation': 'critical'},
+            similarity_score=0.2,
+        )
+
+        result = evaluate_operational_notifications_task()
+
+        self.assertGreaterEqual(result['risk_notifications'], 1)
+        self.assertGreaterEqual(result['objective_notifications'], 2)
+        self.assertGreaterEqual(result['stakeholder_alerts'], 1)
+        self.assertEqual(NotificationDelivery.objects.filter(event_type='risk_critical').count(), 1)
+        self.assertEqual(NotificationDelivery.objects.filter(event_type='objective_deadline').count(), 2)
+        self.assertEqual(NotificationDelivery.objects.filter(event_type='stakeholder_change').count(), 1)
+        self.assertEqual(len(mail.outbox), 4)
+
+    def test_notification_history_endpoint_returns_recent_deliveries(self):
+        send_email_notification(
+            organization=self.organization,
+            event_type='risk_high',
+            event_key='history:test:1',
+            subject='History entry',
+            message='History message',
+            users=[self.user],
+        )
+
+        response = self.client.get(
+            reverse('settings-notification-history'),
+            {'organization_id': self.organization.id, 'limit': 5},
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['count'], 1)
+        self.assertEqual(len(response.data['results']), 1)
+        self.assertEqual(response.data['results'][0]['event_key'], 'history:test:1')
 
 
 class SettingsBackupHistoryTests(TestCase):

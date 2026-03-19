@@ -71,6 +71,7 @@ from .models import (
     OrganizationSettings,
     ISOClauseConfig,
     AuditLog,
+    NotificationDelivery,
     OnboardingInsightSnapshot,
     BillingSubscription,
     BillingPayment,
@@ -182,6 +183,16 @@ class AuditLogSerializer(serializers.ModelSerializer):
         if obj.user:
             return f"{obj.user.first_name} {obj.user.last_name}".strip() or obj.user.username
         return "Sistema"
+
+
+class NotificationDeliverySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NotificationDelivery
+        fields = [
+            'id', 'event_type', 'channel', 'event_key', 'recipients', 'subject',
+            'status', 'error_message', 'metadata', 'sent_at', 'created_at'
+        ]
+        read_only_fields = fields
 
 
 class OnboardingInsightSnapshotSerializer(serializers.ModelSerializer):
