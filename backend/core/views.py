@@ -785,6 +785,44 @@ class OrganizationViewSet(viewsets.ModelViewSet):
     queryset = Organization.objects.all()
     serializer_class = OrganizationSerializer
     permission_classes = [IsAuthenticated]
+
+    def _resolve_role(self, request, org_id=None):
+        if request.user and request.user.is_superuser:
+            return 'org_admin'
+
+        queryset = UserProfile.objects.filter(user=request.user, is_active=True)
+        if org_id:
+            profile = queryset.filter(organization_id=org_id).first()
+        else:
+            profile = queryset.first()
+        return profile.role if profile else None
+
+    def _require_roles(self, request, allowed_roles, org_id=None):
+        role = self._resolve_role(request, org_id=org_id)
+        if role not in allowed_roles:
+            raise PermissionDenied('No autorizado para esta accion')
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.request.user and self.request.user.is_superuser:
+            return queryset
+
+        allowed_org_ids = _allowed_org_ids_for_request(self.request)
+        if allowed_org_ids is None:
+            return queryset
+        return queryset.filter(id__in=allowed_org_ids)
+
+    def perform_create(self, serializer):
+        self._require_roles(self.request, {'org_admin'})
+        serializer.save()
+
+    def perform_update(self, serializer):
+        self._require_roles(self.request, {'org_admin'}, org_id=serializer.instance.id)
+        serializer.save()
+
+    def perform_destroy(self, instance):
+        self._require_roles(self.request, {'org_admin'}, org_id=instance.id)
+        super().perform_destroy(instance)
     
     @action(detail=True, methods=['get'])
     def dashboard(self, request, pk=None):
@@ -1452,6 +1490,22 @@ class BillingViewSet(viewsets.ViewSet):
     """Motor interno de billing (sin pasarela externa)."""
     permission_classes = [IsAuthenticated]
 
+    def _resolve_role(self, request, org_id=None):
+        if request.user and request.user.is_superuser:
+            return 'org_admin'
+
+        queryset = UserProfile.objects.filter(user=request.user, is_active=True)
+        if org_id:
+            profile = queryset.filter(organization_id=org_id).first()
+        else:
+            profile = queryset.first()
+        return profile.role if profile else None
+
+    def _require_roles(self, request, allowed_roles, org):
+        role = self._resolve_role(request, org_id=org.id)
+        if role not in allowed_roles:
+            raise PermissionDenied('No autorizado para esta accion')
+
     def _allowed_organization_ids(self, request):
         if request.user and request.user.is_superuser:
             return None
@@ -1511,6 +1565,7 @@ class BillingViewSet(viewsets.ViewSet):
     @action(detail=False, methods=['post'])
     def update_payer(self, request):
         org = self._resolve_org(request)
+        self._require_roles(request, {'org_admin', 'iso_manager'}, org)
         subscription, _ = BillingSubscription.objects.get_or_create(organization=org)
         old_values = {
             'payer_user': subscription.payer_user_id,
@@ -1564,6 +1619,7 @@ class BillingViewSet(viewsets.ViewSet):
     @action(detail=False, methods=['post'], parser_classes=[MultiPartParser, FormParser, JSONParser])
     def register_payment(self, request):
         org = self._resolve_org(request)
+        self._require_roles(request, {'org_admin', 'iso_manager', 'user'}, org)
         subscription, _ = BillingSubscription.objects.get_or_create(organization=org)
 
         serializer = BillingPaymentSerializer(data=request.data)
@@ -1604,6 +1660,7 @@ class BillingViewSet(viewsets.ViewSet):
     @action(detail=False, methods=['post'])
     def confirm_payment(self, request):
         org = self._resolve_org(request)
+        self._require_roles(request, {'org_admin', 'iso_manager'}, org)
         subscription = BillingSubscription.objects.filter(organization=org).first()
         if not subscription:
             return Response({'detail': 'No existe suscripción para la organización.'}, status=status.HTTP_404_NOT_FOUND)
@@ -1657,6 +1714,7 @@ class BillingViewSet(viewsets.ViewSet):
     @action(detail=False, methods=['post'])
     def reject_payment(self, request):
         org = self._resolve_org(request)
+        self._require_roles(request, {'org_admin', 'iso_manager'}, org)
         subscription = BillingSubscription.objects.filter(organization=org).first()
         if not subscription:
             return Response({'detail': 'No existe suscripción para la organización.'}, status=status.HTTP_404_NOT_FOUND)
@@ -1690,6 +1748,7 @@ class BillingViewSet(viewsets.ViewSet):
     @action(detail=False, methods=['post'])
     def evaluate(self, request):
         org = self._resolve_org(request)
+        self._require_roles(request, {'org_admin', 'iso_manager'}, org)
         subscription = BillingSubscription.objects.filter(organization=org).first()
         if not subscription:
             return Response({'detail': 'No existe suscripción para la organización.'}, status=status.HTTP_404_NOT_FOUND)
@@ -1720,12 +1779,34 @@ class ISOClauseConfigViewSet(viewsets.ModelViewSet):
     queryset = ISOClauseConfig.objects.all()
     serializer_class = ISOClauseConfigSerializer
     permission_classes = [IsAuthenticated]
+
+    def _resolve_role(self, request, org_id=None):
+        if request.user and request.user.is_superuser:
+            return 'org_admin'
+
+        queryset = UserProfile.objects.filter(user=request.user, is_active=True)
+        if org_id:
+            profile = queryset.filter(organization_id=org_id).first()
+        else:
+            profile = queryset.first()
+        return profile.role if profile else None
+
+    def _require_roles(self, request, allowed_roles, org=None):
+        role = self._resolve_role(request, org_id=org.id if org else None)
+        if role not in allowed_roles:
+            raise PermissionDenied('No autorizado para esta accion')
     
     def get_queryset(self):
         queryset = super().get_queryset()
-        org_id = self.request.query_params.get('organization') or getattr(self.request, 'organization_id', None)
+        org_id = self.request.query_params.get('organization') or self.request.query_params.get('organization_id') or getattr(self.request, 'organization_id', None)
         if org_id:
+            allowed_org_ids = _allowed_org_ids_for_request(self.request)
+            if allowed_org_ids is not None and int(org_id) not in allowed_org_ids:
+                raise PermissionDenied('No autorizado para esta organizacion')
             queryset = queryset.filter(organization_id=org_id)
+        elif not (self.request.user and self.request.user.is_superuser):
+            allowed_org_ids = _allowed_org_ids_for_request(self.request)
+            queryset = queryset.filter(organization_id__in=allowed_org_ids)
         standard_code = self.request.query_params.get('standard_code') or self.request.query_params.get('standard')
         if standard_code:
             queryset = queryset.filter(standard_code=standard_code)
@@ -1815,6 +1896,7 @@ class ISOClauseConfigViewSet(viewsets.ModelViewSet):
     def initialize_iso9001(self, request):
         """Inicializar cláusulas ISO 9001:2015"""
         org = self._resolve_org(request)
+        self._require_roles(request, {'org_admin', 'iso_manager'}, org=org)
         clauses = self._standard_clauses_map()['ISO9001_2015']
         created_count = 0
         for number, name in clauses:
@@ -1835,6 +1917,7 @@ class ISOClauseConfigViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['post'])
     def initialize_standards(self, request):
         org = self._resolve_org(request)
+        self._require_roles(request, {'org_admin', 'iso_manager'}, org=org)
         standard_codes = _normalize_enabled_standards(request.data.get('standards'), org.id)
         clause_map = self._standard_clauses_map()
 
@@ -1866,6 +1949,20 @@ class ISOClauseConfigViewSet(viewsets.ModelViewSet):
             'standards': touched_standards,
             'created_clauses': created_count,
         })
+
+    def perform_create(self, serializer):
+        org = self._resolve_org(self.request)
+        self._require_roles(self.request, {'org_admin', 'iso_manager'}, org=org)
+        serializer.save()
+
+    def perform_update(self, serializer):
+        org = serializer.instance.organization
+        self._require_roles(self.request, {'org_admin', 'iso_manager'}, org=org)
+        serializer.save()
+
+    def perform_destroy(self, instance):
+        self._require_roles(self.request, {'org_admin', 'iso_manager'}, org=instance.organization)
+        super().perform_destroy(instance)
 
 
 class AuditLogViewSet(viewsets.ReadOnlyModelViewSet):

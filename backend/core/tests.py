@@ -880,3 +880,166 @@ class BackendRoleAuthorizationTests(TestCase):
         )
         self.assertEqual(response.status_code, 403)
 
+    def test_billing_update_payer_denied_for_viewer(self):
+        self.client.force_authenticate(user=self.viewer)
+        response = self.client.post(
+            reverse('billing-update-payer'),
+            {
+                'organization_id': self.org.id,
+                'payer_name': 'Viewer Blocked',
+            },
+            format='json',
+        )
+        self.assertEqual(response.status_code, 403)
+
+    def test_billing_update_payer_allowed_for_manager(self):
+        self.client.force_authenticate(user=self.manager)
+        response = self.client.post(
+            reverse('billing-update-payer'),
+            {
+                'organization_id': self.org.id,
+                'payer_name': 'Manager Allowed',
+            },
+            format='json',
+        )
+        self.assertEqual(response.status_code, 200)
+
+    def test_iso_initialize_standards_denied_for_viewer(self):
+        self.client.force_authenticate(user=self.viewer)
+        response = self.client.post(
+            reverse('iso-clause-initialize-standards'),
+            {
+                'organization_id': self.org.id,
+                'standards': ['ISO9001_2015'],
+            },
+            format='json',
+        )
+        self.assertEqual(response.status_code, 403)
+
+    def test_iso_initialize_standards_allowed_for_manager(self):
+        self.client.force_authenticate(user=self.manager)
+        response = self.client.post(
+            reverse('iso-clause-initialize-standards'),
+            {
+                'organization_id': self.org.id,
+                'standards': ['ISO9001_2015'],
+            },
+            format='json',
+        )
+        self.assertEqual(response.status_code, 200)
+
+
+class RoleEndpointMatrixTests(TestCase):
+    """Formal role-to-endpoint matrix with parameterized assertions."""
+
+    ROLE_ORDER = ['org_admin', 'iso_manager', 'auditor', 'user', 'viewer']
+
+    MATRIX = [
+        {
+            'name': 'settings_update_notifications',
+            'method': 'post',
+            'url_name': 'settings-update-notifications',
+            'payload': lambda org: {'organization_id': org.id, 'notify_risk_high': False},
+            'allowed_roles': {'org_admin', 'iso_manager'},
+        },
+        {
+            'name': 'user_management_list',
+            'method': 'get',
+            'url_name': 'user-management-list',
+            'query': lambda org: {'organization': org.id},
+            'allowed_roles': {'org_admin'},
+        },
+        {
+            'name': 'billing_update_payer',
+            'method': 'post',
+            'url_name': 'billing-update-payer',
+            'payload': lambda org: {'organization_id': org.id, 'payer_name': 'Matrix QA'},
+            'allowed_roles': {'org_admin', 'iso_manager'},
+        },
+        {
+            'name': 'iso_initialize_standards',
+            'method': 'post',
+            'url_name': 'iso-clause-initialize-standards',
+            'payload': lambda org: {'organization_id': org.id, 'standards': ['ISO9001_2015']},
+            'allowed_roles': {'org_admin', 'iso_manager'},
+        },
+        {
+            'name': 'organization_list',
+            'method': 'get',
+            'url_name': 'organization-list',
+            'query': lambda org: {},
+            'allowed_roles': {'org_admin', 'iso_manager', 'auditor', 'user', 'viewer'},
+        },
+        {
+            'name': 'organization_partial_update',
+            'method': 'patch',
+            'url_name': 'organization-detail',
+            'url_kwargs': lambda org: {'pk': org.id},
+            'payload': lambda org: {'name': 'Role Auth Org Updated'},
+            'allowed_roles': {'org_admin'},
+        },
+    ]
+
+    def setUp(self):
+        self.client = APIClient()
+        user_model = get_user_model()
+
+        self.org = Organization.objects.create(
+            name='Matrix Role Org',
+            slug='matrix-role-org',
+            is_active=True,
+        )
+        OrganizationSettings.objects.create(
+            organization=self.org,
+            notify_risk_high=True,
+        )
+
+        self.users_by_role = {}
+        for role in self.ROLE_ORDER:
+            user = user_model.objects.create_user(
+                username=f'matrix_{role}',
+                email=f'matrix_{role}@isosmart.local',
+                password='StrongPass@123',
+            )
+            UserProfile.objects.create(
+                user=user,
+                organization=self.org,
+                role=role,
+                is_active=True,
+            )
+            self.users_by_role[role] = user
+
+    def _call_case(self, role, case):
+        self.client.force_authenticate(user=self.users_by_role[role])
+        url = reverse(case['url_name'], kwargs=case.get('url_kwargs', lambda _: {})(self.org))
+
+        method = case['method'].lower()
+        if method == 'get':
+            params = case.get('query', lambda _: {})(self.org)
+            return self.client.get(url, params)
+        if method == 'post':
+            data = case.get('payload', lambda _: {})(self.org)
+            return self.client.post(url, data, format='json')
+        if method == 'patch':
+            data = case.get('payload', lambda _: {})(self.org)
+            return self.client.patch(url, data, format='json')
+        raise ValueError(f"Unsupported method in matrix: {method}")
+
+    def test_role_endpoint_matrix(self):
+        for case in self.MATRIX:
+            for role in self.ROLE_ORDER:
+                with self.subTest(case=case['name'], role=role):
+                    response = self._call_case(role, case)
+                    if role in case['allowed_roles']:
+                        self.assertNotEqual(
+                            response.status_code,
+                            403,
+                            msg=f"Expected allowed access for role={role} in case={case['name']}",
+                        )
+                    else:
+                        self.assertEqual(
+                            response.status_code,
+                            403,
+                            msg=f"Expected denied access for role={role} in case={case['name']}",
+                        )
+
