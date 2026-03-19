@@ -6,7 +6,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useI18n } from '../../context/I18nContext';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const UserMenu = () => {
   const { t } = useI18n();
@@ -50,6 +50,11 @@ const UserMenu = () => {
       // Recargar página para actualizar datos
       window.location.reload();
     }
+  };
+
+  const closeMenu = () => {
+    setIsOpen(false);
+    setShowOrgSelector(false);
   };
 
   const getRoleColor = (role) => {
@@ -169,8 +174,9 @@ const UserMenu = () => {
 
           {/* Opciones del menú */}
           <div className="p-2">
-            <a
-              href="/settings"
+            <Link
+              to="/settings"
+              onClick={closeMenu}
               className="flex items-center gap-2 p-2 rounded-lg hover:bg-slate-700/50 transition-colors text-slate-300 hover:text-white"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -178,17 +184,31 @@ const UserMenu = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
               <span>{t('auth.userMenu.settings')}</span>
-            </a>
+            </Link>
 
-            <a
-              href="/profile"
+            <Link
+              to="/profile"
+              onClick={closeMenu}
               className="flex items-center gap-2 p-2 rounded-lg hover:bg-slate-700/50 transition-colors text-slate-300 hover:text-white"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
               <span>{t('auth.userMenu.profile')}</span>
-            </a>
+            </Link>
+
+            <Link
+              to="/profile#password"
+              onClick={closeMenu}
+              className="flex items-center gap-2 p-2 rounded-lg hover:bg-slate-700/50 transition-colors text-slate-300 hover:text-white"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 11c1.657 0 3-1.343 3-3S13.657 5 12 5s-3 1.343-3 3 1.343 3 3 3z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 19a7 7 0 0114 0" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 11l2 2 4-4" />
+              </svg>
+              <span>{t('settings.users.password.title')}</span>
+            </Link>
 
             <hr className="my-2 border-slate-700/50" />
 

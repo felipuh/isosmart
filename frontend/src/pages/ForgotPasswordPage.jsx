@@ -50,7 +50,7 @@ const ForgotPasswordPage = () => {
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               className="w-full px-4 py-3 rounded-lg bg-slate-900 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500"
-              placeholder="email@empresa.com"
+              placeholder={t('auth.passwordReset.request.placeholders.email')}
               autoComplete="email"
               required
             />

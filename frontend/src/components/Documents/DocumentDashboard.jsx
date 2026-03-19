@@ -1,4 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Plus, RefreshCw, FileText, Upload as UploadIcon, Folder } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useI18n } from '../../context/I18nContext';
@@ -239,10 +240,10 @@ const DocumentDashboard = () => {
               <p className="text-sm text-blue-700 dark:text-blue-200">
                 {t('documentsManager.info.description')}
               </p>
-              <a href="/context"
+              <Link to="/context"
                 className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium mt-2 inline-block transition-colors">
                 {t('documentsManager.info.goToContext')}
-              </a>
+              </Link>
             </div>
           </div>
         </div>

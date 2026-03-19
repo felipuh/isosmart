@@ -1,7 +1,10 @@
 import React from 'react';
 import { AlertCircle, X } from 'lucide-react';
+import { useI18n } from '../../context/I18nContext';
 
 const CrudErrorBanner = ({ message, onClose }) => {
+  const { t } = useI18n();
+
   if (!message) return null;
 
   return (
@@ -16,7 +19,7 @@ const CrudErrorBanner = ({ message, onClose }) => {
             type="button"
             onClick={onClose}
             className="text-red-300 transition-colors hover:text-red-100"
-            aria-label="Dismiss error"
+            aria-label={t('common.buttons.dismissError')}
           >
             <X className="h-4 w-4" />
           </button>

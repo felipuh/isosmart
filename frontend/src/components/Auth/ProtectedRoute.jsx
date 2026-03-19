@@ -4,7 +4,7 @@
  * Opcionalmente verifica roles
  */
 
-import { Navigate, useLocation } from 'react-router-dom';
+import { Link, Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useI18n } from '../../context/I18nContext';
 
@@ -41,12 +41,12 @@ const AccessDenied = ({ requiredRoles }) => {
             </span>
           )}
         </p>
-        <a
-          href="/"
+        <Link
+          to="/"
           className="inline-block px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg transition-colors"
         >
           {t('auth.protectedRoute.backHome')}
-        </a>
+        </Link>
       </div>
     </div>
   );

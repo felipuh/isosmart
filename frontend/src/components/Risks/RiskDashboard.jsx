@@ -1,4 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useI18n } from '../../context/I18nContext';
 import riskService from '../../services/riskService';
@@ -251,12 +252,12 @@ const RiskDashboard = () => {
             <p className="text-sm text-slate-700 dark:text-slate-300 mt-1">
               {t('riskManagement.dashboard.info.description')}
             </p>
-            <a href="/context" className="inline-flex items-center text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 mt-2 font-medium transition-colors">
+            <Link to="/context" className="inline-flex items-center text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 mt-2 font-medium transition-colors">
               {t('riskManagement.dashboard.info.goToContext')}
               <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
-            </a>
+            </Link>
           </div>
         </div>
       </div>

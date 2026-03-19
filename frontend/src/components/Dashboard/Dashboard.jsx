@@ -64,7 +64,7 @@ const Dashboard = () => {
       { id: '7', labelKey: 'dashboard.main.clauseProgress.clause7', checks: ['/resources/resources/', '/resources/competences/', '/resources/trainings/'] },
       { id: '8', labelKey: 'dashboard.main.clauseProgress.clause8', checks: ['/operations/requirements/', '/operations/providers/', '/operations/nonconformities/'] },
       { id: '9', labelKey: 'dashboard.main.clauseProgress.clause9', checks: ['/performance/measurements/', '/performance/findings/', '/performance/reviews/'] },
-      { id: '10', labelKey: 'dashboard.main.clauseProgress.clause10', checks: ['/improvement/nonconformities/', '/improvement/corrective-actions/', '/improvement/continual-improvements/'] },
+      { id: '10', labelKey: 'dashboard.main.clauseProgress.clause10', checks: ['/improvement/nonconformities/', '/improvement/corrective-actions/', '/improvement/continual/'] },
     ];
 
     const [processCount, stakeholderCount, clauseResults] = await Promise.all([

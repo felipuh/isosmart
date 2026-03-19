@@ -176,7 +176,7 @@ const ObjectiveForm = ({ objective, onSubmit, onCancel }) => {
                   value={formData.baseline_value}
                   onChange={handleChange}
                   className={`w-full rounded-lg shadow-sm dark:bg-slate-700 dark:text-white dark:focus:ring-blue-400 focus:ring-blue-500 focus:border-blue-500 transition-colors ${errors.baseline_value ? 'border-red-300 dark:border-red-800' : 'border-gray-300 dark:border-slate-600'}`}
-                  placeholder="0"
+                  placeholder={t('objectiveForm.placeholders.baseline')}
                 />
                 {errors.baseline_value && <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.baseline_value}</p>}
               </div>
@@ -191,7 +191,7 @@ const ObjectiveForm = ({ objective, onSubmit, onCancel }) => {
                   value={formData.target_value}
                   onChange={handleChange}
                   className={`w-full rounded-lg shadow-sm dark:bg-slate-700 dark:text-white dark:focus:ring-blue-400 focus:ring-blue-500 focus:border-blue-500 transition-colors ${errors.target_value ? 'border-red-300 dark:border-red-800' : 'border-gray-300 dark:border-slate-600'}`}
-                  placeholder="100"
+                  placeholder={t('objectiveForm.placeholders.target')}
                 />
                 {errors.target_value && <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.target_value}</p>}
               </div>
@@ -204,7 +204,7 @@ const ObjectiveForm = ({ objective, onSubmit, onCancel }) => {
                   value={formData.current_value}
                   onChange={handleChange}
                   className="w-full rounded-lg border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white shadow-sm dark:focus:ring-blue-400 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                  placeholder="0"
+                  placeholder={t('objectiveForm.placeholders.current')}
                 />
               </div>
               <div>
@@ -218,7 +218,7 @@ const ObjectiveForm = ({ objective, onSubmit, onCancel }) => {
                   onChange={handleChange}
                   list="unit-suggestions"
                   className={`w-full rounded-lg shadow-sm dark:bg-slate-700 dark:text-white dark:focus:ring-blue-400 focus:ring-blue-500 focus:border-blue-500 transition-colors ${errors.measurement_unit ? 'border-red-300 dark:border-red-800' : 'border-gray-300 dark:border-slate-600'}`}
-                  placeholder="%"
+                  placeholder={t('objectiveForm.placeholders.unit')}
                 />
                 <datalist id="unit-suggestions">
                   {unitSuggestions.map((unit) => <option key={unit} value={unit} />)}

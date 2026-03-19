@@ -22,7 +22,7 @@ const Sidebar = ({ isOpen = true }) => {
     { name: t('navigation.improvement'), path: '/improvement', icon: Zap },
     { name: t('navigation.performance'), path: '/performance', icon: LineChart },
     { name: t('navigation.leadership'), path: '/leadership', icon: Users },
-    { name: 'Reportes', path: '/reports', icon: FileText },
+    { name: t('navigation.reports'), path: '/reports', icon: FileText },
     { name: t('navigation.settings'), path: '/settings', icon: Settings },
   ];
 

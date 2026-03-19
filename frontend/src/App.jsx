@@ -7,6 +7,7 @@ const ForgotPasswordPage = lazy(() => import('./pages/ForgotPasswordPage'));
 const ResetPasswordPage = lazy(() => import('./pages/ResetPasswordPage'));
 const OnboardingPage = lazy(() => import('./pages/OnboardingPage'));
 const ReportsPage = lazy(() => import('./pages/ReportsPage'));
+const ProfilePage = lazy(() => import('./pages/ProfilePage'));
 import Layout from './components/Layout/Layout'
 import { useI18n } from './context/I18nContext';
 
@@ -194,6 +195,7 @@ function App() {
         <Route path="improvement/continual" element={<ImprovementContinualPage />} />
         <Route path="improvement/continual/new" element={<ImprovementContinualPage />} />
         <Route path="reports" element={<ReportsPage />} />
+        <Route path="profile" element={<ProfilePage />} />
         
         {/* Settings - solo para admin */}
         <Route

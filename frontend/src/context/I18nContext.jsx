@@ -485,6 +485,19 @@ const MESSAGES = {
       settings: 'Configuración',
       logout: 'Cerrar sesión',
       lastAccess: 'Último acceso',
+      theme: {
+        switchToLight: 'Cambiar a tema claro',
+        switchToDark: 'Cambiar a tema oscuro',
+      },
+      notificationsPanel: {
+        label: 'Panel de notificaciones',
+        open: 'Abrir notificaciones',
+        close: 'Cerrar notificaciones',
+        loading: 'Cargando notificaciones...',
+        historyError: 'No se pudo cargar el historial de notificaciones.',
+        noRecipients: 'Sin destinatarios',
+        now: 'Ahora',
+      },
     },
     navigation: {
       dashboard: 'Dashboard',
@@ -501,6 +514,7 @@ const MESSAGES = {
       planning: 'Planificación',
       performance: 'Desempeño',
       operations: 'Operaciones',
+      reports: 'Reportes',
       settings: 'Configuración',
     },
     // === DASHBOARD ===
@@ -874,6 +888,9 @@ const MESSAGES = {
           title: 'Recuperar contraseña',
           subtitle: 'Te enviaremos un enlace seguro para restablecer tu acceso.',
           submit: 'Enviar enlace de recuperación',
+          placeholders: {
+            email: 'email@empresa.com',
+          },
           messages: {
             success: 'Si el correo existe, recibirás instrucciones para restablecer tu contraseña.',
             error: 'No fue posible procesar la solicitud. Intenta nuevamente.',
@@ -949,6 +966,19 @@ const MESSAGES = {
         noOrganization: 'No hay una organización activa seleccionada.',
         success: 'Reporte descargado: {filename}',
         error: 'No fue posible generar el reporte.',
+      },
+    },
+    profilePage: {
+      subtitle: 'Administra tus datos de cuenta y actualiza tu contrasena de acceso.',
+      accountData: 'Datos de cuenta',
+      role: 'Rol',
+      organization: 'Organizacion activa',
+      currentPassword: 'Contrasena actual',
+      passwordHint: 'La nueva contrasena debe ser diferente y cumplir la politica de seguridad.',
+      messages: {
+        passwordUpdated: 'Contrasena actualizada correctamente.',
+        requiredFields: 'Debes completar todos los campos de contrasena.',
+        mismatch: 'Las contrasenas no coinciden.',
       },
     },
     assistantPanel: {
@@ -1789,6 +1819,10 @@ const MESSAGES = {
       placeholders: {
         indicatorName: 'Ej: Índice de Satisfacción del Cliente',
         objectiveDescription: 'Describa el objetivo de calidad...',
+        baseline: '0',
+        target: '100',
+        current: '0',
+        unit: '%',
         responsible: 'Nombre del responsable',
         processId: 'Ej: PROC-001',
       },
@@ -2473,6 +2507,7 @@ const MESSAGES = {
         publish: 'Publicar',
         draft: 'Borrador',
         retry: 'Reintentar',
+        dismissError: 'Descartar error',
       },
       messages: {
         loading: 'Cargando...',
@@ -4433,6 +4468,19 @@ const MESSAGES = {
       settings: 'Settings',
       logout: 'Sign Out',
       lastAccess: 'Last Access',
+      theme: {
+        switchToLight: 'Switch to light theme',
+        switchToDark: 'Switch to dark theme',
+      },
+      notificationsPanel: {
+        label: 'Notifications panel',
+        open: 'Open notifications',
+        close: 'Close notifications',
+        loading: 'Loading notifications...',
+        historyError: 'Could not load notifications history.',
+        noRecipients: 'No recipients',
+        now: 'Now',
+      },
     },
     navigation: {
       dashboard: 'Dashboard',
@@ -4449,6 +4497,7 @@ const MESSAGES = {
       planning: 'Planning',
       performance: 'Performance',
       operations: 'Operations',
+      reports: 'Reports',
       settings: 'Settings',
     },
     dashboard: {
@@ -4820,6 +4869,9 @@ const MESSAGES = {
           title: 'Recover password',
           subtitle: 'We will send you a secure link to restore your access.',
           submit: 'Send recovery link',
+          placeholders: {
+            email: 'email@example.com',
+          },
           messages: {
             success: 'If the email exists, you will receive instructions to reset your password.',
             error: 'The request could not be processed. Please try again.',
@@ -4895,6 +4947,19 @@ const MESSAGES = {
         noOrganization: 'There is no active organization selected.',
         success: 'Report downloaded: {filename}',
         error: 'The report could not be generated.',
+      },
+    },
+    profilePage: {
+      subtitle: 'Manage your account data and update your access password.',
+      accountData: 'Account details',
+      role: 'Role',
+      organization: 'Active organization',
+      currentPassword: 'Current password',
+      passwordHint: 'The new password must be different and comply with the security policy.',
+      messages: {
+        passwordUpdated: 'Password updated successfully.',
+        requiredFields: 'You must complete all password fields.',
+        mismatch: 'Passwords do not match.',
       },
     },
     assistantPanel: {
@@ -5735,6 +5800,10 @@ const MESSAGES = {
       placeholders: {
         indicatorName: 'E.g.: Customer Satisfaction Index',
         objectiveDescription: 'Describe the quality objective...',
+        baseline: '0',
+        target: '100',
+        current: '0',
+        unit: '%',
         responsible: 'Responsible person name',
         processId: 'E.g.: PROC-001',
       },
@@ -6417,6 +6486,7 @@ const MESSAGES = {
         publish: 'Publish',
         draft: 'Draft',
         retry: 'Retry',
+        dismissError: 'Dismiss error',
       },
       messages: {
         loading: 'Loading...',
@@ -8370,6 +8440,19 @@ const MESSAGES = {
       settings: 'Configurações',
       logout: 'Sair',
       lastAccess: 'Último Acesso',
+      theme: {
+        switchToLight: 'Mudar para tema claro',
+        switchToDark: 'Mudar para tema escuro',
+      },
+      notificationsPanel: {
+        label: 'Painel de notificações',
+        open: 'Abrir notificações',
+        close: 'Fechar notificações',
+        loading: 'Carregando notificações...',
+        historyError: 'Nao foi possivel carregar o historico de notificacoes.',
+        noRecipients: 'Sem destinatarios',
+        now: 'Agora',
+      },
     },
     navigation: {
       dashboard: 'Painel',
@@ -8386,6 +8469,7 @@ const MESSAGES = {
       planning: 'Planejamento',
       performance: 'Desempenho',
       operations: 'Operações',
+      reports: 'Relatorios',
       settings: 'Configurações',
     },
     dashboard: {
@@ -8757,6 +8841,9 @@ const MESSAGES = {
           title: 'Recuperar senha',
           subtitle: 'Enviaremos um link seguro para restabelecer seu acesso.',
           submit: 'Enviar link de recuperação',
+          placeholders: {
+            email: 'email@empresa.com',
+          },
           messages: {
             success: 'Se o email existir, você receberá instruções para redefinir sua senha.',
             error: 'Nao foi possivel processar a solicitacao. Tente novamente.',
@@ -8832,6 +8919,19 @@ const MESSAGES = {
         noOrganization: 'Não há uma organização ativa selecionada.',
         success: 'Relatório baixado: {filename}',
         error: 'Não foi possível gerar o relatório.',
+      },
+    },
+    profilePage: {
+      subtitle: 'Gerencie os dados da sua conta e atualize sua senha de acesso.',
+      accountData: 'Dados da conta',
+      role: 'Funcao',
+      organization: 'Organizacao ativa',
+      currentPassword: 'Senha atual',
+      passwordHint: 'A nova senha deve ser diferente e cumprir a politica de seguranca.',
+      messages: {
+        passwordUpdated: 'Senha atualizada com sucesso.',
+        requiredFields: 'Voce deve preencher todos os campos de senha.',
+        mismatch: 'As senhas nao coincidem.',
       },
     },
     assistantPanel: {
@@ -9672,6 +9772,10 @@ const MESSAGES = {
       placeholders: {
         indicatorName: 'Ex.: Índice de Satisfação do Cliente',
         objectiveDescription: 'Descreva o objetivo da qualidade...',
+        baseline: '0',
+        target: '100',
+        current: '0',
+        unit: '%',
         responsible: 'Nome do responsável',
         processId: 'Ex.: PROC-001',
       },
@@ -10354,6 +10458,7 @@ const MESSAGES = {
         publish: 'Publicar',
         draft: 'Rascunho',
         retry: 'Tentar Novamente',
+        dismissError: 'Descartar erro',
       },
       messages: {
         loading: 'Carregando...',
