@@ -37,7 +37,7 @@ const ModuleBadge = ({ module }) => {
     SIE: 'bg-green-100 text-green-800',
     SPM: 'bg-purple-100 text-purple-800',
     ASB: 'bg-orange-100 text-orange-800',
-    MANUAL: 'bg-gray-100 text-gray-800',
+    MANUAL: 'bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-200',
   };
 
   return (
@@ -114,10 +114,10 @@ const RiskMatrix = () => {
   if (loading) {
     return (
       <div className="card">
-        <div className="h-8 w-48 bg-gray-200 rounded animate-pulse mb-4"></div>
+        <div className="h-8 w-48 bg-slate-200 dark:bg-slate-700 rounded animate-pulse mb-4"></div>
         <div className="space-y-3">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="h-20 bg-gray-100 rounded animate-pulse"></div>
+            <div key={i} className="h-20 bg-slate-100 dark:bg-slate-800 rounded animate-pulse"></div>
           ))}
         </div>
       </div>
@@ -128,7 +128,7 @@ const RiskMatrix = () => {
     <div className="space-y-6">
       {/* Gráfico de barras */}
       <div className="card">
-        <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+        <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
           <BarChart className="w-5 h-5 text-blue-600" />
           {t('dashboard.riskMatrix.risksByModule')}
         </h3>
@@ -149,7 +149,7 @@ const RiskMatrix = () => {
       {/* Lista de riesgos */}
       <div className="card">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
             <AlertTriangle className="w-6 h-6 text-red-600" />
             {t('dashboard.riskMatrix.consolidatedTitle')}
           </h2>
@@ -164,7 +164,7 @@ const RiskMatrix = () => {
                 className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
                   filter === level
                     ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'
                 }`}
               >
                 {level === 'all' ? t('dashboard.riskMatrix.all') : levelLabels[level]}
@@ -184,7 +184,7 @@ const RiskMatrix = () => {
             filteredRisks.slice(0, 10).map((risk) => (
               <div
                 key={risk.id}
-                className="p-4 bg-gray-50 rounded-lg border-l-4 hover:bg-gray-100 transition-colors"
+                className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-lg border-l-4 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
                 style={{
                   borderLeftColor: 
                     risk.risk_level === 'critico' ? '#ef4444' :
@@ -201,20 +201,20 @@ const RiskMatrix = () => {
                         {risk.detection_date ? new Date(risk.detection_date).toLocaleDateString(locale) : '-'}
                       </span>
                     </div>
-                    <p className="text-gray-900 font-medium mb-2">
+                    <p className="text-slate-900 dark:text-slate-100 font-medium mb-2">
                       {risk.description}
                     </p>
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
-                        <span className="text-gray-500">{t('dashboard.riskMatrix.probability')}:</span>
+                        <span className="text-slate-500 dark:text-slate-400">{t('dashboard.riskMatrix.probability')}:</span>
                         <span className="ml-2 font-semibold">{risk.probability}</span>
                       </div>
                       <div>
-                        <span className="text-gray-500">{t('dashboard.riskMatrix.impact')}:</span>
+                        <span className="text-slate-500 dark:text-slate-400">{t('dashboard.riskMatrix.impact')}:</span>
                         <span className="ml-2 font-semibold">{risk.impact}</span>
                       </div>
                       <div className="col-span-2">
-                        <span className="text-gray-500">{t('dashboard.riskMatrix.responsible')}:</span>
+                        <span className="text-slate-500 dark:text-slate-400">{t('dashboard.riskMatrix.responsible')}:</span>
                         <span className="ml-2 font-semibold">{risk.responsible}</span>
                       </div>
                     </div>
@@ -222,9 +222,9 @@ const RiskMatrix = () => {
                 </div>
                 
                 {/* Acciones de mitigación */}
-                <div className="mt-3 pt-3 border-t border-gray-200">
-                  <p className="text-xs text-gray-500 mb-1">{t('dashboard.riskMatrix.mitigationActions')}:</p>
-                  <p className="text-sm text-gray-700">{risk.mitigation_actions}</p>
+                <div className="mt-3 pt-3 border-t border-slate-200 dark:border-slate-700">
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mb-1">{t('dashboard.riskMatrix.mitigationActions')}:</p>
+                  <p className="text-sm text-slate-700 dark:text-slate-300">{risk.mitigation_actions}</p>
                 </div>
               </div>
             ))
@@ -233,7 +233,7 @@ const RiskMatrix = () => {
 
         {filteredRisks.length > 10 && (
           <div className="mt-6 text-center">
-            <button className="px-6 py-2 bg-white text-gray-700 rounded-lg font-semibold border-2 border-gray-300 hover:border-blue-500 hover:text-blue-600 transition-all">
+            <button className="px-6 py-2 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-lg font-semibold border-2 border-slate-300 dark:border-slate-600 hover:border-blue-500 hover:text-blue-600 transition-all">
               {t('dashboard.riskMatrix.viewAllRisks')} ({filteredRisks.length})
             </button>
           </div>

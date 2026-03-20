@@ -80,25 +80,25 @@ const CriticalStakeholders = ({ stakeholders, loading }) => {
                 <span className="ml-1 font-medium capitalize dark:text-slate-200">{sh.power}</span>
               </div>
               <div className="flex items-center text-sm">
-                <Activity className="h-4 w-4 mr-1 text-gray-500" />
-                <span className="text-gray-600">{t('stakeholdersInsights.critical.interestLabel')}</span>
+                <Activity className="h-4 w-4 mr-1 text-slate-500 dark:text-slate-400" />
+                <span className="text-slate-600 dark:text-slate-400">{t('stakeholdersInsights.critical.interestLabel')}</span>
                 <span className="ml-1 font-medium capitalize">{sh.interest}</span>
               </div>
             </div>
 
             {sh.engagement_strategy && (
-              <div className="mt-3 pt-3 border-t border-gray-200">
-                <p className="text-sm text-gray-700">
+              <div className="mt-3 pt-3 border-t border-slate-200 dark:border-slate-700">
+                <p className="text-sm text-slate-700 dark:text-slate-300">
                   <span className="font-medium">{t('stakeholdersInsights.critical.strategyLabel')}</span> {sh.engagement_strategy}
                 </p>
               </div>
             )}
 
-            <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-200">
-              <span className="text-xs font-medium px-2 py-1 rounded bg-gray-100">
+            <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-200 dark:border-slate-700">
+              <span className="text-xs font-medium px-2 py-1 rounded bg-slate-100 dark:bg-slate-700 dark:text-slate-300">
                 {sh.is_hub && t('stakeholdersInsights.critical.tags.hub')} {sh.is_broker && t('stakeholdersInsights.critical.tags.broker')}
               </span>
-              <span className="text-xs text-gray-500">
+              <span className="text-xs text-slate-500 dark:text-slate-400">
                 {sh.connections} {t('stakeholdersInsights.critical.connections')}
               </span>
             </div>

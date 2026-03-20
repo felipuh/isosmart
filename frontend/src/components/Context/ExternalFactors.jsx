@@ -82,7 +82,7 @@ const ExternalFactors = ({ factors, loading }) => {
               </div>
               <p className="text-sm text-gray-700 dark:text-slate-100">{getText(factor.descripcion)}</p>
               {factor.tendencia && (
-                <div className="mt-3 pt-3 border-t border-gray-200">
+                <div className="mt-3 pt-3 border-t border-slate-200 dark:border-slate-700">
                   <p className="text-xs text-gray-600 dark:text-slate-400">
                     <span className="font-medium">{t('externalFactors.trend')}</span> {getText(factor.tendencia)}
                   </p>

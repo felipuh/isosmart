@@ -101,7 +101,7 @@ const InfluenceMetrics = ({ stakeholders, loading }) => {
         <div className="bg-orange-50 dark:bg-orange-900/30 rounded-lg p-4 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">{t('stakeholdersInsights.metrics.cards.highInfluence')}</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400">{t('stakeholdersInsights.metrics.cards.highInfluence')}</p>
               <p className="text-2xl font-bold text-orange-600">{stats.highInfluence}</p>
             </div>
             <Network className="h-8 w-8 text-orange-400" />

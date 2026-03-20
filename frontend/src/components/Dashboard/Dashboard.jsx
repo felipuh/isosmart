@@ -64,7 +64,7 @@ const Dashboard = () => {
       { id: '7', labelKey: 'dashboard.main.clauseProgress.clause7', checks: ['/resources/resources/', '/resources/competences/', '/resources/trainings/'] },
       { id: '8', labelKey: 'dashboard.main.clauseProgress.clause8', checks: ['/operations/requirements/', '/operations/providers/', '/operations/nonconformities/'] },
       { id: '9', labelKey: 'dashboard.main.clauseProgress.clause9', checks: ['/performance/measurements/', '/performance/findings/', '/performance/reviews/'] },
-      { id: '10', labelKey: 'dashboard.main.clauseProgress.clause10', checks: ['/improvement/nonconformities/', '/improvement/corrective-actions/', '/improvement/continual/'] },
+      { id: '10', labelKey: 'dashboard.main.clauseProgress.clause10', checks: ['/improvement/nonconformities/', '/improvement/corrective-actions/', '/improvement/continual-improvements/'] },
     ];
 
     const [processCount, stakeholderCount, clauseResults] = await Promise.all([
@@ -633,9 +633,9 @@ const Dashboard = () => {
             <Target className="h-12 w-12 text-blue-400" />
           </div>
           <div className="mt-4">
-            <div className="w-full bg-gray-200 rounded-full h-2">
+            <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
               <div 
-                className="bg-blue-500 h-2 rounded-full transition-all duration-500"
+                className="bg-blue-500 dark:bg-blue-600 h-2 rounded-full transition-all duration-500"
                 style={{ width: `${stats.clause4Progress}%` }}
               />
             </div>
@@ -651,20 +651,20 @@ const Dashboard = () => {
             <Workflow className="h-12 w-12 text-purple-400" />
           </div>
           <div className="mt-2">
-            <p className="text-xs text-gray-500">{t('dashboard.main.cards.mappedProcessesDetail')}</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400">{t('dashboard.main.cards.mappedProcessesDetail')}</p>
           </div>
         </div>
 
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600 dark:text-slate-400 mb-1">{t('dashboard.main.cards.stakeholders')}</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400 mb-1">{t('dashboard.main.cards.stakeholders')}</p>
               <p className="text-3xl font-bold text-orange-600 dark:text-orange-400">{stats.totalStakeholders}</p>
             </div>
             <Activity className="h-12 w-12 text-orange-400" />
           </div>
           <div className="mt-2">
-            <p className="text-xs text-gray-500">{t('dashboard.main.cards.stakeholdersDetail')}</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400">{t('dashboard.main.cards.stakeholdersDetail')}</p>
           </div>
         </div>
       </div>
@@ -730,7 +730,7 @@ const Dashboard = () => {
 
       {/* Quick Actions */}
       <div className="mb-8">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{t('dashboard.quickActions.title')}</h2>
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">{t('dashboard.quickActions.title')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-4 dark:text-white gap-4">
           {quickActions.map((action, idx) => {
             const Icon = action.icon;
@@ -743,8 +743,8 @@ const Dashboard = () => {
                 <div className={`${action.color} w-10 h-10 rounded-lg flex items-center justify-center mb-3`}>
                   <Icon className="h-5 w-5 text-white" />
                 </div>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-1">{action.title}</h3>
-                <p className="text-sm text-gray-600 dark:text-slate-400">{action.description}</p>
+                <h3 className="font-semibold text-slate-900 dark:text-white mb-1">{action.title}</h3>
+                <p className="text-sm text-slate-600 dark:text-slate-400">{action.description}</p>
               </Link>
             );
           })}
@@ -781,22 +781,22 @@ const Dashboard = () => {
           <div className="space-y-3">
             <div className="flex items-center justify-between py-2 border-b border-slate-100 dark:border-slate-700">
               <span className="text-sm text-slate-600 dark:text-slate-400">{t('dashboard.main.summary.activeAiModules')}</span>
-              <span className="text-sm font-bold text-gray-900 dark:text-slate-500">{stats.modulesActive}/{stats.totalModules}</span>
+              <span className="text-sm font-bold text-slate-900 dark:text-slate-200">{stats.modulesActive}/{stats.totalModules}</span>
             </div>
-            <div className="flex items-center justify-between py-2 border-b border-gray-100">
-              <span className="text-sm text-gray-600 dark:text-slate-400">{t('dashboard.main.summary.isoRequirementsCovered')}</span>
-              <span className="text-sm font-bold text-gray-900 dark:text-slate-500">{t('dashboard.main.summary.isoCoveredRange')}</span>
+            <div className="flex items-center justify-between py-2 border-b border-slate-100 dark:border-slate-700">
+              <span className="text-sm text-slate-600 dark:text-slate-400">{t('dashboard.main.summary.isoRequirementsCovered')}</span>
+              <span className="text-sm font-bold text-slate-900 dark:text-slate-200">{t('dashboard.main.summary.isoCoveredRange')}</span>
             </div>
-            <div className="flex items-center justify-between py-2 border-b border-gray-100">
-              <span className="text-sm text-gray-600 dark:text-slate-400">{t('dashboard.main.cards.mappedProcesses')}</span>
-              <span className="text-sm font-bold text-gray-900 dark:text-slate-500">{stats.totalProcesses} {t('dashboard.main.summary.processesSuffix')}</span>
+            <div className="flex items-center justify-between py-2 border-b border-slate-100 dark:border-slate-700">
+              <span className="text-sm text-slate-600 dark:text-slate-400">{t('dashboard.main.cards.mappedProcesses')}</span>
+              <span className="text-sm font-bold text-slate-900 dark:text-slate-200">{stats.totalProcesses} {t('dashboard.main.summary.processesSuffix')}</span>
             </div>
-            <div className="flex items-center justify-between py-2 border-b border-gray-100">
-              <span className="text-sm text-gray-600 dark:text-slate-400">{t('dashboard.main.summary.isoCompliance')}</span>
-              <span className="text-sm font-bold text-gray-900 dark:text-slate-500">{stats.iso9001Progress}%</span>
+            <div className="flex items-center justify-between py-2 border-b border-slate-100 dark:border-slate-700">
+              <span className="text-sm text-slate-600 dark:text-slate-400">{t('dashboard.main.summary.isoCompliance')}</span>
+              <span className="text-sm font-bold text-slate-900 dark:text-slate-200">{stats.iso9001Progress}%</span>
             </div>
             <div className="flex items-center justify-between py-2">
-              <span className="text-sm text-gray-600 dark:text-slate-400">{t('dashboard.main.summary.systemStatus')}</span>
+              <span className="text-sm text-slate-600 dark:text-slate-400">{t('dashboard.main.summary.systemStatus')}</span>
               <span className="text-sm font-bold text-green-600">{t('dashboard.main.summary.operational')}</span>
             </div>
           </div>
@@ -807,14 +807,14 @@ const Dashboard = () => {
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-colors">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="font-semibold text-gray-900 dark:text-white mb-1">{t('dashboard.main.footer.version')}</h3>
-            <p className="text-sm text-gray-600 dark:text-slate-400">
+            <h3 className="font-semibold text-slate-900 dark:text-white mb-1">{t('dashboard.main.footer.version')}</h3>
+            <p className="text-sm text-slate-600 dark:text-slate-400">
               {t('dashboard.main.footer.subtitle')}
             </p>
           </div>
           <div className="text-right">
-            <p className="text-sm text-gray-600 dark:text-slate-400">{t('dashboard.executive.lastUpdate')}</p>
-            <p className="text-sm font-medium text-gray-900 dark:text-slate-500">
+            <p className="text-sm text-slate-600 dark:text-slate-400">{t('dashboard.executive.lastUpdate')}</p>
+            <p className="text-sm font-medium text-slate-900 dark:text-slate-300">
               {new Date(stats.lastUpdate).toLocaleDateString(language === 'es-LATAM' ? 'es-ES' : language, {
                 day: '2-digit',
                 month: 'long',

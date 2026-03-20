@@ -19,8 +19,8 @@ const MetricCard = ({ title, value, subtitle, icon, trend, color, borderColor })
         )}
       </div>
       
-      <h3 className="text-gray-600 text-sm font-medium mb-2">{title}</h3>
-      <p className="text-3xl font-bold text-gray-900 mb-1">{value}</p>
+      <h3 className="text-slate-600 dark:text-slate-400 text-sm font-medium mb-2">{title}</h3>
+      <p className="text-3xl font-bold text-slate-900 dark:text-white mb-1">{value}</p>
       {subtitle && <p className="text-sm text-gray-500">{subtitle}</p>}
     </div>
   );
@@ -35,9 +35,9 @@ const MetricsGrid = ({ data, loading }) => {
         {[1, 2, 3, 4].map((i) => (
           <div key={i} className="metric-card border-l-gray-300 h-32">
             <div className="animate-pulse space-y-3">
-              <div className="h-12 w-12 bg-gray-200 rounded"></div>
-              <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-              <div className="h-8 bg-gray-200 rounded w-1/2"></div>
+              <div className="h-12 w-12 bg-slate-200 dark:bg-slate-700 rounded"></div>
+              <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-3/4"></div>
+              <div className="h-8 bg-slate-200 dark:bg-slate-700 rounded w-1/2"></div>
             </div>
           </div>
         ))}

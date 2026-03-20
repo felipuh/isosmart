@@ -105,7 +105,7 @@ const handleRunAnalysis = async () => {
         <div className="bg-white/70 dark:bg-slate-800/70 backdrop-blur-md rounded-lg shadow dark:shadow-slate-900/50 p-6 transition-all duration-300 hover:shadow-md dark:hover:shadow-slate-900/70 border border-white/20 dark:border-slate-700/50">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">{t('contextDashboard.stats.documentsAnalyzed')}</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400">{t('contextDashboard.stats.documentsAnalyzed')}</p>
               <p className="text-3xl font-bold text-blue-600">
                 {contextData?.total_documents_processed || 0}
               </p>
