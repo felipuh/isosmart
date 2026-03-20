@@ -215,10 +215,10 @@ const NonconformitiesPage = () => {
                 <td className="px-6 py-4 text-sm text-slate-900 dark:text-white">{item.title}</td>
                 <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">{item.nc_type_display}</td>
                 <td className="px-6 py-4">
-                  <span className={`px-2 py-1 text-xs rounded ${
-                    item.severity === 'critical' ? 'bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-300' :
-                    item.severity === 'major' ? 'bg-orange-100 text-orange-700 dark:bg-orange-500/20 dark:text-orange-300' :
-                    'bg-amber-100 text-amber-800 dark:bg-yellow-500/20 dark:text-yellow-300'
+                  <span className={`badge-base ${
+                    item.severity === 'critical' ? 'badge-danger' :
+                    item.severity === 'major' ? 'badge-caution' :
+                    'badge-warning'
                   }`}>
                     {item.severity_display}
                   </span>

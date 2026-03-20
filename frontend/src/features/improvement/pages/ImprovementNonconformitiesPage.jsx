@@ -10,8 +10,8 @@ import { getNonconformities, createNonconformity, updateNonconformity, deleteNon
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
 
-const severityColors = { critical: 'bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-300', major: 'bg-orange-100 text-orange-700 dark:bg-orange-500/20 dark:text-orange-300', minor: 'bg-amber-100 text-amber-800 dark:bg-yellow-500/20 dark:text-yellow-300' };
-const statusColors = { open: 'bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-300', analysis: 'bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300', action_plan: 'bg-purple-100 text-purple-700 dark:bg-purple-500/20 dark:text-purple-300', implementing: 'bg-orange-100 text-orange-700 dark:bg-orange-500/20 dark:text-orange-300', verification: 'bg-cyan-100 text-cyan-700 dark:bg-cyan-500/20 dark:text-cyan-300', closed: 'bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-300', rejected: 'bg-slate-100 text-slate-700 dark:bg-slate-500/20 dark:text-slate-300' };
+const severityColors = { critical: 'badge-base badge-danger', major: 'badge-base badge-caution', minor: 'badge-base badge-warning' };
+const statusColors = { open: 'badge-base badge-danger', analysis: 'badge-base badge-info', action_plan: 'badge-base badge-accent', implementing: 'badge-base badge-caution', verification: 'badge-base badge-cyan', closed: 'badge-base badge-success', rejected: 'badge-base badge-neutral' };
 
 const initialForm = { nc_number: '', title: '', description: '', source: 'process_monitoring', detection_date: '', severity: 'minor', affected_process: '', iso_clause_reference: '', impact_description: '', immediate_action_taken: '', containment_measures: '', status: 'open', target_closure_date: '' };
 
@@ -109,61 +109,61 @@ const ImprovementNonconformitiesPage = () => {
       >
         <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              <label className="text-xs text-slate-400">{t('modules.improvement.nonconformitiesPage.fields.code')}
-                <input type="text" required value={form.nc_number} onChange={e => setForm({ ...form, nc_number: e.target.value })} placeholder={t('modules.improvement.nonconformitiesPage.placeholders.code')} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100" />
+              <label className="form-label-muted">{t('modules.improvement.nonconformitiesPage.fields.code')}
+                <input type="text" required value={form.nc_number} onChange={e => setForm({ ...form, nc_number: e.target.value })} placeholder={t('modules.improvement.nonconformitiesPage.placeholders.code')} className="field-control" />
               </label>
-              <label className="text-xs text-slate-400">{t('modules.improvement.nonconformitiesPage.fields.title')}
-                <input type="text" required value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100" />
+              <label className="form-label-muted">{t('modules.improvement.nonconformitiesPage.fields.title')}
+                <input type="text" required value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} className="field-control" />
               </label>
-              <label className="text-xs text-slate-400">{t('modules.improvement.nonconformitiesPage.fields.detectionDate')}
-                <input type="date" required value={form.detection_date} onChange={e => setForm({ ...form, detection_date: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100" />
+              <label className="form-label-muted">{t('modules.improvement.nonconformitiesPage.fields.detectionDate')}
+                <input type="date" required value={form.detection_date} onChange={e => setForm({ ...form, detection_date: e.target.value })} className="field-control" />
               </label>
             </div>
-            <label className="text-xs text-slate-400 block">{t('modules.improvement.nonconformitiesPage.fields.description')}
-              <textarea required value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} className="mt-1 h-20 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100" />
+            <label className="form-label-muted block">{t('modules.improvement.nonconformitiesPage.fields.description')}
+              <textarea required value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} className="field-control h-20" />
             </label>
             <div className="grid gap-4 sm:grid-cols-3">
-              <label className="text-xs text-slate-400">{t('modules.improvement.nonconformitiesPage.fields.source')}
-                <select value={form.source} onChange={e => setForm({ ...form, source: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100">
+              <label className="form-label-muted">{t('modules.improvement.nonconformitiesPage.fields.source')}
+                <select value={form.source} onChange={e => setForm({ ...form, source: e.target.value })} className="field-control">
                   {Object.entries(sourceLabels).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
                 </select>
               </label>
-              <label className="text-xs text-slate-400">{t('modules.improvement.nonconformitiesPage.fields.severity')}
-                <select value={form.severity} onChange={e => setForm({ ...form, severity: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100">
+              <label className="form-label-muted">{t('modules.improvement.nonconformitiesPage.fields.severity')}
+                <select value={form.severity} onChange={e => setForm({ ...form, severity: e.target.value })} className="field-control">
                   {Object.entries(severityLabels).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
                 </select>
               </label>
-              <label className="text-xs text-slate-400">{t('common.forms.status')}
-                <select value={form.status} onChange={e => setForm({ ...form, status: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100">
+              <label className="form-label-muted">{t('common.forms.status')}
+                <select value={form.status} onChange={e => setForm({ ...form, status: e.target.value })} className="field-control">
                   {Object.entries(statusLabels).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
                 </select>
               </label>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
-              <label className="text-xs text-slate-400">{t('modules.improvement.nonconformitiesPage.fields.affectedProcess')}
-                <input type="text" value={form.affected_process} onChange={e => setForm({ ...form, affected_process: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100" />
+              <label className="form-label-muted">{t('modules.improvement.nonconformitiesPage.fields.affectedProcess')}
+                <input type="text" value={form.affected_process} onChange={e => setForm({ ...form, affected_process: e.target.value })} className="field-control" />
               </label>
-              <label className="text-xs text-slate-400">{t('modules.improvement.nonconformitiesPage.fields.isoClauseReference')}
-                <input type="text" value={form.iso_clause_reference} onChange={e => setForm({ ...form, iso_clause_reference: e.target.value })} placeholder={t('modules.improvement.nonconformitiesPage.placeholders.isoClauseReference')} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100" />
+              <label className="form-label-muted">{t('modules.improvement.nonconformitiesPage.fields.isoClauseReference')}
+                <input type="text" value={form.iso_clause_reference} onChange={e => setForm({ ...form, iso_clause_reference: e.target.value })} placeholder={t('modules.improvement.nonconformitiesPage.placeholders.isoClauseReference')} className="field-control" />
               </label>
             </div>
-            <label className="text-xs text-slate-400 block">{t('modules.improvement.nonconformitiesPage.fields.impactDescription')}
-              <textarea value={form.impact_description} onChange={e => setForm({ ...form, impact_description: e.target.value })} className="mt-1 h-16 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100" />
+            <label className="form-label-muted block">{t('modules.improvement.nonconformitiesPage.fields.impactDescription')}
+              <textarea value={form.impact_description} onChange={e => setForm({ ...form, impact_description: e.target.value })} className="field-control h-16" />
             </label>
             <div className="grid gap-4 sm:grid-cols-2">
-              <label className="text-xs text-slate-400">{t('modules.improvement.nonconformitiesPage.fields.immediateAction')}
-                <textarea value={form.immediate_action_taken} onChange={e => setForm({ ...form, immediate_action_taken: e.target.value })} className="mt-1 h-16 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100" />
+              <label className="form-label-muted">{t('modules.improvement.nonconformitiesPage.fields.immediateAction')}
+                <textarea value={form.immediate_action_taken} onChange={e => setForm({ ...form, immediate_action_taken: e.target.value })} className="field-control h-16" />
               </label>
-              <label className="text-xs text-slate-400">{t('modules.improvement.nonconformitiesPage.fields.containmentMeasures')}
-                <textarea value={form.containment_measures} onChange={e => setForm({ ...form, containment_measures: e.target.value })} className="mt-1 h-16 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100" />
+              <label className="form-label-muted">{t('modules.improvement.nonconformitiesPage.fields.containmentMeasures')}
+                <textarea value={form.containment_measures} onChange={e => setForm({ ...form, containment_measures: e.target.value })} className="field-control h-16" />
               </label>
             </div>
-            <label className="text-xs text-slate-400">{t('modules.improvement.nonconformitiesPage.fields.targetClosureDate')}
-              <input type="date" value={form.target_closure_date} onChange={e => setForm({ ...form, target_closure_date: e.target.value })} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 max-w-xs" />
+            <label className="form-label-muted">{t('modules.improvement.nonconformitiesPage.fields.targetClosureDate')}
+              <input type="date" value={form.target_closure_date} onChange={e => setForm({ ...form, target_closure_date: e.target.value })} className="field-control max-w-xs" />
             </label>
             <div className="flex flex-wrap gap-2">
               <button type="submit" disabled={saving || !orgId} className="rounded-lg bg-emerald-500/80 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-500 disabled:opacity-50">{saving ? t('common.messages.saving') : editingId ? t('common.buttons.update') : t('common.buttons.create')}</button>
-              <button type="button" onClick={closeForm} className="rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-200">{t('common.buttons.cancel')}</button>
+              <button type="button" onClick={closeForm} className="rounded-lg border border-slate-300 dark:border-slate-700 px-4 py-2 text-sm text-slate-700 dark:text-slate-200">{t('common.buttons.cancel')}</button>
             </div>
         </form>
       </Modal>
@@ -180,13 +180,13 @@ const ImprovementNonconformitiesPage = () => {
               <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.improvement.nonconformitiesPage.table.actions')}</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-700/30">
+          <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
             {items.length === 0 ? (
               <CrudEmptyState colSpan={6} message={t('modules.improvement.nonconformitiesPage.empty')} />
             ) : items.map(item => (
-              <tr key={item.id} className="hover:bg-gray-800/30">
-                <td className="px-6 py-4 text-sm font-mono text-blue-400">{item.nc_number}</td>
-                <td className="px-6 py-4 text-sm text-gray-200">{item.title}</td>
+              <tr key={item.id} className="hover:bg-slate-100 dark:hover:bg-slate-800/60">
+                <td className="px-6 py-4 table-code">{item.nc_number}</td>
+                <td className="px-6 py-4 text-sm text-slate-900 dark:text-white">{item.title}</td>
                 <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">{sourceLabels[item.source] || item.source}</td>
                 <td className="px-6 py-4"><span className={`px-2 py-1 rounded text-xs ${severityColors[item.severity] || ''}`}>{severityLabels[item.severity] || item.severity}</span></td>
                 <td className="px-6 py-4"><span className={`px-2 py-1 rounded text-xs ${statusColors[item.status] || ''}`}>{statusLabels[item.status] || item.status}</span></td>

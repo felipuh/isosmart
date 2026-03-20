@@ -228,7 +228,7 @@ const LeadershipDashboard = () => {
                 <p className="text-xs text-slate-600 dark:text-slate-400">{t('modules.leadership.dashboard.recentActivity.policyWhen')}</p>
               </div>
             </div>
-            <span className="px-2 py-1 bg-amber-100 text-amber-800 dark:bg-yellow-500/20 dark:text-yellow-300 text-xs rounded">{t('modules.leadership.dashboard.recentActivity.draft')}</span>
+            <span className="badge-base badge-warning">{t('modules.leadership.dashboard.recentActivity.draft')}</span>
           </div>
           
           <div className="flex items-center justify-between p-3 bg-slate-100 dark:bg-slate-700/40 rounded-lg">
@@ -239,7 +239,7 @@ const LeadershipDashboard = () => {
                 <p className="text-xs text-slate-600 dark:text-slate-400">{t('modules.leadership.dashboard.recentActivity.roleWhen')}</p>
               </div>
             </div>
-            <span className="px-2 py-1 bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-300 text-xs rounded">{t('modules.leadership.dashboard.recentActivity.active')}</span>
+            <span className="badge-base badge-success">{t('modules.leadership.dashboard.recentActivity.active')}</span>
           </div>
         </div>
       </div>

@@ -216,22 +216,22 @@ const RisksOpportunitiesPage = () => {
                 <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">{item.code}</td>
                 <td className="px-6 py-4 text-sm text-slate-900 dark:text-white">{item.title}</td>
                 <td className="px-6 py-4 text-sm">
-                  <span className={`px-2 py-1 text-xs rounded ${item.item_type === 'risk' ? 'bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-300' : 'bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-300'}`}>
+                  <span className={`badge-base ${item.item_type === 'risk' ? 'badge-danger' : 'badge-success'}`}>
                     {item.item_type_display}
                   </span>
                 </td>
                 <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">{item.category_display}</td>
                 <td className="px-6 py-4 text-sm">
                   {item.item_type === 'risk' ? (
-                    <span className={`px-2 py-1 text-xs rounded ${
-                      item.risk_level >= 15 ? 'bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-300' :
-                      item.risk_level >= 10 ? 'bg-amber-100 text-amber-800 dark:bg-yellow-500/20 dark:text-yellow-300' :
-                      'bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-300'
+                    <span className={`badge-base ${
+                      item.risk_level >= 15 ? 'badge-danger' :
+                      item.risk_level >= 10 ? 'badge-warning' :
+                      'badge-success'
                     }`}>
                       {item.risk_level}
                     </span>
                   ) : (
-                    <span className="px-2 py-1 text-xs rounded bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300">
+                    <span className="badge-base badge-info">
                       {item.opportunity_score}
                     </span>
                   )}

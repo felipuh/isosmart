@@ -137,7 +137,7 @@ const RoleAssignmentsPage = () => {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold text-white">{t('modules.leadership.roleAssignmentsPage.title')}</h1>
-          <p className="text-sm text-slate-400">{t('modules.leadership.roleAssignmentsPage.subtitle')}</p>
+          <p className="muted-text">{t('modules.leadership.roleAssignmentsPage.subtitle')}</p>
         </div>
         <button
           type="button"
@@ -163,11 +163,11 @@ const RoleAssignmentsPage = () => {
       <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
         <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-4">
           {loading ? (
-            <div className="py-10 text-center text-slate-400">{t('modules.leadership.roleAssignmentsPage.messages.loading')}</div>
+            <div className="py-10 text-center muted-text">{t('modules.leadership.roleAssignmentsPage.messages.loading')}</div>
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full text-left text-sm text-slate-200">
-                <thead className="text-xs uppercase text-slate-400">
+                <thead className="table-head-muted">
                   <tr>
                     <th className="px-3 py-2">{t('modules.leadership.roleAssignmentsPage.table.role')}</th>
                     <th className="px-3 py-2">{t('modules.leadership.roleAssignmentsPage.table.user')}</th>
@@ -214,16 +214,16 @@ const RoleAssignmentsPage = () => {
             <h2 className="text-lg font-semibold text-white">
               {editingId ? t('modules.leadership.roleAssignmentsPage.form.editTitle') : t('modules.leadership.roleAssignmentsPage.form.newTitle')}
             </h2>
-            <p className="text-xs text-slate-400">{t('modules.leadership.roleAssignmentsPage.form.activeOrganization')}: {currentOrganization?.name || t('modules.leadership.roleAssignmentsPage.form.unselected')}</p>
+            <p className="form-label-muted">{t('modules.leadership.roleAssignmentsPage.form.activeOrganization')}: {currentOrganization?.name || t('modules.leadership.roleAssignmentsPage.form.unselected')}</p>
           </div>
 
           <div className="grid gap-3">
-            <label className="text-xs text-slate-400">
+            <label className="form-label-muted">
               {t('modules.leadership.roleAssignmentsPage.form.role')}
               <select
                 value={form.role}
                 onChange={(event) => setForm({ ...form, role: event.target.value })}
-                className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
+                className="field-control"
                 required
               >
                 <option value="">{t('modules.leadership.roleAssignmentsPage.form.selectRole')}</option>
@@ -235,13 +235,13 @@ const RoleAssignmentsPage = () => {
               </select>
             </label>
 
-            <label className="text-xs text-slate-400">
+            <label className="form-label-muted">
               {t('modules.leadership.roleAssignmentsPage.form.user')}
               {users.length > 0 ? (
                 <select
                   value={form.user}
                   onChange={(event) => setForm({ ...form, user: event.target.value })}
-                  className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
+                  className="field-control"
                   required
                 >
                   <option value="">{t('modules.leadership.roleAssignmentsPage.form.selectUser')}</option>
@@ -256,40 +256,40 @@ const RoleAssignmentsPage = () => {
                   type="number"
                   value={form.user}
                   onChange={(event) => setForm({ ...form, user: event.target.value })}
-                  className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
+                  className="field-control"
                   placeholder={t('modules.leadership.roleAssignmentsPage.form.userIdPlaceholder')}
                   required
                 />
               )}
             </label>
 
-            <label className="text-xs text-slate-400">
+            <label className="form-label-muted">
               {t('modules.leadership.roleAssignmentsPage.form.startDate')}
               <input
                 type="date"
                 value={form.start_date}
                 onChange={(event) => setForm({ ...form, start_date: event.target.value })}
-                className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
+                className="field-control"
                 required
               />
             </label>
 
-            <label className="text-xs text-slate-400">
+            <label className="form-label-muted">
               {t('modules.leadership.roleAssignmentsPage.form.endDate')}
               <input
                 type="date"
                 value={form.end_date}
                 onChange={(event) => setForm({ ...form, end_date: event.target.value })}
-                className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
+                className="field-control"
               />
             </label>
 
-            <label className="text-xs text-slate-400">
+            <label className="form-label-muted">
               {t('modules.leadership.roleAssignmentsPage.form.type')}
               <select
                 value={form.assignment_type}
                 onChange={(event) => setForm({ ...form, assignment_type: event.target.value })}
-                className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
+                className="field-control"
               >
                 <option value="permanent">{t('modules.leadership.roleAssignmentsPage.options.type.permanent')}</option>
                 <option value="temporary">{t('modules.leadership.roleAssignmentsPage.options.type.temporary')}</option>
@@ -297,12 +297,12 @@ const RoleAssignmentsPage = () => {
               </select>
             </label>
 
-            <label className="text-xs text-slate-400">
+            <label className="form-label-muted">
               {t('modules.leadership.roleAssignmentsPage.form.notes')}
               <textarea
                 value={form.notes}
                 onChange={(event) => setForm({ ...form, notes: event.target.value })}
-                className="mt-1 h-20 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
+                className="field-control h-20"
               />
             </label>
 

@@ -160,7 +160,7 @@ const CommitmentsPage = () => {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold text-white">{t('modules.leadership.commitmentsPage.title')}</h1>
-          <p className="text-sm text-slate-400">{t('modules.leadership.commitmentsPage.subtitle')}</p>
+          <p className="muted-text">{t('modules.leadership.commitmentsPage.subtitle')}</p>
         </div>
         <button
           type="button"
@@ -180,11 +180,11 @@ const CommitmentsPage = () => {
       <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
         <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-4">
           {loading ? (
-            <div className="py-10 text-center text-slate-400">{t('modules.leadership.commitmentsPage.messages.loading')}</div>
+            <div className="py-10 text-center muted-text">{t('modules.leadership.commitmentsPage.messages.loading')}</div>
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full text-left text-sm text-slate-200">
-                <thead className="text-xs uppercase text-slate-400">
+                <thead className="table-head-muted">
                   <tr>
                     <th className="px-3 py-2">{t('modules.leadership.commitmentsPage.table.title')}</th>
                     <th className="px-3 py-2">{t('modules.leadership.commitmentsPage.table.type')}</th>
@@ -231,16 +231,16 @@ const CommitmentsPage = () => {
             <h2 className="text-lg font-semibold text-white">
               {editingId ? t('modules.leadership.commitmentsPage.form.editTitle') : t('modules.leadership.commitmentsPage.form.newTitle')}
             </h2>
-            <p className="text-xs text-slate-400">{t('modules.leadership.commitmentsPage.form.organization')}: {orgName || t('modules.leadership.commitmentsPage.form.unselected')}</p>
+            <p className="form-label-muted">{t('modules.leadership.commitmentsPage.form.organization')}: {orgName || t('modules.leadership.commitmentsPage.form.unselected')}</p>
           </div>
 
           <div className="grid gap-3">
-            <label className="text-xs text-slate-400">
+            <label className="form-label-muted">
               {t('modules.leadership.commitmentsPage.form.commitmentType')}
               <select
                 value={form.commitment_type}
                 onChange={(event) => setForm({ ...form, commitment_type: event.target.value })}
-                className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
+                className="field-control"
               >
                 {commitmentTypes.map((type) => (
                   <option key={type.value} value={type.value}>
@@ -250,33 +250,33 @@ const CommitmentsPage = () => {
               </select>
             </label>
 
-            <label className="text-xs text-slate-400">
+            <label className="form-label-muted">
               {t('modules.leadership.commitmentsPage.form.title')}
               <input
                 type="text"
                 value={form.title}
                 onChange={(event) => setForm({ ...form, title: event.target.value })}
-                className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
+                className="field-control"
                 required
               />
             </label>
 
-            <label className="text-xs text-slate-400">
+            <label className="form-label-muted">
               {t('common.forms.description')}
               <textarea
                 value={form.description}
                 onChange={(event) => setForm({ ...form, description: event.target.value })}
-                className="mt-1 h-24 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
+                className="field-control h-24"
                 required
               />
             </label>
 
-            <label className="text-xs text-slate-400">
+            <label className="form-label-muted">
               {t('modules.leadership.commitmentsPage.form.evidenceType')}
               <select
                 value={form.evidence_type}
                 onChange={(event) => setForm({ ...form, evidence_type: event.target.value })}
-                className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
+                className="field-control"
               >
                 {evidenceTypes.map((type) => (
                   <option key={type.value} value={type.value}>
@@ -286,17 +286,17 @@ const CommitmentsPage = () => {
               </select>
             </label>
 
-            <label className="text-xs text-slate-400">
+            <label className="form-label-muted">
               {t('modules.leadership.commitmentsPage.form.evidenceUrl')}
               <input
                 type="url"
                 value={form.evidence_url}
                 onChange={(event) => setForm({ ...form, evidence_url: event.target.value })}
-                className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
+                className="field-control"
               />
             </label>
 
-            <label className="text-xs text-slate-400">
+            <label className="form-label-muted">
               {t('modules.leadership.commitmentsPage.form.evidenceDocument')}
               <input
                 type="file"
@@ -305,23 +305,23 @@ const CommitmentsPage = () => {
               />
             </label>
 
-            <label className="text-xs text-slate-400">
+            <label className="form-label-muted">
               {t('common.forms.date')}
               <input
                 type="date"
                 value={form.commitment_date}
                 onChange={(event) => setForm({ ...form, commitment_date: event.target.value })}
-                className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
+                className="field-control"
                 required
               />
             </label>
 
-            <label className="text-xs text-slate-400">
+            <label className="form-label-muted">
               {t('common.forms.status')}
               <select
                 value={form.status}
                 onChange={(event) => setForm({ ...form, status: event.target.value })}
-                className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
+                className="field-control"
               >
                 {statusOptions.map((option) => (
                   <option key={option.value} value={option.value}>

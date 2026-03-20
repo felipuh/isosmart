@@ -176,10 +176,10 @@ const CustomerRequirementsPage = () => {
                 <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">{item.requirement_title}</td>
                 <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">{item.requirement_type_display}</td>
                 <td className="px-6 py-4">
-                  <span className={`px-2 py-1 text-xs rounded ${
-                    item.status === 'fulfilled' ? 'bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-300' :
-                    item.status === 'in_progress' ? 'bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300' :
-                    'bg-amber-100 text-amber-800 dark:bg-yellow-500/20 dark:text-yellow-300'
+                  <span className={`badge-base ${
+                    item.status === 'fulfilled' ? 'badge-success' :
+                    item.status === 'in_progress' ? 'badge-info' :
+                    'badge-warning'
                   }`}>
                     {item.status_display}
                   </span>

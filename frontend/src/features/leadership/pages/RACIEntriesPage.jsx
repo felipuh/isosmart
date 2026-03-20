@@ -121,7 +121,7 @@ const RACIEntriesPage = () => {
 
   const renderRoleChecklist = (label, valueKey) => (
     <div className="space-y-2">
-      <p className="text-xs uppercase text-slate-400">{label}</p>
+      <p className="text-xs uppercase text-slate-600 dark:text-slate-600 dark:text-slate-400">{label}</p>
       <div className="grid gap-2 sm:grid-cols-2">
         {roles.map((role) => (
           <label key={`${valueKey}-${role.id}`} className="flex items-center gap-2 text-xs text-slate-300">
@@ -146,7 +146,7 @@ const RACIEntriesPage = () => {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold text-white">{t('modules.leadership.raciEntriesPage.title')}</h1>
-          <p className="text-sm text-slate-400">{t('modules.leadership.raciEntriesPage.subtitle')}: {matrixId}</p>
+          <p className="muted-text">{t('modules.leadership.raciEntriesPage.subtitle')}: {matrixId}</p>
         </div>
         <Link
           to="/leadership/raci"
@@ -165,11 +165,11 @@ const RACIEntriesPage = () => {
       <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
         <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-4">
           {loading ? (
-            <div className="py-10 text-center text-slate-400">{t('modules.leadership.raciEntriesPage.messages.loading')}</div>
+            <div className="py-10 text-center muted-text">{t('modules.leadership.raciEntriesPage.messages.loading')}</div>
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full text-left text-sm text-slate-200">
-                <thead className="text-xs uppercase text-slate-400">
+                <thead className="table-head-muted">
                   <tr>
                     <th className="px-3 py-2">{t('modules.leadership.raciEntriesPage.table.order')}</th>
                     <th className="px-3 py-2">{t('modules.leadership.raciEntriesPage.table.activity')}</th>
@@ -215,33 +215,33 @@ const RACIEntriesPage = () => {
           </div>
 
           <div className="grid gap-3">
-            <label className="text-xs text-slate-400">
+            <label className="form-label-muted">
               {t('modules.leadership.raciEntriesPage.form.activity')}
               <input
                 type="text"
                 value={form.activity}
                 onChange={(event) => setForm({ ...form, activity: event.target.value })}
-                className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
+                className="field-control"
                 required
               />
             </label>
 
-            <label className="text-xs text-slate-400">
+            <label className="form-label-muted">
               {t('common.forms.description')}
               <textarea
                 value={form.description}
                 onChange={(event) => setForm({ ...form, description: event.target.value })}
-                className="mt-1 h-20 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
+                className="field-control h-20"
               />
             </label>
 
-            <label className="text-xs text-slate-400">
+            <label className="form-label-muted">
               {t('modules.leadership.raciEntriesPage.form.order')}
               <input
                 type="number"
                 value={form.order}
                 onChange={(event) => setForm({ ...form, order: event.target.value })}
-                className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
+                className="field-control"
               />
             </label>
 

@@ -135,7 +135,7 @@ const CustomerFocusPage = () => {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold text-white">{t('modules.leadership.customerFocusPage.title')}</h1>
-          <p className="text-sm text-slate-400">{t('modules.leadership.customerFocusPage.subtitle')}</p>
+          <p className="muted-text">{t('modules.leadership.customerFocusPage.subtitle')}</p>
         </div>
         <button
           type="button"
@@ -155,11 +155,11 @@ const CustomerFocusPage = () => {
       <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
         <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-4">
           {loading ? (
-            <div className="py-10 text-center text-slate-400">{t('modules.leadership.customerFocusPage.messages.loading')}</div>
+            <div className="py-10 text-center muted-text">{t('modules.leadership.customerFocusPage.messages.loading')}</div>
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full text-left text-sm text-slate-200">
-                <thead className="text-xs uppercase text-slate-400">
+                <thead className="table-head-muted">
                   <tr>
                     <th className="px-3 py-2">{t('modules.leadership.customerFocusPage.table.title')}</th>
                     <th className="px-3 py-2">{t('modules.leadership.customerFocusPage.table.type')}</th>
@@ -204,16 +204,16 @@ const CustomerFocusPage = () => {
             <h2 className="text-lg font-semibold text-white">
               {editingId ? t('modules.leadership.customerFocusPage.form.editTitle') : t('modules.leadership.customerFocusPage.form.newTitle')}
             </h2>
-            <p className="text-xs text-slate-400">{t('modules.leadership.customerFocusPage.form.organization')}: {orgName || t('modules.leadership.customerFocusPage.form.unselected')}</p>
+            <p className="form-label-muted">{t('modules.leadership.customerFocusPage.form.organization')}: {orgName || t('modules.leadership.customerFocusPage.form.unselected')}</p>
           </div>
 
           <div className="grid gap-3">
-            <label className="text-xs text-slate-400">
+            <label className="form-label-muted">
               {t('modules.leadership.customerFocusPage.form.type')}
               <select
                 value={form.focus_type}
                 onChange={(event) => setForm({ ...form, focus_type: event.target.value })}
-                className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
+                className="field-control"
               >
                 {focusTypes.map((type) => (
                   <option key={type.value} value={type.value}>
@@ -223,58 +223,58 @@ const CustomerFocusPage = () => {
               </select>
             </label>
 
-            <label className="text-xs text-slate-400">
+            <label className="form-label-muted">
               {t('modules.leadership.customerFocusPage.form.title')}
               <input
                 type="text"
                 value={form.title}
                 onChange={(event) => setForm({ ...form, title: event.target.value })}
-                className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
+                className="field-control"
                 required
               />
             </label>
 
-            <label className="text-xs text-slate-400">
+            <label className="form-label-muted">
               {t('common.forms.description')}
               <textarea
                 value={form.description}
                 onChange={(event) => setForm({ ...form, description: event.target.value })}
-                className="mt-1 h-20 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
+                className="field-control h-20"
                 required
               />
             </label>
 
-            <label className="text-xs text-slate-400">
+            <label className="form-label-muted">
               {t('modules.leadership.customerFocusPage.form.actionTaken')}
               <textarea
                 value={form.action_taken}
                 onChange={(event) => setForm({ ...form, action_taken: event.target.value })}
-                className="mt-1 h-20 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
+                className="field-control h-20"
                 required
               />
             </label>
 
-            <label className="text-xs text-slate-400">
+            <label className="form-label-muted">
               {t('modules.leadership.customerFocusPage.form.results')}
               <textarea
                 value={form.results}
                 onChange={(event) => setForm({ ...form, results: event.target.value })}
-                className="mt-1 h-16 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
+                className="field-control h-16"
               />
             </label>
 
-            <label className="text-xs text-slate-400">
+            <label className="form-label-muted">
               {t('modules.leadership.customerFocusPage.form.actionDate')}
               <input
                 type="date"
                 value={form.action_date}
                 onChange={(event) => setForm({ ...form, action_date: event.target.value })}
-                className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
+                className="field-control"
                 required
               />
             </label>
 
-            <label className="text-xs text-slate-400">
+            <label className="form-label-muted">
               {t('modules.leadership.customerFocusPage.form.evidence')}
               <input
                 type="file"
