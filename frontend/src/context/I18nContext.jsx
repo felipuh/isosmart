@@ -489,6 +489,12 @@ const MESSAGES = {
         switchToLight: 'Cambiar a tema claro',
         switchToDark: 'Cambiar a tema oscuro',
       },
+      accessibility: {
+        increaseFont: 'Aumentar tamaño de texto',
+        decreaseFont: 'Reducir tamaño de texto',
+        resetFont: 'Restablecer tamaño de texto',
+        fontSizeLabel: 'Tamaño de texto',
+      },
       notificationsPanel: {
         label: 'Panel de notificaciones',
         open: 'Abrir notificaciones',
@@ -4473,6 +4479,12 @@ const MESSAGES = {
         switchToLight: 'Switch to light theme',
         switchToDark: 'Switch to dark theme',
       },
+      accessibility: {
+        increaseFont: 'Increase text size',
+        decreaseFont: 'Decrease text size',
+        resetFont: 'Reset text size',
+        fontSizeLabel: 'Text size',
+      },
       notificationsPanel: {
         label: 'Notifications panel',
         open: 'Open notifications',
@@ -8445,6 +8457,12 @@ const MESSAGES = {
       theme: {
         switchToLight: 'Mudar para tema claro',
         switchToDark: 'Mudar para tema escuro',
+      },
+      accessibility: {
+        increaseFont: 'Aumentar tamanho do texto',
+        decreaseFont: 'Reduzir tamanho do texto',
+        resetFont: 'Redefinir tamanho do texto',
+        fontSizeLabel: 'Tamanho do texto',
       },
       notificationsPanel: {
         label: 'Painel de notificações',

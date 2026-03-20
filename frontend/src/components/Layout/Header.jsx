@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useI18n } from '../../context/I18nContext';
 import { useTheme } from '../../context/ThemeContext';
+import { useFontSize } from '../../context/FontSizeContext';
 import settingsService from '../../services/settingsService';
 import UserMenu from '../Auth/UserMenu';
 
@@ -11,6 +12,7 @@ const Header = () => {
   const { currentOrganization } = useAuth();
   const { language, setLanguage, t } = useI18n();
   const { isDark, toggleTheme } = useTheme();
+  const { increaseFontSize, decreaseFontSize, isMinLevel, isMaxLevel } = useFontSize();
   const notificationsRef = useRef(null);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [notificationHistory, setNotificationHistory] = useState([]);
@@ -122,6 +124,30 @@ const Header = () => {
             >
               {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
+
+            {/* Accesibilidad: tamaño de texto */}
+            <div className="flex items-center gap-0.5" role="group" aria-label={t('header.accessibility.fontSizeLabel')}>
+              <button
+                type="button"
+                onClick={decreaseFontSize}
+                disabled={isMinLevel}
+                title={t('header.accessibility.decreaseFont')}
+                aria-label={t('header.accessibility.decreaseFont')}
+                className="px-2 py-1.5 text-sm font-semibold leading-none text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-slate-700 rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed select-none"
+              >
+                A−
+              </button>
+              <button
+                type="button"
+                onClick={increaseFontSize}
+                disabled={isMaxLevel}
+                title={t('header.accessibility.increaseFont')}
+                aria-label={t('header.accessibility.increaseFont')}
+                className="px-2 py-1.5 text-base font-semibold leading-none text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-slate-700 rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed select-none"
+              >
+                A+
+              </button>
+            </div>
 
             <select
               aria-label={t('header.languageLabel')}
