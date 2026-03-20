@@ -9,8 +9,8 @@ import CrudEmptyState from '../../../components/Common/CrudEmptyState';
 import { getContinualImprovements, createContinualImprovement, updateContinualImprovement, deleteContinualImprovement } from '../api/improvementApi';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
-const statusColors = { proposed: 'bg-gray-500/20 text-gray-400', under_evaluation: 'bg-blue-500/20 text-blue-400', approved: 'bg-cyan-500/20 text-cyan-400', in_progress: 'bg-orange-500/20 text-orange-400', implemented: 'bg-purple-500/20 text-purple-400', measuring_results: 'bg-yellow-500/20 text-yellow-400', successful: 'bg-green-500/20 text-green-400', unsuccessful: 'bg-red-500/20 text-red-400', cancelled: 'bg-gray-500/20 text-gray-400' };
-const priorityColors = { critical: 'bg-red-500/20 text-red-400', high: 'bg-orange-500/20 text-orange-400', medium: 'bg-yellow-500/20 text-yellow-400', low: 'bg-green-500/20 text-green-400' };
+const statusColors = { proposed: 'bg-slate-100 text-slate-700 dark:bg-slate-500/20 dark:text-slate-300', under_evaluation: 'bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300', approved: 'bg-cyan-100 text-cyan-700 dark:bg-cyan-500/20 dark:text-cyan-300', in_progress: 'bg-orange-100 text-orange-700 dark:bg-orange-500/20 dark:text-orange-300', implemented: 'bg-purple-100 text-purple-700 dark:bg-purple-500/20 dark:text-purple-300', measuring_results: 'bg-amber-100 text-amber-800 dark:bg-yellow-500/20 dark:text-yellow-300', successful: 'bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-300', unsuccessful: 'bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-300', cancelled: 'bg-slate-100 text-slate-700 dark:bg-slate-500/20 dark:text-slate-300' };
+const priorityColors = { critical: 'bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-300', high: 'bg-orange-100 text-orange-700 dark:bg-orange-500/20 dark:text-orange-300', medium: 'bg-amber-100 text-amber-800 dark:bg-yellow-500/20 dark:text-yellow-300', low: 'bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-300' };
 
 const initialForm = { initiative_number: '', title: '', description: '', improvement_type: 'process', current_situation: '', proposed_improvement: '', expected_benefits: '', alignment_with_objectives: '', estimated_investment: '', estimated_savings: '', expected_roi: '', priority: 'medium', proposed_date: '', status: 'proposed', completion_percentage: 0 };
 
@@ -152,17 +152,17 @@ const ImprovementContinualPage = () => {
         </form>
       </Modal>
 
-      <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg overflow-hidden">
+      <div className="card overflow-hidden">
         <table className="w-full">
-          <thead className="bg-gray-800/50">
+          <thead className="bg-slate-100 dark:bg-slate-800/60">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.improvement.continualPage.table.code')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.name')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.improvement.continualPage.table.type')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.improvement.continualPage.table.priority')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.improvement.continualPage.table.progress')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.status')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.improvement.continualPage.table.actions')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.improvement.continualPage.table.code')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('common.forms.name')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.improvement.continualPage.table.type')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.improvement.continualPage.table.priority')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.improvement.continualPage.table.progress')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('common.forms.status')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.improvement.continualPage.table.actions')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700/30">
@@ -172,13 +172,13 @@ const ImprovementContinualPage = () => {
               <tr key={item.id} className="hover:bg-gray-800/30">
                 <td className="px-6 py-4 text-sm font-mono text-blue-400">{item.initiative_number}</td>
                 <td className="px-6 py-4 text-sm text-gray-200">{item.title}</td>
-                <td className="px-6 py-4 text-sm text-gray-300">{improvementTypeLabels[item.improvement_type] || item.improvement_type}</td>
+                <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">{improvementTypeLabels[item.improvement_type] || item.improvement_type}</td>
                 <td className="px-6 py-4"><span className={`px-2 py-1 rounded text-xs ${priorityColors[item.priority] || ''}`}>{priorityLabels[item.priority] || item.priority}</span></td>
                 <td className="px-6 py-4"><div className="flex items-center gap-2"><div className="w-20 bg-gray-700 rounded-full h-2"><div className="bg-green-500 h-2 rounded-full" style={{ width: `${item.completion_percentage || 0}%` }}></div></div><span className="text-xs text-gray-400">{item.completion_percentage || 0}%</span></div></td>
                 <td className="px-6 py-4"><span className={`px-2 py-1 rounded text-xs ${statusColors[item.status] || ''}`}>{statusLabels[item.status] || item.status}</span></td>
                 <td className="px-6 py-4 space-x-2">
-                  <button onClick={() => handleEdit(item)} className="text-blue-400 hover:text-blue-300 text-sm">{t('common.buttons.edit')}</button>
-                  <button onClick={() => handleDelete(item.id)} className="text-red-400 hover:text-red-300 text-sm">{t('common.buttons.delete')}</button>
+                  <button onClick={() => handleEdit(item)} className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 text-sm">{t('common.buttons.edit')}</button>
+                  <button onClick={() => handleDelete(item.id)} className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 text-sm">{t('common.buttons.delete')}</button>
                 </td>
               </tr>
             ))}

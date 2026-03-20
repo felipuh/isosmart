@@ -199,29 +199,29 @@ const DesignProjectsPage = () => {
 
       <CrudErrorBanner message={error} onClose={() => setError('')} />
 
-      <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg overflow-hidden">
+      <div className="card overflow-hidden">
         <table className="w-full">
-          <thead className="bg-gray-800/50">
+          <thead className="bg-slate-100 dark:bg-slate-800/60">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.operations.designProjectsPage.table.code')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.name')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.operations.designProjectsPage.table.type')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.operations.designProjectsPage.table.stage')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.status')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.operations.designProjectsPage.table.actions')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.operations.designProjectsPage.table.code')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('common.forms.name')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.operations.designProjectsPage.table.type')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.operations.designProjectsPage.table.stage')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('common.forms.status')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.operations.designProjectsPage.table.actions')}</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-700">
+          <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
             {items.map(i => (
-              <tr key={i.id} className="hover:bg-gray-700/30">
-                <td className="px-6 py-4 text-sm text-gray-300">{i.project_code}</td>
-                <td className="px-6 py-4 text-sm text-white">{i.project_name}</td>
-                <td className="px-6 py-4 text-sm text-gray-300">{i.project_type_display}</td>
-                <td className="px-6 py-4 text-sm text-gray-300">{i.current_stage_display}</td>
-                <td className="px-6 py-4 text-sm text-gray-300">{i.status_display}</td>
+              <tr key={i.id} className="hover:bg-slate-100 dark:hover:bg-slate-800/60">
+                <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">{i.project_code}</td>
+                <td className="px-6 py-4 text-sm text-slate-900 dark:text-white">{i.project_name}</td>
+                <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">{i.project_type_display}</td>
+                <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">{i.current_stage_display}</td>
+                <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">{i.status_display}</td>
                 <td className="px-6 py-4 text-sm space-x-2">
-                  <button onClick={() => handleEdit(i)} className="text-blue-400 hover:text-blue-300">{t('common.buttons.edit')}</button>
-                  <button onClick={() => handleDelete(i.id)} className="text-red-400 hover:text-red-300">{t('common.buttons.delete')}</button>
+                  <button onClick={() => handleEdit(i)} className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">{t('common.buttons.edit')}</button>
+                  <button onClick={() => handleDelete(i.id)} className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">{t('common.buttons.delete')}</button>
                 </td>
               </tr>
             ))}
@@ -238,16 +238,16 @@ const DesignProjectsPage = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.designProjectsPage.fields.code')}</label>
-              <input type="text" value={form.project_code} onChange={(e) => setForm({...form, project_code: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.designProjectsPage.fields.code')}</label>
+              <input type="text" value={form.project_code} onChange={(e) => setForm({...form, project_code: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" required />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.designProjectsPage.fields.name')}</label>
-              <input type="text" value={form.project_name} onChange={(e) => setForm({...form, project_name: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.designProjectsPage.fields.name')}</label>
+              <input type="text" value={form.project_name} onChange={(e) => setForm({...form, project_name: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.designProjectsPage.fields.type')}</label>
-              <select value={form.project_type} onChange={(e) => setForm({...form, project_type: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.designProjectsPage.fields.type')}</label>
+              <select value={form.project_type} onChange={(e) => setForm({...form, project_type: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white">
                 <option value="product">{t('modules.operations.designProjectsPage.types.product')}</option>
                 <option value="service">{t('modules.operations.designProjectsPage.types.service')}</option>
                 <option value="process">{t('modules.operations.designProjectsPage.types.process')}</option>
@@ -255,8 +255,8 @@ const DesignProjectsPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.designProjectsPage.fields.stage')}</label>
-              <select value={form.current_stage} onChange={(e) => setForm({...form, current_stage: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.designProjectsPage.fields.stage')}</label>
+              <select value={form.current_stage} onChange={(e) => setForm({...form, current_stage: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white">
                 <option value="planning">{t('modules.operations.designProjectsPage.stages.planning')}</option>
                 <option value="inputs">{t('modules.operations.designProjectsPage.stages.inputs')}</option>
                 <option value="controls">{t('modules.operations.designProjectsPage.stages.controls')}</option>
@@ -268,8 +268,8 @@ const DesignProjectsPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('common.forms.status')}</label>
-              <select value={form.status} onChange={(e) => setForm({...form, status: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('common.forms.status')}</label>
+              <select value={form.status} onChange={(e) => setForm({...form, status: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white">
                 <option value="active">{t('modules.operations.designProjectsPage.statuses.active')}</option>
                 <option value="on_hold">{t('modules.operations.designProjectsPage.statuses.onHold')}</option>
                 <option value="completed">{t('modules.operations.designProjectsPage.statuses.completed')}</option>
@@ -277,8 +277,8 @@ const DesignProjectsPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.designProjectsPage.fields.projectLeader')}</label>
-              <select value={form.project_leader} onChange={(e) => setForm({...form, project_leader: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.designProjectsPage.fields.projectLeader')}</label>
+              <select value={form.project_leader} onChange={(e) => setForm({...form, project_leader: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white">
                 <option value="">{t('modules.operations.designProjectsPage.fields.unassigned')}</option>
                 {users.map(u => (
                   <option key={u.id} value={u.id}>{u.full_name || u.username || u.email}</option>
@@ -286,47 +286,47 @@ const DesignProjectsPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.designProjectsPage.fields.startDate')}</label>
-              <input type="date" value={form.start_date} onChange={(e) => setForm({...form, start_date: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.designProjectsPage.fields.startDate')}</label>
+              <input type="date" value={form.start_date} onChange={(e) => setForm({...form, start_date: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.designProjectsPage.fields.targetDate')}</label>
-              <input type="date" value={form.target_completion_date} onChange={(e) => setForm({...form, target_completion_date: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.designProjectsPage.fields.targetDate')}</label>
+              <input type="date" value={form.target_completion_date} onChange={(e) => setForm({...form, target_completion_date: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" required />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('common.forms.description')}</label>
-              <textarea value={form.description} onChange={(e) => setForm({...form, description: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="3" required />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('common.forms.description')}</label>
+              <textarea value={form.description} onChange={(e) => setForm({...form, description: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" rows="3" required />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.designProjectsPage.fields.designInputs')}</label>
-              <textarea value={form.design_inputs} onChange={(e) => setForm({...form, design_inputs: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.designProjectsPage.fields.designInputs')}</label>
+              <textarea value={form.design_inputs} onChange={(e) => setForm({...form, design_inputs: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" rows="2" />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.designProjectsPage.fields.designOutputs')}</label>
-              <textarea value={form.design_outputs} onChange={(e) => setForm({...form, design_outputs: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.designProjectsPage.fields.designOutputs')}</label>
+              <textarea value={form.design_outputs} onChange={(e) => setForm({...form, design_outputs: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" rows="2" />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.designProjectsPage.fields.designControls')}</label>
-              <textarea value={form.design_controls} onChange={(e) => setForm({...form, design_controls: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.designProjectsPage.fields.designControls')}</label>
+              <textarea value={form.design_controls} onChange={(e) => setForm({...form, design_controls: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" rows="2" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.designProjectsPage.fields.verificationMethod')}</label>
-              <input type="text" value={form.verification_method} onChange={(e) => setForm({...form, verification_method: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.designProjectsPage.fields.verificationMethod')}</label>
+              <input type="text" value={form.verification_method} onChange={(e) => setForm({...form, verification_method: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" />
             </div>
             <div className="flex items-center">
               <label className="flex items-center space-x-2">
                 <input type="checkbox" checked={form.is_verified} onChange={(e) => setForm({...form, is_verified: e.target.checked})} className="rounded" />
-                <span className="text-sm text-gray-300">{t('modules.operations.designProjectsPage.fields.verified')}</span>
+                <span className="text-sm text-slate-700 dark:text-slate-300">{t('modules.operations.designProjectsPage.fields.verified')}</span>
               </label>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.designProjectsPage.fields.validationMethod')}</label>
-              <input type="text" value={form.validation_method} onChange={(e) => setForm({...form, validation_method: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.designProjectsPage.fields.validationMethod')}</label>
+              <input type="text" value={form.validation_method} onChange={(e) => setForm({...form, validation_method: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" />
             </div>
             <div className="flex items-center">
               <label className="flex items-center space-x-2">
                 <input type="checkbox" checked={form.is_validated} onChange={(e) => setForm({...form, is_validated: e.target.checked})} className="rounded" />
-                <span className="text-sm text-gray-300">{t('modules.operations.designProjectsPage.fields.validated')}</span>
+                <span className="text-sm text-slate-700 dark:text-slate-300">{t('modules.operations.designProjectsPage.fields.validated')}</span>
               </label>
             </div>
           </div>
@@ -334,7 +334,7 @@ const DesignProjectsPage = () => {
             <button type="submit" disabled={saving} className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
               {saving ? t('common.messages.saving') : editingId ? t('common.buttons.update') : t('common.buttons.create')}
             </button>
-            {editingId && <button type="button" onClick={closeForm} className="px-6 py-2 bg-gray-600 text-white rounded-lg">{t('common.buttons.cancel')}</button>}
+            {editingId && <button type="button" onClick={closeForm} className="px-6 py-2 bg-slate-500 hover:bg-slate-600 dark:bg-slate-600 dark:hover:bg-slate-500 text-white rounded-lg">{t('common.buttons.cancel')}</button>}
           </div>
         </form>
       </Modal>

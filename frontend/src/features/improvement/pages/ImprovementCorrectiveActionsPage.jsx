@@ -9,7 +9,7 @@ import CrudEmptyState from '../../../components/Common/CrudEmptyState';
 import { getCorrectiveActions, createCorrectiveAction, updateCorrectiveAction, deleteCorrectiveAction, getNonconformities } from '../api/improvementApi';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
-const statusColors = { planned: 'bg-gray-500/20 text-gray-400', in_progress: 'bg-blue-500/20 text-blue-400', implemented: 'bg-purple-500/20 text-purple-400', verified: 'bg-cyan-500/20 text-cyan-400', effective: 'bg-green-500/20 text-green-400', not_effective: 'bg-red-500/20 text-red-400', cancelled: 'bg-gray-500/20 text-gray-400' };
+const statusColors = { planned: 'bg-slate-100 text-slate-700 dark:bg-slate-500/20 dark:text-slate-300', in_progress: 'bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300', implemented: 'bg-purple-100 text-purple-700 dark:bg-purple-500/20 dark:text-purple-300', verified: 'bg-cyan-100 text-cyan-700 dark:bg-cyan-500/20 dark:text-cyan-300', effective: 'bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-300', not_effective: 'bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-300', cancelled: 'bg-slate-100 text-slate-700 dark:bg-slate-500/20 dark:text-slate-300' };
 
 const initialForm = { nonconformity: '', action_number: '', action_type: 'corrective', root_cause_analysis: '', root_cause_identified: '', analysis_method: '', action_description: '', implementation_steps: '', resources_required: '', planned_start_date: '', planned_completion_date: '', verification_method: '', effectiveness_criteria: '', status: 'planned', completion_percentage: 0, comments: '' };
 
@@ -142,16 +142,16 @@ const ImprovementCorrectiveActionsPage = () => {
         </form>
       </Modal>
 
-      <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg overflow-hidden">
+      <div className="card overflow-hidden">
         <table className="w-full">
-          <thead className="bg-gray-800/50">
+          <thead className="bg-slate-100 dark:bg-slate-800/60">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.improvement.correctiveActionsPage.table.code')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.improvement.correctiveActionsPage.table.nc')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.improvement.correctiveActionsPage.table.type')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.improvement.correctiveActionsPage.table.progress')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.status')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.improvement.correctiveActionsPage.table.actions')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.improvement.correctiveActionsPage.table.code')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.improvement.correctiveActionsPage.table.nc')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.improvement.correctiveActionsPage.table.type')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.improvement.correctiveActionsPage.table.progress')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('common.forms.status')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.improvement.correctiveActionsPage.table.actions')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700/30">
@@ -160,13 +160,13 @@ const ImprovementCorrectiveActionsPage = () => {
             ) : items.map(item => (
               <tr key={item.id} className="hover:bg-gray-800/30">
                 <td className="px-6 py-4 text-sm font-mono text-blue-400">{item.action_number}</td>
-                <td className="px-6 py-4 text-sm text-gray-300">{item.nonconformity_number || t('modules.improvement.correctiveActionsPage.table.ncFallback').replace('{id}', item.nonconformity)}</td>
-                <td className="px-6 py-4 text-sm text-gray-300">{actionTypeLabels[item.action_type] || item.action_type}</td>
+                <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">{item.nonconformity_number || t('modules.improvement.correctiveActionsPage.table.ncFallback').replace('{id}', item.nonconformity)}</td>
+                <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">{actionTypeLabels[item.action_type] || item.action_type}</td>
                 <td className="px-6 py-4"><div className="flex items-center gap-2"><div className="w-20 bg-gray-700 rounded-full h-2"><div className="bg-blue-500 h-2 rounded-full" style={{ width: `${item.completion_percentage || 0}%` }}></div></div><span className="text-xs text-gray-400">{item.completion_percentage || 0}%</span></div></td>
                 <td className="px-6 py-4"><span className={`px-2 py-1 rounded text-xs ${statusColors[item.status] || ''}`}>{statusLabels[item.status] || item.status}</span></td>
                 <td className="px-6 py-4 space-x-2">
-                  <button onClick={() => handleEdit(item)} className="text-blue-400 hover:text-blue-300 text-sm">{t('common.buttons.edit')}</button>
-                  <button onClick={() => handleDelete(item.id)} className="text-red-400 hover:text-red-300 text-sm">{t('common.buttons.delete')}</button>
+                  <button onClick={() => handleEdit(item)} className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 text-sm">{t('common.buttons.edit')}</button>
+                  <button onClick={() => handleDelete(item.id)} className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 text-sm">{t('common.buttons.delete')}</button>
                 </td>
               </tr>
             ))}

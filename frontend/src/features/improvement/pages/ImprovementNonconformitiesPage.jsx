@@ -10,8 +10,8 @@ import { getNonconformities, createNonconformity, updateNonconformity, deleteNon
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
 
-const severityColors = { critical: 'bg-red-500/20 text-red-400', major: 'bg-orange-500/20 text-orange-400', minor: 'bg-yellow-500/20 text-yellow-400' };
-const statusColors = { open: 'bg-red-500/20 text-red-400', analysis: 'bg-blue-500/20 text-blue-400', action_plan: 'bg-purple-500/20 text-purple-400', implementing: 'bg-orange-500/20 text-orange-400', verification: 'bg-cyan-500/20 text-cyan-400', closed: 'bg-green-500/20 text-green-400', rejected: 'bg-gray-500/20 text-gray-400' };
+const severityColors = { critical: 'bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-300', major: 'bg-orange-100 text-orange-700 dark:bg-orange-500/20 dark:text-orange-300', minor: 'bg-amber-100 text-amber-800 dark:bg-yellow-500/20 dark:text-yellow-300' };
+const statusColors = { open: 'bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-300', analysis: 'bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300', action_plan: 'bg-purple-100 text-purple-700 dark:bg-purple-500/20 dark:text-purple-300', implementing: 'bg-orange-100 text-orange-700 dark:bg-orange-500/20 dark:text-orange-300', verification: 'bg-cyan-100 text-cyan-700 dark:bg-cyan-500/20 dark:text-cyan-300', closed: 'bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-300', rejected: 'bg-slate-100 text-slate-700 dark:bg-slate-500/20 dark:text-slate-300' };
 
 const initialForm = { nc_number: '', title: '', description: '', source: 'process_monitoring', detection_date: '', severity: 'minor', affected_process: '', iso_clause_reference: '', impact_description: '', immediate_action_taken: '', containment_measures: '', status: 'open', target_closure_date: '' };
 
@@ -168,16 +168,16 @@ const ImprovementNonconformitiesPage = () => {
         </form>
       </Modal>
 
-      <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg overflow-hidden">
+      <div className="card overflow-hidden">
         <table className="w-full">
-          <thead className="bg-gray-800/50">
+          <thead className="bg-slate-100 dark:bg-slate-800/60">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.improvement.nonconformitiesPage.table.code')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.name')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.improvement.nonconformitiesPage.table.source')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.improvement.nonconformitiesPage.table.severity')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.status')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.improvement.nonconformitiesPage.table.actions')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.improvement.nonconformitiesPage.table.code')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('common.forms.name')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.improvement.nonconformitiesPage.table.source')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.improvement.nonconformitiesPage.table.severity')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('common.forms.status')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.improvement.nonconformitiesPage.table.actions')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700/30">
@@ -187,12 +187,12 @@ const ImprovementNonconformitiesPage = () => {
               <tr key={item.id} className="hover:bg-gray-800/30">
                 <td className="px-6 py-4 text-sm font-mono text-blue-400">{item.nc_number}</td>
                 <td className="px-6 py-4 text-sm text-gray-200">{item.title}</td>
-                <td className="px-6 py-4 text-sm text-gray-300">{sourceLabels[item.source] || item.source}</td>
+                <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">{sourceLabels[item.source] || item.source}</td>
                 <td className="px-6 py-4"><span className={`px-2 py-1 rounded text-xs ${severityColors[item.severity] || ''}`}>{severityLabels[item.severity] || item.severity}</span></td>
                 <td className="px-6 py-4"><span className={`px-2 py-1 rounded text-xs ${statusColors[item.status] || ''}`}>{statusLabels[item.status] || item.status}</span></td>
                 <td className="px-6 py-4 space-x-2">
-                  <button onClick={() => handleEdit(item)} className="text-blue-400 hover:text-blue-300 text-sm">{t('common.buttons.edit')}</button>
-                  <button onClick={() => handleDelete(item.id)} className="text-red-400 hover:text-red-300 text-sm">{t('common.buttons.delete')}</button>
+                  <button onClick={() => handleEdit(item)} className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 text-sm">{t('common.buttons.edit')}</button>
+                  <button onClick={() => handleDelete(item.id)} className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 text-sm">{t('common.buttons.delete')}</button>
                 </td>
               </tr>
             ))}

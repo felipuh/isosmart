@@ -156,37 +156,37 @@ const CustomerRequirementsPage = () => {
 
       <CrudErrorBanner message={error} onClose={() => setError('')} />
 
-      <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg overflow-hidden">
+      <div className="card overflow-hidden">
         <table className="w-full">
-          <thead className="bg-gray-800/50">
+          <thead className="bg-slate-100 dark:bg-slate-800/60">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.operations.customerRequirementsPage.table.code')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.operations.customerRequirementsPage.table.customer')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.operations.customerRequirementsPage.table.title')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.operations.customerRequirementsPage.table.type')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.status')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.operations.customerRequirementsPage.table.actions')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.operations.customerRequirementsPage.table.code')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.operations.customerRequirementsPage.table.customer')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.operations.customerRequirementsPage.table.title')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.operations.customerRequirementsPage.table.type')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('common.forms.status')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.operations.customerRequirementsPage.table.actions')}</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-700">
+          <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
             {items.map(item => (
-              <tr key={item.id} className="hover:bg-gray-700/30">
-                <td className="px-6 py-4 text-sm text-gray-300">{item.requirement_code}</td>
-                <td className="px-6 py-4 text-sm text-white">{item.customer_name}</td>
-                <td className="px-6 py-4 text-sm text-gray-300">{item.requirement_title}</td>
-                <td className="px-6 py-4 text-sm text-gray-300">{item.requirement_type_display}</td>
+              <tr key={item.id} className="hover:bg-slate-100 dark:hover:bg-slate-800/60">
+                <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">{item.requirement_code}</td>
+                <td className="px-6 py-4 text-sm text-slate-900 dark:text-white">{item.customer_name}</td>
+                <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">{item.requirement_title}</td>
+                <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">{item.requirement_type_display}</td>
                 <td className="px-6 py-4">
                   <span className={`px-2 py-1 text-xs rounded ${
-                    item.status === 'fulfilled' ? 'bg-green-500/20 text-green-400' :
-                    item.status === 'in_progress' ? 'bg-blue-500/20 text-blue-400' :
-                    'bg-yellow-500/20 text-yellow-400'
+                    item.status === 'fulfilled' ? 'bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-300' :
+                    item.status === 'in_progress' ? 'bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300' :
+                    'bg-amber-100 text-amber-800 dark:bg-yellow-500/20 dark:text-yellow-300'
                   }`}>
                     {item.status_display}
                   </span>
                 </td>
                 <td className="px-6 py-4 text-sm space-x-2">
-                  <button onClick={() => handleEdit(item)} className="text-blue-400 hover:text-blue-300">{t('common.buttons.edit')}</button>
-                  <button onClick={() => handleDelete(item.id)} className="text-red-400 hover:text-red-300">{t('common.buttons.delete')}</button>
+                  <button onClick={() => handleEdit(item)} className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">{t('common.buttons.edit')}</button>
+                  <button onClick={() => handleDelete(item.id)} className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">{t('common.buttons.delete')}</button>
                 </td>
               </tr>
             ))}
@@ -203,24 +203,24 @@ const CustomerRequirementsPage = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.customerRequirementsPage.form.customerRequired')}</label>
-              <input type="text" value={form.customer_name} onChange={(e) => setForm({...form, customer_name: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.customerRequirementsPage.form.customerRequired')}</label>
+              <input type="text" value={form.customer_name} onChange={(e) => setForm({...form, customer_name: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.customerRequirementsPage.form.customerCode')}</label>
-              <input type="text" value={form.customer_code} onChange={(e) => setForm({...form, customer_code: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.customerRequirementsPage.form.customerCode')}</label>
+              <input type="text" value={form.customer_code} onChange={(e) => setForm({...form, customer_code: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.customerRequirementsPage.form.contact')}</label>
-              <input type="text" value={form.contact_person} onChange={(e) => setForm({...form, contact_person: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.customerRequirementsPage.form.contact')}</label>
+              <input type="text" value={form.contact_person} onChange={(e) => setForm({...form, contact_person: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.customerRequirementsPage.form.codeRequired')}</label>
-              <input type="text" value={form.requirement_code} onChange={(e) => setForm({...form, requirement_code: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.customerRequirementsPage.form.codeRequired')}</label>
+              <input type="text" value={form.requirement_code} onChange={(e) => setForm({...form, requirement_code: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.customerRequirementsPage.form.type')}</label>
-              <select value={form.requirement_type} onChange={(e) => setForm({...form, requirement_type: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.customerRequirementsPage.form.type')}</label>
+              <select value={form.requirement_type} onChange={(e) => setForm({...form, requirement_type: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white">
                 <option value="product">{t('modules.operations.customerRequirementsPage.options.type.product')}</option>
                 <option value="service">{t('modules.operations.customerRequirementsPage.options.type.service')}</option>
                 <option value="delivery">{t('modules.operations.customerRequirementsPage.options.type.delivery')}</option>
@@ -230,33 +230,33 @@ const CustomerRequirementsPage = () => {
               </select>
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.customerRequirementsPage.form.titleRequired')}</label>
-              <input type="text" value={form.requirement_title} onChange={(e) => setForm({...form, requirement_title: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.customerRequirementsPage.form.titleRequired')}</label>
+              <input type="text" value={form.requirement_title} onChange={(e) => setForm({...form, requirement_title: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.customerRequirementsPage.form.communicationDateRequired')}</label>
-              <input type="date" value={form.communication_date} onChange={(e) => setForm({...form, communication_date: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.customerRequirementsPage.form.communicationDateRequired')}</label>
+              <input type="date" value={form.communication_date} onChange={(e) => setForm({...form, communication_date: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.customerRequirementsPage.form.method')}</label>
-              <input type="text" value={form.communication_method} onChange={(e) => setForm({...form, communication_method: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" placeholder={t('modules.operations.customerRequirementsPage.form.methodPlaceholder')} />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.customerRequirementsPage.form.method')}</label>
+              <input type="text" value={form.communication_method} onChange={(e) => setForm({...form, communication_method: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" placeholder={t('modules.operations.customerRequirementsPage.form.methodPlaceholder')} />
             </div>
             <div className="flex items-center">
               <label className="flex items-center space-x-2">
                 <input type="checkbox" checked={form.can_meet_requirement} onChange={(e) => setForm({...form, can_meet_requirement: e.target.checked})} className="rounded" />
-                <span className="text-sm text-gray-300">{t('modules.operations.customerRequirementsPage.form.canMeetRequirement')}</span>
+                <span className="text-sm text-slate-700 dark:text-slate-300">{t('modules.operations.customerRequirementsPage.form.canMeetRequirement')}</span>
               </label>
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('common.forms.description')}</label>
-              <textarea value={form.description} onChange={(e) => setForm({...form, description: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="3" required />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('common.forms.description')}</label>
+              <textarea value={form.description} onChange={(e) => setForm({...form, description: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" rows="3" required />
             </div>
           </div>
           <div className="flex space-x-3">
             <button type="submit" disabled={saving} className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
               {saving ? t('common.messages.saving') : editingId ? t('common.buttons.update') : t('common.buttons.create')}
             </button>
-            {editingId && <button type="button" onClick={closeForm} className="px-6 py-2 bg-gray-600 text-white rounded-lg">{t('common.buttons.cancel')}</button>}
+            {editingId && <button type="button" onClick={closeForm} className="px-6 py-2 bg-slate-500 hover:bg-slate-600 dark:bg-slate-600 dark:hover:bg-slate-500 text-white rounded-lg">{t('common.buttons.cancel')}</button>}
           </div>
         </form>
       </Modal>

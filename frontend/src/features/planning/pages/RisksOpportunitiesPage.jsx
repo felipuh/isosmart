@@ -187,7 +187,7 @@ const RisksOpportunitiesPage = () => {
           <button
             key={type}
             onClick={() => setFilterType(type)}
-            className={`px-4 py-2 rounded-lg ${filterType === type ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
+            className={`px-4 py-2 rounded-lg ${filterType === type ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-700 hover:bg-slate-300 dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-slate-600'}`}
           >
             {type === 'all'
               ? t('modules.planning.risksOpportunitiesPage.filters.all')
@@ -198,47 +198,47 @@ const RisksOpportunitiesPage = () => {
         ))}
       </div>
 
-      <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg overflow-hidden">
+      <div className="card overflow-hidden">
         <table className="w-full">
-          <thead className="bg-gray-800/50">
+          <thead className="bg-slate-100 dark:bg-slate-800/60">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.planning.risksOpportunitiesPage.table.code')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.planning.risksOpportunitiesPage.table.title')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.planning.risksOpportunitiesPage.table.type')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.planning.risksOpportunitiesPage.table.category')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.planning.risksOpportunitiesPage.table.level')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.planning.risksOpportunitiesPage.table.actions')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.planning.risksOpportunitiesPage.table.code')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.planning.risksOpportunitiesPage.table.title')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.planning.risksOpportunitiesPage.table.type')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.planning.risksOpportunitiesPage.table.category')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.planning.risksOpportunitiesPage.table.level')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.planning.risksOpportunitiesPage.table.actions')}</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-700">
+          <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
             {filteredItems.map(item => (
-              <tr key={item.id} className="hover:bg-gray-700/30">
-                <td className="px-6 py-4 text-sm text-gray-300">{item.code}</td>
-                <td className="px-6 py-4 text-sm text-white">{item.title}</td>
+              <tr key={item.id} className="hover:bg-slate-100 dark:hover:bg-slate-800/60">
+                <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">{item.code}</td>
+                <td className="px-6 py-4 text-sm text-slate-900 dark:text-white">{item.title}</td>
                 <td className="px-6 py-4 text-sm">
-                  <span className={`px-2 py-1 text-xs rounded ${item.item_type === 'risk' ? 'bg-red-500/20 text-red-400' : 'bg-green-500/20 text-green-400'}`}>
+                  <span className={`px-2 py-1 text-xs rounded ${item.item_type === 'risk' ? 'bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-300' : 'bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-300'}`}>
                     {item.item_type_display}
                   </span>
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-300">{item.category_display}</td>
+                <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">{item.category_display}</td>
                 <td className="px-6 py-4 text-sm">
                   {item.item_type === 'risk' ? (
                     <span className={`px-2 py-1 text-xs rounded ${
-                      item.risk_level >= 15 ? 'bg-red-500/20 text-red-400' :
-                      item.risk_level >= 10 ? 'bg-yellow-500/20 text-yellow-400' :
-                      'bg-green-500/20 text-green-400'
+                      item.risk_level >= 15 ? 'bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-300' :
+                      item.risk_level >= 10 ? 'bg-amber-100 text-amber-800 dark:bg-yellow-500/20 dark:text-yellow-300' :
+                      'bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-300'
                     }`}>
                       {item.risk_level}
                     </span>
                   ) : (
-                    <span className="px-2 py-1 text-xs rounded bg-blue-500/20 text-blue-400">
+                    <span className="px-2 py-1 text-xs rounded bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300">
                       {item.opportunity_score}
                     </span>
                   )}
                 </td>
                 <td className="px-6 py-4 text-sm space-x-2">
-                  <button onClick={() => handleEdit(item)} className="text-blue-400 hover:text-blue-300">{t('common.buttons.edit')}</button>
-                  <button onClick={() => handleDelete(item.id)} className="text-red-400 hover:text-red-300">{t('common.buttons.delete')}</button>
+                  <button onClick={() => handleEdit(item)} className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">{t('common.buttons.edit')}</button>
+                  <button onClick={() => handleDelete(item.id)} className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">{t('common.buttons.delete')}</button>
                 </td>
               </tr>
             ))}
@@ -255,19 +255,19 @@ const RisksOpportunitiesPage = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.risksOpportunitiesPage.fields.type')}</label>
-              <select value={form.item_type} onChange={(e) => setForm({...form, item_type: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.planning.risksOpportunitiesPage.fields.type')}</label>
+              <select value={form.item_type} onChange={(e) => setForm({...form, item_type: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" required>
                 <option value="risk">{t('modules.planning.risksOpportunitiesPage.types.risk')}</option>
                 <option value="opportunity">{t('modules.planning.risksOpportunitiesPage.types.opportunity')}</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.risksOpportunitiesPage.fields.code')}</label>
-              <input type="text" value={form.code} onChange={(e) => setForm({...form, code: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.planning.risksOpportunitiesPage.fields.code')}</label>
+              <input type="text" value={form.code} onChange={(e) => setForm({...form, code: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.risksOpportunitiesPage.fields.category')}</label>
-              <select value={form.category} onChange={(e) => setForm({...form, category: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.planning.risksOpportunitiesPage.fields.category')}</label>
+              <select value={form.category} onChange={(e) => setForm({...form, category: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white">
                 <option value="strategic">{t('modules.planning.risksOpportunitiesPage.categories.strategic')}</option>
                 <option value="operational">{t('modules.planning.risksOpportunitiesPage.categories.operational')}</option>
                 <option value="financial">{t('modules.planning.risksOpportunitiesPage.categories.financial')}</option>
@@ -279,48 +279,48 @@ const RisksOpportunitiesPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.risksOpportunitiesPage.fields.context')}</label>
-              <select value={form.context} onChange={(e) => setForm({...form, context: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.planning.risksOpportunitiesPage.fields.context')}</label>
+              <select value={form.context} onChange={(e) => setForm({...form, context: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white">
                 <option value="internal">{t('modules.planning.risksOpportunitiesPage.context.internal')}</option>
                 <option value="external">{t('modules.planning.risksOpportunitiesPage.context.external')}</option>
                 <option value="both">{t('modules.planning.risksOpportunitiesPage.context.both')}</option>
               </select>
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.risksOpportunitiesPage.fields.title')}</label>
-              <input type="text" value={form.title} onChange={(e) => setForm({...form, title: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.planning.risksOpportunitiesPage.fields.title')}</label>
+              <input type="text" value={form.title} onChange={(e) => setForm({...form, title: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" required />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('common.forms.description')}</label>
-              <textarea value={form.description} onChange={(e) => setForm({...form, description: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="3" required />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('common.forms.description')}</label>
+              <textarea value={form.description} onChange={(e) => setForm({...form, description: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" rows="3" required />
             </div>
             {form.item_type === 'risk' && (
               <>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.risksOpportunitiesPage.fields.probability')}</label>
-                  <input type="number" min="1" max="5" value={form.probability} onChange={(e) => setForm({...form, probability: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.planning.risksOpportunitiesPage.fields.probability')}</label>
+                  <input type="number" min="1" max="5" value={form.probability} onChange={(e) => setForm({...form, probability: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.risksOpportunitiesPage.fields.impact')}</label>
-                  <input type="number" min="1" max="5" value={form.impact} onChange={(e) => setForm({...form, impact: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.planning.risksOpportunitiesPage.fields.impact')}</label>
+                  <input type="number" min="1" max="5" value={form.impact} onChange={(e) => setForm({...form, impact: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" />
                 </div>
               </>
             )}
             {form.item_type === 'opportunity' && (
               <>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.risksOpportunitiesPage.fields.feasibility')}</label>
-                  <input type="number" min="1" max="5" value={form.feasibility} onChange={(e) => setForm({...form, feasibility: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.planning.risksOpportunitiesPage.fields.feasibility')}</label>
+                  <input type="number" min="1" max="5" value={form.feasibility} onChange={(e) => setForm({...form, feasibility: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.risksOpportunitiesPage.fields.benefit')}</label>
-                  <input type="number" min="1" max="5" value={form.benefit} onChange={(e) => setForm({...form, benefit: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.planning.risksOpportunitiesPage.fields.benefit')}</label>
+                  <input type="number" min="1" max="5" value={form.benefit} onChange={(e) => setForm({...form, benefit: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" />
                 </div>
               </>
             )}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.risksOpportunitiesPage.fields.treatment')}</label>
-              <select value={form.treatment} onChange={(e) => setForm({...form, treatment: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.planning.risksOpportunitiesPage.fields.treatment')}</label>
+              <select value={form.treatment} onChange={(e) => setForm({...form, treatment: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white">
                 <option value="avoid">{t('modules.planning.risksOpportunitiesPage.treatments.avoid')}</option>
                 <option value="mitigate">{t('modules.planning.risksOpportunitiesPage.treatments.mitigate')}</option>
                 <option value="transfer">{t('modules.planning.risksOpportunitiesPage.treatments.transfer')}</option>
@@ -330,15 +330,15 @@ const RisksOpportunitiesPage = () => {
               </select>
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.planning.risksOpportunitiesPage.fields.treatmentDescription')}</label>
-              <textarea value={form.treatment_description} onChange={(e) => setForm({...form, treatment_description: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.planning.risksOpportunitiesPage.fields.treatmentDescription')}</label>
+              <textarea value={form.treatment_description} onChange={(e) => setForm({...form, treatment_description: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" rows="2" />
             </div>
           </div>
           <div className="flex space-x-3">
             <button type="submit" disabled={saving} className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
               {saving ? t('common.messages.saving') : editingId ? t('common.buttons.update') : t('common.buttons.create')}
             </button>
-            {editingId && <button type="button" onClick={closeForm} className="px-6 py-2 bg-gray-600 text-white rounded-lg">{t('common.buttons.cancel')}</button>}
+            {editingId && <button type="button" onClick={closeForm} className="px-6 py-2 bg-slate-500 hover:bg-slate-600 dark:bg-slate-600 dark:hover:bg-slate-500 text-white rounded-lg">{t('common.buttons.cancel')}</button>}
           </div>
         </form>
       </Modal>

@@ -201,27 +201,27 @@ const ExternalProvidersPage = () => {
 
       <CrudErrorBanner message={error} onClose={() => setError('')} />
 
-      <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg overflow-hidden">
+      <div className="card overflow-hidden">
         <table className="w-full">
-          <thead className="bg-gray-800/50">
+          <thead className="bg-slate-100 dark:bg-slate-800/60">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.operations.externalProvidersPage.table.code')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('common.forms.name')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.operations.externalProvidersPage.table.type')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.operations.externalProvidersPage.table.classification')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.operations.externalProvidersPage.table.actions')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.operations.externalProvidersPage.table.code')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('common.forms.name')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.operations.externalProvidersPage.table.type')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.operations.externalProvidersPage.table.classification')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.operations.externalProvidersPage.table.actions')}</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-700">
+          <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
             {items.map(i => (
-              <tr key={i.id} className="hover:bg-gray-700/30">
-                <td className="px-6 py-4 text-sm text-gray-300">{i.provider_code}</td>
-                <td className="px-6 py-4 text-sm text-white">{i.provider_name}</td>
-                <td className="px-6 py-4 text-sm text-gray-300">{i.provision_type_display}</td>
-                <td className="px-6 py-4 text-sm text-gray-300">{i.classification_display}</td>
+              <tr key={i.id} className="hover:bg-slate-100 dark:hover:bg-slate-800/60">
+                <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">{i.provider_code}</td>
+                <td className="px-6 py-4 text-sm text-slate-900 dark:text-white">{i.provider_name}</td>
+                <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">{i.provision_type_display}</td>
+                <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">{i.classification_display}</td>
                 <td className="px-6 py-4 text-sm space-x-2">
-                  <button onClick={() => handleEdit(i)} className="text-blue-400 hover:text-blue-300">{t('common.buttons.edit')}</button>
-                  <button onClick={() => handleDelete(i.id)} className="text-red-400 hover:text-red-300">{t('common.buttons.delete')}</button>
+                  <button onClick={() => handleEdit(i)} className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">{t('common.buttons.edit')}</button>
+                  <button onClick={() => handleDelete(i.id)} className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">{t('common.buttons.delete')}</button>
                 </td>
               </tr>
             ))}
@@ -238,72 +238,72 @@ const ExternalProvidersPage = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.externalProvidersPage.form.codeRequired')}</label>
-              <input type="text" value={form.provider_code} onChange={(e) => setForm({...form, provider_code: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.externalProvidersPage.form.codeRequired')}</label>
+              <input type="text" value={form.provider_code} onChange={(e) => setForm({...form, provider_code: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" required />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.externalProvidersPage.form.nameRequired')}</label>
-              <input type="text" value={form.provider_name} onChange={(e) => setForm({...form, provider_name: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.externalProvidersPage.form.nameRequired')}</label>
+              <input type="text" value={form.provider_name} onChange={(e) => setForm({...form, provider_name: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.externalProvidersPage.form.contact')}</label>
-              <input type="text" value={form.contact_person} onChange={(e) => setForm({...form, contact_person: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.externalProvidersPage.form.contact')}</label>
+              <input type="text" value={form.contact_person} onChange={(e) => setForm({...form, contact_person: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('common.forms.email')}</label>
-              <input type="email" value={form.email} onChange={(e) => setForm({...form, email: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('common.forms.email')}</label>
+              <input type="email" value={form.email} onChange={(e) => setForm({...form, email: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.externalProvidersPage.form.phone')}</label>
-              <input type="text" value={form.phone} onChange={(e) => setForm({...form, phone: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.externalProvidersPage.form.phone')}</label>
+              <input type="text" value={form.phone} onChange={(e) => setForm({...form, phone: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.externalProvidersPage.form.address')}</label>
-              <textarea value={form.address} onChange={(e) => setForm({...form, address: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.externalProvidersPage.form.address')}</label>
+              <textarea value={form.address} onChange={(e) => setForm({...form, address: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" rows="2" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.externalProvidersPage.form.provisionType')}</label>
-              <select value={form.provision_type} onChange={(e) => setForm({...form, provision_type: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.externalProvidersPage.form.provisionType')}</label>
+              <select value={form.provision_type} onChange={(e) => setForm({...form, provision_type: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white">
                 <option value="product">{t('modules.operations.externalProvidersPage.options.provisionType.product')}</option>
                 <option value="service">{t('modules.operations.externalProvidersPage.options.provisionType.service')}</option>
                 <option value="process">{t('modules.operations.externalProvidersPage.options.provisionType.process')}</option>
               </select>
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.externalProvidersPage.form.productsServicesRequired')}</label>
-              <input type="text" value={form.products_services} onChange={(e) => setForm({...form, products_services: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.externalProvidersPage.form.productsServicesRequired')}</label>
+              <input type="text" value={form.products_services} onChange={(e) => setForm({...form, products_services: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" required />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.externalProvidersPage.form.evaluationCriteriaRequired')}</label>
-              <textarea value={form.evaluation_criteria} onChange={(e) => setForm({...form, evaluation_criteria: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" required />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.externalProvidersPage.form.evaluationCriteriaRequired')}</label>
+              <textarea value={form.evaluation_criteria} onChange={(e) => setForm({...form, evaluation_criteria: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" rows="2" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.externalProvidersPage.form.lastEvaluation')}</label>
-              <input type="date" value={form.last_evaluation_date} onChange={(e) => setForm({...form, last_evaluation_date: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.externalProvidersPage.form.lastEvaluation')}</label>
+              <input type="date" value={form.last_evaluation_date} onChange={(e) => setForm({...form, last_evaluation_date: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.externalProvidersPage.form.score')}</label>
-              <input type="number" min="0" max="100" value={form.evaluation_score} onChange={(e) => setForm({...form, evaluation_score: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.externalProvidersPage.form.score')}</label>
+              <input type="number" min="0" max="100" value={form.evaluation_score} onChange={(e) => setForm({...form, evaluation_score: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.externalProvidersPage.form.classification')}</label>
-              <select value={form.classification} onChange={(e) => setForm({...form, classification: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.externalProvidersPage.form.classification')}</label>
+              <select value={form.classification} onChange={(e) => setForm({...form, classification: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white">
                 <option value="approved">{t('modules.operations.externalProvidersPage.options.classification.approved')}</option>
                 <option value="conditional">{t('modules.operations.externalProvidersPage.options.classification.conditional')}</option>
                 <option value="not_approved">{t('modules.operations.externalProvidersPage.options.classification.notApproved')}</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.externalProvidersPage.form.performance')}</label>
-              <input type="number" min="1" max="5" value={form.performance_rating} onChange={(e) => setForm({...form, performance_rating: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.externalProvidersPage.form.performance')}</label>
+              <input type="number" min="1" max="5" value={form.performance_rating} onChange={(e) => setForm({...form, performance_rating: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.externalProvidersPage.form.controlsApplied')}</label>
-              <textarea value={form.controls_applied} onChange={(e) => setForm({...form, controls_applied: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.externalProvidersPage.form.controlsApplied')}</label>
+              <textarea value={form.controls_applied} onChange={(e) => setForm({...form, controls_applied: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" rows="2" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.externalProvidersPage.form.responsible')}</label>
-              <select value={form.responsible} onChange={(e) => setForm({...form, responsible: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.externalProvidersPage.form.responsible')}</label>
+              <select value={form.responsible} onChange={(e) => setForm({...form, responsible: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white">
                 <option value="">{t('modules.operations.externalProvidersPage.form.unassigned')}</option>
                 {users.map(u => (
                   <option key={u.id} value={u.id}>{u.full_name || u.username || u.email}</option>
@@ -315,7 +315,7 @@ const ExternalProvidersPage = () => {
             <button type="submit" disabled={saving} className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
               {saving ? t('common.messages.saving') : editingId ? t('common.buttons.update') : t('common.buttons.create')}
             </button>
-            {editingId && <button type="button" onClick={closeForm} className="px-6 py-2 bg-gray-600 text-white rounded-lg">{t('common.buttons.cancel')}</button>}
+            {editingId && <button type="button" onClick={closeForm} className="px-6 py-2 bg-slate-500 hover:bg-slate-600 dark:bg-slate-600 dark:hover:bg-slate-500 text-white rounded-lg">{t('common.buttons.cancel')}</button>}
           </div>
         </form>
       </Modal>

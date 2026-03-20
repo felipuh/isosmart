@@ -190,25 +190,25 @@ const ProductionControlsPage = () => {
 
       <CrudErrorBanner message={error} onClose={() => setError('')} />
 
-      <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-lg overflow-hidden">
+      <div className="card overflow-hidden">
         <table className="w-full">
-          <thead className="bg-gray-800/50">
+          <thead className="bg-slate-100 dark:bg-slate-800/60">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.operations.productionControlsPage.table.code')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.operations.productionControlsPage.table.productService')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.operations.productionControlsPage.table.type')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{t('modules.operations.productionControlsPage.table.actions')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.operations.productionControlsPage.table.code')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.operations.productionControlsPage.table.productService')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.operations.productionControlsPage.table.type')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.operations.productionControlsPage.table.actions')}</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-700">
+          <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
             {items.map(i => (
-              <tr key={i.id} className="hover:bg-gray-700/30">
-                <td className="px-6 py-4 text-sm text-gray-300">{i.control_code}</td>
-                <td className="px-6 py-4 text-sm text-white">{i.product_service_name}</td>
-                <td className="px-6 py-4 text-sm text-gray-300">{i.control_type_display}</td>
+              <tr key={i.id} className="hover:bg-slate-100 dark:hover:bg-slate-800/60">
+                <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">{i.control_code}</td>
+                <td className="px-6 py-4 text-sm text-slate-900 dark:text-white">{i.product_service_name}</td>
+                <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">{i.control_type_display}</td>
                 <td className="px-6 py-4 text-sm space-x-2">
-                  <button onClick={() => handleEdit(i)} className="text-blue-400 hover:text-blue-300">{t('common.buttons.edit')}</button>
-                  <button onClick={() => handleDelete(i.id)} className="text-red-400 hover:text-red-300">{t('common.buttons.delete')}</button>
+                  <button onClick={() => handleEdit(i)} className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">{t('common.buttons.edit')}</button>
+                  <button onClick={() => handleDelete(i.id)} className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">{t('common.buttons.delete')}</button>
                 </td>
               </tr>
             ))}
@@ -225,63 +225,63 @@ const ProductionControlsPage = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.productionControlsPage.form.codeRequired')}</label>
-              <input type="text" value={form.control_code} onChange={(e) => setForm({...form, control_code: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.productionControlsPage.form.codeRequired')}</label>
+              <input type="text" value={form.control_code} onChange={(e) => setForm({...form, control_code: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" required />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.productionControlsPage.form.productServiceRequired')}</label>
-              <input type="text" value={form.product_service_name} onChange={(e) => setForm({...form, product_service_name: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.productionControlsPage.form.productServiceRequired')}</label>
+              <input type="text" value={form.product_service_name} onChange={(e) => setForm({...form, product_service_name: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.productionControlsPage.form.type')}</label>
-              <select value={form.control_type} onChange={(e) => setForm({...form, control_type: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.productionControlsPage.form.type')}</label>
+              <select value={form.control_type} onChange={(e) => setForm({...form, control_type: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white">
                 <option value="production">{t('modules.operations.productionControlsPage.options.type.production')}</option>
                 <option value="service_delivery">{t('modules.operations.productionControlsPage.options.type.serviceDelivery')}</option>
               </select>
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.productionControlsPage.form.controlMethodRequired')}</label>
-              <input type="text" value={form.control_method} onChange={(e) => setForm({...form, control_method: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" required />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.productionControlsPage.form.controlMethodRequired')}</label>
+              <input type="text" value={form.control_method} onChange={(e) => setForm({...form, control_method: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" required />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('common.forms.description')}</label>
-              <textarea value={form.description} onChange={(e) => setForm({...form, description: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" required />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('common.forms.description')}</label>
+              <textarea value={form.description} onChange={(e) => setForm({...form, description: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" rows="2" required />
             </div>
             <div className="flex items-center">
               <label className="flex items-center space-x-2">
                 <input type="checkbox" checked={form.requires_traceability} onChange={(e) => setForm({...form, requires_traceability: e.target.checked})} className="rounded" />
-                <span className="text-sm text-gray-300">{t('modules.operations.productionControlsPage.form.requiresTraceability')}</span>
+                <span className="text-sm text-slate-700 dark:text-slate-300">{t('modules.operations.productionControlsPage.form.requiresTraceability')}</span>
               </label>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.productionControlsPage.form.traceabilityMethod')}</label>
-              <input type="text" value={form.traceability_method} onChange={(e) => setForm({...form, traceability_method: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.productionControlsPage.form.traceabilityMethod')}</label>
+              <input type="text" value={form.traceability_method} onChange={(e) => setForm({...form, traceability_method: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" />
             </div>
             <div className="flex items-center">
               <label className="flex items-center space-x-2">
                 <input type="checkbox" checked={form.handles_customer_property} onChange={(e) => setForm({...form, handles_customer_property: e.target.checked})} className="rounded" />
-                <span className="text-sm text-gray-300">{t('modules.operations.productionControlsPage.form.handlesCustomerProperty')}</span>
+                <span className="text-sm text-slate-700 dark:text-slate-300">{t('modules.operations.productionControlsPage.form.handlesCustomerProperty')}</span>
               </label>
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.productionControlsPage.form.customerPropertyControls')}</label>
-              <input type="text" value={form.customer_property_controls} onChange={(e) => setForm({...form, customer_property_controls: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.productionControlsPage.form.customerPropertyControls')}</label>
+              <input type="text" value={form.customer_property_controls} onChange={(e) => setForm({...form, customer_property_controls: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.productionControlsPage.form.preservationRequirements')}</label>
-              <textarea value={form.preservation_requirements} onChange={(e) => setForm({...form, preservation_requirements: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.productionControlsPage.form.preservationRequirements')}</label>
+              <textarea value={form.preservation_requirements} onChange={(e) => setForm({...form, preservation_requirements: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" rows="2" />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.productionControlsPage.form.postDeliveryActivities')}</label>
-              <textarea value={form.post_delivery_activities} onChange={(e) => setForm({...form, post_delivery_activities: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.productionControlsPage.form.postDeliveryActivities')}</label>
+              <textarea value={form.post_delivery_activities} onChange={(e) => setForm({...form, post_delivery_activities: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" rows="2" />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.productionControlsPage.form.changeControl')}</label>
-              <textarea value={form.change_control_process} onChange={(e) => setForm({...form, change_control_process: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="2" />
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.productionControlsPage.form.changeControl')}</label>
+              <textarea value={form.change_control_process} onChange={(e) => setForm({...form, change_control_process: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" rows="2" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">{t('modules.operations.productionControlsPage.form.responsible')}</label>
-              <select value={form.responsible} onChange={(e) => setForm({...form, responsible: e.target.value})} className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.operations.productionControlsPage.form.responsible')}</label>
+              <select value={form.responsible} onChange={(e) => setForm({...form, responsible: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white">
                 <option value="">{t('modules.operations.productionControlsPage.form.unassigned')}</option>
                 {users.map(u => (
                   <option key={u.id} value={u.id}>{u.full_name || u.username || u.email}</option>
@@ -293,7 +293,7 @@ const ProductionControlsPage = () => {
             <button type="submit" disabled={saving} className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
               {saving ? t('common.messages.saving') : editingId ? t('common.buttons.update') : t('common.buttons.create')}
             </button>
-            {editingId && <button type="button" onClick={closeForm} className="px-6 py-2 bg-gray-600 text-white rounded-lg">{t('common.buttons.cancel')}</button>}
+            {editingId && <button type="button" onClick={closeForm} className="px-6 py-2 bg-slate-500 hover:bg-slate-600 dark:bg-slate-600 dark:hover:bg-slate-500 text-white rounded-lg">{t('common.buttons.cancel')}</button>}
           </div>
         </form>
       </Modal>
