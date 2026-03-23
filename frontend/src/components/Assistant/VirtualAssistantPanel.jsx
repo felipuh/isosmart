@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Bot, MessageCircle, X, Send } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
 import assistantService from '../../services/assistantService';
@@ -28,6 +28,7 @@ const KNOWLEDGE_BASE = [
 ];
 
 const DEFAULT_ANSWER_KEY = 'assistantPanel.answers.default';
+const ASSISTANT_CONVERSATION_STORAGE_KEY = 'assistant_conversation_id';
 
 const VirtualAssistantPanel = () => {
   const { t } = useI18n();
@@ -35,6 +36,8 @@ const VirtualAssistantPanel = () => {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState('');
   const [sending, setSending] = useState(false);
+  const [conversationId, setConversationId] = useState(null);
+  const [hydrated, setHydrated] = useState(false);
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
@@ -50,6 +53,48 @@ const VirtualAssistantPanel = () => {
     ],
     [t]
   );
+
+  useEffect(() => {
+    const persistedId = localStorage.getItem(ASSISTANT_CONVERSATION_STORAGE_KEY);
+    if (persistedId && !conversationId) {
+      setConversationId(Number(persistedId));
+    }
+  }, [conversationId]);
+
+  useEffect(() => {
+    if (conversationId) {
+      localStorage.setItem(ASSISTANT_CONVERSATION_STORAGE_KEY, String(conversationId));
+      return;
+    }
+    localStorage.removeItem(ASSISTANT_CONVERSATION_STORAGE_KEY);
+  }, [conversationId]);
+
+  useEffect(() => {
+    if (!open || hydrated) return;
+
+    let cancelled = false;
+    assistantService
+      .fetchAssistantState({ conversationId })
+      .then((payload) => {
+        if (cancelled) return;
+        if (payload?.conversation_id) {
+          setConversationId(payload.conversation_id);
+        }
+        if (Array.isArray(payload?.messages) && payload.messages.length) {
+          setMessages(payload.messages);
+        }
+      })
+      .catch(() => {
+        // Keep local in-memory state as fallback.
+      })
+      .finally(() => {
+        if (!cancelled) setHydrated(true);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [open, hydrated, conversationId]);
 
   const resolveAnswer = (question) => {
     const normalized = question.toLowerCase();
@@ -76,13 +121,19 @@ const VirtualAssistantPanel = () => {
       });
     };
 
-    const finish = () => setSending(false);
+    const finish = (payload) => {
+      if (payload?.conversation_id) {
+        setConversationId(payload.conversation_id);
+      }
+      setSending(false);
+    };
 
     assistantService
       .streamAssistantResponse({
         question,
         route: location.pathname,
         conversation: messages,
+        conversationId,
         onChunk: appendChunk,
         onDone: finish,
       })

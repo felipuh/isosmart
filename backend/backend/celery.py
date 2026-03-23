@@ -7,8 +7,8 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
 app = Celery('isosmart')
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
-# Autodescubrir tareas en backend y ai_modules
-app.autodiscover_tasks(['backend', 'ai_modules.sca', 'tasks'])
+# Autodescubrir tareas en backend, integration y ai_modules
+app.autodiscover_tasks(['backend', 'integration', 'ai_modules.sca', 'tasks'])
 
 # Configuración de tareas periódicas
 app.conf.beat_schedule = {

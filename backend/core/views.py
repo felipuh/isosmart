@@ -19,6 +19,7 @@ from .models import (
 from .serializers import DocumentSerializer, DocumentUploadSerializer, RiskMatrixSerializer, QualityObjectiveSerializer, QualityObjectiveSerializer
 from authentication.models import UserProfile
 from .organization_scoping import OrganizationScopedViewSetMixin
+from integration.services.auto_indexing import queue_core_document_index, remove_indexed_artifact
 import logging
 import os
 
@@ -336,6 +337,8 @@ class DocumentViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
                     source=source,
                     uploaded_by=uploaded_by
                 )
+
+                queue_core_document_index(document)
                 
                 logger.info(f"Documento creado: {document.title} (ID: {document.id})")
                 
@@ -355,12 +358,19 @@ class DocumentViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
         
         logger.error(f"Errores de serialización: {serializer.errors}")
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def perform_update(self, serializer):
+        document = serializer.save()
+        queue_core_document_index(document)
     
     def destroy(self, request, *args, **kwargs):
         """Eliminar documento"""
         try:
             instance = self.get_object()
+            org_id = instance.organization_id
+            document_id = f'core_document_{instance.id}'
             instance.delete()
+            remove_indexed_artifact(org_id, document_id)
             
             logger.info(f"Documento eliminado: {instance.title} (ID: {instance.id})")
             

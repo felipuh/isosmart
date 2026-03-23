@@ -12,6 +12,12 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django.utils import timezone
 
 from authentication.permissions import OrganizationPermission
+from integration.services.auto_indexing import (
+    queue_customer_focus_index,
+    queue_leadership_commitment_index,
+    queue_quality_policy_index,
+    remove_indexed_artifact,
+)
 
 from .models import (
     QualityPolicy,
@@ -70,14 +76,26 @@ class QualityPolicyViewSet(OrganizationQuerysetMixin, viewsets.ModelViewSet):
     def perform_create(self, serializer):
         org_id, org_name = self.get_organization_context()
         if org_id and not self.request.user.is_superuser:
-            serializer.save(
+            policy = serializer.save(
                 created_by=self.request.user,
                 organization_id=org_id,
                 organization_name=org_name or serializer.validated_data.get('organization_name', '')
             )
+            queue_quality_policy_index(policy)
             return
 
-        serializer.save(created_by=self.request.user)
+        policy = serializer.save(created_by=self.request.user)
+        queue_quality_policy_index(policy)
+
+    def perform_update(self, serializer):
+        policy = serializer.save()
+        queue_quality_policy_index(policy)
+
+    def perform_destroy(self, instance):
+        org_id = instance.organization_id
+        artifact_id = f'leadership_policy_{instance.id}'
+        super().perform_destroy(instance)
+        remove_indexed_artifact(org_id, artifact_id)
     
     @action(detail=True, methods=['post'])
     def approve(self, request, pk=None):
@@ -219,13 +237,25 @@ class LeadershipCommitmentViewSet(OrganizationQuerysetMixin, viewsets.ModelViewS
     def perform_create(self, serializer):
         org_id, org_name = self.get_organization_context()
         if org_id and not self.request.user.is_superuser:
-            serializer.save(
+            commitment = serializer.save(
                 organization_id=org_id,
                 organization_name=org_name or serializer.validated_data.get('organization_name', '')
             )
+            queue_leadership_commitment_index(commitment)
             return
 
-        serializer.save()
+        commitment = serializer.save()
+        queue_leadership_commitment_index(commitment)
+
+    def perform_update(self, serializer):
+        commitment = serializer.save()
+        queue_leadership_commitment_index(commitment)
+
+    def perform_destroy(self, instance):
+        org_id = instance.organization_id
+        artifact_id = f'leadership_commitment_{instance.id}'
+        super().perform_destroy(instance)
+        remove_indexed_artifact(org_id, artifact_id)
 
 
 class CustomerFocusEvidenceViewSet(OrganizationQuerysetMixin, viewsets.ModelViewSet):
@@ -242,11 +272,23 @@ class CustomerFocusEvidenceViewSet(OrganizationQuerysetMixin, viewsets.ModelView
     def perform_create(self, serializer):
         org_id, org_name = self.get_organization_context()
         if org_id and not self.request.user.is_superuser:
-            serializer.save(
+            evidence = serializer.save(
                 created_by=self.request.user,
                 organization_id=org_id,
                 organization_name=org_name or serializer.validated_data.get('organization_name', '')
             )
+            queue_customer_focus_index(evidence)
             return
 
-        serializer.save(created_by=self.request.user)
+        evidence = serializer.save(created_by=self.request.user)
+        queue_customer_focus_index(evidence)
+
+    def perform_update(self, serializer):
+        evidence = serializer.save()
+        queue_customer_focus_index(evidence)
+
+    def perform_destroy(self, instance):
+        org_id = instance.organization_id
+        artifact_id = f'customer_focus_{instance.id}'
+        super().perform_destroy(instance)
+        remove_indexed_artifact(org_id, artifact_id)

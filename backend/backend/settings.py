@@ -213,6 +213,26 @@ SIMPLE_JWT = {
 AI_ASSISTANT_API_URL = os.getenv('AI_ASSISTANT_API_URL', 'https://api.openai.com/v1/chat/completions')
 AI_ASSISTANT_API_KEY = os.getenv('AI_ASSISTANT_API_KEY', '')
 AI_ASSISTANT_MODEL = os.getenv('AI_ASSISTANT_MODEL', 'gpt-4o-mini')
+AI_ASSISTANT_SUPPORTED_STANDARDS = os.getenv(
+    'AI_ASSISTANT_SUPPORTED_STANDARDS',
+    'ISO 9001, ISO 14001, ISO 45001, ISO 27001, ISO 42001'
+)
+AI_ASSISTANT_SYSTEM_PROMPT = os.getenv(
+    'AI_ASSISTANT_SYSTEM_PROMPT',
+    (
+        'Eres el asistente virtual de ISO Smart. Responde en español de forma breve, precisa y accionable. '
+        'Tu foco principal es orientar sobre sistemas de gestion, clausulas, evidencias, registros, riesgos, '
+        'auditorias, no conformidades, acciones correctivas e implementacion por etapas. '
+        'Normas prioritarias soportadas: {standards}. '
+        'Si la consulta menciona una norma, responde alineado a esa norma. Si no la menciona, prioriza ISO 9001 '
+        'como base y aclara cuando una recomendacion depende de la norma aplicable. '
+        'No inventes requisitos normativos. Si falta contexto, indicalo y pide la informacion minima necesaria. '
+        'Siempre sugiere el siguiente paso practico dentro del modulo actual cuando aplique.'
+    ).format(standards=os.getenv(
+        'AI_ASSISTANT_SUPPORTED_STANDARDS',
+        'ISO 9001, ISO 14001, ISO 45001, ISO 27001, ISO 42001'
+    ))
+)
 
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'noreply@isosmart.local')
 FRONTEND_BASE_URL = os.getenv('FRONTEND_BASE_URL', 'http://localhost:5173')
