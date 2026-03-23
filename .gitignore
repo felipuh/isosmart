@@ -78,3 +78,7 @@ data/chromadb/chroma.sqlite3
 frontend/.tmp-pw/isosmart_i18n_runtime_qa.spec.mjs
 frontend/.tmp-pw/pw-i18n-runtime.config.cjs
 logs/ai/frontend-out-0.log
+backend/logs/gunicorn.log
+backend/.env
+frontend/.env
+frontend/.env.production
