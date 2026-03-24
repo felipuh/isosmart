@@ -58,3 +58,40 @@ Expected baseline:
 - Keep AdminApps as product control center for all Smart3AI applications.
 - Register each upcoming product in AdminApps with lifecycle states.
 - Publish landing pages per product (ISO Smart first), with unified lead capture.
+
+## 7) Security hardening rollout (password policy)
+
+Apply these settings in both backends (`.env` or service environment):
+
+```bash
+PASSWORD_HISTORY_COUNT=5
+TEMP_PASSWORD_MAX_AGE_DAYS=7
+TEMP_PASSWORD_WARNING_DAYS=2
+```
+
+ISO Smart backend (`isosmart/backend`):
+
+```bash
+python manage.py migrate
+python manage.py check
+```
+
+AdminApps backend (`adminapps/backend`):
+
+```bash
+python manage.py check
+```
+
+## 8) Functional validation of temporary passwords
+
+- Create or reset a user from admin flow and confirm `must_change_password=true` on first login.
+- Login with a temporary password that is close to expiry and confirm `security_alert.reason_code=TEMP_PASSWORD_EXPIRING`.
+- Verify warning banner appears in:
+	- ISO Smart profile password section.
+	- AdminApps security settings section.
+- Change password and confirm temporary state is cleared (`must_change_password=false`, no `security_alert`).
+- Attempt password reuse in change/reset/create flows and confirm rejection with `reason_code=PASSWORD_REUSE_RECENT`.
+
+## 9) Operational note for local test execution
+
+- If ISO Smart tests fail creating `test_isosmart_main` with MySQL permission error (1044), grant test DB create privileges for the DB user or run tests against an isolated local test database profile.
