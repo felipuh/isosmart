@@ -64,7 +64,7 @@ const ProtectedRoute = ({
   allowedRoles = null,
   redirectTo = '/login' 
 }) => {
-  const { isAuthenticated, loading, hasRole } = useAuth();
+  const { isAuthenticated, loading, hasRole, mustChangePassword } = useAuth();
   const location = useLocation();
 
   // Mostrar spinner mientras carga
@@ -75,6 +75,10 @@ const ProtectedRoute = ({
   // Redirigir a login si no está autenticado
   if (!isAuthenticated) {
     return <Navigate to={redirectTo} state={{ from: location }} replace />;
+  }
+
+  if (mustChangePassword && location.pathname !== '/profile') {
+    return <Navigate to="/profile" state={{ from: location }} replace />;
   }
 
   // Verificar roles si se especificaron
@@ -91,7 +95,7 @@ const ProtectedRoute = ({
  * Redirige a home si ya está autenticado (útil para login/registro)
  */
 export const PublicRoute = ({ children, redirectTo = '/' }) => {
-  const { isAuthenticated, loading } = useAuth();
+  const { isAuthenticated, loading, mustChangePassword } = useAuth();
   const location = useLocation();
 
   if (loading) {
@@ -99,6 +103,10 @@ export const PublicRoute = ({ children, redirectTo = '/' }) => {
   }
 
   if (isAuthenticated) {
+    if (mustChangePassword) {
+      return <Navigate to="/profile" replace />;
+    }
+
     // Redirigir a donde venía o al home
     const from = location.state?.from?.pathname || redirectTo;
     return <Navigate to={from} replace />;

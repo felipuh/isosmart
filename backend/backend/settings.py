@@ -239,6 +239,7 @@ FRONTEND_BASE_URL = os.getenv('FRONTEND_BASE_URL', 'http://localhost:5173')
 PASSWORD_RESET_TOKEN_EXPIRY_MINUTES = int(os.getenv('PASSWORD_RESET_TOKEN_EXPIRY_MINUTES', '30'))
 PASSWORD_RESET_WINDOW_MINUTES = int(os.getenv('PASSWORD_RESET_WINDOW_MINUTES', '60'))
 PASSWORD_RESET_MAX_REQUESTS_PER_HOUR = int(os.getenv('PASSWORD_RESET_MAX_REQUESTS_PER_HOUR', '5'))
+PASSWORD_HISTORY_COUNT = int(os.getenv('PASSWORD_HISTORY_COUNT', '5'))
 
 # Login brute-force / account-lockout policy
 LOGIN_MAX_ATTEMPTS = int(os.getenv('LOGIN_MAX_ATTEMPTS', '5'))
@@ -268,7 +269,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-        'OPTIONS': {'min_length': 10},
+        'OPTIONS': {'min_length': 12},
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',

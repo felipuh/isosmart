@@ -36,6 +36,11 @@ const LoginPage = () => {
       const result = await login(normalizedEmail, password);
 
       if (result.success) {
+        if (result.mustChangePassword) {
+          navigate('/profile', { replace: true });
+          return;
+        }
+
         // Redirigir a donde venía o al dashboard
         const from = location.state?.from?.pathname || '/';
         navigate(from, { replace: true });

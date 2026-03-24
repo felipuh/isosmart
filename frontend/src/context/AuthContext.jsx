@@ -57,6 +57,7 @@ export const AuthProvider = ({ children }) => {
   const [currentOrganization, setCurrentOrganization] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const mustChangePassword = Boolean(user?.must_change_password);
 
   // Verificar autenticación al cargar
   useEffect(() => {
@@ -144,7 +145,10 @@ export const AuthProvider = ({ children }) => {
       
       setIsAuthenticated(true);
 
-      return { success: true };
+      return {
+        success: true,
+        mustChangePassword: Boolean(userData?.must_change_password),
+      };
     } catch (error) {
       console.error('Error de login:', error);
 
@@ -266,6 +270,11 @@ export const AuthProvider = ({ children }) => {
         new_password: newPassword,
         confirm_password: confirmPassword,
       });
+      setUser((currentUser) => (
+        currentUser
+          ? { ...currentUser, must_change_password: false }
+          : currentUser
+      ));
       return { success: true };
     } catch (error) {
       console.error('Error cambiando contraseña:', error);
@@ -342,6 +351,7 @@ export const AuthProvider = ({ children }) => {
     currentOrganization,
     loading,
     isAuthenticated,
+    mustChangePassword,
     
     // Acciones
     login,

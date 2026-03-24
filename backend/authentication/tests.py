@@ -105,6 +105,26 @@ class PasswordResetFlowTests(TestCase):
 
         self.assertEqual(response.status_code, 400)
 
+    def test_password_reset_confirm_rejects_recent_password_reuse(self):
+        self.user.password_history = [self.user.password]
+        self.user.set_password('AnotherStrongPass@123')
+        self.user.save(update_fields=['password', 'password_history'])
+        reset_token, raw_token = PasswordResetToken.issue_for_user(self.user)
+
+        response = self.client.post(
+            reverse('authentication:password-reset-confirm'),
+            {
+                'selector': reset_token.selector,
+                'token': raw_token,
+                'new_password': 'StrongPass@123',
+                'confirm_password': 'StrongPass@123',
+            },
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('reciente', str(response.data.get('detail', '')).lower())
+
 
 @override_settings(LOGIN_MAX_ATTEMPTS=3, LOGIN_LOCKOUT_MINUTES=15)
 class LoginLockoutTests(TestCase):
@@ -180,3 +200,46 @@ class LoginLockoutTests(TestCase):
             format='json',
         )
         self.assertEqual(response.status_code, 200)
+
+
+@override_settings(PASSWORD_HISTORY_COUNT=5)
+class PasswordReusePolicyTests(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        user_model = get_user_model()
+        self.user = user_model.objects.create_user(
+            email='reuse@isosmart.local',
+            password='StrongPass@123',
+            first_name='Reuse',
+            last_name='Policy',
+        )
+        self.org = Organization.objects.create(
+            name='Reuse Org',
+            slug='reuse-org',
+            email='reuse@org.com',
+        )
+        UserProfile.objects.create(
+            user=self.user,
+            organization=self.org,
+            role='org_admin',
+            is_active=True,
+        )
+        self.client.force_authenticate(user=self.user)
+
+    def test_change_password_rejects_recent_reuse(self):
+        self.user.password_history = [self.user.password]
+        self.user.set_password('AnotherStrongPass@123')
+        self.user.save(update_fields=['password', 'password_history'])
+
+        response = self.client.post(
+            reverse('authentication:change-password'),
+            {
+                'current_password': 'AnotherStrongPass@123',
+                'new_password': 'StrongPass@123',
+                'confirm_password': 'StrongPass@123',
+            },
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('reciente', str(response.data.get('detail', '')).lower())
