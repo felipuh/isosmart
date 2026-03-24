@@ -82,3 +82,4 @@ backend/logs/gunicorn.log
 backend/.env
 frontend/.env
 frontend/.env.production
+logs/ai/frontend-error-0.log
