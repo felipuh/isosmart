@@ -886,7 +886,7 @@ const MESSAGES = {
           connectionError: 'Error de conexión. Intenta nuevamente.',
         },
         footer: {
-          copyright: '© 2026 ISO Smart by Comtech',
+          copyright: '© 2026 ISO Smart by Smart3AI',
         },
       },
       passwordReset: {
@@ -4874,7 +4874,7 @@ const MESSAGES = {
           connectionError: 'Connection error. Please try again.',
         },
         footer: {
-          copyright: '© 2026 ISO Smart by Comtech',
+          copyright: '© 2026 ISO Smart by Smart3AI',
         },
       },
       passwordReset: {
@@ -8853,7 +8853,7 @@ const MESSAGES = {
           connectionError: 'Erro de conexão. Tente novamente.',
         },
         footer: {
-          copyright: '© 2026 ISO Smart by Comtech',
+          copyright: '© 2026 ISO Smart by Smart3AI',
         },
       },
       passwordReset: {
