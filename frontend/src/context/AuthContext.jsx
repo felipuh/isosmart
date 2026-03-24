@@ -55,6 +55,7 @@ export const AuthProvider = ({ children }) => {
   const [profile, setProfile] = useState(null);
   const [organizations, setOrganizations] = useState([]);
   const [currentOrganization, setCurrentOrganization] = useState(null);
+  const [securityAlert, setSecurityAlert] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const mustChangePassword = Boolean(user?.must_change_password);
@@ -139,6 +140,7 @@ export const AuthProvider = ({ children }) => {
       setUser(userData);
       setProfile(profileData);
       setOrganizations(orgs || []);
+      setSecurityAlert(response.data.security_alert || null);
       
       const current = orgs?.find(org => org.is_current);
       setCurrentOrganization(current || orgs?.[0]);
@@ -148,6 +150,7 @@ export const AuthProvider = ({ children }) => {
       return {
         success: true,
         mustChangePassword: Boolean(userData?.must_change_password),
+        securityAlert: response.data.security_alert || null,
       };
     } catch (error) {
       console.error('Error de login:', error);
@@ -195,6 +198,7 @@ export const AuthProvider = ({ children }) => {
     setProfile(null);
     setOrganizations([]);
     setCurrentOrganization(null);
+    setSecurityAlert(null);
     setIsAuthenticated(false);
   };
 
@@ -275,6 +279,7 @@ export const AuthProvider = ({ children }) => {
           ? { ...currentUser, must_change_password: false }
           : currentUser
       ));
+      setSecurityAlert(null);
       return { success: true };
     } catch (error) {
       console.error('Error cambiando contraseña:', error);
@@ -349,6 +354,7 @@ export const AuthProvider = ({ children }) => {
     profile,
     organizations,
     currentOrganization,
+    securityAlert,
     loading,
     isAuthenticated,
     mustChangePassword,

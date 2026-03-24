@@ -2,6 +2,8 @@ from django.contrib.auth import get_user_model
 from django.core import mail
 from django.test import TestCase, override_settings
 from django.urls import reverse
+from django.utils import timezone
+from datetime import timedelta
 from rest_framework.test import APIClient
 
 from authentication.models import PasswordResetToken, UserProfile
@@ -243,3 +245,58 @@ class PasswordReusePolicyTests(TestCase):
 
         self.assertEqual(response.status_code, 400)
         self.assertIn('reciente', str(response.data.get('detail', '')).lower())
+        self.assertEqual(response.data.get('reason_code'), 'PASSWORD_REUSE_RECENT')
+
+
+@override_settings(TEMP_PASSWORD_MAX_AGE_DAYS=7, TEMP_PASSWORD_WARNING_DAYS=2)
+class TemporaryPasswordLoginPolicyTests(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        user_model = get_user_model()
+        self.user = user_model.objects.create_user(
+            email='temp-password@isosmart.local',
+            password='StrongPass@123',
+            first_name='Temp',
+            last_name='Password',
+        )
+        self.org = Organization.objects.create(
+            name='Temp Org',
+            slug='temp-org',
+            email='temp-org@isosmart.local',
+        )
+        UserProfile.objects.create(
+            user=self.user,
+            organization=self.org,
+            role='user',
+            is_active=True,
+        )
+        self.login_url = reverse('authentication:login')
+
+    def test_login_rejects_expired_temporary_password(self):
+        self.user.must_change_password = True
+        self.user.temporary_password_set_at = timezone.now() - timedelta(days=8)
+        self.user.save(update_fields=['must_change_password', 'temporary_password_set_at'])
+
+        response = self.client.post(
+            self.login_url,
+            {'email': self.user.email, 'password': 'StrongPass@123'},
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('TEMP_PASSWORD_EXPIRED', str(response.data.get('reason_code')))
+
+    def test_login_includes_warning_for_soon_expiring_temporary_password(self):
+        self.user.must_change_password = True
+        self.user.temporary_password_set_at = timezone.now() - timedelta(days=6)
+        self.user.save(update_fields=['must_change_password', 'temporary_password_set_at'])
+
+        response = self.client.post(
+            self.login_url,
+            {'email': self.user.email, 'password': 'StrongPass@123'},
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('security_alert', response.data)
+        self.assertEqual(response.data['security_alert'].get('reason_code'), 'TEMP_PASSWORD_EXPIRING')

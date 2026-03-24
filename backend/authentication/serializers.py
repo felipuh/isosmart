@@ -5,9 +5,25 @@ Serializers de Autenticación para ISO Smart
 from rest_framework import serializers
 from django.conf import settings
 from django.contrib.auth import authenticate
+from django.contrib.auth.hashers import check_password
 from django.contrib.auth.password_validation import validate_password
+from django.utils import timezone
 from .models import PasswordResetToken, User, UserProfile
 from core.models import Organization
+
+
+PASSWORD_REUSE_REASON_CODE = 'PASSWORD_REUSE_RECENT'
+TEMP_PASSWORD_EXPIRED_REASON_CODE = 'TEMP_PASSWORD_EXPIRED'
+
+
+def _is_password_reused(user, raw_password):
+    if check_password(raw_password, user.password):
+        return True
+
+    for previous_hash in (user.password_history or []):
+        if previous_hash and check_password(raw_password, previous_hash):
+            return True
+    return False
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -101,6 +117,29 @@ class LoginSerializer(serializers.Serializer):
 
             # Successful authentication — clear any previous failures
             user.reset_login_attempts()
+
+            temporary_expiry = user.get_temporary_password_expiry()
+            if temporary_expiry and timezone.now() >= temporary_expiry:
+                raise serializers.ValidationError(
+                    {
+                        'detail': 'Tu contraseña temporal ha expirado. Solicita un restablecimiento con un administrador.',
+                        'reason_code': TEMP_PASSWORD_EXPIRED_REASON_CODE,
+                    },
+                    code='authorization',
+                )
+
+            temp_password_warning = None
+            if temporary_expiry:
+                warning_days = max(0, int(getattr(settings, 'TEMP_PASSWORD_WARNING_DAYS', 2)))
+                seconds_left = (temporary_expiry - timezone.now()).total_seconds()
+                if seconds_left > 0:
+                    days_left = int((seconds_left - 1) // 86400) + 1
+                    if days_left <= warning_days:
+                        temp_password_warning = {
+                            'reason_code': 'TEMP_PASSWORD_EXPIRING',
+                            'days_left': days_left,
+                            'expires_at': temporary_expiry,
+                        }
             
             # Obtener perfil de organización
             profiles = UserProfile.objects.filter(user=user, is_active=True)
@@ -132,6 +171,7 @@ class LoginSerializer(serializers.Serializer):
             
             attrs['user'] = user
             attrs['profile'] = profile
+            attrs['temp_password_warning'] = temp_password_warning
             
         else:
             raise serializers.ValidationError(
@@ -231,6 +271,16 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({
                 'confirm_password': 'Las contraseñas no coinciden.'
             })
+
+        existing_user = User.objects.filter(email=attrs['email']).first()
+        if existing_user:
+            if _is_password_reused(existing_user, attrs['password']):
+                raise serializers.ValidationError({
+                    'detail': 'No puedes reutilizar una contraseña reciente en esta alta/invitación.',
+                    'reason_code': PASSWORD_REUSE_REASON_CODE,
+                })
+            raise serializers.ValidationError({'email': 'Este correo ya está registrado.'})
+
         return attrs
     
     def create(self, validated_data):
@@ -250,8 +300,8 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         )
 
         # Enforce first-login password rotation for new tenant users.
-        user.must_change_password = True
-        user.save(update_fields=['must_change_password'])
+        user.mark_temporary_password()
+        user.save(update_fields=['must_change_password', 'temporary_password_set_at'])
         
         return user
 

@@ -38,6 +38,8 @@ from .permissions import IsOrgAdmin
 
 logger = logging.getLogger(__name__)
 
+PASSWORD_REUSE_REASON_CODE = 'PASSWORD_REUSE_RECENT'
+
 
 def _password_history_limit():
     return max(1, int(getattr(settings, 'PASSWORD_HISTORY_COUNT', 5)))
@@ -100,7 +102,10 @@ def _audit_password_reuse_rejected(user, request, flow):
         'password_reuse_rejected',
         request,
         'Intento de reutilizacion de contrasena bloqueado',
-        details={'flow': flow},
+        details={
+            'flow': flow,
+            'reason_code': PASSWORD_REUSE_REASON_CODE,
+        },
     )
 
 
@@ -165,6 +170,8 @@ class LoginView(APIView):
             'profile': UserProfileSerializer(profile).data,
             'organizations': organizations,
         }
+        if serializer.validated_data.get('temp_password_warning'):
+            response_data['security_alert'] = serializer.validated_data['temp_password_warning']
         
         return Response(response_data, status=status.HTTP_200_OK)
 
@@ -381,14 +388,17 @@ class ChangePasswordView(APIView):
         if _is_password_reused(user, new_password):
             _audit_password_reuse_rejected(user, request, flow='change_password')
             return Response(
-                {'detail': 'No puedes reutilizar una contraseña reciente. Elige una nueva.'},
+                {
+                    'detail': 'No puedes reutilizar una contraseña reciente. Elige una nueva.',
+                    'reason_code': PASSWORD_REUSE_REASON_CODE,
+                },
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
         user.password_history = _build_password_history(user)
         user.set_password(serializer.validated_data['new_password'])
-        user.must_change_password = False
-        user.save(update_fields=['password', 'must_change_password', 'password_history'])
+        user.clear_temporary_password_flag()
+        user.save(update_fields=['password', 'must_change_password', 'password_history', 'temporary_password_set_at'])
         
         return Response(
             {'detail': 'Contraseña actualizada exitosamente.'},
@@ -490,13 +500,17 @@ class PasswordResetConfirmView(APIView):
         if _is_password_reused(user, new_password):
             _audit_password_reuse_rejected(user, request, flow='password_reset_confirm')
             return Response(
-                {'detail': 'No puedes reutilizar una contraseña reciente. Elige una nueva.'},
+                {
+                    'detail': 'No puedes reutilizar una contraseña reciente. Elige una nueva.',
+                    'reason_code': PASSWORD_REUSE_REASON_CODE,
+                },
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
         user.password_history = _build_password_history(user)
         user.set_password(serializer.validated_data['new_password'])
-        user.save(update_fields=['password', 'password_history'])
+        user.clear_temporary_password_flag()
+        user.save(update_fields=['password', 'password_history', 'must_change_password', 'temporary_password_set_at'])
 
         reset_token.mark_used()
         PasswordResetToken.objects.filter(

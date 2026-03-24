@@ -7,6 +7,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
+from django.conf import settings
 from datetime import timedelta
 import hashlib
 import secrets
@@ -72,6 +73,7 @@ class User(AbstractUser):
     account_locked_until = models.DateTimeField(null=True, blank=True)
     must_change_password = models.BooleanField(default=False)
     password_history = models.JSONField(default=list, blank=True)
+    temporary_password_set_at = models.DateTimeField(null=True, blank=True)
 
     def is_locked(self):
         """Return True when the account is temporarily locked due to failed logins."""
@@ -94,6 +96,24 @@ class User(AbstractUser):
             )
             self.failed_login_attempts = 0
             self.account_locked_until = None
+
+    def mark_temporary_password(self, when=None):
+        """Mark that user currently has a temporary password pending first-login rotation."""
+        timestamp = when or timezone.now()
+        self.must_change_password = True
+        self.temporary_password_set_at = timestamp
+
+    def clear_temporary_password_flag(self):
+        """Clear temporary-password tracking once user sets their own password."""
+        self.must_change_password = False
+        self.temporary_password_set_at = None
+
+    def get_temporary_password_expiry(self):
+        """Return expiry datetime for temporary password policy when applicable."""
+        if not self.must_change_password or not self.temporary_password_set_at:
+            return None
+        max_days = int(getattr(settings, 'TEMP_PASSWORD_MAX_AGE_DAYS', 7))
+        return self.temporary_password_set_at + timedelta(days=max_days)
 
 
 class UserProfile(models.Model):

@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { useI18n } from '../context/I18nContext';
 
 const ProfilePage = () => {
-  const { user, profile, currentOrganization, changePassword, mustChangePassword } = useAuth();
+  const { user, profile, currentOrganization, changePassword, mustChangePassword, securityAlert } = useAuth();
   const { t } = useI18n();
 
   const [currentPassword, setCurrentPassword] = useState('');
@@ -94,6 +94,11 @@ const ProfilePage = () => {
             {mustChangePassword && (
               <div className="mb-5 rounded-xl border border-amber-200 dark:border-amber-900/50 bg-amber-50 dark:bg-amber-900/20 px-4 py-3 text-sm text-amber-800 dark:text-amber-200">
                 Debes cambiar tu contrasena inicial antes de continuar. Usa una frase o contrasena de al menos 12 caracteres y evita datos predecibles.
+              </div>
+            )}
+            {mustChangePassword && securityAlert?.reason_code === 'TEMP_PASSWORD_EXPIRING' && (
+              <div className="mb-5 rounded-xl border border-orange-200 dark:border-orange-900/50 bg-orange-50 dark:bg-orange-900/20 px-4 py-3 text-sm text-orange-800 dark:text-orange-200">
+                Tu contrasena temporal vence en {securityAlert.days_left} dia(s). Cambiala ahora para evitar bloqueo de acceso.
               </div>
             )}
             <p className="text-sm text-slate-500 dark:text-slate-400 mb-5">{t('profilePage.passwordHint')}</p>
