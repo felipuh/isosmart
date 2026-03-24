@@ -19,7 +19,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             'id', 'email', 'first_name', 'last_name', 'full_name',
-            'is_active', 'last_login', 'date_joined'
+            'is_active', 'must_change_password', 'last_login', 'date_joined'
         ]
         read_only_fields = ['id', 'date_joined', 'last_login']
     
@@ -248,6 +248,10 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             role=role,
             phone=phone,
         )
+
+        # Enforce first-login password rotation for new tenant users.
+        user.must_change_password = True
+        user.save(update_fields=['must_change_password'])
         
         return user
 

@@ -70,6 +70,7 @@ class User(AbstractUser):
     # ── Login lockout ──────────────────────────────────────────────────────────
     failed_login_attempts = models.PositiveSmallIntegerField(default=0)
     account_locked_until = models.DateTimeField(null=True, blank=True)
+    must_change_password = models.BooleanField(default=False)
 
     def is_locked(self):
         """Return True when the account is temporarily locked due to failed logins."""

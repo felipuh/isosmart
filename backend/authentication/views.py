@@ -338,7 +338,8 @@ class ChangePasswordView(APIView):
         
         user = request.user
         user.set_password(serializer.validated_data['new_password'])
-        user.save()
+        user.must_change_password = False
+        user.save(update_fields=['password', 'must_change_password'])
         
         return Response(
             {'detail': 'Contraseña actualizada exitosamente.'},
