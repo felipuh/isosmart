@@ -628,6 +628,122 @@ class SettingsBackupHistoryTests(TestCase):
             ).exists()
         )
 
+    def test_complete_onboarding_saves_profile_and_marks_completed(self):
+        payload = {
+            'organization_id': self.org_a.id,
+            'enabled_standards': ['ISO9001_2015'],
+            'preferred_language': 'es-LATAM',
+            'preferred_response_tone': 'manager',
+            'onboarding_profile': {
+                'role': 'quality_manager',
+                'expertise_level': 'intermediate',
+                'size_range': '51-200',
+                'sector': 'manufacturing',
+                'employees_count': 120,
+                'sites_count': 2,
+                'countries': ['Costa Rica'],
+                'certification_status': 'in_progress',
+            },
+        }
+        response = self.client.post(
+            reverse('settings-complete-onboarding'),
+            payload,
+            format='json',
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['organization_id'], self.org_a.id)
+
+        settings = OrganizationSettings.objects.get(organization=self.org_a)
+        self.assertTrue(settings.onboarding_completed)
+        self.assertIsNotNone(settings.onboarding_completed_at)
+        self.assertEqual(settings.onboarding_completed_by, self.user)
+        self.assertEqual(settings.preferred_response_tone, 'manager')
+        self.assertEqual(settings.preferred_language, 'es-LATAM')
+        self.assertEqual(settings.onboarding_profile['role'], 'quality_manager')
+        self.assertEqual(settings.onboarding_profile['employees_count'], 120)
+
+    def test_complete_onboarding_rejects_invalid_tone(self):
+        payload = {
+            'organization_id': self.org_a.id,
+            'preferred_response_tone': 'informal',
+        }
+        response = self.client.post(
+            reverse('settings-complete-onboarding'),
+            payload,
+            format='json',
+        )
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('error', response.data)
+
+    def test_complete_onboarding_rejects_non_dict_profile(self):
+        payload = {
+            'organization_id': self.org_a.id,
+            'onboarding_profile': 'not-a-dict',
+        }
+        response = self.client.post(
+            reverse('settings-complete-onboarding'),
+            payload,
+            format='json',
+        )
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('error', response.data)
+
+    def test_run_onboarding_orchestration_creates_snapshot(self):
+        # Set up profile first
+        settings = OrganizationSettings.objects.get(organization=self.org_a)
+        settings.onboarding_profile = {
+            'role': 'quality_manager',
+            'expertise_level': 'intermediate',
+            'size_range': '51-200',
+            'sector': 'manufacturing',
+            'employees_count': 120,
+            'sites_count': 1,
+            'countries': ['Costa Rica'],
+            'certification_status': 'in_progress',
+        }
+        settings.save()
+
+        response = self.client.post(
+            reverse('settings-run-onboarding-orchestration'),
+            {'organization_id': self.org_a.id},
+            format='json',
+        )
+        self.assertEqual(response.status_code, 201)
+        self.assertIn('message', response.data)
+        self.assertIn('snapshot', response.data)
+        self.assertIn('version', response.data['snapshot'])
+
+        # Snapshot must be persisted
+        snapshot_count = OnboardingInsightSnapshot.objects.filter(organization=self.org_a).count()
+        self.assertEqual(snapshot_count, 1)
+
+    def test_run_onboarding_orchestration_increments_version(self):
+        """Running orchestration twice → version increments."""
+        settings = OrganizationSettings.objects.get(organization=self.org_a)
+        settings.onboarding_profile = {'role': 'ceo', 'expertise_level': 'novice', 'size_range': '10-50'}
+        settings.save()
+
+        self.client.post(
+            reverse('settings-run-onboarding-orchestration'),
+            {'organization_id': self.org_a.id},
+            format='json',
+        )
+        response2 = self.client.post(
+            reverse('settings-run-onboarding-orchestration'),
+            {'organization_id': self.org_a.id},
+            format='json',
+        )
+        self.assertEqual(response2.status_code, 201)
+        self.assertEqual(response2.data['snapshot']['version'], 2)
+
+    def test_run_onboarding_orchestration_forbidden_for_foreign_org(self):
+        response = self.client.post(
+            reverse('settings-run-onboarding-orchestration'),
+            {'organization_id': self.org_b.id},
+            format='json',
+        )
+        self.assertEqual(response.status_code, 403)
+
 
 class BusinessReportTests(TestCase):
     """Tests for GET /api/reports/ — PDF, XLSX, and CSV report generation."""

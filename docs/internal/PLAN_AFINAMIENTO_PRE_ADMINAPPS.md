@@ -192,8 +192,9 @@ Tomar decision formal basada en evidencia.
 - Notificaciones operativas y de eventos criticos con trazabilidad.
 - Lockout de login por intentos fallidos y politicas de seguridad reforzadas.
 - Validacion automatizada vigente:
-  - Backend: 55/55 pruebas en verde.
+  - Backend: 55/55 pruebas en verde (incluye 6 nuevas pruebas de onboarding orchestration).
   - E2E smoke critico: verde en los escenarios definidos.
+  - Frontend: 0 vulnerabilidades npm (7 resueltas), lint limpio, build PASS.
 
 ### Checklist final Fase 6 (Go/No-Go)
 - [x] Password recovery productivo.

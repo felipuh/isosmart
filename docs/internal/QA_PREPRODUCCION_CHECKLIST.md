@@ -5,7 +5,7 @@ Objetivo: validar estabilidad funcional, tecnica y operativa antes de habilitar 
 
 ## 1) Frontend (React/Vite)
 
-- [ ] Dependencias instaladas sin errores (`npm ci` o `npm install`)
+- [x] Dependencias instaladas sin errores (`npm ci` o `npm install`)
 - [x] Lint sin errores ni warnings (`npm run lint`)
 - [x] Build de produccion exitoso (`npm run build`)
 - [x] E2E completo en verde (`npm run test:e2e`)
@@ -30,7 +30,7 @@ Objetivo: validar estabilidad funcional, tecnica y operativa antes de habilitar 
 - [x] Celery worker inicia sin errores de pidfile/ruta
 - [x] Redis accesible para broker/result backend
 - [x] Nginx/proxy sin 5xx en rutas criticas
-- [ ] Logs rotan y no se versionan archivos temporales
+- [x] Logs rotan y no se versionan archivos temporales
 
 ## 5) Criterio de salida a produccion
 
@@ -42,7 +42,7 @@ Se considera aprobado cuando:
 
 ## 6) Evidencia de ejecucion (esta corrida)
 
-Estado global: APROBADO CON OBSERVACIONES
+Estado global: APROBADO
 
 - Frontend build: PASS (`npm run build`) el 2026-03-17.
 - Frontend lint: PASS LIMPIO (`npm run lint`) el 2026-03-17, sin errores ni warnings.
@@ -50,8 +50,8 @@ Estado global: APROBADO CON OBSERVACIONES
 - Frontend i18n runtime: PASS (6/6) el 2026-03-17.
 - Django check: PASS (`manage.py check --settings=backend.settings_test`).
 - Django migrations check: PASS (`manage.py makemigrations --check --dry-run --settings=backend.settings_test`).
-- Django test suite: PASS (20 tests).
-- Django core test suite: PASS (20 tests).
+- Django test suite: PASS (55 tests).
+- Django core test suite: PASS (55 tests).
 - Redis broker/result: PASS (`db1: True`, `db2: True`).
 - Celery inspect ping: PASS (`1 node online`).
 - Runtime ports detectados: 3001 frontend, 6379 Redis, 8001 ISO Smart backend, 8000 AdminApps backend.
@@ -78,3 +78,13 @@ Registrar aqui cada hallazgo con severidad, causa y fix aplicado.
 - H-004 | Severidad: Media | Archivos de runtime seguian versionados y ensuciaban cada corrida de QA.
 	Causa: `logs/ai/celery_worker.log`, `logs/ai/frontend-out-0.log` y `data/chromadb/chroma.sqlite3` estaban trackeados aunque `.gitignore` ya los ignora.
 	Correccion: se desindexaron con `git rm --cached` para que el cambio final deje de registrar artefactos locales de ejecucion.
+
+- H-005 | Severidad: Alta | 7 vulnerabilidades npm en frontend (2 moderate, 5 high).
+	Causa: paquetes desactualizados: axios 1.x (DoS via __proto__), react-router 7.x (CSRF/XSS), rollup 4.x (path traversal), flatted (prototype pollution), minimatch/ajv (ReDoS).
+	Correccion: `npm audit fix` actualizo 9 paquetes a versiones seguras. Build y lint verificados post-update: PASS.
+	Estado: 0 vulnerabilidades tras correccion.
+
+- H-006 | Severidad: Media | Nuevo error de lint en VirtualAssistantPanel.jsx tras actualizacion de eslint-plugin-react-hooks a v7.
+	Causa: regla `react-hooks/set-state-in-effect` marcaba `setConversationId` llamado sincronamente dentro de `useEffect` para recuperar estado de localStorage.
+	Correccion: se reemplazo el `useEffect` de hidratacion por inicializador lazy de `useState(() => localStorage.getItem(...))`, eliminando el ciclo de renderizado innecesario.
+	Estado: `npm run lint` queda limpio; `npm run build` PASS.

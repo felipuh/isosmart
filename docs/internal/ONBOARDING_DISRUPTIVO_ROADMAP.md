@@ -22,7 +22,7 @@ Fecha: 2026-02-27
   - `preferred_response_tone` (manager|technical)
 - Endpoint de finalización de onboarding extendido con validaciones.
 
-## Fase 2 - Motores de valor inmediato (siguiente)
+## Fase 2 - Motores de valor inmediato (completada)
 
 Objetivo: devolver valor en la misma sesión inicial.
 

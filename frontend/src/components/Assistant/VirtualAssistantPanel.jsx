@@ -36,7 +36,10 @@ const VirtualAssistantPanel = () => {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState('');
   const [sending, setSending] = useState(false);
-  const [conversationId, setConversationId] = useState(null);
+  const [conversationId, setConversationId] = useState(() => {
+    const persisted = localStorage.getItem(ASSISTANT_CONVERSATION_STORAGE_KEY);
+    return persisted ? Number(persisted) : null;
+  });
   const [hydrated, setHydrated] = useState(false);
   const [messages, setMessages] = useState([
     {
@@ -53,13 +56,6 @@ const VirtualAssistantPanel = () => {
     ],
     [t]
   );
-
-  useEffect(() => {
-    const persistedId = localStorage.getItem(ASSISTANT_CONVERSATION_STORAGE_KEY);
-    if (persistedId && !conversationId) {
-      setConversationId(Number(persistedId));
-    }
-  }, [conversationId]);
 
   useEffect(() => {
     if (conversationId) {
