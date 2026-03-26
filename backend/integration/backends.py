@@ -5,6 +5,7 @@ Valida credenciales contra Admin Apps
 from django.contrib.auth.backends import BaseBackend
 from django.contrib.auth import get_user_model
 from django.utils.text import slugify
+from django.db import IntegrityError
 from .client import admin_apps_client
 import logging
 
@@ -148,16 +149,32 @@ class AdminAppsAuthBackend(BaseBackend):
                 )
                 logger.info(f"Organizacion creada desde Admin Apps: {organization.name}")
 
-                # Crear o actualizar perfil
+            # Crear o actualizar perfil
             mapped_role = ROLE_MAP.get(role, 'user')
-            UserProfile.objects.update_or_create(
-                user=user,
-                organization=organization,
-                defaults={
-                    'role': mapped_role,
-                    'is_active': True,
-                }
-            )
+            try:
+                UserProfile.objects.update_or_create(
+                    user=user,
+                    organization=organization,
+                    defaults={
+                        'role': mapped_role,
+                        'is_active': True,
+                    }
+                )
+            except IntegrityError:
+                # Legacy schemas may keep a unique index on user_id only.
+                # In that case, repoint the existing profile to the synchronized organization.
+                existing_profile = UserProfile.objects.filter(user=user).first()
+                if not existing_profile:
+                    raise
+                existing_profile.organization = organization
+                existing_profile.role = mapped_role
+                existing_profile.is_active = True
+                existing_profile.save(update_fields=['organization', 'role', 'is_active'])
+                logger.warning(
+                    "Perfil de usuario reasignado por restriccion unica legacy. user=%s org=%s",
+                    user.id,
+                    organization.id,
+                )
         
         return user
     

@@ -121,8 +121,23 @@ class AdminAppsSyncMiddleware:
     
     def __call__(self, request):
         # Solo para usuarios autenticados
+        request.org_sync_blocked = False
         if hasattr(request, 'user') and request.user.is_authenticated:
-            self._maybe_sync_user(request)
+            request.org_sync_blocked = not self._maybe_sync_user(request)
+
+        # Deny non-auth API requests when org has been deprovisioned in AdminApps.
+        if (
+            request.org_sync_blocked
+            and request.path.startswith('/api/')
+            and not request.path.startswith('/api/auth/')
+        ):
+            return JsonResponse(
+                {
+                    'error': 'Tu organizacion ya no existe en AdminApps y el acceso fue revocado.',
+                    'code': 'organization_not_synced',
+                },
+                status=403,
+            )
         
         return self.get_response(request)
     
@@ -136,12 +151,39 @@ class AdminAppsSyncMiddleware:
         
         if last_sync is None:
             # Nunca sincronizado o caché expirada
-            self._sync_user(request)
+            sync_ok = self._sync_user(request)
             cache.set(cache_key, timezone.now().isoformat(), self.SYNC_INTERVAL)
+            return sync_ok
+
+        return True
     
     def _sync_user(self, request):
         """Sincroniza datos del usuario desde Admin Apps"""
         organization_id = getattr(request, 'organization_id', None)
+
+        # Validate that currently selected organization still exists in AdminApps.
+        if organization_id:
+            try:
+                from authentication.models import UserProfile
+                profile = UserProfile.objects.select_related('organization').filter(
+                    user=request.user,
+                    organization_id=organization_id,
+                    is_active=True,
+                ).first()
+                external_org_id = profile.organization.external_id if profile else None
+            except Exception:
+                external_org_id = None
+
+            if external_org_id:
+                org_result = admin_apps_client.get_organization(external_org_id, use_cache=False)
+                if org_result.get('code') == 'not_found':
+                    logger.warning(
+                        "Org deprovisionada detectada. user=%s org_local=%s org_external=%s",
+                        request.user.id,
+                        organization_id,
+                        external_org_id,
+                    )
+                    return False
         
         result = admin_apps_client.get_user(
             request.user.id,
@@ -155,3 +197,6 @@ class AdminAppsSyncMiddleware:
                 request.user.first_name = user_data.get('first_name', request.user.first_name)
                 request.user.last_name = user_data.get('last_name', request.user.last_name)
                 request.user.save(update_fields=['first_name', 'last_name'])
+
+        # Do not block access for temporary integration outages.
+        return True

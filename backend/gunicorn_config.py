@@ -1,4 +1,23 @@
 import multiprocessing
+import os
+from pathlib import Path
+
+
+def _load_env_file(env_path):
+    values = {}
+    if not env_path.exists():
+        return values
+
+    for raw_line in env_path.read_text().splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        key = key.strip()
+        value = value.strip().strip('"').strip("'")
+        values[key] = value
+
+    return values
 
 # Configuración del servidor
 bind = "127.0.0.1:8001"
@@ -34,7 +53,34 @@ chdir = "/home/aplicacion/projects/isosmart/backend"
 reload = False
 
 # Variables de entorno
-raw_env = [
-    "DJANGO_SETTINGS_MODULE=backend.settings",
-    "PYTHONPATH=/home/aplicacion/projects/isosmart/backend",
-]
+env_file_values = _load_env_file(Path(chdir) / ".env")
+env_vars = {
+    "DJANGO_SETTINGS_MODULE": "backend.settings",
+    "PYTHONPATH": chdir,
+}
+
+for key in [
+    "DB_HOST",
+    "DB_PORT",
+    "DB_NAME",
+    "DB_USER",
+    "DB_PASSWORD",
+    "AI_DB_HOST",
+    "AI_DB_PORT",
+    "AI_DB_NAME",
+    "AI_DB_USER",
+    "AI_DB_PASSWORD",
+    "AUDIT_DB_HOST",
+    "AUDIT_DB_PORT",
+    "AUDIT_DB_NAME",
+    "AUDIT_DB_USER",
+    "AUDIT_DB_PASSWORD",
+    "ADMIN_APPS_API_KEY",
+    "ADMIN_APPS_BASE_URL",
+    "SECRET_KEY",
+]:
+    value = os.getenv(key, env_file_values.get(key))
+    if value:
+        env_vars[key] = value
+
+raw_env = [f"{key}={value}" for key, value in env_vars.items()]

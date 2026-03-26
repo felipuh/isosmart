@@ -20,16 +20,31 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / '.env')
 
 
+def _env_bool(name, default=False):
+    value = os.getenv(name)
+    if value is None:
+        return default
+    return value.strip().lower() in ('1', 'true', 'yes', 'on')
+
+
+def _env_list(name, default=''):
+    value = os.getenv(name, default)
+    return [item.strip() for item in value.split(',') if item.strip()]
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-u7*jsa)d!to@r13ni5y_^5m!kkzy)vhh=xc@h%@#l9j8k=etd3')
+SECRET_KEY = os.getenv('SECRET_KEY', 'change-this-dev-secret-key-before-deploy')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = _env_bool('DEBUG', default=True)
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = _env_list(
+    'ALLOWED_HOSTS',
+    default='localhost,127.0.0.1,192.168.100.100,isosmart.local'
+)
 
 
 # Application definition
@@ -65,11 +80,12 @@ INSTALLED_APPS = [
 
 # Configuración de integración
 ADMIN_APPS_INTEGRATION = {
-    'BASE_URL': 'http://127.0.0.1:8000/api/integration',
-    'API_KEY': 'isosmart-integration-key-2025',
-    'TIMEOUT': 10,
-    'CACHE_TTL': 300,
-    'SYNC_USERS': True,
+    'BASE_URL': os.getenv('ADMIN_APPS_BASE_URL', 'http://127.0.0.1:8000/api/integration'),
+    # Keep env override as primary source; fallback keeps local/dev auth integration functional.
+    'API_KEY': os.getenv('ADMIN_APPS_API_KEY', 'isosmart-integration-key-2025'),
+    'TIMEOUT': int(os.getenv('ADMIN_APPS_TIMEOUT', '10')),
+    'CACHE_TTL': int(os.getenv('ADMIN_APPS_CACHE_TTL', '300')),
+    'SYNC_USERS': _env_bool('ADMIN_APPS_SYNC_USERS', default=True),
 }
 
 # Patrones de URL por módulo
@@ -93,10 +109,17 @@ COMMERCIAL_ENABLED_STANDARDS_BY_ORG = {
     # 3: ['ISO9001_2015', 'ISO27001_2022'],
 }
 
+# Politica comercial de organizacion duena (Smart3AI)
+OWNER_ORGANIZATION_ONLY_ACCESS = _env_bool('OWNER_ORGANIZATION_ONLY_ACCESS', default=True)
+OWNER_ORGANIZATION_SLUG = os.getenv('OWNER_ORGANIZATION_SLUG', 'smart3ai')
+OWNER_ORGANIZATION_NAME = os.getenv('OWNER_ORGANIZATION_NAME', 'Smart3AI')
+OWNER_ORGANIZATION_EXTERNAL_ID = os.getenv('OWNER_ORGANIZATION_EXTERNAL_ID', '').strip()
+OWNER_ORGANIZATION_BILLING_EXEMPT = _env_bool('OWNER_ORGANIZATION_BILLING_EXEMPT', default=True)
+
 # Configuración de REST Framework
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',  # Permitir acceso anónimo por defecto
+        'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',  # JWT authentication
@@ -104,12 +127,19 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 20,
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': os.getenv('THROTTLE_ANON_RATE', '60/minute'),
+        'user': os.getenv('THROTTLE_USER_RATE', '300/minute'),
+    },
 }
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'backend.middleware.CsrfExemptAPIMiddleware',
@@ -149,11 +179,11 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'isosmart_main',
-        'USER': 'isosmart',
-        'PASSWORD': '1s05M4rtNeuraxis',  # Usa tu password
-        'HOST': '192.168.100.105',  # IP del servidor de BD
-        'PORT': '3306',
+        'NAME': os.getenv('DB_NAME', 'isosmart_main'),
+        'USER': os.getenv('DB_USER', 'isosmart'),
+        'PASSWORD': os.getenv('DB_PASSWORD', ''),
+        'HOST': os.getenv('DB_HOST', '192.168.100.105'),
+        'PORT': os.getenv('DB_PORT', '3306'),
         'OPTIONS': {
             'charset': 'utf8mb4',
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
@@ -163,22 +193,22 @@ DATABASES = {
     # Bases adicionales para IA y auditoría
     'ai_db': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'isosmart_ai',
-        'USER': 'isosmart',
-        'PASSWORD': '1s05M4rtNeuraxis',
-        'HOST': '192.168.100.105',
-        'PORT': '3306',
+        'NAME': os.getenv('AI_DB_NAME', 'isosmart_ai'),
+        'USER': os.getenv('AI_DB_USER', os.getenv('DB_USER', 'isosmart')),
+        'PASSWORD': os.getenv('AI_DB_PASSWORD', os.getenv('DB_PASSWORD', '')),
+        'HOST': os.getenv('AI_DB_HOST', os.getenv('DB_HOST', '192.168.100.105')),
+        'PORT': os.getenv('AI_DB_PORT', os.getenv('DB_PORT', '3306')),
         'OPTIONS': {
             'charset': 'utf8mb4',
         }
     },
     'audit_db': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'isosmart_audit',
-        'USER': 'isosmart',
-        'PASSWORD': '1s05M4rtNeuraxis',
-        'HOST': '192.168.100.105',
-        'PORT': '3306',
+        'NAME': os.getenv('AUDIT_DB_NAME', 'isosmart_audit'),
+        'USER': os.getenv('AUDIT_DB_USER', os.getenv('DB_USER', 'isosmart')),
+        'PASSWORD': os.getenv('AUDIT_DB_PASSWORD', os.getenv('DB_PASSWORD', '')),
+        'HOST': os.getenv('AUDIT_DB_HOST', os.getenv('DB_HOST', '192.168.100.105')),
+        'PORT': os.getenv('AUDIT_DB_PORT', os.getenv('DB_PORT', '3306')),
         'OPTIONS': {
             'charset': 'utf8mb4',
         }
@@ -251,6 +281,13 @@ LOGIN_LOCKOUT_MINUTES = int(os.getenv('LOGIN_LOCKOUT_MINUTES', '15'))
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = 'DENY'
 SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
+SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin'
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_HTTPONLY = True
+CSRF_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_SECURE = _env_bool('SESSION_COOKIE_SECURE', default=not DEBUG)
+CSRF_COOKIE_SECURE = _env_bool('CSRF_COOKIE_SECURE', default=not DEBUG)
 
 # Configuración de Celery
 CELERY_BROKER_URL = 'redis://localhost:6379/1'
@@ -347,11 +384,10 @@ LOGGING = {
 }
 
 # CORS Configuration
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3001",
-    "http://127.0.0.1:3001",
-    "http://isosmart.local",
-]
+CORS_ALLOWED_ORIGINS = _env_list(
+    'CORS_ALLOWED_ORIGINS',
+    default='http://localhost:3001,http://127.0.0.1:3001,http://isosmart.local'
+)
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOW_METHODS = [
@@ -378,11 +414,10 @@ CORS_ALLOW_HEADERS = [
 # ==================================================
 # CSRF Configuration para API
 # ==================================================
-CSRF_TRUSTED_ORIGINS = [
-    'http://192.168.100.100:3001',
-    'http://192.168.100.100',
-    'http://localhost:3001',
-]
+CSRF_TRUSTED_ORIGINS = _env_list(
+    'CSRF_TRUSTED_ORIGINS',
+    default='http://192.168.100.100:3001,http://192.168.100.100,http://localhost:3001'
+)
 
 # Eximir API de CSRF (solo para endpoints /api/*)
 CSRF_EXEMPT_URLS = [r'^api/']

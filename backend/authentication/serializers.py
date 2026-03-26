@@ -115,6 +115,45 @@ class LoginSerializer(serializers.Serializer):
                     code='authorization'
                 )
 
+            # Reject local-backend-only logins: access must come from AdminApps validation.
+            request_obj = self.context.get('request')
+            admin_apps_data = getattr(request_obj, 'admin_apps_data', None) if request_obj else None
+            if not admin_apps_data:
+                raise serializers.ValidationError(
+                    'No fue posible validar tu acceso contra AdminApps. Contacta al administrador.',
+                    code='authorization'
+                )
+
+            # Owner policy: only Smart3AI organization can authenticate in ISO Smart.
+            if getattr(settings, 'OWNER_ORGANIZATION_ONLY_ACCESS', False):
+                owner_slug = (getattr(settings, 'OWNER_ORGANIZATION_SLUG', '') or '').strip().lower()
+                owner_name = (getattr(settings, 'OWNER_ORGANIZATION_NAME', '') or '').strip().lower()
+                owner_external_id = (getattr(settings, 'OWNER_ORGANIZATION_EXTERNAL_ID', '') or '').strip()
+
+                candidate_orgs = list(admin_apps_data.get('organizations') or [])
+                current_org = admin_apps_data.get('organization') or {}
+                if current_org:
+                    candidate_orgs.append(current_org)
+
+                def _is_owner_org(org_item):
+                    org_slug = str(org_item.get('slug') or '').strip().lower()
+                    org_name = str(org_item.get('name') or '').strip().lower()
+                    org_id = str(org_item.get('id') or '').strip()
+
+                    if owner_external_id and org_id == owner_external_id:
+                        return True
+                    if owner_slug and org_slug == owner_slug:
+                        return True
+                    if owner_name and org_name == owner_name:
+                        return True
+                    return False
+
+                if not any(_is_owner_org(org_item) for org_item in candidate_orgs):
+                    raise serializers.ValidationError(
+                        'Solo la organizacion Smart3AI tiene acceso a esta instancia de ISO Smart.',
+                        code='authorization'
+                    )
+
             # Successful authentication — clear any previous failures
             user.reset_login_attempts()
 
@@ -141,8 +180,20 @@ class LoginSerializer(serializers.Serializer):
                             'expires_at': temporary_expiry,
                         }
             
-            # Obtener perfil de organización
-            profiles = UserProfile.objects.filter(user=user, is_active=True)
+            allowed_external_org_ids = {
+                str(org.get('id'))
+                for org in (admin_apps_data.get('organizations') or [])
+                if org.get('id') is not None
+            }
+
+            # Obtener perfiles locales solo para organizaciones vigentes en AdminApps
+            profiles = UserProfile.objects.filter(
+                user=user,
+                is_active=True,
+                organization__is_active=True,
+            )
+            if allowed_external_org_ids:
+                profiles = profiles.filter(organization__external_id__in=allowed_external_org_ids)
             
             if not profiles.exists():
                 raise serializers.ValidationError(
@@ -166,8 +217,16 @@ class LoginSerializer(serializers.Serializer):
                         code='authorization'
                     )
             else:
-                # Usar primera organización disponible (ordenada por ID)
-                profile = profiles.first()
+                # Preferir la organización activa reportada por AdminApps.
+                current_org = admin_apps_data.get('organization') or {}
+                current_external_id = current_org.get('id')
+                if current_external_id is not None:
+                    profile = profiles.filter(organization__external_id=current_external_id).first()
+                else:
+                    profile = None
+
+                if not profile:
+                    profile = profiles.first()
             
             attrs['user'] = user
             attrs['profile'] = profile
