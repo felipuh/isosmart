@@ -10,7 +10,17 @@ const Sidebar = ({ isOpen = true }) => {
   const menuItems = [
     { name: t('navigation.dashboard'), path: '/', icon: Home },
     { name: t('navigation.stakeholders'), path: '/stakeholders', icon: Network },
-    { name: t('navigation.context'), path: '/context', icon: TrendingUp },
+    {
+      name: t('navigation.context'),
+      path: '/context',
+      icon: TrendingUp,
+      subItems: [
+        { name: t('contextDashboard.tabs.overview'), path: '/context?tab=overview', tab: 'overview' },
+        { name: t('contextDashboard.tabs.signals'), path: '/context?tab=signals', tab: 'signals' },
+        { name: t('contextDashboard.tabs.alerts'), path: '/context?tab=alerts', tab: 'alerts' },
+        { name: t('contextDashboard.tabs.radar'), path: '/context?tab=radar', tab: 'radar' },
+      ],
+    },
     { name: t('navigation.scope'), path: '/scope', icon: Target },
     { name: t('navigation.processes'), path: '/processes', icon: GitBranch },
     { name: t('navigation.documents'), path: '/documents', icon: FolderOpen },
@@ -26,6 +36,15 @@ const Sidebar = ({ isOpen = true }) => {
     { name: t('navigation.settings'), path: '/settings', icon: Settings },
   ];
 
+  const currentTab = new URLSearchParams(location.search).get('tab') || 'overview';
+
+  const isItemActive = (itemPath) => {
+    if (itemPath === '/') {
+      return location.pathname === '/';
+    }
+    return location.pathname === itemPath || location.pathname.startsWith(`${itemPath}/`);
+  };
+
   return (
     <div className={`${isOpen ? 'w-64' : 'w-20'} bg-slate-900 dark:bg-slate-950 text-white flex flex-col transition-all duration-300 fixed left-0 top-16 bottom-0 z-40`}>
       {/* Menu Items */}
@@ -33,7 +52,7 @@ const Sidebar = ({ isOpen = true }) => {
         <ul className="space-y-2">
           {menuItems.map((item) => {
             const Icon = item.icon;
-            const isActive = location.pathname === item.path;
+            const isActive = isItemActive(item.path);
             
             return (
               <li key={item.path}>
@@ -49,6 +68,28 @@ const Sidebar = ({ isOpen = true }) => {
                   <Icon className="h-5 w-5" />
                   {isOpen && <span>{item.name}</span>}
                 </Link>
+
+                {isOpen && item.subItems && (
+                  <ul className="mt-1 ml-7 space-y-1">
+                    {item.subItems.map((subItem) => {
+                      const subActive = location.pathname === '/context' && currentTab === subItem.tab;
+                      return (
+                        <li key={subItem.path}>
+                          <Link
+                            to={subItem.path}
+                            className={`block rounded-md px-3 py-2 text-sm transition-colors ${
+                              subActive
+                                ? 'bg-blue-900/40 text-blue-200'
+                                : 'text-slate-400 hover:bg-slate-800 hover:text-slate-100'
+                            }`}
+                          >
+                            {subItem.name}
+                          </Link>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
               </li>
             );
           })}

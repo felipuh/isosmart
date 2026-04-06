@@ -5,8 +5,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import permission_classes
 from rest_framework.exceptions import PermissionDenied, ValidationError
 from django.core.paginator import Paginator, EmptyPage
+from django.utils import timezone
 from ai_modules.sca.services.context_analyzer import ContextAnalyzer
-from core.models import ContextAnalysis
+from core.models import ContextAnalysis, ExternalContextSignal, EnvironmentalRiskAlert
 from authentication.models import UserProfile
 import logging
 
@@ -202,3 +203,193 @@ def get_analysis_history(request):
             'status': 'error',
             'message': str(e)
         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_external_signals(request):
+    """Lista señales externas auditables por organización con filtros."""
+    try:
+        organization_id = _resolve_scoped_org_id(request)
+        page = int(request.query_params.get('page', 1))
+        page_size = int(request.query_params.get('page_size', 10))
+        source_type = request.query_params.get('source_type')
+        impact_level = request.query_params.get('impact_level')
+
+        queryset = ExternalContextSignal.objects.filter(organization_id=organization_id).order_by('-fetched_at')
+        if source_type:
+            queryset = queryset.filter(source_type=source_type)
+        if impact_level:
+            queryset = queryset.filter(impact_level=impact_level)
+
+        paginator = Paginator(queryset, page_size)
+        try:
+            page_obj = paginator.page(page)
+        except EmptyPage:
+            return Response({'count': paginator.count, 'next': None, 'previous': None, 'results': []})
+
+        results = []
+        for item in page_obj.object_list:
+            results.append({
+                'id': item.id,
+                'source_type': item.source_type,
+                'source_name': item.source_name,
+                'source_url': item.source_url,
+                'title': item.title,
+                'summary': item.summary,
+                'impact_level': item.impact_level,
+                'tags': item.tags,
+                'published_at': item.published_at,
+                'fetched_at': item.fetched_at,
+            })
+
+        return Response({
+            'count': paginator.count,
+            'next': page + 1 if page_obj.has_next() else None,
+            'previous': page - 1 if page_obj.has_previous() else None,
+            'results': results,
+        })
+
+    except (ValidationError, PermissionDenied):
+        raise
+    except Exception as e:
+        logger.error(f"Error en get_external_signals: {str(e)}", exc_info=True)
+        return Response({'status': 'error', 'message': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_environmental_alerts(request):
+    """Lista alertas climáticas/ESG con filtros operativos."""
+    try:
+        organization_id = _resolve_scoped_org_id(request)
+        page = int(request.query_params.get('page', 1))
+        page_size = int(request.query_params.get('page_size', 10))
+        severity = request.query_params.get('severity')
+        alert_status = request.query_params.get('status')
+
+        queryset = EnvironmentalRiskAlert.objects.filter(organization_id=organization_id).order_by('-created_at')
+        if severity:
+            queryset = queryset.filter(severity=severity)
+        if alert_status:
+            queryset = queryset.filter(status=alert_status)
+
+        paginator = Paginator(queryset, page_size)
+        try:
+            page_obj = paginator.page(page)
+        except EmptyPage:
+            return Response({'count': paginator.count, 'next': None, 'previous': None, 'results': []})
+
+        results = []
+        for item in page_obj.object_list:
+            results.append({
+                'id': item.id,
+                'alert_type': item.alert_type,
+                'severity': item.severity,
+                'source_module': item.source_module,
+                'source_id': item.source_id,
+                'title': item.title,
+                'description': item.description,
+                'recommendation': item.recommendation,
+                'status': item.status,
+                'ai_audit_score': item.ai_audit_score,
+                'linked_risk_id': item.linked_risk_id,
+                'external_signal_id': item.external_signal_id,
+                'acknowledged_at': item.acknowledged_at,
+                'created_at': item.created_at,
+            })
+
+        return Response({
+            'count': paginator.count,
+            'next': page + 1 if page_obj.has_next() else None,
+            'previous': page - 1 if page_obj.has_previous() else None,
+            'results': results,
+        })
+
+    except (ValidationError, PermissionDenied):
+        raise
+    except Exception as e:
+        logger.error(f"Error en get_environmental_alerts: {str(e)}", exc_info=True)
+        return Response({'status': 'error', 'message': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def acknowledge_environmental_alert(request, alert_id: int):
+    """Marca una alerta como reconocida y mantiene trazabilidad de usuario/fecha."""
+    try:
+        organization_id = _resolve_scoped_org_id(request)
+        alert = EnvironmentalRiskAlert.objects.filter(id=alert_id, organization_id=organization_id).first()
+        if not alert:
+            return Response({'status': 'error', 'message': 'Alerta no encontrada'}, status=status.HTTP_404_NOT_FOUND)
+
+        alert.status = 'acknowledged'
+        alert.acknowledged_at = timezone.now()
+        alert.acknowledged_by = request.user
+        alert.save(update_fields=['status', 'acknowledged_at', 'acknowledged_by', 'updated_at'])
+
+        return Response({
+            'status': 'success',
+            'alert_id': alert.id,
+            'acknowledged_at': alert.acknowledged_at,
+            'acknowledged_by': request.user.id,
+        })
+
+    except (ValidationError, PermissionDenied):
+        raise
+    except Exception as e:
+        logger.error(f"Error en acknowledge_environmental_alert: {str(e)}", exc_info=True)
+        return Response({'status': 'error', 'message': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_environmental_dashboard(request):
+    """Resumen ejecutivo para panel de señales externas y alertas ambientales."""
+    try:
+        organization_id = _resolve_scoped_org_id(request)
+
+        signals_qs = ExternalContextSignal.objects.filter(organization_id=organization_id)
+        alerts_qs = EnvironmentalRiskAlert.objects.filter(organization_id=organization_id)
+
+        recent_signals = list(signals_qs.order_by('-fetched_at')[:5])
+        recent_alerts = list(alerts_qs.order_by('-created_at')[:5])
+
+        return Response({
+            'status': 'success',
+            'summary': {
+                'signals_total': signals_qs.count(),
+                'signals_high_critical': signals_qs.filter(impact_level__in=['high', 'critical']).count(),
+                'alerts_total': alerts_qs.count(),
+                'alerts_open': alerts_qs.filter(status='open').count(),
+                'alerts_critical': alerts_qs.filter(severity='critical').count(),
+            },
+            'recent_signals': [
+                {
+                    'id': s.id,
+                    'source_name': s.source_name,
+                    'title': s.title,
+                    'impact_level': s.impact_level,
+                    'fetched_at': s.fetched_at,
+                }
+                for s in recent_signals
+            ],
+            'recent_alerts': [
+                {
+                    'id': a.id,
+                    'title': a.title,
+                    'alert_type': a.alert_type,
+                    'severity': a.severity,
+                    'status': a.status,
+                    'linked_risk_id': a.linked_risk_id,
+                    'created_at': a.created_at,
+                }
+                for a in recent_alerts
+            ]
+        })
+
+    except (ValidationError, PermissionDenied):
+        raise
+    except Exception as e:
+        logger.error(f"Error en get_environmental_dashboard: {str(e)}", exc_info=True)
+        return Response({'status': 'error', 'message': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
