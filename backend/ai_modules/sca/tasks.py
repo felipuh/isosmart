@@ -1,5 +1,7 @@
 from celery import shared_task
+from django.utils import timezone
 from .services.context_analyzer import ContextAnalyzer
+from .services.external_context_pipeline import ExternalContextPipeline
 import logging
 
 logger = logging.getLogger(__name__)
@@ -66,3 +68,26 @@ def analyze_document(document_id: int):
     except Exception as e:
         logger.error(f"Error analyzing document {document_id}: {e}", exc_info=True)
         return {'status': 'error', 'message': str(e)}
+
+
+@shared_task(bind=True, max_retries=2, name='ai_modules.sca.tasks.sync_external_context_signals')
+def sync_external_context_signals(self):
+    """Sincroniza señales externas por organización y deja trazabilidad auditable."""
+    from core.models import Organization
+
+    try:
+        total_signals = 0
+        organizations = list(Organization.objects.values_list('id', flat=True))
+        for organization_id in organizations:
+            pipeline = ExternalContextPipeline(organization_id=organization_id)
+            signals = pipeline.collect_signals(max_items_per_source=3)
+            total_signals += len(signals)
+
+        return {
+            'status': 'success',
+            'organizations_processed': len(organizations),
+            'signals_collected': total_signals,
+        }
+    except Exception as exc:
+        logger.error('Error syncing external context signals: %s', exc, exc_info=True)
+        raise self.retry(exc=exc, countdown=600)

@@ -50,6 +50,53 @@ class ProcessMapperEngine:
         self.logger.info(f"Total procesos identificados: {len(processes)}")
         
         return processes
+
+    def enrich_processes_with_climate(self, processes: List[Dict], context_data: Dict) -> List[Dict]:
+        """Asigna atributos climáticos y de resiliencia a cada proceso."""
+        climate = context_data.get('climate', {}) if context_data else {}
+        supply_signals = set(climate.get('supply_chain_signals', []))
+
+        for process in processes:
+            code = process.get('code', '')
+            p_type = process.get('process_type', '')
+
+            if p_type == 'operational':
+                process['carbon_intensity_category'] = 'high'
+                process['climate_exposure_level'] = 'high'
+                process['resilience_score'] = 55.0
+            elif p_type == 'strategic':
+                process['carbon_intensity_category'] = 'medium'
+                process['climate_exposure_level'] = 'medium'
+                process['resilience_score'] = 70.0
+            else:
+                process['carbon_intensity_category'] = 'low'
+                process['climate_exposure_level'] = 'medium'
+                process['resilience_score'] = 65.0
+
+            process['supply_chain_risk'] = 'high' if supply_signals else 'medium'
+
+            if code in {'OPE-01', 'OPE-02'} and supply_signals:
+                process['supply_chain_risk'] = 'high'
+                process['resilience_score'] = max(35.0, process['resilience_score'] - 15.0)
+
+        return processes
+
+    def detect_emerging_climate_risks(self, processes: List[Dict]) -> List[Dict]:
+        """Detecta riesgos emergentes por exposición climática y resiliencia."""
+        emerging = []
+        for process in processes:
+            if process.get('climate_exposure_level') == 'high' and process.get('resilience_score', 100) <= 60:
+                emerging.append({
+                    'process_code': process.get('code'),
+                    'process_name': process.get('name'),
+                    'risk_type': 'process_exposure',
+                    'severity': 'high' if process.get('resilience_score', 100) > 45 else 'critical',
+                    'description': (
+                        f"Proceso {process.get('code')} con alta exposición climática y resiliencia "
+                        f"{process.get('resilience_score')}"
+                    ),
+                })
+        return emerging
     
     def map_interactions(self, processes: List[Dict]) -> List[Dict]:
         """

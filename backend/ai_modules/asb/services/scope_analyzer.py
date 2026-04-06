@@ -54,7 +54,9 @@ class ScopeAnalyzer(AIModuleBase):
             
             context_data = {
                 'internal': context_analysis.internal_insights,
-                'external': context_analysis.external_insights
+                'external': context_analysis.external_insights,
+                'climate': context_analysis.climate_context,
+                'environmental_scope': context_analysis.environmental_scope,
             }
             
             # 2. Analizar límites organizacionales
@@ -88,6 +90,10 @@ class ScopeAnalyzer(AIModuleBase):
                 context_data,
                 {}  # Stakeholder data (integrar con SIE después)
             )
+
+            environmental_criteria = self._build_environmental_criteria(context_analysis)
+            climate_readiness = self._calculate_climate_readiness(coverage, context_analysis)
+            digital_readiness = self._calculate_digital_readiness(context_analysis)
             
             # 6. Generar declaración de alcance
             full_scope_data = {
@@ -116,6 +122,9 @@ class ScopeAnalyzer(AIModuleBase):
                 existing_scope.exclusions = requirements_eval['exclusions']
                 existing_scope.scope_statement = scope_statement
                 existing_scope.coverage_analysis = coverage
+                existing_scope.environmental_criteria = environmental_criteria
+                existing_scope.climate_readiness_score = climate_readiness
+                existing_scope.digital_readiness_score = digital_readiness
                 existing_scope.context_analysis = context_analysis
                 if self.organization_id:
                     existing_scope.organization_id = self.organization_id
@@ -140,6 +149,9 @@ class ScopeAnalyzer(AIModuleBase):
                     exclusions=requirements_eval['exclusions'],
                     scope_statement=scope_statement,
                     coverage_analysis=coverage,
+                    environmental_criteria=environmental_criteria,
+                    climate_readiness_score=climate_readiness,
+                    digital_readiness_score=digital_readiness,
                     status='draft',
                     context_analysis=context_analysis,
                     organization_id=self.organization_id
@@ -161,6 +173,9 @@ class ScopeAnalyzer(AIModuleBase):
                 'products_count': len(products_services),
                 'exclusions_count': len(requirements_eval['exclusions']),
                 'coverage_score': coverage['overall_score'],
+                'climate_readiness_score': climate_readiness,
+                'digital_readiness_score': digital_readiness,
+                'environmental_criteria': environmental_criteria,
                 'boundaries': boundaries,
                 'requirements': requirements_eval,
                 'recommendations': self._generate_recommendations(
@@ -237,3 +252,26 @@ class ScopeAnalyzer(AIModuleBase):
             )
         
         return recommendations
+
+    def _build_environmental_criteria(self, context_analysis: ContextAnalysis) -> Dict[str, Any]:
+        climate = context_analysis.climate_context or {}
+        env_scope = context_analysis.environmental_scope or []
+        return {
+            'signals': [item.get('area') for item in env_scope],
+            'supply_chain_signals': climate.get('supply_chain_signals', []),
+            'regulatory_trends': climate.get('regulatory_trends', []),
+            'emerging_risks': climate.get('emerging_risks', []),
+        }
+
+    def _calculate_climate_readiness(self, coverage: Dict[str, Any], context_analysis: ContextAnalysis) -> float:
+        base = float(coverage.get('overall_score', 0))
+        climate = context_analysis.climate_context or {}
+        env_scope = context_analysis.environmental_scope or []
+        signal_bonus = min(len(climate.get('regulatory_trends', [])) * 3, 15)
+        scope_bonus = min(len(env_scope) * 5, 20)
+        return max(0.0, min(100.0, base * 0.6 + 20 + signal_bonus + scope_bonus))
+
+    def _calculate_digital_readiness(self, context_analysis: ContextAnalysis) -> float:
+        internal = context_analysis.internal_insights or {}
+        digital = internal.get('tendencias_digitales', [])
+        return max(0.0, min(100.0, 40 + (len(digital) * 10)))

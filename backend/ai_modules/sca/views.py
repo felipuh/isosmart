@@ -81,6 +81,8 @@ def trigger_analysis(request):
                 'total_documents': result.get('total_documents', 0),
                 'internal_insights': result.get('internal_insights', {}),
                 'external_insights': result.get('external_insights', {}),
+                'climate_context': result.get('climate_context', {}),
+                'environmental_scope': result.get('environmental_scope', []),
                 'analysis_id': result.get('analysis_id')
             }, status=status.HTTP_200_OK)
         else:
@@ -126,7 +128,9 @@ def get_latest_analysis(request):
                     'oportunidades': [],
                     'amenazas': [],
                     'factores_externos': []
-                }
+                },
+                'climate_context': {},
+                'environmental_scope': []
             })
         
         return Response({
@@ -135,7 +139,9 @@ def get_latest_analysis(request):
             'timestamp': latest.timestamp,
             'total_documents_processed': latest.total_documents_processed,
             'internal_insights': latest.internal_insights,
-            'external_insights': latest.external_insights
+            'external_insights': latest.external_insights,
+            'climate_context': latest.climate_context,
+            'environmental_scope': latest.environmental_scope,
         })
         
     except (ValidationError, PermissionDenied):

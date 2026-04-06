@@ -8,7 +8,7 @@ app = Celery('isosmart')
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
 # Autodescubrir tareas en backend, integration y ai_modules
-app.autodiscover_tasks(['backend', 'integration', 'ai_modules.sca', 'tasks'])
+app.autodiscover_tasks(['backend', 'integration', 'ai_modules.sca', 'ai_modules.sie', 'tasks'])
 
 # Configuración de tareas periódicas
 app.conf.beat_schedule = {
@@ -21,6 +21,16 @@ app.conf.beat_schedule = {
     'analyze-context-daily': {
         'task': 'ai_modules.sca.tasks.analyze_context_periodic',
         'schedule': crontab(hour=2, minute=0),
+    },
+    # Sincronización de señales externas (ONU/IPCC/ISO) a las 6 AM
+    'sync-external-context-signals-daily': {
+        'task': 'ai_modules.sca.tasks.sync_external_context_signals',
+        'schedule': crontab(hour=6, minute=0),
+    },
+    # Análisis de stakeholders diario a las 2:30 AM
+    'analyze-stakeholders-daily': {
+        'task': 'ai_modules.sie.tasks.analyze_stakeholders_periodic',
+        'schedule': crontab(hour=2, minute=30),
     },
     # Evaluación de estado de facturación diaria a las 3 AM
     'evaluate-billing-status-daily': {

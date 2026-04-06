@@ -228,6 +228,55 @@ class Process(models.Model):
         default=False,
         verbose_name="Proceso Crítico"
     )
+
+    # Variables de sostenibilidad y resiliencia (ISO 9001:2026)
+    CARBON_INTENSITY_CHOICES = [
+        ('low', 'Baja'),
+        ('medium', 'Media'),
+        ('high', 'Alta'),
+        ('unknown', 'Desconocida'),
+    ]
+
+    CLIMATE_EXPOSURE_CHOICES = [
+        ('low', 'Baja'),
+        ('medium', 'Media'),
+        ('high', 'Alta'),
+    ]
+
+    SUPPLY_CHAIN_RISK_CHOICES = [
+        ('low', 'Bajo'),
+        ('medium', 'Medio'),
+        ('high', 'Alto'),
+        ('unknown', 'Desconocido'),
+    ]
+
+    carbon_intensity_category = models.CharField(
+        max_length=20,
+        choices=CARBON_INTENSITY_CHOICES,
+        default='unknown',
+        verbose_name="Intensidad de Carbono"
+    )
+
+    climate_exposure_level = models.CharField(
+        max_length=20,
+        choices=CLIMATE_EXPOSURE_CHOICES,
+        default='medium',
+        verbose_name="Exposición Climática"
+    )
+
+    supply_chain_risk = models.CharField(
+        max_length=20,
+        choices=SUPPLY_CHAIN_RISK_CHOICES,
+        default='unknown',
+        verbose_name="Riesgo de Cadena de Suministro"
+    )
+
+    resilience_score = models.FloatField(
+        verbose_name="Score de Resiliencia",
+        validators=[MinValueValidator(0.0), MaxValueValidator(100.0)],
+        default=50.0,
+        help_text="Capacidad de respuesta del proceso ante disrupciones (0-100)"
+    )
     
     # Documentación
     documented_in = models.CharField(

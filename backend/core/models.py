@@ -26,6 +26,8 @@ class ContextAnalysis(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     internal_insights = models.JSONField(default=dict, blank=True)
     external_insights = models.JSONField(default=dict, blank=True)
+    climate_context = models.JSONField(default=dict, blank=True)
+    environmental_scope = models.JSONField(default=list, blank=True)
     total_documents_processed = models.IntegerField(default=0)
     execution_time_seconds = models.FloatField(null=True, blank=True)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
@@ -708,6 +710,116 @@ class NotificationDelivery(models.Model):
 
     def __str__(self):
         return f"{self.event_type} - {self.organization.name} - {self.status}"
+
+
+class ExternalContextSignal(models.Model):
+    """Señales externas relevantes para contexto ISO 4.1 (clima/ESG/digital/regulatorio)."""
+
+    SOURCE_TYPE_CHOICES = [
+        ('ipcc', 'IPCC'),
+        ('un', 'ONU'),
+        ('iso', 'ISO'),
+        ('regulator', 'Regulador'),
+        ('industry', 'Industria'),
+    ]
+
+    IMPACT_CHOICES = [
+        ('low', 'Bajo'),
+        ('medium', 'Medio'),
+        ('high', 'Alto'),
+        ('critical', 'Critico'),
+    ]
+
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name='external_context_signals')
+    source_type = models.CharField(max_length=20, choices=SOURCE_TYPE_CHOICES)
+    source_name = models.CharField(max_length=120)
+    source_url = models.URLField(max_length=500, blank=True)
+    title = models.CharField(max_length=300)
+    summary = models.TextField(blank=True)
+    signal_hash = models.CharField(max_length=64)
+    published_at = models.DateTimeField(null=True, blank=True)
+    impact_level = models.CharField(max_length=20, choices=IMPACT_CHOICES, default='medium')
+    tags = models.JSONField(default=list, blank=True)
+    raw_payload = models.JSONField(default=dict, blank=True)
+    fetched_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'external_context_signals'
+        ordering = ['-fetched_at']
+        unique_together = ['organization', 'source_name', 'signal_hash']
+        indexes = [
+            models.Index(fields=['organization', 'source_type']),
+            models.Index(fields=['impact_level', '-fetched_at']),
+        ]
+
+    def __str__(self):
+        return f"{self.source_name}: {self.title}"
+
+
+class EnvironmentalRiskAlert(models.Model):
+    """Alertas trazables de riesgos climáticos/ESG conectadas a la matriz 6.1."""
+
+    ALERT_TYPE_CHOICES = [
+        ('regulatory_change', 'Cambio regulatorio'),
+        ('climate_event', 'Evento climatico'),
+        ('supply_chain_risk', 'Riesgo de cadena de suministro'),
+        ('process_exposure', 'Exposicion de proceso'),
+        ('stakeholder_pressure', 'Presion de stakeholder'),
+    ]
+
+    SEVERITY_CHOICES = [
+        ('low', 'Bajo'),
+        ('medium', 'Medio'),
+        ('high', 'Alto'),
+        ('critical', 'Critico'),
+    ]
+
+    STATUS_CHOICES = [
+        ('open', 'Abierta'),
+        ('in_progress', 'En progreso'),
+        ('acknowledged', 'Reconocida'),
+        ('closed', 'Cerrada'),
+    ]
+
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name='environmental_alerts')
+    alert_type = models.CharField(max_length=50, choices=ALERT_TYPE_CHOICES)
+    severity = models.CharField(max_length=20, choices=SEVERITY_CHOICES, default='medium')
+    source_module = models.CharField(max_length=20, default='SCA')
+    source_id = models.IntegerField(null=True, blank=True)
+    external_signal = models.ForeignKey(
+        ExternalContextSignal,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='alerts'
+    )
+    linked_risk = models.ForeignKey(
+        'RiskMatrix',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='environmental_alerts'
+    )
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    recommendation = models.TextField(blank=True)
+    ai_audit_score = models.FloatField(default=0.0)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='open')
+    acknowledged_at = models.DateTimeField(null=True, blank=True)
+    acknowledged_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'environmental_risk_alerts'
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['organization', 'severity']),
+            models.Index(fields=['status', '-created_at']),
+        ]
+
+    def __str__(self):
+        return f"{self.alert_type} - {self.severity} - {self.organization.name}"
 
 
 class OnboardingInsightSnapshot(models.Model):

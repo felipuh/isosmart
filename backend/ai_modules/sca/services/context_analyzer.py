@@ -5,17 +5,20 @@ Integra el motor de IA con los modelos Django
 
 from django.utils import timezone
 from datetime import datetime, timedelta
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Optional
 import logging
 
 from ai_modules.common.base import AIModuleBase
 from ai_modules.sie.services.stakeholder_intelligence import StakeholderIntelligenceEngine
+from ai_modules.sca.services.external_context_pipeline import ExternalContextPipeline
 from core.models import (
     StakeholderProfile, 
     StakeholderChangeLog, 
     RiskMatrix,
     Document, 
-    ContextAnalysis
+    ContextAnalysis,
+    EnvironmentalRiskAlert,
+    ExternalContextSignal,
 )
 
 logger = logging.getLogger(__name__)
@@ -367,6 +370,11 @@ class ContextAnalyzer(AIModuleBase):
             # 2. Analizar documentos (simplificado por ahora)
             internal_insights = self._analyze_internal_factors(documents)
             external_insights = self._analyze_external_factors(documents)
+            external_signals = self._collect_external_signals(organization_id)
+            climate_context = self._build_climate_context(documents)
+            environmental_scope = self._build_environmental_scope(documents)
+            climate_context['external_signals_count'] = len(external_signals)
+            climate_context['external_signal_titles'] = [s.get('title', '') for s in external_signals[:5]]
             
             # 3. Crear o actualizar registro de análisis
             existing_analysis_qs = ContextAnalysis.objects.filter(status='completed')
@@ -379,6 +387,9 @@ class ContextAnalyzer(AIModuleBase):
                 existing_analysis.total_documents_processed = documents.count()
                 existing_analysis.internal_insights = internal_insights
                 existing_analysis.external_insights = external_insights
+                existing_analysis.climate_context = climate_context
+                existing_analysis.environmental_scope = environmental_scope
+                existing_analysis.execution_time_seconds = (datetime.now() - start_time).total_seconds()
                 existing_analysis.save()
                 analysis = existing_analysis
                 logger.info(f"Análisis de contexto actualizado: ID {analysis.id}")
@@ -389,7 +400,10 @@ class ContextAnalyzer(AIModuleBase):
                     status='completed',
                     total_documents_processed=documents.count(),
                     internal_insights=internal_insights,
-                    external_insights=external_insights
+                    external_insights=external_insights,
+                    climate_context=climate_context,
+                    environmental_scope=environmental_scope,
+                    execution_time_seconds=(datetime.now() - start_time).total_seconds(),
                 )
                 logger.info(f"Nuevo análisis de contexto creado: ID {analysis.id}")
             
@@ -404,8 +418,15 @@ class ContextAnalyzer(AIModuleBase):
                 'total_documents': documents.count(),
                 'analysis_id': analysis.id,
                 'internal_insights': internal_insights,
-                'external_insights': external_insights
+                'external_insights': external_insights,
+                'climate_context': climate_context,
+                'environmental_scope': environmental_scope,
             }
+
+            # 4. Integrar señales externas a riesgos/alertas trazables (ISO 6.1 + 42001)
+            if organization_id and external_signals:
+                integration_stats = self._create_external_risks_and_alerts(organization_id, external_signals)
+                result['external_integration'] = integration_stats
             
             self.log_execution('context_analysis', 'success', {
                 'documents': documents.count(),
@@ -425,9 +446,114 @@ class ContextAnalyzer(AIModuleBase):
                 'organization_id': organization_id,
                 'total_documents': 0
             }
+
+    def _collect_external_signals(self, organization_id: Optional[int]) -> List[Dict[str, Any]]:
+        if not organization_id:
+            return []
+        pipeline = ExternalContextPipeline(organization_id=organization_id)
+        return pipeline.collect_signals(max_items_per_source=3)
+
+    def _create_external_risks_and_alerts(self, organization_id: int, signals: List[Dict[str, Any]]) -> Dict[str, int]:
+        """Crea riesgos y alertas trazables a partir de señales externas de alto impacto."""
+        created_risks = 0
+        created_alerts = 0
+
+        for signal in signals:
+            if signal.get('impact_level') not in {'high', 'critical'}:
+                continue
+
+            db_signal = ExternalContextSignal.objects.filter(
+                organization_id=organization_id,
+                source_name=signal.get('source_name'),
+                signal_hash=signal.get('signal_hash'),
+            ).first()
+
+            risk, risk_created = RiskMatrix.objects.get_or_create(
+                organization_id=organization_id,
+                source_module='SCA',
+                source_id=db_signal.id if db_signal else None,
+                risk_description=f"Señal externa: {signal.get('title', '')[:180]}",
+                defaults={
+                    'risk_category': 'climatico_esg',
+                    'probability': 'alta' if signal.get('impact_level') == 'critical' else 'media',
+                    'impact': 'muy_alto' if signal.get('impact_level') == 'critical' else 'alto',
+                    'risk_level': 'critico' if signal.get('impact_level') == 'critical' else 'alto',
+                    'mitigation_actions': (
+                        'Evaluar impacto regulatorio y de continuidad; ajustar objetivos, alcance y controles.'
+                    ),
+                    'responsible': 'Responsable SGC',
+                    'iso_clause': '6.1',
+                    'status': 'identified',
+                }
+            )
+            if risk_created:
+                created_risks += 1
+
+            _, alert_created = EnvironmentalRiskAlert.objects.get_or_create(
+                organization_id=organization_id,
+                source_module='SCA',
+                source_id=db_signal.id if db_signal else None,
+                title=f"Alerta externa: {signal.get('source_name', 'fuente')}",
+                defaults={
+                    'alert_type': 'regulatory_change',
+                    'severity': signal.get('impact_level', 'medium'),
+                    'description': signal.get('summary', '')[:2000],
+                    'recommendation': 'Revisar impacto en procesos críticos y actualizar matriz 6.1.',
+                    'ai_audit_score': 0.8,
+                    'external_signal': db_signal,
+                    'linked_risk': risk,
+                }
+            )
+            if alert_created:
+                created_alerts += 1
+
+        return {
+            'signals_processed': len(signals),
+            'risks_created': created_risks,
+            'alerts_created': created_alerts,
+        }
+
+    def analyze_internal_context(self, documents_payload: List[Dict[str, Any]]) -> Dict[str, Any]:
+        """Interfaz de compatibilidad para análisis de un subconjunto de documentos."""
+        return self._analyze_internal_factors(documents_payload)
+
+    def _extract_keywords(self, text: str, keywords: List[str]) -> List[str]:
+        text_lower = (text or '').lower()
+        return [keyword for keyword in keywords if keyword in text_lower]
+
+    def _iter_document_blobs(self, documents) -> List[str]:
+        blobs = []
+        for doc in documents:
+            if isinstance(doc, dict):
+                pieces = [
+                    str(doc.get('title', '')),
+                    str(doc.get('source', '')),
+                    str(doc.get('type', '')),
+                    str(doc.get('content', '')),
+                ]
+            else:
+                pieces = [
+                    str(getattr(doc, 'title', '')),
+                    str(getattr(doc, 'source', '')),
+                    str(getattr(doc, 'document_type', '')),
+                    str(getattr(doc, 'content', '')),
+                ]
+            blobs.append(' '.join(pieces).lower())
+        return blobs
     
     def _analyze_internal_factors(self, documents) -> Dict:
-        """Análisis de factores internos (simplificado)"""
+        """Análisis de factores internos incluyendo señales ESG/digitales."""
+        blobs = self._iter_document_blobs(documents)
+        joined = ' '.join(blobs)
+        digital_keywords = [
+            'transformacion digital', 'cloud', 'iot', 'industria 4.0', 'inteligencia artificial',
+            'ciberseguridad', 'blockchain', 'telemetria', 'trabajo remoto', 'hibrido'
+        ]
+        esg_keywords = [
+            'emisiones', 'co2', 'energia', 'residuos', 'diversidad', 'inclusion',
+            'etica', 'transparencia', 'anticorrupcion', 'derechos humanos'
+        ]
+
         return {
             'fortalezas': [
                 'Procesos documentados según ISO 9001',
@@ -444,8 +570,16 @@ class ContextAnalyzer(AIModuleBase):
                     'severidad': 'medio',
                     'categoria': 'Tecnología',
                     'mitigacion': 'Plan de modernización gradual'
+                },
+                {
+                    'texto': 'Cambio climático puede alterar continuidad operativa y cadena de suministro',
+                    'severidad': 'alto',
+                    'categoria': 'Climático',
+                    'mitigacion': 'Definir escenarios y planes de contingencia por criticidad'
                 }
             ],
+            'tendencias_digitales': self._extract_keywords(joined, digital_keywords),
+            'factores_esg_detectados': self._extract_keywords(joined, esg_keywords),
             'recomendaciones': [
                 {
                     'texto': 'Implementar sistema de gestión documental integrado',
@@ -460,7 +594,18 @@ class ContextAnalyzer(AIModuleBase):
         }
     
     def _analyze_external_factors(self, documents) -> Dict:
-        """Análisis de factores externos (simplificado)"""
+        """Análisis de factores externos con foco 2026 (clima, ESG y digital)."""
+        blobs = self._iter_document_blobs(documents)
+        joined = ' '.join(blobs)
+
+        climate_keywords = [
+            'cambio climatico', 'ipcc', 'nasa', 'desastres naturales', 'huella de carbono',
+            'descarbonizacion', 'net zero', 'adaptacion climatica'
+        ]
+        regulatory_keywords = [
+            'regulatorio', 'ley', 'norma', 'cumplimiento', 'iso 42001', 'esg', 'sostenibilidad'
+        ]
+
         return {
             'oportunidades': [
                 'Crecimiento del mercado de servicios de calidad',
@@ -469,6 +614,7 @@ class ContextAnalyzer(AIModuleBase):
             'amenazas': [
                 'Cambios regulatorios frecuentes',
                 'Competencia internacional',
+                'Eventos climáticos extremos con impacto en continuidad del negocio',
             ],
             'factores_externos': [
                 {
@@ -482,6 +628,58 @@ class ContextAnalyzer(AIModuleBase):
                     'descripcion': 'Volatilidad en costos operativos',
                     'impacto': 'medio',
                     'tendencia': 'Inestable'
+                },
+                {
+                    'tipo': 'climático',
+                    'descripcion': 'Mayor presión regulatoria y de mercado para descarbonización',
+                    'impacto': 'alto',
+                    'tendencia': 'Crecimiento continuo'
                 }
-            ]
+            ],
+            'temas_climaticos_detectados': self._extract_keywords(joined, climate_keywords),
+            'temas_regulatorios_detectados': self._extract_keywords(joined, regulatory_keywords),
         }
+
+    def _build_climate_context(self, documents) -> Dict[str, Any]:
+        """Construye contexto climático y ESG trazable para ISO 9001:2026."""
+        blobs = self._iter_document_blobs(documents)
+        joined = ' '.join(blobs)
+
+        trend_keywords = ['ipcc', 'nasa', 'onu', 'emisiones', 'co2', 'descarbonizacion', 'esg']
+        supply_keywords = ['proveedor', 'cadena de suministro', 'third party', 'outsourcing', 'logistica']
+        digital_keywords = ['ia', 'iot', 'blockchain', 'cloud', 'ciberseguridad', 'industria 4.0']
+
+        return {
+            'regulatory_trends': self._extract_keywords(joined, trend_keywords),
+            'supply_chain_signals': self._extract_keywords(joined, supply_keywords),
+            'digital_transformation_signals': self._extract_keywords(joined, digital_keywords),
+            'emerging_risks': [
+                'Interrupciones por eventos climáticos extremos',
+                'Aumento de exigencias ESG de clientes y reguladores',
+                'Riesgos de ciberseguridad por digitalización acelerada',
+            ],
+        }
+
+    def _build_environmental_scope(self, documents) -> List[Dict[str, Any]]:
+        """Identifica elementos del alcance con potencial impacto ambiental."""
+        blobs = self._iter_document_blobs(documents)
+        joined = ' '.join(blobs)
+
+        criteria = {
+            'energia': ['energia', 'consumo energetico', 'eficiencia energetica'],
+            'residuos': ['residuos', 'reciclaje', 'desechos'],
+            'emisiones': ['emisiones', 'co2', 'huella de carbono'],
+            'cadena_suministro': ['proveedor', 'cadena de suministro', 'logistica'],
+        }
+
+        scope = []
+        for area, keywords in criteria.items():
+            matched = self._extract_keywords(joined, keywords)
+            if matched:
+                scope.append({
+                    'area': area,
+                    'signals': matched,
+                    'impact_level': 'alto' if area in {'emisiones', 'cadena_suministro'} else 'medio',
+                })
+
+        return scope

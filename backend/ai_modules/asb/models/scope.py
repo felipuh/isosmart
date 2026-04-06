@@ -58,6 +58,27 @@ class ScopeDefinition(models.Model):
         help_text="Requisitos ISO 9001 aplicables y justificaciones",
         default=dict
     )
+
+    # Criterios ambientales y de resiliencia (ISO 9001:2026 + enmienda 2024)
+    environmental_criteria = models.JSONField(
+        verbose_name="Criterios Ambientales",
+        help_text="Criterios de materialidad ambiental y climática para el alcance",
+        default=dict
+    )
+
+    climate_readiness_score = models.FloatField(
+        verbose_name="Score de Madurez Climática",
+        validators=[MinValueValidator(0.0), MaxValueValidator(100.0)],
+        default=0.0,
+        help_text="Puntaje de preparación climática del alcance (0-100)"
+    )
+
+    digital_readiness_score = models.FloatField(
+        verbose_name="Score de Madurez Digital",
+        validators=[MinValueValidator(0.0), MaxValueValidator(100.0)],
+        default=0.0,
+        help_text="Puntaje de preparación digital del alcance (0-100)"
+    )
     
     # Exclusiones
     exclusions = models.JSONField(

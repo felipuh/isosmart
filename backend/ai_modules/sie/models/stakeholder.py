@@ -20,7 +20,10 @@ class StakeholderProfile(models.Model):
         ('empleado', 'Empleado'),
         ('accionista', 'Accionista'),
         ('regulador', 'Entidad Reguladora'),
+        ('regulatory_environmental', 'Regulador Ambiental'),
         ('comunidad', 'Comunidad Local'),
+        ('community_climate_affected', 'Comunidad Afectada por Clima'),
+        ('esg_investor', 'Inversor ESG'),
         ('socio', 'Socio Estratégico'),
         ('competidor', 'Competidor'),
         ('otro', 'Otro'),
@@ -59,7 +62,7 @@ class StakeholderProfile(models.Model):
     # Información básica
     name = models.CharField(max_length=200, verbose_name="Nombre")
     stakeholder_type = models.CharField(
-        max_length=20,
+        max_length=40,
         choices=STAKEHOLDER_TYPES,
         verbose_name="Tipo de Stakeholder"
     )

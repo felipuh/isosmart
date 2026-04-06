@@ -12,7 +12,7 @@ from ai_modules.common.base import AIModuleBase
 from ai_modules.spm.services.process_mapper import ProcessMapperEngine
 from ai_modules.spm.models import ProcessMap, Process, ProcessInteraction, ProcessActivity
 from ai_modules.asb.models import ScopeDefinition
-from core.models import ContextAnalysis
+from core.models import ContextAnalysis, RiskMatrix, EnvironmentalRiskAlert
 
 logger = logging.getLogger(__name__)
 
@@ -64,7 +64,8 @@ class ProcessAnalyzer(AIModuleBase):
             # Preparar datos
             context_data = {
                 'internal': context_analysis.internal_insights,
-                'external': context_analysis.external_insights
+                'external': context_analysis.external_insights,
+                'climate': context_analysis.climate_context,
             }
             
             scope_data = {
@@ -75,6 +76,7 @@ class ProcessAnalyzer(AIModuleBase):
             # 2. Identificar procesos
             self.logger.info("Identificando procesos organizacionales...")
             processes_data = self.engine.identify_processes(context_data, scope_data)
+            processes_data = self.engine.enrich_processes_with_climate(processes_data, context_data)
             
             # 3. Mapear interacciones
             self.logger.info("Mapeando interacciones entre procesos...")
@@ -105,6 +107,7 @@ class ProcessAnalyzer(AIModuleBase):
                 processes_data,
                 interactions_data
             )
+            emerging_risks = self.engine.detect_emerging_climate_risks(processes_data)
             
             # 7. Crear o actualizar mapa de procesos en BD
             existing_map_qs = ProcessMap.objects.filter(status__in=['draft', 'active'])
@@ -160,6 +163,8 @@ class ProcessAnalyzer(AIModuleBase):
                 created_processes,
                 interactions_data
             )
+
+            created_climate_items = self._create_emerging_risks(process_map, emerging_risks)
             
             # 10. Crear actividades de ejemplo para procesos críticos
             self._create_sample_activities(created_processes)
@@ -180,6 +185,8 @@ class ProcessAnalyzer(AIModuleBase):
                 'critical_processes_count': len(process_map.critical_processes),
                 'diagram_data': diagram_data,
                 'recommendations': recommendations,
+                'emerging_risks': emerging_risks,
+                'emerging_risks_created': created_climate_items,
                 'processes': processes_data,
                 'interactions': interactions_data
             }
@@ -224,6 +231,10 @@ class ProcessAnalyzer(AIModuleBase):
                 controls=process_data.get('controls', []),
                 criticality_score=process_data.get('criticality_score', 0.5),
                 is_critical=process_data.get('is_critical', False),
+                carbon_intensity_category=process_data.get('carbon_intensity_category', 'unknown'),
+                climate_exposure_level=process_data.get('climate_exposure_level', 'medium'),
+                supply_chain_risk=process_data.get('supply_chain_risk', 'unknown'),
+                resilience_score=process_data.get('resilience_score', 50.0),
                 documented_in=process_data.get('documented_in', ''),
                 is_active=True
             )
@@ -366,3 +377,54 @@ class ProcessAnalyzer(AIModuleBase):
                     responsible=act['responsible'],
                     estimated_duration=act['duration']
                 )
+
+    def _create_emerging_risks(self, process_map: ProcessMap, emerging_risks: List[Dict]) -> Dict[str, int]:
+        """Crea riesgos 6.1 y alertas trazables para riesgos emergentes de procesos."""
+        created_risks = 0
+        created_alerts = 0
+
+        for item in emerging_risks:
+            process_code = item.get('process_code')
+            process = Process.objects.filter(process_map=process_map, code=process_code).first()
+
+            risk, risk_created = RiskMatrix.objects.get_or_create(
+                organization_id=process_map.organization_id,
+                source_module='SPM',
+                source_id=process.id if process else None,
+                risk_description=item.get('description', ''),
+                defaults={
+                    'risk_category': 'climatico_proceso',
+                    'probability': 'alta' if item.get('severity') == 'critical' else 'media',
+                    'impact': 'muy_alto' if item.get('severity') == 'critical' else 'alto',
+                    'risk_level': 'critico' if item.get('severity') == 'critical' else 'alto',
+                    'mitigation_actions': 'Revisar rediseño de proceso, controles de continuidad y redundancia de proveedores.',
+                    'responsible': process.owner if process else 'Responsable de Operaciones',
+                    'iso_clause': '6.1',
+                    'status': 'identified',
+                    'process_id': process_code,
+                }
+            )
+            if risk_created:
+                created_risks += 1
+
+            _, alert_created = EnvironmentalRiskAlert.objects.get_or_create(
+                organization_id=process_map.organization_id,
+                source_module='SPM',
+                source_id=process.id if process else None,
+                title=f"Riesgo emergente de proceso {process_code}",
+                defaults={
+                    'alert_type': 'process_exposure',
+                    'severity': 'critical' if item.get('severity') == 'critical' else 'high',
+                    'description': item.get('description', ''),
+                    'recommendation': 'Actualizar matriz 6.1, plan de continuidad y objetivos 6.2.',
+                    'ai_audit_score': 0.82,
+                    'linked_risk': risk,
+                }
+            )
+            if alert_created:
+                created_alerts += 1
+
+        return {
+            'risks_created': created_risks,
+            'alerts_created': created_alerts,
+        }

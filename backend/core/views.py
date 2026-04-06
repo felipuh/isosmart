@@ -263,6 +263,8 @@ def context_analysis_latest(request):
         'status': analysis.status,
         'internal_insights': analysis.internal_insights,
         'external_insights': analysis.external_insights,
+        'climate_context': analysis.climate_context,
+        'environmental_scope': analysis.environmental_scope,
         'total_documents_processed': analysis.total_documents_processed,
         'execution_time_seconds': analysis.execution_time_seconds
     })
