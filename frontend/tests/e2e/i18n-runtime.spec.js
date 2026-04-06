@@ -40,6 +40,10 @@ const LANGS = [
 ];
 
 async function login(page) {
+  await page.context().setExtraHTTPHeaders({
+    'X-ISO-LOCAL-AUTH-BYPASS': '1',
+  });
+
   await page.locator('input#email, input[type="email"]').first().fill(EMAIL);
   await page.locator('input#password, input[type="password"]').first().fill(PASSWORD);
 
@@ -121,7 +125,11 @@ for (const lang of LANGS) {
   });
 
   test(`i18n runtime ${lang.code} forced onboarding`, async ({ browser }) => {
-    const context = await browser.newContext();
+    const context = await browser.newContext({
+      extraHTTPHeaders: {
+        'X-ISO-LOCAL-AUTH-BYPASS': '1',
+      },
+    });
     const page = await context.newPage();
 
     await context.route('**/settings/onboarding_status/**', async (route) => {

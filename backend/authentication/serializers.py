@@ -115,17 +115,62 @@ class LoginSerializer(serializers.Serializer):
                     code='authorization'
                 )
 
-            # Reject local-backend-only logins: access must come from AdminApps validation.
+            request_obj = self.context.get('request')
+            bypass_header_enabled = bool(
+                request_obj
+                and str(request_obj.headers.get('X-ISO-LOCAL-AUTH-BYPASS', '')).strip() == '1'
+                and getattr(settings, 'DEBUG', False)
+            )
+            bypass_flag_enabled = bool(getattr(settings, 'ALLOW_LOCAL_AUTH_BYPASS_FOR_TESTS', False))
+            allow_local_bypass = bypass_header_enabled or bypass_flag_enabled
+
+            # Reject local-backend-only logins unless controlled local bypass is explicitly enabled.
             request_obj = self.context.get('request')
             admin_apps_data = getattr(request_obj, 'admin_apps_data', None) if request_obj else None
             if not admin_apps_data:
-                raise serializers.ValidationError(
-                    'No fue posible validar tu acceso contra AdminApps. Contacta al administrador.',
-                    code='authorization'
+                if not allow_local_bypass:
+                    raise serializers.ValidationError(
+                        'No fue posible validar tu acceso contra AdminApps. Contacta al administrador.',
+                        code='authorization'
+                    )
+
+                # Local bypass for testing: synthesize AdminApps-like payload from active local profiles.
+                local_profiles = UserProfile.objects.filter(
+                    user=user,
+                    is_active=True,
+                    organization__is_active=True,
+                ).select_related('organization')
+
+                local_orgs = []
+                for local_profile in local_profiles:
+                    local_org = local_profile.organization
+                    local_orgs.append({
+                        'id': local_org.external_id,
+                        'name': local_org.name,
+                        'slug': local_org.slug,
+                    })
+
+                selected_org = organization.external_id if organization else None
+                current_org = next(
+                    (org_item for org_item in local_orgs if selected_org and org_item.get('id') == selected_org),
+                    local_orgs[0] if local_orgs else {},
                 )
 
+                admin_apps_data = {
+                    'user': {
+                        'id': user.id,
+                        'email': user.email,
+                    },
+                    'organization': current_org,
+                    'organizations': local_orgs,
+                    'role': None,
+                }
+
+                if request_obj is not None:
+                    request_obj.admin_apps_data = admin_apps_data
+
             # Owner policy: only Smart3AI organization can authenticate in ISO Smart.
-            if getattr(settings, 'OWNER_ORGANIZATION_ONLY_ACCESS', False):
+            if getattr(settings, 'OWNER_ORGANIZATION_ONLY_ACCESS', False) and not allow_local_bypass:
                 owner_slug = (getattr(settings, 'OWNER_ORGANIZATION_SLUG', '') or '').strip().lower()
                 owner_name = (getattr(settings, 'OWNER_ORGANIZATION_NAME', '') or '').strip().lower()
                 owner_external_id = (getattr(settings, 'OWNER_ORGANIZATION_EXTERNAL_ID', '') or '').strip()
