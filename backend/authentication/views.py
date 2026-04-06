@@ -13,6 +13,7 @@ from django.utils import timezone
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
+from django.db import IntegrityError
 from datetime import timedelta
 import logging
 import secrets
@@ -584,16 +585,36 @@ class UserListView(generics.ListCreateAPIView):
                 user.save()
 
             mapped_role = ROLE_MAP.get(user_data.get('role', 'user'), 'user')
-            UserProfile.objects.update_or_create(
-                user=user,
-                organization=organization,
-                defaults={
-                    'role': mapped_role,
-                    'job_title': user_data.get('job_title', ''),
-                    'department': user_data.get('department', ''),
-                    'is_active': user_data.get('is_active', True),
-                }
-            )
+            profile_defaults = {
+                'role': mapped_role,
+                'job_title': user_data.get('job_title', ''),
+                'department': user_data.get('department', ''),
+                'is_active': user_data.get('is_active', True),
+            }
+
+            try:
+                UserProfile.objects.update_or_create(
+                    user=user,
+                    organization=organization,
+                    defaults=profile_defaults,
+                )
+            except IntegrityError:
+                # Legacy databases can still enforce unique(user_id) in user_profiles.
+                # Fallback to updating the existing row by user to avoid failing the list endpoint.
+                existing_profile = UserProfile.objects.filter(user=user).first()
+                if existing_profile is None:
+                    raise
+
+                existing_profile.organization = organization
+                for field, value in profile_defaults.items():
+                    setattr(existing_profile, field, value)
+                existing_profile.save(update_fields=['organization', *profile_defaults.keys()])
+
+                logger.warning(
+                    'Resolved legacy unique user profile conflict during Admin Apps sync for user=%s organization=%s',
+                    user.email,
+                    organization.id,
+                )
     
     def create(self, request, *args, **kwargs):
         # Usar serializer de registro
