@@ -7,6 +7,7 @@ import CrudErrorBanner from '../../../components/Common/CrudErrorBanner';
 import CrudPageHeader from '../../../components/Common/CrudPageHeader';
 import CrudEmptyState from '../../../components/Common/CrudEmptyState';
 import { getResources, createResource, updateResource, deleteResource } from '../api/resourcesApi';
+import { showAlert, showConfirm } from '../../../services/dialogs';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
 
@@ -67,7 +68,7 @@ const ResourcesPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!orgId) {
-      alert(t('modules.resources.resourcesPage.messages.selectOrganization'));
+      await showAlert(t('modules.resources.resourcesPage.messages.selectOrganization'));
       return;
     }
     try {
@@ -109,7 +110,8 @@ const ResourcesPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm(t('modules.resources.resourcesPage.messages.confirmDelete'))) return;
+    const confirmed = await showConfirm(t('modules.resources.resourcesPage.messages.confirmDelete'));
+    if (!confirmed) return;
     try {
       await deleteResource(id);
       await loadResources();

@@ -3,6 +3,7 @@ import { RefreshCw, Download, Plus, Search } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useI18n } from '../../context/I18nContext';
 import stakeholderService from '../../services/stakeholderService';
+import { showAlert } from '../../services/dialogs';
 import CriticalStakeholders from './CriticalStakeholders';
 import PowerInterestMatrix from './PowerInterestMatrix';
 import InfluenceMetrics from './InfluenceMetrics';
@@ -57,15 +58,16 @@ const StakeholderDashboard = () => {
       const result = await stakeholderService.runAnalysis();
       console.log('Analysis completed:', result);
       await loadAllData();
-      alert(
+      await showAlert(
         t('stakeholderDashboard.messages.analysisCompleted')
           .replace('{analyzed}', result.stakeholders_analyzed || 0)
           .replace('{critical}', result.critical_stakeholders?.length || 0)
-          .replace('{changes}', result.changes_detected?.length || 0)
+          .replace('{changes}', result.changes_detected?.length || 0),
+        { icon: 'success' }
       );
     } catch (error) {
       console.error('Error running analysis:', error);
-      alert(t('stakeholderDashboard.messages.analysisError'));
+      await showAlert(t('stakeholderDashboard.messages.analysisError'), { icon: 'error' });
     } finally {
       setAnalyzing(false);
     }
@@ -85,17 +87,17 @@ const StakeholderDashboard = () => {
     try {
       if (editingStakeholder) {
         await stakeholderService.update(editingStakeholder.id, formData);
-        alert(t('stakeholderDashboard.messages.stakeholderUpdated'));
+        await showAlert(t('stakeholderDashboard.messages.stakeholderUpdated'), { icon: 'success' });
       } else {
         await stakeholderService.create(formData);
-        alert(t('stakeholderDashboard.messages.stakeholderCreated'));
+        await showAlert(t('stakeholderDashboard.messages.stakeholderCreated'), { icon: 'success' });
       }
       setShowForm(false);
       setEditingStakeholder(null);
       await loadAllData();
     } catch (error) {
       console.error('Error saving stakeholder:', error);
-      alert(t('stakeholderDashboard.messages.saveError'));
+      await showAlert(t('stakeholderDashboard.messages.saveError'), { icon: 'error' });
       throw error;
     }
   };

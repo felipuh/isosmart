@@ -12,9 +12,66 @@ export default defineConfig({
             return 'app-i18n';
           }
 
-          // Use a single vendor bucket to avoid circular references between custom chunks.
           if (id.includes('node_modules/')) {
-            return 'vendor';
+            if (
+              id.includes('/react/') ||
+              id.includes('/react-dom/') ||
+              id.includes('/scheduler/') ||
+              id.includes('/react-router/') ||
+              id.includes('/react-router-dom/')
+            ) {
+              return 'vendor-react';
+            }
+
+            if (id.includes('/lucide-react/')) {
+              return 'vendor-lucide';
+            }
+
+            if (
+              id.includes('/i18next/') ||
+              id.includes('/react-i18next/') ||
+              id.includes('/i18next-browser-languagedetector/')
+            ) {
+              return 'vendor-i18n';
+            }
+
+            if (
+              id.includes('/axios/') ||
+              id.includes('/qs/') ||
+              id.includes('/form-data/')
+            ) {
+              return 'vendor-network';
+            }
+
+            return 'vendor-misc';
+          }
+
+          if (id.includes('/src/components/Dashboard/') || id.includes('/src/pages/Dashboard')) {
+            return 'dashboard-core';
+          }
+
+          if (id.includes('/src/features/operations/')) {
+            return 'feature-operations';
+          }
+
+          if (id.includes('/src/features/performance/')) {
+            return 'feature-performance';
+          }
+
+          if (id.includes('/src/features/improvement/')) {
+            return 'feature-improvement';
+          }
+
+          if (id.includes('/src/features/resources/')) {
+            return 'feature-resources';
+          }
+
+          if (id.includes('/src/features/leadership/')) {
+            return 'feature-leadership';
+          }
+
+          if (id.includes('/src/features/planning/')) {
+            return 'feature-planning';
           }
         },
       },

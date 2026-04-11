@@ -7,6 +7,7 @@ import CrudErrorBanner from '../../../components/Common/CrudErrorBanner';
 import CrudPageHeader from '../../../components/Common/CrudPageHeader';
 import CrudEmptyState from '../../../components/Common/CrudEmptyState';
 import { getCommunications, createCommunication, updateCommunication, deleteCommunication } from '../api/resourcesApi';
+import { showAlert, showConfirm } from '../../../services/dialogs';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
 
@@ -67,7 +68,7 @@ const CommunicationsPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!orgId) {
-      alert(t('modules.resources.communicationsPage.messages.selectOrganization'));
+      await showAlert(t('modules.resources.communicationsPage.messages.selectOrganization'));
       return;
     }
     try {
@@ -109,7 +110,8 @@ const CommunicationsPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm(t('modules.resources.communicationsPage.messages.confirmDelete'))) return;
+    const confirmed = await showConfirm(t('modules.resources.communicationsPage.messages.confirmDelete'));
+    if (!confirmed) return;
     try {
       await deleteCommunication(id);
       await loadData();

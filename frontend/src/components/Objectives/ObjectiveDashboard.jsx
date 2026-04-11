@@ -2,6 +2,7 @@ import React, { useCallback, useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useI18n } from '../../context/I18nContext';
 import objectiveService from '../../services/objectiveService';
+import { showConfirm } from '../../services/dialogs';
 import ObjectiveList from './ObjectiveList';
 import ObjectiveForm from './ObjectiveForm';
 
@@ -63,13 +64,15 @@ const ObjectiveDashboard = () => {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm(t('objectivesDashboard.confirmDelete'))) {
-      try {
-        await objectiveService.deleteObjective(id);
-        await loadData();
-      } catch (err) {
-        setError(err.message);
-      }
+    const confirmed = await showConfirm(t('objectivesDashboard.confirmDelete'));
+    if (!confirmed) {
+      return;
+    }
+    try {
+      await objectiveService.deleteObjective(id);
+      await loadData();
+    } catch (err) {
+      setError(err.message);
     }
   };
 

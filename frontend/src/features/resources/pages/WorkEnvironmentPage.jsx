@@ -7,6 +7,7 @@ import CrudErrorBanner from '../../../components/Common/CrudErrorBanner';
 import CrudPageHeader from '../../../components/Common/CrudPageHeader';
 import CrudEmptyState from '../../../components/Common/CrudEmptyState';
 import { getWorkEnvironments, createWorkEnvironment, updateWorkEnvironment, deleteWorkEnvironment } from '../api/resourcesApi';
+import { showAlert, showConfirm } from '../../../services/dialogs';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
 
@@ -63,7 +64,7 @@ const WorkEnvironmentPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!orgId) {
-      alert(t('modules.resources.workEnvironmentPage.messages.selectOrganization'));
+      await showAlert(t('modules.resources.workEnvironmentPage.messages.selectOrganization'));
       return;
     }
     try {
@@ -101,7 +102,8 @@ const WorkEnvironmentPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm(t('modules.resources.workEnvironmentPage.messages.confirmDelete'))) return;
+    const confirmed = await showConfirm(t('modules.resources.workEnvironmentPage.messages.confirmDelete'));
+    if (!confirmed) return;
     try {
       await deleteWorkEnvironment(id);
       await loadData();

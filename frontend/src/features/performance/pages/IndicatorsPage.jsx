@@ -5,6 +5,7 @@ import Modal from '../../../components/Common/Modal';
 import CrudErrorBanner from '../../../components/Common/CrudErrorBanner';
 import CrudPageHeader from '../../../components/Common/CrudPageHeader';
 import CrudEmptyState from '../../../components/Common/CrudEmptyState';
+import { showConfirm } from '../../../services/dialogs';
 import {
   getIndicators,
   createIndicator,
@@ -128,7 +129,8 @@ const IndicatorsPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm(t('modules.performance.indicatorsPage.deleteConfirm'))) return;
+    const confirmed = await showConfirm(t('modules.performance.indicatorsPage.deleteConfirm'));
+    if (!confirmed) return;
     try {
       setError('');
       await deleteIndicator(id);

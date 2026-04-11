@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Save, Plus } from 'lucide-react';
 import { useI18n } from '../../context/I18nContext';
+import { showAlert } from '../../services/dialogs';
 
 const ProcessForm = ({ process, mapId, onSave, onClose }) => {
   const { t } = useI18n();
@@ -84,11 +85,11 @@ const ProcessForm = ({ process, mapId, onSave, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.code.trim() || !formData.name.trim()) {
-      alert(t('processForm.errors.codeAndNameRequired'));
+      await showAlert(t('processForm.errors.codeAndNameRequired'), { icon: 'warning' });
       return;
     }
     if (!formData.owner.trim()) {
-      alert(t('processForm.errors.responsibleRequired'));
+      await showAlert(t('processForm.errors.responsibleRequired'), { icon: 'warning' });
       return;
     }
     setSaving(true);

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Save, Plus, Trash2 } from 'lucide-react';
 import { useI18n } from '../../context/I18nContext';
+import { showAlert } from '../../services/dialogs';
 
 const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
   const { t } = useI18n();
@@ -160,7 +161,7 @@ const StakeholderForm = ({ stakeholder, onSave, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.name.trim()) {
-      alert(t('stakeholderForm.messages.nameRequired'));
+      await showAlert(t('stakeholderForm.messages.nameRequired'), { icon: 'warning' });
       return;
     }
     setSaving(true);

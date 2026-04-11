@@ -7,6 +7,7 @@ import CrudErrorBanner from '../../../components/Common/CrudErrorBanner';
 import CrudPageHeader from '../../../components/Common/CrudPageHeader';
 import CrudEmptyState from '../../../components/Common/CrudEmptyState';
 import { getActions, createAction, updateAction, deleteAction, getObjectives, getUsers } from '../api/planningApi';
+import { showConfirm } from '../../../services/dialogs';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
 
@@ -160,7 +161,8 @@ const ObjectiveActionsPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm(t('modules.planning.objectiveActionsPage.deleteConfirm'))) return;
+    const confirmed = await showConfirm(t('modules.planning.objectiveActionsPage.deleteConfirm'));
+    if (!confirmed) return;
     try {
       await deleteAction(id);
       await loadData();

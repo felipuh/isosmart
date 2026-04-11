@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Save, Plus } from 'lucide-react';
 import { useI18n } from '../../context/I18nContext';
+import { showAlert } from '../../services/dialogs';
 
 const ProcessScopeForm = ({ process, scopeId, onSave, onClose }) => {
   const { t } = useI18n();
@@ -75,7 +76,7 @@ const ProcessScopeForm = ({ process, scopeId, onSave, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.process_name.trim()) {
-      alert(t('processScopeForm.messages.nameRequired'));
+      await showAlert(t('processScopeForm.messages.nameRequired'), { icon: 'warning' });
       return;
     }
     setSaving(true);

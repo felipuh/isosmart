@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Save, Plus } from 'lucide-react';
 import { useI18n } from '../../context/I18nContext';
+import { showAlert } from '../../services/dialogs';
 
 const LocationScopeForm = ({ location, scopeId, onSave, onClose }) => {
   const { t } = useI18n();
@@ -72,11 +73,11 @@ const LocationScopeForm = ({ location, scopeId, onSave, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.location_name.trim()) {
-      alert(t('locationScopeForm.messages.locationNameRequired'));
+      await showAlert(t('locationScopeForm.messages.locationNameRequired'), { icon: 'warning' });
       return;
     }
     if (!formData.city.trim()) {
-      alert(t('locationScopeForm.messages.cityRequired'));
+      await showAlert(t('locationScopeForm.messages.cityRequired'), { icon: 'warning' });
       return;
     }
     setSaving(true);

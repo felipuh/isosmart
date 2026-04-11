@@ -4,6 +4,7 @@ import { Plus, RefreshCw, FileText, Upload as UploadIcon, Folder } from 'lucide-
 import { useAuth } from '../../context/AuthContext';
 import { useI18n } from '../../context/I18nContext';
 import documentService from '../../services/documentService';
+import { showAlert, showConfirm } from '../../services/dialogs';
 import DocumentList from './DocumentList';
 import DocumentUploadForm from './DocumentUploadForm';
 
@@ -30,7 +31,7 @@ const DocumentDashboard = () => {
       setStats(statsResponse);
     } catch (error) {
       console.error('Error cargando documentos:', error);
-      alert(t('documentsManager.messages.errorLoading'));
+      await showAlert(t('documentsManager.messages.errorLoading'), { icon: 'error' });
     } finally {
       setLoading(false);
     }
@@ -47,32 +48,33 @@ const DocumentDashboard = () => {
     try {
       await documentService.upload(formData);
 
-      alert(t('documentsManager.messages.uploadSuccess'));
+      await showAlert(t('documentsManager.messages.uploadSuccess'), { icon: 'success' });
 
       setShowUploadForm(false);
       await loadData();
     } catch (error) {
       console.error('Error subiendo documento:', error);
-      alert(t('documentsManager.messages.uploadError'));
+      await showAlert(t('documentsManager.messages.uploadError'), { icon: 'error' });
     } finally {
       setUploading(false);
     }
   };
 
   const handleDelete = async (doc) => {
-    if (!window.confirm(t('documentsManager.messages.confirmDelete').replace('{title}', doc.title))) {
+    const confirmed = await showConfirm(t('documentsManager.messages.confirmDelete').replace('{title}', doc.title));
+    if (!confirmed) {
       return;
     }
 
     try {
       await documentService.delete(doc.id);
 
-      alert(t('documentsManager.messages.deleteSuccess'));
+      await showAlert(t('documentsManager.messages.deleteSuccess'), { icon: 'success' });
 
       await loadData();
     } catch (error) {
       console.error('Error eliminando documento:', error);
-      alert(t('documentsManager.messages.deleteError'));
+      await showAlert(t('documentsManager.messages.deleteError'), { icon: 'error' });
     }
   };
 
@@ -95,7 +97,7 @@ const DocumentDashboard = () => {
       window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error('Error descargando documento:', error);
-      alert(t('documentsManager.messages.downloadError'));
+      await showAlert(t('documentsManager.messages.downloadError'), { icon: 'error' });
     }
   };
 

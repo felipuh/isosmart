@@ -42,7 +42,7 @@ Se considera aprobado cuando:
 
 ## 6) Evidencia de ejecucion (esta corrida)
 
-Estado global: APROBADO
+Estado global: APROBADO CON RESERVA (actualizado 2026-04-11)
 
 - Frontend build: PASS (`npm run build`) el 2026-03-17.
 - Frontend lint: PASS LIMPIO (`npm run lint`) el 2026-03-17, sin errores ni warnings.
@@ -56,6 +56,25 @@ Estado global: APROBADO
 - Celery inspect ping: PASS (`1 node online`).
 - Runtime ports detectados: 3001 frontend, 6379 Redis, 8001 ISO Smart backend, 8000 AdminApps backend.
 - Proxy API desde frontend: PASS (`/api/auth/login/` responde `405`, consistente con endpoint existente que requiere POST).
+
+### Actualizacion de cierre (2026-04-11)
+
+- IsoSmart frontend build: PASS (`npm run build`).
+- AdminApps frontend build: PASS (`npm run build`).
+- Landing runtime: PASS (`GET http://127.0.0.1:4180/` => `200`).
+- Barrido dialogs frontend: PASS (sin usos nativos de `alert(` o `confirm(` en `frontend/src`).
+- Smoke login ISO Smart directo (`POST http://127.0.0.1:8001/api/auth/login/`): FAIL (`400`).
+- Smoke login via proxy frontend (`POST http://127.0.0.1:3001/api/auth/login/`): FAIL (`400`).
+
+Detalle de error observado en ambos login smoke:
+
+- `{"non_field_errors":["No fue posible validar tu acceso contra AdminApps. Contacta al administrador."]}`
+
+Implicacion para certificacion:
+
+- El requerimiento de UI/UX y build tecnico esta cumplido.
+- La certificacion end-to-end queda pendiente por integracion de autenticacion con AdminApps.
+- Para declarar 100% cerrado, ambos endpoints de login (`8001` y `3001`) deben responder `200` con credenciales validas.
 
 ## 7) Hallazgos y correcciones
 

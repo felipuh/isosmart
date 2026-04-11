@@ -6,6 +6,7 @@ import Modal from '../../../components/Common/Modal';
 import CrudErrorBanner from '../../../components/Common/CrudErrorBanner';
 import CrudPageHeader from '../../../components/Common/CrudPageHeader';
 import CrudEmptyState from '../../../components/Common/CrudEmptyState';
+import { showConfirm } from '../../../services/dialogs';
 import { getNonconformities, createNonconformity, updateNonconformity, deleteNonconformity } from '../api/improvementApi';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
@@ -83,7 +84,18 @@ const ImprovementNonconformitiesPage = () => {
     setEditingId(item.id); setShowForm(true);
   };
 
-  const handleDelete = async (id) => { if (!confirm(t('modules.improvement.nonconformitiesPage.deleteConfirm'))) return; try { setError(''); await deleteNonconformity(id); await loadData(); } catch (error) { console.error('Error:', error); setError(t('common.messages.errorTryAgain')); } };
+  const handleDelete = async (id) => {
+    const confirmed = await showConfirm(t('modules.improvement.nonconformitiesPage.deleteConfirm'));
+    if (!confirmed) return;
+    try {
+      setError('');
+      await deleteNonconformity(id);
+      await loadData();
+    } catch (error) {
+      console.error('Error:', error);
+      setError(t('common.messages.errorTryAgain'));
+    }
+  };
   const resetForm = () => { setForm(initialForm); setEditingId(null); };
   const openForm = () => { resetForm(); setShowForm(true); };
   const closeForm = () => { resetForm(); setShowForm(false); if (location.pathname.endsWith('/new')) navigate(location.pathname.replace(/\/new$/, ''), { replace: true }); };

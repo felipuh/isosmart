@@ -3,6 +3,7 @@ import { RefreshCw, Download, PlayCircle, FileText, Network, Target, Plus } from
 import { useAuth } from '../../context/AuthContext';
 import { useI18n } from '../../context/I18nContext';
 import processService from '../../services/processService';
+import { showAlert, showConfirm } from '../../services/dialogs';
 import ProcessDiagram from './ProcessDiagram';
 import ProcessList from './ProcessList';
 import ProcessRecommendations from './ProcessRecommendations';
@@ -57,7 +58,8 @@ const ProcessDashboard = () => {
   }, [currentOrganization?.id, loadData]);
 
   const handleRunMapping = async () => {
-    if (!window.confirm(t('processDashboard.messages.confirmRunMapping'))) {
+    const confirmed = await showConfirm(t('processDashboard.messages.confirmRunMapping'));
+    if (!confirmed) {
       return;
     }
 
@@ -69,21 +71,22 @@ const ProcessDashboard = () => {
       if (result.status === 'success') {
         await loadData();
 
-        alert(
+        await showAlert(
           t('processDashboard.messages.mappingCompleted')
             .replace('{total}', result.total_processes || 0)
             .replace('{strategic}', result.strategic_count || 0)
             .replace('{operational}', result.operational_count || 0)
             .replace('{support}', result.support_count || 0)
             .replace('{interactions}', result.total_interactions || 0)
-            .replace('{critical}', result.critical_processes_count || 0)
+            .replace('{critical}', result.critical_processes_count || 0),
+          { icon: 'success' }
         );
       } else {
-        alert(result.message);
+        await showAlert(result.message, { icon: 'info' });
       }
     } catch (error) {
       console.error('Error running process mapping:', error);
-      alert(t('processDashboard.messages.mappingError'));
+      await showAlert(t('processDashboard.messages.mappingError'), { icon: 'error' });
     } finally {
       setAnalyzing(false);
     }
@@ -103,33 +106,34 @@ const ProcessDashboard = () => {
     try {
       if (editingProcess) {
         await processService.updateProcess(editingProcess.id, formData, currentOrganization?.id);
-        alert(t('processDashboard.messages.processUpdated'));
+        await showAlert(t('processDashboard.messages.processUpdated'), { icon: 'success' });
       } else {
         await processService.createProcess(formData, currentOrganization?.id);
-        alert(t('processDashboard.messages.processCreated'));
+        await showAlert(t('processDashboard.messages.processCreated'), { icon: 'success' });
       }
       setShowForm(false);
       setEditingProcess(null);
       await loadData();
     } catch (error) {
       console.error('Error saving process:', error);
-      alert(t('processDashboard.messages.processSaveError'));
+      await showAlert(t('processDashboard.messages.processSaveError'), { icon: 'error' });
       throw error;
     }
   };
 
   const handleDeleteProcess = async (process) => {
     const processLabel = process?.name || process?.code || process?.id || '-';
-    if (!window.confirm(t('processDashboard.messages.confirmDeleteProcess').replace('{name}', processLabel))) {
+    const confirmed = await showConfirm(t('processDashboard.messages.confirmDeleteProcess').replace('{name}', processLabel));
+    if (!confirmed) {
       return;
     }
     try {
       await processService.deleteProcess(process.id, currentOrganization?.id);
-      alert(t('processDashboard.messages.processDeleted'));
+      await showAlert(t('processDashboard.messages.processDeleted'), { icon: 'success' });
       await loadData();
     } catch (error) {
       console.error('Error deleting process:', error);
-      alert(t('processDashboard.messages.processDeleteError'));
+      await showAlert(t('processDashboard.messages.processDeleteError'), { icon: 'error' });
     }
   };
 

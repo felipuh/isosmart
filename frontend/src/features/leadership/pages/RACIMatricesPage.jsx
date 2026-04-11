@@ -8,6 +8,7 @@ import {
   updateRACIMatrix,
   deleteRACIMatrix
 } from '../api/leadershipApi';
+import { showConfirm } from '../../../services/dialogs';
 
 const normalizeList = (data) => (Array.isArray(data) ? data : data?.results || []);
 
@@ -90,7 +91,8 @@ const RACIMatricesPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm(t('modules.leadership.raciMatricesPage.messages.confirmDelete'))) {
+    const confirmed = await showConfirm(t('modules.leadership.raciMatricesPage.messages.confirmDelete'));
+    if (!confirmed) {
       return;
     }
 

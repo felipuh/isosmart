@@ -10,6 +10,7 @@ import {
   publishPolicy,
   makeObsoletePolicy
 } from '../api/leadershipApi';
+import { showConfirm } from '../../../services/dialogs';
 
 const normalizeList = (data) => (Array.isArray(data) ? data : data?.results || []);
 
@@ -124,7 +125,8 @@ const PoliciesPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm(t('modules.leadership.policiesPage.messages.confirmDelete'))) {
+    const confirmed = await showConfirm(t('modules.leadership.policiesPage.messages.confirmDelete'));
+    if (!confirmed) {
       return;
     }
 

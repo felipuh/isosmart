@@ -9,6 +9,7 @@ import {
   getRoles,
   getUsers
 } from '../api/leadershipApi';
+import { showConfirm } from '../../../services/dialogs';
 
 const normalizeList = (data) => (Array.isArray(data) ? data : data?.results || []);
 
@@ -120,7 +121,8 @@ const RoleAssignmentsPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm(t('modules.leadership.roleAssignmentsPage.messages.confirmDelete'))) {
+    const confirmed = await showConfirm(t('modules.leadership.roleAssignmentsPage.messages.confirmDelete'));
+    if (!confirmed) {
       return;
     }
 

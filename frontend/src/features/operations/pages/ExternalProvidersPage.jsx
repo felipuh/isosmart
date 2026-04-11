@@ -6,6 +6,7 @@ import Modal from '../../../components/Common/Modal';
 import CrudErrorBanner from '../../../components/Common/CrudErrorBanner';
 import CrudPageHeader from '../../../components/Common/CrudPageHeader';
 import CrudEmptyState from '../../../components/Common/CrudEmptyState';
+import { showConfirm } from '../../../services/dialogs';
 import { getExternalProviders, createExternalProvider, updateExternalProvider, deleteExternalProvider, getUsers } from '../api/operationsApi';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
@@ -166,7 +167,8 @@ const ExternalProvidersPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm(t('modules.operations.externalProvidersPage.messages.confirmDelete'))) return;
+    const confirmed = await showConfirm(t('modules.operations.externalProvidersPage.messages.confirmDelete'));
+    if (!confirmed) return;
     try {
       await deleteExternalProvider(id);
       await loadData();

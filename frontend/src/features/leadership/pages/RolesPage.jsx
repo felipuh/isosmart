@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import { useI18n } from '../../../context/I18nContext';
 import { getRoles, createRole, updateRole, deleteRole } from '../api/leadershipApi';
+import { showConfirm } from '../../../services/dialogs';
 
 const normalizeList = (data) => (Array.isArray(data) ? data : data?.results || []);
 const listToText = (value) => (Array.isArray(value) ? value.join(', ') : '');
@@ -111,7 +112,8 @@ const RolesPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm(t('modules.leadership.rolesPage.messages.confirmDelete'))) {
+    const confirmed = await showConfirm(t('modules.leadership.rolesPage.messages.confirmDelete'));
+    if (!confirmed) {
       return;
     }
 

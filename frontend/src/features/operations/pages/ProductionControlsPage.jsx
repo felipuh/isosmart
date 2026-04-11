@@ -6,6 +6,7 @@ import Modal from '../../../components/Common/Modal';
 import CrudErrorBanner from '../../../components/Common/CrudErrorBanner';
 import CrudPageHeader from '../../../components/Common/CrudPageHeader';
 import CrudEmptyState from '../../../components/Common/CrudEmptyState';
+import { showConfirm } from '../../../services/dialogs';
 import { getProductionControls, createProductionControl, updateProductionControl, deleteProductionControl, getUsers } from '../api/operationsApi';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
@@ -155,7 +156,8 @@ const ProductionControlsPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm(t('modules.operations.productionControlsPage.messages.confirmDelete'))) return;
+    const confirmed = await showConfirm(t('modules.operations.productionControlsPage.messages.confirmDelete'));
+    if (!confirmed) return;
     try {
       await deleteProductionControl(id);
       await loadData();

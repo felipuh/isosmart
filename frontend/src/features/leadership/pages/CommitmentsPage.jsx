@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import { useI18n } from '../../../context/I18nContext';
 import { getCommitments, createCommitment, updateCommitment, deleteCommitment } from '../api/leadershipApi';
+import { showConfirm } from '../../../services/dialogs';
 
 const normalizeList = (data) => (Array.isArray(data) ? data : data?.results || []);
 
@@ -143,7 +144,8 @@ const CommitmentsPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm(t('modules.leadership.commitmentsPage.messages.confirmDelete'))) {
+    const confirmed = await showConfirm(t('modules.leadership.commitmentsPage.messages.confirmDelete'));
+    if (!confirmed) {
       return;
     }
 

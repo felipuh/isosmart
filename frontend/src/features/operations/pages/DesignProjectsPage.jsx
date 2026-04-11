@@ -6,6 +6,7 @@ import Modal from '../../../components/Common/Modal';
 import CrudErrorBanner from '../../../components/Common/CrudErrorBanner';
 import CrudPageHeader from '../../../components/Common/CrudPageHeader';
 import CrudEmptyState from '../../../components/Common/CrudEmptyState';
+import { showConfirm } from '../../../services/dialogs';
 import { getDesignProjects, createDesignProject, updateDesignProject, deleteDesignProject, getUsers } from '../api/operationsApi';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
@@ -164,7 +165,8 @@ const DesignProjectsPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm(t('modules.operations.designProjectsPage.deleteConfirm'))) return;
+    const confirmed = await showConfirm(t('modules.operations.designProjectsPage.deleteConfirm'));
+    if (!confirmed) return;
     try {
       await deleteDesignProject(id);
       await loadData();

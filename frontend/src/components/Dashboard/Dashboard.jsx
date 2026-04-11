@@ -16,12 +16,14 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useI18n } from '../../context/I18nContext';
+import { useTheme } from '../../context/ThemeContext';
 import api from '../../services/api';
 import settingsService from '../../services/settingsService';
 
 const Dashboard = () => {
   const { currentOrganization, user } = useAuth();
   const { t, language, translateBackendString } = useI18n();
+  const { isDark } = useTheme();
   const orgId = currentOrganization?.id || null;
   const [stats, setStats] = useState({
     modulesActive: 0,
@@ -282,9 +284,11 @@ const Dashboard = () => {
       descriptionKey: 'dashboard.main.modulesCatalog.sca.description',
       icon: TrendingUp,
       color: 'bg-blue-500',
-      bgColor: 'bg-blue-50',
-      borderColor: 'border-blue-200',
-      textColor: 'text-blue-700',
+      accentClass: 'text-blue-700 dark:text-blue-300',
+      surfaceLight: '#eff6ff',
+      surfaceDark: 'rgba(30, 58, 138, 0.30)',
+      borderLight: '#bfdbfe',
+      borderDark: 'rgba(30, 64, 175, 0.70)',
       route: '/context',
       status: 'active',
       featuresKey: [
@@ -301,9 +305,11 @@ const Dashboard = () => {
       descriptionKey: 'dashboard.main.modulesCatalog.sie.description',
       icon: Network,
       color: 'bg-green-500',
-      bgColor: 'bg-green-50',
-      borderColor: 'border-green-200',
-      textColor: 'text-green-700',
+      accentClass: 'text-green-700 dark:text-green-300',
+      surfaceLight: '#ecfdf5',
+      surfaceDark: 'rgba(6, 78, 59, 0.28)',
+      borderLight: '#bbf7d0',
+      borderDark: 'rgba(21, 128, 61, 0.65)',
       route: '/stakeholders',
       status: 'active',
       featuresKey: [
@@ -320,9 +326,11 @@ const Dashboard = () => {
       descriptionKey: 'dashboard.main.modulesCatalog.asb.description',
       icon: Target,
       color: 'bg-purple-500',
-      bgColor: 'bg-purple-50',
-      borderColor: 'border-purple-200',
-      textColor: 'text-purple-700',
+      accentClass: 'text-purple-700 dark:text-purple-300',
+      surfaceLight: '#faf5ff',
+      surfaceDark: 'rgba(88, 28, 135, 0.27)',
+      borderLight: '#e9d5ff',
+      borderDark: 'rgba(126, 34, 206, 0.60)',
       route: '/scope',
       status: 'active',
       featuresKey: [
@@ -339,9 +347,11 @@ const Dashboard = () => {
       descriptionKey: 'dashboard.main.modulesCatalog.spm.description',
       icon: Workflow,
       color: 'bg-orange-500',
-      bgColor: 'bg-orange-50',
-      borderColor: 'border-orange-200',
-      textColor: 'text-orange-700',
+      accentClass: 'text-orange-700 dark:text-orange-300',
+      surfaceLight: '#fff7ed',
+      surfaceDark: 'rgba(124, 45, 18, 0.28)',
+      borderLight: '#fed7aa',
+      borderDark: 'rgba(194, 65, 12, 0.60)',
       route: '/processes',
       status: 'active',
       featuresKey: [
@@ -687,7 +697,11 @@ const Dashboard = () => {
               <Link
                 key={module.id}
                 to={module.route}
-                className={`${module.bgColor} dark:bg-slate-800 ${module.borderColor} dark:border-slate-700 border-2 rounded-lg p-6 hover:shadow-lg dark:hover:shadow-slate-900/50 transition-all duration-200 hover:scale-105`}
+                className="border-2 rounded-lg p-6 shadow-sm dark:shadow-slate-950/30 hover:shadow-lg dark:hover:shadow-slate-950/60 transition-all duration-200 hover:scale-[1.02]"
+                style={{
+                  backgroundColor: isDark ? module.surfaceDark : module.surfaceLight,
+                  borderColor: isDark ? module.borderDark : module.borderLight,
+                }}
               >
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center">
@@ -717,10 +731,10 @@ const Dashboard = () => {
                 </div>
 
                 <div className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700 flex items-center justify-between">
-                  <span className={`text-sm font-semibold ${module.textColor}`}>
+                  <span className={`text-sm font-semibold ${module.accentClass}`}>
                     {t('dashboard.main.viewDashboard')}
                   </span>
-                  <ArrowRight className={`h-5 w-5 ${module.textColor}`} />
+                  <ArrowRight className={`h-5 w-5 ${module.accentClass}`} />
                 </div>
               </Link>
             );

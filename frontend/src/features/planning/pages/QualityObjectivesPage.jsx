@@ -7,6 +7,7 @@ import CrudErrorBanner from '../../../components/Common/CrudErrorBanner';
 import CrudPageHeader from '../../../components/Common/CrudPageHeader';
 import CrudEmptyState from '../../../components/Common/CrudEmptyState';
 import { getObjectives, createObjective, updateObjective, deleteObjective, getUsers } from '../api/planningApi';
+import { showConfirm } from '../../../services/dialogs';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
 
@@ -183,7 +184,8 @@ const QualityObjectivesPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm(t('modules.planning.qualityObjectivesPage.deleteConfirm'))) return;
+    const confirmed = await showConfirm(t('modules.planning.qualityObjectivesPage.deleteConfirm'));
+    if (!confirmed) return;
     try {
       await deleteObjective(id);
       await loadData();

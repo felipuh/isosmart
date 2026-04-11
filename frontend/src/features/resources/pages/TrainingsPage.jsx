@@ -7,6 +7,7 @@ import CrudErrorBanner from '../../../components/Common/CrudErrorBanner';
 import CrudPageHeader from '../../../components/Common/CrudPageHeader';
 import CrudEmptyState from '../../../components/Common/CrudEmptyState';
 import { getTrainings, createTraining, updateTraining, deleteTraining } from '../api/resourcesApi';
+import { showAlert, showConfirm } from '../../../services/dialogs';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
 
@@ -66,7 +67,7 @@ const TrainingsPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!orgId) {
-      alert(t('modules.resources.trainingsPage.messages.selectOrganization'));
+      await showAlert(t('modules.resources.trainingsPage.messages.selectOrganization'));
       return;
     }
     try {
@@ -107,7 +108,8 @@ const TrainingsPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm(t('modules.resources.trainingsPage.messages.confirmDelete'))) return;
+    const confirmed = await showConfirm(t('modules.resources.trainingsPage.messages.confirmDelete'));
+    if (!confirmed) return;
     try {
       await deleteTraining(id);
       await loadData();

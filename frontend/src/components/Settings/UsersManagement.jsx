@@ -7,6 +7,7 @@ import {
 import { useAuth } from '../../context/AuthContext';
 import { useI18n } from '../../context/I18nContext';
 import settingsService from '../../services/settingsService';
+import { showAlert, showConfirm } from '../../services/dialogs';
 
 const UsersManagement = () => {
   const { t } = useI18n();
@@ -77,11 +78,12 @@ const UsersManagement = () => {
 
   const handleDeleteUser = async (userId) => {
     if (!canManageUsers) {
-      alert(t('settings.users.messages.noPermissionDelete'));
+      await showAlert(t('settings.users.messages.noPermissionDelete'), { icon: 'warning' });
       return;
     }
     
-    if (!confirm(t('settings.users.messages.confirmDelete'))) return;
+    const confirmed = await showConfirm(t('settings.users.messages.confirmDelete'));
+    if (!confirmed) return;
     
     try {
       await settingsService.deleteUser(userId);

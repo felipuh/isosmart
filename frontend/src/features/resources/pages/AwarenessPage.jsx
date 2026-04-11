@@ -7,6 +7,7 @@ import CrudErrorBanner from '../../../components/Common/CrudErrorBanner';
 import CrudPageHeader from '../../../components/Common/CrudPageHeader';
 import CrudEmptyState from '../../../components/Common/CrudEmptyState';
 import { getAwareness, createAwareness, updateAwareness, deleteAwareness } from '../api/resourcesApi';
+import { showAlert, showConfirm } from '../../../services/dialogs';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
 
@@ -65,7 +66,7 @@ const AwarenessPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!orgId) {
-      alert(t('modules.resources.awarenessPage.messages.selectOrganization'));
+      await showAlert(t('modules.resources.awarenessPage.messages.selectOrganization'));
       return;
     }
     try {
@@ -105,7 +106,8 @@ const AwarenessPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm(t('modules.resources.awarenessPage.messages.confirmDelete'))) return;
+    const confirmed = await showConfirm(t('modules.resources.awarenessPage.messages.confirmDelete'));
+    if (!confirmed) return;
     try {
       await deleteAwareness(id);
       await loadData();

@@ -6,6 +6,7 @@ import Modal from '../../../components/Common/Modal';
 import CrudErrorBanner from '../../../components/Common/CrudErrorBanner';
 import CrudPageHeader from '../../../components/Common/CrudPageHeader';
 import CrudEmptyState from '../../../components/Common/CrudEmptyState';
+import { showConfirm } from '../../../services/dialogs';
 import { getCustomerRequirements, createCustomerRequirement, updateCustomerRequirement, deleteCustomerRequirement } from '../api/operationsApi';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
@@ -105,7 +106,8 @@ const CustomerRequirementsPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm(t('modules.operations.customerRequirementsPage.messages.confirmDelete'))) return;
+    const confirmed = await showConfirm(t('modules.operations.customerRequirementsPage.messages.confirmDelete'));
+    if (!confirmed) return;
     try {
       await deleteCustomerRequirement(id);
       await loadData();

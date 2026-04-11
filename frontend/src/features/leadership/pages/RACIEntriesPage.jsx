@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { getRACIEntries, createRACIEntry, updateRACIEntry, deleteRACIEntry, getRoles } from '../api/leadershipApi';
 import { useAuth } from '../../../context/AuthContext';
 import { useI18n } from '../../../context/I18nContext';
+import { showConfirm } from '../../../services/dialogs';
 
 const normalizeList = (data) => (Array.isArray(data) ? data : data?.results || []);
 
@@ -107,7 +108,8 @@ const RACIEntriesPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm(t('modules.leadership.raciEntriesPage.messages.confirmDelete'))) {
+    const confirmed = await showConfirm(t('modules.leadership.raciEntriesPage.messages.confirmDelete'));
+    if (!confirmed) {
       return;
     }
 

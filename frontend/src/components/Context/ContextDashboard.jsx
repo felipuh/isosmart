@@ -4,6 +4,7 @@ import { useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useI18n } from '../../context/I18nContext';
 import contextService from '../../services/contextService';
+import { showAlert } from '../../services/dialogs';
 import FODAAnalysis from './FODAAnalysis';
 import ExternalFactors from './ExternalFactors';
 import InternalFactors from './InternalFactors';
@@ -138,7 +139,7 @@ const ContextDashboard = () => {
 const handleRunAnalysis = async () => {
   // Verificar si hay documentos
   if (!contextData || contextData.total_documents_processed === 0) {
-    alert(t('contextDashboard.messages.noDocuments'));
+    await showAlert(t('contextDashboard.messages.noDocuments'), { icon: 'warning' });
     return;
   }
 
@@ -149,20 +150,21 @@ const handleRunAnalysis = async () => {
     
     await loadContextData();
 
-    alert(
+    await showAlert(
       t('contextDashboard.messages.analysisCompleted')
         .replace('{documents}', result.total_documents || 0)
         .replace('{strengths}', result.internal_insights?.fortalezas?.length || 0)
-        .replace('{risks}', result.internal_insights?.riesgos_identificados?.length || 0)
+        .replace('{risks}', result.internal_insights?.riesgos_identificados?.length || 0),
+      { icon: 'success' }
     );
   } catch (error) {
     console.error('Error running context analysis:', error);
     
     // Mensaje más informativo
     if (error.response?.status === 500) {
-      alert(t('contextDashboard.messages.serverError'));
+      await showAlert(t('contextDashboard.messages.serverError'), { icon: 'error' });
     } else {
-      alert(t('contextDashboard.messages.runError'));
+      await showAlert(t('contextDashboard.messages.runError'), { icon: 'error' });
     }
   } finally {
     setAnalyzing(false);
@@ -223,7 +225,7 @@ const handleRunAnalysis = async () => {
       await loadContextData();
     } catch (error) {
       console.error('Error acknowledging alert:', error);
-      alert(t('contextDashboard.messages.acknowledgeError'));
+      await showAlert(t('contextDashboard.messages.acknowledgeError'), { icon: 'error' });
     } finally {
       setAcknowledgingAlertId(null);
     }
@@ -259,7 +261,7 @@ const handleRunAnalysis = async () => {
 
     const popup = window.open('', '_blank', 'width=1200,height=900');
     if (!popup) {
-      alert(t('contextDashboard.print.popupBlocked'));
+      showAlert(t('contextDashboard.print.popupBlocked'), { icon: 'warning' });
       return;
     }
 

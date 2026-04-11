@@ -5,6 +5,7 @@ import Modal from '../../../components/Common/Modal';
 import CrudErrorBanner from '../../../components/Common/CrudErrorBanner';
 import CrudPageHeader from '../../../components/Common/CrudPageHeader';
 import CrudEmptyState from '../../../components/Common/CrudEmptyState';
+import { showConfirm } from '../../../services/dialogs';
 import {
   getAudits,
   getFindings,
@@ -127,7 +128,8 @@ const FindingsPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm(t('modules.performance.findingsPage.deleteConfirm'))) return;
+    const confirmed = await showConfirm(t('modules.performance.findingsPage.deleteConfirm'));
+    if (!confirmed) return;
     try {
       setError('');
       await deleteFinding(id);

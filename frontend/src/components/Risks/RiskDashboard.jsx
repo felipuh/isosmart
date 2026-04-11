@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useI18n } from '../../context/I18nContext';
 import riskService from '../../services/riskService';
+import { showConfirm } from '../../services/dialogs';
 import RiskMatrixVisual from './RiskMatrixVisual';
 import RiskList from './RiskList';
 import RiskForm from './RiskForm';
@@ -71,13 +72,15 @@ const RiskDashboard = () => {
   };
 
   const handleDeleteRisk = async (id) => {
-    if (window.confirm(t('riskManagement.dashboard.messages.confirmDelete'))) {
-      try {
-        await riskService.deleteRisk(id);
-        await loadData();
-      } catch (err) {
-        setError(err.message);
-      }
+    const confirmed = await showConfirm(t('riskManagement.dashboard.messages.confirmDelete'));
+    if (!confirmed) {
+      return;
+    }
+    try {
+      await riskService.deleteRisk(id);
+      await loadData();
+    } catch (err) {
+      setError(err.message);
     }
   };
 

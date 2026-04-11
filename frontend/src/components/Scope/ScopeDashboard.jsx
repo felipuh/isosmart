@@ -3,6 +3,7 @@ import { RefreshCw, Download, PlayCircle, FileText } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useI18n } from '../../context/I18nContext';
 import scopeService from '../../services/scopeService';
+import { showAlert, showConfirm } from '../../services/dialogs';
 import ScopeStatement from './ScopeStatement';
 import OrganizationalBoundaries from './OrganizationalBoundaries';
 import ISORequirements from './ISORequirements';
@@ -69,7 +70,7 @@ const ScopeDashboard = () => {
     const cleanProducts = analysisConfig.products_services.filter(p => p.trim() !== '');
     
     if (cleanProducts.length === 0) {
-      alert(t('scopeDashboard.alerts.addAtLeastOneProduct'));
+      await showAlert(t('scopeDashboard.alerts.addAtLeastOneProduct'), { icon: 'warning' });
       return;
     }
 
@@ -83,18 +84,19 @@ const ScopeDashboard = () => {
       if (result.status === 'success') {
         await loadData();
         setShowConfig(false);
-        alert(
+        await showAlert(
           `${t('scopeDashboard.alerts.analysisCompleted')}\n\n` +
           `${t('scopeDashboard.alerts.productsServices')}: ${result.products_count}\n` +
           `${t('scopeDashboard.alerts.exclusions')}: ${result.exclusions_count}\n` +
-          `${t('scopeDashboard.alerts.coverage')}: ${result.coverage_score?.toFixed(1) || 0}%`
+          `${t('scopeDashboard.alerts.coverage')}: ${result.coverage_score?.toFixed(1) || 0}%`,
+          { icon: 'success' }
         );
       } else {
-        alert(result.message);
+        await showAlert(result.message, { icon: 'info' });
       }
     } catch (error) {
       console.error('Error ejecutando análisis:', error);
-      alert(t('scopeDashboard.alerts.analysisError'));
+      await showAlert(t('scopeDashboard.alerts.analysisError'), { icon: 'error' });
     } finally {
       setAnalyzing(false);
     }
@@ -115,32 +117,33 @@ const ScopeDashboard = () => {
     try {
       if (editingProcess) {
         await scopeService.updateProcess(editingProcess.id, formData, currentOrganization?.id);
-        alert(t('scopeDashboard.alerts.processUpdated'));
+        await showAlert(t('scopeDashboard.alerts.processUpdated'), { icon: 'success' });
       } else {
         await scopeService.createProcess(formData, currentOrganization?.id);
-        alert(t('scopeDashboard.alerts.processCreated'));
+        await showAlert(t('scopeDashboard.alerts.processCreated'), { icon: 'success' });
       }
       setShowProcessForm(false);
       setEditingProcess(null);
       await loadData();
     } catch (error) {
       console.error('Error guardando proceso:', error);
-      alert(t('scopeDashboard.alerts.processSaveError'));
+      await showAlert(t('scopeDashboard.alerts.processSaveError'), { icon: 'error' });
       throw error;
     }
   };
 
   const handleDeleteProcess = async (process) => {
-    if (!window.confirm(`${t('scopeDashboard.alerts.confirmDeleteProcess')} "${process.process_name}"?`)) {
+    const confirmed = await showConfirm(`${t('scopeDashboard.alerts.confirmDeleteProcess')} "${process.process_name}"?`);
+    if (!confirmed) {
       return;
     }
     try {
       await scopeService.deleteProcess(process.id, currentOrganization?.id);
-      alert(t('scopeDashboard.alerts.processDeleted'));
+      await showAlert(t('scopeDashboard.alerts.processDeleted'), { icon: 'success' });
       await loadData();
     } catch (error) {
       console.error('Error eliminando proceso:', error);
-      alert(t('scopeDashboard.alerts.processDeleteError'));
+      await showAlert(t('scopeDashboard.alerts.processDeleteError'), { icon: 'error' });
     }
   };
 
@@ -159,32 +162,33 @@ const ScopeDashboard = () => {
     try {
       if (editingLocation) {
         await scopeService.updateLocation(editingLocation.id, formData, currentOrganization?.id);
-        alert(t('scopeDashboard.alerts.locationUpdated'));
+        await showAlert(t('scopeDashboard.alerts.locationUpdated'), { icon: 'success' });
       } else {
         await scopeService.createLocation(formData, currentOrganization?.id);
-        alert(t('scopeDashboard.alerts.locationCreated'));
+        await showAlert(t('scopeDashboard.alerts.locationCreated'), { icon: 'success' });
       }
       setShowLocationForm(false);
       setEditingLocation(null);
       await loadData();
     } catch (error) {
       console.error('Error guardando ubicación:', error);
-      alert(t('scopeDashboard.alerts.locationSaveError'));
+      await showAlert(t('scopeDashboard.alerts.locationSaveError'), { icon: 'error' });
       throw error;
     }
   };
 
   const handleDeleteLocation = async (location) => {
-    if (!window.confirm(`${t('scopeDashboard.alerts.confirmDeleteLocation')} "${location.location_name}"?`)) {
+    const confirmed = await showConfirm(`${t('scopeDashboard.alerts.confirmDeleteLocation')} "${location.location_name}"?`);
+    if (!confirmed) {
       return;
     }
     try {
       await scopeService.deleteLocation(location.id, currentOrganization?.id);
-      alert(t('scopeDashboard.alerts.locationDeleted'));
+      await showAlert(t('scopeDashboard.alerts.locationDeleted'), { icon: 'success' });
       await loadData();
     } catch (error) {
       console.error('Error eliminando ubicación:', error);
-      alert(t('scopeDashboard.alerts.locationDeleteError'));
+      await showAlert(t('scopeDashboard.alerts.locationDeleteError'), { icon: 'error' });
     }
   };
 
