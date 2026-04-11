@@ -35,6 +35,14 @@ const COMPANY_SIZE_OPTIONS = [
 const CERTIFICATION_OPTIONS = ['first_time', 'already_certified', 'in_transition'];
 const TONE_OPTIONS = ['manager', 'technical'];
 
+const EXPERTISE_ROUTE_SUMMARY = {
+  none: 'Modo Taller Guiado',
+  beginner: 'Modo Taller Guiado',
+  intermediate: 'Fast-Track 4 semanas',
+  expert: 'Modo Consultor',
+  ninja: 'Modo Consultor Multiempresa',
+};
+
 const inputClassName = 'mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-cyan-500 dark:focus:ring-cyan-500/20';
 
 const sleep = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
@@ -188,6 +196,8 @@ const OnboardingPage = () => {
   const wizardCounterLabel = t('onboarding.wizard.stepCounter')
     .replace('{current}', String(currentStep + 1))
     .replace('{total}', String(stepDefinitions.length));
+
+  const selectedExpertiseRoute = EXPERTISE_ROUTE_SUMMARY[onboardingProfile.iso_expertise] || 'Ruta personalizada';
 
   const toggleStandard = (code, required) => {
     if (required) return;
@@ -497,6 +507,32 @@ const OnboardingPage = () => {
               </span>
             </label>
           ))}
+        </div>
+      </section>
+
+      <section className="rounded-3xl border border-slate-200 bg-slate-50/90 p-5 dark:border-slate-700 dark:bg-slate-900/70">
+        <h3 className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-400 dark:text-slate-500">Validación IA del onboarding</h3>
+        <div className="mt-4 grid gap-3 md:grid-cols-3">
+          <article className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-950/80">
+            <p className="text-xs uppercase tracking-[0.16em] text-slate-400 dark:text-slate-500">Motor 1</p>
+            <p className="mt-2 text-sm font-semibold text-slate-900 dark:text-white">Perfil Organizacional</p>
+            <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">Estructura base de procesos y contexto inicial.</p>
+          </article>
+          <article className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-950/80">
+            <p className="text-xs uppercase tracking-[0.16em] text-slate-400 dark:text-slate-500">Motor 2</p>
+            <p className="mt-2 text-sm font-semibold text-slate-900 dark:text-white">Impacto y Ahorro</p>
+            <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">Quick wins y oportunidades económicas priorizadas.</p>
+          </article>
+          <article className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-950/80">
+            <p className="text-xs uppercase tracking-[0.16em] text-slate-400 dark:text-slate-500">Motor 3</p>
+            <p className="mt-2 text-sm font-semibold text-slate-900 dark:text-white">Propósito y Alineación</p>
+            <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">Objetivos del líder conectados con calidad y ejecución.</p>
+          </article>
+        </div>
+
+        <div className="mt-4 rounded-2xl border border-cyan-200 bg-cyan-50/80 px-4 py-3 text-sm text-cyan-900 dark:border-cyan-700 dark:bg-cyan-900/20 dark:text-cyan-100">
+          <p className="font-semibold">Ruta sugerida por expertise: {selectedExpertiseRoute}</p>
+          <p className="mt-1 text-xs text-cyan-700 dark:text-cyan-200">Nivel seleccionado: {t(`onboarding.expertiseLevels.${onboardingProfile.iso_expertise}`)}.</p>
         </div>
       </section>
 
