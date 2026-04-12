@@ -460,7 +460,7 @@ claramente marcadas como 'RECOMENDACIÓN IA (requiere aprobación dirección)'.
                 status__in=['approved', 'active']
             ).values(
                 'id', 'version', 'title', 'content', 'status',
-                'approved_by__get_full_name', 'approval_date',
+                'approved_by__email', 'approval_date',
                 'effective_date', 'is_published',
             )
         )
@@ -483,7 +483,7 @@ claramente marcadas como 'RECOMENDACIÓN IA (requiere aprobación dirección)'.
                 'minutes_approved_by': r.minutes_approved_by.get_full_name() if r.minutes_approved_by else None,
                 'decisions': list(r.decisions.values(
                     'id', 'title', 'decision_type', 'status',
-                    'responsible__get_full_name', 'due_date', 'approved_at',
+                    'responsible__email', 'due_date', 'approved_at',
                 )),
             })
 
@@ -493,7 +493,7 @@ claramente marcadas como 'RECOMENDACIÓN IA (requiere aprobación dirección)'.
                 organization_id=organization_id
             ).values(
                 'id', 'workflow_type', 'title', 'approved_at',
-                'approved_by__get_full_name', 'digital_signature',
+                'approved_by__email', 'digital_signature',
                 'reference_model', 'reference_id',
             )
         )
@@ -504,7 +504,7 @@ claramente marcadas como 'RECOMENDACIÓN IA (requiere aprobación dirección)'.
                 organization_id=organization_id
             ).values(
                 'id', 'node_type', 'title', 'description',
-                'responsible__get_full_name', 'approver__get_full_name',
+                'responsible__email', 'approver__email',
                 'approved_at', 'created_at',
             )
         )
