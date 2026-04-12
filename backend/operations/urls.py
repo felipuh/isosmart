@@ -13,7 +13,12 @@ from .views import (
     ProductionControlViewSet,
     ProductReleaseViewSet,
     NonconformityViewSet,
-    DispositionViewSet
+    DispositionViewSet,
+    operations_cockpit_kpis,
+    operations_ai_requirements,
+    operations_ai_providers,
+    operations_ai_releases,
+    operations_ai_nonconformities,
 )
 
 router = DefaultRouter()
@@ -30,4 +35,9 @@ app_name = 'operations'
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('cockpit/kpis/', operations_cockpit_kpis, name='operations-cockpit-kpis'),
+    path('ai/requirements/', operations_ai_requirements, name='operations-ai-requirements'),
+    path('ai/providers/', operations_ai_providers, name='operations-ai-providers'),
+    path('ai/releases/', operations_ai_releases, name='operations-ai-releases'),
+    path('ai/nonconformities/', operations_ai_nonconformities, name='operations-ai-nonconformities'),
 ]

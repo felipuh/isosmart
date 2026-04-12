@@ -9,7 +9,11 @@ import {
   getMeasurementStats,
   getAudits,
   getFindings,
-  getReviews
+  getReviews,
+  getPerformanceCockpitKpis,
+  analyzeIndicatorDriftAI,
+  analyzeAuditAssistantAI,
+  generateExecutiveBriefAI,
 } from '../api/performanceApi';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
@@ -64,6 +68,12 @@ const PerformanceDashboard = () => {
     reviews: { total: 0, scheduled: 0 }
   });
   const [loading, setLoading] = useState(true);
+  const [cockpit, setCockpit] = useState(null);
+  const [aiInsights, setAiInsights] = useState({
+    drift: null,
+    audit: null,
+    executive: null,
+  });
 
   const loadDashboardData = useCallback(async () => {
     try {
@@ -74,14 +84,16 @@ const PerformanceDashboard = () => {
         auditsData,
         findingsData,
         reviewsData,
-        measurementStats
+        measurementStats,
+        cockpitData
       ] = await Promise.all([
         getIndicators({ organization_id: orgId }),
         getMeasurements({ organization_id: orgId }),
         getAudits({ organization_id: orgId }),
         getFindings({ organization_id: orgId }),
         getReviews({ organization_id: orgId }),
-        getMeasurementStats(orgId)
+        getMeasurementStats(orgId),
+        getPerformanceCockpitKpis(orgId).catch(() => null)
       ]);
 
       const indicators = normalizeList(indicatorsData);
@@ -113,6 +125,7 @@ const PerformanceDashboard = () => {
           scheduled: reviews.filter(r => r.status === 'scheduled').length
         }
       });
+      setCockpit(cockpitData);
     } catch (error) {
       console.error('Error loading performance dashboard:', error);
     } finally {
@@ -125,6 +138,23 @@ const PerformanceDashboard = () => {
       loadDashboardData();
     }
   }, [orgId, loadDashboardData]);
+
+  const runAiInsight = async (kind) => {
+    if (!orgId) return;
+    try {
+      const actionMap = {
+        drift: analyzeIndicatorDriftAI,
+        audit: analyzeAuditAssistantAI,
+        executive: generateExecutiveBriefAI,
+      };
+      const executor = actionMap[kind];
+      if (!executor) return;
+      const result = await executor(orgId);
+      setAiInsights(prev => ({ ...prev, [kind]: result }));
+    } catch (error) {
+      console.error('Error generating performance AI insight:', error);
+    }
+  };
 
   if (loading) {
     return (
@@ -185,6 +215,35 @@ const PerformanceDashboard = () => {
           color="red"
           statColors={statColors}
         />
+      </div>
+
+      <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-6 shadow dark:shadow-slate-900/50">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-bold text-slate-900 dark:text-white">{t('modules.performance.dashboard.cockpit.title')}</h2>
+          <span className="text-xs px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200">
+            {cockpit?.ai?.priority || 'n/a'}
+          </span>
+        </div>
+        <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">{t('modules.performance.dashboard.cockpit.subtitle')}</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+          {(cockpit?.ai?.alerts || []).map((alert, idx) => (
+            <div key={idx} className="p-3 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-800 dark:text-blue-200 text-sm">
+              {alert}
+            </div>
+          ))}
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <button type="button" onClick={() => runAiInsight('drift')} className="px-3 py-2 rounded-lg bg-indigo-600 text-white text-sm hover:bg-indigo-700 transition-all">{t('modules.performance.dashboard.cockpit.actions.drift')}</button>
+          <button type="button" onClick={() => runAiInsight('audit')} className="px-3 py-2 rounded-lg bg-orange-600 text-white text-sm hover:bg-orange-700 transition-all">{t('modules.performance.dashboard.cockpit.actions.audit')}</button>
+          <button type="button" onClick={() => runAiInsight('executive')} className="px-3 py-2 rounded-lg bg-teal-600 text-white text-sm hover:bg-teal-700 transition-all">{t('modules.performance.dashboard.cockpit.actions.executive')}</button>
+        </div>
+        {(aiInsights.drift || aiInsights.audit || aiInsights.executive) && (
+          <div className="mt-4 p-4 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 text-sm text-slate-700 dark:text-slate-200 space-y-2">
+            {aiInsights.drift?.drift_percentage !== undefined && <p>{t('modules.performance.dashboard.cockpit.summary.drift').replace('{value}', aiInsights.drift.drift_percentage)}</p>}
+            {aiInsights.audit?.top_priority && <p>{t('modules.performance.dashboard.cockpit.summary.audit').replace('{count}', aiInsights.audit.top_priority.length)}</p>}
+            {aiInsights.executive?.summary && <p>{t('modules.performance.dashboard.cockpit.summary.executive').replace('{count}', aiInsights.executive.summary.open_reviews || 0)}</p>}
+          </div>
+        )}
       </div>
 
       <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-6 shadow dark:shadow-slate-900/50">

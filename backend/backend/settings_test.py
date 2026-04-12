@@ -21,3 +21,9 @@ PASSWORD_HASHERS = [
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
+
+# Allow login without AdminApps during automated tests (no external service available).
+ALLOW_LOCAL_AUTH_BYPASS_FOR_TESTS = True
+
+# Disable owner-only restriction so test users can authenticate freely.
+OWNER_ORGANIZATION_ONLY_ACCESS = False

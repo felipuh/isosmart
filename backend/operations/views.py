@@ -5,13 +5,15 @@ Views for Operations Module
 
 from rest_framework import viewsets, filters, status
 from rest_framework.decorators import action
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import PermissionDenied, ValidationError
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db import models
 from core.organization_scoping import OrganizationScopedViewSetMixin
 from improvement.services import sync_operations_nc_to_improvement_nc
+from ai_modules.operations.operations_engine import OperationsAIService
 
 from .models import (
     OperationalControl,
@@ -327,7 +329,7 @@ class DispositionViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
         if nonconformity and nonconformity.organization_id != organization_id:
             raise PermissionDenied('No conformidad fuera de la organización activa')
         serializer.save()
-    
+
     @action(detail=False, methods=['get'])
     def pending_verification(self, request):
         """Disposiciones implementadas pero no verificadas"""
@@ -335,6 +337,144 @@ class DispositionViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
             implementation_date__isnull=False,
             is_verified=False
         ).order_by('implementation_date')
-        
+
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def operations_cockpit_kpis(request):
+    organization_id = getattr(request, 'organization_id', None) or request.query_params.get('organization_id')
+    if not organization_id:
+        raise ValidationError({'organization_id': 'organization_id requerido'})
+
+    requirements_qs = CustomerRequirement.objects.filter(organization_id=organization_id)
+    providers_qs = ExternalProvider.objects.filter(organization_id=organization_id, is_active=True)
+    releases_qs = ProductRelease.objects.filter(organization_id=organization_id)
+    nc_qs = Nonconformity.objects.filter(organization_id=organization_id)
+
+    kpis = {
+        'requirements': {
+            'total': requirements_qs.count(),
+            'pending_review': requirements_qs.filter(is_reviewed=False).count(),
+            'pending_confirmation': requirements_qs.filter(is_reviewed=True, is_confirmed=False).count(),
+            'not_feasible': requirements_qs.filter(can_meet_requirement=False).count(),
+        },
+        'providers': {
+            'total': providers_qs.count(),
+            'approved': providers_qs.filter(classification='approved').count(),
+            'conditional_or_not_approved': providers_qs.filter(classification__in=['conditional', 'not_approved']).count(),
+        },
+        'releases': {
+            'total': releases_qs.count(),
+            'pending': releases_qs.filter(status='pending').count(),
+            'rejected': releases_qs.filter(status='rejected').count(),
+        },
+        'nonconformities': {
+            'total': nc_qs.count(),
+            'open': nc_qs.filter(status__in=['identified', 'under_review', 'disposition_pending', 'treated']).count(),
+            'critical': nc_qs.filter(severity='critical', status__in=['identified', 'under_review', 'disposition_pending', 'treated']).count(),
+        },
+    }
+
+    service = OperationsAIService()
+    ai_result = service.process({'operation': 'cockpit_summary', 'kpis': kpis})
+    return Response({'organization_id': int(organization_id), 'kpis': kpis, 'ai': ai_result})
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def operations_ai_requirements(request):
+    organization_id = getattr(request, 'organization_id', None) or request.query_params.get('organization_id')
+    if not organization_id:
+        raise ValidationError({'organization_id': 'organization_id requerido'})
+
+    requirements = CustomerRequirement.objects.filter(organization_id=organization_id)
+    payload = {
+        'operation': 'requirement_validation',
+        'requirements': [
+            {
+                'id': item.id,
+                'requirement_code': item.requirement_code,
+                'is_reviewed': item.is_reviewed,
+                'is_confirmed': item.is_confirmed,
+                'can_meet_requirement': item.can_meet_requirement,
+            }
+            for item in requirements
+        ],
+    }
+    service = OperationsAIService()
+    return Response(service.process(payload))
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def operations_ai_providers(request):
+    organization_id = getattr(request, 'organization_id', None) or request.query_params.get('organization_id')
+    if not organization_id:
+        raise ValidationError({'organization_id': 'organization_id requerido'})
+
+    providers = ExternalProvider.objects.filter(organization_id=organization_id, is_active=True)
+    payload = {
+        'operation': 'provider_risk_scoring',
+        'providers': [
+            {
+                'id': item.id,
+                'provider_name': item.provider_name,
+                'classification': item.classification,
+                'evaluation_score': item.evaluation_score,
+                'performance_rating': item.performance_rating,
+            }
+            for item in providers
+        ],
+    }
+    service = OperationsAIService()
+    return Response(service.process(payload))
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def operations_ai_releases(request):
+    organization_id = getattr(request, 'organization_id', None) or request.query_params.get('organization_id')
+    if not organization_id:
+        raise ValidationError({'organization_id': 'organization_id requerido'})
+
+    releases = ProductRelease.objects.filter(organization_id=organization_id).order_by('-release_date')[:50]
+    payload = {
+        'operation': 'release_recommendation',
+        'releases': [
+            {
+                'id': item.id,
+                'release_code': item.release_code,
+                'verification_performed': item.verification_performed,
+                'acceptance_criteria_met': item.acceptance_criteria_met,
+            }
+            for item in releases
+        ],
+    }
+    service = OperationsAIService()
+    return Response(service.process(payload))
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def operations_ai_nonconformities(request):
+    organization_id = getattr(request, 'organization_id', None) or request.query_params.get('organization_id')
+    if not organization_id:
+        raise ValidationError({'organization_id': 'organization_id requerido'})
+
+    nonconformities = Nonconformity.objects.filter(organization_id=organization_id).order_by('-detection_date')[:50]
+    payload = {
+        'operation': 'root_cause_suggestions',
+        'nonconformities': [
+            {
+                'id': item.id,
+                'nc_number': item.nc_number,
+                'nc_type': item.nc_type,
+            }
+            for item in nonconformities
+        ],
+    }
+    service = OperationsAIService()
+    return Response(service.process(payload))

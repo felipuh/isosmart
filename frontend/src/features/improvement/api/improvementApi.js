@@ -87,8 +87,38 @@ export const getActiveInitiatives = async (organizationId) => {
   return response.data;
 };
 
+// ==================== COCKPIT + IA (CLAUSULA 10) ====================
+export const getImprovementCockpitKpis = async (organizationId) => {
+  const response = await api.get(`${API_URL}/cockpit/kpis/`, {
+    params: { organization_id: organizationId }
+  });
+  return response.data;
+};
+
+export const analyzeImprovementRootCauseAI = async (organizationId) => {
+  const response = await api.post(`${API_URL}/ai/root-cause/`, {}, {
+    params: { organization_id: organizationId }
+  });
+  return response.data;
+};
+
+export const analyzeCorrectiveTrackerAI = async (organizationId) => {
+  const response = await api.post(`${API_URL}/ai/corrective-tracker/`, {}, {
+    params: { organization_id: organizationId }
+  });
+  return response.data;
+};
+
+export const analyzeContinualOptimizerAI = async (organizationId) => {
+  const response = await api.post(`${API_URL}/ai/continual-optimizer/`, {}, {
+    params: { organization_id: organizationId }
+  });
+  return response.data;
+};
+
 export default {
   getNonconformities, createNonconformity, updateNonconformity, deleteNonconformity, getNonconformityStats,
   getCorrectiveActions, createCorrectiveAction, updateCorrectiveAction, deleteCorrectiveAction, getOverdueActions,
-  getContinualImprovements, createContinualImprovement, updateContinualImprovement, deleteContinualImprovement, getActiveInitiatives
+  getContinualImprovements, createContinualImprovement, updateContinualImprovement, deleteContinualImprovement, getActiveInitiatives,
+  getImprovementCockpitKpis, analyzeImprovementRootCauseAI, analyzeCorrectiveTrackerAI, analyzeContinualOptimizerAI
 };

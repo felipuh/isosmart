@@ -274,6 +274,42 @@ export const getUsers = async (params = {}) => {
   return response.data;
 };
 
+// ==================== COCKPIT + IA (CLAUSULA 8) ====================
+export const getOperationsCockpitKpis = async (organizationId) => {
+  const response = await api.get(`${API_URL}/cockpit/kpis/`, {
+    params: { organization_id: organizationId }
+  });
+  return response.data;
+};
+
+export const analyzeOperationsRequirementsAI = async (organizationId) => {
+  const response = await api.post(`${API_URL}/ai/requirements/`, {}, {
+    params: { organization_id: organizationId }
+  });
+  return response.data;
+};
+
+export const analyzeOperationsProvidersAI = async (organizationId) => {
+  const response = await api.post(`${API_URL}/ai/providers/`, {}, {
+    params: { organization_id: organizationId }
+  });
+  return response.data;
+};
+
+export const analyzeOperationsReleasesAI = async (organizationId) => {
+  const response = await api.post(`${API_URL}/ai/releases/`, {}, {
+    params: { organization_id: organizationId }
+  });
+  return response.data;
+};
+
+export const analyzeOperationsNonconformitiesAI = async (organizationId) => {
+  const response = await api.post(`${API_URL}/ai/nonconformities/`, {}, {
+    params: { organization_id: organizationId }
+  });
+  return response.data;
+};
+
 export default {
   getOperationalControls,
   createOperationalControl,
@@ -328,5 +364,10 @@ export default {
   updateDisposition,
   deleteDisposition,
 
+  getOperationsCockpitKpis,
+  analyzeOperationsRequirementsAI,
+  analyzeOperationsProvidersAI,
+  analyzeOperationsReleasesAI,
+  analyzeOperationsNonconformitiesAI,
   getUsers
 };

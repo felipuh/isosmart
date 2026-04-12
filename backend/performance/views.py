@@ -1,7 +1,9 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.exceptions import ValidationError
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
 from core.organization_scoping import OrganizationScopedViewSetMixin
@@ -9,6 +11,7 @@ from improvement.services import (
     sync_finding_to_improvement_nc,
     sync_management_review_to_continual_improvement,
 )
+from ai_modules.performance.performance_engine import PerformanceAIService
 from .models import (
     PerformanceIndicator, Measurement, DataAnalysis,
     InternalAudit, AuditFinding, ManagementReview
@@ -119,7 +122,7 @@ class ManagementReviewViewSet(OrganizationScopedViewSetMixin, viewsets.ModelView
     search_fields = ['review_code', 'title']
     ordering_fields = ['scheduled_date', 'created_at']
     ordering = ['-scheduled_date']
-    
+
     def perform_create(self, serializer):
         super().perform_create(serializer)
         sync_management_review_to_continual_improvement(serializer.instance)
@@ -127,3 +130,116 @@ class ManagementReviewViewSet(OrganizationScopedViewSetMixin, viewsets.ModelView
     def perform_update(self, serializer):
         super().perform_update(serializer)
         sync_management_review_to_continual_improvement(serializer.instance)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def performance_cockpit_kpis(request):
+    organization_id = getattr(request, 'organization_id', None) or request.query_params.get('organization_id')
+    if not organization_id:
+        raise ValidationError({'organization_id': 'organization_id requerido'})
+
+    indicators_qs = PerformanceIndicator.objects.filter(organization_id=organization_id)
+    measurements_qs = Measurement.objects.filter(organization_id=organization_id)
+    audits_qs = InternalAudit.objects.filter(organization_id=organization_id)
+    findings_qs = AuditFinding.objects.filter(organization_id=organization_id)
+    reviews_qs = ManagementReview.objects.filter(organization_id=organization_id)
+
+    kpis = {
+        'indicators': {
+            'total': indicators_qs.count(),
+            'active': indicators_qs.filter(status='active').count(),
+        },
+        'measurements': {
+            'total': measurements_qs.count(),
+            'on_target': measurements_qs.filter(status='on_target').count(),
+            'needs_attention': measurements_qs.filter(status='needs_attention').count(),
+        },
+        'audits': {
+            'total': audits_qs.count(),
+            'planned': audits_qs.filter(status='planned').count(),
+            'in_progress': audits_qs.filter(status='in_progress').count(),
+        },
+        'findings': {
+            'total': findings_qs.count(),
+            'open': findings_qs.filter(status='open').count(),
+            'major_nc': findings_qs.filter(finding_type='nc_major').count(),
+        },
+        'reviews': {
+            'total': reviews_qs.count(),
+            'scheduled': reviews_qs.filter(status='scheduled').count(),
+        },
+    }
+
+    service = PerformanceAIService()
+    ai_result = service.process({'operation': 'cockpit_summary', 'kpis': kpis})
+    return Response({'organization_id': int(organization_id), 'kpis': kpis, 'ai': ai_result})
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def performance_ai_indicator_drift(request):
+    organization_id = getattr(request, 'organization_id', None) or request.query_params.get('organization_id')
+    if not organization_id:
+        raise ValidationError({'organization_id': 'organization_id requerido'})
+
+    measurements = Measurement.objects.filter(organization_id=organization_id).order_by('-measurement_date')[:100]
+    payload = {
+        'operation': 'indicator_drift',
+        'measurements': [
+            {
+                'id': item.id,
+                'status': item.status,
+            }
+            for item in measurements
+        ],
+    }
+    service = PerformanceAIService()
+    return Response(service.process(payload))
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def performance_ai_audit_assistant(request):
+    organization_id = getattr(request, 'organization_id', None) or request.query_params.get('organization_id')
+    if not organization_id:
+        raise ValidationError({'organization_id': 'organization_id requerido'})
+
+    findings = AuditFinding.objects.filter(organization_id=organization_id).order_by('-created_at')[:100]
+    payload = {
+        'operation': 'audit_assistant',
+        'findings': [
+            {
+                'id': item.id,
+                'finding_number': item.finding_number,
+                'finding_type': item.finding_type,
+                'status': item.status,
+            }
+            for item in findings
+        ],
+    }
+    service = PerformanceAIService()
+    return Response(service.process(payload))
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def performance_ai_executive_brief(request):
+    organization_id = getattr(request, 'organization_id', None) or request.query_params.get('organization_id')
+    if not organization_id:
+        raise ValidationError({'organization_id': 'organization_id requerido'})
+
+    reviews = ManagementReview.objects.filter(organization_id=organization_id).order_by('-scheduled_date')[:50]
+    payload = {
+        'operation': 'executive_review_brief',
+        'reviews': [
+            {
+                'id': item.id,
+                'review_code': item.review_code,
+                'status': item.status,
+            }
+            for item in reviews
+        ],
+    }
+    service = PerformanceAIService()
+    return Response(service.process(payload))

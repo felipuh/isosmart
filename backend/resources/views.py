@@ -5,10 +5,13 @@ Views for Resources Module
 
 from rest_framework import viewsets, filters, status
 from rest_framework.decorators import action
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django_filters.rest_framework import DjangoFilterBackend
 from core.organization_scoping import OrganizationScopedViewSetMixin
+from ai_modules.resources.support_engine import SupportAIService
 
 from .models import (
     Resource,
@@ -233,3 +236,136 @@ class CommunicationViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet
         
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def support_cockpit_kpis(request):
+    organization_id = getattr(request, 'organization_id', None) or request.query_params.get('organization_id')
+    if not organization_id:
+        raise ValidationError({'organization_id': 'organization_id requerido'})
+
+    resources_qs = Resource.objects.filter(organization_id=organization_id, is_active=True)
+    infrastructure_qs = Infrastructure.objects.filter(organization_id=organization_id, is_active=True)
+    competences_qs = Competence.objects.filter(organization_id=organization_id, is_active=True)
+    trainings_qs = Training.objects.filter(organization_id=organization_id)
+    awareness_qs = Awareness.objects.filter(organization_id=organization_id)
+    communications_qs = Communication.objects.filter(organization_id=organization_id, is_active=True)
+
+    gaps_count = sum(1 for comp in competences_qs if comp.has_gap)
+    stats = {
+        'resources': {
+            'total': resources_qs.count(),
+            'in_maintenance': resources_qs.filter(status='maintenance').count(),
+            'in_use': resources_qs.filter(status='in_use').count(),
+        },
+        'infrastructure': {
+            'total': infrastructure_qs.count(),
+            'repair_or_out': infrastructure_qs.filter(status__in=['repair', 'out_of_service']).count(),
+            'maintenance': infrastructure_qs.filter(status='maintenance').count(),
+        },
+        'competence': {
+            'total': competences_qs.count(),
+            'gaps': gaps_count,
+        },
+        'training': {
+            'total': trainings_qs.count(),
+            'planned_or_running': trainings_qs.filter(status__in=['planned', 'in_progress']).count(),
+        },
+        'awareness': {
+            'total_activities': awareness_qs.count(),
+            'with_effectiveness': awareness_qs.exclude(effectiveness_evaluation='').count(),
+        },
+        'communications': {
+            'total': communications_qs.count(),
+            'pending': communications_qs.filter(status='planned').count(),
+        },
+    }
+
+    alerts = []
+    if stats['competence']['gaps'] > 0:
+        alerts.append({'type': 'warning', 'message': f"{stats['competence']['gaps']} brecha(s) de competencia requieren plan de cierre."})
+    if stats['infrastructure']['repair_or_out'] > 0:
+        alerts.append({'type': 'warning', 'message': f"{stats['infrastructure']['repair_or_out']} activo(s) de infraestructura en reparacion o fuera de servicio."})
+    if stats['communications']['pending'] > 0:
+        alerts.append({'type': 'info', 'message': f"{stats['communications']['pending']} comunicacion(es) pendientes de ejecutar."})
+
+    return Response({'organization_id': int(organization_id), 'kpis': stats, 'alerts': alerts})
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def support_ai_competence_plan(request):
+    organization_id = getattr(request, 'organization_id', None) or request.query_params.get('organization_id')
+    if not organization_id:
+        raise ValidationError({'organization_id': 'organization_id requerido'})
+
+    competences = Competence.objects.filter(organization_id=organization_id, is_active=True)
+    payload = {
+        'operation': 'competence_plan',
+        'competences': [
+            {
+                'id': comp.id,
+                'user_id': comp.user_id,
+                'competence_name': comp.competence_name,
+                'required_level': comp.required_level,
+                'current_level': comp.current_level,
+                'has_gap': comp.has_gap,
+            }
+            for comp in competences
+        ],
+    }
+    service = SupportAIService()
+    return Response(service.process(payload))
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def support_ai_awareness_pulse(request):
+    organization_id = getattr(request, 'organization_id', None) or request.query_params.get('organization_id')
+    if not organization_id:
+        raise ValidationError({'organization_id': 'organization_id requerido'})
+
+    activities = Awareness.objects.filter(organization_id=organization_id)
+    payload = {
+        'operation': 'awareness_pulse',
+        'activities': [
+            {
+                'id': item.id,
+                'awareness_type': item.awareness_type,
+                'effectiveness_evaluation': item.effectiveness_evaluation,
+            }
+            for item in activities
+        ],
+    }
+    service = SupportAIService()
+    return Response(service.process(payload))
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def support_ai_communication_draft(request):
+    organization_id = getattr(request, 'organization_id', None) or request.query_params.get('organization_id')
+    if not organization_id:
+        raise ValidationError({'organization_id': 'organization_id requerido'})
+
+    service = SupportAIService()
+    payload = {
+        'operation': 'communication_draft',
+        'topic': request.data.get('topic', ''),
+        'target_audience': request.data.get('target_audience', ''),
+        'channel': request.data.get('channel', 'intranet'),
+    }
+    return Response(service.process(payload))
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def support_ai_document_health(request):
+    organization_id = getattr(request, 'organization_id', None) or request.query_params.get('organization_id')
+    if not organization_id:
+        raise ValidationError({'organization_id': 'organization_id requerido'})
+
+    documents = request.data.get('documents') or []
+    service = SupportAIService()
+    return Response(service.process({'operation': 'document_health', 'documents': documents}))

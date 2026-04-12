@@ -18,6 +18,7 @@ from .client import admin_apps_client
 from .models import AssistantConversation, AssistantMessage, AssistantMemoryItem, AssistantOrgProfile
 from .services.vector_store import AssistantVectorSearchService
 from .tasks import index_text_as_chunks
+from ai_modules.integration.services.aims_governance_engine import AIMSGovernanceService
 
 
 def _bool_param(value, default=True):
@@ -73,6 +74,53 @@ def organization_modules(request, org_id):
     result = admin_apps_client.get_organization_modules(org_id, use_cache=use_cache)
     status_code = status.HTTP_200_OK if 'error' not in result else status.HTTP_502_BAD_GATEWAY
     return Response(result, status=status_code)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def aims_overview(request):
+    """ISO/IEC 42001 AIMS overview and baseline maturity."""
+    service = AIMSGovernanceService()
+    payload = {
+        'operation': 'aims_overview',
+        'models': request.data.get('models') or [],
+        'risks': request.data.get('risks') or [],
+        'controls': request.data.get('controls') or [],
+    }
+    return Response(service.process(payload))
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def aims_model_lifecycle_check(request):
+    service = AIMSGovernanceService()
+    payload = {
+        'operation': 'model_lifecycle_check',
+        'models': request.data.get('models') or [],
+    }
+    return Response(service.process(payload))
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def aims_risk_register(request):
+    service = AIMSGovernanceService()
+    payload = {
+        'operation': 'risk_register',
+        'risks': request.data.get('risks') or [],
+    }
+    return Response(service.process(payload))
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def aims_audit_digest(request):
+    service = AIMSGovernanceService()
+    payload = {
+        'operation': 'audit_log_digest',
+        'events': request.data.get('events') or [],
+    }
+    return Response(service.process(payload))
 
 
 def _sse(event, payload):

@@ -11,7 +11,15 @@ from .models import (
     RACIMatrix,
     RACIEntry,
     LeadershipCommitment,
-    CustomerFocusEvidence
+    CustomerFocusEvidence,
+    EvidenceNode,
+    EvidenceEdge,
+    ManagementReview,
+    ReviewDecision,
+    ApprovalRecord,
+    QualityCultureSurvey,
+    SurveyResponse,
+    AIGovernanceLog,
 )
 
 
@@ -165,3 +173,232 @@ class CustomerFocusEvidenceSerializer(serializers.ModelSerializer):
             'created_at', 'updated_at'
         ]
         read_only_fields = ['created_by', 'created_at', 'updated_at']
+
+
+# ─────────────────────────────────────────────────────────────
+# NUEVOS SERIALIZERS — Evidence Graph, ManagementReview,
+# ApprovalRecord, QualityCultureSurvey, AIGovernanceLog
+# ─────────────────────────────────────────────────────────────
+
+class EvidenceNodeSerializer(serializers.ModelSerializer):
+    """Serializer para Nodos del Grafo de Evidencias"""
+
+    node_type_display = serializers.CharField(source='get_node_type_display', read_only=True)
+    responsible_name = serializers.CharField(source='responsible.get_full_name', read_only=True)
+    approver_name = serializers.CharField(source='approver.get_full_name', read_only=True)
+    outgoing_edges_count = serializers.SerializerMethodField()
+    incoming_edges_count = serializers.SerializerMethodField()
+
+    class Meta:
+        model = EvidenceNode
+        fields = [
+            'id', 'organization_id', 'node_type', 'node_type_display',
+            'title', 'description',
+            'reference_id', 'reference_model',
+            'data_source', 'expected_impact',
+            'responsible', 'responsible_name',
+            'approver', 'approver_name', 'approved_at',
+            'metadata',
+            'outgoing_edges_count', 'incoming_edges_count',
+            'created_at', 'updated_at',
+        ]
+        read_only_fields = ['approved_at', 'created_at', 'updated_at']
+
+    def get_outgoing_edges_count(self, obj):
+        return obj.outgoing_edges.count()
+
+    def get_incoming_edges_count(self, obj):
+        return obj.incoming_edges.count()
+
+
+class EvidenceEdgeSerializer(serializers.ModelSerializer):
+    """Serializer para Aristas del Grafo de Evidencias"""
+
+    edge_type_display = serializers.CharField(source='get_edge_type_display', read_only=True)
+    source_title = serializers.CharField(source='source.title', read_only=True)
+    target_title = serializers.CharField(source='target.title', read_only=True)
+    created_by_name = serializers.CharField(source='created_by.get_full_name', read_only=True)
+
+    class Meta:
+        model = EvidenceEdge
+        fields = [
+            'id', 'source', 'source_title',
+            'target', 'target_title',
+            'edge_type', 'edge_type_display', 'label',
+            'created_by', 'created_by_name', 'created_at',
+        ]
+        read_only_fields = ['created_by', 'created_at']
+
+
+class EvidenceGraphSerializer(serializers.Serializer):
+    """Grafo completo de evidencias (nodos + aristas) para visualización"""
+    nodes = EvidenceNodeSerializer(many=True)
+    edges = EvidenceEdgeSerializer(many=True)
+
+
+class ReviewDecisionSerializer(serializers.ModelSerializer):
+    """Serializer para Decisiones de Revisión por la Dirección"""
+
+    decision_type_display = serializers.CharField(source='get_decision_type_display', read_only=True)
+    status_display = serializers.CharField(source='get_status_display', read_only=True)
+    responsible_name = serializers.CharField(source='responsible.get_full_name', read_only=True)
+    approved_by_name = serializers.CharField(source='approved_by.get_full_name', read_only=True)
+
+    class Meta:
+        model = ReviewDecision
+        fields = [
+            'id', 'review',
+            'title', 'description',
+            'decision_type', 'decision_type_display',
+            'responsible', 'responsible_name',
+            'due_date', 'status', 'status_display',
+            'ai_suggested', 'rationale',
+            'approved_by', 'approved_by_name', 'approved_at',
+            'created_at', 'updated_at',
+        ]
+        read_only_fields = ['approved_by', 'approved_at', 'created_at', 'updated_at']
+
+
+class ManagementReviewSerializer(serializers.ModelSerializer):
+    """Serializer para Revisiones por la Dirección"""
+
+    review_type_display = serializers.CharField(source='get_review_type_display', read_only=True)
+    status_display = serializers.CharField(source='get_status_display', read_only=True)
+    facilitator_name = serializers.CharField(source='facilitator.get_full_name', read_only=True)
+    created_by_name = serializers.CharField(source='created_by.get_full_name', read_only=True)
+    minutes_approved_by_name = serializers.CharField(source='minutes_approved_by.get_full_name', read_only=True)
+    ai_brief_approved_by_name = serializers.CharField(source='ai_brief_approved_by.get_full_name', read_only=True)
+    decisions = ReviewDecisionSerializer(many=True, read_only=True)
+    decisions_count = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ManagementReview
+        fields = [
+            'id', 'organization_id', 'organization_name',
+            'title', 'review_type', 'review_type_display',
+            'scheduled_date', 'actual_date',
+            'status', 'status_display',
+            'facilitator', 'facilitator_name',
+            'attendee_ids', 'agenda_items',
+            'ai_brief', 'ai_brief_generated_at',
+            'ai_brief_approved_by', 'ai_brief_approved_by_name', 'ai_brief_approved_at',
+            'minutes', 'minutes_approved_by', 'minutes_approved_by_name', 'minutes_approved_at',
+            'decisions', 'decisions_count',
+            'created_by', 'created_by_name',
+            'created_at', 'updated_at',
+        ]
+        read_only_fields = [
+            'ai_brief', 'ai_brief_generated_at',
+            'ai_brief_approved_by', 'ai_brief_approved_at',
+            'minutes_approved_by', 'minutes_approved_at',
+            'created_by', 'created_at', 'updated_at',
+        ]
+
+    def get_decisions_count(self, obj):
+        return obj.decisions.count()
+
+
+class ApprovalRecordSerializer(serializers.ModelSerializer):
+    """Serializer para Registros Inmutables de Aprobación"""
+
+    workflow_type_display = serializers.CharField(source='get_workflow_type_display', read_only=True)
+    approved_by_name = serializers.CharField(source='approved_by.get_full_name', read_only=True)
+    approved_by_email = serializers.EmailField(source='approved_by.email', read_only=True)
+
+    class Meta:
+        model = ApprovalRecord
+        fields = [
+            'id', 'organization_id',
+            'workflow_type', 'workflow_type_display',
+            'reference_id', 'reference_model',
+            'title',
+            'approved_by', 'approved_by_name', 'approved_by_email',
+            'approved_at', 'digital_signature',
+            'content_snapshot', 'ip_address', 'notes',
+        ]
+        # Todos los campos son de solo lectura — el registro es inmutable
+        read_only_fields = [
+            'approved_at', 'digital_signature', 'content_snapshot',
+            'approved_by', 'ip_address',
+        ]
+
+
+class QualityCultureSurveySerializer(serializers.ModelSerializer):
+    """Serializer para Encuestas de Cultura de Calidad"""
+
+    status_display = serializers.CharField(source='get_status_display', read_only=True)
+    created_by_name = serializers.CharField(source='created_by.get_full_name', read_only=True)
+    response_count = serializers.SerializerMethodField()
+    has_enough_responses = serializers.SerializerMethodField()
+
+    class Meta:
+        model = QualityCultureSurvey
+        fields = [
+            'id', 'organization_id', 'organization_name',
+            'title', 'description',
+            'status', 'status_display',
+            'start_date', 'end_date',
+            'questions', 'min_responses_for_analysis',
+            'response_count', 'has_enough_responses',
+            'created_by', 'created_by_name',
+            'created_at', 'updated_at',
+        ]
+        read_only_fields = ['created_by', 'created_at', 'updated_at']
+
+    def get_response_count(self, obj):
+        return obj.responses.count()
+
+    def get_has_enough_responses(self, obj):
+        return obj.responses.count() >= obj.min_responses_for_analysis
+
+
+class SurveyResponseSerializer(serializers.ModelSerializer):
+    """
+    Serializer para Respuestas de Encuesta.
+    Por diseño: NO se expone session_hash en respuestas, no se acepta user/email.
+    """
+
+    class Meta:
+        model = SurveyResponse
+        fields = ['id', 'survey', 'responses', 'submitted_at']
+        read_only_fields = ['submitted_at']
+
+    def validate(self, data):
+        """Asegurar que no haya campos de identidad en la respuesta."""
+        responses = data.get('responses', {})
+        forbidden = {'user', 'user_id', 'email', 'nombre', 'name', 'dni', 'cedula'}
+        found = forbidden & set(str(k).lower() for k in responses.keys())
+        if found:
+            raise serializers.ValidationError(
+                f"Privacidad por diseño: no se permiten campos de identificación en respuestas: {found}"
+            )
+        return data
+
+
+class AIGovernanceLogSerializer(serializers.ModelSerializer):
+    """Serializer para Logs de Gobernanza de IA"""
+
+    human_decision_display = serializers.CharField(source='get_human_decision_display', read_only=True)
+    decided_by_name = serializers.CharField(source='decided_by.get_full_name', read_only=True)
+
+    class Meta:
+        model = AIGovernanceLog
+        fields = [
+            'id', 'organization_id', 'module', 'operation',
+            'model_version', 'prompt_template',
+            # prompt_hash: auditable pero no expone el prompt completo
+            'prompt_hash',
+            'response_summary',
+            'ai_recommendation', 'sources_cited',
+            'hallucination_flags', 'privacy_check_passed',
+            'human_decision', 'human_decision_display',
+            'decided_by', 'decided_by_name', 'decided_at',
+            'human_notes',
+            'created_at',
+        ]
+        read_only_fields = [
+            'prompt_hash', 'model_version', 'prompt_template',
+            'response_summary', 'ai_recommendation', 'sources_cited',
+            'hallucination_flags', 'privacy_check_passed',
+            'created_at',
+        ]

@@ -11,7 +11,8 @@ import {
   getHighPriorityRisks,
   getAtRiskObjectives,
   getOverdueActions,
-  getPendingChanges
+  getPendingChanges,
+  getPlanningCockpitKPIs
 } from '../api/planningApi';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
@@ -47,6 +48,7 @@ const PlanningDashboard = () => {
     actions: { total: 0, overdue: 0 },
     changes: { total: 0, pending: 0 }
   });
+  const [cockpit, setCockpit] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const loadDashboardData = useCallback(async () => {
@@ -61,7 +63,8 @@ const PlanningDashboard = () => {
         highRisks,
         atRiskObjs,
         overdueActs,
-        pendingChgs
+        pendingChgs,
+        cockpitData
       ] = await Promise.all([
         getRisksOpportunities({ organization_id: orgId }),
         getObjectives({ organization_id: orgId }),
@@ -70,13 +73,15 @@ const PlanningDashboard = () => {
         getHighPriorityRisks(orgId),
         getAtRiskObjectives(orgId),
         getOverdueActions(orgId),
-        getPendingChanges(orgId)
+        getPendingChanges(orgId),
+        getPlanningCockpitKPIs(orgId)
       ]);
 
       const risks = normalizeList(risksData);
       const objectives = normalizeList(objectivesData);
       const actions = normalizeList(actionsData);
       const changes = normalizeList(changesData);
+      setCockpit(cockpitData);
 
       setStats({
         risks: {
@@ -186,6 +191,17 @@ const PlanningDashboard = () => {
           color="purple"
         />
       </div>
+
+      {cockpit?.alerts?.length > 0 && (
+        <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-lg p-4">
+          <h3 className="text-sm font-semibold text-amber-800 dark:text-amber-200 mb-2">{t('modules.planning.dashboard.alertsTitle')}</h3>
+          <ul className="space-y-1">
+            {cockpit.alerts.map((alert, index) => (
+              <li key={index} className="text-xs text-amber-700 dark:text-amber-300">• {alert.message}</li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {/* Change Control */}
       <div className="bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-500/20 rounded-lg p-6">

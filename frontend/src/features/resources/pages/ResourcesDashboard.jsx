@@ -9,7 +9,11 @@ import {
   getCompetences,
   getTrainings,
   getUpcomingTrainings,
-  getCompetenceGaps
+  getCompetenceGaps,
+  getSupportCockpitKpis,
+  generateCompetencePlanWithAI,
+  generateAwarenessPulseWithAI,
+  generateCommunicationDraftWithAI,
 } from '../api/resourcesApi';
 
 const ResourcesDashboard = () => {
@@ -42,19 +46,27 @@ const ResourcesDashboard = () => {
     competences: { total: 0, gaps: 0 },
     trainings: { upcoming: 0, in_progress: 0 }
   });
+  const [supportCockpit, setSupportCockpit] = useState(null);
+  const [aiInsights, setAiInsights] = useState({
+    competencePlan: null,
+    awarenessPulse: null,
+    communicationDraft: null,
+  });
+  const [generatingAI, setGeneratingAI] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const loadDashboardData = useCallback(async () => {
     try {
       setLoading(true);
 
-      const [resourcesData, infraData, compData, trainData, upcomingData, gapsData] = await Promise.all([
+      const [resourcesData, infraData, compData, trainData, upcomingData, gapsData, cockpitData] = await Promise.all([
         getResources({ organization_id: orgId }),
         getInfrastructure({ organization_id: orgId }),
         getCompetences({ organization_id: orgId }),
         getTrainings({ organization_id: orgId }),
         getUpcomingTrainings(orgId),
-        getCompetenceGaps(orgId)
+        getCompetenceGaps(orgId),
+        getSupportCockpitKpis(orgId),
       ]);
 
       const resources = Array.isArray(resourcesData) ? resourcesData : resourcesData.results || [];
@@ -84,12 +96,34 @@ const ResourcesDashboard = () => {
           in_progress: trainings.filter(t => t.status === 'in_progress').length
         }
       });
+      setSupportCockpit(cockpitData);
     } catch (error) {
       console.error('Error loading dashboard:', error);
     } finally {
       setLoading(false);
     }
   }, [orgId]);
+
+  const generateAIInsights = useCallback(async () => {
+    if (!orgId) return;
+    try {
+      setGeneratingAI(true);
+      const [competencePlan, awarenessPulse, communicationDraft] = await Promise.all([
+        generateCompetencePlanWithAI(orgId),
+        generateAwarenessPulseWithAI(orgId),
+        generateCommunicationDraftWithAI(orgId, {
+          topic: t('modules.resources.dashboard.ai.defaultTopic'),
+          target_audience: t('modules.resources.dashboard.ai.defaultAudience'),
+          channel: 'intranet',
+        }),
+      ]);
+      setAiInsights({ competencePlan, awarenessPulse, communicationDraft });
+    } catch (error) {
+      console.error('Error generating AI insights:', error);
+    } finally {
+      setGeneratingAI(false);
+    }
+  }, [orgId, t]);
 
   useEffect(() => {
     if (orgId) {
@@ -213,6 +247,57 @@ const ResourcesDashboard = () => {
             </div>
           </Link>
         </div>
+      </div>
+
+      <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-6 shadow dark:shadow-slate-900/50">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-bold text-slate-900 dark:text-white">{t('modules.resources.dashboard.cockpit.title')}</h2>
+          <button
+            type="button"
+            onClick={generateAIInsights}
+            disabled={generatingAI}
+            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-60 text-white rounded-lg text-sm"
+          >
+            {generatingAI ? t('modules.resources.dashboard.ai.generating') : t('modules.resources.dashboard.ai.generate')}
+          </button>
+        </div>
+
+        {supportCockpit?.alerts?.length > 0 ? (
+          <div className="space-y-2 mb-4">
+            {supportCockpit.alerts.map((alert, idx) => (
+              <div key={idx} className="px-4 py-2 rounded-lg border border-amber-300/40 bg-amber-100/60 dark:bg-amber-900/20 text-sm text-slate-700 dark:text-slate-200">
+                {alert.message}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">{t('modules.resources.dashboard.cockpit.noAlerts')}</p>
+        )}
+
+        {aiInsights.competencePlan?.summary && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
+            <div className="p-3 rounded-lg border border-slate-200 dark:border-slate-700">
+              <p className="text-xs text-slate-500 dark:text-slate-400">{t('modules.resources.dashboard.ai.gaps')}</p>
+              <p className="text-xl font-bold text-slate-900 dark:text-white">{aiInsights.competencePlan.summary.total_gaps}</p>
+            </div>
+            <div className="p-3 rounded-lg border border-slate-200 dark:border-slate-700">
+              <p className="text-xs text-slate-500 dark:text-slate-400">{t('modules.resources.dashboard.ai.criticalGaps')}</p>
+              <p className="text-xl font-bold text-slate-900 dark:text-white">{aiInsights.competencePlan.summary.critical_gaps}</p>
+            </div>
+            <div className="p-3 rounded-lg border border-slate-200 dark:border-slate-700">
+              <p className="text-xs text-slate-500 dark:text-slate-400">{t('modules.resources.dashboard.ai.awarenessHealth')}</p>
+              <p className="text-xl font-bold text-slate-900 dark:text-white">{aiInsights.awarenessPulse?.awareness?.health_status || '-'}</p>
+            </div>
+          </div>
+        )}
+
+        {aiInsights.communicationDraft?.draft?.subject && (
+          <div className="p-4 rounded-lg border border-blue-300/40 bg-blue-50/60 dark:bg-blue-900/20">
+            <p className="text-xs text-slate-500 dark:text-slate-400 mb-1">{t('modules.resources.dashboard.ai.draftLabel')}</p>
+            <p className="text-sm font-semibold text-slate-900 dark:text-white">{aiInsights.communicationDraft.draft.subject}</p>
+            <p className="text-sm text-slate-700 dark:text-slate-300 mt-1 whitespace-pre-line">{aiInsights.communicationDraft.draft.body}</p>
+          </div>
+        )}
       </div>
 
       {/* Module Links */}

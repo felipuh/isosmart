@@ -5,7 +5,11 @@ import { useI18n } from '../../../context/I18nContext';
 import {
   getNonconformities, getNonconformityStats,
   getCorrectiveActions, getOverdueActions,
-  getContinualImprovements, getActiveInitiatives
+  getContinualImprovements, getActiveInitiatives,
+  getImprovementCockpitKpis,
+  analyzeImprovementRootCauseAI,
+  analyzeCorrectiveTrackerAI,
+  analyzeContinualOptimizerAI,
 } from '../api/improvementApi';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
@@ -22,6 +26,12 @@ const ImprovementDashboard = () => {
   const { currentOrganization } = useAuth();
   const orgId = currentOrganization?.id || null;
   const [loading, setLoading] = useState(true);
+  const [cockpit, setCockpit] = useState(null);
+  const [aiInsights, setAiInsights] = useState({
+    rootCause: null,
+    tracker: null,
+    optimizer: null,
+  });
   const [stats, setStats] = useState({
     nonconformities: { total: 0, open: 0, closed: 0, critical: 0 },
     corrective_actions: { total: 0, overdue: 0, effective: 0 },
@@ -31,13 +41,14 @@ const ImprovementDashboard = () => {
   const loadDashboard = useCallback(async () => {
     try {
       setLoading(true);
-      const [ncsData, ncStats, actionsData, overdueData, improvementsData, activeData] = await Promise.all([
+      const [ncsData, ncStats, actionsData, overdueData, improvementsData, activeData, cockpitData] = await Promise.all([
         getNonconformities({ organization_id: orgId }),
         getNonconformityStats(orgId).catch(() => null),
         getCorrectiveActions({ organization_id: orgId }),
         getOverdueActions(orgId).catch(() => []),
         getContinualImprovements({ organization_id: orgId }),
-        getActiveInitiatives(orgId).catch(() => [])
+        getActiveInitiatives(orgId).catch(() => []),
+        getImprovementCockpitKpis(orgId).catch(() => null)
       ]);
 
       const ncs = normalizeList(ncsData);
@@ -64,6 +75,7 @@ const ImprovementDashboard = () => {
           successful: improvements.filter(i => i.status === 'successful').length,
         }
       });
+      setCockpit(cockpitData);
     } catch (error) {
       console.error('Error loading improvement dashboard:', error);
     } finally {
@@ -72,6 +84,23 @@ const ImprovementDashboard = () => {
   }, [orgId]);
 
   useEffect(() => { if (orgId) loadDashboard(); }, [orgId, loadDashboard]);
+
+  const runAiInsight = async (kind) => {
+    if (!orgId) return;
+    try {
+      const actionMap = {
+        rootCause: analyzeImprovementRootCauseAI,
+        tracker: analyzeCorrectiveTrackerAI,
+        optimizer: analyzeContinualOptimizerAI,
+      };
+      const executor = actionMap[kind];
+      if (!executor) return;
+      const result = await executor(orgId);
+      setAiInsights(prev => ({ ...prev, [kind]: result }));
+    } catch (error) {
+      console.error('Error generating improvement AI insight:', error);
+    }
+  };
 
   const StatCard = ({ title, value, subtitle, icon, link, color = 'blue' }) => {
     const palette = statColors[color] || statColors.blue;
@@ -119,6 +148,35 @@ const ImprovementDashboard = () => {
         <StatCard title={t('modules.improvement.dashboard.stats.effectiveness')}
           value={stats.corrective_actions.total > 0 ? `${Math.round((stats.corrective_actions.effective / stats.corrective_actions.total) * 100)}%` : t('modules.improvement.dashboard.stats.notAvailable')}
           subtitle={t('modules.improvement.dashboard.stats.effectivenessDetail')} icon="✅" link="/improvement/corrective-actions" color="blue" />
+      </div>
+
+      <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-6 shadow dark:shadow-slate-900/50">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-bold text-slate-900 dark:text-white">{t('modules.improvement.dashboard.cockpit.title')}</h2>
+          <span className="text-xs px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200">
+            {cockpit?.ai?.maturity || 'n/a'}
+          </span>
+        </div>
+        <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">{t('modules.improvement.dashboard.cockpit.subtitle')}</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+          {(cockpit?.ai?.alerts || []).map((alert, idx) => (
+            <div key={idx} className="p-3 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-800 dark:text-rose-200 text-sm">
+              {alert}
+            </div>
+          ))}
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <button type="button" onClick={() => runAiInsight('rootCause')} className="px-3 py-2 rounded-lg bg-rose-600 text-white text-sm hover:bg-rose-700 transition-all">{t('modules.improvement.dashboard.cockpit.actions.rootCause')}</button>
+          <button type="button" onClick={() => runAiInsight('tracker')} className="px-3 py-2 rounded-lg bg-amber-600 text-white text-sm hover:bg-amber-700 transition-all">{t('modules.improvement.dashboard.cockpit.actions.tracker')}</button>
+          <button type="button" onClick={() => runAiInsight('optimizer')} className="px-3 py-2 rounded-lg bg-emerald-600 text-white text-sm hover:bg-emerald-700 transition-all">{t('modules.improvement.dashboard.cockpit.actions.optimizer')}</button>
+        </div>
+        {(aiInsights.rootCause || aiInsights.tracker || aiInsights.optimizer) && (
+          <div className="mt-4 p-4 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 text-sm text-slate-700 dark:text-slate-200 space-y-2">
+            {aiInsights.rootCause?.suggestions && <p>{t('modules.improvement.dashboard.cockpit.summary.rootCause').replace('{count}', aiInsights.rootCause.suggestions.length)}</p>}
+            {aiInsights.tracker?.summary && <p>{t('modules.improvement.dashboard.cockpit.summary.tracker').replace('{count}', aiInsights.tracker.summary.overdue || 0)}</p>}
+            {aiInsights.optimizer?.next_wave && <p>{t('modules.improvement.dashboard.cockpit.summary.optimizer').replace('{count}', aiInsights.optimizer.next_wave.length)}</p>}
+          </div>
+        )}
       </div>
 
       {stats.nonconformities.critical > 0 && (

@@ -8,7 +8,10 @@ from .models import (
     RiskOpportunity,
     QualityObjective,
     ObjectiveAction,
-    ChangeControl
+    ChangeControl,
+    PlanningVersionRecord,
+    PlanningApprovalRecord,
+    PlanningAIGovernanceLog,
 )
 
 
@@ -19,6 +22,10 @@ class RiskOpportunitySerializer(serializers.ModelSerializer):
     treatment_display = serializers.CharField(source='get_treatment_display', read_only=True)
     status_display = serializers.CharField(source='get_status_display', read_only=True)
     owner_name = serializers.CharField(source='owner.get_full_name', read_only=True)
+    approved_by_name = serializers.CharField(source='approved_by.get_full_name', read_only=True)
+    normalized_probability = serializers.FloatField(read_only=True)
+    normalized_impact = serializers.FloatField(read_only=True)
+    level_band = serializers.CharField(read_only=True)
     
     class Meta:
         model = RiskOpportunity
@@ -29,10 +36,13 @@ class RiskOpportunitySerializer(serializers.ModelSerializer):
             'context', 'context_display',
             'category', 'category_display',
             'probability', 'impact', 'risk_level',
+            'normalized_probability', 'normalized_impact', 'level_band',
             'feasibility', 'benefit', 'opportunity_score',
             'treatment', 'treatment_display', 'treatment_description',
             'owner', 'owner_name',
+            'ai_sources', 'proposed_actions',
             'status', 'status_display',
+            'approved_by', 'approved_by_name', 'approved_at', 'approval_notes',
             'review_date', 'last_review_date', 'review_notes',
             'related_processes',
             'is_active', 'created_at', 'updated_at'
@@ -82,6 +92,7 @@ class QualityObjectiveSerializer(serializers.ModelSerializer):
     achievement_percentage = serializers.FloatField(read_only=True)
     actions = ObjectiveActionSerializer(many=True, read_only=True)
     actions_count = serializers.SerializerMethodField()
+    approved_by_name = serializers.CharField(source='approved_by.get_full_name', read_only=True)
     
     class Meta:
         model = QualityObjective
@@ -99,6 +110,8 @@ class QualityObjectiveSerializer(serializers.ModelSerializer):
             'progress_percentage',
             'addresses_risks', 'leverages_opportunities',
             'required_resources', 'budget',
+            'ai_recommendations', 'forecast_summary',
+            'approved_by', 'approved_by_name', 'approval_date',
             'actions', 'actions_count',
             'is_active', 'created_at', 'updated_at'
         ]
@@ -156,7 +169,53 @@ class ChangeControlSerializer(serializers.ModelSerializer):
             'status', 'status_display',
             'approval_date', 'approval_comments',
             'verification_date', 'verification_notes', 'is_effective',
-            'related_documents',
+            'related_documents', 'impact_estimated', 'implementation_plan', 'affected_versions',
             'created_at', 'updated_at'
         ]
         read_only_fields = ['created_at', 'updated_at']
+
+
+class PlanningVersionRecordSerializer(serializers.ModelSerializer):
+    changed_by_name = serializers.CharField(source='changed_by.get_full_name', read_only=True)
+    entity_type_display = serializers.CharField(source='get_entity_type_display', read_only=True)
+
+    class Meta:
+        model = PlanningVersionRecord
+        fields = [
+            'id', 'organization_id', 'entity_type', 'entity_type_display', 'entity_id',
+            'version_number', 'snapshot', 'changed_by', 'changed_by_name',
+            'change_reason', 'created_at'
+        ]
+        read_only_fields = fields
+
+
+class PlanningApprovalRecordSerializer(serializers.ModelSerializer):
+    approved_by_name = serializers.CharField(source='approved_by.get_full_name', read_only=True)
+    workflow_type_display = serializers.CharField(source='get_workflow_type_display', read_only=True)
+
+    class Meta:
+        model = PlanningApprovalRecord
+        fields = [
+            'id', 'organization_id', 'workflow_type', 'workflow_type_display',
+            'reference_model', 'reference_id', 'title', 'approved_by', 'approved_by_name',
+            'approved_at', 'digital_signature', 'content_snapshot', 'notes'
+        ]
+        read_only_fields = fields
+
+
+class PlanningAIGovernanceLogSerializer(serializers.ModelSerializer):
+    decided_by_name = serializers.CharField(source='decided_by.get_full_name', read_only=True)
+    human_decision_display = serializers.CharField(source='get_human_decision_display', read_only=True)
+
+    class Meta:
+        model = PlanningAIGovernanceLog
+        fields = [
+            'id', 'organization_id', 'operation', 'model_version', 'prompt_template', 'prompt_hash',
+            'response_summary', 'ai_recommendation', 'data_sources', 'privacy_check_passed',
+            'human_decision', 'human_decision_display', 'decided_by', 'decided_by_name',
+            'decided_at', 'human_notes', 'created_at'
+        ]
+        read_only_fields = [
+            'model_version', 'prompt_template', 'prompt_hash', 'response_summary',
+            'ai_recommendation', 'data_sources', 'privacy_check_passed', 'created_at'
+        ]

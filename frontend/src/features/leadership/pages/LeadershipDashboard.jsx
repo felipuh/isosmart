@@ -1,7 +1,7 @@
 // features/leadership/pages/LeadershipDashboard.jsx
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getPolicies, getRoles, getCommitments } from '../api/leadershipApi';
+import { getPolicies, getRoles, getCommitments, getCockpitKPIs } from '../api/leadershipApi';
 import { useAuth } from '../../../context/AuthContext';
 import { useI18n } from '../../../context/I18nContext';
 
@@ -9,6 +9,8 @@ const LeadershipDashboard = () => {
   const { t } = useI18n();
   const { currentOrganization } = useAuth();
   const orgId = currentOrganization?.id || null;
+  const [cockpit, setCockpit] = useState(null);
+  const [cockpitError, setCockpitError] = useState(false);
   const [stats, setStats] = useState({
     policies: { total: 0, active: 0, draft: 0 },
     roles: { total: 0, assigned: 0 },
@@ -36,6 +38,12 @@ const LeadershipDashboard = () => {
       setLoading(true);
 
       const params = { organization_id: orgId };
+
+      // Cockpit KPIs (enhanced)
+      try {
+        const kpis = await getCockpitKPIs();
+        setCockpit(kpis);
+      } catch { setCockpitError(true); }
 
       // Cargar políticas
       const policiesData = await getPolicies(params);
@@ -177,6 +185,56 @@ const LeadershipDashboard = () => {
         />
       </div>
 
+      {/* Cockpit KPIs row */}
+      {cockpit && !cockpitError && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <StatCard
+            title={t('modules.leadership.dashboard.cockpit.reviews')}
+            value={cockpit.management_reviews?.total ?? '—'}
+            subtitle={`${cockpit.management_reviews?.pending_count ?? 0} ${t('modules.leadership.dashboard.cockpit.pending')}`}
+            icon="📋"
+            link="/leadership/management-reviews"
+            color="blue"
+          />
+          <StatCard
+            title={t('modules.leadership.dashboard.cockpit.evidenceGraph')}
+            value={cockpit.evidence_graph?.total_nodes ?? '—'}
+            subtitle={`${cockpit.evidence_graph?.approved_nodes ?? 0} ${t('modules.leadership.dashboard.cockpit.approved')}`}
+            icon="🕸"
+            link="/leadership/evidence-graph"
+            color="purple"
+          />
+          <StatCard
+            title={t('modules.leadership.dashboard.cockpit.culture')}
+            value={cockpit.culture_surveys?.active_count ?? '—'}
+            subtitle={t('modules.leadership.dashboard.cockpit.activeSurveys')}
+            icon="📝"
+            link="/leadership/culture"
+            color="green"
+          />
+          <StatCard
+            title={t('modules.leadership.dashboard.cockpit.aiGovernance')}
+            value={cockpit.ai_governance?.pending_decisions ?? '—'}
+            subtitle={t('modules.leadership.dashboard.cockpit.pendingDecisions')}
+            icon="🤖"
+            link="/leadership/evidence-graph"
+            color="orange"
+          />
+        </div>
+      )}
+
+      {/* Alerts from cockpit */}
+      {cockpit?.alerts && cockpit.alerts.length > 0 && (
+        <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-lg p-4">
+          <h3 className="text-sm font-semibold text-amber-800 dark:text-amber-200 mb-2">⚠️ {t('modules.leadership.dashboard.cockpit.alertsTitle')}</h3>
+          <ul className="space-y-1">
+            {cockpit.alerts.map((a, i) => (
+              <li key={i} className="text-xs text-amber-700 dark:text-amber-300">• {a.message || a}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       {/* Quick Actions */}
       <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-6 shadow dark:shadow-slate-900/50">
         <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4">{t('modules.leadership.dashboard.quickActions.title')}</h2>
@@ -211,6 +269,38 @@ const LeadershipDashboard = () => {
             <div>
               <p className="font-medium text-slate-900 dark:text-white">{t('modules.leadership.dashboard.quickActions.newRaci')}</p>
               <p className="text-xs text-slate-600 dark:text-slate-400">{t('modules.leadership.dashboard.quickActions.newRaciDesc')}</p>
+            </div>
+          </Link>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+          <Link
+            to="/leadership/management-reviews"
+            className="flex items-center space-x-3 p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg hover:bg-blue-500/20 transition-all"
+          >
+            <span className="text-2xl">📋</span>
+            <div>
+              <p className="font-medium text-slate-900 dark:text-white">{t('modules.leadership.dashboard.quickActions.managementReviews')}</p>
+              <p className="text-xs text-slate-600 dark:text-slate-400">{t('modules.leadership.dashboard.quickActions.managementReviewsDesc')}</p>
+            </div>
+          </Link>
+          <Link
+            to="/leadership/evidence-graph"
+            className="flex items-center space-x-3 p-4 bg-purple-500/10 border border-purple-500/20 rounded-lg hover:bg-purple-500/20 transition-all"
+          >
+            <span className="text-2xl">🕸</span>
+            <div>
+              <p className="font-medium text-slate-900 dark:text-white">{t('modules.leadership.dashboard.quickActions.evidenceGraph')}</p>
+              <p className="text-xs text-slate-600 dark:text-slate-400">{t('modules.leadership.dashboard.quickActions.evidenceGraphDesc')}</p>
+            </div>
+          </Link>
+          <Link
+            to="/leadership/auditor-pack"
+            className="flex items-center space-x-3 p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg hover:bg-amber-500/20 transition-all"
+          >
+            <span className="text-2xl">📦</span>
+            <div>
+              <p className="font-medium text-slate-900 dark:text-white">{t('modules.leadership.dashboard.quickActions.auditorPack')}</p>
+              <p className="text-xs text-slate-600 dark:text-slate-400">{t('modules.leadership.dashboard.quickActions.auditorPackDesc')}</p>
             </div>
           </Link>
         </div>

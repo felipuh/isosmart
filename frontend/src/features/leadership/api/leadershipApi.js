@@ -191,6 +191,160 @@ export const deleteCustomerFocus = async (id) => {
   return response.data;
 };
 
+// ==================== GRAFO DE EVIDENCIA ====================
+export const getEvidenceGraph = async (params = {}) => {
+  const response = await api.get(`${API_URL}/evidence-nodes/graph/`, { params });
+  return response.data;
+};
+export const getEvidenceNodes = async (params = {}) => {
+  const response = await api.get(`${API_URL}/evidence-nodes/`, { params });
+  return response.data;
+};
+export const createEvidenceNode = async (data) => {
+  const response = await api.post(`${API_URL}/evidence-nodes/`, data);
+  return response.data;
+};
+export const updateEvidenceNode = async (id, data) => {
+  const response = await api.put(`${API_URL}/evidence-nodes/${id}/`, data);
+  return response.data;
+};
+export const deleteEvidenceNode = async (id) => {
+  const response = await api.delete(`${API_URL}/evidence-nodes/${id}/`);
+  return response.data;
+};
+export const approveEvidenceNode = async (id) => {
+  const response = await api.post(`${API_URL}/evidence-nodes/${id}/approve/`);
+  return response.data;
+};
+export const createEvidenceEdge = async (data) => {
+  const response = await api.post(`${API_URL}/evidence-edges/`, data);
+  return response.data;
+};
+export const deleteEvidenceEdge = async (id) => {
+  const response = await api.delete(`${API_URL}/evidence-edges/${id}/`);
+  return response.data;
+};
+
+// ==================== REVISIONES DE GESTIÓN ====================
+export const getManagementReviews = async (params = {}) => {
+  const response = await api.get(`${API_URL}/management-reviews/`, { params });
+  return response.data;
+};
+export const createManagementReview = async (data) => {
+  const response = await api.post(`${API_URL}/management-reviews/`, data);
+  return response.data;
+};
+export const updateManagementReview = async (id, data) => {
+  const response = await api.put(`${API_URL}/management-reviews/${id}/`, data);
+  return response.data;
+};
+export const deleteManagementReview = async (id) => {
+  const response = await api.delete(`${API_URL}/management-reviews/${id}/`);
+  return response.data;
+};
+export const generateReviewBrief = async (id) => {
+  const response = await api.post(`${API_URL}/management-reviews/${id}/generate_brief/`);
+  return response.data;
+};
+export const approveReviewBrief = async (id) => {
+  const response = await api.post(`${API_URL}/management-reviews/${id}/approve_brief/`);
+  return response.data;
+};
+export const approveReviewMinutes = async (id, data = {}) => {
+  const response = await api.post(`${API_URL}/management-reviews/${id}/approve_minutes/`, data);
+  return response.data;
+};
+
+// ==================== DECISIONES ====================
+export const getReviewDecisions = async (params = {}) => {
+  const response = await api.get(`${API_URL}/review-decisions/`, { params });
+  return response.data;
+};
+export const createReviewDecision = async (data) => {
+  const response = await api.post(`${API_URL}/review-decisions/`, data);
+  return response.data;
+};
+export const updateReviewDecision = async (id, data) => {
+  const response = await api.put(`${API_URL}/review-decisions/${id}/`, data);
+  return response.data;
+};
+export const approveReviewDecision = async (id, data = {}) => {
+  const response = await api.post(`${API_URL}/review-decisions/${id}/approve/`, data);
+  return response.data;
+};
+
+// ==================== CULTURA DE CALIDAD ====================
+export const getCultureSurveys = async (params = {}) => {
+  const response = await api.get(`${API_URL}/culture-surveys/`, { params });
+  return response.data;
+};
+export const createCultureSurvey = async (data) => {
+  const response = await api.post(`${API_URL}/culture-surveys/`, data);
+  return response.data;
+};
+export const getSurveyAggregateResults = async (id) => {
+  const response = await api.get(`${API_URL}/culture-surveys/${id}/aggregate_results/`);
+  return response.data;
+};
+export const submitSurveyResponse = async (data) => {
+  const response = await api.post(`${API_URL}/survey-responses/submit/`, data);
+  return response.data;
+};
+
+// ==================== REGISTROS DE APROBACIÓN ====================
+export const getApprovalRecords = async (params = {}) => {
+  const response = await api.get(`${API_URL}/approval-records/`, { params });
+  return response.data;
+};
+export const verifyApprovalSignature = async (id) => {
+  const response = await api.get(`${API_URL}/approval-records/${id}/verify_signature/`);
+  return response.data;
+};
+
+// ==================== GOBERNANZA IA ====================
+export const getAIGovernanceLogs = async (params = {}) => {
+  const response = await api.get(`${API_URL}/ai-governance-logs/`, { params });
+  return response.data;
+};
+export const recordAIDecision = async (id, decision, notes = '') => {
+  const response = await api.post(`${API_URL}/ai-governance-logs/${id}/decide/`, { decision, notes });
+  return response.data;
+};
+export const getPendingAIDecisions = async () => {
+  const response = await api.get(`${API_URL}/ai-governance-logs/pending_decisions/`);
+  return response.data;
+};
+
+// ==================== ENDPOINTS IA ====================
+export const generatePolicyDraft = async (context = '') => {
+  const response = await api.post(`${API_URL}/ai/policy-draft/`, { context });
+  return response.data;
+};
+export const analyzeVOC = async () => {
+  const response = await api.post(`${API_URL}/ai/voc-analysis/`);
+  return response.data;
+};
+export const detectRaciGaps = async () => {
+  const response = await api.get(`${API_URL}/ai/raci-gaps/`);
+  return response.data;
+};
+export const detectPolicyIncoherences = async () => {
+  const response = await api.get(`${API_URL}/ai/policy-incoherences/`);
+  return response.data;
+};
+export const validateISORule = async (entity_type, data) => {
+  const response = await api.post(`${API_URL}/ai/validate-iso-rules/`, { entity_type, data });
+  return response.data;
+};
+export const generateAuditorPack = async () => {
+  const response = await api.get(`${API_URL}/ai/auditor-pack/`);
+  return response.data;
+};
+export const getCockpitKPIs = async () => {
+  const response = await api.get(`${API_URL}/cockpit/kpis/`);
+  return response.data;
+};
+
 export default {
   // Policies
   getPolicies,

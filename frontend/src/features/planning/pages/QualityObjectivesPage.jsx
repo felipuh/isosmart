@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import { useI18n } from '../../../context/I18nContext';
@@ -6,10 +6,45 @@ import Modal from '../../../components/Common/Modal';
 import CrudErrorBanner from '../../../components/Common/CrudErrorBanner';
 import CrudPageHeader from '../../../components/Common/CrudPageHeader';
 import CrudEmptyState from '../../../components/Common/CrudEmptyState';
-import { getObjectives, createObjective, updateObjective, deleteObjective, getUsers } from '../api/planningApi';
+import {
+  approveObjective,
+  createObjective,
+  deleteObjective,
+  forecastObjective,
+  generateSmartObjectiveWithAI,
+  getObjectiveVersionHistory,
+  getObjectives,
+  getUsers,
+  updateObjective,
+  validateSmartObjective,
+} from '../api/planningApi';
 import { showConfirm } from '../../../services/dialogs';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
+
+const initialForm = (ownerId) => ({
+  code: '',
+  title: '',
+  description: '',
+  alignment: 'policy',
+  metric: '',
+  baseline: '',
+  target: '',
+  current_value: '',
+  unit: '',
+  owner: ownerId || '',
+  start_date: '',
+  target_date: '',
+  status: 'draft',
+  progress_percentage: 0,
+  is_specific: false,
+  is_measurable: false,
+  is_achievable: false,
+  is_relevant: false,
+  is_time_bound: false,
+  required_resources: '',
+  budget: '',
+});
 
 const QualityObjectivesPage = () => {
   const { t } = useI18n();
@@ -21,92 +56,46 @@ const QualityObjectivesPage = () => {
 
   const [items, setItems] = useState([]);
   const [users, setUsers] = useState([]);
-  const [form, setForm] = useState({
-    code: '',
-    title: '',
-    description: '',
-    alignment: 'policy',
-    metric: '',
-    baseline: '',
-    target: '',
-    current_value: '',
-    unit: '',
-    owner: user?.id || '',
-    start_date: '',
-    target_date: '',
-    status: 'draft',
-    progress_percentage: 0,
-    is_specific: false,
-    is_measurable: false,
-    is_achievable: false,
-    is_relevant: false,
-    is_time_bound: false,
-    required_resources: '',
-    budget: ''
-  });
+  const [selected, setSelected] = useState(null);
+  const [versions, setVersions] = useState([]);
+  const [forecast, setForecast] = useState(null);
+  const [smartCheck, setSmartCheck] = useState(null);
+  const [aiDraft, setAiDraft] = useState(null);
+  const [form, setForm] = useState(initialForm(user?.id));
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [error, setError] = useState('');
+  const [aiLoading, setAiLoading] = useState(false);
 
   const resetForm = useCallback(() => {
-    setForm({
-      code: '',
-      title: '',
-      description: '',
-      alignment: 'policy',
-      metric: '',
-      baseline: '',
-      target: '',
-      current_value: '',
-      unit: '',
-      owner: user?.id || '',
-      start_date: '',
-      target_date: '',
-      status: 'draft',
-      progress_percentage: 0,
-      is_specific: false,
-      is_measurable: false,
-      is_achievable: false,
-      is_relevant: false,
-      is_time_bound: false,
-      required_resources: '',
-      budget: ''
-    });
+    setForm(initialForm(user?.id));
     setEditingId(null);
+    setSmartCheck(null);
+    setAiDraft(null);
   }, [user?.id]);
 
   const loadData = useCallback(async () => {
+    if (!orgId) return;
     try {
       setLoading(true);
-      setError('');
-      const data = await getObjectives({ organization_id: orgId });
-      setItems(normalizeList(data));
-    } catch (error) {
-      console.error('Error:', error);
+      const [objectivesData, usersData] = await Promise.all([
+        getObjectives({ organization_id: orgId }),
+        getUsers({ organization_id: orgId }),
+      ]);
+      setItems(normalizeList(objectivesData));
+      setUsers(normalizeList(usersData));
+    } catch {
       setError(t('common.messages.errorTryAgain'));
     } finally {
       setLoading(false);
     }
   }, [orgId, t]);
 
-  const loadUsers = useCallback(async () => {
-    try {
-      const data = await getUsers({ organization_id: orgId });
-      setUsers(normalizeList(data));
-    } catch (error) {
-      console.error('Error loading users:', error);
-      setError(t('common.messages.errorTryAgain'));
-    }
-  }, [orgId, t]);
-
   useEffect(() => {
-    if (orgId) {
-      loadData();
-      loadUsers();
-    }
-  }, [orgId, loadData, loadUsers]);
+    if (orgId) loadData();
+  }, [orgId, loadData]);
 
   useEffect(() => {
     if (location.pathname.endsWith('/new')) {
@@ -115,17 +104,25 @@ const QualityObjectivesPage = () => {
     }
   }, [location.pathname, resetForm]);
 
-  useEffect(() => {
-    if (user?.id) {
-      setForm(prev => ({ ...prev, owner: prev.owner || user.id }));
+  const handleSelect = async (item) => {
+    setSelected(item);
+    try {
+      const [forecastData, versionData] = await Promise.all([
+        forecastObjective(item.id, orgId),
+        getObjectiveVersionHistory(item.id, orgId),
+      ]);
+      setForecast(forecastData?.forecast || null);
+      setVersions(normalizeList(versionData));
+    } catch {
+      setForecast(null);
+      setVersions([]);
     }
-  }, [user]);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setSaving(true);
-      setError('');
       const payload = {
         ...form,
         organization_id: orgId,
@@ -134,21 +131,21 @@ const QualityObjectivesPage = () => {
         target: form.target === '' ? null : Number(form.target),
         current_value: form.current_value === '' ? null : Number(form.current_value),
         budget: form.budget === '' ? null : Number(form.budget),
-        owner: form.owner || null
+        owner: form.owner || null,
+        ai_recommendations: aiDraft?.draft || {},
       };
       if (editingId) {
         await updateObjective(editingId, payload);
       } else {
         await createObjective(payload);
       }
+      setShowForm(false);
       resetForm();
       await loadData();
-      setShowForm(false);
       if (location.pathname.endsWith('/new')) {
         navigate(location.pathname.replace(/\/new$/, ''), { replace: true });
       }
-    } catch (error) {
-      console.error('Error:', error);
+    } catch {
       setError(t('common.messages.errorTryAgain'));
     } finally {
       setSaving(false);
@@ -156,6 +153,7 @@ const QualityObjectivesPage = () => {
   };
 
   const handleEdit = (item) => {
+    setEditingId(item.id);
     setForm({
       code: item.code,
       title: item.title,
@@ -177,34 +175,81 @@ const QualityObjectivesPage = () => {
       is_relevant: item.is_relevant,
       is_time_bound: item.is_time_bound,
       required_resources: item.required_resources || '',
-      budget: item.budget ?? ''
+      budget: item.budget ?? '',
     });
-    setEditingId(item.id);
     setShowForm(true);
   };
 
   const handleDelete = async (id) => {
-    const confirmed = await showConfirm(t('modules.planning.qualityObjectivesPage.deleteConfirm'));
-    if (!confirmed) return;
+    if (!await showConfirm(t('modules.planning.qualityObjectivesPage.deleteConfirm'))) return;
     try {
       await deleteObjective(id);
+      if (selected?.id === id) setSelected(null);
       await loadData();
-    } catch (error) {
-      console.error('Error:', error);
+    } catch {
       setError(t('common.messages.errorTryAgain'));
     }
   };
 
-  const openForm = () => {
-    resetForm();
-    setShowForm(true);
+  const handleValidateSmart = async () => {
+    try {
+      const result = await validateSmartObjective(form);
+      setSmartCheck(result);
+      setForm((prev) => ({
+        ...prev,
+        is_specific: result?.checks?.specific || false,
+        is_measurable: result?.checks?.measurable || false,
+        is_achievable: result?.checks?.achievable || false,
+        is_relevant: result?.checks?.relevant || false,
+        is_time_bound: result?.checks?.time_bound || false,
+      }));
+    } catch {
+      setError(t('common.messages.errorTryAgain'));
+    }
   };
 
-  const closeForm = () => {
-    resetForm();
-    setShowForm(false);
-    if (location.pathname.endsWith('/new')) {
-      navigate(location.pathname.replace(/\/new$/, ''), { replace: true });
+  const handleGenerateDraft = async () => {
+    try {
+      setAiLoading(true);
+      const result = await generateSmartObjectiveWithAI(orgId, {
+        title: form.title,
+        strategy: form.description,
+        indicator: form.metric,
+        baseline: form.baseline || 0,
+        target: form.target || 0,
+        deadline: form.target_date,
+        resources: form.required_resources,
+      });
+      setAiDraft(result);
+      const draft = result?.draft || {};
+      setForm((prev) => ({
+        ...prev,
+        title: draft.objective || prev.title,
+        metric: draft.indicator || prev.metric,
+        baseline: draft.baseline ?? prev.baseline,
+        target: draft.target ?? prev.target,
+        target_date: draft.deadline || prev.target_date,
+        required_resources: draft.resources || prev.required_resources,
+        is_specific: !!draft.specific,
+        is_measurable: !!draft.measurable,
+        is_achievable: !!draft.achievable,
+        is_relevant: !!draft.relevant,
+        is_time_bound: !!draft.time_bound,
+      }));
+    } catch {
+      setError(t('common.messages.errorTryAgain'));
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
+  const handleApprove = async (item) => {
+    try {
+      await approveObjective(item.id);
+      await loadData();
+      handleSelect({ ...item, approval_date: new Date().toISOString() });
+    } catch {
+      setError(t('common.messages.errorTryAgain'));
     }
   };
 
@@ -212,168 +257,168 @@ const QualityObjectivesPage = () => {
 
   return (
     <div className="space-y-6">
-      <CrudPageHeader
-        title={t('modules.planning.qualityObjectivesPage.title')}
-        actionLabel={t('modules.planning.qualityObjectivesPage.new')}
-        onAction={openForm}
-      />
-
+      <CrudPageHeader title={t('modules.planning.qualityObjectivesPage.title')} actionLabel={t('modules.planning.qualityObjectivesPage.new')} onAction={() => { resetForm(); setShowForm(true); }} />
       <CrudErrorBanner message={error} onClose={() => setError('')} />
 
-      <div className="card overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-slate-100 dark:bg-slate-800/60">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.planning.qualityObjectivesPage.table.code')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.planning.qualityObjectivesPage.table.title')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('common.forms.status')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.planning.qualityObjectivesPage.table.target')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.planning.qualityObjectivesPage.table.progress')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.planning.qualityObjectivesPage.table.owner')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.planning.qualityObjectivesPage.table.actions')}</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
-            {items.map(i => (
-              <tr key={i.id} className="hover:bg-slate-100 dark:hover:bg-slate-800/60">
-                <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">{i.code}</td>
-                <td className="px-6 py-4 text-sm text-slate-900 dark:text-white">{i.title}</td>
-                <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">{i.status_display}</td>
-                <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">{i.target_date}</td>
-                <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">{i.progress_percentage}%</td>
-                <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">{i.owner_name || '-'}</td>
-                <td className="px-6 py-4 text-sm space-x-2">
-                  <button onClick={() => handleEdit(i)} className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">{t('common.buttons.edit')}</button>
-                  <button onClick={() => handleDelete(i.id)} className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">{t('common.buttons.delete')}</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        {items.length === 0 && <CrudEmptyState message={t('modules.planning.qualityObjectivesPage.empty')} />}
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <div className="xl:col-span-2 space-y-6">
+          <div className="card overflow-hidden">
+            <table className="w-full">
+              <thead className="bg-slate-100 dark:bg-slate-800/60">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.planning.qualityObjectivesPage.table.code')}</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.planning.qualityObjectivesPage.table.title')}</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('common.forms.status')}</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.planning.qualityObjectivesPage.table.smart')}</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.planning.qualityObjectivesPage.table.progress')}</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.planning.qualityObjectivesPage.table.actions')}</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
+                {items.map((item) => (
+                  <tr key={item.id} className="hover:bg-slate-100 dark:hover:bg-slate-800/60 cursor-pointer" onClick={() => handleSelect(item)}>
+                    <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">{item.code}</td>
+                    <td className="px-6 py-4 text-sm text-slate-900 dark:text-white">{item.title}</td>
+                    <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">{item.status_display}</td>
+                    <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">{item.is_smart ? '✓' : '−'}</td>
+                    <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">{item.progress_percentage}%</td>
+                    <td className="px-6 py-4 text-sm space-x-2">
+                      <button onClick={(e) => { e.stopPropagation(); handleEdit(item); }} className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">{t('common.buttons.edit')}</button>
+                      <button onClick={(e) => { e.stopPropagation(); handleDelete(item.id); }} className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">{t('common.buttons.delete')}</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {items.length === 0 && <CrudEmptyState message={t('modules.planning.qualityObjectivesPage.empty')} />}
+          </div>
+        </div>
+
+        <div className="space-y-6">
+          <div className="card p-4">
+            <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-3">{t('modules.planning.qualityObjectivesPage.detailTitle')}</h3>
+            {selected ? (
+              <div className="space-y-3 text-sm">
+                <div>
+                  <p className="font-semibold text-slate-900 dark:text-white">{selected.title}</p>
+                  <p className="text-slate-500 dark:text-slate-400">{selected.metric} · {selected.owner_name || t('modules.planning.qualityObjectivesPage.noOwner')}</p>
+                </div>
+                <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-3 overflow-hidden">
+                  <div className={`h-3 ${selected.progress_percentage < 50 ? 'bg-amber-500' : 'bg-green-500'}`} style={{ width: `${selected.progress_percentage}%` }}></div>
+                </div>
+                {forecast && (
+                  <div className="rounded-lg bg-slate-100 dark:bg-slate-800 p-3 text-xs">
+                    <p className="font-semibold text-slate-700 dark:text-slate-300">{t('modules.planning.qualityObjectivesPage.forecastTitle')}</p>
+                    <p className="text-slate-500 dark:text-slate-400">{t('modules.planning.qualityObjectivesPage.projectedStatus')}: {forecast.projected_status}</p>
+                    <p className="text-slate-500 dark:text-slate-400">{t('modules.planning.qualityObjectivesPage.recommendedAction')}: {forecast.recommended_action}</p>
+                  </div>
+                )}
+                {!selected.approval_date && selected.status !== 'approved' && (
+                  <button onClick={() => handleApprove(selected)} className="w-full px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm">{t('modules.planning.qualityObjectivesPage.approveObjective')}</button>
+                )}
+              </div>
+            ) : <p className="text-sm text-slate-500 dark:text-slate-400">{t('modules.planning.qualityObjectivesPage.selectPrompt')}</p>}
+          </div>
+
+          <div className="card p-4">
+            <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-3">{t('modules.planning.qualityObjectivesPage.historyTitle')}</h3>
+            <div className="space-y-2 text-xs">
+              {versions.length > 0 ? versions.map((version) => (
+                <div key={version.id} className="rounded-lg bg-slate-100 dark:bg-slate-800 p-3">
+                  <p className="font-semibold text-slate-700 dark:text-slate-300">v{version.version_number}</p>
+                  <p className="text-slate-500 dark:text-slate-400">{version.change_reason || t('modules.planning.qualityObjectivesPage.noReason')} · {version.created_at}</p>
+                </div>
+              )) : <p className="text-slate-500 dark:text-slate-400">{t('modules.planning.qualityObjectivesPage.noVersions')}</p>}
+            </div>
+          </div>
+        </div>
       </div>
 
-      <Modal
-        title={editingId ? t('modules.planning.qualityObjectivesPage.edit') : t('modules.planning.qualityObjectivesPage.new')}
-        isOpen={showForm}
-        onClose={closeForm}
-      >
+      <Modal title={editingId ? t('modules.planning.qualityObjectivesPage.edit') : t('modules.planning.qualityObjectivesPage.new')} isOpen={showForm} onClose={() => setShowForm(false)}>
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="flex flex-wrap gap-2">
+            <button type="button" onClick={handleValidateSmart} className="px-3 py-2 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-lg text-sm">{t('modules.planning.qualityObjectivesPage.validateSmart')}</button>
+            <button type="button" onClick={handleGenerateDraft} disabled={aiLoading} className="px-3 py-2 bg-purple-600 text-white rounded-lg text-sm disabled:opacity-50">{aiLoading ? t('modules.planning.qualityObjectivesPage.generating') : t('modules.planning.qualityObjectivesPage.generateAiDraft')}</button>
+          </div>
+
+          {smartCheck && (
+            <div className={`rounded-lg p-3 text-xs ${smartCheck.passed ? 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300' : 'bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-300'}`}>
+              {smartCheck.passed ? t('modules.planning.qualityObjectivesPage.smartValid') : smartCheck.issues.join(' ')}
+            </div>
+          )}
+
+          {aiDraft?.draft && (
+            <div className="rounded-lg p-3 text-xs bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300">
+              {t('modules.planning.qualityObjectivesPage.aiRationale')}: {aiDraft.draft.rationale}
+            </div>
+          )}
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.planning.qualityObjectivesPage.fields.code')}</label>
-              <input type="text" value={form.code} onChange={(e) => setForm({...form, code: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" required />
+              <input type="text" value={form.code} onChange={(e) => setForm({ ...form, code: e.target.value })} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" required />
             </div>
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.planning.qualityObjectivesPage.fields.title')}</label>
-              <input type="text" value={form.title} onChange={(e) => setForm({...form, title: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" required />
+              <input type="text" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" required />
             </div>
             <div className="md:col-span-3">
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('common.forms.description')}</label>
-              <textarea value={form.description} onChange={(e) => setForm({...form, description: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" rows="3" required />
+              <textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={3} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" required />
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.planning.qualityObjectivesPage.fields.alignment')}</label>
-              <select value={form.alignment} onChange={(e) => setForm({...form, alignment: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white">
-                <option value="policy">{t('modules.planning.qualityObjectivesPage.alignment.policy')}</option>
-                <option value="strategic">{t('modules.planning.qualityObjectivesPage.alignment.strategic')}</option>
-                <option value="customer">{t('modules.planning.qualityObjectivesPage.alignment.customer')}</option>
-                <option value="compliance">{t('modules.planning.qualityObjectivesPage.alignment.compliance')}</option>
-                <option value="improvement">{t('modules.planning.qualityObjectivesPage.alignment.improvement')}</option>
+              <select value={form.alignment} onChange={(e) => setForm({ ...form, alignment: e.target.value })} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white">
+                {['policy', 'strategic', 'customer', 'compliance', 'improvement'].map((alignment) => <option key={alignment} value={alignment}>{t(`modules.planning.qualityObjectivesPage.alignment.${alignment}`)}</option>)}
               </select>
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.planning.qualityObjectivesPage.fields.metric')}</label>
-              <input type="text" value={form.metric} onChange={(e) => setForm({...form, metric: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" required />
+              <input type="text" value={form.metric} onChange={(e) => setForm({ ...form, metric: e.target.value })} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" required />
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.planning.qualityObjectivesPage.fields.unit')}</label>
-              <input type="text" value={form.unit} onChange={(e) => setForm({...form, unit: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" />
+              <input type="text" value={form.unit} onChange={(e) => setForm({ ...form, unit: e.target.value })} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" />
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.planning.qualityObjectivesPage.fields.baseline')}</label>
-              <input type="number" value={form.baseline} onChange={(e) => setForm({...form, baseline: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" />
+              <input type="number" value={form.baseline} onChange={(e) => setForm({ ...form, baseline: e.target.value })} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" />
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.planning.qualityObjectivesPage.fields.target')}</label>
-              <input type="number" value={form.target} onChange={(e) => setForm({...form, target: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" required />
+              <input type="number" value={form.target} onChange={(e) => setForm({ ...form, target: e.target.value })} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" required />
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.planning.qualityObjectivesPage.fields.currentValue')}</label>
-              <input type="number" value={form.current_value} onChange={(e) => setForm({...form, current_value: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" />
+              <input type="number" value={form.current_value} onChange={(e) => setForm({ ...form, current_value: e.target.value })} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" />
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.planning.qualityObjectivesPage.fields.owner')}</label>
-              <select value={form.owner} onChange={(e) => setForm({...form, owner: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white">
+              <select value={form.owner} onChange={(e) => setForm({ ...form, owner: e.target.value })} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white">
                 <option value="">{t('modules.planning.qualityObjectivesPage.fields.unassigned')}</option>
-                {users.map(u => (
-                  <option key={u.id} value={u.id}>{u.full_name || u.username || u.email}</option>
-                ))}
+                {users.map((entry) => <option key={entry.id} value={entry.id}>{entry.full_name || entry.username || entry.email}</option>)}
               </select>
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.planning.qualityObjectivesPage.fields.startDate')}</label>
-              <input type="date" value={form.start_date} onChange={(e) => setForm({...form, start_date: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" required />
+              <input type="date" value={form.start_date} onChange={(e) => setForm({ ...form, start_date: e.target.value })} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" required />
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.planning.qualityObjectivesPage.fields.targetDate')}</label>
-              <input type="date" value={form.target_date} onChange={(e) => setForm({...form, target_date: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" required />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('common.forms.status')}</label>
-              <select value={form.status} onChange={(e) => setForm({...form, status: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white">
-                <option value="draft">{t('modules.planning.qualityObjectivesPage.statuses.draft')}</option>
-                <option value="approved">{t('modules.planning.qualityObjectivesPage.statuses.approved')}</option>
-                <option value="in_progress">{t('modules.planning.qualityObjectivesPage.statuses.inProgress')}</option>
-                <option value="achieved">{t('modules.planning.qualityObjectivesPage.statuses.achieved')}</option>
-                <option value="partially_achieved">{t('modules.planning.qualityObjectivesPage.statuses.partiallyAchieved')}</option>
-                <option value="not_achieved">{t('modules.planning.qualityObjectivesPage.statuses.notAchieved')}</option>
-                <option value="cancelled">{t('modules.planning.qualityObjectivesPage.statuses.cancelled')}</option>
-              </select>
+              <input type="date" value={form.target_date} onChange={(e) => setForm({ ...form, target_date: e.target.value })} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" required />
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.planning.qualityObjectivesPage.fields.progress')}</label>
-              <input type="number" min="0" max="100" value={form.progress_percentage} onChange={(e) => setForm({...form, progress_percentage: parseInt(e.target.value || 0)})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" />
+              <input type="number" min="0" max="100" value={form.progress_percentage} onChange={(e) => setForm({ ...form, progress_percentage: Number(e.target.value || 0) })} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" />
             </div>
             <div className="md:col-span-3">
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.planning.qualityObjectivesPage.fields.requiredResources')}</label>
-              <textarea value={form.required_resources} onChange={(e) => setForm({...form, required_resources: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" rows="2" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.planning.qualityObjectivesPage.fields.budget')}</label>
-              <input type="number" value={form.budget} onChange={(e) => setForm({...form, budget: e.target.value})} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" />
-            </div>
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('modules.planning.qualityObjectivesPage.fields.smartCriteria')}</label>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                <label className="flex items-center space-x-2">
-                  <input type="checkbox" checked={form.is_specific} onChange={(e) => setForm({...form, is_specific: e.target.checked})} className="rounded" />
-                  <span className="text-sm text-slate-700 dark:text-slate-300">{t('modules.planning.qualityObjectivesPage.smart.specific')}</span>
-                </label>
-                <label className="flex items-center space-x-2">
-                  <input type="checkbox" checked={form.is_measurable} onChange={(e) => setForm({...form, is_measurable: e.target.checked})} className="rounded" />
-                  <span className="text-sm text-slate-700 dark:text-slate-300">{t('modules.planning.qualityObjectivesPage.smart.measurable')}</span>
-                </label>
-                <label className="flex items-center space-x-2">
-                  <input type="checkbox" checked={form.is_achievable} onChange={(e) => setForm({...form, is_achievable: e.target.checked})} className="rounded" />
-                  <span className="text-sm text-slate-700 dark:text-slate-300">{t('modules.planning.qualityObjectivesPage.smart.achievable')}</span>
-                </label>
-                <label className="flex items-center space-x-2">
-                  <input type="checkbox" checked={form.is_relevant} onChange={(e) => setForm({...form, is_relevant: e.target.checked})} className="rounded" />
-                  <span className="text-sm text-slate-700 dark:text-slate-300">{t('modules.planning.qualityObjectivesPage.smart.relevant')}</span>
-                </label>
-                <label className="flex items-center space-x-2">
-                  <input type="checkbox" checked={form.is_time_bound} onChange={(e) => setForm({...form, is_time_bound: e.target.checked})} className="rounded" />
-                  <span className="text-sm text-slate-700 dark:text-slate-300">{t('modules.planning.qualityObjectivesPage.smart.timeBound')}</span>
-                </label>
-              </div>
+              <textarea value={form.required_resources} onChange={(e) => setForm({ ...form, required_resources: e.target.value })} rows={2} className="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white" />
             </div>
           </div>
           <div className="flex space-x-3">
-            <button type="submit" disabled={saving} className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
-              {saving ? t('common.messages.saving') : editingId ? t('common.buttons.update') : t('common.buttons.create')}
-            </button>
-            {editingId && <button type="button" onClick={closeForm} className="px-6 py-2 bg-slate-500 hover:bg-slate-600 dark:bg-slate-600 dark:hover:bg-slate-500 text-white rounded-lg">{t('common.buttons.cancel')}</button>}
+            <button type="submit" disabled={saving} className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">{saving ? t('common.messages.saving') : editingId ? t('common.buttons.update') : t('common.buttons.create')}</button>
+            <button type="button" onClick={() => setShowForm(false)} className="px-6 py-2 bg-slate-500 hover:bg-slate-600 text-white rounded-lg">{t('common.buttons.cancel')}</button>
           </div>
         </form>
       </Modal>

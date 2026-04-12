@@ -136,6 +136,35 @@ export const deleteReview = async (id) => {
   return response.data;
 };
 
+// ==================== COCKPIT + IA (CLAUSULA 9) ====================
+export const getPerformanceCockpitKpis = async (organizationId) => {
+  const response = await api.get(`${API_URL}/cockpit/kpis/`, {
+    params: { organization_id: organizationId }
+  });
+  return response.data;
+};
+
+export const analyzeIndicatorDriftAI = async (organizationId) => {
+  const response = await api.post(`${API_URL}/ai/indicator-drift/`, {}, {
+    params: { organization_id: organizationId }
+  });
+  return response.data;
+};
+
+export const analyzeAuditAssistantAI = async (organizationId) => {
+  const response = await api.post(`${API_URL}/ai/audit-assistant/`, {}, {
+    params: { organization_id: organizationId }
+  });
+  return response.data;
+};
+
+export const generateExecutiveBriefAI = async (organizationId) => {
+  const response = await api.post(`${API_URL}/ai/executive-brief/`, {}, {
+    params: { organization_id: organizationId }
+  });
+  return response.data;
+};
+
 export default {
   getIndicators,
   createIndicator,
@@ -161,5 +190,9 @@ export default {
   getReviews,
   createReview,
   updateReview,
-  deleteReview
+  deleteReview,
+  getPerformanceCockpitKpis,
+  analyzeIndicatorDriftAI,
+  analyzeAuditAssistantAI,
+  generateExecutiveBriefAI
 };

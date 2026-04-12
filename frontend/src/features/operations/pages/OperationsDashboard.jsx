@@ -11,7 +11,12 @@ import {
   getProductReleases,
   getPendingReviewRequirements,
   getOpenNonconformities,
-  getCriticalNonconformities
+  getCriticalNonconformities,
+  getOperationsCockpitKpis,
+  analyzeOperationsRequirementsAI,
+  analyzeOperationsProvidersAI,
+  analyzeOperationsReleasesAI,
+  analyzeOperationsNonconformitiesAI,
 } from '../api/operationsApi';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
@@ -48,6 +53,13 @@ const OperationsDashboard = () => {
     nonconformities: { total: 0, open: 0, critical: 0 }
   });
   const [loading, setLoading] = useState(true);
+  const [cockpit, setCockpit] = useState(null);
+  const [aiInsights, setAiInsights] = useState({
+    requirements: null,
+    providers: null,
+    releases: null,
+    nonconformities: null,
+  });
 
   const loadDashboardData = useCallback(async () => {
     try {
@@ -61,7 +73,8 @@ const OperationsDashboard = () => {
         ncsData,
         pendingReqs,
         openNCs,
-        criticalNCs
+        criticalNCs,
+        cockpitData
       ] = await Promise.all([
         getCustomerRequirements({ organization_id: orgId }),
         getDesignProjects({ organization_id: orgId }),
@@ -70,7 +83,8 @@ const OperationsDashboard = () => {
         getNonconformities({ organization_id: orgId }),
         getPendingReviewRequirements(orgId),
         getOpenNonconformities(orgId),
-        getCriticalNonconformities(orgId)
+        getCriticalNonconformities(orgId),
+        getOperationsCockpitKpis(orgId).catch(() => null)
       ]);
 
       const requirements = normalizeList(requirementsData);
@@ -102,6 +116,7 @@ const OperationsDashboard = () => {
           critical: normalizeList(criticalNCs).length
         }
       });
+      setCockpit(cockpitData);
     } catch (error) {
       console.error('Error loading dashboard:', error);
     } finally {
@@ -112,6 +127,24 @@ const OperationsDashboard = () => {
   useEffect(() => {
     if (orgId) loadDashboardData();
   }, [orgId, loadDashboardData]);
+
+  const runAiInsight = async (kind) => {
+    if (!orgId) return;
+    try {
+      const actionMap = {
+        requirements: analyzeOperationsRequirementsAI,
+        providers: analyzeOperationsProvidersAI,
+        releases: analyzeOperationsReleasesAI,
+        nonconformities: analyzeOperationsNonconformitiesAI,
+      };
+      const executor = actionMap[kind];
+      if (!executor) return;
+      const result = await executor(orgId);
+      setAiInsights(prev => ({ ...prev, [kind]: result }));
+    } catch (error) {
+      console.error('Error generating operations AI insight:', error);
+    }
+  };
 
   const StatCard = ({ title, value, subtitle, icon, link, color = 'blue' }) => {
     const palette = statColors[color] || statColors.blue;
@@ -205,6 +238,39 @@ const OperationsDashboard = () => {
           </Link>
         </div>
       )}
+
+      <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-6 shadow dark:shadow-slate-900/50">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-bold text-slate-900 dark:text-white">{t('modules.operations.dashboard.cockpit.title')}</h2>
+          <span className="text-xs px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200">
+            {cockpit?.ai?.risk_level || 'n/a'}
+          </span>
+        </div>
+        <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
+          {t('modules.operations.dashboard.cockpit.subtitle')}
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+          {(cockpit?.ai?.alerts || []).map((alert, idx) => (
+            <div key={idx} className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-800 dark:text-amber-200 text-sm">
+              {alert}
+            </div>
+          ))}
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <button type="button" onClick={() => runAiInsight('requirements')} className="px-3 py-2 rounded-lg bg-blue-600 text-white text-sm hover:bg-blue-700 transition-all">{t('modules.operations.dashboard.cockpit.actions.requirements')}</button>
+          <button type="button" onClick={() => runAiInsight('providers')} className="px-3 py-2 rounded-lg bg-emerald-600 text-white text-sm hover:bg-emerald-700 transition-all">{t('modules.operations.dashboard.cockpit.actions.providers')}</button>
+          <button type="button" onClick={() => runAiInsight('releases')} className="px-3 py-2 rounded-lg bg-indigo-600 text-white text-sm hover:bg-indigo-700 transition-all">{t('modules.operations.dashboard.cockpit.actions.releases')}</button>
+          <button type="button" onClick={() => runAiInsight('nonconformities')} className="px-3 py-2 rounded-lg bg-rose-600 text-white text-sm hover:bg-rose-700 transition-all">{t('modules.operations.dashboard.cockpit.actions.nonconformities')}</button>
+        </div>
+        {(aiInsights.requirements || aiInsights.providers || aiInsights.releases || aiInsights.nonconformities) && (
+          <div className="mt-4 p-4 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 text-sm text-slate-700 dark:text-slate-200 space-y-2">
+            {aiInsights.requirements?.summary && <p>{t('modules.operations.dashboard.cockpit.summary.requirements').replace('{count}', aiInsights.requirements.summary.pending_review || 0)}</p>}
+            {aiInsights.providers?.top_risks?.length > 0 && <p>{t('modules.operations.dashboard.cockpit.summary.providers').replace('{count}', aiInsights.providers.top_risks.length)}</p>}
+            {aiInsights.releases?.recommendations && <p>{t('modules.operations.dashboard.cockpit.summary.releases').replace('{count}', aiInsights.releases.recommendations.filter(r => r.decision === 'hold').length)}</p>}
+            {aiInsights.nonconformities?.items && <p>{t('modules.operations.dashboard.cockpit.summary.nonconformities').replace('{count}', aiInsights.nonconformities.items.length)}</p>}
+          </div>
+        )}
+      </div>
 
       {/* Quick Actions */}
       <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-6 shadow dark:shadow-slate-900/50">

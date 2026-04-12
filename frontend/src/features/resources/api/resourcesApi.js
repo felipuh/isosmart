@@ -211,6 +211,34 @@ export const getPendingCommunications = async (organizationId) => {
   return response.data;
 };
 
+// ==================== SUPPORT COCKPIT + IA ====================
+export const getSupportCockpitKpis = async (organizationId) => {
+  const response = await api.get(`${API_URL}/cockpit/kpis/`, {
+    params: { organization_id: organizationId }
+  });
+  return response.data;
+};
+
+export const generateCompetencePlanWithAI = async (organizationId) => {
+  const response = await api.post(`${API_URL}/ai/competence-plan/?organization_id=${organizationId}`, {});
+  return response.data;
+};
+
+export const generateAwarenessPulseWithAI = async (organizationId) => {
+  const response = await api.post(`${API_URL}/ai/awareness-pulse/?organization_id=${organizationId}`, {});
+  return response.data;
+};
+
+export const generateCommunicationDraftWithAI = async (organizationId, payload) => {
+  const response = await api.post(`${API_URL}/ai/communication-draft/?organization_id=${organizationId}`, payload);
+  return response.data;
+};
+
+export const evaluateDocumentHealthWithAI = async (organizationId, documents = []) => {
+  const response = await api.post(`${API_URL}/ai/document-health/?organization_id=${organizationId}`, { documents });
+  return response.data;
+};
+
 export const getUsers = async (params = {}) => {
   const response = await api.get('/auth/users/', { params });
   return response.data;
@@ -267,5 +295,10 @@ export default {
   updateCommunication,
   deleteCommunication,
   getPendingCommunications,
+  getSupportCockpitKpis,
+  generateCompetencePlanWithAI,
+  generateAwarenessPulseWithAI,
+  generateCommunicationDraftWithAI,
+  evaluateDocumentHealthWithAI,
   getUsers
 };

@@ -28,6 +28,10 @@ const RACIMatricesPage = lazy(() => import('./features/leadership/pages/RACIMatr
 const RACIEntriesPage = lazy(() => import('./features/leadership/pages/RACIEntriesPage'));
 const CommitmentsPage = lazy(() => import('./features/leadership/pages/CommitmentsPage'));
 const CustomerFocusPage = lazy(() => import('./features/leadership/pages/CustomerFocusPage'));
+const ManagementReviewPage = lazy(() => import('./features/leadership/pages/ManagementReviewPage'));
+const EvidenceGraphPage = lazy(() => import('./features/leadership/pages/EvidenceGraphPage'));
+const QualityCulturePage = lazy(() => import('./features/leadership/pages/QualityCulturePage'));
+const AuditorPackPage = lazy(() => import('./features/leadership/pages/AuditorPackPage'));
 const ResourcesDashboard = lazy(() => import('./features/resources/pages/ResourcesDashboard'));
 const ResourcesPage = lazy(() => import('./features/resources/pages/ResourcesPage'));
 const InfrastructurePage = lazy(() => import('./features/resources/pages/InfrastructurePage'));
@@ -133,6 +137,10 @@ function App() {
         <Route path="leadership/raci" element={<RACIMatricesPage />} />
         <Route path="leadership/raci/new" element={<RACIMatricesPage />} />
         <Route path="leadership/raci/:matrixId" element={<RACIEntriesPage />} />
+        <Route path="leadership/management-reviews" element={<ManagementReviewPage />} />
+        <Route path="leadership/evidence-graph" element={<EvidenceGraphPage />} />
+        <Route path="leadership/culture" element={<QualityCulturePage />} />
+        <Route path="leadership/auditor-pack" element={<AuditorPackPage />} />
         
         {/* Resources Module */}
         <Route path="resources" element={<ResourcesDashboard />} />
