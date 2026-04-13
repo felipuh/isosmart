@@ -2,13 +2,13 @@ import React, { Suspense, lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import ProtectedRoute, { PublicRoute } from './components/Auth/ProtectedRoute'
 import OnboardingGuard from './components/Auth/OnboardingGuard';
+const Layout = lazy(() => import('./components/Layout/Layout'));
 const LoginPage = lazy(() => import('./pages/LoginPage'));
 const ForgotPasswordPage = lazy(() => import('./pages/ForgotPasswordPage'));
 const ResetPasswordPage = lazy(() => import('./pages/ResetPasswordPage'));
 const OnboardingPage = lazy(() => import('./pages/OnboardingPage'));
 const ReportsPage = lazy(() => import('./pages/ReportsPage'));
 const ProfilePage = lazy(() => import('./pages/ProfilePage'));
-import Layout from './components/Layout/Layout'
 import { useI18n } from './context/I18nContext';
 
 const Dashboard = lazy(() => import('./components/Dashboard/Dashboard'));
