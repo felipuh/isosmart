@@ -99,11 +99,11 @@ const Header = () => {
   }, [notificationsOpen, currentOrganization?.id]);
 
   return (
-    <header className="bg-white dark:bg-slate-800 shadow-md dark:shadow-slate-900 border-b border-slate-200 dark:border-slate-700 transition-colors duration-300 fixed top-0 left-0 right-0 z-50">
+    <header className="bg-white/95 dark:bg-slate-800/90 shadow-md dark:shadow-slate-900 border-b border-slate-200 dark:border-slate-700 backdrop-blur-md transition-colors duration-300 fixed top-0 left-0 right-0 z-50">
       <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-lg flex items-center justify-center shadow-sm shadow-blue-600/30">
               <Activity className="w-6 h-6 text-white" />
             </div>
             <div>
@@ -166,6 +166,9 @@ const Header = () => {
                 onClick={() => setNotificationsOpen((prev) => !prev)}
                 title={notificationsOpen ? t('header.notificationsPanel.close') : t('header.notificationsPanel.open')}
                 aria-label={notificationsOpen ? t('header.notificationsPanel.close') : t('header.notificationsPanel.open')}
+                aria-expanded={notificationsOpen}
+                aria-haspopup="menu"
+                aria-controls="isosmart-notifications-panel"
                 className="relative p-2 text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-700 rounded-lg transition-colors"
               >
                 <Bell className="w-5 h-5" />
@@ -176,6 +179,8 @@ const Header = () => {
                 <div
                   className="absolute right-0 mt-2 w-[360px] max-w-[calc(100vw-2rem)] rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-xl overflow-hidden"
                   aria-label={t('header.notificationsPanel.label')}
+                  id="isosmart-notifications-panel"
+                  role="menu"
                 >
                   <div className="px-4 py-3 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
                     <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">{t('header.notifications')}</h3>
@@ -236,6 +241,7 @@ const Header = () => {
 
             <Link 
               to="/settings"
+              aria-label={t('header.settings')}
               className="p-2 text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-700 rounded-lg transition-colors"
             >
               <Settings className="w-5 h-5" />

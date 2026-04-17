@@ -22,6 +22,7 @@ html[data-font-size="xlarge"] { font-size: 20px; }
   --brand-700: #00356a;
   --brand-800: #002b57;
   --brand-900: #002144;
+  --surface-soft: #f8fbff;
 }
 
 /* ================================================
@@ -37,6 +38,23 @@ html.dark {
 html,
 body {
   transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body {
+  min-height: 100vh;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  background:
+    radial-gradient(1200px 600px at -10% -10%, rgba(0, 73, 144, 0.08), transparent 55%),
+    radial-gradient(900px 480px at 105% 0%, rgba(56, 189, 248, 0.08), transparent 50%),
+    var(--surface-soft);
+}
+
+.dark body {
+  background:
+    radial-gradient(1200px 600px at -10% -10%, rgba(0, 73, 144, 0.22), transparent 55%),
+    radial-gradient(900px 480px at 105% 0%, rgba(56, 189, 248, 0.12), transparent 50%),
+    #020617;
 }
 
 /* ================================================
@@ -183,6 +201,24 @@ body {
 .focus-ring:focus-visible {
   outline: 2px solid var(--brand-500);
   outline-offset: 2px;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--brand-500);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* ================================================

@@ -853,6 +853,35 @@ const MESSAGES = {
           desc: 'Más foco en cláusulas, matrices, evidencias y auditorías.',
         },
       },
+      expertiseRoutes: {
+        none: 'Modo Taller Guiado',
+        beginner: 'Modo Taller Guiado',
+        intermediate: 'Fast-Track 4 semanas',
+        expert: 'Modo Consultor',
+        ninja: 'Modo Consultor Multiempresa',
+      },
+      aiReview: {
+        title: 'Validación IA del onboarding',
+        suggestedRoute: 'Ruta sugerida por expertise: {route}',
+        selectedLevel: 'Nivel seleccionado: {level}.',
+        engines: {
+          engine1: {
+            label: 'Motor 1',
+            title: 'Perfil Organizacional',
+            desc: 'Estructura base de procesos y contexto inicial.',
+          },
+          engine2: {
+            label: 'Motor 2',
+            title: 'Impacto y Ahorro',
+            desc: 'Quick wins y oportunidades económicas priorizadas.',
+          },
+          engine3: {
+            label: 'Motor 3',
+            title: 'Propósito y Alineación',
+            desc: 'Objetivos del líder conectados con calidad y ejecución.',
+          },
+        },
+      },
       languages: {
         'es-LATAM': 'Español (LATAM)',
         'en': 'English',
@@ -5252,6 +5281,35 @@ const MESSAGES = {
           desc: 'More focus on clauses, matrices, evidence, and audits.',
         },
       },
+      expertiseRoutes: {
+        none: 'Guided Workshop mode',
+        beginner: 'Guided Workshop mode',
+        intermediate: '4-week Fast Track',
+        expert: 'Consultant mode',
+        ninja: 'Multi-company Consultant mode',
+      },
+      aiReview: {
+        title: 'AI onboarding validation',
+        suggestedRoute: 'Suggested route by expertise: {route}',
+        selectedLevel: 'Selected level: {level}.',
+        engines: {
+          engine1: {
+            label: 'Engine 1',
+            title: 'Organizational Profile',
+            desc: 'Baseline structure for processes and initial context.',
+          },
+          engine2: {
+            label: 'Engine 2',
+            title: 'Impact and Savings',
+            desc: 'Prioritized quick wins and financial opportunities.',
+          },
+          engine3: {
+            label: 'Engine 3',
+            title: 'Purpose and Alignment',
+            desc: 'Leader goals connected to quality and execution.',
+          },
+        },
+      },
       languages: {
         'es-LATAM': 'Español (LATAM)',
         'en': 'English',
@@ -9640,6 +9698,35 @@ const MESSAGES = {
         technical: {
           title: 'Linguagem técnica',
           desc: 'Mais foco em cláusulas, matrizes, evidências e auditorias.',
+        },
+      },
+      expertiseRoutes: {
+        none: 'Modo Oficina Guiada',
+        beginner: 'Modo Oficina Guiada',
+        intermediate: 'Fast Track de 4 semanas',
+        expert: 'Modo Consultor',
+        ninja: 'Modo Consultor Multiempresa',
+      },
+      aiReview: {
+        title: 'Validacao IA do onboarding',
+        suggestedRoute: 'Rota sugerida por expertise: {route}',
+        selectedLevel: 'Nivel selecionado: {level}.',
+        engines: {
+          engine1: {
+            label: 'Motor 1',
+            title: 'Perfil Organizacional',
+            desc: 'Estrutura base de processos e contexto inicial.',
+          },
+          engine2: {
+            label: 'Motor 2',
+            title: 'Impacto e Economia',
+            desc: 'Quick wins e oportunidades economicas priorizadas.',
+          },
+          engine3: {
+            label: 'Motor 3',
+            title: 'Proposito e Alinhamento',
+            desc: 'Objetivos da lideranca conectados a qualidade e execucao.',
+          },
         },
       },
       languages: {

@@ -1,5 +1,12 @@
 # React + Vite
 
+## Linea Base UI/UX + Prompt
+
+Estandar operativo para evolucion frontend (compatibilidad, i18n, accesibilidad, IA UX y checklist de PR):
+
+- [../docs/internal/FRONTEND_LINEA_BASE_Y_PROMPT.md](../docs/internal/FRONTEND_LINEA_BASE_Y_PROMPT.md)
+- [../docs/internal/SMART3AI_FRONTEND_BASELINE_UNIFICADA.md](../docs/internal/SMART3AI_FRONTEND_BASELINE_UNIFICADA.md)
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:
