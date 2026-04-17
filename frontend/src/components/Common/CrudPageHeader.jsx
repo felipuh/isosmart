@@ -4,8 +4,8 @@ const CrudPageHeader = ({ title, subtitle, actionLabel, onAction, actionDisabled
   return (
     <div className="flex flex-wrap items-center justify-between gap-4">
       <div>
-        <h1 className="text-3xl font-bold text-white">{title}</h1>
-        {subtitle ? <p className="mt-1 text-gray-400">{subtitle}</p> : null}
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-white">{title}</h1>
+        {subtitle ? <p className="mt-1 text-slate-600 dark:text-slate-400">{subtitle}</p> : null}
       </div>
       {actionLabel && onAction ? (
         <button

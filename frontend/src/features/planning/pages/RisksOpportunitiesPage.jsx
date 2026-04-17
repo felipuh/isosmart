@@ -242,14 +242,14 @@ const RisksOpportunitiesPage = () => {
               <table className="w-full text-xs text-center">
                 <thead>
                   <tr>
-                    <th className="p-2 text-slate-500">{t('modules.planning.risksOpportunitiesPage.matrixAxis')}</th>
-                    {[1, 2, 3, 4, 5].map((impact) => <th key={impact} className="p-2 text-slate-500">{impact}</th>)}
+                    <th className="p-2 text-slate-500 dark:text-slate-400">{t('modules.planning.risksOpportunitiesPage.matrixAxis')}</th>
+                    {[1, 2, 3, 4, 5].map((impact) => <th key={impact} className="p-2 text-slate-500 dark:text-slate-400">{impact}</th>)}
                   </tr>
                 </thead>
                 <tbody>
                   {heatmap.map((row, rowIndex) => (
                     <tr key={rowIndex}>
-                      <td className="p-2 font-semibold text-slate-500">{rowIndex + 1}</td>
+                      <td className="p-2 font-semibold text-slate-500 dark:text-slate-400">{rowIndex + 1}</td>
                       {row.map((cell) => {
                         const tone = cell.count >= 3 ? 'bg-red-500/20 text-red-700 dark:text-red-300' : cell.count >= 1 ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300' : 'bg-slate-100 dark:bg-slate-800 text-slate-400';
                         return <td key={`${cell.probability}-${cell.impact}`} className={`p-3 rounded ${tone}`}>{cell.count}</td>;
@@ -327,13 +327,13 @@ const RisksOpportunitiesPage = () => {
                   <div className="rounded-lg bg-slate-100 dark:bg-slate-800 p-3">{t('modules.planning.risksOpportunitiesPage.impactLabel')}: {selected.normalized_impact ?? '-'}</div>
                 </div>
                 <div>
-                  <p className="text-xs uppercase tracking-wide text-slate-500 mb-1">{t('modules.planning.risksOpportunitiesPage.suggestedActionsTitle')}</p>
+                  <p className="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-1">{t('modules.planning.risksOpportunitiesPage.suggestedActionsTitle')}</p>
                   <ul className="space-y-1 text-slate-700 dark:text-slate-300">
                     {(selected.proposed_actions || []).length > 0 ? selected.proposed_actions.map((action, index) => <li key={index}>• {action}</li>) : <li>{t('modules.planning.risksOpportunitiesPage.noActions')}</li>}
                   </ul>
                 </div>
                 <div>
-                  <p className="text-xs uppercase tracking-wide text-slate-500 mb-1">{t('modules.planning.risksOpportunitiesPage.sourcesTitle')}</p>
+                  <p className="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-1">{t('modules.planning.risksOpportunitiesPage.sourcesTitle')}</p>
                   <ul className="space-y-1 text-slate-700 dark:text-slate-300">
                     {(selected.ai_sources || []).length > 0 ? selected.ai_sources.map((source, index) => <li key={index}>• {source}</li>) : <li>{t('modules.planning.risksOpportunitiesPage.noSources')}</li>}
                   </ul>

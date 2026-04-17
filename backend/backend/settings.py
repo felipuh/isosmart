@@ -177,44 +177,59 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv('DB_NAME', 'isosmart_main'),
-        'USER': os.getenv('DB_USER', 'isosmart'),
-        'PASSWORD': os.getenv('DB_PASSWORD', ''),
-        'HOST': os.getenv('DB_HOST', '192.168.100.105'),
-        'PORT': os.getenv('DB_PORT', '3306'),
-        'OPTIONS': {
-            'charset': 'utf8mb4',
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-            'connect_timeout': 10,
-        }
-    },
-    # Bases adicionales para IA y auditoría
-    'ai_db': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv('AI_DB_NAME', 'isosmart_ai'),
-        'USER': os.getenv('AI_DB_USER', os.getenv('DB_USER', 'isosmart')),
-        'PASSWORD': os.getenv('AI_DB_PASSWORD', os.getenv('DB_PASSWORD', '')),
-        'HOST': os.getenv('AI_DB_HOST', os.getenv('DB_HOST', '192.168.100.105')),
-        'PORT': os.getenv('AI_DB_PORT', os.getenv('DB_PORT', '3306')),
-        'OPTIONS': {
-            'charset': 'utf8mb4',
-        }
-    },
-    'audit_db': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv('AUDIT_DB_NAME', 'isosmart_audit'),
-        'USER': os.getenv('AUDIT_DB_USER', os.getenv('DB_USER', 'isosmart')),
-        'PASSWORD': os.getenv('AUDIT_DB_PASSWORD', os.getenv('DB_PASSWORD', '')),
-        'HOST': os.getenv('AUDIT_DB_HOST', os.getenv('DB_HOST', '192.168.100.105')),
-        'PORT': os.getenv('AUDIT_DB_PORT', os.getenv('DB_PORT', '3306')),
-        'OPTIONS': {
-            'charset': 'utf8mb4',
+USE_SQLITE = _env_bool('USE_SQLITE', default=False)
+
+if USE_SQLITE:
+    sqlite_name = os.getenv('SQLITE_NAME', 'test_default.sqlite3')
+    sqlite_path = BASE_DIR / sqlite_name
+    sqlite_db = {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': str(sqlite_path),
+    }
+    DATABASES = {
+        'default': sqlite_db,
+        'ai_db': sqlite_db,
+        'audit_db': sqlite_db,
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.getenv('DB_NAME', 'isosmart_main'),
+            'USER': os.getenv('DB_USER', 'isosmart'),
+            'PASSWORD': os.getenv('DB_PASSWORD', ''),
+            'HOST': os.getenv('DB_HOST', '192.168.100.105'),
+            'PORT': os.getenv('DB_PORT', '3306'),
+            'OPTIONS': {
+                'charset': 'utf8mb4',
+                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+                'connect_timeout': 10,
+            }
+        },
+        # Bases adicionales para IA y auditoría
+        'ai_db': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.getenv('AI_DB_NAME', 'isosmart_ai'),
+            'USER': os.getenv('AI_DB_USER', os.getenv('DB_USER', 'isosmart')),
+            'PASSWORD': os.getenv('AI_DB_PASSWORD', os.getenv('DB_PASSWORD', '')),
+            'HOST': os.getenv('AI_DB_HOST', os.getenv('DB_HOST', '192.168.100.105')),
+            'PORT': os.getenv('AI_DB_PORT', os.getenv('DB_PORT', '3306')),
+            'OPTIONS': {
+                'charset': 'utf8mb4',
+            }
+        },
+        'audit_db': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.getenv('AUDIT_DB_NAME', 'isosmart_audit'),
+            'USER': os.getenv('AUDIT_DB_USER', os.getenv('DB_USER', 'isosmart')),
+            'PASSWORD': os.getenv('AUDIT_DB_PASSWORD', os.getenv('DB_PASSWORD', '')),
+            'HOST': os.getenv('AUDIT_DB_HOST', os.getenv('DB_HOST', '192.168.100.105')),
+            'PORT': os.getenv('AUDIT_DB_PORT', os.getenv('DB_PORT', '3306')),
+            'OPTIONS': {
+                'charset': 'utf8mb4',
+            }
         }
     }
-}
 
 #Configurar modelo de usuario
 AUTH_USER_MODEL = 'authentication.User'

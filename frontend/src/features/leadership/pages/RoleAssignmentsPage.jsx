@@ -138,66 +138,66 @@ const RoleAssignmentsPage = () => {
     <div className="space-y-6" style={{ fontFamily: '"Sora", "Work Sans", sans-serif' }}>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-white">{t('modules.leadership.roleAssignmentsPage.title')}</h1>
+          <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">{t('modules.leadership.roleAssignmentsPage.title')}</h1>
           <p className="muted-text">{t('modules.leadership.roleAssignmentsPage.subtitle')}</p>
         </div>
         <button
           type="button"
           onClick={resetForm}
-          className="rounded-lg border border-slate-700 px-3 py-2 text-sm text-slate-200 hover:border-slate-500"
+          className="rounded-lg border border-slate-300 dark:border-slate-700 px-3 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/40"
         >
           {t('modules.leadership.roleAssignmentsPage.buttons.new')}
         </button>
       </div>
 
       {error && (
-        <div className="rounded-lg border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+        <div className="rounded-lg border border-red-300 dark:border-red-500/40 bg-red-50 dark:bg-red-500/10 px-4 py-3 text-sm text-red-700 dark:text-red-200">
           {error}
         </div>
       )}
 
       {userError && (
-        <div className="rounded-lg border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
+        <div className="rounded-lg border border-amber-300 dark:border-amber-500/40 bg-amber-50 dark:bg-amber-500/10 px-4 py-3 text-sm text-amber-700 dark:text-amber-200">
           {userError}
         </div>
       )}
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
-        <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-4">
+        <div className="card p-5 lg:p-6">
           {loading ? (
             <div className="py-10 text-center muted-text">{t('modules.leadership.roleAssignmentsPage.messages.loading')}</div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="min-w-full text-left text-sm text-slate-200">
-                <thead className="table-head-muted">
+              <table className="min-w-full text-left text-sm text-slate-700 dark:text-slate-200">
+                <thead className="table-head-muted border-b border-slate-200 dark:border-slate-700">
                   <tr>
-                    <th className="px-3 py-2">{t('modules.leadership.roleAssignmentsPage.table.role')}</th>
-                    <th className="px-3 py-2">{t('modules.leadership.roleAssignmentsPage.table.user')}</th>
-                    <th className="px-3 py-2">{t('modules.leadership.roleAssignmentsPage.table.startDate')}</th>
-                    <th className="px-3 py-2">{t('modules.leadership.roleAssignmentsPage.table.type')}</th>
-                    <th className="px-3 py-2 text-right">{t('modules.leadership.roleAssignmentsPage.table.actions')}</th>
+                    <th className="px-3 py-3">{t('modules.leadership.roleAssignmentsPage.table.role')}</th>
+                    <th className="px-3 py-3">{t('modules.leadership.roleAssignmentsPage.table.user')}</th>
+                    <th className="px-3 py-3">{t('modules.leadership.roleAssignmentsPage.table.startDate')}</th>
+                    <th className="px-3 py-3">{t('modules.leadership.roleAssignmentsPage.table.type')}</th>
+                    <th className="px-3 py-3 text-right">{t('modules.leadership.roleAssignmentsPage.table.actions')}</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800">
+                <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
                   {assignments.map((assignment) => (
-                    <tr key={assignment.id} className="hover:bg-slate-800/40">
-                      <td className="px-3 py-2 font-medium text-slate-100">{assignment.role_name || assignment.role}</td>
-                      <td className="px-3 py-2">{assignment.user_name || assignment.user_email || assignment.user}</td>
-                      <td className="px-3 py-2">{assignment.start_date}</td>
-                      <td className="px-3 py-2 capitalize">{assignment.assignment_type}</td>
-                      <td className="px-3 py-2 text-right">
-                        <div className="flex justify-end gap-2">
+                    <tr key={assignment.id} className="hover:bg-slate-100 dark:hover:bg-slate-800/40">
+                      <td className="px-3 py-3 font-medium text-slate-900 dark:text-slate-100">{assignment.role_name || assignment.role}</td>
+                      <td className="px-3 py-3">{assignment.user_name || assignment.user_email || assignment.user}</td>
+                      <td className="px-3 py-3">{assignment.start_date}</td>
+                      <td className="px-3 py-3 capitalize">{assignment.assignment_type}</td>
+                      <td className="px-3 py-3 text-right">
+                        <div className="flex flex-wrap justify-end gap-2">
                           <button
                             type="button"
                             onClick={() => handleEdit(assignment)}
-                            className="rounded-md border border-slate-700 px-2 py-1 text-xs text-slate-200"
+                            className="rounded-md border border-slate-300 dark:border-slate-700 px-2 py-1 text-xs text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700/60"
                           >
                             {t('common.buttons.edit')}
                           </button>
                           <button
                             type="button"
                             onClick={() => handleDelete(assignment.id)}
-                            className="rounded-md border border-red-500/50 px-2 py-1 text-xs text-red-200"
+                            className="rounded-md border border-red-300 dark:border-red-500/50 px-2 py-1 text-xs text-red-700 dark:text-red-200 hover:bg-red-50 dark:hover:bg-red-500/10"
                           >
                             {t('common.buttons.delete')}
                           </button>
@@ -211,15 +211,15 @@ const RoleAssignmentsPage = () => {
           )}
         </div>
 
-        <form onSubmit={handleSubmit} className="rounded-xl border border-slate-800 bg-slate-900/70 p-4 space-y-4">
+        <form onSubmit={handleSubmit} className="card p-5 lg:p-6 space-y-5 lg:max-h-[calc(100vh-11rem)] lg:overflow-y-auto">
           <div>
-            <h2 className="text-lg font-semibold text-white">
+            <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
               {editingId ? t('modules.leadership.roleAssignmentsPage.form.editTitle') : t('modules.leadership.roleAssignmentsPage.form.newTitle')}
             </h2>
             <p className="form-label-muted">{t('modules.leadership.roleAssignmentsPage.form.activeOrganization')}: {currentOrganization?.name || t('modules.leadership.roleAssignmentsPage.form.unselected')}</p>
           </div>
 
-          <div className="grid gap-3">
+          <div className="grid gap-4">
             <label className="form-label-muted">
               {t('modules.leadership.roleAssignmentsPage.form.role')}
               <select
@@ -308,7 +308,7 @@ const RoleAssignmentsPage = () => {
               />
             </label>
 
-            <label className="flex items-center gap-2 text-xs text-slate-300">
+            <label className="flex items-center gap-2 text-xs text-slate-700 dark:text-slate-300">
               <input
                 type="checkbox"
                 checked={form.is_active}
@@ -330,7 +330,7 @@ const RoleAssignmentsPage = () => {
             <button
               type="button"
               onClick={resetForm}
-              className="rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-200"
+              className="rounded-lg border border-slate-300 dark:border-slate-700 px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/40"
             >
               {t('common.buttons.clear')}
             </button>

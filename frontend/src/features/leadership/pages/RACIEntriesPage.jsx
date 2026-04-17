@@ -123,10 +123,10 @@ const RACIEntriesPage = () => {
 
   const renderRoleChecklist = (label, valueKey) => (
     <div className="space-y-2">
-      <p className="text-xs uppercase text-slate-600 dark:text-slate-600 dark:text-slate-400">{label}</p>
+      <p className="text-xs uppercase text-slate-600 dark:text-slate-400">{label}</p>
       <div className="grid gap-2 sm:grid-cols-2">
         {roles.map((role) => (
-          <label key={`${valueKey}-${role.id}`} className="flex items-center gap-2 text-xs text-slate-300">
+          <label key={`${valueKey}-${role.id}`} className="flex items-center gap-2 text-xs text-slate-700 dark:text-slate-300">
             <input
               type="checkbox"
               checked={form[valueKey].includes(role.id)}
@@ -147,7 +147,7 @@ const RACIEntriesPage = () => {
     <div className="space-y-6" style={{ fontFamily: '"Sora", "Work Sans", sans-serif' }}>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-white">{t('modules.leadership.raciEntriesPage.title')}</h1>
+          <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">{t('modules.leadership.raciEntriesPage.title')}</h1>
           <p className="muted-text">{t('modules.leadership.raciEntriesPage.subtitle')}: {matrixId}</p>
         </div>
         <Link
@@ -180,7 +180,7 @@ const RACIEntriesPage = () => {
                 </thead>
                 <tbody className="divide-y divide-slate-800">
                   {entries.map((entry) => (
-                    <tr key={entry.id} className="hover:bg-slate-800/40">
+                    <tr key={entry.id} className="hover:bg-slate-100 dark:hover:bg-slate-800/40">
                       <td className="px-3 py-2">{entry.order}</td>
                       <td className="px-3 py-2 font-medium text-slate-100">{entry.activity}</td>
                       <td className="px-3 py-2 text-right">
@@ -211,7 +211,7 @@ const RACIEntriesPage = () => {
 
         <form onSubmit={handleSubmit} className="rounded-xl border border-slate-800 bg-slate-900/70 p-4 space-y-4">
           <div>
-            <h2 className="text-lg font-semibold text-white">
+            <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
               {editingId ? t('modules.leadership.raciEntriesPage.form.editTitle') : t('modules.leadership.raciEntriesPage.form.newTitle')}
             </h2>
           </div>
@@ -264,7 +264,7 @@ const RACIEntriesPage = () => {
             <button
               type="button"
               onClick={resetForm}
-              className="rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-200"
+              className="rounded-lg border border-slate-300 dark:border-slate-700 px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/40"
             >
               {t('common.buttons.clear')}
             </button>

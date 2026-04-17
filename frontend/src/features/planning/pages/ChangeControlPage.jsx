@@ -269,7 +269,7 @@ const ChangeControlPage = () => {
                 )}
                 {(selected.implementation_plan || []).length > 0 && (
                   <div>
-                    <p className="text-xs uppercase tracking-wide text-slate-500 mb-1">{t('modules.planning.changeControlPage.implementationPlan')}</p>
+                    <p className="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-1">{t('modules.planning.changeControlPage.implementationPlan')}</p>
                     <ul className="space-y-1 text-xs text-slate-700 dark:text-slate-300">
                       {selected.implementation_plan.map((step, index) => <li key={index}>• {step.title || step.step}</li>)}
                     </ul>

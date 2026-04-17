@@ -60,6 +60,8 @@ env_vars = {
 }
 
 for key in [
+    "USE_SQLITE",
+    "SQLITE_NAME",
     "DB_HOST",
     "DB_PORT",
     "DB_NAME",

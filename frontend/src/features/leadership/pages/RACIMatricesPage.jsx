@@ -108,7 +108,7 @@ const RACIMatricesPage = () => {
     <div className="space-y-6" style={{ fontFamily: '"Sora", "Work Sans", sans-serif' }}>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-white">{t('modules.leadership.raciMatricesPage.title')}</h1>
+          <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">{t('modules.leadership.raciMatricesPage.title')}</h1>
           <p className="muted-text">{t('modules.leadership.raciMatricesPage.subtitle')}</p>
         </div>
         <button
@@ -143,7 +143,7 @@ const RACIMatricesPage = () => {
                 </thead>
                 <tbody className="divide-y divide-slate-800">
                   {matrices.map((matrix) => (
-                    <tr key={matrix.id} className="hover:bg-slate-800/40">
+                    <tr key={matrix.id} className="hover:bg-slate-100 dark:hover:bg-slate-800/40">
                       <td className="px-3 py-2 font-medium text-slate-100">
                         <Link
                           to={`/leadership/raci/${matrix.id}`}
@@ -182,7 +182,7 @@ const RACIMatricesPage = () => {
 
         <form onSubmit={handleSubmit} className="rounded-xl border border-slate-800 bg-slate-900/70 p-4 space-y-4">
           <div>
-            <h2 className="text-lg font-semibold text-white">
+            <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
               {editingId ? t('modules.leadership.raciMatricesPage.form.editTitle') : t('modules.leadership.raciMatricesPage.form.newTitle')}
             </h2>
             <p className="form-label-muted">{t('modules.leadership.raciMatricesPage.form.organization')}: {orgName || t('modules.leadership.raciMatricesPage.form.unselected')}</p>
@@ -209,7 +209,7 @@ const RACIMatricesPage = () => {
               />
             </label>
 
-            <label className="flex items-center gap-2 text-xs text-slate-300">
+            <label className="flex items-center gap-2 text-xs text-slate-700 dark:text-slate-300">
               <input
                 type="checkbox"
                 checked={form.is_active}
@@ -231,7 +231,7 @@ const RACIMatricesPage = () => {
             <button
               type="button"
               onClick={resetForm}
-              className="rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-200"
+              className="rounded-lg border border-slate-300 dark:border-slate-700 px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/40"
             >
               {t('common.buttons.clear')}
             </button>
