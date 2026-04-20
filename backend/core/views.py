@@ -20,6 +20,8 @@ from .serializers import DocumentSerializer, DocumentUploadSerializer, RiskMatri
 from authentication.models import UserProfile
 from .organization_scoping import OrganizationScopedViewSetMixin
 from integration.services.auto_indexing import queue_core_document_index, remove_indexed_artifact
+from core.services.document_service import DocumentCreationError, create_document_from_upload
+from core.services.health_service import HealthCheckError, check_database_connection
 import logging
 import os
 
@@ -273,12 +275,8 @@ def context_analysis_latest(request):
 @api_view(['GET'])
 def health_check(request):
     """Health check endpoint"""
-    from django.db import connection
-    
     try:
-        # Verificar conexión a BD
-        with connection.cursor() as cursor:
-            cursor.execute("SELECT 1")
+        check_database_connection()
         
         return Response({
             'status': 'healthy',
@@ -286,11 +284,12 @@ def health_check(request):
             'database': 'connected',
             'timestamp': datetime.now().isoformat()
         })
-    
-    except Exception as e:
+
+    except HealthCheckError as exc:
+        logger.warning("Health check failed", extra={'error': str(exc)})
         return Response({
             'status': 'unhealthy',
-            'error': str(e)
+            'error': 'database_unavailable'
         }, status=status.HTTP_503_SERVICE_UNAVAILABLE)
 
 
@@ -318,48 +317,28 @@ class DocumentViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
         """Crear nuevo documento con archivo"""
         organization_id = self.get_organization_id()
         serializer = DocumentUploadSerializer(data=request.data)
-        
-        if serializer.is_valid():
-            try:
-                # Extraer datos
-                title = serializer.validated_data['title']
-                content = serializer.validated_data.get('content', '')
-                doc_type = serializer.validated_data['document_type']
-                uploaded_file = serializer.validated_data['file']
-                source = serializer.validated_data.get('source', 'Sistema')
-                uploaded_by = request.user if request.user.is_authenticated else None
-                
-                # Crear documento
-                document = Document.objects.create(
-                    organization_id=organization_id,
-                    title=title,
-                    content=content,
-                    document_type=doc_type,
-                    file_path=uploaded_file,
-                    source=source,
-                    uploaded_by=uploaded_by
-                )
 
-                queue_core_document_index(document)
-                
-                logger.info(f"Documento creado: {document.title} (ID: {document.id})")
-                
-                # Serializar respuesta
-                response_serializer = DocumentSerializer(document)
-                return Response(
-                    response_serializer.data,
-                    status=status.HTTP_201_CREATED
-                )
-                
-            except Exception as e:
-                logger.error(f"Error creando documento: {str(e)}", exc_info=True)
-                return Response(
-                    {'error': f'Error al crear documento: {str(e)}'},
-                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
-                )
-        
-        logger.error(f"Errores de serialización: {serializer.errors}")
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer.is_valid(raise_exception=True)
+
+        try:
+            document = create_document_from_upload(
+                organization_id=organization_id,
+                validated_data=serializer.validated_data,
+                uploaded_by=request.user if request.user.is_authenticated else None,
+            )
+        except DocumentCreationError as exc:
+            logger.error("Error creando documento", exc_info=True)
+            return Response(
+                {'error': str(exc)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+        logger.info(f"Documento creado: {document.title} (ID: {document.id})")
+        response_serializer = DocumentSerializer(document)
+        return Response(
+            response_serializer.data,
+            status=status.HTTP_201_CREATED,
+        )
 
     def perform_update(self, serializer):
         document = serializer.save()
