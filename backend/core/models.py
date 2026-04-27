@@ -966,3 +966,84 @@ class BillingPayment(models.Model):
 
     def __str__(self):
         return f"Payment {self.id} org={self.subscription.organization_id} status={self.status}"
+
+
+# =====================================================
+# Feature Flags
+# =====================================================
+
+class FeatureFlagQuerySet(models.QuerySet):
+    def for_organization(self, organization):
+        return self.filter(
+            models.Q(scope='global', organization__isnull=True) |
+            models.Q(scope='organization', organization=organization)
+        )
+
+
+class FeatureFlagManager(models.Manager):
+    def get_queryset(self):
+        return FeatureFlagQuerySet(self.model, using=self._db)
+
+    def is_enabled(self, name: str, organization=None) -> bool:
+        """Resolve a flag: org-specific overrides global; default False if absent."""
+        flags = {
+            f.scope: f.enabled
+            for f in self.get_queryset()
+                         .filter(name=name)
+                         .filter(
+                             models.Q(scope='global', organization__isnull=True) |
+                             models.Q(scope='organization', organization=organization)
+                         )
+        }
+        if organization and 'organization' in flags:
+            return flags['organization']
+        return flags.get('global', False)
+
+    def resolve_all(self, organization=None) -> dict:
+        """Return a dict {flag_name: bool} for all known flags in org context."""
+        result: dict = {}
+        qs = self.get_queryset().filter(
+            models.Q(scope='global', organization__isnull=True) |
+            models.Q(scope='organization', organization=organization)
+        ).order_by('name', 'scope')
+
+        for flag in qs:
+            if flag.scope == 'global' and flag.name not in result:
+                result[flag.name] = flag.enabled
+            elif flag.scope == 'organization':
+                result[flag.name] = flag.enabled
+        return result
+
+
+class FeatureFlag(models.Model):
+    SCOPE_GLOBAL = 'global'
+    SCOPE_ORGANIZATION = 'organization'
+    SCOPE_CHOICES = [
+        ('global', 'Global'),
+        ('organization', 'Por Organización'),
+    ]
+
+    name = models.CharField(max_length=100, db_index=True)
+    scope = models.CharField(max_length=20, choices=SCOPE_CHOICES, default=SCOPE_GLOBAL)
+    organization = models.ForeignKey(
+        Organization,
+        null=True, blank=True,
+        on_delete=models.CASCADE,
+        related_name='feature_flags',
+    )
+    enabled = models.BooleanField(default=False)
+    description = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    objects = FeatureFlagManager()
+
+    class Meta:
+        db_table = 'feature_flags'
+        unique_together = [('name', 'organization')]
+        verbose_name = 'Feature Flag'
+        verbose_name_plural = 'Feature Flags'
+
+    def __str__(self):
+        org = self.organization.name if self.organization else 'global'
+        return f"{self.name} [{org}] → {'ON' if self.enabled else 'OFF'}"

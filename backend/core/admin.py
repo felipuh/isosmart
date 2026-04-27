@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import (
-    ContextAnalysis, Document, StakeholderProfile, StakeholderChangeLog,
+    ContextAnalysis, Document, FeatureFlag, StakeholderProfile, StakeholderChangeLog,
     ScopeElement, ScopeAudit, ProcessMap, RiskMatrix, QualityObjective,
     ChangeLog, AIModelVersion, AIAuditLog, BillingSubscription, BillingPayment,
     NotificationDelivery,
@@ -109,4 +109,12 @@ class NotificationDeliveryAdmin(admin.ModelAdmin):
     list_display = ['event_type', 'organization', 'channel', 'status', 'sent_at', 'created_at']
     list_filter = ['event_type', 'channel', 'status', 'created_at']
     search_fields = ['organization__name', 'subject', 'event_key']
-    readonly_fields = ['created_at', 'updated_at', 'sent_at']
+
+
+@admin.register(FeatureFlag)
+class FeatureFlagAdmin(admin.ModelAdmin):
+    list_display = ['name', 'scope', 'organization', 'enabled', 'updated_at']
+    list_filter = ['scope', 'enabled']
+    search_fields = ['name', 'description', 'organization__name']
+    list_editable = ['enabled']
+    readonly_fields = ['created_at', 'updated_at']

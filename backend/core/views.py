@@ -13,7 +13,7 @@ from django.db.models import Count, Avg, Q
 from datetime import datetime, timedelta
 import calendar
 from .models import (
-    ContextAnalysis, RiskMatrix, QualityObjective, 
+    ContextAnalysis, FeatureFlag, RiskMatrix, QualityObjective,
     StakeholderProfile, ProcessMap, Document
 )
 from .serializers import DocumentSerializer, DocumentUploadSerializer, RiskMatrixSerializer, QualityObjectiveSerializer, QualityObjectiveSerializer
@@ -2030,3 +2030,32 @@ def export_data(request):
         'export_type': export_type,
         'data': data
     })
+
+
+# =====================================================
+# Feature Flags endpoint
+# =====================================================
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def feature_flags_view(request):
+    """
+    GET /api/core/feature-flags/
+    Returns {flag_name: bool} resolved for the requesting user's organization context.
+    Superusers may pass ?org_id=<id> to query a specific organization.
+    """
+    profile = getattr(request.user, 'userprofile', None)
+
+    if request.user.is_superuser and request.query_params.get('org_id'):
+        try:
+            from .models import Organization
+            org = Organization.objects.get(pk=request.query_params['org_id'])
+        except Organization.DoesNotExist:
+            return Response({'detail': 'Organization not found.'}, status=404)
+    elif profile and profile.organization:
+        org = profile.organization
+    else:
+        org = None
+
+    flags = FeatureFlag.objects.resolve_all(organization=org)
+    return Response(flags)

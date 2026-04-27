@@ -32,6 +32,10 @@ def _env_list(name, default=''):
     return [item.strip() for item in value.split(',') if item.strip()]
 
 
+ENVIRONMENT = os.getenv('ENVIRONMENT', 'development').strip().lower()
+IS_PRODUCTION = ENVIRONMENT in ('production', 'prod')
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -45,6 +49,14 @@ ALLOWED_HOSTS = _env_list(
     'ALLOWED_HOSTS',
     default='localhost,127.0.0.1,192.168.100.100,isosmart.local'
 )
+
+if IS_PRODUCTION:
+    if SECRET_KEY in ('', 'change-this-dev-secret-key-before-deploy'):
+        raise RuntimeError('SECRET_KEY must be set to a secure value in production')
+    if DEBUG:
+        raise RuntimeError('DEBUG must be disabled in production')
+    if not ALLOWED_HOSTS:
+        raise RuntimeError('ALLOWED_HOSTS must be configured in production')
 
 
 # Application definition
@@ -140,6 +152,7 @@ REST_FRAMEWORK = {
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
+    'backend.middleware.RequestIDMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -374,9 +387,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'filters': {
+        'request_id': {
+            '()': 'backend.request_context.RequestIDLogFilter',
+        },
+    },
     'formatters': {
         'verbose': {
-            'format': '{levelname} {asctime} {module} {message}',
+            'format': '{levelname} {asctime} {module} request_id={request_id} {message}',
             'style': '{',
         },
     },
@@ -386,11 +404,13 @@ LOGGING = {
             'class': 'logging.FileHandler',
             'filename': '/home/aplicacion/projects/isosmart/logs/ai/django.log',
             'formatter': 'verbose',
+            'filters': ['request_id'],
         },
         'console': {
             'level': 'INFO',
             'class': 'logging.StreamHandler',
             'formatter': 'verbose',
+            'filters': ['request_id'],
         },
     },
     'root': {
@@ -424,6 +444,7 @@ CORS_ALLOW_HEADERS = [
     'origin',
     'user-agent',
     'x-csrftoken',
+    'x-request-id',
     'x-requested-with',
 ]
 

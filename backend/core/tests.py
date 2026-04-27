@@ -1159,3 +1159,89 @@ class RoleEndpointMatrixTests(TestCase):
                             msg=f"Expected denied access for role={role} in case={case['name']}",
                         )
 
+
+
+# =====================================================
+# Feature Flags tests
+# =====================================================
+
+from core.models import FeatureFlag
+
+
+class FeatureFlagManagerTests(TestCase):
+    def setUp(self):
+        self.org_a = Organization.objects.create(name='Flag Org A', slug='flag-org-a')
+        self.org_b = Organization.objects.create(name='Flag Org B', slug='flag-org-b')
+
+    def test_is_enabled_returns_false_when_no_flag(self):
+        self.assertFalse(FeatureFlag.objects.is_enabled('nonexistent'))
+
+    def test_global_flag_visible_to_all(self):
+        FeatureFlag.objects.create(name='global_feature', scope='global', enabled=True)
+        self.assertTrue(FeatureFlag.objects.is_enabled('global_feature', organization=self.org_a))
+        self.assertTrue(FeatureFlag.objects.is_enabled('global_feature', organization=self.org_b))
+        self.assertTrue(FeatureFlag.objects.is_enabled('global_feature'))
+
+    def test_org_override_takes_precedence_over_global(self):
+        FeatureFlag.objects.create(name='beta_module', scope='global', enabled=False)
+        FeatureFlag.objects.create(name='beta_module', scope='organization', organization=self.org_a, enabled=True)
+        self.assertTrue(FeatureFlag.objects.is_enabled('beta_module', organization=self.org_a))
+        self.assertFalse(FeatureFlag.objects.is_enabled('beta_module', organization=self.org_b))
+
+    def test_resolve_all_returns_dict(self):
+        FeatureFlag.objects.create(name='feat_x', scope='global', enabled=True)
+        FeatureFlag.objects.create(name='feat_y', scope='global', enabled=False)
+        FeatureFlag.objects.create(name='feat_y', scope='organization', organization=self.org_a, enabled=True)
+        result = FeatureFlag.objects.resolve_all(organization=self.org_a)
+        self.assertEqual(result, {'feat_x': True, 'feat_y': True})
+        result_b = FeatureFlag.objects.resolve_all(organization=self.org_b)
+        self.assertEqual(result_b, {'feat_x': True, 'feat_y': False})
+
+
+class FeatureFlagsEndpointTests(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        user_model = get_user_model()
+        self.user = user_model.objects.create_user(
+            username='flag_user',
+            email='flag_user@isosmart.local',
+            password='Pass@12345',
+        )
+        self.org = Organization.objects.create(name='Flag Test Org', slug='flag-test-org')
+        UserProfile.objects.filter(user=self.user).update(organization=self.org)
+
+    def test_unauthenticated_returns_401(self):
+        response = self.client.get('/api/feature-flags/')
+        self.assertEqual(response.status_code, 401)
+
+    def test_authenticated_empty_flags(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.get('/api/feature-flags/')
+        self.assertEqual(response.status_code, 200)
+        self.assertIsInstance(response.data, dict)
+
+    def test_returns_resolved_flags(self):
+        FeatureFlag.objects.create(name='new_dashboard', scope='global', enabled=True)
+        self.client.force_authenticate(user=self.user)
+        response = self.client.get('/api/feature-flags/')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('new_dashboard', response.data)
+        self.assertTrue(response.data['new_dashboard'])
+
+
+class RequestIDMiddlewareTests(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+
+    def test_generates_request_id_when_missing(self):
+        response = self.client.get('/api/feature-flags/')
+
+        self.assertEqual(response.status_code, 401)
+        self.assertIn('X-Request-ID', response)
+        self.assertTrue(response['X-Request-ID'])
+
+    def test_echoes_incoming_request_id_header(self):
+        response = self.client.get('/api/feature-flags/', HTTP_X_REQUEST_ID='req-isosmart-001')
+
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response['X-Request-ID'], 'req-isosmart-001')
