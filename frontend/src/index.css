@@ -50,11 +50,98 @@ body {
     var(--surface-soft);
 }
 
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background: repeating-linear-gradient(118deg, rgba(15, 23, 42, 0.02) 0 2px, transparent 2px 12px);
+  animation: data-drift 28s linear infinite;
+}
+
+#root {
+  position: relative;
+  isolation: isolate;
+}
+
+#root > :not(.immersive-canvas) {
+  position: relative;
+  z-index: 1;
+}
+
 .dark body {
   background:
     radial-gradient(1200px 600px at -10% -10%, rgba(0, 73, 144, 0.22), transparent 55%),
     radial-gradient(900px 480px at 105% 0%, rgba(56, 189, 248, 0.12), transparent 50%),
     #020617;
+}
+
+.immersive-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.68;
+}
+
+html.immersive-ready .ui-reveal-target {
+  opacity: 0;
+  transform: translate3d(0, 14px, 0) scale(0.995);
+  transition: opacity 520ms ease, transform 520ms ease;
+  transition-delay: var(--stagger, 0ms);
+}
+
+html.immersive-ready .ui-reveal-target.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+.ui-reveal-target.btn-primary,
+button[class*='bg-gradient'],
+a[class*='bg-gradient'] {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.ui-reveal-target.btn-primary::before,
+button[class*='bg-gradient']::before,
+a[class*='bg-gradient']::before {
+  content: '';
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  left: calc(var(--mx, 50%) - 90px);
+  top: calc(var(--my, 50%) - 90px);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.36), rgba(255, 255, 255, 0));
+  opacity: 0;
+  transition: opacity 180ms ease;
+  z-index: -1;
+}
+
+.ui-reveal-target.btn-primary:hover::before,
+button[class*='bg-gradient']:hover::before,
+a[class*='bg-gradient']:hover::before {
+  opacity: 1;
+}
+
+main [class*='rounded-2xl'][class*='border'][class*='p-'],
+main [class*='rounded-3xl'][class*='border'][class*='p-'] {
+  transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+}
+
+main [class*='rounded-2xl'][class*='border'][class*='p-']:hover,
+main [class*='rounded-3xl'][class*='border'][class*='p-']:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 42px -22px rgba(0, 73, 144, 0.5);
+  border-color: rgba(59, 130, 246, 0.45);
+}
+
+main [class*='rounded'][class*='border']:hover {
+  border-color: rgba(56, 189, 248, 0.42);
 }
 
 /* ================================================
@@ -140,6 +227,11 @@ body {
   50% { opacity: 0.7; }
 }
 
+@keyframes data-drift {
+  from { transform: translate3d(-2%, 0, 0); }
+  to { transform: translate3d(2%, 0, 0); }
+}
+
 .animate-fade-in {
   animation: fade-in 0.3s ease-in-out;
 }
@@ -218,6 +310,12 @@ textarea:focus-visible {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  .immersive-canvas,
+  body::before,
+  body::after {
+    display: none;
   }
 }
 

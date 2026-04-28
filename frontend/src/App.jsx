@@ -10,6 +10,7 @@ const OnboardingPage = lazy(() => import('./pages/OnboardingPage'));
 const ReportsPage = lazy(() => import('./pages/ReportsPage'));
 const ProfilePage = lazy(() => import('./pages/ProfilePage'));
 import { useI18n } from './context/I18nContext';
+import ImmersiveEffects from './components/ui/ImmersiveEffects';
 
 const Dashboard = lazy(() => import('./components/Dashboard/Dashboard'));
 const StakeholderDashboard = lazy(() => import('./components/Stakeholders/StakeholderDashboard'));
@@ -68,6 +69,7 @@ function App() {
   const { t } = useI18n();
   return (
     <Suspense fallback={<div className="flex items-center justify-center h-screen text-slate-300">{t('common.messages.loading')}</div>}>
+      <ImmersiveEffects />
       <Routes>
       {/* Rutas públicas */}
       <Route
