@@ -79,6 +79,7 @@ for key in [
     "AUDIT_DB_PASSWORD",
     "ADMIN_APPS_API_KEY",
     "ADMIN_APPS_BASE_URL",
+    "ALLOW_LOCAL_AUTH_BYPASS_FOR_TESTS",
     "SECRET_KEY",
 ]:
     value = os.getenv(key, env_file_values.get(key))

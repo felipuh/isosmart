@@ -26,14 +26,21 @@ const LoginPage = () => {
     setLoading(true);
 
     const normalizedEmail = email.trim().toLowerCase();
+    const normalizedPassword = password.trim();
     if (!normalizedEmail) {
       setError(`${t('common.forms.email')}: ${t('common.messages.required')}`);
       setLoading(false);
       return;
     }
 
+    if (!normalizedPassword) {
+      setError(`${t('common.forms.password')}: ${t('common.messages.required')}`);
+      setLoading(false);
+      return;
+    }
+
     try {
-      const result = await login(normalizedEmail, password);
+      const result = await login(normalizedEmail, normalizedPassword);
 
       if (result.success) {
         if (result.mustChangePassword) {

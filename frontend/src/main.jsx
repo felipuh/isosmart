@@ -12,15 +12,15 @@ import './index.css'
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
-      <ThemeProvider>
-        <FontSizeProvider>
-          <I18nProvider>
+      <I18nProvider>
+        <ThemeProvider>
+          <FontSizeProvider>
             <AuthProvider>
               <App />
             </AuthProvider>
-          </I18nProvider>
-        </FontSizeProvider>
-      </ThemeProvider>
+          </FontSizeProvider>
+        </ThemeProvider>
+      </I18nProvider>
     </BrowserRouter>
   </React.StrictMode>,
 )

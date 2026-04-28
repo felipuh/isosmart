@@ -124,11 +124,13 @@ class AdminAppsAuthBackend(BaseBackend):
             }
         )
         
-        if created:
-            # Nuevo usuario - establecer contraseña inutilizable
-            # (la autenticación siempre va por Admin Apps)
+        # For AdminApps-synced identities, force local password to unusable
+        # so authentication authority remains centralized in AdminApps.
+        if user.has_usable_password():
             user.set_unusable_password()
-            user.save()
+            user.save(update_fields=['password'])
+
+        if created:
             logger.info(f"Usuario {email} creado desde Admin Apps")
         
         # Sincronizar organización si existe

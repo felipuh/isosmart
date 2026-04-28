@@ -153,7 +153,12 @@ export const AuthProvider = ({ children }) => {
         securityAlert: response.data.security_alert || null,
       };
     } catch (error) {
-      console.error('Error de login:', error);
+      const statusCode = error?.response?.status;
+      if (statusCode && (statusCode === 400 || statusCode === 401)) {
+        console.warn('Login rechazado por credenciales o autorización.');
+      } else {
+        console.error('Error de login:', error);
+      }
 
       const responseData = error.response?.data;
       const backendMessage =
