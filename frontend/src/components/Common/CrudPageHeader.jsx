@@ -1,6 +1,8 @@
 import React from 'react';
 
+import { useI18n } from '../../context/I18nContext';
 const CrudPageHeader = ({ title, subtitle, actionLabel, onAction, actionDisabled = false }) => {
+  +  const { t } = useI18n();
   return (
     <div className="flex flex-wrap items-center justify-between gap-4">
       <div>

@@ -3,8 +3,10 @@ import { Outlet } from 'react-router-dom';
 import Header from './Header';
 import Sidebar from './Sidebar';
 import VirtualAssistantPanel from '../Assistant/VirtualAssistantPanel';
+import { useI18n } from '../../context/I18nContext';
 
 const Layout = ({ children }) => {
+  +  const { t } = useI18n();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const content = children ?? <Outlet />;
 

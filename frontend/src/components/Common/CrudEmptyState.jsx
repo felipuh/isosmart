@@ -1,6 +1,8 @@
 import React from 'react';
 
+import { useI18n } from '../../context/I18nContext';
 const CrudEmptyState = ({ message, colSpan }) => {
+  +  const { t } = useI18n();
   if (colSpan) {
     return (
       <tr>

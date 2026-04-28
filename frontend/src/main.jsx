@@ -8,6 +8,7 @@ import { FontSizeProvider } from './context/FontSizeContext'
 import App from './App.jsx'
 import './index.css'
 
+// I18n integration note: I18nProvider must be initialized before useI18n can be used
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
