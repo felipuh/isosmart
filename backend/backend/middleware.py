@@ -6,11 +6,13 @@ from backend.request_context import set_request_id
 
 class CsrfExemptAPIMiddleware(MiddlewareMixin):
     """
-    Middleware para eximir rutas /api/* de verificación CSRF
+    Middleware para proteger rutas /api/* — CSRF está habilitado pero HTTP-only cookies
+    con JWT no requieren verificación CSRF explícita (JWT va en header Authorization)
     """
     def process_request(self, request):
-        if request.path.startswith('/api/'):
-            setattr(request, '_dont_enforce_csrf_checks', True)
+        # DEPRECATED: Esta clase no hace nada; CSRF está habilitado globalmente.
+        # JWT en headers Authorization no requiere CSRF (no hay cookies de sesión).
+        pass
 
 
 class RequestIDMiddleware(MiddlewareMixin):

@@ -43,7 +43,7 @@ IS_PRODUCTION = ENVIRONMENT in ('production', 'prod')
 SECRET_KEY = os.getenv('SECRET_KEY', 'change-this-dev-secret-key-before-deploy')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = _env_bool('DEBUG', default=True)
+DEBUG = _env_bool('DEBUG', default=False)
 
 ALLOWED_HOSTS = _env_list(
     'ALLOWED_HOSTS',
