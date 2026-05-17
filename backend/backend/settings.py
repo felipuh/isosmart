@@ -41,6 +41,8 @@ IS_PRODUCTION = ENVIRONMENT in ('production', 'prod')
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY', 'change-this-dev-secret-key-before-deploy')
+SMART3AI_SSO_JWT_SECRET = os.getenv('SMART3AI_SSO_JWT_SECRET', SECRET_KEY)
+SMART3AI_SSO_ISSUER = os.getenv('SMART3AI_SSO_ISSUER', 'https://sso.smart3ai.local')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = _env_bool('DEBUG', default=False)
@@ -49,6 +51,14 @@ ALLOWED_HOSTS = _env_list(
     'ALLOWED_HOSTS',
     default='localhost,127.0.0.1,192.168.100.100,isosmart.local'
 )
+
+# Keep reverse-proxy host aliases accepted even if .env ALLOWED_HOSTS is stale.
+for required_host in (
+    'isosmart.smart3ai.local',
+    'smart3ai.local',
+):
+    if required_host not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(required_host)
 
 if IS_PRODUCTION:
     if SECRET_KEY in ('', 'change-this-dev-secret-key-before-deploy'):
@@ -135,6 +145,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
+        'integration.sso_auth.Smart3AISSOAuthentication',  # Centralized SSO JWT
         'rest_framework_simplejwt.authentication.JWTAuthentication',  # JWT authentication
         'rest_framework.authentication.SessionAuthentication',  # Session authentication para desarrollo
     ],
@@ -249,7 +260,7 @@ SIMPLE_JWT = {
     'BLACKLIST_AFTER_ROTATION': True,
     'UPDATE_LAST_LOGIN': True,
     'ALGORITHM': 'HS256',
-    'SIGNING_KEY': SECRET_KEY,
+    'SIGNING_KEY': SMART3AI_SSO_JWT_SECRET,
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
