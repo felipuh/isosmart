@@ -7,6 +7,7 @@ from django.conf import settings
 from django.contrib.auth import authenticate
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.password_validation import validate_password
+from django.utils.text import slugify
 from django.utils import timezone
 from .models import PasswordResetToken, User, UserProfile
 from core.models import Organization
@@ -66,6 +67,85 @@ class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
     organization_id = serializers.CharField(required=False, allow_null=True)
+
+    _ROLE_MAP = {
+        'superadmin': 'org_admin',
+        'admin': 'org_admin',
+        'org_admin': 'org_admin',
+        'iso_manager': 'iso_manager',
+        'auditor': 'auditor',
+        'user': 'user',
+        'viewer': 'viewer',
+    }
+
+    def _map_role(self, role):
+        return self._ROLE_MAP.get(str(role or '').strip().lower(), 'user')
+
+    def _unique_slug(self, base_slug):
+        candidate = (base_slug or '').strip() or 'organization'
+        if not Organization.objects.filter(slug=candidate).exists():
+            return candidate
+
+        suffix = 2
+        while True:
+            with_suffix = f"{candidate}-{suffix}"
+            if not Organization.objects.filter(slug=with_suffix).exists():
+                return with_suffix
+            suffix += 1
+
+    def _sync_profiles_from_adminapps(self, user, admin_apps_data):
+        organizations = list(admin_apps_data.get('organizations') or [])
+        if not organizations:
+            return
+
+        default_role = admin_apps_data.get('role')
+
+        for org_item in organizations:
+            candidate_external_ids = []
+            for key in ('uuid', 'external_id', 'id'):
+                value = org_item.get(key)
+                if value is not None:
+                    candidate_external_ids.append(str(value))
+
+            if not candidate_external_ids:
+                continue
+
+            organization = Organization.objects.filter(
+                external_id__in=candidate_external_ids
+            ).first()
+
+            if not organization:
+                org_slug = slugify(org_item.get('slug') or org_item.get('name') or '')
+                if org_slug:
+                    organization = Organization.objects.filter(slug=org_slug).first()
+
+            if not organization:
+                org_name = (org_item.get('name') or '').strip() or f"Org {candidate_external_ids[0]}"
+                org_slug = self._unique_slug(slugify(org_item.get('slug') or org_name))
+                organization = Organization.objects.create(
+                    external_id=candidate_external_ids[0],
+                    name=org_name,
+                    slug=org_slug,
+                    is_active=True,
+                )
+            elif organization.external_id not in candidate_external_ids:
+                # Keep external IDs aligned with AdminApps so tenant filters match.
+                organization.external_id = candidate_external_ids[0]
+                organization.save(update_fields=['external_id'])
+
+            if not organization.is_active:
+                organization.is_active = True
+                organization.save(update_fields=['is_active'])
+
+            mapped_role = self._map_role(org_item.get('role') or default_role)
+            UserProfile.objects.update_or_create(
+                user=user,
+                organization=organization,
+                defaults={
+                    'role': mapped_role,
+                    'is_active': True,
+                },
+            )
     
     def validate(self, attrs):
         email = attrs.get('email')
@@ -240,6 +320,16 @@ class LoginSerializer(serializers.Serializer):
             )
             if allowed_external_org_ids:
                 profiles = profiles.filter(organization__external_id__in=allowed_external_org_ids)
+
+            if not profiles.exists() and (admin_apps_data.get('organizations') or []):
+                self._sync_profiles_from_adminapps(user, admin_apps_data)
+                profiles = UserProfile.objects.filter(
+                    user=user,
+                    is_active=True,
+                    organization__is_active=True,
+                )
+                if allowed_external_org_ids:
+                    profiles = profiles.filter(organization__external_id__in=allowed_external_org_ids)
             
             if not profiles.exists():
                 raise serializers.ValidationError(

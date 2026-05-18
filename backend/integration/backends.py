@@ -151,6 +151,18 @@ class AdminAppsAuthBackend(BaseBackend):
                 )
                 logger.info(f"Organizacion creada desde Admin Apps: {organization.name}")
 
+            # Keep local organization active/updated after successful AdminApps auth.
+            updates = []
+            desired_name = (org_data.get('name') or '').strip()
+            if desired_name and organization.name != desired_name:
+                organization.name = desired_name
+                updates.append('name')
+            if not organization.is_active:
+                organization.is_active = True
+                updates.append('is_active')
+            if updates:
+                organization.save(update_fields=updates)
+
             # Crear o actualizar perfil
             mapped_role = ROLE_MAP.get(role, 'user')
             try:
