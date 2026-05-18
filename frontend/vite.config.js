@@ -83,7 +83,19 @@ export default defineConfig({
     host: '0.0.0.0',
     port: 3001,
     strictPort: false,  // Si 3001 está ocupado, usa el siguiente puerto disponible
-    allowedHosts: ['isosmart.local', 'localhost', '127.0.0.1', '192.168.100.100'],
+    hmr: {
+      protocol: 'ws',
+      host: process.env.VITE_HMR_HOST || 'isosmart.smart3ai.local',
+      clientPort: Number(process.env.VITE_HMR_CLIENT_PORT || 80),
+    },
+    allowedHosts: [
+      'isosmart.local',
+      'isosmart.smart3ai.local',
+      'smart3ai.local',
+      'localhost',
+      '127.0.0.1',
+      '192.168.100.100',
+    ],
     proxy: {
       '/api': {
         target: 'http://127.0.0.1:8001',

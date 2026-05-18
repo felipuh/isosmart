@@ -6,6 +6,7 @@ Este directorio centraliza documentación técnica interna del sistema.
 
 - [Arquitectura, Integraciones y Multitenancy](./arquitectura-integraciones-multitenancy.md)
 - [Manual de Operación por Roles](./manual-operacion-por-roles.md)
+- [Mapa Operativo Nginx Smart3AI (2026-05-17)](./NGINX_MAPA_DOMINIOS_SMART3AI_2026-05-17.md)
 
 ## Audiencia
 

@@ -225,11 +225,12 @@ class LoginSerializer(serializers.Serializer):
                             'expires_at': temporary_expiry,
                         }
             
-            allowed_external_org_ids = {
-                str(org.get('id'))
-                for org in (admin_apps_data.get('organizations') or [])
-                if org.get('id') is not None
-            }
+            allowed_external_org_ids = set()
+            for org in (admin_apps_data.get('organizations') or []):
+                for key in ('id', 'uuid', 'external_id'):
+                    value = org.get(key)
+                    if value is not None:
+                        allowed_external_org_ids.add(str(value))
 
             # Obtener perfiles locales solo para organizaciones vigentes en AdminApps
             profiles = UserProfile.objects.filter(
@@ -264,7 +265,11 @@ class LoginSerializer(serializers.Serializer):
             else:
                 # Preferir la organización activa reportada por AdminApps.
                 current_org = admin_apps_data.get('organization') or {}
-                current_external_id = current_org.get('id')
+                current_external_id = (
+                    current_org.get('uuid')
+                    or current_org.get('external_id')
+                    or current_org.get('id')
+                )
                 if current_external_id is not None:
                     profile = profiles.filter(organization__external_id=current_external_id).first()
                 else:

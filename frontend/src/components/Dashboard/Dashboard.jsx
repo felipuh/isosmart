@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   Network, 
@@ -39,6 +39,8 @@ const Dashboard = () => {
   const [onboardingIsoSkeleton, setOnboardingIsoSkeleton] = useState(null);
   const [onboardingAdaptiveRoute, setOnboardingAdaptiveRoute] = useState(null);
   const [billingSummary, setBillingSummary] = useState(null);
+  const statsRequestInFlightRef = useRef(false);
+  const lastStatsLoadRef = useRef({ orgId: null, at: 0 });
 
   const normalizeCount = (data) => {
     if (Array.isArray(data)) return data.length;
@@ -59,6 +61,17 @@ const Dashboard = () => {
   const loadDashboardStats = useCallback(async () => {
     if (!orgId) return;
 
+    const now = Date.now();
+    const wasRecentlyLoaded =
+      lastStatsLoadRef.current.orgId === orgId &&
+      now - lastStatsLoadRef.current.at < 10000;
+
+    if (statsRequestInFlightRef.current || wasRecentlyLoaded) {
+      return;
+    }
+
+    statsRequestInFlightRef.current = true;
+
     const clauseChecks = [
       { id: '4', labelKey: 'dashboard.main.clauseProgress.clause4', checks: ['/context/history/', '/stakeholders/stakeholders/', '/scope/scopes/', '/processes/maps/'] },
       { id: '5', labelKey: 'dashboard.main.clauseProgress.clause5', checks: ['/leadership/policies/', '/leadership/commitments/', '/leadership/roles/'] },
@@ -69,33 +82,38 @@ const Dashboard = () => {
       { id: '10', labelKey: 'dashboard.main.clauseProgress.clause10', checks: ['/improvement/nonconformities/', '/improvement/corrective-actions/', '/improvement/continual-improvements/'] },
     ];
 
-    const [processCount, stakeholderCount, clauseResults] = await Promise.all([
-      fetchCount('/processes/maps/'),
-      fetchCount('/stakeholders/stakeholders/'),
-      Promise.all(
-        clauseChecks.map(async (clause) => {
-          const values = await Promise.all(clause.checks.map((endpoint) => fetchCount(endpoint)));
-          const completed = values.filter((value) => value > 0).length;
-          const progress = Math.round((completed / clause.checks.length) * 100);
-          return { ...clause, progress };
-        })
-      ),
-    ]);
+    try {
+      const [processCount, stakeholderCount, clauseResults] = await Promise.all([
+        fetchCount('/processes/maps/'),
+        fetchCount('/stakeholders/stakeholders/'),
+        Promise.all(
+          clauseChecks.map(async (clause) => {
+            const values = await Promise.all(clause.checks.map((endpoint) => fetchCount(endpoint)));
+            const completed = values.filter((value) => value > 0).length;
+            const progress = Math.round((completed / clause.checks.length) * 100);
+            return { ...clause, progress };
+          })
+        ),
+      ]);
 
-    const iso9001Progress = clauseResults.length
-      ? Math.round(clauseResults.reduce((acc, clause) => acc + clause.progress, 0) / clauseResults.length)
-      : 0;
+      const iso9001Progress = clauseResults.length
+        ? Math.round(clauseResults.reduce((acc, clause) => acc + clause.progress, 0) / clauseResults.length)
+        : 0;
 
-    setClauseProgress(clauseResults);
-    setStats({
-      modulesActive: clauseResults.filter((clause) => clause.progress > 0).length,
-      totalModules: clauseResults.length,
-      clause4Progress: clauseResults.find((clause) => clause.id === '4')?.progress || 0,
-      iso9001Progress,
-      totalProcesses: processCount,
-      totalStakeholders: stakeholderCount,
-      lastUpdate: new Date().toISOString(),
-    });
+      setClauseProgress(clauseResults);
+      setStats({
+        modulesActive: clauseResults.filter((clause) => clause.progress > 0).length,
+        totalModules: clauseResults.length,
+        clause4Progress: clauseResults.find((clause) => clause.id === '4')?.progress || 0,
+        iso9001Progress,
+        totalProcesses: processCount,
+        totalStakeholders: stakeholderCount,
+        lastUpdate: new Date().toISOString(),
+      });
+    } finally {
+      statsRequestInFlightRef.current = false;
+      lastStatsLoadRef.current = { orgId, at: Date.now() };
+    }
   }, [fetchCount, orgId]);
 
   useEffect(() => {

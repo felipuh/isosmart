@@ -83,3 +83,6 @@ backend/.env
 frontend/.env
 frontend/.env.production
 logs/ai/frontend-error-0.log
+logs/ai/vite_dev.log
+.gitignore
+logs/ai/vite_dev_5173.log

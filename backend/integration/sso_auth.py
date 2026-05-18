@@ -7,6 +7,8 @@ from token claims so multi-tenant scoping works across services.
 
 from __future__ import annotations
 
+import logging
+
 from django.contrib.auth import get_user_model
 from django.db import IntegrityError
 from django.utils.text import slugify
@@ -18,6 +20,7 @@ from core.models import Organization
 from integration.backends import ROLE_MAP
 
 User = get_user_model()
+logger = logging.getLogger(__name__)
 
 
 class Smart3AISSOAuthentication(JWTAuthentication):
@@ -77,7 +80,16 @@ class Smart3AISSOAuthentication(JWTAuthentication):
         if not org_external_id:
             return
 
-        organization = Organization.objects.filter(external_id=org_external_id).first()
+        organization = None
+
+        # Local tokens can carry the internal organization PK (int); prefer
+        # that lookup before treating the claim as external_id.
+        if org_external_id.isdigit():
+            organization = Organization.objects.filter(id=int(org_external_id)).first()
+
+        if not organization:
+            organization = Organization.objects.filter(external_id=org_external_id).first()
+
         if not organization:
             source_slug = org_code or org_name or org_external_id
             base_slug = slugify(source_slug) if source_slug else f"org-{org_external_id}"
@@ -89,17 +101,26 @@ class Smart3AISSOAuthentication(JWTAuthentication):
                 is_active=True,
             )
 
-        profile, _ = UserProfile.objects.get_or_create(
-            user=user,
-            organization=organization,
-            defaults={"role": mapped_role, "is_active": True},
-        )
-        update_fields = []
-        if profile.role != mapped_role:
-            profile.role = mapped_role
-            update_fields.append("role")
-        if not profile.is_active:
-            profile.is_active = True
-            update_fields.append("is_active")
-        if update_fields:
-            profile.save(update_fields=update_fields)
+        try:
+            UserProfile.objects.update_or_create(
+                user=user,
+                organization=organization,
+                defaults={"role": mapped_role, "is_active": True},
+            )
+            return
+        except IntegrityError:
+            # Legacy schemas may still enforce unique(user_id) and reject a
+            # second profile row for the same user across organizations.
+            existing_profile = UserProfile.objects.filter(user=user).first()
+            if not existing_profile:
+                raise
+
+            existing_profile.organization = organization
+            existing_profile.role = mapped_role
+            existing_profile.is_active = True
+            existing_profile.save(update_fields=["organization", "role", "is_active"])
+            logger.warning(
+                "Perfil de usuario reasignado por restriccion unica legacy (SSO). user=%s org=%s",
+                user.id,
+                organization.id,
+            )
