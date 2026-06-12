@@ -1,8 +1,6 @@
 import os
 import sys
 
-import pymysql
-
 
 def _dedupe_syspath_by_realpath() -> None:
 	unique_paths = []
@@ -17,8 +15,6 @@ def _dedupe_syspath_by_realpath() -> None:
 
 
 _dedupe_syspath_by_realpath()
-
-pymysql.install_as_MySQLdb()
 
 # Esto asegura que Celery se cargue cuando Django inicie
 from .celery import app as celery_app

@@ -25,12 +25,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='refreshtokenblacklist',
             name='token_hash',
-            field=models.CharField(blank=True, db_index=True, max_length=64, null=True),
+            field=models.CharField(blank=True, max_length=64, null=True),
         ),
         migrations.RunPython(populate_token_hash, migrations.RunPython.noop),
         migrations.AlterField(
             model_name='refreshtokenblacklist',
             name='token_hash',
-            field=models.CharField(db_index=True, max_length=64, unique=True),
+            field=models.CharField(max_length=64, unique=True),
         ),
     ]

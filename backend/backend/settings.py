@@ -203,40 +203,32 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.getenv('DB_NAME', 'isosmart_main'),
         'USER': os.getenv('DB_USER', 'isosmart'),
         'PASSWORD': os.getenv('DB_PASSWORD', ''),
-        'HOST': os.getenv('DB_HOST', '192.168.100.105'),
-        'PORT': os.getenv('DB_PORT', '3306'),
-        'OPTIONS': {
-            'charset': 'utf8mb4',
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-            'connect_timeout': 10,
-        }
+        'HOST': os.getenv('DB_HOST', '127.0.0.1'),
+        'PORT': os.getenv('DB_PORT', '5432'),
+        'CONN_MAX_AGE': int(os.getenv('DB_CONN_MAX_AGE', '60')),
     },
     # Bases adicionales para IA y auditoría
     'ai_db': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.getenv('AI_DB_NAME', 'isosmart_ai'),
         'USER': os.getenv('AI_DB_USER', os.getenv('DB_USER', 'isosmart')),
         'PASSWORD': os.getenv('AI_DB_PASSWORD', os.getenv('DB_PASSWORD', '')),
-        'HOST': os.getenv('AI_DB_HOST', os.getenv('DB_HOST', '192.168.100.105')),
-        'PORT': os.getenv('AI_DB_PORT', os.getenv('DB_PORT', '3306')),
-        'OPTIONS': {
-            'charset': 'utf8mb4',
-        }
+        'HOST': os.getenv('AI_DB_HOST', os.getenv('DB_HOST', '127.0.0.1')),
+        'PORT': os.getenv('AI_DB_PORT', os.getenv('DB_PORT', '5432')),
+        'CONN_MAX_AGE': int(os.getenv('DB_CONN_MAX_AGE', '60')),
     },
     'audit_db': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.getenv('AUDIT_DB_NAME', 'isosmart_audit'),
         'USER': os.getenv('AUDIT_DB_USER', os.getenv('DB_USER', 'isosmart')),
         'PASSWORD': os.getenv('AUDIT_DB_PASSWORD', os.getenv('DB_PASSWORD', '')),
-        'HOST': os.getenv('AUDIT_DB_HOST', os.getenv('DB_HOST', '192.168.100.105')),
-        'PORT': os.getenv('AUDIT_DB_PORT', os.getenv('DB_PORT', '3306')),
-        'OPTIONS': {
-            'charset': 'utf8mb4',
-        }
+        'HOST': os.getenv('AUDIT_DB_HOST', os.getenv('DB_HOST', '127.0.0.1')),
+        'PORT': os.getenv('AUDIT_DB_PORT', os.getenv('DB_PORT', '5432')),
+        'CONN_MAX_AGE': int(os.getenv('DB_CONN_MAX_AGE', '60')),
     }
 }
 
