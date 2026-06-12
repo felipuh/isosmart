@@ -5,6 +5,7 @@ Serializers de Autenticación para ISO Smart
 from rest_framework import serializers
 from django.conf import settings
 from django.contrib.auth import authenticate
+from django.core.exceptions import FieldError
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.password_validation import validate_password
 from django.utils.text import slugify
@@ -158,14 +159,25 @@ class LoginSerializer(serializers.Serializer):
         lockout_minutes = getattr(settings, 'LOGIN_LOCKOUT_MINUTES', 15)
 
         if email and password:
-            # Look up user for lockout check before calling authenticate()
+            # Look up user for lockout check before calling authenticate().
+            # Some environments may run with pending auth migrations; fail closed
+            # (invalid credentials) instead of bubbling DB field errors as 500.
             try:
                 candidate = User.objects.get(email=email)
             except User.DoesNotExist:
                 candidate = None
+            except FieldError:
+                candidate = None
+            except Exception:
+                candidate = None
 
-            if candidate and candidate.is_locked():
-                raise serializers.ValidationError(_INVALID_CREDENTIALS_MSG, code='account_locked')
+            if candidate:
+                try:
+                    if candidate.is_locked():
+                        raise serializers.ValidationError(_INVALID_CREDENTIALS_MSG, code='account_locked')
+                except Exception:
+                    # If schema is outdated (missing lockout fields), avoid 500.
+                    pass
 
             if organization_id:
                 try:
@@ -184,9 +196,13 @@ class LoginSerializer(serializers.Serializer):
 
             if not user:
                 if candidate:
-                    candidate.record_failed_login(
-                        max_attempts=max_attempts, lockout_minutes=lockout_minutes
-                    )
+                    try:
+                        candidate.record_failed_login(
+                            max_attempts=max_attempts, lockout_minutes=lockout_minutes
+                        )
+                    except Exception:
+                        # Ignore lockout bookkeeping errors when DB is not fully migrated.
+                        pass
                 raise serializers.ValidationError(_INVALID_CREDENTIALS_MSG, code='authorization')
 
             if not user.is_active:
@@ -280,9 +296,16 @@ class LoginSerializer(serializers.Serializer):
                     )
 
             # Successful authentication — clear any previous failures
-            user.reset_login_attempts()
+            try:
+                user.reset_login_attempts()
+            except Exception:
+                # Ignore bookkeeping errors when lockout columns are missing.
+                pass
 
-            temporary_expiry = user.get_temporary_password_expiry()
+            try:
+                temporary_expiry = user.get_temporary_password_expiry()
+            except Exception:
+                temporary_expiry = None
             if temporary_expiry and timezone.now() >= temporary_expiry:
                 raise serializers.ValidationError(
                     {

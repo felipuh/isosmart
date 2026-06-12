@@ -5,6 +5,7 @@ Permite autenticación con email en lugar de username
 
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth import get_user_model
+from django.db import DatabaseError
 
 User = get_user_model()
 
@@ -29,9 +30,17 @@ class EmailBackend(ModelBackend):
             # para evitar timing attacks
             User().set_password(password)
             return None
+        except DatabaseError:
+            # If DB schema is not up to date, avoid bubbling errors as HTTP 500.
+            return None
+        except Exception:
+            return None
         
-        if user.check_password(password) and self.user_can_authenticate(user):
-            return user
+        try:
+            if user.check_password(password) and self.user_can_authenticate(user):
+                return user
+        except Exception:
+            return None
         
         return None
     

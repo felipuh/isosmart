@@ -143,13 +143,21 @@ class AdminAppsAuthBackend(BaseBackend):
                 name = org_data.get('name', '')
                 slug_source = code or name
                 slug = slugify(slug_source) if slug_source else None
-                organization = Organization.objects.create(
-                    external_id=org_id,
-                    name=name or f"Org {org_id}",
-                    slug=slug or f"org-{org_id}",
-                    is_active=org_data.get('is_active', True),
-                )
-                logger.info(f"Organizacion creada desde Admin Apps: {organization.name}")
+                # Reuse existing organization when slug already exists locally,
+                # then align external_id to avoid duplicate-key errors.
+                organization = Organization.objects.filter(slug=slug).first() if slug else None
+                if organization:
+                    if org_id and organization.external_id != org_id:
+                        organization.external_id = org_id
+                        organization.save(update_fields=['external_id'])
+                else:
+                    organization = Organization.objects.create(
+                        external_id=org_id,
+                        name=name or f"Org {org_id}",
+                        slug=slug or f"org-{org_id}",
+                        is_active=org_data.get('is_active', True),
+                    )
+                    logger.info(f"Organizacion creada desde Admin Apps: {organization.name}")
 
             # Keep local organization active/updated after successful AdminApps auth.
             updates = []
