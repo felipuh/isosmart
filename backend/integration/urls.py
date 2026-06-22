@@ -37,9 +37,9 @@ urlpatterns = [
     path('aims/risk-register/', views.aims_risk_register, name='aims-risk-register'),
     path('aims/audit-digest/', views.aims_audit_digest, name='aims-audit-digest'),
     path('organizations/', views.organizations, name='adminapps-organizations'),
-    path('organizations/<int:org_id>/', views.organization_detail, name='adminapps-organization-detail'),
-    path('organizations/<int:org_id>/users/', views.organization_users, name='adminapps-organization-users'),
-    path('organizations/<int:org_id>/modules/', views.organization_modules, name='adminapps-organization-modules'),
+    path('organizations/<str:org_id>/', views.organization_detail, name='adminapps-organization-detail'),
+    path('organizations/<str:org_id>/users/', views.organization_users, name='adminapps-organization-users'),
+    path('organizations/<str:org_id>/modules/', views.organization_modules, name='adminapps-organization-modules'),
 ]
 
 urlpatterns += router.urls

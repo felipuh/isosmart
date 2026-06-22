@@ -372,6 +372,9 @@ STATICFILES_FINDERS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Configuración de logs
+LOG_DIR = Path(os.getenv('ISOSMART_LOG_DIR', BASE_DIR / 'logs' / 'ai'))
+LOG_DIR.mkdir(parents=True, exist_ok=True)
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -390,7 +393,7 @@ LOGGING = {
         'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': '/home/aplicacion/projects/isosmart/logs/ai/django.log',
+            'filename': str(LOG_DIR / 'django.log'),
             'formatter': 'verbose',
             'filters': ['request_id'],
         },

@@ -3,7 +3,7 @@ module.exports = {
     name: 'isosmart-frontend',
     script: 'npm',
     args: 'run dev',
-    cwd: '/home/aplicacion/projects/isosmart/frontend',
+    cwd: '/home/felipe/proyectos/isosmart/frontend',
     env: {
       NODE_ENV: 'development',
       PORT: 3001,
@@ -13,8 +13,8 @@ module.exports = {
     autorestart: true,
     watch: false,
     max_memory_restart: '1G',
-    error_file: '/home/aplicacion/projects/isosmart/logs/ai/frontend-error.log',
-    out_file: '/home/aplicacion/projects/isosmart/logs/ai/frontend-out.log',
+    error_file: '/home/felipe/proyectos/isosmart/logs/ai/frontend-error.log',
+    out_file: '/home/felipe/proyectos/isosmart/logs/ai/frontend-out.log',
     time: true,
   }]
 }
