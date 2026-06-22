@@ -86,3 +86,4 @@ logs/ai/frontend-error-0.log
 logs/ai/vite_dev.log
 .gitignore
 logs/ai/vite_dev_5173.log
+backend/logs/ai/django.log
