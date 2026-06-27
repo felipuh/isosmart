@@ -11,60 +11,79 @@ Uso:
 from authentication.models import User, UserProfile
 from core.models import Organization
 
+INITIAL_ADMIN_EMAIL = 'admin@isosmart.local'
 INITIAL_ADMIN_PASSWORD = 'Admin@123456'
 
-# Verificar si ya existe un usuario admin
-if User.objects.filter(email='admin@isosmart.local').exists():
-    print("✅ El usuario admin ya existe")
-else:
-    # Obtener o crear la organización por defecto
+
+org = Organization.objects.filter(slug='smart3ai', is_active=True).first()
+if not org:
     org, created = Organization.objects.get_or_create(
-        id=1,
+        slug='smart3ai',
         defaults={
-            'name': 'Organización Demo',
-            'slug': 'organizacion-demo',
-            'legal_name': 'Organización Demo S.A.',
+            'name': 'Smart3AI',
+            'legal_name': 'Smart3AI',
             'tax_id': '0000000000',
-            'email': 'demo@isosmart.local',
+            'email': 'felipe@smart3ai.com',
             'phone': '0000000000',
-            'address': 'Dirección Demo',
-            'website': 'https://demo.isosmart.local',
+            'address': 'Direccion Smart3AI',
+            'website': 'https://smart3ai.local',
+            'is_active': True,
         }
     )
-    
-    if created:
-        print(f"✅ Organización creada: {org.name}")
-    else:
-        print(f"✅ Organización existente: {org.name}")
-    
-    # Crear usuario administrador
-    user = User.objects.create_user(
-        username='admin_isosmart',  # Username requerido por la tabla auth_user
-        email='admin@isosmart.local',
-        password=INITIAL_ADMIN_PASSWORD,  # ⚠️ Cambiar después del primer login
-        first_name='Administrador',
-        last_name='Sistema',
-        is_active=True,
-    )
-    
-    print(f"✅ Usuario creado: {user.email}")
-    
-    # Crear perfil de administrador
-    profile = UserProfile.objects.create(
-        user=user,
-        organization=org,
-        role='org_admin',
-        job_title='Administrador del Sistema',
-        is_active=True,
-    )
-    
-    print(f"✅ Perfil creado: {profile.role} en {org.name}")
-    
-    print("\n" + "="*50)
-    print("CREDENCIALES DE ACCESO INICIAL")
-    print("="*50)
-    print(f"Email: admin@isosmart.local")
-    print(f"Password: {INITIAL_ADMIN_PASSWORD}")
-    print("="*50)
-    print("⚠️  Cambia la contraseña después del primer login!")
-    print("="*50)
+else:
+    created = False
+
+if created:
+    print(f"Organizacion creada: {org.name}")
+else:
+    print(f"Organizacion existente: {org.name}")
+
+user, user_created = User.objects.get_or_create(
+    email=INITIAL_ADMIN_EMAIL,
+    defaults={
+        'username': 'admin_isosmart',
+        'first_name': 'Administrador',
+        'last_name': 'Sistema',
+        'is_active': True,
+        'is_staff': True,
+        'is_superuser': True,
+    },
+)
+
+user.username = user.username or 'admin_isosmart'
+user.first_name = user.first_name or 'Administrador'
+user.last_name = user.last_name or 'Sistema'
+user.is_active = True
+user.is_staff = True
+user.is_superuser = True
+user.set_password(INITIAL_ADMIN_PASSWORD)
+user.save()
+
+if user_created:
+    print(f"Usuario creado: {user.email}")
+else:
+    print(f"Usuario actualizado: {user.email}")
+
+profile, profile_created = UserProfile.objects.update_or_create(
+    user=user,
+    organization=org,
+    defaults={
+        'role': 'org_admin',
+        'job_title': 'Administrador del Sistema',
+        'is_active': True,
+    },
+)
+
+if profile_created:
+    print(f"Perfil creado: {profile.role} en {org.name}")
+else:
+    print(f"Perfil actualizado: {profile.role} en {org.name}")
+
+print("\n" + "=" * 50)
+print("CREDENCIALES DE ACCESO INICIAL")
+print("=" * 50)
+print(f"Email: {INITIAL_ADMIN_EMAIL}")
+print(f"Password: {INITIAL_ADMIN_PASSWORD}")
+print("=" * 50)
+print("Cambia la contrasena despues del primer login.")
+print("=" * 50)

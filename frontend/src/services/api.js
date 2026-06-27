@@ -51,9 +51,13 @@ const processQueue = (error, token = null) => {
 // Interceptor de request - agregar token
 api.interceptors.request.use(
   (config) => {
+    const requestUrl = config?.url || '';
+    const isAuthEndpoint = requestUrl.includes('/auth/login/') || requestUrl.includes('/auth/refresh/');
     const token = localStorage.getItem('access_token');
-    if (token) {
+    if (token && !isAuthEndpoint) {
       config.headers.Authorization = `Bearer ${token}`;
+    } else if (isAuthEndpoint && config.headers?.Authorization) {
+      delete config.headers.Authorization;
     }
     return config;
   },
@@ -67,9 +71,11 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+    const requestUrl = originalRequest?.url || '';
+    const isAuthEndpoint = requestUrl.includes('/auth/login/') || requestUrl.includes('/auth/refresh/');
 
     // Si el error no es 401 o ya intentamos refresh, rechazar
-    if (error.response?.status !== 401 || originalRequest._retry) {
+    if (!originalRequest || error.response?.status !== 401 || originalRequest._retry || isAuthEndpoint) {
       return Promise.reject(error);
     }
 

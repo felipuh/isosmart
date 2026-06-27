@@ -173,11 +173,13 @@ class LoginSerializer(serializers.Serializer):
 
             if candidate:
                 try:
-                    if candidate.is_locked():
-                        raise serializers.ValidationError(_INVALID_CREDENTIALS_MSG, code='account_locked')
+                    is_locked = candidate.is_locked()
                 except Exception:
                     # If schema is outdated (missing lockout fields), avoid 500.
-                    pass
+                    is_locked = False
+
+                if is_locked:
+                    raise serializers.ValidationError(_INVALID_CREDENTIALS_MSG, code='account_locked')
 
             if organization_id:
                 try:
@@ -212,12 +214,27 @@ class LoginSerializer(serializers.Serializer):
                 )
 
             request_obj = self.context.get('request')
+            request_host = ''
+            if request_obj:
+                try:
+                    request_host = request_obj.get_host().split(':')[0].strip().lower()
+                except Exception:
+                    request_host = ''
+            local_auth_bypass_hosts = {
+                str(host).strip().lower()
+                for host in getattr(settings, 'LOCAL_AUTH_BYPASS_HOSTS', set())
+                if str(host).strip()
+            }
+            is_local_request = request_host in local_auth_bypass_hosts
             bypass_header_enabled = bool(
                 request_obj
                 and str(request_obj.headers.get('X-ISO-LOCAL-AUTH-BYPASS', '')).strip() == '1'
                 and getattr(settings, 'DEBUG', False)
             )
-            bypass_flag_enabled = bool(getattr(settings, 'ALLOW_LOCAL_AUTH_BYPASS_FOR_TESTS', False))
+            bypass_flag_enabled = bool(
+                getattr(settings, 'ALLOW_LOCAL_AUTH_BYPASS_FOR_TESTS', False)
+                and is_local_request
+            )
             allow_local_bypass = bypass_header_enabled or bypass_flag_enabled
 
             # Reject local-backend-only logins unless controlled local bypass is explicitly enabled.

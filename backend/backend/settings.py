@@ -138,6 +138,10 @@ OWNER_ORGANIZATION_NAME = os.getenv('OWNER_ORGANIZATION_NAME', 'Smart3AI')
 OWNER_ORGANIZATION_EXTERNAL_ID = os.getenv('OWNER_ORGANIZATION_EXTERNAL_ID', '').strip()
 OWNER_ORGANIZATION_BILLING_EXEMPT = _env_bool('OWNER_ORGANIZATION_BILLING_EXEMPT', default=True)
 ALLOW_LOCAL_AUTH_BYPASS_FOR_TESTS = _env_bool('ALLOW_LOCAL_AUTH_BYPASS_FOR_TESTS', default=False)
+LOCAL_AUTH_BYPASS_HOSTS = set(_env_list(
+    'LOCAL_AUTH_BYPASS_HOSTS',
+    default='127.0.0.1,localhost,testserver,isosmart.local,isosmart.smart3ai.local'
+))
 
 # Configuración de REST Framework
 REST_FRAMEWORK = {

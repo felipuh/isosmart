@@ -1016,6 +1016,7 @@ class FeatureFlagManager(models.Manager):
 
 
 class FeatureFlag(models.Model):
+    id = models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')
     SCOPE_GLOBAL = 'global'
     SCOPE_ORGANIZATION = 'organization'
     SCOPE_CHOICES = [

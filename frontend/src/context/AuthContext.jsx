@@ -128,6 +128,10 @@ export const AuthProvider = ({ children }) => {
         payload.organization_id = organizationId;
       }
 
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
+      delete api.defaults.headers.common['Authorization'];
+
       const response = await api.post('/auth/login/', payload);
       const { access, refresh, user: userData, profile: profileData, organizations: orgs } = response.data;
 
