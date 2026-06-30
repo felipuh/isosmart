@@ -1,7 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 
-import { useI18n } from './I18nContext';
 const STORAGE_KEY = 'isosmart_font_size';
 const LEVELS = ['small', 'normal', 'large', 'xlarge'];
 const DEFAULT_LEVEL = 'normal';
@@ -9,7 +8,6 @@ const DEFAULT_LEVEL = 'normal';
 const FontSizeContext = createContext(null);
 
 export const FontSizeProvider = ({ children }) => {
-    const { t } = useI18n();
   const [fontSizeLevel, setFontSizeLevel] = useState(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     return LEVELS.includes(saved) ? saved : DEFAULT_LEVEL;

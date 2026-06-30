@@ -77,6 +77,35 @@ def _request_ip_address(request):
     return request.META.get('REMOTE_ADDR')
 
 
+def _local_debug_recovery_allowed(request):
+    if not getattr(settings, 'ALLOW_LOCAL_AUTH_BYPASS_FOR_TESTS', False):
+        return False
+
+    def normalize_host(value):
+        return str(value or '').split(':')[0].strip().lower()
+
+    try:
+        request_host = normalize_host(request.get_host())
+    except Exception:
+        request_host = ''
+
+    meta_hosts = {
+        normalize_host(request.META.get('HTTP_HOST')),
+        normalize_host(request.META.get('SERVER_NAME')),
+    }
+    remote_addr = normalize_host(_request_ip_address(request))
+    local_hosts = {
+        str(item).strip().lower()
+        for item in getattr(settings, 'LOCAL_AUTH_BYPASS_HOSTS', set())
+        if str(item).strip()
+    }
+    return bool(
+        request_host in local_hosts
+        or meta_hosts.intersection(local_hosts)
+        or remote_addr in {'127.0.0.1', '::1', 'localhost'}
+    )
+
+
 def _audit_password_reset(user, action, request, description, details=None):
     profile = UserProfile.objects.filter(user=user, is_active=True).select_related('organization').first()
     if not profile:
@@ -420,9 +449,12 @@ class PasswordResetRequestView(APIView):
         ip_address = _request_ip_address(request)
         user_agent = request.META.get('HTTP_USER_AGENT', '')
         now = timezone.now()
-        debug_recovery_mode = settings.DEBUG and (
+        explicit_debug_recovery = (
             request.META.get('HTTP_X_DEBUG_RECOVERY') == '1'
             or request.query_params.get('debug_recovery') == '1'
+        )
+        debug_recovery_mode = explicit_debug_recovery and (
+            settings.DEBUG or _local_debug_recovery_allowed(request)
         )
         window_minutes = getattr(settings, 'PASSWORD_RESET_WINDOW_MINUTES', 60)
         max_requests = getattr(settings, 'PASSWORD_RESET_MAX_REQUESTS_PER_HOUR', 5)
@@ -479,7 +511,7 @@ class PasswordResetRequestView(APIView):
         response_payload = {
             'detail': 'Si el correo existe, recibirás instrucciones para restablecer tu contraseña.'
         }
-        if settings.DEBUG and user and reset_url:
+        if debug_recovery_mode and user and reset_url:
             response_payload['debug_reset_url'] = reset_url
 
         return Response(response_payload, status=status.HTTP_200_OK)

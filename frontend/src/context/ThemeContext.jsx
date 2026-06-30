@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-import { useI18n } from './I18nContext';
 /* eslint-disable react-refresh/only-export-components */
 
 const ThemeContext = createContext();
@@ -14,7 +13,6 @@ export const useTheme = () => {
 };
 
 export const ThemeProvider = ({ children }) => {
-    const { t } = useI18n();
   const [theme, setTheme] = useState(() => {
     // Recuperar tema guardado o usar preferencia del sistema
     const saved = localStorage.getItem('isosmart-theme');

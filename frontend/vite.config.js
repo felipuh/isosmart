@@ -1,3 +1,4 @@
+/* global process */
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
@@ -98,7 +99,7 @@ export default defineConfig({
     ],
     proxy: {
       '/api': {
-        target: 'http://127.0.0.1:8001',
+        target: process.env.VITE_BACKEND_PROXY_TARGET || 'http://127.0.0.1:8001',
         changeOrigin: true,
         rewrite: (path) => path,  // No reescribe el path
         ws: true,  // Soportar WebSockets si es necesario

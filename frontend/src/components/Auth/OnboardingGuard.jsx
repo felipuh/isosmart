@@ -4,7 +4,6 @@ import { Loader2 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import settingsService from '../../services/settingsService';
 
-import { useI18n } from '../../context/I18nContext';
 const getOnboardingSessionKey = (organizationId) => (
   organizationId ? `isosmart_onboarding_seen_${organizationId}` : null
 );
@@ -12,7 +11,6 @@ const getOnboardingSessionKey = (organizationId) => (
 const OnboardingGuard = ({ children }) => {
   const { currentOrganization, isAuthenticated } = useAuth();
   const location = useLocation();
-    const { t } = useI18n();
   const [loading, setLoading] = useState(true);
   const [completed, setCompleted] = useState(true);
   const [shownInSession, setShownInSession] = useState(false);

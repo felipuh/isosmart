@@ -2,7 +2,8 @@ import { expect, test } from '@playwright/test';
 
 const EMAIL = process.env.TEST_EMAIL || 'admin@isosmart.local';
 const PASSWORD = process.env.TEST_PASSWORD || 'Admin@123456';
-const BACKEND_URL = 'http://127.0.0.1:8002';
+const BACKEND_URL = process.env.BACKEND_URL || 'http://127.0.0.1:8002';
+const TLS_PROXY_HEADERS = { 'X-Forwarded-Proto': 'https' };
 
 async function login(request) {
   const response = await request.post(`${BACKEND_URL}/api/auth/login/`, {
@@ -10,6 +11,7 @@ async function login(request) {
       email: EMAIL,
       password: PASSWORD,
     },
+    headers: TLS_PROXY_HEADERS,
   });
 
   expect(response.status(), 'login API should succeed').toBe(200);
@@ -20,6 +22,7 @@ test('business reports endpoint exports pdf/xlsx/csv with tenant protections', a
   const loginData = await login(request);
   const organizationId = loginData.profile.organization;
   const headers = {
+    ...TLS_PROXY_HEADERS,
     Authorization: `Bearer ${loginData.access}`,
   };
 

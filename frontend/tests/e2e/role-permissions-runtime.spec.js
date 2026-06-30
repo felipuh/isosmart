@@ -2,11 +2,13 @@ import { expect, test } from '@playwright/test';
 
 const ADMIN_EMAIL = process.env.TEST_EMAIL || 'admin@isosmart.local';
 const ADMIN_PASSWORD = process.env.TEST_PASSWORD || 'Admin@123456';
-const BACKEND_URL = 'http://127.0.0.1:8002';
+const BACKEND_URL = process.env.BACKEND_URL || 'http://127.0.0.1:8002';
+const TLS_PROXY_HEADERS = { 'X-Forwarded-Proto': 'https' };
 
 async function apiLogin(request, email, password) {
   const response = await request.post(`${BACKEND_URL}/api/auth/login/`, {
     data: { email, password },
+    headers: TLS_PROXY_HEADERS,
   });
   expect(response.status(), `login should succeed for ${email}`).toBe(200);
   return response.json();
@@ -16,6 +18,7 @@ async function createUserWithRole(request, role, organizationId, adminAccessToke
   const unique = `${Date.now()}-${Math.floor(Math.random() * 100000)}`;
   const email = `role.${role}.${unique}@isosmart.local`;
   const password = 'RoleRuntime@123';
+  const activePassword = `RoleRuntimeActive@${unique}`;
 
   const response = await request.post(`${BACKEND_URL}/api/auth/users/`, {
     data: {
@@ -29,12 +32,34 @@ async function createUserWithRole(request, role, organizationId, adminAccessToke
       role,
     },
     headers: {
+      ...TLS_PROXY_HEADERS,
       Authorization: `Bearer ${adminAccessToken}`,
     },
   });
 
   expect(response.status(), `user creation should succeed for role ${role}`).toBe(201);
-  return { email, password, role };
+
+  const loginResponse = await request.post(`${BACKEND_URL}/api/auth/login/`, {
+    data: { email, password },
+    headers: TLS_PROXY_HEADERS,
+  });
+  expect(loginResponse.status(), `initial login should succeed for role ${role}`).toBe(200);
+  const loginData = await loginResponse.json();
+
+  const changeResponse = await request.post(`${BACKEND_URL}/api/auth/change-password/`, {
+    data: {
+      current_password: password,
+      new_password: activePassword,
+      confirm_password: activePassword,
+    },
+    headers: {
+      ...TLS_PROXY_HEADERS,
+      Authorization: `Bearer ${loginData.access}`,
+    },
+  });
+  expect(changeResponse.status(), `first-login password rotation should succeed for role ${role}`).toBe(200);
+
+  return { email, password: activePassword, role };
 }
 
 async function loginInUi(page, email, password) {

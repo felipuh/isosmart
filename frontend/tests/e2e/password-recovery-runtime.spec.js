@@ -3,7 +3,8 @@ import { expect, test } from '@playwright/test';
 const ADMIN_EMAIL = process.env.TEST_EMAIL || 'admin@isosmart.local';
 const ORIGINAL_PASSWORD = process.env.TEST_PASSWORD || 'Admin@123456';
 const NEW_PASSWORD = 'RecoveryFlow@123';
-const BACKEND_URL = 'http://127.0.0.1:8002';
+const BACKEND_URL = process.env.BACKEND_URL || 'http://127.0.0.1:8002';
+const TLS_PROXY_HEADERS = { 'X-Forwarded-Proto': 'https' };
 
 async function loginByApi(request, email, password) {
   const response = await request.post(`${BACKEND_URL}/api/auth/login/`, {
@@ -11,6 +12,7 @@ async function loginByApi(request, email, password) {
       email,
       password,
     },
+    headers: TLS_PROXY_HEADERS,
   });
 
   expect(response.status(), 'login API should succeed').toBe(200);
@@ -33,6 +35,7 @@ async function createRecoveryUser(request) {
       role: 'user',
     },
     headers: {
+      ...TLS_PROXY_HEADERS,
       Authorization: `Bearer ${adminLogin.access}`,
     },
   });
@@ -48,6 +51,7 @@ test('password recovery flow works end-to-end', async ({ page, request }) => {
     const postData = route.request().postDataJSON();
     const response = await request.post(`${BACKEND_URL}/api/auth/password-reset/request/`, {
       data: postData,
+      headers: TLS_PROXY_HEADERS,
     });
     await route.fulfill({
       status: response.status(),
@@ -60,6 +64,7 @@ test('password recovery flow works end-to-end', async ({ page, request }) => {
     const postData = route.request().postDataJSON();
     const response = await request.post(`${BACKEND_URL}/api/auth/password-reset/confirm/`, {
       data: postData,
+      headers: TLS_PROXY_HEADERS,
     });
     await route.fulfill({
       status: response.status(),
@@ -83,6 +88,10 @@ test('password recovery flow works end-to-end', async ({ page, request }) => {
 
   const recoveryResponse = await request.post(`${BACKEND_URL}/api/auth/password-reset/request/?debug_recovery=1`, {
     data: { email: recoveryEmail },
+    headers: {
+      ...TLS_PROXY_HEADERS,
+      'X-Debug-Recovery': '1',
+    },
   });
 
   expect(recoveryResponse.status(), 'password reset request should succeed').toBe(200);

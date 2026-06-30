@@ -1,5 +1,7 @@
 from .settings import *  # noqa: F401,F403
 
+DEBUG = True
+
 # Use local SQLite databases for test runs to avoid external MySQL dependencies.
 DATABASES = {
     'default': {

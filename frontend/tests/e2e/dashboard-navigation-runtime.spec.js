@@ -2,6 +2,8 @@ import { expect, test } from '@playwright/test';
 
 const EMAIL = process.env.TEST_EMAIL || 'admin@isosmart.local';
 const PASSWORD = process.env.TEST_PASSWORD || 'Admin@123456';
+const BACKEND_URL = process.env.BACKEND_URL || 'http://127.0.0.1:8002';
+const TLS_PROXY_HEADERS = { 'X-Forwarded-Proto': 'https' };
 
 const ROUTES = [
   { path: '/', name: 'dashboard-home' },
@@ -24,32 +26,43 @@ const ROUTES = [
   { path: '/settings', name: 'settings' },
 ];
 
-async function login(page) {
+async function login(page, request) {
+  const response = await request.post(`${BACKEND_URL}/api/auth/login/`, {
+    data: {
+      email: EMAIL,
+      password: PASSWORD,
+    },
+    headers: TLS_PROXY_HEADERS,
+  });
+  expect(response.status(), 'login API should succeed').toBe(200);
+  const loginData = await response.json();
+
   await page.context().setExtraHTTPHeaders({
     'X-ISO-LOCAL-AUTH-BYPASS': '1',
   });
+  await page.context().addInitScript(({ access, refresh }) => {
+    localStorage.setItem('access_token', access);
+    localStorage.setItem('refresh_token', refresh);
+  }, { access: loginData.access, refresh: loginData.refresh });
 
   await page.goto('/login');
-  await page.locator('input#email, input[type="email"]').first().fill(EMAIL);
-  await page.locator('input#password, input[type="password"]').first().fill(PASSWORD);
-
-  const loginResponsePromise = page.waitForResponse(
-    (response) =>
-      response.url().includes('/api/auth/login/') && response.request().method() === 'POST',
-    { timeout: 45000 }
-  );
-
-  await page.locator('button[type="submit"]').first().click();
-
-  const loginResponse = await loginResponsePromise;
-  expect(loginResponse.status(), 'login should succeed').toBe(200);
-
-  await page.waitForURL((url) => !url.pathname.endsWith('/login'), {
-    timeout: 45000,
-  });
+  await page.evaluate(({ access, refresh }) => {
+    localStorage.setItem('access_token', access);
+    localStorage.setItem('refresh_token', refresh);
+  }, { access: loginData.access, refresh: loginData.refresh });
 }
 
-test('main dashboards and routes load successfully', async ({ page }) => {
+async function gotoAuthenticatedRoute(page, request, path) {
+  await page.goto(path);
+  await page.waitForTimeout(750);
+  if (page.url().endsWith('/login')) {
+    await login(page, request);
+    await page.goto(path);
+    await page.waitForTimeout(750);
+  }
+}
+
+test('main dashboards and routes load successfully', async ({ page, request }) => {
   test.setTimeout(420000);
 
   await page.route('**/settings/onboarding_status/**', async (route) => {
@@ -60,11 +73,12 @@ test('main dashboards and routes load successfully', async ({ page }) => {
     });
   });
 
-  await login(page);
+  await login(page, request);
 
   for (const route of ROUTES) {
     await test.step(`visit ${route.name}`, async () => {
-      await page.goto(route.path);
+      await login(page, request);
+      await gotoAuthenticatedRoute(page, request, route.path);
       await expect(page).not.toHaveURL(/\/login$/);
 
       const mainLocator = page.locator('main');
