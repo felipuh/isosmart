@@ -32,8 +32,9 @@ def _env_list(name, default=''):
     return [item.strip() for item in value.split(',') if item.strip()]
 
 
-ENVIRONMENT = os.getenv('ENVIRONMENT', 'development').strip().lower()
+ENVIRONMENT = os.getenv('DJANGO_ENV', os.getenv('ENVIRONMENT', 'development')).strip().lower()
 IS_PRODUCTION = ENVIRONMENT in ('production', 'prod')
+IS_DEVELOPMENT = ENVIRONMENT in ('development', 'dev', 'local')
 
 
 # Quick-start development settings - unsuitable for production
@@ -52,13 +53,14 @@ ALLOWED_HOSTS = _env_list(
     default='localhost,127.0.0.1,192.168.100.100,isosmart.local'
 )
 
-# Keep reverse-proxy host aliases accepted even if .env ALLOWED_HOSTS is stale.
-for required_host in (
-    'isosmart.smart3ai.local',
-    'smart3ai.local',
-):
-    if required_host not in ALLOWED_HOSTS:
-        ALLOWED_HOSTS.append(required_host)
+# Keep local reverse-proxy host aliases accepted even if .env ALLOWED_HOSTS is stale.
+if not IS_PRODUCTION:
+    for required_host in (
+        'isosmart.smart3ai.local',
+        'smart3ai.local',
+    ):
+        if required_host not in ALLOWED_HOSTS:
+            ALLOWED_HOSTS.append(required_host)
 
 if IS_PRODUCTION:
     if SECRET_KEY in ('', 'change-this-dev-secret-key-before-deploy'):
@@ -137,7 +139,10 @@ OWNER_ORGANIZATION_SLUG = os.getenv('OWNER_ORGANIZATION_SLUG', 'smart3ai')
 OWNER_ORGANIZATION_NAME = os.getenv('OWNER_ORGANIZATION_NAME', 'Smart3AI')
 OWNER_ORGANIZATION_EXTERNAL_ID = os.getenv('OWNER_ORGANIZATION_EXTERNAL_ID', '').strip()
 OWNER_ORGANIZATION_BILLING_EXEMPT = _env_bool('OWNER_ORGANIZATION_BILLING_EXEMPT', default=True)
-ALLOW_LOCAL_AUTH_BYPASS_FOR_TESTS = _env_bool('ALLOW_LOCAL_AUTH_BYPASS_FOR_TESTS', default=False)
+ALLOW_LOCAL_AUTH_BYPASS_FOR_TESTS = (
+    IS_DEVELOPMENT
+    and _env_bool('ALLOW_LOCAL_AUTH_BYPASS_FOR_TESTS', default=False)
+)
 LOCAL_AUTH_BYPASS_HOSTS = set(_env_list(
     'LOCAL_AUTH_BYPASS_HOSTS',
     default='127.0.0.1,localhost,testserver,isosmart.local,isosmart.smart3ai.local'

@@ -43,14 +43,24 @@ class QualityObjectiveSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = QualityObjective
-        fields = '__all__'
+        fields = [
+            'id', 'organization', 'source_module', 'objective_description',
+            'indicator_name', 'measurement_unit', 'baseline_value',
+            'target_value', 'current_value', 'measurement_frequency',
+            'responsible', 'deadline', 'status', 'iso_clause', 'process_id',
+            'progress_percentage', 'created_at', 'updated_at',
+        ]
         read_only_fields = ['id', 'organization', 'created_at', 'updated_at']
 
 
 class DocumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Document
-        fields = '__all__'
+        fields = [
+            'id', 'organization', 'title', 'document_type', 'content',
+            'source', 'file_path', 'uploaded_by', 'is_processed',
+            'processed_at', 'created_at', 'updated_at',
+        ]
         read_only_fields = ['id', 'organization', 'created_at', 'updated_at']
 
 
