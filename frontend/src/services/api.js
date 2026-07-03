@@ -25,9 +25,11 @@ const isTokenExpired = (token) => {
   return payload.exp <= nowSeconds;
 };
 
-// Crear instancia de API - USAR RUTA RELATIVA para evitar problemas de CORS
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
+
+// Crear instancia de API - usar ruta relativa por defecto para que Vite/Nginx manejen el backend.
 const api = axios.create({
-  baseURL: '/api',  // Ruta relativa - el proxy de Vite/Nginx maneja el backend
+  baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
