@@ -5,7 +5,7 @@ Permite a ISO Smart comunicarse con Admin Apps para:
 - Obtener organizaciones
 - Verificar módulos activos
 
-Fallback: Si Admin Apps no está disponible, usa datos de BD local (Organization model)
+Fallback local: solo si ALLOW_LOCAL_AUTH_FALLBACK=true en desarrollo.
 """
 import requests
 from django.conf import settings
@@ -102,6 +102,21 @@ class AdminAppsClient:
         except Exception as e:
             logger.exception(f"Error inesperado con Admin Apps: {e}")
             return {'error': str(e), 'code': 'unknown_error'}
+
+    def _local_fallback_allowed(self):
+        return bool(getattr(settings, 'ALLOW_LOCAL_AUTH_FALLBACK', False))
+
+    def _fallback_disabled_response(self, result):
+        logger.error(
+            "Admin Apps unavailable and local fallback disabled. code=%s error=%s",
+            result.get('code'),
+            result.get('error'),
+        )
+        return {
+            **result,
+            'fallback': 'disabled',
+            'source': 'adminapps',
+        }
     
     # =========================================================================
     # MÉTODOS PÚBLICOS
@@ -123,6 +138,8 @@ class AdminAppsClient:
         
         # Si hay error, intentar fallback a BD local
         if 'error' in result and Organization:
+            if not self._local_fallback_allowed():
+                return self._fallback_disabled_response(result)
             logger.warning(f"Admin Apps falló ({result.get('error')}), usando fallback de BD local")
             return self._get_organizations_local()
         
@@ -162,6 +179,8 @@ class AdminAppsClient:
         
         # Si hay error, intentar fallback a BD local
         if 'error' in result and Organization:
+            if not self._local_fallback_allowed():
+                return self._fallback_disabled_response(result)
             logger.warning(f"Admin Apps falló ({result.get('error')}), usando fallback de BD local para org {org_id}")
             return self._get_organization_local(org_id)
         
@@ -207,6 +226,8 @@ class AdminAppsClient:
         
         # Si hay error, fallback: retornar admin local
         if 'error' in result:
+            if not self._local_fallback_allowed():
+                return self._fallback_disabled_response(result)
             logger.warning(f"Admin Apps falló ({result.get('error')}), retornando usuarios locales para org {org_id}")
             return self._get_organization_users_local(org_id)
         
@@ -254,6 +275,8 @@ class AdminAppsClient:
         
         # Si hay error, fallback a BD local
         if 'error' in result:
+            if not self._local_fallback_allowed():
+                return self._fallback_disabled_response(result)
             logger.warning(f"Admin Apps falló ({result.get('error')}), retornando módulos locales para org {org_id}")
             return self._get_organization_modules_local(org_id)
         

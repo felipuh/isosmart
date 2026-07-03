@@ -106,11 +106,15 @@ INSTALLED_APPS = [
 ADMIN_APPS_INTEGRATION = {
     'BASE_URL': os.getenv('ADMIN_APPS_BASE_URL', 'http://127.0.0.1:8000/api/integration'),
     # Keep env override as primary source; fallback keeps local/dev auth integration functional.
-    'API_KEY': os.getenv('ADMIN_APPS_API_KEY', 'isosmart-integration-key-2025'),
+    'API_KEY': os.getenv('ADMIN_APPS_API_KEY', 'isosmart-integration-key-2025' if IS_DEVELOPMENT else ''),
     'TIMEOUT': int(os.getenv('ADMIN_APPS_TIMEOUT', '10')),
     'CACHE_TTL': int(os.getenv('ADMIN_APPS_CACHE_TTL', '300')),
     'SYNC_USERS': _env_bool('ADMIN_APPS_SYNC_USERS', default=True),
 }
+ALLOW_LOCAL_AUTH_FALLBACK = (
+    IS_DEVELOPMENT
+    and _env_bool('ALLOW_LOCAL_AUTH_FALLBACK', default=False)
+)
 
 # Patrones de URL por módulo
 MODULE_URL_PATTERNS = {
@@ -156,7 +160,6 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'integration.sso_auth.Smart3AISSOAuthentication',  # Centralized SSO JWT
         'rest_framework_simplejwt.authentication.JWTAuthentication',  # JWT authentication
-        'rest_framework.authentication.SessionAuthentication',  # Session authentication para desarrollo
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 20,
@@ -169,6 +172,11 @@ REST_FRAMEWORK = {
         'user': os.getenv('THROTTLE_USER_RATE', '300/minute'),
     },
 }
+
+if IS_DEVELOPMENT and _env_bool('ALLOW_SESSION_AUTH_FOR_DEV', default=True):
+    REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'].append(
+        'rest_framework.authentication.SessionAuthentication'
+    )
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -461,8 +469,9 @@ CSRF_TRUSTED_ORIGINS = _env_list(
     default='http://192.168.100.100:3001,http://192.168.100.100,http://localhost:3001'
 )
 
-# Eximir API de CSRF (solo para endpoints /api/*)
-CSRF_EXEMPT_URLS = [r'^api/']
+# API CSRF exemption is for local development only. JWT APIs authenticate via
+# Authorization headers; production should not broadly exempt /api/*.
+CSRF_EXEMPT_URLS = [r'^api/'] if IS_DEVELOPMENT else []
 
 # Media files (uploads)
 MEDIA_URL = '/media/'
