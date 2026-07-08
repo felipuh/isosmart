@@ -12,6 +12,7 @@ from django.utils.text import slugify
 from django.utils import timezone
 from .models import PasswordResetToken, User, UserProfile
 from core.models import Organization
+from integration.client import admin_apps_client
 
 
 PASSWORD_REUSE_REASON_CODE = 'PASSWORD_REUSE_RECENT'
@@ -407,6 +408,24 @@ class LoginSerializer(serializers.Serializer):
 
                 if not profile:
                     profile = profiles.first()
+
+            product_code = getattr(settings, 'ISO_SMART_PRODUCT_CODE', 'ISO_SMART')
+            product_access = admin_apps_client.validate_product_access(
+                profile.organization_id,
+                product_code,
+                use_cache=False,
+                allow_local_fallback=allow_local_bypass,
+            )
+            if request_obj is not None:
+                request_obj.admin_apps_product_access = product_access
+                admin_apps_data['product_access'] = product_access
+
+            if not product_access.get('allowed'):
+                denial_reason = product_access.get('reason') or product_access.get('code') or 'product_access_denied'
+                raise serializers.ValidationError(
+                    denial_reason,
+                    code='authorization'
+                )
             
             attrs['user'] = user
             attrs['profile'] = profile

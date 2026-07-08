@@ -111,6 +111,7 @@ ADMIN_APPS_INTEGRATION = {
     'CACHE_TTL': int(os.getenv('ADMIN_APPS_CACHE_TTL', '300')),
     'SYNC_USERS': _env_bool('ADMIN_APPS_SYNC_USERS', default=True),
 }
+ISO_SMART_PRODUCT_CODE = os.getenv('ISO_SMART_PRODUCT_CODE', 'ISO_SMART').strip().upper()
 ALLOW_LOCAL_AUTH_FALLBACK = (
     IS_DEVELOPMENT
     and _env_bool('ALLOW_LOCAL_AUTH_FALLBACK', default=False)

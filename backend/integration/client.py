@@ -41,6 +41,9 @@ class AdminAppsClient:
         self.api_key = config.get('API_KEY', '')
         self.timeout = config.get('TIMEOUT', 10)
         self.cache_ttl = config.get('CACHE_TTL', 300)
+        self.product_code = str(
+            config.get('PRODUCT_CODE', getattr(settings, 'ISO_SMART_PRODUCT_CODE', 'ISO_SMART'))
+        ).strip().upper() or 'ISO_SMART'
     
     def _get_headers(self):
         """Headers para las peticiones"""
@@ -48,6 +51,21 @@ class AdminAppsClient:
             'X-API-Key': self.api_key,
             'Content-Type': 'application/json',
         }
+
+    def _resolve_adminapps_org_id(self, org_id):
+        """Translate a local organization id to an AdminApps external id when available."""
+        if not Organization or org_id in (None, ''):
+            return org_id
+
+        try:
+            org = Organization.objects.filter(id=org_id).only('external_id').first()
+        except (TypeError, ValueError):
+            org = None
+        except Exception:
+            logger.exception('Error resolviendo external_id de organizacion local %s', org_id)
+            org = None
+
+        return org.external_id if org and org.external_id else org_id
     
     def _make_request(self, method, endpoint, data=None, use_cache=False, cache_key=None):
         """Realiza una petición a Admin Apps"""
@@ -376,6 +394,118 @@ class AdminAppsClient:
         
         modules = result.get('modules', [])
         return any(m['code'] == module_code for m in modules)
+
+    def validate_product_access(self, org_id, product_code, use_cache=True, allow_local_fallback=None):
+        """Validate product access against AdminApps; fail closed by default."""
+        normalized_code = str(product_code or self.product_code).strip().upper() or self.product_code
+        adminapps_org_id = self._resolve_adminapps_org_id(org_id)
+        cache_key = (
+            f'adminapps:organization:{adminapps_org_id}:product:{normalized_code}:validate'
+            if use_cache else None
+        )
+        result = self._make_request(
+            'GET',
+            f'/organizations/{adminapps_org_id}/products/{normalized_code}/validate/',
+            use_cache=use_cache,
+            cache_key=cache_key,
+        )
+
+        if result.get('allowed') is True:
+            result.setdefault('source', 'adminapps')
+            result.setdefault('fallback', False)
+            result.setdefault('billing_status', (result.get('product') or {}).get('billing_status'))
+            return result
+
+        if result.get('allowed') is False:
+            result.setdefault('source', 'adminapps')
+            result.setdefault('fallback', False)
+            result.setdefault('billing_status', (result.get('product') or {}).get('billing_status'))
+            return result
+
+        fallback_allowed = (
+            self._local_fallback_allowed()
+            if allow_local_fallback is None
+            else bool(allow_local_fallback) and not getattr(settings, 'IS_PRODUCTION', False)
+        )
+        if 'error' in result and fallback_allowed:
+            logger.warning(
+                'AdminApps product validation failed for org=%s product=%s; using explicit local fallback: %s',
+                org_id,
+                normalized_code,
+                result.get('code') or result.get('error'),
+            )
+            return self._validate_product_access_local(org_id, normalized_code, result)
+
+        return {
+            'allowed': False,
+            'organization_id': str(org_id),
+            'product_code': normalized_code,
+            'billing_status': (result.get('product') or {}).get('billing_status') or result.get('billing_status'),
+            'reason': result.get('reason') or result.get('code') or 'adminapps_unavailable',
+            'source': 'fail_closed',
+            'fallback': False,
+            'adminapps_error': result,
+        }
+
+    def _validate_product_access_local(self, org_id, product_code, adminapps_error=None):
+        """Explicit demo/test fallback. It never grants access silently."""
+        if product_code != self.product_code:
+            return {
+                'allowed': False,
+                'organization_id': str(org_id),
+                'product_code': product_code,
+                'reason': 'local_fallback_product_not_supported',
+                'source': 'local_database',
+                'fallback': True,
+                'adminapps_error': adminapps_error or {},
+            }
+
+        try:
+            org = Organization.objects.get(id=org_id, is_active=True)
+        except (Organization.DoesNotExist, ValueError, TypeError):
+            return {
+                'allowed': False,
+                'organization_id': str(org_id),
+                'product_code': product_code,
+                'reason': 'organization_not_found',
+                'source': 'local_database',
+                'fallback': True,
+                'adminapps_error': adminapps_error or {},
+            }
+
+        subscription = getattr(org, 'subscription', None)
+        owner_slug = str(getattr(settings, 'OWNER_ORGANIZATION_SLUG', '') or '').strip().lower()
+        owner_name = str(getattr(settings, 'OWNER_ORGANIZATION_NAME', '') or '').strip().lower()
+        owner_external_id = str(getattr(settings, 'OWNER_ORGANIZATION_EXTERNAL_ID', '') or '').strip()
+        is_owner_org = bool(
+            (owner_external_id and str(org.id) == owner_external_id)
+            or (owner_slug and str(getattr(org, 'slug', '') or '').strip().lower() == owner_slug)
+            or (owner_name and str(getattr(org, 'name', '') or '').strip().lower() == owner_name)
+        )
+        owner_billing_exempt = bool(getattr(settings, 'OWNER_ORGANIZATION_BILLING_EXEMPT', True))
+        allowed = bool((subscription and subscription.is_active) or (is_owner_org and owner_billing_exempt))
+
+        return {
+            'allowed': allowed,
+            'organization_id': str(org.id),
+            'organization_status': 'active' if org.is_active else 'inactive',
+            'billing_status': subscription.status if subscription else 'not_configured',
+            'product': {
+                'code': self.product_code,
+                'name': 'ISO Smart',
+                'enabled': allowed,
+                'status': 'demo_local_fallback' if allowed else 'missing_local_subscription',
+                'is_active': allowed,
+                'access_allowed': allowed,
+                'access_denial_reason': 'ok' if allowed else 'billing_not_configured',
+                'billing_status': subscription.status if subscription else 'not_configured',
+            },
+            'reason': 'ok' if allowed else 'billing_not_configured',
+            'source': 'local_database',
+            'fallback': True,
+            'warning': 'Explicit demo/test fallback; not allowed in production and not a billing substitute.',
+            'adminapps_error': adminapps_error or {},
+        }
     
     def clear_cache(self, org_id=None):
         """Limpia la caché de integración"""
@@ -383,6 +513,7 @@ class AdminAppsClient:
             cache.delete(f'adminapps:organization:{org_id}')
             cache.delete(f'adminapps:organization:{org_id}:users')
             cache.delete(f'adminapps:organization:{org_id}:modules')
+            cache.delete(f'adminapps:organization:{org_id}:product:{self.product_code}:validate')
         else:
             # Limpiar toda la caché de adminapps (requiere patrón de eliminación)
             cache.delete('adminapps:organizations')
