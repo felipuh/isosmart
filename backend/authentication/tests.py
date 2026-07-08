@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 from django.contrib.auth import get_user_model
 from django.core import mail
 from django.test import TestCase, override_settings
@@ -148,6 +150,55 @@ class LoginLockoutTests(TestCase):
             user=self.user, organization=self.org, role='user', is_active=True
         )
         self.url = reverse('authentication:login')
+        self.validate_credentials_patcher = patch('integration.client.admin_apps_client.validate_credentials')
+        self.validate_product_access_patcher = patch('integration.client.admin_apps_client.validate_product_access')
+        self.mock_validate_credentials = self.validate_credentials_patcher.start()
+        self.mock_validate_product_access = self.validate_product_access_patcher.start()
+        self.addCleanup(self.validate_credentials_patcher.stop)
+        self.addCleanup(self.validate_product_access_patcher.stop)
+
+        def _validate_credentials(email=None, password=None, organization_id=None):
+            if password == 'StrongPass@123':
+                return {
+                    'valid': True,
+                    'user': {
+                        'id': str(self.user.id),
+                        'email': self.user.email,
+                        'first_name': self.user.first_name,
+                        'last_name': self.user.last_name,
+                    },
+                    'current_organization': {
+                        'id': str(self.org.id),
+                        'name': self.org.name,
+                        'slug': self.org.slug,
+                        'is_active': True,
+                    },
+                    'organizations': [
+                        {
+                            'id': str(self.org.id),
+                            'name': self.org.name,
+                            'slug': self.org.slug,
+                        }
+                    ],
+                    'current_role': 'user',
+                }
+            return {'valid': False, 'error': 'Credenciales inválidas'}
+
+        self.mock_validate_credentials.side_effect = _validate_credentials
+        self.mock_validate_product_access.return_value = {
+            'allowed': True,
+            'reason': 'ok',
+            'source': 'adminapps',
+            'fallback': False,
+            'billing_status': 'active',
+            'product': {
+                'code': 'ISO_SMART',
+                'enabled': True,
+                'access_allowed': True,
+                'access_denial_reason': 'ok',
+                'billing_status': 'active',
+            },
+        }
 
     def _bad_login(self):
         return self.client.post(
@@ -271,6 +322,49 @@ class TemporaryPasswordLoginPolicyTests(TestCase):
             is_active=True,
         )
         self.login_url = reverse('authentication:login')
+        self.validate_credentials_patcher = patch('integration.client.admin_apps_client.validate_credentials')
+        self.validate_product_access_patcher = patch('integration.client.admin_apps_client.validate_product_access')
+        self.mock_validate_credentials = self.validate_credentials_patcher.start()
+        self.mock_validate_product_access = self.validate_product_access_patcher.start()
+        self.addCleanup(self.validate_credentials_patcher.stop)
+        self.addCleanup(self.validate_product_access_patcher.stop)
+        self.mock_validate_credentials.return_value = {
+            'valid': True,
+            'user': {
+                'id': str(self.user.id),
+                'email': self.user.email,
+                'first_name': self.user.first_name,
+                'last_name': self.user.last_name,
+            },
+            'current_organization': {
+                'id': str(self.org.id),
+                'name': self.org.name,
+                'slug': self.org.slug,
+                'is_active': True,
+            },
+            'organizations': [
+                {
+                    'id': str(self.org.id),
+                    'name': self.org.name,
+                    'slug': self.org.slug,
+                }
+            ],
+            'current_role': 'user',
+        }
+        self.mock_validate_product_access.return_value = {
+            'allowed': True,
+            'reason': 'ok',
+            'source': 'adminapps',
+            'fallback': False,
+            'billing_status': 'active',
+            'product': {
+                'code': 'ISO_SMART',
+                'enabled': True,
+                'access_allowed': True,
+                'access_denial_reason': 'ok',
+                'billing_status': 'active',
+            },
+        }
 
     def test_login_rejects_expired_temporary_password(self):
         self.user.must_change_password = True
@@ -300,3 +394,130 @@ class TemporaryPasswordLoginPolicyTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn('security_alert', response.data)
         self.assertEqual(response.data['security_alert'].get('reason_code'), 'TEMP_PASSWORD_EXPIRING')
+
+
+class LoginProductAccessPolicyTests(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        user_model = get_user_model()
+        self.user = user_model.objects.create_user(
+            email='product-access@isosmart.local',
+            password='StrongPass@123',
+            first_name='Product',
+            last_name='Access',
+        )
+        self.org = Organization.objects.create(
+            name='Product Access Org',
+            slug='product-access-org',
+            email='product-access@org.local',
+            external_id='adminapps-org-001',
+        )
+        UserProfile.objects.create(
+            user=self.user,
+            organization=self.org,
+            role='org_admin',
+            is_active=True,
+        )
+        self.login_url = reverse('authentication:login')
+
+    @patch('integration.client.admin_apps_client.validate_credentials')
+    @patch('integration.client.admin_apps_client.validate_product_access')
+    def test_login_requires_iso_smart_product_access(self, mocked_validate_product_access, mocked_validate_credentials):
+        mocked_validate_credentials.return_value = {
+            'valid': True,
+            'user': {
+                'id': str(self.user.id),
+                'email': self.user.email,
+                'first_name': self.user.first_name,
+                'last_name': self.user.last_name,
+            },
+            'current_organization': {
+                'id': self.org.external_id,
+                'name': self.org.name,
+                'slug': self.org.slug,
+                'is_active': True,
+            },
+            'organizations': [
+                {
+                    'id': self.org.external_id,
+                    'name': self.org.name,
+                    'slug': self.org.slug,
+                }
+            ],
+            'current_role': 'org_admin',
+        }
+        mocked_validate_product_access.return_value = {
+            'allowed': True,
+            'reason': 'ok',
+            'source': 'adminapps',
+            'fallback': False,
+            'billing_status': 'active',
+            'product': {
+                'code': 'ISO_SMART',
+                'enabled': True,
+                'access_allowed': True,
+                'access_denial_reason': 'ok',
+                'billing_status': 'active',
+            },
+        }
+
+        response = self.client.post(
+            self.login_url,
+            {'email': self.user.email, 'password': 'StrongPass@123'},
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, 200)
+        mocked_validate_product_access.assert_called_once()
+        self.assertIn('access', response.data)
+        self.assertIn('refresh', response.data)
+
+    @patch('integration.client.admin_apps_client.validate_credentials')
+    @patch('integration.client.admin_apps_client.validate_product_access')
+    def test_login_rejects_when_iso_smart_access_is_denied(self, mocked_validate_product_access, mocked_validate_credentials):
+        mocked_validate_credentials.return_value = {
+            'valid': True,
+            'user': {
+                'id': str(self.user.id),
+                'email': self.user.email,
+                'first_name': self.user.first_name,
+                'last_name': self.user.last_name,
+            },
+            'current_organization': {
+                'id': self.org.external_id,
+                'name': self.org.name,
+                'slug': self.org.slug,
+                'is_active': True,
+            },
+            'organizations': [
+                {
+                    'id': self.org.external_id,
+                    'name': self.org.name,
+                    'slug': self.org.slug,
+                }
+            ],
+            'current_role': 'org_admin',
+        }
+        mocked_validate_product_access.return_value = {
+            'allowed': False,
+            'reason': 'billing_blocked',
+            'source': 'adminapps',
+            'fallback': False,
+            'billing_status': 'past_due',
+            'product': {
+                'code': 'ISO_SMART',
+                'enabled': False,
+                'access_allowed': False,
+                'access_denial_reason': 'billing_blocked',
+                'billing_status': 'past_due',
+            },
+        }
+
+        response = self.client.post(
+            self.login_url,
+            {'email': self.user.email, 'password': 'StrongPass@123'},
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('billing_blocked', str(response.data).lower())

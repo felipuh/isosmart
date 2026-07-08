@@ -62,6 +62,50 @@ class AssistantApiTests(TestCase):
             is_active=True,
         )
 
+        self.validate_credentials_patcher = patch('integration.client.admin_apps_client.validate_credentials')
+        self.validate_product_access_patcher = patch('integration.client.admin_apps_client.validate_product_access')
+        self.mock_validate_credentials = self.validate_credentials_patcher.start()
+        self.mock_validate_product_access = self.validate_product_access_patcher.start()
+        self.addCleanup(self.validate_credentials_patcher.stop)
+        self.addCleanup(self.validate_product_access_patcher.stop)
+        self.mock_validate_credentials.return_value = {
+            'valid': True,
+            'user': {
+                'id': str(self.user.id),
+                'email': self.user.email,
+                'first_name': self.user.first_name,
+                'last_name': self.user.last_name,
+            },
+            'current_organization': {
+                'id': str(self.organization.id),
+                'name': self.organization.name,
+                'slug': self.organization.slug,
+                'is_active': True,
+            },
+            'organizations': [
+                {
+                    'id': str(self.organization.id),
+                    'name': self.organization.name,
+                    'slug': self.organization.slug,
+                }
+            ],
+            'current_role': 'org_admin',
+        }
+        self.mock_validate_product_access.return_value = {
+            'allowed': True,
+            'reason': 'ok',
+            'source': 'adminapps',
+            'fallback': False,
+            'billing_status': 'active',
+            'product': {
+                'code': 'ISO_SMART',
+                'enabled': True,
+                'access_allowed': True,
+                'access_denial_reason': 'ok',
+                'billing_status': 'active',
+            },
+        }
+
         login_response = self.client.post(
             '/api/auth/login/',
             {'email': self.user.email, 'password': 'StrongPass@123'},
