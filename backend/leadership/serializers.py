@@ -205,14 +205,29 @@ class EvidenceNodeSerializer(serializers.ModelSerializer):
         read_only_fields = ['approved_at', 'created_at', 'updated_at']
 
     def get_outgoing_edges_count(self, obj):
-        return obj.outgoing_edges.count()
+        return obj.outgoing_edges.filter(target__organization_id=obj.organization_id).count()
 
     def get_incoming_edges_count(self, obj):
-        return obj.incoming_edges.count()
+        return obj.incoming_edges.filter(source__organization_id=obj.organization_id).count()
 
 
 class EvidenceEdgeSerializer(serializers.ModelSerializer):
     """Serializer para Aristas del Grafo de Evidencias"""
+
+    source = serializers.PrimaryKeyRelatedField(
+        queryset=EvidenceNode.objects.none(),
+        error_messages={
+            'does_not_exist': 'Referencia de nodo inválida.',
+            'incorrect_type': 'Referencia de nodo inválida.',
+        },
+    )
+    target = serializers.PrimaryKeyRelatedField(
+        queryset=EvidenceNode.objects.none(),
+        error_messages={
+            'does_not_exist': 'Referencia de nodo inválida.',
+            'incorrect_type': 'Referencia de nodo inválida.',
+        },
+    )
 
     edge_type_display = serializers.CharField(source='get_edge_type_display', read_only=True)
     source_title = serializers.CharField(source='source.title', read_only=True)
@@ -228,6 +243,26 @@ class EvidenceEdgeSerializer(serializers.ModelSerializer):
             'created_by', 'created_by_name', 'created_at',
         ]
         read_only_fields = ['created_by', 'created_at']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        request = self.context.get('request')
+        organization_id = getattr(request, 'organization_id', None)
+        if organization_id:
+            scoped_nodes = EvidenceNode.objects.filter(organization_id=organization_id)
+            self.fields['source'].queryset = scoped_nodes
+            self.fields['target'].queryset = scoped_nodes
+
+    def validate(self, attrs):
+        source = attrs.get('source') or getattr(self.instance, 'source', None)
+        target = attrs.get('target') or getattr(self.instance, 'target', None)
+        request = self.context.get('request')
+        organization_id = getattr(request, 'organization_id', None)
+        if not organization_id or not source or not target:
+            raise serializers.ValidationError('No fue posible validar la organización activa.')
+        if source.organization_id != organization_id or target.organization_id != organization_id:
+            raise serializers.ValidationError('Referencia de nodo inválida.')
+        return attrs
 
 
 class EvidenceGraphSerializer(serializers.Serializer):

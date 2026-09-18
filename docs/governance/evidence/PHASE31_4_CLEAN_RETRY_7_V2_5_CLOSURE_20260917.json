@@ -1,0 +1,20 @@
+{
+  "artifact_schema": "phase31.4-clean-retry-7-v2.5-closure/v1",
+  "retry": "Phase 31.4 V2.5 Clean Retry 7",
+  "verdict": "NOT_PROMOTED",
+  "stage_a": "PASS",
+  "stage_b1": "PASS",
+  "native_sources": "16/16",
+  "native_phases": "33/33",
+  "capture_producers": "509/509",
+  "dependency_graph": "PASS",
+  "production_runtime_factory": "PASS",
+  "postgresql_18_6": "PASS",
+  "migrations": "PASS",
+  "live_retry": "BLOCKED_BEFORE_PHASE_1",
+  "p0": 0,
+  "p1": 1,
+  "v24_sha256": "a102d278bf2e5ca6e9b8bf282f5402a54f52d4690beed2ecbed5145c56539387",
+  "teardown": "PASS",
+  "blocker_artifact": "PHASE31_4_CLEAN_RETRY_7_V2_5_LIVE_BLOCKER_20260917.json"
+}

@@ -127,12 +127,12 @@ def _sse(event, payload):
     return f"event: {event}\ndata: {json.dumps(payload, ensure_ascii=False)}\n\n"
 
 
-def _fallback_message(question, module_name='general'):
-    base = (
-        f"No tengo conexión al proveedor de IA en este momento. "
-        f"Puedo ayudarte con orientación del módulo {module_name}."
+def _degraded_message():
+    return (
+        'El servicio de inteligencia no está disponible en este momento. '
+        'No se generó ninguna recomendación ni análisis normativo. '
+        'Intente nuevamente o contacte soporte si el problema continúa.'
     )
-    return f"{base} Consulta recibida: {question[:220]}"
 
 
 MODULE_GUIDANCE = {
@@ -455,21 +455,22 @@ def assistant_stream(request):
         messages.append({'role': 'user', 'content': question})
 
         if not api_key:
-            fallback = _fallback_message(question, module_name)
-            assistant_chunks.append(fallback)
-            yield _sse('chunk', {'text': fallback})
+            degraded = _degraded_message()
+            assistant_chunks.append(degraded)
+            yield _sse('chunk', {'text': degraded})
             if conversation_obj and org_id:
                 AssistantMessage.objects.create(
                     conversation=conversation_obj,
                     organization_id=org_id,
                     role='assistant',
-                    content=fallback,
+                    content=degraded,
                     content_type='text',
-                    model_name='fallback',
+                    model_name='degraded',
                 )
             yield _sse('done', {
-                'ok': True,
-                'provider': 'fallback',
+                'ok': False,
+                'provider': 'unavailable',
+                'degraded': True,
                 'conversation_id': conversation_obj.id if conversation_obj else None,
             })
             return
@@ -489,21 +490,22 @@ def assistant_stream(request):
         try:
             with httpx.stream('POST', api_url, headers=headers, json=payload, timeout=60.0) as response:
                 if response.status_code >= 400:
-                    fallback = _fallback_message(question, module_name)
-                    assistant_chunks.append(fallback)
-                    yield _sse('chunk', {'text': fallback})
+                    degraded = _degraded_message()
+                    assistant_chunks.append(degraded)
+                    yield _sse('chunk', {'text': degraded})
                     if conversation_obj and org_id:
                         AssistantMessage.objects.create(
                             conversation=conversation_obj,
                             organization_id=org_id,
                             role='assistant',
-                            content=fallback,
+                            content=degraded,
                             content_type='text',
-                            model_name='fallback',
+                            model_name='degraded',
                         )
                     yield _sse('done', {
-                        'ok': True,
-                        'provider': 'fallback',
+                        'ok': False,
+                        'provider': 'unavailable',
+                        'degraded': True,
                         'error': f'provider_status_{response.status_code}',
                         'conversation_id': conversation_obj.id if conversation_obj else None,
                     })
@@ -554,22 +556,23 @@ def assistant_stream(request):
                 'conversation_id': conversation_obj.id if conversation_obj else None,
             })
         except Exception as exc:
-            fallback = _fallback_message(question, module_name)
-            assistant_chunks.append(fallback)
-            yield _sse('chunk', {'text': fallback})
+            degraded = _degraded_message()
+            assistant_chunks.append(degraded)
+            yield _sse('chunk', {'text': degraded})
             if conversation_obj and org_id:
                 AssistantMessage.objects.create(
                     conversation=conversation_obj,
                     organization_id=org_id,
                     role='assistant',
-                    content=fallback,
+                    content=degraded,
                     content_type='text',
-                    model_name='fallback',
+                    model_name='degraded',
                 )
             yield _sse('done', {
-                'ok': True,
-                'provider': 'fallback',
-                'error': str(exc)[:180],
+                'ok': False,
+                'provider': 'unavailable',
+                'degraded': True,
+                'error': 'provider_unavailable',
                 'conversation_id': conversation_obj.id if conversation_obj else None,
             })
 

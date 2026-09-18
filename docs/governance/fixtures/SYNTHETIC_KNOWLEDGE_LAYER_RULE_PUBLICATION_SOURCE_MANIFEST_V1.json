@@ -1,0 +1,37 @@
+{
+  "allowed_operation": "learning.knowledge_layer_rule.source_reference.correct/v1",
+  "authoritative": false,
+  "canonicalization_version": "iso-smart-retained-evidence-canonical-json-v1",
+  "closed_classification": [
+    "NON_OFFICIAL_TEST_FIXTURE",
+    "NON_NORMATIVE",
+    "NON_LICENSED",
+    "TEST_ONLY",
+    "NON_PRODUCTION"
+  ],
+  "deterministic_source_id": "6ec35e4a-bb8a-592b-bc6a-420691f4e8e3",
+  "generator_contract_version": "iso-smart-synthetic-publication-source-generator/v1",
+  "licensed_content_present": false,
+  "locator_grammar": "iso-smart-synthetic-poc-source-ref-v1:<source-uuid>:<source-material-sha256>:fixture/element/<token>",
+  "locator_scheme": "iso-smart-synthetic-poc-source-ref-v1",
+  "manifest_material_hash": "cf92c267439f94f302e67888665dbf99392592341a808f5fc00f4c32ef23dc24",
+  "manifest_schema": "synthetic-knowledge-layer-rule-publication-source-manifest/v1",
+  "normative": false,
+  "phase26_continuity_claim": false,
+  "prohibited_uses": [
+    "publication",
+    "activation",
+    "runtime_adoption",
+    "phase26_recovery",
+    "authoritative_citation",
+    "production",
+    "staging"
+  ],
+  "provenance_statement": "Repository-created deterministic synthetic bytes with no claim of origin in ISO or any authoritative source artifact.",
+  "purpose": "Retained non-authoritative input for a later isolated publication-candidate governance POC.",
+  "source_classification": "RETAINED_DETERMINISTIC_SYNTHETIC_FIXTURE",
+  "source_material": "synthetic-publication-poc-source-v1\nclassification=NON_OFFICIAL_TEST_FIXTURE|NON_NORMATIVE|NON_LICENSED|TEST_ONLY|NON_PRODUCTION\nelement=A\nelement=B\n",
+  "source_material_sha256": "efe61114215914ac486011e4efd9977b4fa2f1c34fa6fad67012a46ced85ab4f",
+  "source_reference_scheme_version": "v1",
+  "synthetic_source_namespace": "iso-smart/publication-poc-fixture/v1"
+}

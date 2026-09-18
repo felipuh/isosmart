@@ -1,0 +1,13 @@
+{
+  "schema": "phase31.4-postgres18.6-runtime-image/v1",
+  "repository": "docker.io/library/postgres",
+  "tag": "18.6",
+  "oci_digest": "sha256:7341002d2b8c7c5bdd7542a671a95b36196c0b5b888daf454ae4fc33ba5346d7",
+  "local_image_id": "a6638641707cdf047e5d5c2781f437e2e809323cab22c70b280be8389fbb7878",
+  "platform": "linux",
+  "architecture": "amd64",
+  "expected_server_version": "PostgreSQL 18.6",
+  "pull_allowed": false,
+  "registry_fallback_allowed": false,
+  "tag_only_execution_allowed": false
+}

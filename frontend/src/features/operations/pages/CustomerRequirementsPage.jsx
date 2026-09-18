@@ -1,5 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { S3PageContent, S3PageLayout, S3Panel } from '@smart3ai/design-system';
 import { useAuth } from '../../../context/AuthContext';
 import { useI18n } from '../../../context/I18nContext';
 import Modal from '../../../components/Common/Modal';
@@ -146,10 +147,17 @@ const CustomerRequirementsPage = () => {
     }
   };
 
-  if (loading) return <div className="flex justify-center p-8"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div></div>;
+  if (loading) {
+    return (
+      <S3PageLayout as="div" size="wide">
+        <div className="flex justify-center p-8"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div></div>
+      </S3PageLayout>
+    );
+  }
 
   return (
-    <div className="space-y-6">
+    <S3PageLayout as="div" size="wide">
+      <S3PageContent>
       <CrudPageHeader
         title={t('modules.operations.customerRequirementsPage.title')}
         actionLabel={t('modules.operations.customerRequirementsPage.buttons.new')}
@@ -158,7 +166,7 @@ const CustomerRequirementsPage = () => {
 
       <CrudErrorBanner message={error} onClose={() => setError('')} />
 
-      <div className="card overflow-hidden">
+      <S3Panel className="overflow-hidden" padding="none">
         <table className="w-full">
           <thead className="bg-slate-100 dark:bg-slate-800/60">
             <tr>
@@ -195,7 +203,7 @@ const CustomerRequirementsPage = () => {
           </tbody>
         </table>
         {items.length === 0 && <CrudEmptyState message={t('modules.operations.customerRequirementsPage.messages.empty')} />}
-      </div>
+      </S3Panel>
 
       <Modal
         title={editingId ? t('modules.operations.customerRequirementsPage.modal.editTitle') : t('modules.operations.customerRequirementsPage.modal.newTitle')}
@@ -262,7 +270,8 @@ const CustomerRequirementsPage = () => {
           </div>
         </form>
       </Modal>
-    </div>
+      </S3PageContent>
+    </S3PageLayout>
   );
 };
 

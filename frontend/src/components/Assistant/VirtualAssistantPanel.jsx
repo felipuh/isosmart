@@ -1,33 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Bot, MessageCircle, X, Send } from 'lucide-react';
+import { AlertTriangle, Bot, MessageCircle, X, Send } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
 import assistantService from '../../services/assistantService';
 import { useI18n } from '../../context/I18nContext';
 
-const KNOWLEDGE_BASE = [
-  {
-    match: ['riesgo', 'risk'],
-    answerKey: 'assistantPanel.answers.risks',
-  },
-  {
-    match: ['auditor', 'audit', '9.2'],
-    answerKey: 'assistantPanel.answers.audits',
-  },
-  {
-    match: ['no conform', '10.2', 'incidencia'],
-    answerKey: 'assistantPanel.answers.nonconformities',
-  },
-  {
-    match: ['onboarding', 'configuración inicial'],
-    answerKey: 'assistantPanel.answers.onboarding',
-  },
-  {
-    match: ['iso 42001', 'ia'],
-    answerKey: 'assistantPanel.answers.iso42001',
-  },
-];
-
-const DEFAULT_ANSWER_KEY = 'assistantPanel.answers.default';
 const ASSISTANT_CONVERSATION_STORAGE_KEY = 'assistant_conversation_id';
 
 const VirtualAssistantPanel = () => {
@@ -81,7 +57,7 @@ const VirtualAssistantPanel = () => {
         }
       })
       .catch(() => {
-        // Keep local in-memory state as fallback.
+        // Keep the current UI history when backend hydration is unavailable.
       })
       .finally(() => {
         if (!cancelled) setHydrated(true);
@@ -91,12 +67,6 @@ const VirtualAssistantPanel = () => {
       cancelled = true;
     };
   }, [open, hydrated, conversationId]);
-
-  const resolveAnswer = (question) => {
-    const normalized = question.toLowerCase();
-    const hit = KNOWLEDGE_BASE.find((entry) => entry.match.some((key) => normalized.includes(key)));
-    return hit ? t(hit.answerKey) : t(DEFAULT_ANSWER_KEY);
-  };
 
   const sendQuestion = (questionText) => {
     const question = questionText.trim();
@@ -121,6 +91,18 @@ const VirtualAssistantPanel = () => {
       if (payload?.conversation_id) {
         setConversationId(payload.conversation_id);
       }
+      if (payload?.degraded || payload?.provider === 'unavailable') {
+        setMessages((prev) => {
+          const updated = [...prev];
+          const current = updated[assistantIndex] || {};
+          updated[assistantIndex] = {
+            role: 'assistant',
+            content: current.content || t('assistantPanel.unavailable'),
+            status: 'degraded',
+          };
+          return updated;
+        });
+      }
       setSending(false);
     };
 
@@ -134,10 +116,13 @@ const VirtualAssistantPanel = () => {
         onDone: finish,
       })
       .catch(() => {
-        const fallback = resolveAnswer(question);
         setMessages((prev) => {
           const updated = [...prev];
-          updated[assistantIndex] = { role: 'assistant', content: fallback };
+          updated[assistantIndex] = {
+            role: 'assistant',
+            content: t('assistantPanel.unavailable'),
+            status: 'degraded',
+          };
           return updated;
         });
       })
@@ -171,6 +156,12 @@ const VirtualAssistantPanel = () => {
                     : 'ml-auto bg-indigo-600 text-white'
                 }`}
               >
+                {message.status === 'degraded' && (
+                  <span className="mb-1 flex items-center gap-1 text-xs font-semibold text-amber-600 dark:text-amber-300">
+                    <AlertTriangle className="h-3.5 w-3.5" />
+                    {t('assistantPanel.degradedLabel')}
+                  </span>
+                )}
                 {message.content}
               </div>
             ))}

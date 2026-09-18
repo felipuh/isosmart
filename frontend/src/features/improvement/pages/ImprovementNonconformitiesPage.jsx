@@ -8,11 +8,12 @@ import CrudPageHeader from '../../../components/Common/CrudPageHeader';
 import CrudEmptyState from '../../../components/Common/CrudEmptyState';
 import { showConfirm } from '../../../services/dialogs';
 import { getNonconformities, createNonconformity, updateNonconformity, deleteNonconformity } from '../api/improvementApi';
+import { S3Button, S3LoadingState, S3StatusBadge } from '@smart3ai/design-system';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
 
-const severityColors = { critical: 'badge-base badge-danger', major: 'badge-base badge-caution', minor: 'badge-base badge-warning' };
-const statusColors = { open: 'badge-base badge-danger', analysis: 'badge-base badge-info', action_plan: 'badge-base badge-accent', implementing: 'badge-base badge-caution', verification: 'badge-base badge-cyan', closed: 'badge-base badge-success', rejected: 'badge-base badge-neutral' };
+const severityTones = { critical: 'danger', major: 'warning', minor: 'warning' };
+const statusTones = { open: 'danger', analysis: 'info', action_plan: 'accent', implementing: 'warning', verification: 'info', closed: 'success', rejected: 'neutral' };
 
 const initialForm = { nc_number: '', title: '', description: '', source: 'process_monitoring', detection_date: '', severity: 'minor', affected_process: '', iso_clause_reference: '', impact_description: '', immediate_action_taken: '', containment_measures: '', status: 'open', target_closure_date: '' };
 
@@ -100,7 +101,7 @@ const ImprovementNonconformitiesPage = () => {
   const openForm = () => { resetForm(); setShowForm(true); };
   const closeForm = () => { resetForm(); setShowForm(false); if (location.pathname.endsWith('/new')) navigate(location.pathname.replace(/\/new$/, ''), { replace: true }); };
 
-  if (loading) return <div className="flex justify-center p-8"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div></div>;
+  if (loading) return <S3LoadingState variant="section" size="lg" label={t('common.messages.loading')} />;
 
   return (
     <div className="space-y-6">
@@ -174,8 +175,8 @@ const ImprovementNonconformitiesPage = () => {
               <input type="date" value={form.target_closure_date} onChange={e => setForm({ ...form, target_closure_date: e.target.value })} className="field-control max-w-xs" />
             </label>
             <div className="flex flex-wrap gap-2">
-              <button type="submit" disabled={saving || !orgId} className="rounded-lg bg-emerald-500/80 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-500 disabled:opacity-50">{saving ? t('common.messages.saving') : editingId ? t('common.buttons.update') : t('common.buttons.create')}</button>
-              <button type="button" onClick={closeForm} className="rounded-lg border border-slate-300 dark:border-slate-700 px-4 py-2 text-sm text-slate-700 dark:text-slate-200">{t('common.buttons.cancel')}</button>
+              <S3Button type="submit" disabled={saving || !orgId} loading={saving}>{saving ? t('common.messages.saving') : editingId ? t('common.buttons.update') : t('common.buttons.create')}</S3Button>
+              <S3Button type="button" variant="secondary" onClick={closeForm}>{t('common.buttons.cancel')}</S3Button>
             </div>
         </form>
       </Modal>
@@ -200,8 +201,8 @@ const ImprovementNonconformitiesPage = () => {
                 <td className="px-6 py-4 table-code">{item.nc_number}</td>
                 <td className="px-6 py-4 text-sm text-slate-900 dark:text-white">{item.title}</td>
                 <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">{sourceLabels[item.source] || item.source}</td>
-                <td className="px-6 py-4"><span className={`px-2 py-1 rounded text-xs ${severityColors[item.severity] || ''}`}>{severityLabels[item.severity] || item.severity}</span></td>
-                <td className="px-6 py-4"><span className={`px-2 py-1 rounded text-xs ${statusColors[item.status] || ''}`}>{statusLabels[item.status] || item.status}</span></td>
+                <td className="px-6 py-4"><S3StatusBadge tone={severityTones[item.severity] || 'neutral'}>{severityLabels[item.severity] || item.severity}</S3StatusBadge></td>
+                <td className="px-6 py-4"><S3StatusBadge tone={statusTones[item.status] || 'neutral'}>{statusLabels[item.status] || item.status}</S3StatusBadge></td>
                 <td className="px-6 py-4 space-x-2">
                   <button onClick={() => handleEdit(item)} className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 text-sm">{t('common.buttons.edit')}</button>
                   <button onClick={() => handleDelete(item.id)} className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 text-sm">{t('common.buttons.delete')}</button>

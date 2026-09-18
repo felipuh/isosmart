@@ -1,0 +1,285 @@
+{
+  "adr0017_exception": "APPLICATION_OUTPUT_IDENTITY_ONLY",
+  "artifact_schema": "phase31.4.2-native-governance-binding-audit/v1",
+  "database_creation_authorized": false,
+  "digest_provenance": {
+    "06f75de72e2a2ded515c223a1c62df6ab3780ebfe1ed0ccca71a22a222071c9e": "RECOMPUTED_HISTORICAL_INPUT:docs/governance/fixtures/PHASE31_3_COMPLETE_RETAINED_SYNTHETIC_LIFECYCLE_SPEC_V1.json; historical_delta; not execution authority",
+    "0ea440ce1df2cfbaa384c7b1a360818a03d8940d69810ecdcc67914aa222c56d": "REPRODUCIBLE_OFFLINE_PREIMAGE:operations.activation.preimage_utf8",
+    "1386cf84820f66454c021e8c1a4bf446c56f4b70757a5252b7b316b0319f676a": "RECOMPUTED_HISTORICAL_INPUT:docs/governance/fixtures/PHASE31_3_COMPLETE_RETAINED_SYNTHETIC_LIFECYCLE_SPEC_V1.json; publication_caller_key; not execution authority",
+    "24b3506a14713ba8ad4b81bbfcec700884f0e093d4ef86715a299018988c8217": "RECOMPUTED_HISTORICAL_INPUT:docs/governance/fixtures/PHASE31_3_COMPLETE_RETAINED_SYNTHETIC_LIFECYCLE_SPEC_V1.json; activation_caller_key; not execution authority",
+    "32b1e0837a268abe3d80314ff433866cea583698e18e34dc2dfd9a7db8efb81b": "RECOMPUTED_HISTORICAL_INPUT:docs/governance/fixtures/PHASE31_3_COMPLETE_RETAINED_SYNTHETIC_LIFECYCLE_SPEC_V1.json; locator_before; not execution authority",
+    "43c72090f30e90a4f3896b3d194aa264f421189f0589978453136464e270dbc9": "HISTORICAL_IMMUTABLE_REFERENCE:docs/governance/fixtures/PHASE31_3_COMPLETE_RETAINED_SYNTHETIC_LIFECYCLE_SPEC_V1.json; not execution authority",
+    "5a90a655f2460d33bbd78512f9f3c831689cc58c4e2c0f3e07eaa1132a3c822a": "REPRODUCIBLE_OFFLINE_PREIMAGE:operations.publication.preimage_utf8",
+    "683f7c83ff3e3e16733d63288d317f8b3a14fe9e5bfaf2e86b0cf2e86b6ab6ca": "SOURCE_FILE_SHA256:docs/governance/fixtures/PHASE31_3_COMPLETE_RETAINED_SYNTHETIC_LIFECYCLE_SPEC_V1.json",
+    "82501ef34edc6d7e76e0971d3d2607c58f229a1dd4dd26696dd227fb7e994edb": "SOURCE_FILE_SHA256:docs/adr/0017-ephemeral-exact-id-governed-application-adapter.md",
+    "830e154ad5afba60eb25da62237e0d0373baca86f9cd8dfd011abb87a1495289": "RECOMPUTED_HISTORICAL_INPUT:docs/governance/fixtures/PHASE31_3_COMPLETE_RETAINED_SYNTHETIC_LIFECYCLE_SPEC_V1.json; locator_after; not execution authority",
+    "93a4e545bca381b18219eaaf7712222d27c9ea849e24de26024f766bb15adf2b": "RECOMPUTED_HISTORICAL_INPUT:docs/governance/fixtures/PHASE31_3_COMPLETE_RETAINED_SYNTHETIC_LIFECYCLE_SPEC_V1.json; candidate_lifecycle; not execution authority",
+    "a7b0477f48120b852d9ec510d30e85d4700f5c0ba970e3ed3c9e244b1be4d7e9": "SOURCE_FILE_SHA256:backend/foundation/knowledge_rule_release.py",
+    "afefd7100a18e5c7324efaeb1af656225b309fd86f08673a8742f7f9f6c2e618": "SOURCE_FILE_SHA256:backend/foundation/migrations/0022_inert_rule_publication_activation_runtime_adoption.py",
+    "bec1b0b60d1e212670f1da70d001ece88a75fe8bd6cbee12d8298a92f3340c3c": "SOURCE_FILE_SHA256:docs/governance/evidence/PHASE31_4_2_SUCCESSOR_DESIGN_DIAGNOSTIC_V1.json",
+    "cb32408595bf1627f8d846aceba46a51028bb92f40223566981eabfa75d528fc": "RECOMPUTED_SOURCE_MANIFEST:sorted migration path + NUL + file SHA256 + LF; source hashes retained in predecessor diagnostic",
+    "df00196b7ce7f22c1eaa444af8cd12fa902b04d1f57bcac945bc8d78378967df": "RECOMPUTED_HISTORICAL_INPUT:docs/governance/fixtures/PHASE31_3_COMPLETE_RETAINED_SYNTHETIC_LIFECYCLE_SPEC_V1.json; source_manifest; not execution authority",
+    "e188e1302f8bcf6c1df4c07fe06eb5dc01d4824453bc7698537b6599571c6e3a": "RECOMPUTED_HISTORICAL_INPUT:docs/governance/fixtures/PHASE31_3_COMPLETE_RETAINED_SYNTHETIC_LIFECYCLE_SPEC_V1.json; candidate_selected; not execution authority",
+    "e458cd0bb7eb11f96ce8723b0ab4dea97e4ca60b0e47a6f7e1fb1f38cef66d6b": "RECOMPUTED_HISTORICAL_INPUT:docs/governance/fixtures/PHASE31_3_COMPLETE_RETAINED_SYNTHETIC_LIFECYCLE_SPEC_V1.json; source; not execution authority",
+    "f6ac677ce2cd548926dc27cb3de8111730f97fb6934cdb9d6a8f28f0bb2bc963": "RECOMPUTED_HISTORICAL_INPUT:docs/governance/fixtures/PHASE31_3_COMPLETE_RETAINED_SYNTHETIC_LIFECYCLE_SPEC_V1.json; application_caller_key; not execution authority"
+  },
+  "entry_diff_check_exact": {
+    "exit_code": 2,
+    "output": "frontend/src/components/Layout/Sidebar.jsx:28: trailing whitespace.\n+    { name: t('navigation.risks'), path: '/risks', icon: AlertTriangle, group: 'control' }, \n"
+  },
+  "final_git_status_exact": " M backend/backend/settings.py\n M backend/integration/assistant_memory_views.py\n M backend/integration/serializers.py\n M backend/integration/tests.py\n M backend/integration/views.py\n M backend/leadership/serializers.py\n M backend/leadership/views.py\n M backend/test_default.sqlite3\n M frontend/src/components/Assistant/VirtualAssistantPanel.jsx\n M frontend/src/components/Auth/OnboardingGuard.jsx\n M frontend/src/components/Common/CrudEmptyState.jsx\n M frontend/src/components/Common/CrudErrorBanner.jsx\n M frontend/src/components/Common/CrudPageHeader.jsx\n M frontend/src/components/Layout/Header.jsx\n M frontend/src/components/Layout/Layout.jsx\n M frontend/src/components/Layout/Sidebar.jsx\n M frontend/src/context/I18nContext.jsx\n M frontend/src/features/improvement/pages/ImprovementCorrectiveActionsPage.jsx\n M frontend/src/features/improvement/pages/ImprovementNonconformitiesPage.jsx\n M frontend/src/features/operations/pages/CustomerRequirementsPage.jsx\n M frontend/src/index.css\n M frontend/src/pages/ForgotPasswordPage.jsx\n M frontend/tests/e2e/assistant-runtime.spec.js\n M frontend/vite.config.js\n?? AGENTS.md\n?? backend/foundation/\n?? backend/leadership/tests.py\n?? backend/logs/\n?? docs/adr/\n?? docs/governance/\n?? docs/operations/\n?? docs/transformation/\n?? frontend/tests/e2e/onboarding-guard-runtime.spec.js\n",
+  "findings": [
+    {
+      "finding": "Publication has no compatibility/release evidence input. Activation binds compatibility_hash, but has no release evidence or closure digest input. Native operation hash equality is not full retained-evidence equality.",
+      "id": "N1",
+      "related_blockers": [
+        "B2",
+        "B3"
+      ]
+    },
+    {
+      "finding": "Native Publication/Activation hashes omit actor, authority, policy, trace and caller key. Their replay comparison does not compare those retained fields. An approved outer admission/replay/precommit contract is still required; do not relabel native hashes as the broader governance binding.",
+      "id": "N2",
+      "related_blockers": [
+        "B1",
+        "B4"
+      ]
+    },
+    {
+      "finding": "Predecessor Publication admission demands compatibility/release evidence hashes; postpublication observation semantics require versioned replacement of that edge before execution.",
+      "id": "N3",
+      "related_blockers": [
+        "B2",
+        "B3"
+      ]
+    }
+  ],
+  "git_hygiene": {
+    "durable_additions": [
+      "docs/governance/evidence/PHASE31_4_2_NATIVE_BINDING_AUDIT_V1.json",
+      "backend/foundation/test_phase31_4_2_native_binding_audit.py"
+    ],
+    "durable_updates": [
+      "docs/transformation/PHASE31_4_2_EXECUTION_DERIVED_GOVERNANCE_BINDINGS_AND_SUPPORTING_SIGNAL_SUCCESSOR_DESIGN_GATE_REPORT.md"
+    ],
+    "full_diff_check_exit": 2,
+    "full_diff_check_output": "frontend/src/components/Layout/Sidebar.jsx:28: trailing whitespace.\n+    { name: t('navigation.risks'), path: '/risks', icon: AlertTriangle, group: 'control' }, \n",
+    "new_and_updated_file_whitespace": "PASS",
+    "scoped_diff_check_exit": 0,
+    "temporary_files_removed": true
+  },
+  "initial_git_status_exact": " M backend/backend/settings.py\n M backend/integration/assistant_memory_views.py\n M backend/integration/serializers.py\n M backend/integration/tests.py\n M backend/integration/views.py\n M backend/leadership/serializers.py\n M backend/leadership/views.py\n M backend/test_default.sqlite3\n M frontend/src/components/Assistant/VirtualAssistantPanel.jsx\n M frontend/src/components/Auth/OnboardingGuard.jsx\n M frontend/src/components/Common/CrudEmptyState.jsx\n M frontend/src/components/Common/CrudErrorBanner.jsx\n M frontend/src/components/Common/CrudPageHeader.jsx\n M frontend/src/components/Layout/Header.jsx\n M frontend/src/components/Layout/Layout.jsx\n M frontend/src/components/Layout/Sidebar.jsx\n M frontend/src/context/I18nContext.jsx\n M frontend/src/features/improvement/pages/ImprovementCorrectiveActionsPage.jsx\n M frontend/src/features/improvement/pages/ImprovementNonconformitiesPage.jsx\n M frontend/src/features/operations/pages/CustomerRequirementsPage.jsx\n M frontend/src/index.css\n M frontend/src/pages/ForgotPasswordPage.jsx\n M frontend/tests/e2e/assistant-runtime.spec.js\n M frontend/vite.config.js\n?? AGENTS.md\n?? backend/foundation/\n?? backend/leadership/tests.py\n?? backend/logs/\n?? docs/adr/\n?? docs/governance/\n?? docs/operations/\n?? docs/transformation/\n?? frontend/tests/e2e/onboarding-guard-runtime.spec.js\n",
+  "integrity_validation": {
+    "expected_changed_files": [
+      "docs/transformation/PHASE31_4_2_EXECUTION_DERIVED_GOVERNANCE_BINDINGS_AND_SUPPORTING_SIGNAL_SUCCESSOR_DESIGN_GATE_REPORT.md"
+    ],
+    "frozen_files_checked": 216,
+    "migration_0024_absent": true,
+    "migration_files_checked": 23,
+    "migration_set_sha256": "cb32408595bf1627f8d846aceba46a51028bb92f40223566981eabfa75d528fc",
+    "preexisting_regular_files_checked": 14355,
+    "prior_phase3142_diagnostic_and_tests_unchanged": true,
+    "unexpected_changed_files": []
+  },
+  "lifecycle_execution_authorized": false,
+  "offline_validation": {
+    "attempts": {
+      "database": 0,
+      "lifecycle": 0,
+      "network": 0,
+      "resolver": 0
+    },
+    "compiled_count": 353,
+    "django_version": "4.2.22",
+    "errors": 0,
+    "failures": 0,
+    "full_mandatory_semantic_read": false,
+    "interpreter": "/home/felipe/proyectos/isosmart/backend/.venv/bin/python",
+    "labels": [
+      "foundation.tests.Phase3ContractTests",
+      "foundation.tests.Phase9KnowledgeLayerContractTests",
+      "foundation.tests.Phase21BlockingHardeningTests",
+      "foundation.tests.Phase23LearningProposalGovernanceTests",
+      "foundation.tests.Phase26KnowledgeRuleApplicationContractTests",
+      "foundation.test_learning_delta",
+      "foundation.test_knowledge_rule_release.InertKnowledgeRuleReleaseContractTests.test_resolver_has_only_exact_runtime_adoption_identifier",
+      "foundation.test_knowledge_rule_release.InertKnowledgeRuleReleaseContractTests.test_command_signatures_do_not_offer_generic_dispatch_or_runtime_fallback",
+      "foundation.test_phase31_4_1_root_binding",
+      "foundation.test_phase31_4_2_design_gate",
+      "foundation.test_phase31_4_2_native_binding_audit"
+    ],
+    "makemigrations_check_dry_run": "PASS",
+    "operational_tests": "NOT EXECUTED",
+    "raw_output": "System check identified no issues (0 silenced).\nNo changes detected\nFound 87 test(s).\n.......................................................................................\n----------------------------------------------------------------------\nRan 87 tests in 0.103s\n\nOK\n",
+    "schema": "phase31.4.2-offline-revalidation/v1",
+    "settings_scope": "In-memory auth/contenttypes/Foundation; dummy database; normal project settings and logging not loaded",
+    "skipped": 0,
+    "successor_package_complete": false,
+    "system_check": "PASS",
+    "tests_run": 87
+  },
+  "operations": {
+    "activation": {
+      "execution_authority": false,
+      "native_hash_is_complete_governance_hash": false,
+      "outer_binding_required": true,
+      "preimage_utf8": "cf4db0d2-a312-5a44-91cf-6e14f5cd600e:e188e1302f8bcf6c1df4c07fe06eb5dc01d4824453bc7698537b6599571c6e3a:ROOT:43c72090f30e90a4f3896b3d194aa264f421189f0589978453136464e270dbc9:phase31.3 first Activation; governance evidence only; no RuntimeAdoption",
+      "probe_input": {
+        "actor_external_id": "7a3d6ce6-d5be-5a16-8ba7-9c2be2b6bc5d",
+        "compatibility_hash": "43c72090f30e90a4f3896b3d194aa264f421189f0589978453136464e270dbc9",
+        "expected_hash": "e188e1302f8bcf6c1df4c07fe06eb5dc01d4824453bc7698537b6599571c6e3a",
+        "idempotency_key_hash": "24b3506a14713ba8ad4b81bbfcec700884f0e093d4ef86715a299018988c8217",
+        "policy_id": "complete-retained-synthetic-klr-lifecycle-poc-policy/v1",
+        "predecessor_id": null,
+        "publication_id": "cf4db0d2-a312-5a44-91cf-6e14f5cd600e",
+        "reason": "phase31.3 first Activation; governance evidence only; no RuntimeAdoption",
+        "trace_id": "fea8eeb5-7be1-5b77-b2a3-e082569b98ba"
+      },
+      "sha256": "0ea440ce1df2cfbaa384c7b1a360818a03d8940d69810ecdcc67914aa222c56d",
+      "sql_function": "activate_knowledge_layer_rule_v1",
+      "sql_hash_expression": "encode(sha256(convert_to(p_publication_id::text||':'||p_expected_hash||':'||coalesce(p_expected_predecessor::text,'ROOT')||':'||p_compatibility_hash||':'||p_reason,'UTF8')),'hex')"
+    },
+    "publication": {
+      "execution_authority": false,
+      "native_hash_is_complete_governance_hash": false,
+      "outer_binding_required": true,
+      "preimage_utf8": "a55716fa-63c7-54eb-bda2-9c9666613b1a:e188e1302f8bcf6c1df4c07fe06eb5dc01d4824453bc7698537b6599571c6e3a:phase31.3 synthetic native Publication after complete governed Application",
+      "probe_input": {
+        "actor_external_id": "14e64261-75cc-525d-b877-ab1c34ed1253",
+        "expected_hash": "e188e1302f8bcf6c1df4c07fe06eb5dc01d4824453bc7698537b6599571c6e3a",
+        "idempotency_key_hash": "1386cf84820f66454c021e8c1a4bf446c56f4b70757a5252b7b316b0319f676a",
+        "policy_id": "complete-retained-synthetic-klr-lifecycle-poc-policy/v1",
+        "reason": "phase31.3 synthetic native Publication after complete governed Application",
+        "rule_id": "a55716fa-63c7-54eb-bda2-9c9666613b1a",
+        "trace_id": "3eabb59e-6e0e-53cf-a840-a4abbb62b442"
+      },
+      "sha256": "5a90a655f2460d33bbd78512f9f3c831689cc58c4e2c0f3e07eaa1132a3c822a",
+      "sql_function": "publish_knowledge_layer_rule_v1",
+      "sql_hash_expression": "encode(sha256(convert_to(p_rule_id::text||':'||p_expected_hash||':'||p_reason,'UTF8')),'hex')"
+    }
+  },
+  "probe_scope": "Historical input arithmetic and static SQL inspection only; no persisted facts or authentic authority outcomes asserted.",
+  "publication_dependency_cycle": [
+    "publication_admission",
+    "postpublication_evidence",
+    "persisted_publication",
+    "publication_admission"
+  ],
+  "remaining_blockers": [
+    "B1",
+    "B2",
+    "B3",
+    "B4"
+  ],
+  "required_successor_work": [
+    "Define distinct native operation material and full governed admission material; retain exact preimages for each.",
+    "Define which fresh authority belongs to a replay attempt versus the immutable original business action; verify original and new authority independently.",
+    "Bind compatibility through native Activation compatibility_hash and retain full evidence; bind release and Publication closure through an explicitly approved external admission artifact.",
+    "Specify atomic admission/precommit/replay enforcement and least-privilege producer without expanding ADR-0017 or changing frozen SQL.",
+    "Finish B1-B4 and all required reading before creating ADR-0018 or an operational V2 package."
+  ],
+  "source_file_hashes": {
+    "backend/foundation/knowledge_rule_release.py": "a7b0477f48120b852d9ec510d30e85d4700f5c0ba970e3ed3c9e244b1be4d7e9",
+    "backend/foundation/migrations/0022_inert_rule_publication_activation_runtime_adoption.py": "afefd7100a18e5c7324efaeb1af656225b309fd86f08673a8742f7f9f6c2e618",
+    "docs/adr/0017-ephemeral-exact-id-governed-application-adapter.md": "82501ef34edc6d7e76e0971d3d2607c58f229a1dd4dd26696dd227fb7e994edb",
+    "docs/governance/evidence/PHASE31_4_2_SUCCESSOR_DESIGN_DIAGNOSTIC_V1.json": "bec1b0b60d1e212670f1da70d001ece88a75fe8bd6cbee12d8298a92f3340c3c",
+    "docs/governance/fixtures/PHASE31_3_COMPLETE_RETAINED_SYNTHETIC_LIFECYCLE_SPEC_V1.json": "683f7c83ff3e3e16733d63288d317f8b3a14fe9e5bfaf2e86b0cf2e86b6ab6ca"
+  },
+  "sql_behavior_verified": false,
+  "static_revalidation": {
+    "candidate_id_collisions": [],
+    "candidate_support_ids_checked": 28,
+    "canonical_recomputations": {
+      "activation_caller_key": {
+        "expected": "24b3506a14713ba8ad4b81bbfcec700884f0e093d4ef86715a299018988c8217",
+        "match": true,
+        "observed": "24b3506a14713ba8ad4b81bbfcec700884f0e093d4ef86715a299018988c8217"
+      },
+      "application_caller_key": {
+        "expected": "f6ac677ce2cd548926dc27cb3de8111730f97fb6934cdb9d6a8f28f0bb2bc963",
+        "match": true,
+        "observed": "f6ac677ce2cd548926dc27cb3de8111730f97fb6934cdb9d6a8f28f0bb2bc963"
+      },
+      "candidate_lifecycle": {
+        "expected": "93a4e545bca381b18219eaaf7712222d27c9ea849e24de26024f766bb15adf2b",
+        "match": true,
+        "observed": "93a4e545bca381b18219eaaf7712222d27c9ea849e24de26024f766bb15adf2b"
+      },
+      "candidate_selected": {
+        "expected": "e188e1302f8bcf6c1df4c07fe06eb5dc01d4824453bc7698537b6599571c6e3a",
+        "match": true,
+        "observed": "e188e1302f8bcf6c1df4c07fe06eb5dc01d4824453bc7698537b6599571c6e3a"
+      },
+      "historical_delta": {
+        "expected": "06f75de72e2a2ded515c223a1c62df6ab3780ebfe1ed0ccca71a22a222071c9e",
+        "match": true,
+        "observed": "06f75de72e2a2ded515c223a1c62df6ab3780ebfe1ed0ccca71a22a222071c9e"
+      },
+      "locator_after": {
+        "expected": "830e154ad5afba60eb25da62237e0d0373baca86f9cd8dfd011abb87a1495289",
+        "match": true,
+        "observed": "830e154ad5afba60eb25da62237e0d0373baca86f9cd8dfd011abb87a1495289"
+      },
+      "locator_before": {
+        "expected": "32b1e0837a268abe3d80314ff433866cea583698e18e34dc2dfd9a7db8efb81b",
+        "match": true,
+        "observed": "32b1e0837a268abe3d80314ff433866cea583698e18e34dc2dfd9a7db8efb81b"
+      },
+      "publication_caller_key": {
+        "expected": "1386cf84820f66454c021e8c1a4bf446c56f4b70757a5252b7b316b0319f676a",
+        "match": true,
+        "observed": "1386cf84820f66454c021e8c1a4bf446c56f4b70757a5252b7b316b0319f676a"
+      },
+      "source": {
+        "expected": "e458cd0bb7eb11f96ce8723b0ab4dea97e4ca60b0e47a6f7e1fb1f38cef66d6b",
+        "match": true,
+        "observed": "e458cd0bb7eb11f96ce8723b0ab4dea97e4ca60b0e47a6f7e1fb1f38cef66d6b"
+      },
+      "source_manifest": {
+        "expected": "df00196b7ce7f22c1eaa444af8cd12fa902b04d1f57bcac945bc8d78378967df",
+        "match": true,
+        "observed": "df00196b7ce7f22c1eaa444af8cd12fa902b04d1f57bcac945bc8d78378967df"
+      }
+    },
+    "closure_v2_complete": false,
+    "curation_audit_expected_field_count": 8,
+    "json_files_parsed_and_canonicalizable": [
+      "docs/governance/evidence/PHASE28_3_RETAINED_SYNTHETIC_KNOWLEDGE_LAYER_RULE_CREATED_AND_RETAINED_V1.json",
+      "docs/governance/evidence/PHASE28_3_RETAINED_SYNTHETIC_KNOWLEDGE_LAYER_RULE_DISPOSITION_V1.json",
+      "docs/governance/evidence/PHASE29_RETAINED_SYNTHETIC_KNOWLEDGE_LAYER_RULE_PUBLICATION_DISPOSITION_V1.json",
+      "docs/governance/evidence/PHASE29_RETAINED_SYNTHETIC_KNOWLEDGE_LAYER_RULE_PUBLICATION_V1.json",
+      "docs/governance/evidence/PHASE31_4_1_ROOT_BINDING_DIAGNOSTIC_VECTORS_V1.json",
+      "docs/governance/evidence/PHASE31_4_2_NATIVE_BINDING_AUDIT_V1.json",
+      "docs/governance/evidence/PHASE31_4_2_SUCCESSOR_DESIGN_DIAGNOSTIC_V1.json",
+      "docs/governance/evidence/PHASE31_4_PRECREATION_BLOCKER_EVIDENCE_V1.json",
+      "docs/governance/fixtures/PHASE31_3_COMPLETE_RETAINED_SYNTHETIC_LIFECYCLE_SPEC_V1.json",
+      "docs/governance/fixtures/PHASE31_3_EXPECTED_RETENTION_CLOSURE_V1.json",
+      "docs/governance/fixtures/PHASE31_3_TRANSITIVE_RETENTION_SEMANTIC_REGISTRY_V1.json",
+      "docs/governance/fixtures/SYNTHETIC_KNOWLEDGE_LAYER_RULE_PUBLICATION_SOURCE_MANIFEST_V1.json"
+    ],
+    "note": "Historical structural checks do not establish an operational successor or live closure.",
+    "registry_edges_structurally_checked": 56,
+    "registry_v2_complete": false
+  },
+  "status": "DIAGNOSTIC_ONLY_NOT_AUTHORIZED",
+  "successor_package_complete": false,
+  "zero_effects": {
+    "Activation": 0,
+    "Application": 0,
+    "Phase29 reconstruction": 0,
+    "PostgreSQL": 0,
+    "Publication": 0,
+    "RuntimeAdoption": 0,
+    "automatic learning": 0,
+    "database": 0,
+    "external API": 0,
+    "external business": 0,
+    "normative": 0,
+    "production": 0,
+    "real AdminApps": 0,
+    "resolver invocation": 0,
+    "runtime": 0,
+    "shared DB": 0,
+    "staging": 0
+  }
+}

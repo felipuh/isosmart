@@ -1,16 +1,8 @@
 import React from 'react';
-const CrudEmptyState = ({ message, colSpan }) => {
-  if (colSpan) {
-    return (
-      <tr>
-        <td colSpan={colSpan} className="px-6 py-8 text-center text-gray-400">
-          {message}
-        </td>
-      </tr>
-    );
-  }
+import { S3EmptyState } from '@smart3ai/design-system';
 
-  return <div className="py-8 text-center text-gray-400">{message}</div>;
+const CrudEmptyState = ({ message, colSpan }) => {
+  return <S3EmptyState message={message} colSpan={colSpan} />;
 };
 
 export default CrudEmptyState;

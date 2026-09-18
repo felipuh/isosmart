@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { S3Button, S3FormField, S3Input } from '@smart3ai/design-system';
 import { useAuth } from '../context/AuthContext';
 import { useI18n } from '../context/I18nContext';
 
@@ -39,33 +40,28 @@ const ForgotPasswordPage = () => {
           <p className="text-slate-400">{t('auth.passwordReset.request.subtitle')}</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-2">
-              {t('common.forms.email')}
-            </label>
-            <input
-              id="email"
+        <form onSubmit={handleSubmit} className="s3-on-dark space-y-6">
+          <S3FormField label={t('common.forms.email')} controlId="email" required>
+            <S3Input
               type="email"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
-              className="w-full px-4 py-3 rounded-lg bg-slate-900 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500"
               placeholder={t('auth.passwordReset.request.placeholders.email')}
               autoComplete="email"
-              required
             />
-          </div>
+          </S3FormField>
 
           {message ? <div className="text-sm text-emerald-300">{message}</div> : null}
           {error ? <div className="text-sm text-red-300">{error}</div> : null}
 
-          <button
+          <S3Button
             type="submit"
             disabled={loading}
-            className="w-full py-3 px-4 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-semibold rounded-lg shadow-lg shadow-cyan-500/25 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            loading={loading}
+            className="w-full"
           >
             {loading ? t('common.messages.loading') : t('auth.passwordReset.request.submit')}
-          </button>
+          </S3Button>
         </form>
 
         <div className="mt-6 text-center text-sm">

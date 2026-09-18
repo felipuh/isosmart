@@ -1,0 +1,11 @@
+{
+  "P0": 0,
+  "P1": 0,
+  "artifact_schema": "phase31.4-v2.5-stage-b-authorization/v1",
+  "authorized": true,
+  "contract": "PHASE31_4_5C_ROW_LEVEL_EXECUTION_CONTRACT_V2_5.json",
+  "contract_sha256": "12f048fcada1a36d02d26ff0e4efaa247d04687161c7d1dcb6cbc196ae69001b",
+  "decision": "AUTHORIZED_FOR_STAGE_B",
+  "scope": "native execution, PostgreSQL capture, post-capture exact comparison",
+  "stage_a_proof": "PHASE31_4_5C_V2_5_OFFLINE_BINDING_PROOF_V1.json"
+}

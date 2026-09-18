@@ -24,7 +24,18 @@ from .serializers import (
 )
 
 
-class AssistantConversationViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
+class AssistantTenantScopedViewSetMixin(OrganizationScopedViewSetMixin):
+    """Tenant scope derived only from the authenticated request context."""
+
+    def get_organization_id(self):
+        organization_id = self._parse_org_id(getattr(self.request, 'organization_id', None))
+        if not organization_id:
+            from rest_framework.exceptions import PermissionDenied
+            raise PermissionDenied('No fue posible validar la organización activa.')
+        return organization_id
+
+
+class AssistantConversationViewSet(AssistantTenantScopedViewSetMixin, viewsets.ModelViewSet):
     queryset = AssistantConversation.objects.all()
     serializer_class = AssistantConversationSerializer
     permission_classes = [IsAuthenticated]
@@ -32,8 +43,14 @@ class AssistantConversationViewSet(OrganizationScopedViewSetMixin, viewsets.Mode
     search_fields = ['title', 'context_summary']
     ordering_fields = ['updated_at', 'created_at']
 
+    def perform_create(self, serializer):
+        serializer.save(
+            organization_id=self.get_organization_id(),
+            user=self.request.user,
+        )
 
-class AssistantMessageViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
+
+class AssistantMessageViewSet(AssistantTenantScopedViewSetMixin, viewsets.ModelViewSet):
     queryset = AssistantMessage.objects.select_related('conversation').all()
     serializer_class = AssistantMessageSerializer
     permission_classes = [IsAuthenticated]
@@ -42,7 +59,7 @@ class AssistantMessageViewSet(OrganizationScopedViewSetMixin, viewsets.ModelView
     ordering_fields = ['created_at']
 
 
-class AssistantOrgProfileViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
+class AssistantOrgProfileViewSet(AssistantTenantScopedViewSetMixin, viewsets.ModelViewSet):
     queryset = AssistantOrgProfile.objects.all()
     serializer_class = AssistantOrgProfileSerializer
     permission_classes = [IsAuthenticated]
@@ -51,7 +68,7 @@ class AssistantOrgProfileViewSet(OrganizationScopedViewSetMixin, viewsets.ModelV
     organization_write_field = 'organization_id'
 
 
-class AssistantMemoryItemViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
+class AssistantMemoryItemViewSet(AssistantTenantScopedViewSetMixin, viewsets.ModelViewSet):
     queryset = AssistantMemoryItem.objects.all()
     serializer_class = AssistantMemoryItemSerializer
     permission_classes = [IsAuthenticated]
@@ -60,7 +77,7 @@ class AssistantMemoryItemViewSet(OrganizationScopedViewSetMixin, viewsets.ModelV
     ordering_fields = ['updated_at', 'created_at', 'confidence_score']
 
     def perform_create(self, serializer):
-        item = serializer.save()
+        item = serializer.save(organization_id=self.get_organization_id())
         queue_memory_item_index(item)
 
     def perform_update(self, serializer):
@@ -77,7 +94,7 @@ class AssistantMemoryItemViewSet(OrganizationScopedViewSetMixin, viewsets.ModelV
         remove_indexed_artifact(org_id, artifact_id)
 
 
-class AssistantPromptConfigViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
+class AssistantPromptConfigViewSet(AssistantTenantScopedViewSetMixin, viewsets.ModelViewSet):
     queryset = AssistantPromptConfig.objects.all()
     serializer_class = AssistantPromptConfigSerializer
     permission_classes = [IsAuthenticated]
@@ -86,13 +103,16 @@ class AssistantPromptConfigViewSet(OrganizationScopedViewSetMixin, viewsets.Mode
     organization_write_field = 'organization_id'
 
     def perform_create(self, serializer):
-        serializer.save(updated_by=self.request.user)
+        serializer.save(
+            organization_id=self.get_organization_id(),
+            updated_by=self.request.user,
+        )
 
     def perform_update(self, serializer):
         serializer.save(updated_by=self.request.user)
 
 
-class AssistantFeedbackViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
+class AssistantFeedbackViewSet(AssistantTenantScopedViewSetMixin, viewsets.ModelViewSet):
     queryset = AssistantFeedback.objects.select_related('conversation', 'message').all()
     serializer_class = AssistantFeedbackSerializer
     permission_classes = [IsAuthenticated]
@@ -100,15 +120,15 @@ class AssistantFeedbackViewSet(OrganizationScopedViewSetMixin, viewsets.ModelVie
     ordering_fields = ['created_at', 'rating']
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        serializer.save(
+            organization_id=self.get_organization_id(),
+            user=self.request.user,
+        )
 
 
-class AssistantAuditLogViewSet(OrganizationScopedViewSetMixin, viewsets.ModelViewSet):
+class AssistantAuditLogViewSet(AssistantTenantScopedViewSetMixin, viewsets.ReadOnlyModelViewSet):
     queryset = AssistantAuditLog.objects.select_related('conversation').all()
     serializer_class = AssistantAuditLogSerializer
     permission_classes = [IsAuthenticated]
     filterset_fields = ['organization_id', 'event_type', 'conversation']
     ordering_fields = ['created_at']
-
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)

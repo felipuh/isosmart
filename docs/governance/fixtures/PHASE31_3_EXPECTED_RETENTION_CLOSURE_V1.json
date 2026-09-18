@@ -1,0 +1,102 @@
+{
+  "algorithm_contract": {
+    "canonicalization_version": "iso-smart-retention-canonical-json-v1",
+    "closure_algorithm_version": "transitive-retention-closure/v1",
+    "compare_export_to_live_graph": ["independently re-query every member by exact identity", "canonicalize using member rule", "compare identity, typed material, hash and cross-links", "reject extra, missing, stale or mismatched member"],
+    "compute_retention_closure": ["load exact root and intended operations", "load immutable schema/FK snapshot", "traverse relational edges in stable table/constraint/identity order", "merge registry edges in stable source/edge/target order", "deduplicate only by artifact type plus exact identity", "assign exactly one disposition", "repeat to fixed point"],
+    "export_retention_closure": ["write source bytes and lossless typed member representations", "write separately hashed manifest and disposition", "write schema snapshot and registry", "fsync append-only export", "re-read exported bytes and recompute all hashes"],
+    "re_read_live_graph": ["use a new read-only transaction and exact selectors", "capture schema and every closure member", "capture zero-downstream counts", "do not use exporter in-memory objects"],
+    "verifier_version": "phase31.4-offline-closure-verifier/v1",
+    "verify_retention_closure": ["require both relational and semantic sources", "require exactly one allowed disposition per edge", "verify canonical material and hashes", "verify all cross-links bidirectionally", "require zero unknown/unresolved/reconstruction dependencies"]
+  },
+  "artifact_schema": "phase31.3-expected-retention-closure/v1",
+  "breach_contract": {
+    "classification": "RETENTION_CLOSURE_BREACH",
+    "consequences": {"activation_input_allowed_when_publication_affected": false, "automatic_reconstruction": false, "automatic_repair": false, "operational_continuation": false, "promotion": false, "runtime_adoption_input_allowed": false},
+    "trigger": "any missing, unknown, conflicting, multiply disposed, hash-mismatched or UUID-only mandatory dependency"
+  },
+  "closure_id": "3ecc1ada-44c4-56d1-8373-dc47d2383500",
+  "disposition_contract": {
+    "allowed": ["RETAIN_FULL_CANONICAL_MATERIAL", "REFERENCE_ONLY_ALLOWED_BY_APPROVED_POLICY", "INTENTIONALLY_NON_REMATERIALIZABLE", "EXTERNAL_AUTHORITY_REFERENCE_WITH_FROZEN_PROVENANCE"],
+    "exactly_one_per_reachable_dependency": true,
+    "mandatory_fk_reference_only_allowed": false,
+    "successful_experiment_dispositions": {"external_authority": "EXTERNAL_AUTHORITY_REFERENCE_WITH_FROZEN_PROVENANCE", "every_other_reachable_member": "RETAIN_FULL_CANONICAL_MATERIAL"},
+    "unknown_allowed": false
+  },
+  "execution_gate": {
+    "activation_execution_requires_publication_closure_complete": true,
+    "database_creation_requires_design_artifact_hashes_exact": true,
+    "promotion_requires_activation_closure_complete": true,
+    "teardown_requires": {"closure_complete": true, "export_matches_live_graph": true, "reconstruction_required": false},
+    "teardown_sequence": ["execute_lifecycle", "compute_closure", "verify_closure", "export_closure", "independent_live_reread", "compare_export_live", "assert_closure_complete", "assert_export_matches_live", "generate_pre_teardown_disposition", "authorize_teardown", "teardown", "offline_verify"],
+    "override": "dual-control append-only override may authorize teardown only; forces INTENTIONALLY_NON_REMATERIALIZABLE and operationally_ineligible forever; never PASS"
+  },
+  "manifest_contract": {
+    "activation_manifest_id": "77c9b823-dde2-5fd1-b262-a92c9dede03d",
+    "canonical_manifest_hash_rule": "SHA-256(canonical manifest excluding canonical_manifest_material_hash)",
+    "disposition_hash_rule": "SHA-256(separate canonical disposition excluding disposition_material_hash)",
+    "publication_manifest_id": "5254643e-442e-59f1-82b5-65fbe1077e70",
+    "required_fields": ["manifest_schema", "manifest_version", "experiment_id", "closure_version", "closure_root", "intended_future_operations", "root_artifact", "schema_fk_snapshot_hash", "semantic_registry_version", "semantic_registry_hash", "closure_algorithm_version", "verifier_version", "canonicalization_version", "dependency_counts_by_disposition", "complete_member_inventory", "member_material_hashes", "cross_links", "closure_digest", "verification_timestamp", "closure_complete", "export_matches_live_graph", "reconstruction_required", "RuntimeAdoption_count", "runtime_effect", "canonical_manifest_material_hash"],
+    "separate_disposition_ids": {"activation": "d0a79cb5-77e3-5ae2-aeb2-19809eebb1c3", "publication": "e8d2f595-66cb-5629-ad42-ee99af68dd0f"}
+  },
+  "offline_expected_result": {
+    "ACTIVATED": true,
+    "APPLICATION_GOVERNED": true,
+    "CREATED": true,
+    "PUBLISHED": true,
+    "RUNTIME_ADOPTED": false,
+    "RUNTIME_EFFECTIVE": false,
+    "database_reconstructed": false,
+    "reconstruction_required": false,
+    "retention_closure_complete": true
+  },
+  "roots": {
+    "activation": {
+      "id": "676ad5e4-e167-5336-93ae-5a9f1d4388d3",
+      "intended_future_operations": ["OFFLINE_VERIFICATION", "HISTORICAL_REPORTING"],
+      "lower_bound_member_types": ["complete_Publication_closure", "Activation_claim", "Activation", "explicit_NULL_predecessor", "fresh_activator_authority_frozen_provenance", "Activation_policy", "Activation_capability", "Activation_event", "Activation_Outbox", "Activation_immutable_Audit", "compatibility_evidence", "release_evidence", "canonical_operation_material", "SOD_evidence", "zero_RuntimeAdoption_evidence", "zero_runtime_effect_evidence", "closure_manifest", "disposition"]
+    },
+    "publication": {
+      "id": "cf4db0d2-a312-5a44-91cf-6e14f5cd600e",
+      "intended_future_operations": ["ACTIVATION", "OFFLINE_VERIFICATION", "HISTORICAL_REPORTING"],
+      "lower_bound_member_types": ["source_bytes", "source_manifest", "source_reference", "synthetic_support_graph", "KnowledgeLayerRule_root", "KnowledgeLayerRule_candidate", "lineage_predecessor_facts", "Proposal", "Delta", "Review", "Decision", "Application_Authorization", "Application_claim", "Application_Receipt", "Application_event", "Application_Outbox", "Application_curation_audit", "Application_immutable_Audit", "curator_evidence", "Publication_curation_audit_complete_row", "Publication_claim", "Publication", "Publication_event", "Publication_Outbox", "Publication_governance_Audit", "Publication_policy", "publisher_authority_frozen_provenance", "Publication_capability", "canonical_operation_material", "compatibility_evidence", "release_evidence", "schema_FK_snapshot", "semantic_registry", "closure_manifest", "disposition"]
+    }
+  },
+  "schema_fk_snapshot": {
+    "canonicalization": "sorted migrations as path + NUL + byte SHA-256 + LF; schema objects sorted by qualified name; fields and constraints in migration declaration order; UTF-8 canonical JSON/v1",
+    "closure_algorithm_version": "transitive-retention-closure/v1",
+    "id": "8b60018d-21b2-53a9-a428-6354672fa3a5",
+    "migration_0024_absent": true,
+    "migration_set": "foundation/0001-0023",
+    "migration_set_hash": "cb32408595bf1627f8d846aceba46a51028bb92f40223566981eabfa75d528fc",
+    "relevant_append_only_guards": ["published StandardEdition immutable", "KnowledgeLayer identity append-only", "KnowledgeLayerRule material revision-only and published immutable", "one root per lineage", "one child per predecessor", "same lineage/layer/rule-key predecessor", "cycle/self-edge forbidden", "Application claim/Receipt/audit/event/Outbox immutable", "release claim/Publication/Activation/RuntimeAdoption/event/Outbox/Audit/disposition/capability immutable"],
+    "semantic_registry_id": "b2c76475-947a-5ebd-a8ae-20084d3fb085",
+    "semantic_registry_version": "phase31.3-transitive-retention-registry/v1",
+    "tables": {
+      "audit.knowledge_layer_rule_governance_audit": {"columns":"id PK uuid; operation_kind; artifact_id UNIQUE; target_rule_id FK; actor_external_id; authority_context_version; authority_decision_reference; governance_policy_version; operation_material_hash; trace_id; payload_hash; occurred_at", "fks":["target_rule_id -> normative.knowledge_layer_rule RESTRICT"]},
+      "eventing.knowledge_layer_rule_governance_outbox": {"columns":"id PK uuid; event_id UNIQUE NOT NULL; destination fixed; status pending; available_at; created_at", "fks":["event_id -> normative.knowledge_layer_rule_governance_event RESTRICT"]},
+      "eventing.platform_transactional_outbox": {"columns":"id PK uuid; event_id UNIQUE NOT NULL; destination fixed; status pending; available_at; created_at", "fks":["event_id -> normative.knowledge_layer_rule_event RESTRICT"]},
+      "normative.clause": {"columns":"id PK uuid; standard_edition_id FK; code; title; parent_id nullable", "constraints":["UNIQUE(standard_edition_id,code)", "UNIQUE(standard_edition_id,id)", "parent != self"], "fks":["standard_edition_id -> normative.standard_edition RESTRICT", "(standard_edition_id,parent_id) -> normative.clause(standard_edition_id,id) RESTRICT"]},
+      "normative.curation_audit": {"columns":"id PK uuid; action NOT NULL; entity_type NOT NULL; entity_id NOT NULL; actor_id NOT NULL; trace_id NOT NULL; payload_hash NOT NULL 64hex; occurred_at NOT NULL", "fks":[], "required_field_count":8},
+      "normative.knowledge_layer": {"columns":"id PK uuid; standard_edition_id NOT NULL FK; layer_type; certifiability_classification; created_at", "fks":["standard_edition_id -> normative.standard_edition RESTRICT"]},
+      "normative.knowledge_layer_rule": {"columns":"id PK uuid; knowledge_layer_id NOT NULL FK; lineage_id; rule_key; version; previous_revision_id nullable UNIQUE self-FK; status; logic_json; evidence_expectation; source_reference; certifiability_classification; published_at nullable; created_at", "constraints":["one root UNIQUE by lineage", "one successor UNIQUE by previous_revision_id", "same-lineage/layer/rule-key trigger", "no self/cycle", "new draft only; material revision-only"], "fks":["knowledge_layer_id -> normative.knowledge_layer RESTRICT", "previous_revision_id -> normative.knowledge_layer_rule RESTRICT"]},
+      "normative.knowledge_layer_rule_activation": {"columns":"id PK; publication_id FK; knowledge_layer_rule_id FK; knowledge_layer_id FK; lineage_id; rule_version; rule_material_hash; semantic_fingerprint; predecessor_activation_id nullable self-FK; compatibility_hash; actor/authority/policy; authorized_at; reason; idempotency_key_hash UNIQUE; operation_material_hash; claim_id UNIQUE FK; event_id UNIQUE; outbox_id UNIQUE; audit_id UNIQUE; trace_id; created_at", "constraints":["UNIQUE NULLS NOT DISTINCT(lineage_id,predecessor_activation_id)"], "fks":["publication_id -> Publication RESTRICT", "knowledge_layer_rule_id -> KnowledgeLayerRule RESTRICT", "knowledge_layer_id -> KnowledgeLayer RESTRICT", "predecessor_activation_id -> Activation RESTRICT", "claim_id -> GovernanceClaim RESTRICT"]},
+      "normative.knowledge_layer_rule_capability_decision": {"columns":"id PK; capability; enabled; predecessor_decision_id nullable self-FK; actor/authority/policy; reason; trace_id; created_at", "constraints":["capability in PUBLICATION|ACTIVATION|RUNTIME_ADOPTION", "UNIQUE NULLS NOT DISTINCT(capability,predecessor_decision_id)"], "fks":["predecessor_decision_id -> capability decision RESTRICT"]},
+      "normative.knowledge_layer_rule_governance_claim": {"columns":"id PK; operation_kind; artifact_id UNIQUE; target_rule_id nullable FK; idempotency_key_hash; operation_material_hash; event_id nullable; outbox_id nullable; audit_id nullable; trace_id; actor/authority/policy; admitted_at", "constraints":["UNIQUE(operation_kind,idempotency_key_hash)", "event/outbox/audit all-null or all-present"], "fks":["target_rule_id -> KnowledgeLayerRule RESTRICT"]},
+      "normative.knowledge_layer_rule_governance_event": {"columns":"id PK; event_type; schema_version=1; operation_kind; artifact_id UNIQUE; target_rule_id FK; payload object; payload_hash; trace_id; occurred_at", "fks":["target_rule_id -> KnowledgeLayerRule RESTRICT"]},
+      "normative.knowledge_layer_rule_publication": {"columns":"id PK; evidence_kind; workflow_approved; knowledge_layer_rule_id UNIQUE FK; knowledge_layer_id FK; lineage_id; rule_version; rule_material_hash; semantic_fingerprint; curation_audit_id UNIQUE FK; publication/import evidence fields; actor/authority/policy; authorized_at; reason; idempotency_key_hash UNIQUE; operation_material_hash; claim_id UNIQUE FK; event_id UNIQUE; outbox_id UNIQUE; audit_id UNIQUE; trace_id; created_at", "constraints":["native/workflow-approved/import-null consistency"], "fks":["knowledge_layer_rule_id -> KnowledgeLayerRule RESTRICT", "knowledge_layer_id -> KnowledgeLayer RESTRICT", "curation_audit_id -> normative.curation_audit RESTRICT", "claim_id -> GovernanceClaim RESTRICT"]},
+      "normative.requirement_control": {"columns":"id PK; standard_edition_id; clause_id; paraphrase; applicability_rule; control_type; valid_from/to", "constraints":["UNIQUE(standard_edition_id,id)"], "fks":["(standard_edition_id,clause_id) -> normative.clause RESTRICT"]},
+      "normative.standard": {"columns":"id PK uuid; code UNIQUE NOT NULL; title; publisher NOT NULL", "fks":[]},
+      "normative.standard_edition": {"columns":"id PK uuid; standard_id NOT NULL FK; edition; status; effective_from/to; source_hash", "constraints":["UNIQUE(standard_id,edition)", "UNIQUE(id,standard_id)", "status draft|published", "source_hash null or 64hex"], "fks":["standard_id -> normative.standard RESTRICT"]},
+      "qms.learning_application_authorization": {"columns":"id PK; tenant/org/proposal/decision FKs; exact proposal/delta/operation/target/capability material; status; idempotency; authorizer projection/external snapshot; authority/scope/policy/trace/time", "fks":["tenant/org", "proposal", "decision UNIQUE", "authorizer user projection"]},
+      "qms.learning_proposal": {"columns":"id PK; tenant/org; exact target snapshot/hash; change/delta/operation; rationale/effect/risks/domains; status; predecessor nullable UNIQUE; revision; actor projection/external snapshot; authority/policy/trace/time", "fks":["tenant/org", "canonical delta nullable UNIQUE", "predecessor self RESTRICT", "actor user projection"]},
+      "qms.learning_proposal_canonical_delta": {"columns":"id PK; tenant/org; proposal UNIQUE FK; canonicalization/schema/operation/target; delta_document; canonical_bytes; delta_hash; created_at", "fks":["tenant/org", "proposal RESTRICT"]},
+      "qms.learning_proposal_decision": {"columns":"id PK; tenant/org; proposal UNIQUE FK; exact proposal/delta/review/target; outcome; rationale; identity hash UNIQUE; approver projection/external snapshot; authority/scope/policy/trace/time", "fks":["tenant/org", "proposal", "approver user projection"]},
+      "qms.learning_proposal_review": {"columns":"id PK; tenant/org; proposal FK; exact proposal/delta/target; outcome/findings/domains; reviewer projection/external snapshot; authority/scope/policy/trace/time", "fks":["tenant/org", "proposal", "reviewer user projection"]},
+      "qms.learning_target_application_audit": {"columns":"id PK; tenant/org; receipt UNIQUE FK; authorization FK; target before/after; delta/semantic hashes; actor; trace; payload_hash; occurred_at", "fks":["tenant/org", "receipt RESTRICT", "authorization RESTRICT"]},
+      "qms.learning_target_application_claim": {"columns":"id PK; tenant/org; application_identity UNIQUE; material_hash; authorization UNIQUE FK; forward_receipt nullable FK; receipt_id UNIQUE; created_at", "fks":["tenant/org", "authorization RESTRICT", "forward_receipt RESTRICT"]},
+      "qms.learning_target_application_receipt": {"columns":"id PK; tenant/org; application_identity UNIQUE; proposal/reviews/decision/authorization; operation/delta; lineage/before/after/predecessor; source refs/fingerprint/state flags/actor/trace; event/outbox/curation-audit/application-audit IDs UNIQUE; forward_receipt nullable self-FK; created_at", "constraints":["predecessor_id=before_rule_id", "forward vs compensation consistency"], "fks":["tenant/org", "proposal", "decision", "authorization UNIQUE", "before/after rule", "event", "outbox", "curation audit", "forward receipt"]}
+    }
+  },
+  "zero_downstream_assertions": {"RuntimeAdoption_Audit_delta":0, "RuntimeAdoption_Outbox_delta":0, "RuntimeAdoption_event_delta":0, "RuntimeAdoption_rows_delta":0, "adoption_authority_use":0, "resolver_invocation":0, "runtime_cutover":0, "runtime_effect":false}
+}

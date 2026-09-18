@@ -1,0 +1,440 @@
+{
+  "actor_sod": {
+    "actors": {
+      "activator": "7a3d6ce6-d5be-5a16-8ba7-9c2be2b6bc5d",
+      "application_authorizer": "a82b80ee-c697-5240-a78a-7c8c7d2f88fd",
+      "application_executor": "0ff68e3a-a186-5cca-b450-32b88cacd47e",
+      "capability_control_authority": "7de37f98-fe49-5288-be6a-a197ee498738",
+      "curator": "c4e28dac-c20f-5d00-a54c-86dabf22c1c9",
+      "future_adopter_placeholder": "cd6f28b5-02cb-5e8a-9a42-0a0263886a65",
+      "proposal_approver": "047b0d39-8390-54ac-9e93-ed25afe45521",
+      "proposer": "a22ccf21-8384-573e-9f7a-96e871168aef",
+      "publisher": "14e64261-75cc-525d-b877-ab1c34ed1253",
+      "repair_authority": "b319c40a-b64d-5c29-a376-5c8c9806be75",
+      "reviewer": "22786668-63b0-50f3-a660-53ec0e23ccec"
+    },
+    "admission_and_precommit_enforcement": true,
+    "all_actor_ids_pairwise_distinct": true,
+    "prohibited_collisions": [
+      ["publisher", "activator"],
+      ["activator", "future_adopter_placeholder"],
+      ["application_executor", "publisher"],
+      ["application_executor", "activator"],
+      ["curator", "publisher"],
+      ["curator", "activator"],
+      ["repair_authority", "publisher"],
+      ["repair_authority", "activator"],
+      ["repair_authority", "future_adopter_placeholder"],
+      ["capability_control_authority", "application_executor"],
+      ["capability_control_authority", "publisher"],
+      ["capability_control_authority", "activator"]
+    ]
+  },
+  "application": {
+    "application_audit_id": "c71bd788-df60-5d1a-895e-8a8274624886",
+    "application_authorization_id": "4768a437-735b-5afb-903a-b362443fb1bf",
+    "application_claim_id": "29c6f7d5-989b-5bf0-a494-7d22d83a6a18",
+    "canonical_delta": {
+      "canonicalization_version": "iso-smart-learning-delta-canonical-v1",
+      "delta_hash": "06f75de72e2a2ded515c223a1c62df6ab3780ebfe1ed0ccca71a22a222071c9e",
+      "delta_schema_version": "learning-knowledge-layer-rule-source-reference-correction-delta-v1",
+      "id": "96895eeb-41a6-546a-a270-a72147271a4c",
+      "material": {
+        "canonicalization_version": "iso-smart-learning-delta-canonical-v1",
+        "delta_schema_version": "learning-knowledge-layer-rule-source-reference-correction-delta-v1",
+        "operation_id": "learning.knowledge_layer_rule.source_reference.correct",
+        "operation_version": "v1",
+        "payload": {
+          "current_source_reference": "iso-smart-synthetic-poc-source-ref-v1:98939c5e-1a06-53c9-bbf9-07b21d81feb1:e458cd0bb7eb11f96ce8723b0ab4dea97e4ca60b0e47a6f7e1fb1f38cef66d6b:fixture/element/source-reference-before",
+          "new_source_reference": "iso-smart-synthetic-poc-source-ref-v1:98939c5e-1a06-53c9-bbf9-07b21d81feb1:e458cd0bb7eb11f96ce8723b0ab4dea97e4ca60b0e47a6f7e1fb1f38cef66d6b:fixture/element/source-reference-after",
+          "standard_edition_id": "98939c5e-1a06-53c9-bbf9-07b21d81feb1",
+          "standard_edition_source_hash": "e458cd0bb7eb11f96ce8723b0ab4dea97e4ca60b0e47a6f7e1fb1f38cef66d6b",
+          "successor_version": "s1"
+        },
+        "target_hash": "dbaa2e4eff3c980522a916d0cf2f10127e39f0af8dbfdacb469ac3015d8d87db",
+        "target_id": "bc5f4f17-294d-5abd-b27b-2d296921ffdf",
+        "target_lineage_id": "bc5f4f17-294d-5abd-b27b-2d296921ffdf",
+        "target_type": "KnowledgeLayerRule",
+        "target_version": "s0"
+      }
+    },
+    "capability": {
+      "decision_id": "3604a119-c674-5607-b93d-68693757cc97",
+      "id": "learning.knowledge_layer_rule.source_reference.correct",
+      "required_state": "ENABLED",
+      "version": "v1"
+    },
+    "curation_audit_id": "ff75b1d0-a2ea-5eae-9064-b9114496047a",
+    "decision_id": "dbbf331b-0388-51a9-bca7-e9d1bbf84dd5",
+    "event_id": "e01768a1-8e00-5fbc-a73f-cc1cf80af542",
+    "event_type": "knowledge_layer_rule.source_reference_corrected",
+    "idempotency_key": "phase31.3/application/a55716fa-63c7-54eb-bda2-9c9666613b1a/v1",
+    "idempotency_key_hash": "f6ac677ce2cd548926dc27cb3de8111730f97fb6934cdb9d6a8f28f0bb2bc963",
+    "operation_id": "learning.knowledge_layer_rule.source_reference.correct",
+    "operation_version": "v1",
+    "outbox_id": "8827890a-0465-5906-8125-716081bfae74",
+    "policy_id": "governed-learning-proposal-review-application-boundary/v1",
+    "proposal_id": "a0c36b62-ab9e-5852-9228-19891ec48217",
+    "proposal_trace_id": "9ab6ceef-cbc9-5ed6-a88d-d3f3c5445e8f",
+    "receipt_id": "b35d11e1-6848-50b2-b760-dd09d38f0acb",
+    "review_ids": ["54aa2fd0-1449-51bc-b543-5e607c84b59a"],
+    "review_trace_id": "279859b3-7b20-5dd9-9b35-e8d9ea340b30",
+    "decision_trace_id": "119c77e1-055d-503b-aa56-b1ca2f0f8db3",
+    "authorization_trace_id": "ba632699-0061-5522-9703-c324a3865d0e",
+    "transaction_members": [
+      "application_claim",
+      "candidate_s1",
+      "knowledge_layer_rule.source_reference_corrected/v1",
+      "application_outbox",
+      "application_curation_audit",
+      "application_receipt",
+      "application_immutable_audit"
+    ],
+    "transaction_rule": "ALL_OR_ZERO",
+    "trace_id": "516edff7-ce39-5e41-9888-79828c2bc1d4"
+  },
+  "artifact_schema": "phase31.3-complete-retained-synthetic-lifecycle-spec/v1",
+  "authority_contract": {
+    "freshness_checks": ["ADMISSION", "IMMEDIATELY_BEFORE_COMMIT"],
+    "fresh_runtime_fields": [
+      "authority_decision_id",
+      "authority_context_version",
+      "evaluation_timestamp",
+      "expiry_timestamp",
+      "policy_binding",
+      "decision_hash"
+    ],
+    "required_frozen_shape": {
+      "active_access": true,
+      "actor_exact": true,
+      "mfa_verified": true,
+      "scope": "global",
+      "server_resolved": true
+    },
+    "slots": {
+      "activation": {
+        "actor": "7a3d6ce6-d5be-5a16-8ba7-9c2be2b6bc5d",
+        "evidence_slot_id": "8bc3edf5-7bef-5d91-88b0-f8ddcadc7682",
+        "permission": "qms.knowledge_layer_rule.activate",
+        "policy": "complete-retained-synthetic-klr-lifecycle-poc-policy/v1"
+      },
+      "application": {
+        "actor": "0ff68e3a-a186-5cca-b450-32b88cacd47e",
+        "evidence_slot_id": "94e97461-b4c3-500a-9d57-3d32cd1dfb10",
+        "permission": "qms.learning_target.knowledge_rule_source_reference.apply",
+        "policy": "governed-learning-proposal-review-application-boundary/v1"
+      },
+      "application_authorizer": {"actor":"a82b80ee-c697-5240-a78a-7c8c7d2f88fd","evidence_slot_id":"c64f09f9-56cd-5440-be65-707d976a43a2","permission":"qms.learning_application.authorize","policy":"governed-learning-proposal-review-application-boundary/v1"},
+      "curator": {"actor":"c4e28dac-c20f-5d00-a54c-86dabf22c1c9","evidence_slot_id":"fef5ecd0-f385-5fdc-92ac-88be47206fd4","permission":"qms.knowledge_layer_rule.curate","policy":"complete-retained-synthetic-klr-lifecycle-poc-policy/v1"},
+      "proposal_approver": {"actor":"047b0d39-8390-54ac-9e93-ed25afe45521","evidence_slot_id":"179f7b49-0a22-5774-b94b-b89b97493e80","permission":"qms.learning_proposal.decide","policy":"governed-learning-proposal-review-application-boundary/v1"},
+      "proposer": {"actor":"a22ccf21-8384-573e-9f7a-96e871168aef","evidence_slot_id":"7d37935b-0115-54a2-a02e-aa98db60e60f","permission":"qms.learning_proposal.create","policy":"governed-learning-proposal-review-application-boundary/v1"},
+      "publication": {
+        "actor": "14e64261-75cc-525d-b877-ab1c34ed1253",
+        "evidence_slot_id": "4e259158-bf48-5157-abc0-936d8956b1a5",
+        "permission": "qms.knowledge_layer_rule.publish",
+        "policy": "complete-retained-synthetic-klr-lifecycle-poc-policy/v1"
+      },
+      "capability_control": {"actor":"7de37f98-fe49-5288-be6a-a197ee498738","evidence_slot_id":"04cc788d-27e5-57e8-b84e-d2eeb23a82a8","permission":"qms.knowledge_layer_rule.release_capability_admin","policy":"complete-retained-synthetic-klr-lifecycle-poc-policy/v1"},
+      "repair": {"actor":"b319c40a-b64d-5c29-a376-5c8c9806be75","evidence_slot_id":"f2e3a826-e7d0-567c-b7fe-a87e8f3bd9be","permission":"qms.knowledge_layer_rule.release_repair","policy":"complete-retained-synthetic-klr-lifecycle-poc-policy/v1"},
+      "reviewer": {"actor":"22786668-63b0-50f3-a660-53ec0e23ccec","evidence_slot_id":"6928d2c7-7c4b-572a-9e4a-b7a24fbc1dc9","permission":"qms.learning_proposal.review","policy":"governed-learning-proposal-review-application-boundary/v1"}
+    },
+    "unconditional_denials": [
+      "client_supplied",
+      "cached_only",
+      "stale",
+      "expired",
+      "revoked",
+      "actor_mismatch",
+      "scope_mismatch",
+      "policy_mismatch",
+      "permission_mismatch"
+    ]
+  },
+  "canonicalization": {
+    "artifact_material": "RFC8785-compatible UTF-8 JSON, object keys lexicographically sorted, no insignificant whitespace, arrays order-significant/v1",
+    "hash": "SHA-256 lowercase hex/v1",
+    "id": "UUIDv5(namespace_uuid, UTF-8 label)/v1",
+    "release_child_id": "foundation_0022_uuid-v1: MD5(base_uuid + ':' + suffix), forced version nibble 4 and variant nibble 8 exactly as migration 0022"
+  },
+  "capability_streams": {
+    "ACTIVATION": {"admission_and_precommit": true, "initial_decision_id": "3678b3f3-545a-5458-bb6b-767d8f962895", "required": "ENABLED"},
+    "APPLICATION": {"admission_and_precommit": true, "initial_decision_id": "3604a119-c674-5607-b93d-68693757cc97", "required": "ENABLED"},
+    "CAPABILITY_CONTROL": {"execution_authority_implied": false, "initial_decision_id": "7c03a7a0-e4db-5c5d-a883-9821d5f46bf3", "required": "ENABLED"},
+    "PUBLICATION": {"admission_and_precommit": true, "initial_decision_id": "9619440b-6a04-53ac-ba95-6a18d31fe06c", "required": "ENABLED"},
+    "REPAIR": {"lifecycle_execution_authority": false, "initial_decision_id": "585d9360-f44a-578d-b0d6-4a798cfe92b0", "required": "ENABLED"},
+    "RUNTIME_ADOPTION": {"decision_slot_id": "f9f32bf5-9adc-50bb-b8af-a4cb8fb2c452", "required": "DISABLED", "use_count": 0}
+  },
+  "governance_artifact_id_bindings": {
+    "activation_closure_manifest":"77c9b823-dde2-5fd1-b262-a92c9dede03d",
+    "activation_disposition":"d0a79cb5-77e3-5ae2-aeb2-19809eebb1c3",
+    "activation_policy":"dba46565-da5e-5c6a-9c29-9ff3e54065a0",
+    "closure_spec":"3ecc1ada-44c4-56d1-8373-dc47d2383500",
+    "product_policy":"57b377f3-760e-5db4-a990-c625bdb5739a",
+    "publication_closure_manifest":"5254643e-442e-59f1-82b5-65fbe1077e70",
+    "publication_disposition":"e8d2f595-66cb-5629-ad42-ee99af68dd0f",
+    "publication_policy":"e175eace-5022-564f-84ff-a6ff6b67f4f8",
+    "semantic_registry":"b2c76475-947a-5ebd-a8ae-20084d3fb085",
+    "schema_snapshot":"8b60018d-21b2-53a9-a428-6354672fa3a5"
+  },
+  "experiment": {
+    "id": "a3f8fd64-af24-5b31-977a-bcaf8146c563",
+    "namespace": "iso-smart/phase31.3/complete-retained-synthetic-lifecycle/v1",
+    "namespace_material": "https://iso-smart.local/phase31.3/complete-retained-synthetic-lifecycle/v1",
+    "namespace_uuid": "05611a8a-f662-5b7f-ad24-c4df48d573ec",
+    "phase29_continuity_claim": false
+  },
+  "fresh_runtime_slots_policy": "Only the declared authority/capability evaluation timestamps, expiry, decision material hashes, transaction timestamps, and live schema catalog observations may be filled at execution. Their actor, permission, scope, policy, canonicalization, identity slot and verification rules are frozen here.",
+  "hostile_matrix": {
+    "all_denials_require_every_protected_delta_zero": true,
+    "principals": ["PUBLIC", "proposer", "publisher_for_activation", "application_executor_for_activation", "curator_for_activation", "adopter_for_activation", "worker_projector", "repair_authority"],
+    "spoofs_or_drift": ["actor", "MFA", "scope", "stale_authority", "revoked_authority", "candidate", "publication", "source", "full_hash", "semantic_fingerprint", "lifecycle_hash", "evidence_hash", "policy", "predecessor", "disabled_capability", "hostile_search_path", "direct_DML", "latest_current_head_max_version_timestamp_selector", "claim_theft"]
+  },
+  "identity_inventory": {
+    "activation": "676ad5e4-e167-5336-93ae-5a9f1d4388d3",
+    "activation_audit": "b51984ce-3391-4597-8592-6539737b2ee9",
+    "activation_claim": "676ad5e4-e167-5336-93ae-5a9f1d4388d3",
+    "activation_event": "237fd48c-59bd-4b25-8521-4876fe9fc1a1",
+    "activation_outbox": "68df6cc0-e04a-4693-80ab-07182c81bec1",
+    "candidate": "a55716fa-63c7-54eb-bda2-9c9666613b1a",
+    "clause": "cd11a240-2f3a-5239-9906-a5217b0979c4",
+    "curator_evidence": "a0680835-af47-59dc-9db5-72c51556f6e6",
+    "knowledge_layer": "ca734de0-7bfe-51e4-acce-639cc5f26f1d",
+    "organization": "ac638304-fdd6-5ce8-96d7-62014117af94",
+    "publication": "cf4db0d2-a312-5a44-91cf-6e14f5cd600e",
+    "publication_audit": "5f33e3ba-abba-4b0e-8a43-bb60cc67a5cc",
+    "publication_claim": "cf4db0d2-a312-5a44-91cf-6e14f5cd600e",
+    "publication_curation_audit": "5fa5038d-3042-481f-8162-e1144eebc815",
+    "publication_event": "0ff9868e-a847-4624-862c-d93ddb9c11e2",
+    "publication_outbox": "37816380-7022-43b2-8d4a-c57346e5f7f6",
+    "root_rule_and_lineage": "bc5f4f17-294d-5abd-b27b-2d296921ffdf",
+    "root_creation_curation_audit": "805875c2-6505-5b82-ad41-40c2519293d2",
+    "root_creation_manifest": "ecda9247-9a3d-5e51-9df7-f13fb598dd3b",
+    "root_creation_trace": "ba2d50e8-d47e-592b-b506-f0e7f111e30f",
+    "requirement_control": "c56a413e-00f1-5a20-81c4-dfeda4681dc7",
+    "source": "72d038c3-4ee5-5d40-a75b-398133dbed00",
+    "source_manifest": "2bd274fb-3844-532e-8e76-e276153cad2e",
+    "standard": "9b9a75f6-f3dc-5089-9b27-6aff45ca0556",
+    "standard_edition": "98939c5e-1a06-53c9-bbf9-07b21d81feb1",
+    "tenant": "daa6bb22-660c-56f5-aadf-c63f06b01731"
+  },
+  "lineage": {
+    "candidate": {
+      "full_material_hash": "e188e1302f8bcf6c1df4c07fe06eb5dc01d4824453bc7698537b6599571c6e3a",
+      "id": "a55716fa-63c7-54eb-bda2-9c9666613b1a",
+      "lifecycle_hash": "93a4e545bca381b18219eaaf7712222d27c9ea849e24de26024f766bb15adf2b",
+      "material": {
+        "certifiability_classification": "non_certifiable_guidance",
+        "evidence_expectation": {"normative": false, "required": ["synthetic_fixture_reference", "transitive_retention_closure_v1"]},
+        "id": "a55716fa-63c7-54eb-bda2-9c9666613b1a",
+        "knowledge_layer_id": "ca734de0-7bfe-51e4-acce-639cc5f26f1d",
+        "lineage_id": "bc5f4f17-294d-5abd-b27b-2d296921ffdf",
+        "logic_json": {"fixture_only": true, "operator": "source_locator_is_retained", "runtime_effect": false},
+        "previous_revision_id": "bc5f4f17-294d-5abd-b27b-2d296921ffdf",
+        "rule_key": "phase31.3.complete-retained-synthetic-lifecycle",
+        "source_reference": "iso-smart-synthetic-poc-source-ref-v1:98939c5e-1a06-53c9-bbf9-07b21d81feb1:e458cd0bb7eb11f96ce8723b0ab4dea97e4ca60b0e47a6f7e1fb1f38cef66d6b:fixture/element/source-reference-after",
+        "version": "s1"
+      },
+      "semantic_fingerprint": "23cbf18249043f5f603dd6488760e4a64e29b97cc493909b7c622e978f42e4a6"
+    },
+    "full_material_algorithm": "migration-0022-foundation_0022_rule_material_hash/SHA-256/v1",
+    "lifecycle_hash_algorithm": "migration-0022-foundation_0022_rule_semantic_hash/SHA-256/v1",
+    "root": {
+      "foundation_0021_target_hash": "dbaa2e4eff3c980522a916d0cf2f10127e39f0af8dbfdacb469ac3015d8d87db",
+      "full_material_hash": "3421457f44586a28cf4b6a242cb2f25929e3eae8689de214292639fcb89be3af",
+      "id": "bc5f4f17-294d-5abd-b27b-2d296921ffdf",
+      "previous_revision_id": null,
+      "status_at_application": "published",
+      "version": "s0"
+    },
+    "semantic_fingerprint_algorithm": "iso-smart-knowledge-layer-rule-substantive-fingerprint-v1",
+    "selection": "EXACT_ID_HASH_AND_PREDECESSOR_GRAPH_ONLY"
+  },
+  "lock_order": [
+    "01_exact_claim_or_idempotency_identity",
+    "02_exact_operation_stream_or_lineage_predecessor_slot",
+    "03_exact_upstream_artifact_and_retained_evidence",
+    "04_exact_candidate_or_application_target",
+    "05_exact_authority_decision",
+    "06_exact_capability_decision",
+    "07_deterministic_event_outbox_audit_streams"
+  ],
+  "canonical_operation_contracts": {
+    "activation": {"canonicalization_version":"iso-smart-lifecycle-operation-canonical-json/v1","required_fields":["Activation_id","candidate_id","Publication_id","candidate_full_material_hash","semantic_fingerprint","lifecycle_hash","Publication_closure_digest","source_manifest_hash","source_hash","predecessor_activation_id_explicit_null","activator_actor","fresh_authority_decision_material","policy_id_and_hash","capability_decision_id_and_hash","idempotency_key_hash","trace_id","operation_version","event_id","Outbox_id","Audit_id"],"hash":"SHA-256(canonical material)"},
+    "application": {"canonicalization_version":"iso-smart-lifecycle-operation-canonical-json/v1","required_fields":["proposal_id","delta_id_and_hash","review_id_set","decision_id","authorization_id","root_rule_id_lineage_version_target_hash","candidate_id_full_hash_semantic_lifecycle_hash","source_before_after_hashes","actors_and_SOD","fresh_authority_material","policy_id_and_hash","capability_id_decision_hash","idempotency_key_hash","trace_ids","event_Outbox_curation_audit_Receipt_Audit_ids"],"hash":"SHA-256(canonical material)"},
+    "publication": {"canonicalization_version":"iso-smart-lifecycle-operation-canonical-json/v1","required_fields":["Publication_id","candidate_id_lineage_version","candidate_full_material_hash","semantic_fingerprint","lifecycle_hash","source_manifest_reference_hashes","complete_application_closure_digest","curator_evidence_id_and_hash","full_publication_curation_audit_contract","publisher_actor","fresh_authority_decision_material","policy_id_and_hash","capability_decision_id_and_hash","idempotency_key_hash","trace_id","operation_version","event_id","Outbox_id","Audit_id","compatibility_release_evidence_hashes"],"hash":"SHA-256(canonical material)"},
+    "replay_rules": {"same_artifact_changed_material":"CONFLICT","same_key_changed_material":"CONFLICT","same_key_identical_material":"SAME_ARTIFACT_REPLAY_OR_WAITER","timeout_claim_theft":false}
+  },
+  "concurrency_matrix": {
+    "activation": {"authority_revocation_racing_commit":"DENY_PRECOMMIT_ALL_DELTAS_ZERO","capability_disable_racing_commit":"DENY_PRECOMMIT_ALL_DELTAS_ZERO","changed_material":"ONE_WINNER_OTHER_CONFLICT","competing_Publication_same_predecessor_slot":"ONE_WINNER_OTHER_STALE_OR_CONFLICT","identical_concurrent":"ONE_ACTIVATION_PLUS_REPLAY_OR_WAITER"},
+    "application": {"authority_revocation_race":"DENY_PRECOMMIT_ALL_DELTAS_ZERO","capability_disable_race":"DENY_PRECOMMIT_ALL_DELTAS_ZERO","changed_canonical_material":"ONE_WINNER_OTHER_CONFLICT","identical_concurrent":"ONE_APPLICATION_PLUS_REPLAY_OR_WAITER","stale_predecessor":"DENY_ALL_DELTAS_ZERO"},
+    "publication": {"authority_revocation":"DENY_PRECOMMIT_ALL_DELTAS_ZERO","capability_disable":"DENY_PRECOMMIT_ALL_DELTAS_ZERO","changed_material":"ONE_WINNER_OTHER_CONFLICT","competing_Publication":"ONE_WINNER_OTHER_STALE_OR_CONFLICT","identical":"ONE_PUBLICATION_PLUS_REPLAY_OR_WAITER"},
+    "forks_permitted": false
+  },
+  "identity_generation_labels": {
+    "activation":"activation","activation_authority_slot":"activation-authority-slot","activation_capability_decision":"activation-capability-decision","activation_closure_manifest":"activation-closure-manifest","activation_disposition":"activation-disposition","activation_policy":"activation-policy","activation_trace":"activation-trace","application_audit":"application-audit","application_authority_slot":"application-authority-slot","application_authorization":"application-authorization","application_authorizer_authority_slot":"application-authorizer-authority-slot","application_capability_decision":"application-capability-decision","application_claim":"application-claim","application_curation_audit":"application-curation-audit","application_event":"application-event","application_outbox":"application-outbox","approver_authority_slot":"approver-authority-slot","candidate":"candidate","capability_control_authority_slot":"capability-control-authority-slot","capability_control_decision":"capability-control-decision","clause":"clause","closure_spec":"closure-spec","compatibility_evidence":"compatibility-evidence","curator_authority_slot":"curator-authority-slot","curator_evidence":"curator-evidence","delta":"delta","decision":"decision","experiment":"experiment","knowledge_layer":"knowledge-layer","organization":"organization","product_policy":"product-policy","proposal":"proposal","proposer_authority_slot":"proposer-authority-slot","publication":"publication","publication_authority_slot":"publication-authority-slot","publication_capability_decision":"publication-capability-decision","publication_closure_manifest":"publication-closure-manifest","publication_disposition":"publication-disposition","publication_policy":"publication-policy","publication_trace":"publication-trace","receipt":"receipt","registry":"registry","release_evidence":"release-evidence","repair_authority_slot":"repair-authority-slot","repair_capability_decision":"repair-capability-decision","requirement_control":"requirement-control","review":"review","reviewer_authority_slot":"reviewer-authority-slot","root_creation_curation_audit":"root-curation-audit","root_creation_manifest":"root-creation-manifest","root_creation_trace":"root-trace","root_rule":"root-rule","schema_snapshot":"schema-snapshot","source":"source","source_manifest":"source-manifest","standard":"standard","standard_edition":"standard-edition","tenant":"tenant"},
+  "least_privilege": {
+    "activation_LOGIN":"NOSUPERUSER NOINHERIT NOBYPASSRLS non-owner",
+    "activation_denied":["generic table/rule DML","schema CREATE","role escalation","Publication","RuntimeAdoption","learning Application","repair","capability control"],
+    "activation_positive_grant":"EXECUTE exact fixed Activation boundary only",
+    "security_definer":{"dynamic_SQL":false,"fully_qualified_objects":true,"owner":"dedicated NOLOGIN NOSUPERUSER NOINHERIT NOBYPASSRLS non-table-owner","public_execute_revoked":true,"search_path":"pg_catalog","selector":"exact frozen IDs/hashes only"}
+  },
+  "publication": {
+    "audit_id": "5f33e3ba-abba-4b0e-8a43-bb60cc67a5cc",
+    "candidate_id": "a55716fa-63c7-54eb-bda2-9c9666613b1a",
+    "claim_id": "cf4db0d2-a312-5a44-91cf-6e14f5cd600e",
+    "curation_audit_complete_row_contract": {
+      "action": "knowledge_layer_rule.published",
+      "actor_id": "14e64261-75cc-525d-b877-ab1c34ed1253",
+      "entity_id": "a55716fa-63c7-54eb-bda2-9c9666613b1a",
+      "entity_type": "knowledge_layer_rule",
+      "id": "5fa5038d-3042-481f-8162-e1144eebc815",
+      "occurred_at": "FRESH_TRANSACTION_TIMESTAMP_SLOT",
+      "payload_hash": "e188e1302f8bcf6c1df4c07fe06eb5dc01d4824453bc7698537b6599571c6e3a",
+      "trace_id": "3eabb59e-6e0e-53cf-a840-a4abbb62b442"
+    },
+    "event_id": "0ff9868e-a847-4624-862c-d93ddb9c11e2",
+    "event_type": "knowledge_layer_rule.published",
+    "evidence_kind": "NATIVE",
+    "id": "cf4db0d2-a312-5a44-91cf-6e14f5cd600e",
+    "idempotency_key": "phase31.3/publication/cf4db0d2-a312-5a44-91cf-6e14f5cd600e/v1",
+    "idempotency_key_hash": "1386cf84820f66454c021e8c1a4bf446c56f4b70757a5252b7b316b0319f676a",
+    "outbox_id": "37816380-7022-43b2-8d4a-c57346e5f7f6",
+    "policy_id": "complete-retained-synthetic-klr-lifecycle-poc-policy/v1",
+    "reason": "phase31.3 synthetic native Publication after complete governed Application",
+    "trace_id": "3eabb59e-6e0e-53cf-a840-a4abbb62b442",
+    "transaction_members": ["claim", "publication_curation_audit_full_row", "candidate_status_transition", "Publication", "knowledge_layer_rule.published/v1", "Outbox", "immutable_governance_Audit"]
+  },
+  "activation": {
+    "audit_id": "b51984ce-3391-4597-8592-6539737b2ee9",
+    "claim_id": "676ad5e4-e167-5336-93ae-5a9f1d4388d3",
+    "compatibility_evidence": {
+      "hash": "43c72090f30e90a4f3896b3d194aa264f421189f0589978453136464e270dbc9",
+      "id": "37d3d0bc-4387-581a-a627-f02a011250d1"
+    },
+    "event_id": "237fd48c-59bd-4b25-8521-4876fe9fc1a1",
+    "event_schema": "v1",
+    "event_semantics": "Exact published synthetic revision passed Activation governance only",
+    "event_type": "knowledge_layer_rule.activation_recorded",
+    "id": "676ad5e4-e167-5336-93ae-5a9f1d4388d3",
+    "idempotency_key": "phase31.3/activation/676ad5e4-e167-5336-93ae-5a9f1d4388d3/v1",
+    "idempotency_key_hash": "24b3506a14713ba8ad4b81bbfcec700884f0e093d4ef86715a299018988c8217",
+    "outbox_id": "68df6cc0-e04a-4693-80ab-07182c81bec1",
+    "policy_id": "complete-retained-synthetic-klr-lifecycle-poc-policy/v1",
+    "predecessor_activation_id": null,
+    "publication_id": "cf4db0d2-a312-5a44-91cf-6e14f5cd600e",
+    "reason": "phase31.3 first Activation; governance evidence only; no RuntimeAdoption",
+    "release_evidence": {
+      "hash": "5583dd2939abe5e1e2d602cef33077685df8efb48f0c664812eaee138723d15a",
+      "id": "981e1753-dcd1-5f8d-8b10-49bfaed5eafb"
+    },
+    "runtime_adoption_created": false,
+    "runtime_effective": false,
+    "trace_id": "fea8eeb5-7be1-5b77-b2a3-e082569b98ba",
+    "transaction_members": ["claim", "Activation", "knowledge_layer_rule.activation_recorded/v1", "Outbox", "immutable_governance_Audit"]
+  },
+  "reconciliation": {
+    "ABANDONED": "exact claim plus separately authorized append-only disposition and no artifact/event/outbox/audit; timeout alone forbidden",
+    "COMMITTED": "complete mutually matching mandatory graph",
+    "INCONSISTENT": "any partial, duplicated, mismatched or unclassified graph",
+    "NOT_COMMITTED": "total durable absence",
+    "blind_retry": false,
+    "claim_theft": false
+  },
+  "rollback_injection_points": {
+    "activation": ["claim", "authority_validation", "capability_admission", "predecessor_lock", "Publication_validation", "retained_evidence_validation", "candidate_validation", "Activation_insert", "event", "Outbox", "Audit", "precommit_revalidation"],
+    "application": ["claim", "governance_validation", "target_lock", "target_revalidation", "delta_validation", "semantic_hash_validation", "candidate_insert", "event", "Outbox", "curation_audit", "Receipt", "immutable_Audit", "precommit_revalidation"],
+    "publication": ["claim", "authority_validation", "capability_admission", "candidate_lock", "application_evidence_validation", "source_validation", "curation_audit", "Publication_insert", "event", "Outbox", "Audit", "precommit_revalidation"]
+  },
+  "rollback_postconditions": {"activation":{"Activation_delta":0,"Activation_Audit_delta":0,"Activation_Outbox_delta":0,"Activation_event_delta":0,"RuntimeAdoption_delta":0,"runtime_effect_delta":0},"application":"candidate, claim, event, Outbox, curation-audit, Receipt and immutable-Audit deltas all zero; predecessor/protected state unchanged","publication":"candidate status, claim, curation-audit, Publication, event, Outbox and governance-Audit deltas all zero"},
+  "runtime_and_learning_invariance": {
+    "automatic_learning_unauthorized_deltas_zero":["LearningSignal","LearningProposal_outside_exact_fixture","autonomous_review","autonomous_Decision","unauthorized_learning_Application","confidence_state","compensation","ModelPolicy","AgentDefinition","autonomy_settings"],
+    "protected_runtime":["agent_runtime.py","recommendation.py","runtime configuration","AgentRun protected state","Recommendation protected state","RuntimeAdoption resolver","runtime selectors"],
+    "selector_denials":["latest","current","head_without_exact_identity","max_version","newest","timestamp"],
+    "state_after_activation":"RUNTIME_EFFECTIVE=false"
+  },
+  "source": {
+    "authoritative": false,
+    "canonicalization_version": "exact-utf8-bytes/v1",
+    "certifiable": false,
+    "external_business_effect": false,
+    "fixture_path": "docs/governance/fixtures/PHASE31_3_COMPLETE_RETAINED_SYNTHETIC_SOURCE_V1.txt",
+    "id": "72d038c3-4ee5-5d40-a75b-398133dbed00",
+    "licensed": false,
+    "locator_after_hash": "830e154ad5afba60eb25da62237e0d0373baca86f9cd8dfd011abb87a1495289",
+    "locator_before_hash": "32b1e0837a268abe3d80314ff433866cea583698e18e34dc2dfd9a7db8efb81b",
+    "locator_scheme": "iso-smart-synthetic-poc-source-ref-v1:<standard-edition-uuid>:<source-sha256>:fixture/element/<exact-token>",
+    "manifest_id": "2bd274fb-3844-532e-8e76-e276153cad2e",
+    "manifest_material": {
+      "authoritative": false,
+      "canonicalization_version": "exact-utf8-bytes/v1",
+      "certifiable": false,
+      "external_business_effect": false,
+      "licensed": false,
+      "locator_scheme": "iso-smart-synthetic-poc-source-ref-v1",
+      "manifest_id": "2bd274fb-3844-532e-8e76-e276153cad2e",
+      "manifest_schema": "iso-smart-synthetic-source-manifest/v1",
+      "media_type": "text/plain; charset=utf-8",
+      "namespace": "iso-smart/phase31.3/complete-retained-synthetic-lifecycle/v1",
+      "normative": false,
+      "permitted_future_operations": ["CREATE_SYNTHETIC_FIXTURE", "GOVERNED_APPLICATION", "PUBLICATION_POC", "ACTIVATION_POC", "OFFLINE_VERIFY"],
+      "phase29_continuity_claim": false,
+      "production_allowed": false,
+      "prohibited_future_operations": ["RUNTIME_ADOPTION", "RUNTIME_EFFECT", "PRODUCTION", "STAGING", "DEPLOYMENT", "CERTIFICATION", "AUTOMATIC_LEARNING"],
+      "provenance": "Repository-created deterministic synthetic bytes; no ISO, licensed, authoritative, normative, production, or external origin claim.",
+      "retention_disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "source_id": "72d038c3-4ee5-5d40-a75b-398133dbed00",
+      "source_material_sha256": "e458cd0bb7eb11f96ce8723b0ab4dea97e4ca60b0e47a6f7e1fb1f38cef66d6b",
+      "source_schema": "iso-smart-synthetic-source-lines/v1",
+      "standard_edition_id": "98939c5e-1a06-53c9-bbf9-07b21d81feb1",
+      "synthetic": true,
+      "test_only": true
+    },
+    "manifest_material_hash": "df00196b7ce7f22c1eaa444af8cd12fa902b04d1f57bcac945bc8d78378967df",
+    "media_type": "text/plain; charset=utf-8",
+    "normative": false,
+    "phase29_continuity_claim": false,
+    "production_allowed": false,
+    "provenance": "Repository-created deterministic synthetic bytes; no ISO, licensed, authoritative, normative, production, or external origin claim.",
+    "schema": "iso-smart-synthetic-source-lines/v1",
+    "sha256": "e458cd0bb7eb11f96ce8723b0ab4dea97e4ca60b0e47a6f7e1fb1f38cef66d6b",
+    "synthetic": true,
+    "test_only": true
+  },
+  "support_graph": {
+    "classification": "SYNTHETIC_TEST_ONLY_NON_NORMATIVE",
+    "clause": {"code": "SYNTHETIC-ONLY", "id": "cd11a240-2f3a-5239-9906-a5217b0979c4", "standard_edition_id": "98939c5e-1a06-53c9-bbf9-07b21d81feb1", "title": "Synthetic non-normative publication prerequisite"},
+    "knowledge_layer": {"certifiability_classification": "non_certifiable_guidance", "id": "ca734de0-7bfe-51e4-acce-639cc5f26f1d", "layer_type": "SYNTHETIC_TEST_ONLY_RETAINED_LIFECYCLE", "standard_edition_id": "98939c5e-1a06-53c9-bbf9-07b21d81feb1"},
+    "organization": {"id": "ac638304-fdd6-5ce8-96d7-62014117af94", "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731"},
+    "requirement_control": {"applicability_rule": {"synthetic_test_only": true}, "clause_id": "cd11a240-2f3a-5239-9906-a5217b0979c4", "control_type": "synthetic_test_only", "id": "c56a413e-00f1-5a20-81c4-dfeda4681dc7", "paraphrase": "Synthetic test-only placeholder; no normative requirement.", "standard_edition_id": "98939c5e-1a06-53c9-bbf9-07b21d81feb1"},
+    "root_creation": {"curation_audit_id": "805875c2-6505-5b82-ad41-40c2519293d2", "curator_evidence_id": "a0680835-af47-59dc-9db5-72c51556f6e6", "manifest_id": "ecda9247-9a3d-5e51-9df7-f13fb598dd3b", "predecessor": null, "rule_id": "bc5f4f17-294d-5abd-b27b-2d296921ffdf", "trace_id": "ba2d50e8-d47e-592b-b506-f0e7f111e30f"},
+    "standard": {"code": "SYNTHETIC-PHASE31.3-NON-NORMATIVE", "id": "9b9a75f6-f3dc-5089-9b27-6aff45ca0556", "publisher": "ISO SMART SYNTHETIC TEST FIXTURE", "title": "Non-normative synthetic lifecycle fixture"},
+    "standard_edition": {"edition": "synthetic-v1", "id": "98939c5e-1a06-53c9-bbf9-07b21d81feb1", "source_hash": "e458cd0bb7eb11f96ce8723b0ab4dea97e4ca60b0e47a6f7e1fb1f38cef66d6b", "standard_id": "9b9a75f6-f3dc-5089-9b27-6aff45ca0556", "status": "published"},
+    "tenant": {"id": "daa6bb22-660c-56f5-aadf-c63f06b01731"}
+  },
+  "toctou_precommit": [
+    "exact_candidate_identity_full_material_hash_semantic_fingerprint_lifecycle_hash",
+    "exact_Publication_and_validity",
+    "Publication_complete_retained_evidence_hashes",
+    "exact_source_provenance_and_hashes",
+    "explicit_predecessor_NULL_and_no_competing_successor",
+    "fresh_actor_bound_authority_MFA_active_access_permission_scope",
+    "SOD",
+    "policy_identity_and_hash",
+    "capability_decision_and_state",
+    "idempotency_canonical_material",
+    "zero_RuntimeAdoption_for_activation"
+  ],
+  "zero_effect_contract": {
+    "RuntimeAdoption_Audit_delta": 0,
+    "RuntimeAdoption_Outbox_delta": 0,
+    "RuntimeAdoption_event_delta": 0,
+    "RuntimeAdoption_row_delta": 0,
+    "adoption_authority_use": 0,
+    "automatic_learning_effects": 0,
+    "external_business_effects": 0,
+    "normative_effects": 0,
+    "resolver_invocation": 0,
+    "runtime_cutover": 0,
+    "runtime_effective": false
+  }
+}

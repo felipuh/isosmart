@@ -1,0 +1,31 @@
+{
+  "candidate_id": "01a0682b-dfc8-7b49-a601-f9bda29a70a5",
+  "disposed_at": "2026-09-03T20:19:20.278711+00:00",
+  "disposition_material_hash": "fff3b225184282e48dad30f4e56b16444df4241b5f647f2f3750ee4a254158f1",
+  "disposition_schema": "governed-target-publication-evidence-disposition/v1",
+  "post_teardown_verification": {
+    "activated": false,
+    "candidate_id": "01a0682b-dfc8-7b49-a601-f9bda29a70a5",
+    "created": true,
+    "database_reconstructed": false,
+    "governance_application_verified": true,
+    "manifest_verified": true,
+    "offline_release_state_verified": true,
+    "published": true,
+    "runtime_adopted": false,
+    "runtime_effective": false,
+    "verified_at": "2026-09-03T20:19:20.278711+00:00"
+  },
+  "post_teardown_verification_hash": "65dd9e2874a70d150f707893f75ce81d4c23f114a2e33145a10688c517fd927e",
+  "publication_manifest_hash": "51f0b207c790e6ab0c3d67985e161ba0d0cc7b2feb888f545c1ff5eedacf5366",
+  "state": "PUBLISHED_POC_DISPOSED_WITH_RETAINED_EVIDENCE",
+  "teardown_evidence": {
+    "container_absent": true,
+    "database_absent": true,
+    "roles_absent": true,
+    "temp_absent": true,
+    "verification_basis": "postgres_foundation_gate run 20260903T201829Z_16bb0b scoped drop and absence checks",
+    "volume_absent": true
+  },
+  "teardown_evidence_hash": "589b7c910c37317a87889e31910008a3083cda98db5d49abfa2c0de0e458831d"
+}

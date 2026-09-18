@@ -1,0 +1,4 @@
+# schema: phase31.4-detached-file-byte-sha256-ledger/v1
+# provenance: finalized offline Phase 31.4 task artifacts; no live lifecycle evidence
+b8490b2bb2cd059b015be7a97731dad009b45018fa822278b61daabb886fbf70  docs/governance/evidence/PHASE31_4_PRECREATION_BLOCKER_EVIDENCE_V1.json
+2bd96b31bf55dd36b7a459b1ff511bea8cbe4de43562be9e97162ab2489aeb8d  docs/transformation/PHASE31_4_NEW_COMPLETE_RETAINED_SYNTHETIC_LIFECYCLE_ISOLATED_EPHEMERAL_POSTGRESQL_18_6_CREATION_THROUGH_ACTIVATION_POC_REPORT.md

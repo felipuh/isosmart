@@ -1,0 +1,9 @@
+{
+  "P0": 0,
+  "P1": 0,
+  "artifact_schema": "phase31.4-clean-retry-4-v2.5-report/v1",
+  "native_identity_capture": "OFFLINE_FIXTURE_ONLY",
+  "offline_stage_a": "PASS",
+  "postgresql_runtime": "NOT_EXECUTED_IN_THIS_OFFLINE_RUN",
+  "stage_b": "AUTHORIZED"
+}

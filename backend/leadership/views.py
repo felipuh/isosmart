@@ -361,13 +361,14 @@ class EvidenceNodeViewSet(OrganizationQuerysetMixin, viewsets.ModelViewSet):
     def graph(self, request):
         """Retorna el grafo completo (nodos + aristas) para visualización"""
         org_id = getattr(request, 'organization_id', None)
-        if not org_id and not request.user.is_superuser:
+        if not org_id:
             return Response({'nodes': [], 'edges': []})
 
-        nodes_qs = self.get_queryset()
+        nodes_qs = EvidenceNode.objects.filter(organization_id=org_id)
         edges_qs = EvidenceEdge.objects.filter(
-            source__organization_id=org_id
-        ).select_related('source', 'target') if org_id else EvidenceEdge.objects.all()
+            source__organization_id=org_id,
+            target__organization_id=org_id,
+        ).select_related('source', 'target')
 
         return Response({
             'nodes': EvidenceNodeSerializer(nodes_qs, many=True).data,
@@ -385,11 +386,27 @@ class EvidenceEdgeViewSet(OrganizationQuerysetMixin, viewsets.ModelViewSet):
     filterset_fields = ['edge_type']
     search_fields = ['label']
 
+    def get_queryset(self):
+        organization_id = getattr(self.request, 'organization_id', None)
+        if not organization_id:
+            return EvidenceEdge.objects.none()
+        return EvidenceEdge.objects.filter(
+            source__organization_id=organization_id,
+            target__organization_id=organization_id,
+        )
+
     def perform_create(self, serializer):
         org_id, _ = self.get_organization_context()
         source = serializer.validated_data.get('source')
-        if org_id and source and source.organization_id != org_id and not self.request.user.is_superuser:
-            raise PermissionDenied('El nodo fuente no pertenece a la organización activa.')
+        target = serializer.validated_data.get('target')
+        if (
+            not org_id
+            or not source
+            or not target
+            or source.organization_id != org_id
+            or target.organization_id != org_id
+        ):
+            raise ValidationError('Referencia de nodo inválida.')
         serializer.save(created_by=self.request.user)
 
 

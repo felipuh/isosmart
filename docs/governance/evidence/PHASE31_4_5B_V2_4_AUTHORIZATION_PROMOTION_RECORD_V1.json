@@ -1,0 +1,11 @@
+{
+  "artifact_schema": "phase31.4.5b-v2.4-authorization-promotion-record/v1",
+  "authorization_artifact_path": "docs/governance/evidence/PHASE31_4_5B_V2_4_OPERATIONAL_CORRECTION_AUTHORIZATION_V1.json",
+  "authorization_artifact_sha256": "4e83049a9928cd0a93c97228f33093e282c16e8e5e8969882ea21c8cd83e373b",
+  "V2_4_sha256": "a102d278bf2e5ca6e9b8bf282f5402a54f52d4690beed2ecbed5145c56539387",
+  "changeset_sha256": "4204d022492de843d7f6763dfb05f3ce7ec5e166fc4c14de4b8b2c4cb80f27de",
+  "change_count": 231,
+  "authorization_verified": true,
+  "repository_isolation_verified": true,
+  "promoted": true
+}

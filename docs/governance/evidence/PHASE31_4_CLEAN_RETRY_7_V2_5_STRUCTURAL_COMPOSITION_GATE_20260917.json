@@ -1,0 +1,29 @@
+{
+  "artifact_schema": "phase31.4-clean-retry-7-v2.5-structural-composition-gate/v1",
+  "execution_scope": "STRUCTURAL_COMPOSITION_ONLY",
+  "native_sources": {
+    "required": 16,
+    "registered": 16,
+    "unresolved": 0,
+    "duplicates": 0
+  },
+  "native_phases": {
+    "required": 33,
+    "registered": 33,
+    "missing": 0,
+    "duplicates": 0,
+    "concrete_executors": 33
+  },
+  "capture_producers": {
+    "expected": 509,
+    "covered": 509,
+    "uncovered": 0,
+    "ambiguous": 0
+  },
+  "dependency_graph": "PASS",
+  "production_runtime_factory": "PASS",
+  "P0": 0,
+  "P1": 0,
+  "live_capture_resolution": "NOT_EXECUTED",
+  "postgresql": "NOT_CREATED_BEFORE_THIS_GATE"
+}

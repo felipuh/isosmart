@@ -1,0 +1,13 @@
+{
+  "authentication": "X-API-Key with SHA-256 configured consumer comparison",
+  "invalid_key_http_status": 401,
+  "issuer": "adminapps",
+  "shared_secret_recorded": false,
+  "transport": "HTTP loopback only in isolated smoke; production dispatcher requires HTTPS",
+  "valid_event_http_statuses": [
+    201,
+    201,
+    200
+  ],
+  "verdict": "PASS"
+}

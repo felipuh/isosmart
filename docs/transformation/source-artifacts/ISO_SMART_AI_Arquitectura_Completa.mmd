@@ -1,0 +1,44 @@
+flowchart TB
+  classDef harmonized fill:#DCEBFF,stroke:#2F6FED,color:#0B1F3A,stroke-width:2px;
+  classDef quality fill:#E3F6E8,stroke:#2E8B57,color:#143D24,stroke-width:2px;
+  classDef ai fill:#EEE4FF,stroke:#7B4DD8,color:#2B1748,stroke-width:2px;
+  classDef packs fill:#FFF0D8,stroke:#D98100,color:#4A2B00,stroke-width:2px;
+  classDef clause fill:#F7F7F9,stroke:#777,color:#111;
+  classDef human fill:#FFE4E4,stroke:#C0392B,color:#5B1510;
+
+  subgraph ARCH[Arquitectura fundamental]
+    HC[1. ISO Smart Harmonized Core\nCláusulas 4-10 + PHVA + objetos + eventos + evidencias]:::harmonized
+    QI[2. ISO Smart Quality Intelligence\n9000 + 9001 + 9002 + 9004 + serie 10000 + 19011 + 31000]:::quality
+    AIG[3. ISO Smart AI Governance Core\n42001 + 42005 + 23894 + 22989 + 5259 + 38507 + 27001 + 27701]:::ai
+    SP[4. Standard & Industry Packs\n14001 + 45001 + 50001 + 13485 + 22000 + 7101 + 22163...]:::packs
+    QI --> HC
+    AIG --> HC
+    SP --> HC
+  end
+
+  subgraph PDCA[Red de cláusulas 4-10]
+    C4[4 Contexto]:::clause --> C5[5 Liderazgo]:::clause --> C6[6 Planificación]:::clause --> C7[7 Apoyo]:::clause --> C8[8 Operación]:::clause --> C9[9 Evaluación]:::clause --> C10[10 Mejora]:::clause
+    C10 --> C4
+    C4 --> C6
+    C4 --> C8
+    C6 --> C8
+    C7 --> C8
+    C8 --> C9
+    C9 --> C6
+    C9 --> C10
+    C10 --> C6
+  end
+  HC --> C4
+
+  subgraph RUNTIME[Runtime universal de agentes]
+    EVT[Evento] --> OBS[Observar] --> CTX[Contextualizar] --> KL[Recuperar Knowledge Layers] --> EV[Validar evidencia] --> AN[Analizar] --> SIM[Simular] --> REC[Recomendar] --> AUT[Motor de autonomía]
+    AUT -->|A0-A2| OUT[Mostrar resultado]
+    AUT -->|A3 o alto impacto| HDG[Human Decision Gate]:::human
+    HDG --> EXE[Ejecutar acción autorizada]
+    AUT -->|A4 guardrail| EXE
+    EXE --> EFF[Medir eficacia] --> MEM[Memoria institucional] --> EVT
+  end
+
+  subgraph ONB[Onboarding autónomo]
+    PLAN[Plan] --> REG[Registro] --> BILL[Billing contact] --> PAY[Pago] --> VER[Verificación segura] --> TEN[Tenant provisioning] --> MFA[MFA/RBAC] --> GATE[ISO 9000:2026 Foundation Gate] --> PROF[Perfil industria/madurez] --> ING[Ingesta de datos] --> TWIN[Context Twin 4.1-4.4] --> BASE[Baseline SGC] --> VAL[Validación humana]:::human --> ACT[Activar agentes] --> WOW[Quick wins + ahorro + roadmap]
+  end

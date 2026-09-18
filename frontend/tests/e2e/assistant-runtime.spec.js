@@ -36,6 +36,14 @@ test('assistant hydrates state and persists conversation id across reload', asyn
     });
   });
 
+  await page.route('**/api/settings/onboarding_status/**', async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({ organization_id: 1, onboarding_completed: true }),
+    });
+  });
+
   let stateCalls = 0;
   let streamCalls = 0;
   const stateUrls = [];
@@ -108,7 +116,7 @@ test('assistant hydrates state and persists conversation id across reload', asyn
   expect(persistedConversationId).toBe('321');
 });
 
-test('assistant shows local fallback answer when stream endpoint fails', async ({ page }) => {
+test('assistant shows explicit degradation and no local normative fallback when stream endpoint fails', async ({ page }) => {
   const now = Math.floor(Date.now() / 1000);
   const access = makeFakeJwt({ exp: now + 3600, sub: 10, organization_id: 1, role: 'org_admin' });
   const refresh = makeFakeJwt({ exp: now + 86400, sub: 10 });
@@ -135,6 +143,14 @@ test('assistant shows local fallback answer when stream endpoint fails', async (
         profile: { id: 11, role: 'org_admin', organization: 1 },
         organizations: [{ id: 1, name: 'Org E2E', is_current: true }],
       }),
+    });
+  });
+
+  await page.route('**/api/settings/onboarding_status/**', async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({ organization_id: 1, onboarding_completed: true }),
     });
   });
 
@@ -173,5 +189,8 @@ test('assistant shows local fallback answer when stream endpoint fails', async (
   const bubbles = panel.locator('div.p-4.h-72.overflow-y-auto.space-y-3 > div');
   await expect.poll(async () => await bubbles.count(), { timeout: 20000 }).toBeGreaterThanOrEqual(2);
   const assistantText = await bubbles.last().innerText();
-  expect(assistantText.trim().length).toBeGreaterThan(0);
+  expect(assistantText).toContain('No se generó ninguna recomendación ni análisis normativo');
+  expect(assistantText).toContain('Servicio de inteligencia no disponible');
+  expect(assistantText).not.toContain('Registra probabilidad, impacto y tratamiento');
+  expect(assistantText).not.toContain('Planificación > Riesgos y Oportunidades');
 });

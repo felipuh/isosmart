@@ -1,9 +1,21 @@
 /* global process */
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 export default defineConfig({
   plugins: [react()],
+  resolve: {
+    alias: {
+      '@smart3ai/design-system': path.resolve(__dirname, '../../design-system/src/index.js'),
+      react: path.resolve(__dirname, 'node_modules/react'),
+      'react-dom': path.resolve(__dirname, 'node_modules/react-dom'),
+      'lucide-react': path.resolve(__dirname, 'node_modules/lucide-react/dist/esm/lucide-react.js'),
+    },
+  },
   build: {
       cssCodeSplit: true,
       modulePreload: { polyfill: false },

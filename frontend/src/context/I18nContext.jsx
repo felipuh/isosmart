@@ -1023,6 +1023,8 @@ const MESSAGES = {
       sendAriaLabel: 'Enviar',
       inputPlaceholder: 'Escribe tu consulta...',
       initialMessage: 'Soy tu asistente virtual de ISO Smart. Te ayudo a ubicar flujos y módulos clave.',
+      unavailable: 'El servicio de inteligencia no está disponible en este momento. No se generó ninguna recomendación ni análisis normativo. Intente nuevamente o contacte soporte si el problema continúa.',
+      degradedLabel: 'Servicio de inteligencia no disponible',
       suggestions: {
         audits: '¿Dónde registro auditorías?',
         iso27001: '¿Cómo inicializo ISO 27001?',
@@ -1036,6 +1038,12 @@ const MESSAGES = {
         iso42001: 'ISO/IEC 42001 está disponible en configuración de estándares. Inicializa sus cláusulas desde Ajustes > Parámetros ISO.',
         default: 'Puedo ayudarte con navegación ISO Smart (riesgos, auditorías, no conformidades, estándares, onboarding). Formula tu pregunta con el módulo o cláusula.',
       },
+    },
+    onboardingGuard: {
+      loading: 'Validando el estado de onboarding con el servidor...',
+      degradedTitle: 'No se pudo validar el acceso',
+      degradedDescription: 'La ruta permanece bloqueada porque el servidor no pudo confirmar que el onboarding esté completo. Intente nuevamente.',
+      support: 'Si el problema continúa, contacte al soporte de su organización.',
     },
     identifiedRisks: {
       title: 'Riesgos Identificados ({count})',
@@ -5451,6 +5459,8 @@ const MESSAGES = {
       sendAriaLabel: 'Send',
       inputPlaceholder: 'Type your question...',
       initialMessage: 'I am your ISO Smart virtual assistant. I help you find key flows and modules.',
+      unavailable: 'The intelligence service is currently unavailable. No recommendation or standards analysis was generated. Try again or contact support if the problem continues.',
+      degradedLabel: 'Intelligence service unavailable',
       suggestions: {
         audits: 'Where do I register audits?',
         iso27001: 'How do I initialize ISO 27001?',
@@ -5464,6 +5474,12 @@ const MESSAGES = {
         iso42001: 'ISO/IEC 42001 is available in standards settings. Initialize its clauses from Settings > ISO Parameters.',
         default: 'I can help you navigate ISO Smart (risks, audits, nonconformities, standards, onboarding). Ask your question with the module or clause.',
       },
+    },
+    onboardingGuard: {
+      loading: 'Validating onboarding status with the server...',
+      degradedTitle: 'Access could not be validated',
+      degradedDescription: 'This route remains blocked because the server could not confirm that onboarding is complete. Please try again.',
+      support: 'If the problem continues, contact your organization support team.',
     },
     identifiedRisks: {
       title: 'Identified Risks ({count})',
@@ -9870,6 +9886,8 @@ const MESSAGES = {
       sendAriaLabel: 'Enviar',
       inputPlaceholder: 'Escreva sua pergunta...',
       initialMessage: 'Sou seu assistente virtual do ISO Smart. Ajudo você a localizar fluxos e módulos principais.',
+      unavailable: 'O serviço de inteligência não está disponível neste momento. Nenhuma recomendação ou análise normativa foi gerada. Tente novamente ou contate o suporte se o problema continuar.',
+      degradedLabel: 'Serviço de inteligência indisponível',
       suggestions: {
         audits: 'Onde registro auditorias?',
         iso27001: 'Como inicializo a ISO 27001?',
@@ -9883,6 +9901,12 @@ const MESSAGES = {
         iso42001: 'A ISO/IEC 42001 está disponível nas configurações de normas. Inicialize suas cláusulas em Configurações > Parâmetros ISO.',
         default: 'Posso ajudar com a navegação no ISO Smart (riscos, auditorias, não conformidades, normas e onboarding). Faça sua pergunta com o módulo ou cláusula.',
       },
+    },
+    onboardingGuard: {
+      loading: 'Validando o status do onboarding com o servidor...',
+      degradedTitle: 'Não foi possível validar o acesso',
+      degradedDescription: 'Esta rota permanece bloqueada porque o servidor não confirmou que o onboarding foi concluído. Tente novamente.',
+      support: 'Se o problema continuar, contate o suporte da sua organização.',
     },
     identifiedRisks: {
       title: 'Riscos Identificados ({count})',

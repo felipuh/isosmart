@@ -1,0 +1,64 @@
+{
+  "authentication_result_recorded": true,
+  "failure_status_supported": true,
+  "first_event_replay": "idempotent_replay",
+  "receipts": [
+    {
+      "adminapps_tenant_id": "e7400a3b-a1c2-4b7c-b6c5-4474fb46f505",
+      "authenticated": true,
+      "event_id": "609a479b-feab-4d93-a5a6-647c3214be3c",
+      "issuer": "adminapps",
+      "projection_id": "1792f5b0-3a5d-4b31-89d8-a44572293011",
+      "replay_count": 1,
+      "schema_version": 1,
+      "source_version": 1,
+      "status": "processed"
+    },
+    {
+      "adminapps_tenant_id": "e7400a3b-a1c2-4b7c-b6c5-4474fb46f505",
+      "authenticated": true,
+      "event_id": "8595c25d-6318-46fa-8cc1-d12137ae52b4",
+      "issuer": "adminapps",
+      "projection_id": "1792f5b0-3a5d-4b31-89d8-a44572293011",
+      "replay_count": 0,
+      "schema_version": 1,
+      "source_version": 2,
+      "status": "processed"
+    },
+    {
+      "adminapps_tenant_id": "a26f09f5-9ac8-4157-bd1f-e2598f216b3d",
+      "authenticated": true,
+      "event_id": "f30cd3c3-d54f-4198-b329-8116635f0d03",
+      "issuer": "adminapps",
+      "projection_id": "47bd214c-88d9-4d08-8fc8-ab7fb6c2261c",
+      "replay_count": 0,
+      "schema_version": 1,
+      "source_version": 1,
+      "status": "processed"
+    },
+    {
+      "adminapps_tenant_id": "a26f09f5-9ac8-4157-bd1f-e2598f216b3d",
+      "authenticated": true,
+      "event_id": "0d0df58e-9a03-422e-a55e-a70ec48e9aa4",
+      "issuer": "adminapps",
+      "projection_id": "47bd214c-88d9-4d08-8fc8-ab7fb6c2261c",
+      "replay_count": 0,
+      "schema_version": 1,
+      "source_version": 2,
+      "status": "processed"
+    },
+    {
+      "adminapps_tenant_id": "a26f09f5-9ac8-4157-bd1f-e2598f216b3d",
+      "authenticated": true,
+      "event_id": "cb224dfb-67af-42b8-bf4f-ff9139239da9",
+      "issuer": "adminapps",
+      "projection_id": "47bd214c-88d9-4d08-8fc8-ab7fb6c2261c",
+      "replay_count": 0,
+      "schema_version": 1,
+      "source_version": 3,
+      "status": "processed"
+    }
+  ],
+  "table": "eventing.adminapps_ingress_receipt",
+  "verdict": "PASS"
+}

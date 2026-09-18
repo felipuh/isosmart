@@ -1,0 +1,39 @@
+{
+  "chain": {
+    "actor_id": "a9145cca-b85a-4b72-870f-c155338a1254",
+    "adminapps_tenant_id": "e7400a3b-a1c2-4b7c-b6c5-4474fb46f505",
+    "idempotent_replay": true,
+    "opportunity_event_id": "8a352760-dc40-4944-b477-e8858a5f079e",
+    "opportunity_id": "64ffaa1d-3ec1-49c3-8aee-a149573b8f67",
+    "opportunity_lineage_id": "64ffaa1d-3ec1-49c3-8aee-a149573b8f67",
+    "opportunity_revision": 1,
+    "organization_audit_id": "01a0b29e-4a3e-7532-b5a3-bef2d5fa9157",
+    "organization_event_id": "9f8a9ee1-7c5f-4718-8942-b9a31e5bf6fd",
+    "organization_ids": [
+      "ca6ac209-2116-4c23-a032-9b0ebc0e7e93",
+      "a01e841d-ae93-4a20-b9cd-6d66cce32ec9"
+    ],
+    "organization_outbox_id": "4be4f9ae-5d11-4ba0-84bd-57919ce431f9",
+    "process_event_id": "9a1c9613-b64c-4a13-859e-4e07b8073390",
+    "process_id": "74942c31-58e7-47c2-bfba-d673055ed056",
+    "rollback_verified": true,
+    "source_version": 2,
+    "tenant_projection_id": "1792f5b0-3a5d-4b31-89d8-a44572293011",
+    "unauthorized_denied": true
+  },
+  "environment": "isolated /tmp PostgreSQL 18.4; AdminApps real API/database; ISO Smart real foundation service/API/PostgreSQL; authenticated loopback ingress",
+  "event_receipt_count": 5,
+  "phase31_4_live_executed": false,
+  "source_tenants": [
+    {
+      "id": "e7400a3b-a1c2-4b7c-b6c5-4474fb46f505",
+      "status": "active"
+    },
+    {
+      "id": "a26f09f5-9ac8-4157-bd1f-e2598f216b3d",
+      "status": "suspended"
+    }
+  ],
+  "synthetic_projection_or_organization_insertions": 0,
+  "verdict": "UPSTREAM_NATIVE_CHAIN_PASS"
+}

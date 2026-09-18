@@ -7,7 +7,15 @@ from rest_framework.test import APIClient
 
 from authentication.models import UserProfile
 from core.models import Organization
-from integration.models import AssistantMemoryItem, AssistantOrgProfile
+from integration.models import (
+    AssistantAuditLog,
+    AssistantConversation,
+    AssistantFeedback,
+    AssistantMemoryItem,
+    AssistantMessage,
+    AssistantOrgProfile,
+    AssistantPromptConfig,
+)
 from integration.views import _build_assistant_prompt
 
 
@@ -260,7 +268,7 @@ class AssistantApiTests(TestCase):
         self.assertIn('Memoria estructurada relevante de la organizacion', system_prompt)
         self.assertIn('Politica de calidad vigente', system_prompt)
 
-    def test_stream_fallback_when_provider_returns_401(self):
+    def test_stream_reports_degraded_when_provider_returns_401(self):
         def fake_stream(_method, _url, headers=None, json=None, timeout=None):
             return _FakeStreamContext(_FakeErrorResponse())
 
@@ -292,6 +300,244 @@ class AssistantApiTests(TestCase):
         self.assertEqual(response.status_code, 200)
         done_payload = self._parse_done_payload(response)
         self.assertIsNotNone(done_payload)
-        self.assertEqual(done_payload.get('provider'), 'fallback')
+        self.assertEqual(done_payload.get('provider'), 'unavailable')
+        self.assertTrue(done_payload.get('degraded'))
+        self.assertFalse(done_payload.get('ok'))
         self.assertTrue(done_payload.get('error'))
         self.assertIsInstance(done_payload.get('conversation_id'), int)
+
+        degraded_message = AssistantMessage.objects.filter(
+            conversation_id=done_payload['conversation_id'],
+            role='assistant',
+        ).latest('id')
+        self.assertEqual(degraded_message.model_name, 'degraded')
+        self.assertIn('No se generó ninguna recomendación ni análisis normativo', degraded_message.content)
+        self.assertNotIn('Consulta recibida', degraded_message.content)
+
+    @patch('integration.assistant_memory_views.queue_memory_item_index')
+    def test_memory_items_ignore_payload_tenant_and_hide_cross_tenant_objects(self, _queue_index):
+        other_org = Organization.objects.create(
+            name='Other Tenant',
+            slug='other-tenant',
+            email='other-tenant@isosmart.local',
+        )
+        foreign_item = AssistantMemoryItem.objects.create(
+            organization_id=other_org.id,
+            memory_type='fact',
+            title='Tenant B private memory',
+            content='Private B content',
+        )
+
+        created = self.client.post(
+            '/api/integration/assistant/memory-items/',
+            {
+                'organization_id': other_org.id,
+                'memory_type': 'fact',
+                'title': 'Tenant A memory',
+                'content': 'Tenant A content',
+            },
+            format='json',
+            **self.auth_headers,
+        )
+        self.assertEqual(created.status_code, 201)
+        created_item = AssistantMemoryItem.objects.get(id=created.data['id'])
+        self.assertEqual(created_item.organization_id, self.organization.id)
+
+        updated = self.client.patch(
+            f'/api/integration/assistant/memory-items/{created_item.id}/',
+            {'organization_id': other_org.id, 'title': 'Still Tenant A'},
+            format='json',
+            **self.auth_headers,
+        )
+        self.assertEqual(updated.status_code, 200)
+        created_item.refresh_from_db()
+        self.assertEqual(created_item.organization_id, self.organization.id)
+
+        listed = self.client.get('/api/integration/assistant/memory-items/', **self.auth_headers)
+        self.assertEqual(listed.status_code, 200)
+        listed_ids = [item['id'] for item in listed.data['results']]
+        self.assertIn(created_item.id, listed_ids)
+        self.assertNotIn(foreign_item.id, listed_ids)
+
+        detail_url = f'/api/integration/assistant/memory-items/{foreign_item.id}/'
+        self.assertEqual(self.client.get(detail_url, **self.auth_headers).status_code, 404)
+        self.assertEqual(
+            self.client.patch(detail_url, {'title': 'attacker'}, format='json', **self.auth_headers).status_code,
+            404,
+        )
+        self.assertEqual(self.client.delete(detail_url, **self.auth_headers).status_code, 404)
+        foreign_item.refresh_from_db()
+        self.assertEqual(foreign_item.title, 'Tenant B private memory')
+
+    def test_prompt_feedback_and_audit_queries_are_tenant_scoped(self):
+        other_org = Organization.objects.create(
+            name='Scoped Tenant B',
+            slug='scoped-tenant-b',
+            email='scoped-tenant-b@isosmart.local',
+        )
+        own_conversation = AssistantConversation.objects.create(
+            organization_id=self.organization.id,
+            user=self.user,
+            title='Tenant A conversation',
+        )
+        foreign_conversation = AssistantConversation.objects.create(
+            organization_id=other_org.id,
+            user=self.user,
+            title='Tenant B private conversation',
+        )
+        own_message = AssistantMessage.objects.create(
+            organization_id=self.organization.id,
+            conversation=own_conversation,
+            role='assistant',
+            content='Tenant A message',
+        )
+        foreign_message = AssistantMessage.objects.create(
+            organization_id=other_org.id,
+            conversation=foreign_conversation,
+            role='assistant',
+            content='Tenant B private message',
+        )
+        foreign_prompt = AssistantPromptConfig.objects.create(
+            organization_id=other_org.id,
+            system_prompt='Tenant B private prompt',
+        )
+        foreign_feedback = AssistantFeedback.objects.create(
+            organization_id=other_org.id,
+            conversation=foreign_conversation,
+            message=foreign_message,
+            user=self.user,
+            rating=5,
+        )
+        foreign_audit = AssistantAuditLog.objects.create(
+            organization_id=other_org.id,
+            user=self.user,
+            conversation=foreign_conversation,
+            event_type='private_b_event',
+        )
+
+        resources = [
+            ('prompt-configs', foreign_prompt),
+            ('feedback', foreign_feedback),
+            ('audit-logs', foreign_audit),
+        ]
+        for resource, foreign_object in resources:
+            with self.subTest(resource=resource):
+                collection_url = f'/api/integration/assistant/{resource}/'
+                detail_url = f'{collection_url}{foreign_object.id}/'
+                listed = self.client.get(collection_url, **self.auth_headers)
+                self.assertEqual(listed.status_code, 200)
+                self.assertNotIn(foreign_object.id, [item['id'] for item in listed.data['results']])
+                self.assertEqual(self.client.get(detail_url, **self.auth_headers).status_code, 404)
+                if resource != 'audit-logs':
+                    self.assertEqual(
+                        self.client.patch(detail_url, {'rating': 1}, format='json', **self.auth_headers).status_code,
+                        404,
+                    )
+                    self.assertEqual(self.client.delete(detail_url, **self.auth_headers).status_code, 404)
+
+        own_feedback = self.client.post(
+            '/api/integration/assistant/feedback/',
+            {
+                'organization_id': other_org.id,
+                'conversation': own_conversation.id,
+                'message': own_message.id,
+                'rating': 4,
+            },
+            format='json',
+            **self.auth_headers,
+        )
+        self.assertEqual(own_feedback.status_code, 201)
+        self.assertEqual(
+            AssistantFeedback.objects.get(id=own_feedback.data['id']).organization_id,
+            self.organization.id,
+        )
+
+    def test_feedback_cross_tenant_and_missing_references_are_indistinguishable(self):
+        other_org = Organization.objects.create(
+            name='Reference Tenant B',
+            slug='reference-tenant-b',
+            email='reference-tenant-b@isosmart.local',
+        )
+        own_conversation = AssistantConversation.objects.create(
+            organization_id=self.organization.id,
+            user=self.user,
+            title='Own conversation',
+        )
+        foreign_conversation = AssistantConversation.objects.create(
+            organization_id=other_org.id,
+            user=self.user,
+            title='Foreign conversation',
+        )
+        foreign_message = AssistantMessage.objects.create(
+            organization_id=other_org.id,
+            conversation=foreign_conversation,
+            role='assistant',
+            content='Foreign private content',
+        )
+
+        conversation_payload = {'conversation': foreign_conversation.id, 'rating': 3}
+        foreign_conversation_response = self.client.post(
+            '/api/integration/assistant/feedback/',
+            conversation_payload,
+            format='json',
+            **self.auth_headers,
+        )
+        missing_conversation_response = self.client.post(
+            '/api/integration/assistant/feedback/',
+            {'conversation': 99999999, 'rating': 3},
+            format='json',
+            **self.auth_headers,
+        )
+        self.assertEqual(foreign_conversation_response.status_code, 400)
+        self.assertEqual(missing_conversation_response.status_code, 400)
+        self.assertEqual(foreign_conversation_response.data, missing_conversation_response.data)
+
+        foreign_message_response = self.client.post(
+            '/api/integration/assistant/feedback/',
+            {'conversation': own_conversation.id, 'message': foreign_message.id, 'rating': 3},
+            format='json',
+            **self.auth_headers,
+        )
+        missing_message_response = self.client.post(
+            '/api/integration/assistant/feedback/',
+            {'conversation': own_conversation.id, 'message': 99999999, 'rating': 3},
+            format='json',
+            **self.auth_headers,
+        )
+        self.assertEqual(foreign_message_response.status_code, 400)
+        self.assertEqual(missing_message_response.status_code, 400)
+        self.assertEqual(foreign_message_response.data, missing_message_response.data)
+        self.assertNotIn(other_org.name, str(foreign_message_response.data))
+
+    def test_assistant_audit_log_api_is_read_only_but_internal_emission_remains_available(self):
+        conversation = AssistantConversation.objects.create(
+            organization_id=self.organization.id,
+            user=self.user,
+            title='Audited conversation',
+        )
+        internal_log = AssistantAuditLog.objects.create(
+            organization_id=self.organization.id,
+            user=self.user,
+            conversation=conversation,
+            event_type='internal_test_event',
+        )
+        collection_url = '/api/integration/assistant/audit-logs/'
+        detail_url = f'{collection_url}{internal_log.id}/'
+
+        self.assertEqual(self.client.get(collection_url, **self.auth_headers).status_code, 200)
+        self.assertEqual(self.client.get(detail_url, **self.auth_headers).status_code, 200)
+        self.assertEqual(
+            self.client.post(collection_url, {'event_type': 'client_event'}, format='json', **self.auth_headers).status_code,
+            405,
+        )
+        self.assertEqual(
+            self.client.put(detail_url, {'event_type': 'changed'}, format='json', **self.auth_headers).status_code,
+            405,
+        )
+        self.assertEqual(
+            self.client.patch(detail_url, {'event_type': 'changed'}, format='json', **self.auth_headers).status_code,
+            405,
+        )
+        self.assertEqual(self.client.delete(detail_url, **self.auth_headers).status_code, 405)
+        internal_log.refresh_from_db()
+        self.assertEqual(internal_log.event_type, 'internal_test_event')

@@ -1,0 +1,524 @@
+{
+  "artifact_schema": "phase31.4.4-mandatory-semantic-reading-ledger/v1",
+  "file_count": 86,
+  "files": [
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "AGENTS.md",
+      "semantic_focus": "Complete operational constraints and repository discipline.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/action_authorization.py",
+      "semantic_focus": "Complete callable behavior, transactions, validation, identity allocation, events/outbox/audit, security and failure paths.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/action_execution.py",
+      "semantic_focus": "Complete callable behavior, transactions, validation, identity allocation, events/outbox/audit, security and failure paths.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/agent_runtime.py",
+      "semantic_focus": "Complete callable behavior, transactions, validation, identity allocation, events/outbox/audit, security and failure paths.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/audit.py",
+      "semantic_focus": "Complete callable behavior, transactions, validation, identity allocation, events/outbox/audit, security and failure paths.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/canonical.py",
+      "semantic_focus": "Complete callable behavior, transactions, validation, identity allocation, events/outbox/audit, security and failure paths.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/controlled_opportunity.py",
+      "semantic_focus": "Complete callable behavior, transactions, validation, identity allocation, events/outbox/audit, security and failure paths.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/document_evidence.py",
+      "semantic_focus": "Complete callable behavior, transactions, validation, identity allocation, events/outbox/audit, security and failure paths.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/effectiveness.py",
+      "semantic_focus": "Complete callable behavior, transactions, validation, identity allocation, events/outbox/audit, security and failure paths.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/eventing.py",
+      "semantic_focus": "Complete callable behavior, transactions, validation, identity allocation, events/outbox/audit, security and failure paths.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/governed_learning.py",
+      "semantic_focus": "Complete callable behavior, transactions, validation, identity allocation, events/outbox/audit, security and failure paths.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/governed_learning_application.py",
+      "semantic_focus": "Complete callable behavior, transactions, validation, identity allocation, events/outbox/audit, security and failure paths.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/human_decision.py",
+      "semantic_focus": "Complete callable behavior, transactions, validation, identity allocation, events/outbox/audit, security and failure paths.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/knowledge_layer.py",
+      "semantic_focus": "Complete callable behavior, transactions, validation, identity allocation, events/outbox/audit, security and failure paths.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/knowledge_rule_release.py",
+      "semantic_focus": "Complete callable behavior, transactions, validation, identity allocation, events/outbox/audit, security and failure paths.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/learning_delta.py",
+      "semantic_focus": "Complete callable behavior, transactions, validation, identity allocation, events/outbox/audit, security and failure paths.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/learning_proposal_governance.py",
+      "semantic_focus": "Complete callable behavior, transactions, validation, identity allocation, events/outbox/audit, security and failure paths.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py",
+      "semantic_focus": "Complete SQL/DDL, triggers, constraints, roles, grants, RLS, forwards/reverse behavior and ORM state.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/migrations/0009_knowledge_layer_foundation.py",
+      "semantic_focus": "Complete SQL/DDL, triggers, constraints, roles, grants, RLS, forwards/reverse behavior and ORM state.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/migrations/0010_governed_recommendation_foundation.py",
+      "semantic_focus": "Complete SQL/DDL, triggers, constraints, roles, grants, RLS, forwards/reverse behavior and ORM state.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/migrations/0011_agent_definition_run_provenance_foundation.py",
+      "semantic_focus": "Complete SQL/DDL, triggers, constraints, roles, grants, RLS, forwards/reverse behavior and ORM state.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/migrations/0012_agent_decision_human_decision_gate_foundation.py",
+      "semantic_focus": "Complete SQL/DDL, triggers, constraints, roles, grants, RLS, forwards/reverse behavior and ORM state.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/migrations/0013_action_execution_preparation_authorization_foundation.py",
+      "semantic_focus": "Complete SQL/DDL, triggers, constraints, roles, grants, RLS, forwards/reverse behavior and ORM state.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/migrations/0014_action_execution_synthetic_foundation.py",
+      "semantic_focus": "Complete SQL/DDL, triggers, constraints, roles, grants, RLS, forwards/reverse behavior and ORM state.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/migrations/0015_first_controlled_qms_mutation_poc.py",
+      "semantic_focus": "Complete SQL/DDL, triggers, constraints, roles, grants, RLS, forwards/reverse behavior and ORM state.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/migrations/0016_controlled_execution_recovery_hardening.py",
+      "semantic_focus": "Complete SQL/DDL, triggers, constraints, roles, grants, RLS, forwards/reverse behavior and ORM state.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/migrations/0017_effectiveness_check_foundation.py",
+      "semantic_focus": "Complete SQL/DDL, triggers, constraints, roles, grants, RLS, forwards/reverse behavior and ORM state.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/migrations/0018_governed_learning_foundation.py",
+      "semantic_focus": "Complete SQL/DDL, triggers, constraints, roles, grants, RLS, forwards/reverse behavior and ORM state.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/migrations/0019_learning_proposal_review_application_authorization_foundation.py",
+      "semantic_focus": "Complete SQL/DDL, triggers, constraints, roles, grants, RLS, forwards/reverse behavior and ORM state.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/migrations/0020_exact_learning_delta_target_operation_contract.py",
+      "semantic_focus": "Complete SQL/DDL, triggers, constraints, roles, grants, RLS, forwards/reverse behavior and ORM state.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/migrations/0021_first_governed_knowledge_rule_application_poc.py",
+      "semantic_focus": "Complete SQL/DDL, triggers, constraints, roles, grants, RLS, forwards/reverse behavior and ORM state.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/migrations/0022_inert_rule_publication_activation_runtime_adoption.py",
+      "semantic_focus": "Complete SQL/DDL, triggers, constraints, roles, grants, RLS, forwards/reverse behavior and ORM state.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/migrations/0023_retained_synthetic_source_reference_application.py",
+      "semantic_focus": "Complete SQL/DDL, triggers, constraints, roles, grants, RLS, forwards/reverse behavior and ORM state.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/models.py",
+      "semantic_focus": "Complete callable behavior, transactions, validation, identity allocation, events/outbox/audit, security and failure paths.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/phase283_retained_candidate.py",
+      "semantic_focus": "Complete callable behavior, transactions, validation, identity allocation, events/outbox/audit, security and failure paths.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/postgres_phase26_harness.py",
+      "semantic_focus": "Complete callable behavior, transactions, validation, identity allocation, events/outbox/audit, security and failure paths.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/postgres_phase28_3_harness.py",
+      "semantic_focus": "Complete callable behavior, transactions, validation, identity allocation, events/outbox/audit, security and failure paths.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/postgres_phase28_3_migration_security_harness.py",
+      "semantic_focus": "Complete callable behavior, transactions, validation, identity allocation, events/outbox/audit, security and failure paths.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/recommendation.py",
+      "semantic_focus": "Complete callable behavior, transactions, validation, identity allocation, events/outbox/audit, security and failure paths.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/retained_publication_evidence.py",
+      "semantic_focus": "Complete callable behavior, transactions, validation, identity allocation, events/outbox/audit, security and failure paths.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/tenant_context.py",
+      "semantic_focus": "Complete callable behavior, transactions, validation, identity allocation, events/outbox/audit, security and failure paths.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/test_phase31_4_1_root_binding.py",
+      "semantic_focus": "Complete callable behavior, transactions, validation, identity allocation, events/outbox/audit, security and failure paths.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/test_phase31_4_2_design_gate.py",
+      "semantic_focus": "Complete callable behavior, transactions, validation, identity allocation, events/outbox/audit, security and failure paths.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/test_phase31_4_2_native_binding_audit.py",
+      "semantic_focus": "Complete callable behavior, transactions, validation, identity allocation, events/outbox/audit, security and failure paths.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "docs/adr/0013-knowledge-layer-rule-lineage-head-runtime-effective-separation.md",
+      "semantic_focus": "Complete decision, context, invariants, consequences and supersession boundary.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "docs/adr/0014-separate-knowledge-layer-rule-publication-activation-runtime-adoption.md",
+      "semantic_focus": "Complete decision, context, invariants, consequences and supersession boundary.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "docs/adr/0015-retained-cross-phase-evidence-and-synthetic-publication-fixture.md",
+      "semantic_focus": "Complete decision, context, invariants, consequences and supersession boundary.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "docs/adr/0016-historical-fact-rematerialization-eligibility-and-transitive-retention-closure.md",
+      "semantic_focus": "Complete decision, context, invariants, consequences and supersession boundary.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "docs/adr/0017-ephemeral-exact-id-governed-application-adapter.md",
+      "semantic_focus": "Complete decision, context, invariants, consequences and supersession boundary.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "docs/governance/COMPLETE_RETAINED_SYNTHETIC_KNOWLEDGE_LAYER_RULE_LIFECYCLE_POC_POLICY_V1.md",
+      "semantic_focus": "Complete policy scope, authority, sequencing, retention, prohibitions and evidence contract.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "docs/governance/CONTROLLED_QMS_ACTION_POLICY_V1.md",
+      "semantic_focus": "Complete policy scope, authority, sequencing, retention, prohibitions and evidence contract.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "docs/governance/EFFECTIVENESS_CHECK_POLICY_V1.md",
+      "semantic_focus": "Complete policy scope, authority, sequencing, retention, prohibitions and evidence contract.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "docs/governance/FIRST_RETAINED_SYNTHETIC_KNOWLEDGE_LAYER_RULE_ACTIVATION_POC_POLICY_V1.md",
+      "semantic_focus": "Complete policy scope, authority, sequencing, retention, prohibitions and evidence contract.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "docs/governance/FIRST_RETAINED_SYNTHETIC_KNOWLEDGE_LAYER_RULE_PUBLICATION_CANDIDATE_POLICY_V1.md",
+      "semantic_focus": "Complete policy scope, authority, sequencing, retention, prohibitions and evidence contract.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "docs/governance/FIRST_RETAINED_SYNTHETIC_KNOWLEDGE_LAYER_RULE_PUBLICATION_POC_POLICY_V1.md",
+      "semantic_focus": "Complete policy scope, authority, sequencing, retention, prohibitions and evidence contract.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "docs/governance/GOVERNED_LEARNING_IMPLEMENTATION_AUTHORIZATION_V1.md",
+      "semantic_focus": "Complete policy scope, authority, sequencing, retention, prohibitions and evidence contract.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "docs/governance/GOVERNED_LEARNING_POLICY_V1.md",
+      "semantic_focus": "Complete policy scope, authority, sequencing, retention, prohibitions and evidence contract.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "docs/governance/GOVERNED_LEARNING_PROPOSAL_REVIEW_APPLICATION_BOUNDARY_V1.md",
+      "semantic_focus": "Complete policy scope, authority, sequencing, retention, prohibitions and evidence contract.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "docs/governance/HISTORICAL_LIFECYCLE_EVIDENCE_AND_TRANSITIVE_RETENTION_CLOSURE_POLICY_V1.md",
+      "semantic_focus": "Complete policy scope, authority, sequencing, retention, prohibitions and evidence contract.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "docs/governance/KNOWLEDGE_LAYER_RULE_GOVERNED_SOURCE_REFERENCE_APPLICATION_POLICY_V1.md",
+      "semantic_focus": "Complete policy scope, authority, sequencing, retention, prohibitions and evidence contract.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "docs/governance/KNOWLEDGE_LAYER_RULE_PUBLICATION_ACTIVATION_RUNTIME_ADOPTION_POLICY_V1.md",
+      "semantic_focus": "Complete policy scope, authority, sequencing, retention, prohibitions and evidence contract.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "docs/governance/KNOWLEDGE_LAYER_RULE_RUNTIME_ADOPTION_AND_OPERATIONAL_REPAIR_DESIGN_V1.md",
+      "semantic_focus": "Complete policy scope, authority, sequencing, retention, prohibitions and evidence contract.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "docs/governance/evidence/PHASE31_4_1_ROOT_BINDING_DIAGNOSTIC_VECTORS_V1.json",
+      "semantic_focus": "Complete schema, identity/material bindings, dependency edges, dispositions, diagnostics and gate assertions.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "docs/governance/evidence/PHASE31_4_2_NATIVE_BINDING_AUDIT_V1.json",
+      "semantic_focus": "Complete schema, identity/material bindings, dependency edges, dispositions, diagnostics and gate assertions.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "docs/governance/evidence/PHASE31_4_2_SUCCESSOR_DESIGN_DIAGNOSTIC_V1.json",
+      "semantic_focus": "Complete schema, identity/material bindings, dependency edges, dispositions, diagnostics and gate assertions.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "docs/governance/evidence/PHASE31_4_PRECREATION_BLOCKER_EVIDENCE_V1.json",
+      "semantic_focus": "Complete schema, identity/material bindings, dependency edges, dispositions, diagnostics and gate assertions.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "docs/governance/fixtures/PHASE31_3_COMPLETE_RETAINED_SYNTHETIC_LIFECYCLE_SPEC_V1.json",
+      "semantic_focus": "Complete schema, identity/material bindings, dependency edges, dispositions, diagnostics and gate assertions.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "docs/governance/fixtures/PHASE31_3_COMPLETE_RETAINED_SYNTHETIC_SOURCE_V1.txt",
+      "semantic_focus": "Complete policy scope, authority, sequencing, retention, prohibitions and evidence contract.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "docs/governance/fixtures/PHASE31_3_EXPECTED_RETENTION_CLOSURE_V1.json",
+      "semantic_focus": "Complete schema, identity/material bindings, dependency edges, dispositions, diagnostics and gate assertions.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "docs/governance/fixtures/PHASE31_3_TRANSITIVE_RETENTION_SEMANTIC_REGISTRY_V1.json",
+      "semantic_focus": "Complete schema, identity/material bindings, dependency edges, dispositions, diagnostics and gate assertions.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "docs/transformation/ISO_SMART_AI_EVENTING_DESIGN.md",
+      "semantic_focus": "Complete verdict, evidence, limitations, blockers, history and continuation boundary.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "docs/transformation/ISO_SMART_AI_IMMUTABLE_AUDIT_DESIGN.md",
+      "semantic_focus": "Complete verdict, evidence, limitations, blockers, history and continuation boundary.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "docs/transformation/ISO_SMART_AI_POSTGRESQL_RLS_DESIGN.md",
+      "semantic_focus": "Complete verdict, evidence, limitations, blockers, history and continuation boundary.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "docs/transformation/ISO_SMART_AI_TENANT_MODEL.md",
+      "semantic_focus": "Complete verdict, evidence, limitations, blockers, history and continuation boundary.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "docs/transformation/PHASE31_1_EXACT_RETAINED_PUBLICATION_CURATION_AUDIT_EVIDENCE_BLOCKER_CLOSURE_REPORT.md",
+      "semantic_focus": "Complete verdict, evidence, limitations, blockers, history and continuation boundary.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "docs/transformation/PHASE31_2_UNAVAILABLE_HISTORICAL_TRANSITIVE_DEPENDENCY_GOVERNANCE_DECISION_GATE_REPORT.md",
+      "semantic_focus": "Complete verdict, evidence, limitations, blockers, history and continuation boundary.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "docs/transformation/PHASE31_3_1_EXACT_ID_APPLICATION_ADAPTER_ARCHITECTURAL_DECISION_CLOSURE_GATE_REPORT.md",
+      "semantic_focus": "Complete verdict, evidence, limitations, blockers, history and continuation boundary.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "docs/transformation/PHASE31_3_NEW_COMPLETE_RETAINED_SYNTHETIC_LIFECYCLE_DESIGN_AUTHORIZATION_GATE_REPORT.md",
+      "semantic_focus": "Complete verdict, evidence, limitations, blockers, history and continuation boundary.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "docs/transformation/PHASE31_4_1_ROOT_FULL_ROW_TARGET_HASH_TIMESTAMP_BINDING_EXECUTION_READINESS_BLOCKER_CLOSURE_REPORT.md",
+      "semantic_focus": "Complete verdict, evidence, limitations, blockers, history and continuation boundary.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "docs/transformation/PHASE31_4_2_EXECUTION_DERIVED_GOVERNANCE_BINDINGS_AND_SUPPORTING_SIGNAL_SUCCESSOR_DESIGN_GATE_REPORT.md",
+      "semantic_focus": "Complete verdict, evidence, limitations, blockers, history and continuation boundary.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "docs/transformation/PHASE31_4_NEW_COMPLETE_RETAINED_SYNTHETIC_LIFECYCLE_ISOLATED_EPHEMERAL_POSTGRESQL_18_6_CREATION_THROUGH_ACTIVATION_POC_REPORT.md",
+      "semantic_focus": "Complete verdict, evidence, limitations, blockers, history and continuation boundary.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "docs/transformation/PHASE31_FIRST_RETAINED_SYNTHETIC_KNOWLEDGE_LAYER_RULE_ACTIVATION_EPHEMERAL_POSTGRESQL_18_6_POC_REPORT.md",
+      "semantic_focus": "Complete verdict, evidence, limitations, blockers, history and continuation boundary.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/phase31_activation_preflight.py",
+      "semantic_focus": "Complete callable behavior, transactions, validation, identity allocation, events/outbox/audit, security and failure paths.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/test_phase31_activation_preflight.py",
+      "semantic_focus": "Complete callable behavior, transactions, validation, identity allocation, events/outbox/audit, security and failure paths.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/test_phase31_4_3_supporting_contract_audit.py",
+      "semantic_focus": "Complete callable behavior, transactions, validation, identity allocation, events/outbox/audit, security and failure paths.",
+      "status": "COMPLETE"
+    },
+    {
+      "complete_semantic_read_this_task": true,
+      "path": "backend/foundation/verify_phase31_4_3_offline.py",
+      "semantic_focus": "Complete callable behavior, transactions, validation, identity allocation, events/outbox/audit, security and failure paths.",
+      "status": "COMPLETE"
+    }
+  ],
+  "mandatory_reading_complete": true,
+  "method": "Complete content review; hashes, parsing, AST/model metadata and predecessor claims were not accepted as substitutes."
+}

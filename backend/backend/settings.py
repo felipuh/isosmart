@@ -100,6 +100,7 @@ INSTALLED_APPS = [
     'operations',
     'performance',
     'improvement',
+    'foundation',
 ]
 
 # Configuración de integración
@@ -219,38 +220,71 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME', 'isosmart_main'),
-        'USER': os.getenv('DB_USER', 'isosmart'),
-        'PASSWORD': os.getenv('DB_PASSWORD', ''),
-        'HOST': os.getenv('DB_HOST', '127.0.0.1'),
-        'PORT': os.getenv('DB_PORT', '5432'),
-        'CONN_MAX_AGE': int(os.getenv('DB_CONN_MAX_AGE', '60')),
-    },
-    # Bases adicionales para IA y auditoría
-    'ai_db': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('AI_DB_NAME', 'isosmart_ai'),
-        'USER': os.getenv('AI_DB_USER', os.getenv('DB_USER', 'isosmart')),
-        'PASSWORD': os.getenv('AI_DB_PASSWORD', os.getenv('DB_PASSWORD', '')),
-        'HOST': os.getenv('AI_DB_HOST', os.getenv('DB_HOST', '127.0.0.1')),
-        'PORT': os.getenv('AI_DB_PORT', os.getenv('DB_PORT', '5432')),
-        'CONN_MAX_AGE': int(os.getenv('DB_CONN_MAX_AGE', '60')),
-    },
-    'audit_db': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('AUDIT_DB_NAME', 'isosmart_audit'),
-        'USER': os.getenv('AUDIT_DB_USER', os.getenv('DB_USER', 'isosmart')),
-        'PASSWORD': os.getenv('AUDIT_DB_PASSWORD', os.getenv('DB_PASSWORD', '')),
-        'HOST': os.getenv('AUDIT_DB_HOST', os.getenv('DB_HOST', '127.0.0.1')),
-        'PORT': os.getenv('AUDIT_DB_PORT', os.getenv('DB_PORT', '5432')),
-        'CONN_MAX_AGE': int(os.getenv('DB_CONN_MAX_AGE', '60')),
+if _env_bool('USE_SQLITE_DATABASE', default=False):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / os.getenv('SQLITE_DB_NAME', 'test_default.sqlite3'),
+        },
+        'ai_db': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / os.getenv('SQLITE_AI_DB_NAME', 'test_ai.sqlite3'),
+        },
+        'audit_db': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / os.getenv('SQLITE_AUDIT_DB_NAME', 'test_audit.sqlite3'),
+        },
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.getenv('DB_NAME', 'isosmart_main'),
+            'USER': os.getenv('DB_USER', 'isosmart'),
+            'PASSWORD': os.getenv('DB_PASSWORD', ''),
+            'HOST': os.getenv('DB_HOST', '127.0.0.1'),
+            'PORT': os.getenv('DB_PORT', '5432'),
+            'CONN_MAX_AGE': int(os.getenv('DB_CONN_MAX_AGE', '60')),
+        },
+        # Bases adicionales para IA y auditoría
+        'ai_db': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.getenv('AI_DB_NAME', 'isosmart_ai'),
+            'USER': os.getenv('AI_DB_USER', os.getenv('DB_USER', 'isosmart')),
+            'PASSWORD': os.getenv('AI_DB_PASSWORD', os.getenv('DB_PASSWORD', '')),
+            'HOST': os.getenv('AI_DB_HOST', os.getenv('DB_HOST', '127.0.0.1')),
+            'PORT': os.getenv('AI_DB_PORT', os.getenv('DB_PORT', '5432')),
+            'CONN_MAX_AGE': int(os.getenv('DB_CONN_MAX_AGE', '60')),
+        },
+        'audit_db': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.getenv('AUDIT_DB_NAME', 'isosmart_audit'),
+            'USER': os.getenv('AUDIT_DB_USER', os.getenv('DB_USER', 'isosmart')),
+            'PASSWORD': os.getenv('AUDIT_DB_PASSWORD', os.getenv('DB_PASSWORD', '')),
+            'HOST': os.getenv('AUDIT_DB_HOST', os.getenv('DB_HOST', '127.0.0.1')),
+            'PORT': os.getenv('AUDIT_DB_PORT', os.getenv('DB_PORT', '5432')),
+            'CONN_MAX_AGE': int(os.getenv('DB_CONN_MAX_AGE', '60')),
+        }
+    }
 
 #Configurar modelo de usuario
+ADMINAPPS_TENANT_EVENT_KEY_SHA256 = os.getenv('ADMINAPPS_TENANT_EVENT_KEY_SHA256', '')
+
+# Foundation SQL uses distinct least-privilege PostgreSQL principals. Missing
+# credentials leave the production ingress/commands unavailable by design.
+if not _env_bool('USE_SQLITE_DATABASE', default=False):
+    for alias, prefix in (('app', 'FOUNDATION_APP'), ('projector', 'FOUNDATION_PROJECTOR')):
+        user = os.getenv(f'{prefix}_DB_USER') or os.getenv(f'{prefix}_ROLE', '')
+        password = os.getenv(f'{prefix}_DB_PASSWORD') or os.getenv(f'{prefix}_PASSWORD', '')
+        if user and password:
+            DATABASES[alias] = {
+                **DATABASES['default'],
+                'NAME': os.getenv('FOUNDATION_DB_NAME', DATABASES['default']['NAME']),
+                'HOST': os.getenv('FOUNDATION_DB_HOST', DATABASES['default']['HOST']),
+                'PORT': os.getenv('FOUNDATION_DB_PORT', DATABASES['default']['PORT']),
+                'USER': user, 'PASSWORD': password,
+            }
+
 AUTH_USER_MODEL = 'authentication.User'
 
 #Configurar backends de autenticación

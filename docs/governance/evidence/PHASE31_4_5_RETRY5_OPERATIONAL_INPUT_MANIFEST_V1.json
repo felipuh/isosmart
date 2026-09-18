@@ -1,0 +1,777 @@
+{
+  "counts": {
+    "imports": 29,
+    "members": 72,
+    "migrations": 23,
+    "named_operations": 29,
+    "phases": 33
+  },
+  "external_expected_sha256_required": true,
+  "import_closure": [
+    "backend/foundation/action_authorization.py",
+    "backend/foundation/agent_runtime.py",
+    "backend/foundation/audit.py",
+    "backend/foundation/canonical.py",
+    "backend/foundation/effectiveness.py",
+    "backend/foundation/generate_phase31_4_retry5_manifest.py",
+    "backend/foundation/governed_learning.py",
+    "backend/foundation/governed_learning_application.py",
+    "backend/foundation/human_decision.py",
+    "backend/foundation/learning_delta.py",
+    "backend/foundation/learning_proposal_governance.py",
+    "backend/foundation/migrations/0015_first_controlled_qms_mutation_poc.py",
+    "backend/foundation/migrations/0022_inert_rule_publication_activation_runtime_adoption.py",
+    "backend/foundation/migrations/0023_retained_synthetic_source_reference_application.py",
+    "backend/foundation/models.py",
+    "backend/foundation/phase31_4_4a_field_binding_validator.py",
+    "backend/foundation/phase31_4_4b_strict_type_validator.py",
+    "backend/foundation/phase31_4_5b_source_reachability_validator.py",
+    "backend/foundation/phase31_4_operational_manifest.py",
+    "backend/foundation/phase31_4_postgres18_environment.py",
+    "backend/foundation/phase31_4_v2_4_execution_backend.py",
+    "backend/foundation/phase31_4_v2_4_execution_wiring.py",
+    "backend/foundation/phase31_4_v2_4_security_installer.py",
+    "backend/foundation/phase31_4_v2_4_support_producer.py",
+    "backend/foundation/postgres_phase31_4_clean_retry_3_harness.py",
+    "backend/foundation/recommendation.py",
+    "backend/foundation/tenant_context.py",
+    "backend/foundation/test_phase31_4_retry5_operational_manifest.py",
+    "backend/foundation/test_phase31_4_v2_4_support_package.py"
+  ],
+  "import_roots": [
+    "backend/foundation/action_authorization.py",
+    "backend/foundation/agent_runtime.py",
+    "backend/foundation/effectiveness.py",
+    "backend/foundation/generate_phase31_4_retry5_manifest.py",
+    "backend/foundation/governed_learning.py",
+    "backend/foundation/governed_learning_application.py",
+    "backend/foundation/human_decision.py",
+    "backend/foundation/learning_proposal_governance.py",
+    "backend/foundation/migrations/0015_first_controlled_qms_mutation_poc.py",
+    "backend/foundation/migrations/0022_inert_rule_publication_activation_runtime_adoption.py",
+    "backend/foundation/migrations/0023_retained_synthetic_source_reference_application.py",
+    "backend/foundation/phase31_4_operational_manifest.py",
+    "backend/foundation/phase31_4_postgres18_environment.py",
+    "backend/foundation/phase31_4_v2_4_execution_backend.py",
+    "backend/foundation/phase31_4_v2_4_execution_wiring.py",
+    "backend/foundation/phase31_4_v2_4_security_installer.py",
+    "backend/foundation/phase31_4_v2_4_support_producer.py",
+    "backend/foundation/postgres_phase31_4_clean_retry_3_harness.py",
+    "backend/foundation/test_phase31_4_retry5_operational_manifest.py",
+    "backend/foundation/test_phase31_4_v2_4_support_package.py"
+  ],
+  "members": [
+    {
+      "artifact_class": "RUNTIME_CONFIGURATION",
+      "execution_role": "future Clean Retry runtime",
+      "mutable_during_retry": false,
+      "path": "backend/backend/settings.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "1da64d5f1c8248a2c2e2e9cc586424bde185c85efd467923be28d5c1f2d170ba"
+    },
+    {
+      "artifact_class": "IMPLEMENTATION",
+      "execution_role": "project-local execution/import closure",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/action_authorization.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "04fffd84058da2166a4843e92f04b5bc5d6c3c84035e379a60722b56ffcc38d3"
+    },
+    {
+      "artifact_class": "IMPLEMENTATION",
+      "execution_role": "project-local execution/import closure",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/agent_runtime.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "6767e2098365536b88d4d8e9afdaef0f8b796383c79d7f40e0e0ea91b964ec2d"
+    },
+    {
+      "artifact_class": "IMPLEMENTATION",
+      "execution_role": "project-local execution/import closure",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/audit.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "461459401abb354b22c42eec05dcd9805e4fd7800554c67b96aee8885c6734ef"
+    },
+    {
+      "artifact_class": "IMPLEMENTATION",
+      "execution_role": "project-local execution/import closure",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/canonical.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "e00efbff9abba03c0e12a27a2d1ce6151baeaa3372fb6b7cfea889a0df80b657"
+    },
+    {
+      "artifact_class": "IMPLEMENTATION",
+      "execution_role": "project-local execution/import closure",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/effectiveness.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "8f88ec0618ac740c3d57adedd2cdde0f55e340e9efd17d8c12a64baa1e917234"
+    },
+    {
+      "artifact_class": "SOURCE_FIXTURE",
+      "execution_role": "runtime/source configuration",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/fixtures/adminapps_projection_events.json",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "fcffee24c42814618001d40af4c35da491ed485273809ad604590e5f2e521cbf"
+    },
+    {
+      "artifact_class": "IMPLEMENTATION",
+      "execution_role": "project-local execution/import closure",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/generate_phase31_4_retry5_manifest.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "bcf353742fed2257d163b7f86695644dd4c0cda81727f73451973590dab1838e"
+    },
+    {
+      "artifact_class": "IMPLEMENTATION",
+      "execution_role": "project-local execution/import closure",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/governed_learning.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "3cc23839a372cfac94dd265154876b66915d43b8a5c0b391a804d3aabe6476cd"
+    },
+    {
+      "artifact_class": "IMPLEMENTATION",
+      "execution_role": "project-local execution/import closure",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/governed_learning_application.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "99d228984efe4bba15c76f91e157f2ddd66d8aec9b5bf153a21c095fd57ed8cf"
+    },
+    {
+      "artifact_class": "IMPLEMENTATION",
+      "execution_role": "project-local execution/import closure",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/human_decision.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "83777738712ba6db473590c367b14dd17ee90eda2549e04cb467db3e58b636ab"
+    },
+    {
+      "artifact_class": "IMPLEMENTATION",
+      "execution_role": "project-local execution/import closure",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/learning_delta.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "bf0edbc0dfa5e2ea04f99af3c1ed8cdfc21e8bd0558208a824b74b8d7844747b"
+    },
+    {
+      "artifact_class": "IMPLEMENTATION",
+      "execution_role": "project-local execution/import closure",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/learning_proposal_governance.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "0a4a214edb63aaf7de579bba090010df728402bfc133c250bd05b20c73edb945"
+    },
+    {
+      "artifact_class": "MIGRATION",
+      "execution_role": "ordered frozen schema/source operation",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/migrations/0001_foundation_tenant_projection.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "0d72f26245c3637b579e5289b1ee99b87667a1061a245e950992724cb7d2dc51"
+    },
+    {
+      "artifact_class": "MIGRATION",
+      "execution_role": "ordered frozen schema/source operation",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/migrations/0002_projection_organization_user_foundation.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "1f538ca4c72309fa670af773f91fd8a62be2732a3222ce3067dbd79fd5e9b537"
+    },
+    {
+      "artifact_class": "MIGRATION",
+      "execution_role": "ordered frozen schema/source operation",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "dadfad2c14468352f9f8fc37463f5d689029b98c40e026270223dac5e79613fc"
+    },
+    {
+      "artifact_class": "MIGRATION",
+      "execution_role": "ordered frozen schema/source operation",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/migrations/0004_qms_harmonized_context_foundation.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "045043275245e5d8068a8e03d122f5fe34b8f9f60b020336e61881550ecea125"
+    },
+    {
+      "artifact_class": "MIGRATION",
+      "execution_role": "ordered frozen schema/source operation",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/migrations/0005_risk_opportunity_objective_foundation.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "96ab33a18252dc0c2e6142f7afdc02a165349d15d50b290b4092c844a1996e86"
+    },
+    {
+      "artifact_class": "MIGRATION",
+      "execution_role": "ordered frozen schema/source operation",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/migrations/0006_change_performance_measurement_foundation.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "033242bd6fe801da0b090a332b9f6d1b07dba77027a0334d1830e845cd51aa95"
+    },
+    {
+      "artifact_class": "MIGRATION",
+      "execution_role": "ordered frozen schema/source operation",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/migrations/0007_document_evidence_foundation.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "c7f6a2030c9155714093a21fadb571a1cdeb8a121be5598540d4807af62283ec"
+    },
+    {
+      "artifact_class": "MIGRATION",
+      "execution_role": "ordered frozen schema/source operation",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/migrations/0008_evidence_coverage_normative_core_foundation.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "285aecb34d5f7e8c1a1273c9622cde7933809949ac7bdbfca04e577e9e762032"
+    },
+    {
+      "artifact_class": "MIGRATION",
+      "execution_role": "ordered frozen schema/source operation",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/migrations/0009_knowledge_layer_foundation.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "412c645974635959c74a446f64dc0a9b6dfd2a1a50a6a2e346698850e998effc"
+    },
+    {
+      "artifact_class": "MIGRATION",
+      "execution_role": "ordered frozen schema/source operation",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/migrations/0010_governed_recommendation_foundation.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "c4f37a9a3a8d0d20a049e4e1cc9c0e04feb947cbeec9cea18fa89b7964f57b79"
+    },
+    {
+      "artifact_class": "MIGRATION",
+      "execution_role": "ordered frozen schema/source operation",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/migrations/0011_agent_definition_run_provenance_foundation.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "cdb23edcad75e8a8781815dac847359a368b64d8ea4b607a40d01d5296c863a2"
+    },
+    {
+      "artifact_class": "MIGRATION",
+      "execution_role": "ordered frozen schema/source operation",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/migrations/0012_agent_decision_human_decision_gate_foundation.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "7f280e24a8e95858b8144aa6a85fc645245aa2c2d3c2ad5700dfbe19ac0f0fdc"
+    },
+    {
+      "artifact_class": "MIGRATION",
+      "execution_role": "ordered frozen schema/source operation",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/migrations/0013_action_execution_preparation_authorization_foundation.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "06177fde1c25d884602a41d03df6d2625e8d15df18d7c66bffdb047348abf34b"
+    },
+    {
+      "artifact_class": "MIGRATION",
+      "execution_role": "ordered frozen schema/source operation",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/migrations/0014_action_execution_synthetic_foundation.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "ee0e42a7d45803f633ca40d9b0ca20987a20acfdaf3452ee81d721cec29ada33"
+    },
+    {
+      "artifact_class": "MIGRATION",
+      "execution_role": "ordered frozen schema/source operation",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/migrations/0015_first_controlled_qms_mutation_poc.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "5e297591c8096938c90b6748d0d3ed22a8099cf8f4537e7f65f8bc6fa5beaba3"
+    },
+    {
+      "artifact_class": "MIGRATION",
+      "execution_role": "ordered frozen schema/source operation",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/migrations/0016_controlled_execution_recovery_hardening.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "e922ff20285751193382a17d9fe7e71726511bff659f4e66b97748e6ad43cdd5"
+    },
+    {
+      "artifact_class": "MIGRATION",
+      "execution_role": "ordered frozen schema/source operation",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/migrations/0017_effectiveness_check_foundation.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "580f16d1cdb10c30bae8f3e3c1667c3c4d2552b895fc9dea053d2c9b6adfaa38"
+    },
+    {
+      "artifact_class": "MIGRATION",
+      "execution_role": "ordered frozen schema/source operation",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/migrations/0018_governed_learning_foundation.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "703a85885a67df953f38ef35302205caeddea249104683f4f751ab20ece0696b"
+    },
+    {
+      "artifact_class": "MIGRATION",
+      "execution_role": "ordered frozen schema/source operation",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/migrations/0019_learning_proposal_review_application_authorization_foundation.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "c188b638124404bba10cae4c94a678053d49d7a1d07c6e455a48e46524064b50"
+    },
+    {
+      "artifact_class": "MIGRATION",
+      "execution_role": "ordered frozen schema/source operation",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/migrations/0020_exact_learning_delta_target_operation_contract.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "491f21d3422c9c9a5866520f6623d3b9c9bea2139083f0128495dd7207d19894"
+    },
+    {
+      "artifact_class": "MIGRATION",
+      "execution_role": "ordered frozen schema/source operation",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/migrations/0021_first_governed_knowledge_rule_application_poc.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "e796910c1660f701c3457b020792a158c06d3e58135a7ebba1728bd8b33c7a97"
+    },
+    {
+      "artifact_class": "MIGRATION",
+      "execution_role": "ordered frozen schema/source operation",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/migrations/0022_inert_rule_publication_activation_runtime_adoption.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "afefd7100a18e5c7324efaeb1af656225b309fd86f08673a8742f7f9f6c2e618"
+    },
+    {
+      "artifact_class": "MIGRATION",
+      "execution_role": "ordered frozen schema/source operation",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/migrations/0023_retained_synthetic_source_reference_application.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "bb9889af836ae1e92ccf75b868c4c6a8c1ab9ba1e7d63464a2cbd749a872e642"
+    },
+    {
+      "artifact_class": "IMPLEMENTATION",
+      "execution_role": "project-local execution/import closure",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/models.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "9dd94c945dd0c256c3872e82b45760b06c066a4364e3dc3d833d56c09645c244"
+    },
+    {
+      "artifact_class": "IMPLEMENTATION",
+      "execution_role": "project-local execution/import closure",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/phase31_4_4a_field_binding_validator.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "8a1b70854128809623ec196179f5c7ceba1c78c3687e2c8eed8fb73462e78ad0"
+    },
+    {
+      "artifact_class": "IMPLEMENTATION",
+      "execution_role": "project-local execution/import closure",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/phase31_4_4b_strict_type_validator.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "29f005a121640f74a161a88161af9480792a9db84abf6d95073fa094e3659daf"
+    },
+    {
+      "artifact_class": "IMPLEMENTATION",
+      "execution_role": "project-local execution/import closure",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/phase31_4_5b_source_reachability_validator.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "10c8827ddd53fac92b44e4105bb61eec7f2114991309118bf3d3cc48c47e6308"
+    },
+    {
+      "artifact_class": "IMPLEMENTATION",
+      "execution_role": "project-local execution/import closure",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/phase31_4_operational_manifest.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "bc04652d77aefa2719ff6879d5ec318b72d31460ab13b443c143f790d8b8c63b"
+    },
+    {
+      "artifact_class": "IMPLEMENTATION",
+      "execution_role": "project-local execution/import closure",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/phase31_4_postgres18_environment.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "f5e2e189a3e09fa6e15c45d7308d7920e9948a77e2a5cf3958671074154afad1"
+    },
+    {
+      "artifact_class": "IMPLEMENTATION",
+      "execution_role": "project-local execution/import closure",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/phase31_4_v2_4_execution_backend.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "39fd21aaf3805f166a220d55bcf0ddcfa51b007f390db20a0f7c8348dd2100b1"
+    },
+    {
+      "artifact_class": "IMPLEMENTATION",
+      "execution_role": "project-local execution/import closure",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/phase31_4_v2_4_execution_wiring.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "b3b6a7810c52039b1bc39b401bc31a3e3e24c63a5d05438d4acd5b3abd5b153b"
+    },
+    {
+      "artifact_class": "IMPLEMENTATION",
+      "execution_role": "project-local execution/import closure",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/phase31_4_v2_4_security_installer.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "c86f43f9f61e38d89d2c56bd245bdf4a78bdf06f570be9e52afd409e74c19822"
+    },
+    {
+      "artifact_class": "IMPLEMENTATION",
+      "execution_role": "project-local execution/import closure",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/phase31_4_v2_4_support_producer.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "aa5512fbeccd9149ca981edb2855431d0a6c4d4a58a89aa0ff7ece3c9af15770"
+    },
+    {
+      "artifact_class": "IMPLEMENTATION",
+      "execution_role": "project-local execution/import closure",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/postgres_phase31_4_clean_retry_3_harness.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "4ad7f24ae8be60333097b2d2df49e571a183a963b3a0ecceddf96975ce07cabb"
+    },
+    {
+      "artifact_class": "IMPLEMENTATION",
+      "execution_role": "project-local execution/import closure",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/recommendation.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "655fbdd18437f3d04a838c4dfad0b5b5fb3f6cc2e3d53d29fcc21a22acc6648c"
+    },
+    {
+      "artifact_class": "IMPLEMENTATION",
+      "execution_role": "project-local execution/import closure",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/tenant_context.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "18065e217a7b2108fd8286283fd432a51fe45372c1397306281cf9189518880f"
+    },
+    {
+      "artifact_class": "IMPLEMENTATION",
+      "execution_role": "project-local execution/import closure",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/test_phase31_4_retry5_operational_manifest.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "595e2d9cf1f314c0df497e292aa9b3e120e7f725b2829a35b314780d1bb342e2"
+    },
+    {
+      "artifact_class": "IMPLEMENTATION",
+      "execution_role": "project-local execution/import closure",
+      "mutable_during_retry": false,
+      "path": "backend/foundation/test_phase31_4_v2_4_support_package.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "c8490a1baeb736d056c96639a4248fa5310338128f2e2331424f7ac68dac3ab4"
+    },
+    {
+      "artifact_class": "RUNTIME_CONFIGURATION",
+      "execution_role": "future Clean Retry runtime",
+      "mutable_during_retry": false,
+      "path": "backend/manage.py",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "8940937288f2e45f2489dfd8c5d7004beb08179cbb493ccc0eccbf9e49afbe6b"
+    },
+    {
+      "artifact_class": "GOVERNANCE",
+      "execution_role": "authorized execution input",
+      "mutable_during_retry": false,
+      "path": "docs/adr/0017-ephemeral-exact-id-governed-application-adapter.md",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "82501ef34edc6d7e76e0971d3d2607c58f229a1dd4dd26696dd227fb7e994edb"
+    },
+    {
+      "artifact_class": "GOVERNANCE",
+      "execution_role": "authorized execution input",
+      "mutable_during_retry": false,
+      "path": "docs/adr/0018-row-level-execution-ready-v2-contract.md",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "f9f6272c72e433241f66e44884b53dc804a667b32950c8ab098df6473ecf6089"
+    },
+    {
+      "artifact_class": "GOVERNANCE",
+      "execution_role": "authorized execution input",
+      "mutable_during_retry": false,
+      "path": "docs/governance/COMPLETE_RETAINED_SYNTHETIC_KNOWLEDGE_LAYER_RULE_LIFECYCLE_POC_POLICY_V2.md",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "bf92aa4aafdaa99e27f90fc3c2766cd3a8fa85214f26a4fe7ffbbd1a7397cad2"
+    },
+    {
+      "artifact_class": "GOVERNANCE",
+      "execution_role": "authorized execution input",
+      "mutable_during_retry": false,
+      "path": "docs/governance/FIRST_RETAINED_SYNTHETIC_KNOWLEDGE_LAYER_RULE_ACTIVATION_POC_POLICY_V1.md",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "43c67505ec3e3d9df0d306012e2036ced7cf437de703e8ff95b709a7af08756d"
+    },
+    {
+      "artifact_class": "GOVERNANCE",
+      "execution_role": "authorized execution input",
+      "mutable_during_retry": false,
+      "path": "docs/governance/FIRST_RETAINED_SYNTHETIC_KNOWLEDGE_LAYER_RULE_PUBLICATION_CANDIDATE_POLICY_V1.md",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "1d6352eaac748fff42098242b39db63e5f446140cfc935e961eb078d40010ed8"
+    },
+    {
+      "artifact_class": "GOVERNANCE",
+      "execution_role": "authorized execution input",
+      "mutable_during_retry": false,
+      "path": "docs/governance/FIRST_RETAINED_SYNTHETIC_KNOWLEDGE_LAYER_RULE_PUBLICATION_POC_POLICY_V1.md",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "0dfa36804827f272ac7e289beab6e876d27af78b8ae06d3b8a5b5d46b9db8289"
+    },
+    {
+      "artifact_class": "GOVERNANCE",
+      "execution_role": "authorized execution input",
+      "mutable_during_retry": false,
+      "path": "docs/governance/PHASE31_4_4_SUPPORTING_FIXTURE_PRODUCER_CONTRACT_V1.md",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "9ca5530bf24e0dc90b004b0b88fa86c344646e5991a5c65659eaae3dae2e795e"
+    },
+    {
+      "artifact_class": "GOVERNANCE",
+      "execution_role": "authorized execution input",
+      "mutable_during_retry": false,
+      "path": "docs/governance/evidence/PHASE31_4_5A_AGENT_RUN_START_EVENT_SERIALIZATION_DECISION_V1.json",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "5a1bc305b84fb10472905303aaadea668cf9e220b7385c01ae1c1a3e8c3040df"
+    },
+    {
+      "artifact_class": "GOVERNANCE",
+      "execution_role": "authorized execution input",
+      "mutable_during_retry": false,
+      "path": "docs/governance/evidence/PHASE31_4_5A_RETRY1_AGENTRUN_SOURCE_REACHABILITY_AND_SERIALIZATION_V1.json",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "2cd3326cf480c7a5700dd85b569670a7190cedb0e5e88f76a57aa548d72069fc"
+    },
+    {
+      "artifact_class": "GOVERNANCE",
+      "execution_role": "authorized execution input",
+      "mutable_during_retry": false,
+      "path": "docs/governance/evidence/PHASE31_4_5B_V2_3_TO_V2_4_CHANGESET_V1.json",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "4204d022492de843d7f6763dfb05f3ce7ec5e166fc4c14de4b8b2c4cb80f27de"
+    },
+    {
+      "artifact_class": "GOVERNANCE",
+      "execution_role": "authorized execution input",
+      "mutable_during_retry": false,
+      "path": "docs/governance/evidence/PHASE31_4_5B_V2_4_AUTHORIZATION_PROMOTION_RECORD_V1.json",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "57c6ec320e2db8a9b6ef47c4ea504f384be4b8cdb1b5e1420a97f76e5094bf6a"
+    },
+    {
+      "artifact_class": "GOVERNANCE",
+      "execution_role": "authorized execution input",
+      "mutable_during_retry": false,
+      "path": "docs/governance/evidence/PHASE31_4_5B_V2_4_OPERATIONAL_CORRECTION_AUTHORIZATION_V1.json",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "4e83049a9928cd0a93c97228f33093e282c16e8e5e8969882ea21c8cd83e373b"
+    },
+    {
+      "artifact_class": "GOVERNANCE",
+      "execution_role": "authorized execution input",
+      "mutable_during_retry": false,
+      "path": "docs/governance/fixtures/PHASE31_4_4A_ROW_LEVEL_EXECUTION_CONTRACT_V2_1.json",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "acd9e5551a04fc60356fedc2abdc4170932274913795fb6a5a4952ebf9477d85"
+    },
+    {
+      "artifact_class": "GOVERNANCE",
+      "execution_role": "authorized execution input",
+      "mutable_during_retry": false,
+      "path": "docs/governance/fixtures/PHASE31_4_4B_ROW_LEVEL_EXECUTION_CONTRACT_V2_2.json",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "a4a36025ac8873508ce5ba840d5c2920d18ba4d430d18c2353ca53a2bf597f8d"
+    },
+    {
+      "artifact_class": "GOVERNANCE",
+      "execution_role": "authorized execution input",
+      "mutable_during_retry": false,
+      "path": "docs/governance/fixtures/PHASE31_4_4_EXPECTED_RETENTION_CLOSURE_V2.json",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "80eb1e7f8e857712aa49bcca98f3d27da2b525ba98df16fa34651cf8254cc425"
+    },
+    {
+      "artifact_class": "GOVERNANCE",
+      "execution_role": "authorized execution input",
+      "mutable_during_retry": false,
+      "path": "docs/governance/fixtures/PHASE31_4_4_ROW_LEVEL_EXECUTION_CONTRACT_V2.json",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "962ec0b393b49c3c0a2894e32bb9a3246cbf7793cfd600391248634bee56f70b"
+    },
+    {
+      "artifact_class": "GOVERNANCE",
+      "execution_role": "authorized execution input",
+      "mutable_during_retry": false,
+      "path": "docs/governance/fixtures/PHASE31_4_4_TRANSITIVE_RETENTION_SEMANTIC_REGISTRY_V2.json",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "58b8278cbe05b0b5056e058bb3db1eecfc4d576cbef3dc5383c5e894900730fb"
+    },
+    {
+      "artifact_class": "GOVERNANCE",
+      "execution_role": "authorized execution input",
+      "mutable_during_retry": false,
+      "path": "docs/governance/fixtures/PHASE31_4_5A_RETRY1_ROW_LEVEL_EXECUTION_CONTRACT_V2_3.json",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "c982588956bb6009dc2489f1a724afcfe223dda0af2b7fcb884693f43f66c1d6"
+    },
+    {
+      "artifact_class": "GOVERNANCE",
+      "execution_role": "authorized execution input",
+      "mutable_during_retry": false,
+      "path": "docs/governance/fixtures/PHASE31_4_5B_ROW_LEVEL_EXECUTION_CONTRACT_V2_4.json",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "a102d278bf2e5ca6e9b8bf282f5402a54f52d4690beed2ecbed5145c56539387"
+    },
+    {
+      "artifact_class": "GOVERNANCE",
+      "execution_role": "authorized execution input",
+      "mutable_during_retry": false,
+      "path": "docs/governance/fixtures/SYNTHETIC_KNOWLEDGE_LAYER_RULE_PUBLICATION_SOURCE_MANIFEST_V1.json",
+      "provenance": "repository byte frozen by Phase 31.4.5 Retry5",
+      "required": true,
+      "sha256": "6172874247eaa53d374e687073052c7e9ad8f333bfa94b135234bb8d2e02a600"
+    }
+  ],
+  "non_self_referential": true,
+  "order_sensitive_sets": {
+    "migrations_0001_0023": [
+      "backend/foundation/migrations/0001_foundation_tenant_projection.py",
+      "backend/foundation/migrations/0002_projection_organization_user_foundation.py",
+      "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py",
+      "backend/foundation/migrations/0004_qms_harmonized_context_foundation.py",
+      "backend/foundation/migrations/0005_risk_opportunity_objective_foundation.py",
+      "backend/foundation/migrations/0006_change_performance_measurement_foundation.py",
+      "backend/foundation/migrations/0007_document_evidence_foundation.py",
+      "backend/foundation/migrations/0008_evidence_coverage_normative_core_foundation.py",
+      "backend/foundation/migrations/0009_knowledge_layer_foundation.py",
+      "backend/foundation/migrations/0010_governed_recommendation_foundation.py",
+      "backend/foundation/migrations/0011_agent_definition_run_provenance_foundation.py",
+      "backend/foundation/migrations/0012_agent_decision_human_decision_gate_foundation.py",
+      "backend/foundation/migrations/0013_action_execution_preparation_authorization_foundation.py",
+      "backend/foundation/migrations/0014_action_execution_synthetic_foundation.py",
+      "backend/foundation/migrations/0015_first_controlled_qms_mutation_poc.py",
+      "backend/foundation/migrations/0016_controlled_execution_recovery_hardening.py",
+      "backend/foundation/migrations/0017_effectiveness_check_foundation.py",
+      "backend/foundation/migrations/0018_governed_learning_foundation.py",
+      "backend/foundation/migrations/0019_learning_proposal_review_application_authorization_foundation.py",
+      "backend/foundation/migrations/0020_exact_learning_delta_target_operation_contract.py",
+      "backend/foundation/migrations/0021_first_governed_knowledge_rule_application_poc.py",
+      "backend/foundation/migrations/0022_inert_rule_publication_activation_runtime_adoption.py",
+      "backend/foundation/migrations/0023_retained_synthetic_source_reference_application.py"
+    ]
+  },
+  "phase_machine_order": [
+    "PRECREATION_INTEGRITY",
+    "ENVIRONMENT_CREATE",
+    "RENDER_PROFILE",
+    "MIGRATIONS",
+    "CATALOG_ASSERTIONS",
+    "SUPPORT_PRODUCER_INSTALL",
+    "SECURITY_ASSERTIONS",
+    "SUPPORT_FIXTURE",
+    "FREEZE_1_5",
+    "ROOT_BOOTSTRAP",
+    "ROOT_DUAL_REREAD",
+    "PROPOSAL_DELTA",
+    "REVIEW",
+    "DECISION",
+    "AUTHORIZATION",
+    "ADR0017_PARITY",
+    "APPLICATION",
+    "PUBLICATION_ADMISSION",
+    "NATIVE_PUBLICATION",
+    "PUBLICATION_CHECKPOINT",
+    "B2_COMPATIBILITY",
+    "B3_RELEASE",
+    "PUBLICATION_CLOSURE",
+    "PUBLICATION_LIVE_COMPARE",
+    "PUBLICATION_ELIGIBILITY",
+    "ACTIVATION_ADMISSION",
+    "NATIVE_ACTIVATION",
+    "FULL_CLOSURE",
+    "LIVE_COMPARE",
+    "TEARDOWN_GATE",
+    "TEARDOWN",
+    "POST_TEARDOWN_VERIFY",
+    "TAMPER_NEGATIVE"
+  ],
+  "schema": "phase31.4.5-retry5-operational-input-manifest/v1"
+}

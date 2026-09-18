@@ -1,0 +1,50 @@
+{
+  "artifact_schema": "phase31.4-clean-retry-8-v2.5-live-blocker/v1",
+  "execution_label": "LIVE_NATIVE_EXECUTION",
+  "retry": "Phase 31.4 V2.5 Clean Retry 8",
+  "verdict": "NOT_PROMOTED",
+  "p0": 0,
+  "p1": 1,
+  "postgresql": "PostgreSQL 18.6 (Debian 18.6-1.pgdg13+2)",
+  "database_identifier": "phase31_4_retry8",
+  "migrations_applied": 91,
+  "pending_required_migrations": 0,
+  "blocker": {
+    "id": "P1-V25-LIVE-INITIAL-OPPORTUNITY-UPSTREAM-PROCESS-MISSING-20260917",
+    "phase": "INITIAL_OPPORTUNITY",
+    "native_executor": "_NativePhaseExecutor",
+    "native_source": "phase31.4.4-controlled-opportunity-producer/v1",
+    "service_method": "RiskOpportunityObjectiveCommandService.create_opportunity",
+    "contract_member_or_field": "qms.opportunity::6497b073-b3cb-5159-b64f-90700f2f5f85.process_id",
+    "expected_state": "Process 506d920c-fe62-53c0-aac8-9c1ca8ca78ed exists in PostgreSQL before native Opportunity creation.",
+    "actual_state": "PostgreSQL query returned no Process row for the contract-bound process_id.",
+    "error": "django.core.exceptions.ObjectDoesNotExist: Process matching query does not exist.",
+    "remediation": "Add the authoritative native Process producer and execute it before INITIAL_OPPORTUNITY, or provide an approved live upstream seed through its native service. Do not insert the row directly or use the offline resolved graph.",
+    "effects_before_failure": {
+      "qms.process": 0,
+      "qms.opportunity": 0,
+      "eventing.domain_event": 0,
+      "eventing.transactional_outbox": 0
+    }
+  },
+  "execution": {
+    "precondition_phases_passed": 13,
+    "phases_executed": 13,
+    "phases_passed": 13,
+    "phases_failed": 1,
+    "captures_resolved": 0,
+    "captures_unresolved": 509,
+    "native_authority": "NOT_EXECUTED",
+    "a3": "NOT_EXECUTED",
+    "references": "NOT_EXECUTED",
+    "invariants": "NOT_EXECUTED",
+    "transactions": "NOT_EXECUTED",
+    "event_outbox": "NOT_EXECUTED"
+  },
+  "preservation": {
+    "v24_sha256": "a102d278bf2e5ca6e9b8bf282f5402a54f52d4690beed2ecbed5145c56539387",
+    "shared_systems_touched": false,
+    "previous_retries_overwritten": false
+  },
+  "teardown": "PENDING"
+}

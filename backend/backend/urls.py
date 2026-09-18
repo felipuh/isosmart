@@ -7,8 +7,10 @@ from resources import views as resources_views
 from operations import views as operations_views
 from django.conf import settings
 from django.conf.urls.static import static
+from foundation.adminapps_ingress import receive_tenant_event
 
 urlpatterns = [
+    path('api/integration/adminapps/tenant-events/', receive_tenant_event, name='adminapps-tenant-events'),
     path('admin/', admin.site.urls),
     path('health', views.health_check, name='health'),
     

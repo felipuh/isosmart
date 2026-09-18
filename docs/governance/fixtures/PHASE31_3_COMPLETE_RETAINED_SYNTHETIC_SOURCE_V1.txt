@@ -1,0 +1,6 @@
+iso-smart-complete-retained-synthetic-lifecycle-source-v1
+classification=SYNTHETIC|NON_AUTHORITATIVE|NON_NORMATIVE|NON_LICENSED|TEST_ONLY|NON_PRODUCTION|NON_CERTIFIABLE
+element=source-reference-before
+element=source-reference-after
+external_business_effect=false
+phase29_continuity_claim=false

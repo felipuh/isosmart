@@ -1,0 +1,37 @@
+-- ISO SMART AI - DDL inicial de referencia (PostgreSQL)
+-- Arquitectura multi-tenant, versionada y preparada para RLS/RBAC.
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+CREATE TABLE tenant (
+  tenant_id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  name text NOT NULL, plan_code text NOT NULL, status text NOT NULL DEFAULT 'provisioning',
+  locale text DEFAULT 'es-CR', created_at timestamptz NOT NULL DEFAULT now()
+);
+CREATE TABLE standard (standard_id uuid PRIMARY KEY DEFAULT gen_random_uuid(), code text UNIQUE NOT NULL, title text, publisher text DEFAULT 'ISO');
+CREATE TABLE standard_edition (edition_id uuid PRIMARY KEY DEFAULT gen_random_uuid(), standard_id uuid NOT NULL REFERENCES standard, edition text NOT NULL, status text NOT NULL, effective_from date, effective_to date, source_hash text, UNIQUE(standard_id,edition));
+CREATE TABLE clause (clause_id uuid PRIMARY KEY DEFAULT gen_random_uuid(), edition_id uuid NOT NULL REFERENCES standard_edition, code text NOT NULL, title text, parent_id uuid REFERENCES clause, UNIQUE(edition_id,code));
+CREATE TABLE requirement_control (requirement_id uuid PRIMARY KEY DEFAULT gen_random_uuid(), clause_id uuid NOT NULL REFERENCES clause, paraphrase text NOT NULL, applicability_rule jsonb NOT NULL DEFAULT '{}'::jsonb, control_type text, valid_from timestamptz DEFAULT now(), valid_to timestamptz);
+CREATE TABLE knowledge_layer (knowledge_layer_id uuid PRIMARY KEY DEFAULT gen_random_uuid(), standard_edition_id uuid REFERENCES standard_edition, layer_type text NOT NULL, certifiable_if_pack_active boolean NOT NULL DEFAULT false);
+CREATE TABLE knowledge_layer_rule (rule_id uuid PRIMARY KEY DEFAULT gen_random_uuid(), knowledge_layer_id uuid NOT NULL REFERENCES knowledge_layer, rule_key text NOT NULL, version text NOT NULL, logic_json jsonb NOT NULL DEFAULT '{}'::jsonb, evidence_expectation jsonb NOT NULL DEFAULT '{}'::jsonb, UNIQUE(knowledge_layer_id,rule_key,version));
+CREATE TABLE knowledge_layer_binding (binding_id uuid PRIMARY KEY DEFAULT gen_random_uuid(), requirement_id uuid NOT NULL REFERENCES requirement_control, rule_id uuid NOT NULL REFERENCES knowledge_layer_rule, priority text, rationale text, UNIQUE(requirement_id,rule_id));
+CREATE TABLE process (process_id uuid PRIMARY KEY DEFAULT gen_random_uuid(), tenant_id uuid NOT NULL REFERENCES tenant, name text NOT NULL, process_type text, owner_user_id uuid, status text DEFAULT 'active');
+CREATE TABLE evidence (evidence_id uuid PRIMARY KEY DEFAULT gen_random_uuid(), tenant_id uuid NOT NULL REFERENCES tenant, source_type text NOT NULL, source_uri text, content_hash text NOT NULL, captured_at timestamptz NOT NULL DEFAULT now(), trust_score numeric(5,4), metadata jsonb NOT NULL DEFAULT '{}'::jsonb);
+CREATE INDEX idx_evidence_tenant_time ON evidence(tenant_id,captured_at DESC);
+CREATE TABLE evidence_coverage (coverage_id uuid PRIMARY KEY DEFAULT gen_random_uuid(), evidence_id uuid NOT NULL REFERENCES evidence, requirement_id uuid NOT NULL REFERENCES requirement_control, confidence numeric(5,4), validation_status text NOT NULL DEFAULT 'proposed', validated_by uuid, validated_at timestamptz, UNIQUE(evidence_id,requirement_id));
+CREATE TABLE domain_event (event_id uuid PRIMARY KEY DEFAULT gen_random_uuid(), tenant_id uuid NOT NULL REFERENCES tenant, event_type text NOT NULL, aggregate_type text, aggregate_id uuid, payload_json jsonb NOT NULL DEFAULT '{}'::jsonb, occurred_at timestamptz NOT NULL DEFAULT now(), trace_id uuid NOT NULL DEFAULT gen_random_uuid());
+CREATE INDEX idx_event_tenant_type_time ON domain_event(tenant_id,event_type,occurred_at DESC);
+CREATE TABLE agent_definition (agent_id uuid PRIMARY KEY DEFAULT gen_random_uuid(), name text UNIQUE NOT NULL, purpose text, autonomy_max smallint NOT NULL CHECK(autonomy_max BETWEEN 0 AND 4), model_policy jsonb NOT NULL DEFAULT '{}'::jsonb);
+CREATE TABLE agent_run (agent_run_id uuid PRIMARY KEY DEFAULT gen_random_uuid(), tenant_id uuid NOT NULL REFERENCES tenant, agent_id uuid NOT NULL REFERENCES agent_definition, event_id uuid REFERENCES domain_event, model_provider text, model_name text, model_version text, prompt_version text, rule_bundle_version text, started_at timestamptz NOT NULL DEFAULT now(), completed_at timestamptz, trace_id uuid NOT NULL);
+CREATE TABLE recommendation (recommendation_id uuid PRIMARY KEY DEFAULT gen_random_uuid(), tenant_id uuid NOT NULL REFERENCES tenant, agent_run_id uuid NOT NULL REFERENCES agent_run, title text NOT NULL, body text NOT NULL, confidence numeric(5,4), impact text, status text NOT NULL DEFAULT 'proposed', created_at timestamptz NOT NULL DEFAULT now());
+CREATE TABLE recommendation_basis (basis_id uuid PRIMARY KEY DEFAULT gen_random_uuid(), recommendation_id uuid NOT NULL REFERENCES recommendation ON DELETE CASCADE, requirement_id uuid REFERENCES requirement_control, rule_id uuid REFERENCES knowledge_layer_rule, evidence_id uuid REFERENCES evidence, rationale text NOT NULL);
+CREATE TABLE approval (approval_id uuid PRIMARY KEY DEFAULT gen_random_uuid(), tenant_id uuid NOT NULL REFERENCES tenant, subject_type text NOT NULL, subject_id uuid NOT NULL, required_role text NOT NULL, decision text, decided_by uuid, decided_at timestamptz, comments text);
+CREATE TABLE action_execution (execution_id uuid PRIMARY KEY DEFAULT gen_random_uuid(), recommendation_id uuid NOT NULL REFERENCES recommendation, executor_type text NOT NULL, started_at timestamptz, completed_at timestamptz, reversible boolean NOT NULL DEFAULT true, rollback_ref text, result jsonb NOT NULL DEFAULT '{}'::jsonb);
+CREATE TABLE effectiveness_check (check_id uuid PRIMARY KEY DEFAULT gen_random_uuid(), tenant_id uuid NOT NULL REFERENCES tenant, subject_type text NOT NULL, subject_id uuid NOT NULL, method text NOT NULL, due_at timestamptz, result text, evidence_id uuid REFERENCES evidence, completed_at timestamptz);
+CREATE TABLE learning_path (learning_path_id uuid PRIMARY KEY DEFAULT gen_random_uuid(), edition_id uuid REFERENCES standard_edition, role_code text, industry_code text, required_score numeric(5,2) DEFAULT 80, active boolean DEFAULT true);
+CREATE TABLE question_bank (question_id uuid PRIMARY KEY DEFAULT gen_random_uuid(), learning_path_id uuid REFERENCES learning_path, concept_key text NOT NULL, industry_code text, difficulty smallint, scenario text NOT NULL, options_json jsonb NOT NULL, answer_key jsonb NOT NULL, explanation text);
+CREATE TABLE quiz_attempt (attempt_id uuid PRIMARY KEY DEFAULT gen_random_uuid(), tenant_id uuid NOT NULL REFERENCES tenant, user_id uuid NOT NULL, learning_path_id uuid NOT NULL REFERENCES learning_path, score numeric(5,2), passed boolean, started_at timestamptz DEFAULT now(), completed_at timestamptz);
+CREATE TABLE concept_mastery (mastery_id uuid PRIMARY KEY DEFAULT gen_random_uuid(), tenant_id uuid NOT NULL REFERENCES tenant, user_id uuid NOT NULL, concept_key text NOT NULL, score numeric(5,2), last_assessed_at timestamptz, retraining_due_at timestamptz, UNIQUE(tenant_id,user_id,concept_key));
+CREATE TABLE immutable_audit_log (log_id bigserial PRIMARY KEY, tenant_id uuid NOT NULL REFERENCES tenant, actor_type text NOT NULL, actor_id text, action text NOT NULL, entity_type text NOT NULL, entity_id text NOT NULL, before_hash text, after_hash text, payload_hash text, occurred_at timestamptz NOT NULL DEFAULT now());
+
+-- Regla de versionado: nunca UPDATE destructivo de RequirementControl/KnowledgeLayerRule cuando cambia una edición.
+-- Se inserta nueva StandardEdition + reglas/bindings y se conserva la cobertura histórica de evidencia.

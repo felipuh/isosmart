@@ -1,97 +1,105 @@
 import { useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { Loader2 } from 'lucide-react';
+import { AlertTriangle, Loader2, RefreshCw } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { useI18n } from '../../context/I18nContext';
 import settingsService from '../../services/settingsService';
 
-const getOnboardingSessionKey = (organizationId) => (
-  organizationId ? `isosmart_onboarding_seen_${organizationId}` : null
-);
+const ONBOARDING_STATUS_TIMEOUT_MS = 10000;
 
 const OnboardingGuard = ({ children }) => {
+  const { t } = useI18n();
   const { currentOrganization, isAuthenticated } = useAuth();
   const location = useLocation();
-  const [loading, setLoading] = useState(true);
-  const [completed, setCompleted] = useState(true);
-  const [shownInSession, setShownInSession] = useState(false);
+  const [status, setStatus] = useState('loading');
+  const [validatedOrganizationId, setValidatedOrganizationId] = useState(null);
+  const [retryCount, setRetryCount] = useState(0);
 
-  const organizationId = currentOrganization?.id;
   const isOnboardingRoute = location.pathname === '/onboarding';
 
   useEffect(() => {
     let mounted = true;
+    let timeoutId;
 
     const checkStatus = async () => {
       if (!isAuthenticated || !currentOrganization?.id) {
         if (mounted) {
-          setCompleted(true);
-          setLoading(false);
+          setValidatedOrganizationId(null);
+          setStatus('degraded');
         }
         return;
       }
 
       try {
-        setLoading(true);
-        const data = await settingsService.getOnboardingStatus(currentOrganization.id);
+        setValidatedOrganizationId(null);
+        setStatus('loading');
+        const timeout = new Promise((_, reject) => {
+          timeoutId = window.setTimeout(
+            () => reject(new Error('onboarding_status_timeout')),
+            ONBOARDING_STATUS_TIMEOUT_MS
+          );
+        });
+        const data = await Promise.race([
+          settingsService.getOnboardingStatus(currentOrganization.id),
+          timeout,
+        ]);
+        if (typeof data?.onboarding_completed !== 'boolean') {
+          throw new Error('invalid_onboarding_status');
+        }
         if (mounted) {
-          setCompleted(Boolean(data.onboarding_completed));
+          setValidatedOrganizationId(currentOrganization.id);
+          setStatus(data.onboarding_completed ? 'completed' : 'incomplete');
         }
       } catch {
         if (mounted) {
-          setCompleted(true);
+          setValidatedOrganizationId(null);
+          setStatus('degraded');
         }
       } finally {
-        if (mounted) {
-          setLoading(false);
-        }
+        window.clearTimeout(timeoutId);
       }
     };
 
     checkStatus();
     return () => {
       mounted = false;
+      window.clearTimeout(timeoutId);
     };
-  }, [currentOrganization?.id, isAuthenticated]);
+  }, [currentOrganization?.id, isAuthenticated, retryCount]);
 
-  useEffect(() => {
-    const sessionKey = getOnboardingSessionKey(organizationId);
-    if (!sessionKey || typeof window === 'undefined') {
-      setShownInSession(false);
-      return;
-    }
-
-    setShownInSession(window.sessionStorage.getItem(sessionKey) === '1');
-  }, [organizationId, isAuthenticated]);
-
-  useEffect(() => {
-    const sessionKey = getOnboardingSessionKey(organizationId);
-    if (!sessionKey || typeof window === 'undefined') {
-      return;
-    }
-
-    if (completed) {
-      window.sessionStorage.removeItem(sessionKey);
-      if (shownInSession) {
-        setShownInSession(false);
-      }
-      return;
-    }
-
-    if (isOnboardingRoute && !shownInSession) {
-      window.sessionStorage.setItem(sessionKey, '1');
-      setShownInSession(true);
-    }
-  }, [completed, isOnboardingRoute, organizationId, shownInSession]);
-
-  if (loading) {
+  if (status === 'degraded') {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900">
-        <Loader2 className="w-8 h-8 animate-spin text-indigo-500" />
+      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900 p-6">
+        <div className="max-w-md rounded-xl border border-amber-300 bg-white dark:bg-slate-800 p-6 text-center shadow-sm" role="alert">
+          <AlertTriangle className="w-10 h-10 text-amber-500 mx-auto mb-3" />
+          <h1 className="text-lg font-semibold text-slate-900 dark:text-white">{t('onboardingGuard.degradedTitle')}</h1>
+          <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">{t('onboardingGuard.degradedDescription')}</p>
+          <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">{t('onboardingGuard.support')}</p>
+          <button
+            type="button"
+            onClick={() => setRetryCount((value) => value + 1)}
+            className="mt-5 inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700"
+          >
+            <RefreshCw className="w-4 h-4" />
+            {t('common.buttons.retry')}
+          </button>
+        </div>
       </div>
     );
   }
 
-  if (!completed && !isOnboardingRoute && !shownInSession) {
+  if (status === 'loading' || validatedOrganizationId !== currentOrganization?.id) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900">
+        <div className="text-center" role="status" aria-live="polite">
+          <Loader2 className="w-8 h-8 animate-spin text-indigo-500 mx-auto mb-3" />
+          <p className="text-sm text-slate-600 dark:text-slate-300">{t('onboardingGuard.loading')}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (status === 'incomplete' && !isOnboardingRoute) {
     return <Navigate to="/onboarding" replace />;
   }
 

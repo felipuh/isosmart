@@ -1,0 +1,15 @@
+{
+  "command": "QmsOrganizationCommandService.create_organization",
+  "conflicting_request_key_denied": true,
+  "idempotent_replay": true,
+  "main_tenant_projection_id": "1792f5b0-3a5d-4b31-89d8-a44572293011",
+  "native_uuid_generation": true,
+  "organization_ids": [
+    "ca6ac209-2116-4c23-a032-9b0ebc0e7e93",
+    "a01e841d-ae93-4a20-b9cd-6d66cce32ec9"
+  ],
+  "persisted_organization_count": 2,
+  "request_receipt_count": 2,
+  "transaction_rollback_verified": true,
+  "verdict": "PASS"
+}

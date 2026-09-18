@@ -1,0 +1,98 @@
+{
+  "artifact_schema": "phase31.4.5a-retry1-agentrun-source-reachability-and-serialization/v1",
+  "mandatory_source_identity_reading_complete": true,
+  "contract_agentrun_event_member_count": 2,
+  "declared_members": [
+    {
+      "row_id": "90e2d38f-9600-5701-a34c-c9827eafc88c",
+      "logical_fixture_purpose": "DomainEvent:agent-run-start",
+      "contract_event_type": "agent_run.started",
+      "contract_aggregate_type": "agent_run",
+      "contract_aggregate_id": "REFERENCE_TO_BOUND_FIELD qms.agent_run::b87bdcde-c623-522f-a0ac-ff81f61df8e8.id",
+      "selected_producer": "AgentRunCommandService._event_outbox_audit under start_agent_run",
+      "native_event_contract": "EVENT_CONTRACTS['agent_run.started']=1",
+      "source_location": "backend/foundation/agent_runtime.py:19-23,219-249,251-332"
+    },
+    {
+      "row_id": "47be0b7e-10d0-5e96-94fd-fcaa8ad14cfd",
+      "logical_fixture_purpose": "DomainEvent:agent-run-complete",
+      "contract_event_type": "agent_run.completed",
+      "contract_aggregate_type": "agent_run",
+      "contract_aggregate_id": "REFERENCE_TO_BOUND_FIELD qms.agent_run::b87bdcde-c623-522f-a0ac-ff81f61df8e8.id",
+      "selected_producer": "AgentRunCommandService._event_outbox_audit under complete_agent_run_with_recommendation",
+      "native_event_contract": "EVENT_CONTRACTS['agent_run.completed']=1",
+      "source_location": "backend/foundation/agent_runtime.py:19-23,219-249,334-390"
+    }
+  ],
+  "persisted_event_field_matrix": {
+    "shared_native_rules": [
+      {"contract_field": "event_id", "native_producer_value_or_rule": "uuid4() with enumerated ADR-0018 exact-fixture identity substitution", "source_location": "backend/foundation/agent_runtime.py:220; docs/adr/0018-row-level-execution-ready-v2-contract.md", "match": true, "correction_required": false},
+      {"contract_field": "tenant_id", "native_producer_value_or_rule": "identity.tenant_id", "source_location": "backend/foundation/agent_runtime.py:228", "match": true, "correction_required": false},
+      {"contract_field": "event_type", "native_producer_value_or_rule": "caller-selected EVENT_CONTRACTS key", "source_location": "backend/foundation/agent_runtime.py:19-23,228", "match": true, "correction_required": true},
+      {"contract_field": "schema_version", "native_producer_value_or_rule": "EVENT_CONTRACTS[event_type] == 1", "source_location": "backend/foundation/agent_runtime.py:19-23,229", "match": true, "correction_required": false},
+      {"contract_field": "aggregate_type", "native_producer_value_or_rule": "agent_run", "source_location": "backend/foundation/agent_runtime.py:223,229", "match": true, "correction_required": true},
+      {"contract_field": "aggregate_id", "native_producer_value_or_rule": "run.id", "source_location": "backend/foundation/agent_runtime.py:223,230", "match": true, "correction_required": true},
+      {"contract_field": "aggregate_version", "native_producer_value_or_rule": "COALESCE(MAX(aggregate_version),0)+1 for (agent_run,run.id)", "source_location": "backend/foundation/agent_runtime.py:221-225", "match": true, "correction_required": false},
+      {"contract_field": "occurred_at", "native_producer_value_or_rule": "start started_at / completion run.completed_at", "source_location": "backend/foundation/agent_runtime.py:258,326-328,371-385", "match": true, "correction_required": false},
+      {"contract_field": "recorded_at", "native_producer_value_or_rule": "statement_timestamp() database default", "source_location": "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:56", "match": true, "correction_required": false},
+      {"contract_field": "trace_id", "native_producer_value_or_rule": "run.trace_id", "source_location": "backend/foundation/agent_runtime.py:231", "match": true, "correction_required": true},
+      {"contract_field": "correlation_id", "native_producer_value_or_rule": "run.correlation_id; exact fixture supplies NULL", "source_location": "backend/foundation/agent_runtime.py:232,258-294", "match": true, "correction_required": false},
+      {"contract_field": "causation_id", "native_producer_value_or_rule": "run.causation_id; exact fixture supplies NULL", "source_location": "backend/foundation/agent_runtime.py:232,258-294", "match": true, "correction_required": false},
+      {"contract_field": "source", "native_producer_value_or_rule": "iso-smart-agent-runtime", "source_location": "backend/foundation/agent_runtime.py:233", "match": true, "correction_required": true},
+      {"contract_field": "payload", "native_producer_value_or_rule": "canonicalized _state(run, inputs, recommendation_id)", "source_location": "backend/foundation/agent_runtime.py:226,325-328,381-385,410-435", "match": true, "correction_required": true},
+      {"contract_field": "payload_hash", "native_producer_value_or_rule": "canonical_hash(canonical_payload)", "source_location": "backend/foundation/agent_runtime.py:234", "match": true, "correction_required": false}
+    ],
+    "start_specific": {"event_type": "agent_run.started", "status_in_payload": "running", "recommendation_id_in_payload": null, "completed_at_in_payload": null},
+    "completion_specific": {"event_type": "agent_run.completed", "status_in_payload": "completed", "recommendation_id_in_payload": "Recommendation.id", "completed_at_in_payload": "run.completed_at"}
+  },
+  "identity_allocation": {
+    "event_primary_key": {"native": "uuid4 caller supplied to DomainEvent.objects.create", "contract": "enumerated deterministic ADR-0018 fixture replacement", "authorized": true},
+    "outbox_primary_key": {"native": "ORM UUIDField default uuid4", "contract": "enumerated deterministic ADR-0018 fixture replacement", "authorized": true},
+    "audit_primary_key": {"native": "database uuidv7 output", "contract": "NATIVE_UUIDV7_OUTPUT", "authorized": true},
+    "unapproved_event_identity_substitution": 0,
+    "unapproved_outbox_identity_substitution": 0,
+    "unapproved_audit_identity_substitution": 0
+  },
+  "outbox_linkage": {
+    "domain_event_id": "reference to affected DomainEvent.event_id",
+    "status": "pending",
+    "publish_attempts": 0,
+    "available_at": "same occurred_at supplied to event",
+    "lease_owner": null,
+    "lease_expires_at": null,
+    "published_at": null,
+    "source_location": "backend/foundation/agent_runtime.py:236-240"
+  },
+  "immutable_audit_linkage": {
+    "stream_type": "agent_run",
+    "stream_id": "reference to AgentRun.id",
+    "action": "same native event type",
+    "entity_type": "agent_run",
+    "entity_id": "reference to AgentRun.id",
+    "actor_type": "worker",
+    "actor_id": "exact synthetic caller input serialized by str(actor_id)",
+    "trace_id": "reference to AgentRun.trace_id",
+    "metadata": "canonical event_id/schema_version/status/provenance_hash object",
+    "sequence_and_predecessor": "native audit.append_immutable_audit per-stream advisory-lock allocation",
+    "source_location": "backend/foundation/agent_runtime.py:241-248; backend/foundation/audit.py:48-73; backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:274-349"
+  },
+  "same_stream_writers": [
+    {"operation": "start_agent_run", "event_type": "agent_run.started", "aggregate_key": ["agent_run", "AgentRun.id"], "serialization": "deterministic parent INSERT primary-key conflict occurs before MAX+1", "invariant": "AGGREGATE_CREATION_SERIALIZED_BY_PARENT_IDENTITY"},
+    {"operation": "complete_agent_run_with_recommendation", "event_type": "agent_run.completed", "aggregate_key": ["agent_run", "AgentRun.id"], "serialization": "SELECT FOR UPDATE on AgentRun before MAX+1"},
+    {"operation": "fail_agent_run", "event_type": "agent_run.failed", "aggregate_key": ["agent_run", "AgentRun.id"], "serialization": "SELECT FOR UPDATE on AgentRun before MAX+1", "future_contract_member_present": false}
+  ],
+  "serialization_promotion": {
+    "same_aggregate_writer_inventory_complete": true,
+    "start_source_reachable": true,
+    "completion_source_reachable": true,
+    "start_serialization_proven": true,
+    "completion_serialization_proven": true,
+    "failure_writer_domain_proven": true,
+    "later_writer_serialization_domain": "AgentRun.id",
+    "allocation_window_mutual_exclusion_proven": true,
+    "domain_event_stream_index_unique": false,
+    "new_lock_required": false,
+    "live_PostgreSQL_race_test": "NOT EXECUTED"
+  },
+  "guards": {"database_attempts": 0, "network_attempts": 0, "container_attempts": 0, "lifecycle_attempts": 0, "resolver_invocations": 0}
+}

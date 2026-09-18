@@ -8,9 +8,23 @@ import CrudPageHeader from '../../../components/Common/CrudPageHeader';
 import CrudEmptyState from '../../../components/Common/CrudEmptyState';
 import { showConfirm } from '../../../services/dialogs';
 import { getCorrectiveActions, createCorrectiveAction, updateCorrectiveAction, deleteCorrectiveAction, getNonconformities } from '../api/improvementApi';
+import {
+  S3Button,
+  S3LoadingState,
+  S3ResultsSummary,
+  S3StatusBadge,
+  S3Table,
+  S3TableActions,
+  S3TableBody,
+  S3TableCell,
+  S3TableContainer,
+  S3TableHead,
+  S3TableHeader,
+  S3TableRow,
+} from '@smart3ai/design-system';
 
 const normalizeList = (data) => Array.isArray(data) ? data : data?.results || [];
-const statusColors = { planned: 'badge-base badge-neutral', in_progress: 'badge-base badge-info', implemented: 'badge-base badge-accent', verified: 'badge-base badge-cyan', effective: 'badge-base badge-success', not_effective: 'badge-base badge-danger', cancelled: 'badge-base badge-neutral' };
+const statusTones = { planned: 'neutral', in_progress: 'info', implemented: 'accent', verified: 'info', effective: 'success', not_effective: 'danger', cancelled: 'neutral' };
 
 const initialForm = { nonconformity: '', action_number: '', action_type: 'corrective', root_cause_analysis: '', root_cause_identified: '', analysis_method: '', action_description: '', implementation_steps: '', resources_required: '', planned_start_date: '', planned_completion_date: '', verification_method: '', effectiveness_criteria: '', status: 'planned', completion_percentage: 0, comments: '' };
 
@@ -92,7 +106,7 @@ const ImprovementCorrectiveActionsPage = () => {
   const openForm = () => { resetForm(); setShowForm(true); };
   const closeForm = () => { resetForm(); setShowForm(false); if (location.pathname.endsWith('/new')) navigate(location.pathname.replace(/\/new$/, ''), { replace: true }); };
 
-  if (loading) return <div className="flex justify-center p-8"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div></div>;
+  if (loading) return <S3LoadingState variant="section" size="lg" label={t('common.messages.loading')} />;
 
   return (
     <div className="space-y-6">
@@ -148,43 +162,49 @@ const ImprovementCorrectiveActionsPage = () => {
               <label className="form-label-muted">{t('modules.improvement.correctiveActionsPage.fields.comments')}<input type="text" value={form.comments} onChange={e => setForm({ ...form, comments: e.target.value })} className="field-control"  /></label>
             </div>
             <div className="flex flex-wrap gap-2">
-              <button type="submit" disabled={saving || !orgId} className="rounded-lg bg-emerald-500/80 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-500 disabled:opacity-50">{saving ? t('common.messages.saving') : editingId ? t('common.buttons.update') : t('common.buttons.create')}</button>
-              <button type="button" onClick={closeForm} className="rounded-lg border border-slate-300 dark:border-slate-700 px-4 py-2 text-sm text-slate-700 dark:text-slate-200">{t('common.buttons.cancel')}</button>
+              <S3Button type="submit" disabled={saving || !orgId} loading={saving}>{saving ? t('common.messages.saving') : editingId ? t('common.buttons.update') : t('common.buttons.create')}</S3Button>
+              <S3Button type="button" variant="secondary" onClick={closeForm}>{t('common.buttons.cancel')}</S3Button>
             </div>
         </form>
       </Modal>
 
-      <div className="card overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-slate-100 dark:bg-slate-800/60">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.improvement.correctiveActionsPage.table.code')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.improvement.correctiveActionsPage.table.nc')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.improvement.correctiveActionsPage.table.type')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.improvement.correctiveActionsPage.table.progress')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('common.forms.status')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-300 uppercase">{t('modules.improvement.correctiveActionsPage.table.actions')}</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
+      <S3ResultsSummary>
+        {items.length} {t('modules.improvement.correctiveActionsPage.title')}
+      </S3ResultsSummary>
+
+      <S3TableContainer>
+        <S3Table>
+          <S3TableHead>
+            <S3TableRow>
+              <S3TableHeader>{t('modules.improvement.correctiveActionsPage.table.code')}</S3TableHeader>
+              <S3TableHeader>{t('modules.improvement.correctiveActionsPage.table.nc')}</S3TableHeader>
+              <S3TableHeader>{t('modules.improvement.correctiveActionsPage.table.type')}</S3TableHeader>
+              <S3TableHeader>{t('modules.improvement.correctiveActionsPage.table.progress')}</S3TableHeader>
+              <S3TableHeader>{t('common.forms.status')}</S3TableHeader>
+              <S3TableHeader align="end">{t('modules.improvement.correctiveActionsPage.table.actions')}</S3TableHeader>
+            </S3TableRow>
+          </S3TableHead>
+          <S3TableBody>
             {items.length === 0 ? (
               <CrudEmptyState colSpan={6} message={t('modules.improvement.correctiveActionsPage.empty')} />
             ) : items.map(item => (
-              <tr key={item.id} className="hover:bg-slate-100 dark:hover:bg-slate-800/60">
-                <td className="px-6 py-4 table-code">{item.action_number}</td>
-                <td className="px-6 py-4 table-secondary-text">{item.nonconformity_number || t('modules.improvement.correctiveActionsPage.table.ncFallback').replace('{id}', item.nonconformity)}</td>
-                <td className="px-6 py-4 table-secondary-text">{actionTypeLabels[item.action_type] || item.action_type}</td>
-                <td className="px-6 py-4"><div className="flex items-center gap-2"><div className="progress-track"><div className="progress-fill-info" style={{ width: `${item.completion_percentage || 0}%` }}></div></div><span className="table-tertiary-text">{item.completion_percentage || 0}%</span></div></td>
-                <td className="px-6 py-4"><span className={`px-2 py-1 rounded text-xs ${statusColors[item.status] || ''}`}>{statusLabels[item.status] || item.status}</span></td>
-                <td className="px-6 py-4 space-x-2">
+              <S3TableRow key={item.id}>
+                <S3TableCell className="table-code">{item.action_number}</S3TableCell>
+                <S3TableCell className="table-secondary-text">{item.nonconformity_number || t('modules.improvement.correctiveActionsPage.table.ncFallback').replace('{id}', item.nonconformity)}</S3TableCell>
+                <S3TableCell className="table-secondary-text">{actionTypeLabels[item.action_type] || item.action_type}</S3TableCell>
+                <S3TableCell><div className="flex items-center gap-2"><div className="progress-track"><div className="progress-fill-info" style={{ width: `${item.completion_percentage || 0}%` }}></div></div><span className="table-tertiary-text">{item.completion_percentage || 0}%</span></div></S3TableCell>
+                <S3TableCell><S3StatusBadge tone={statusTones[item.status] || 'neutral'}>{statusLabels[item.status] || item.status}</S3StatusBadge></S3TableCell>
+                <S3TableCell align="end">
+                  <S3TableActions>
                   <button onClick={() => handleEdit(item)} className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 text-sm">{t('common.buttons.edit')}</button>
                   <button onClick={() => handleDelete(item.id)} className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 text-sm">{t('common.buttons.delete')}</button>
-                </td>
-              </tr>
+                  </S3TableActions>
+                </S3TableCell>
+              </S3TableRow>
             ))}
-          </tbody>
-        </table>
-      </div>
+          </S3TableBody>
+        </S3Table>
+      </S3TableContainer>
     </div>
   );
 };

@@ -1,0 +1,7 @@
+{
+  "artifact_schema": "phase31.4-v2.5-exact-comparison/v1",
+  "comparison_after_native_resolution": true,
+  "equal": true,
+  "first_hash": "682becf930f980bddbd061cfcc90f6bdd5ac8af85c79b05837dbed2482e5c765",
+  "second_hash": "682becf930f980bddbd061cfcc90f6bdd5ac8af85c79b05837dbed2482e5c765"
+}

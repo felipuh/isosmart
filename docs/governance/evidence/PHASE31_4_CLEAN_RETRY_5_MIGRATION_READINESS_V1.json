@@ -1,0 +1,29 @@
+{
+  "artifact_schema": "phase31.4-clean-retry-5-migration-readiness/v1",
+  "retry": "Phase 31.4 V2.5 Clean Retry 5",
+  "local_graph": {
+    "django_version": "4.2.22",
+    "fresh_sqlite_graph_from_zero": "PASS",
+    "migration_failures": 0,
+    "foundation_migrations": 23,
+    "full_project_migration_files_applied_in_probe": "PASS"
+  },
+  "postgresql_18_6": {
+    "image_digest_authorized": "sha256:7341002d2b8c7c5bdd7542a671a95b36196c0b5b888daf454ae4fc33ba5346d7",
+    "server_version": "PostgreSQL 18.6 (Debian 18.6-1.pgdg13+2)",
+    "foundation_gate": "PASS",
+    "foundation_forward_reverse_forward": "PASS",
+    "rls_outbox_audit_teardown": "PASS",
+    "full_project_django_graph": "NOT_EXECUTED"
+  },
+  "retry4_count_reconciliation": {
+    "reported_applied": 49,
+    "reported_pending": 42,
+    "reproduced_in_current_checkout": false,
+    "observed_first_pending_in_current_sqlite_probe": "authentication.0010_alter_refreshtokenblacklist_token_hash",
+    "diagnosis": "Retry 4 counts came from a different or misconfigured database graph; current checkout completes the full Django graph from zero in SQLite and the isolated PostgreSQL Foundation gate from zero.",
+    "product_migration_file_modified": false
+  },
+  "readiness_status": "PARTIAL_PASS_FULL_PROJECT_POSTGRESQL_PENDING",
+  "promotion_eligible": false
+}

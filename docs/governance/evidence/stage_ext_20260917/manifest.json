@@ -1,0 +1,19 @@
+{
+  "artifacts": {
+    "01-canonical-tenant-identity.json": "0926babe2439315468c046a3c8519ca934b9c7b2af92907ffb7bfbe72eee04a6",
+    "02-event-contract.json": "9f7a1bd9979a94cabbe2466f2f20d3d0b4e49fdbb897c44bdc344f0d395f6776",
+    "03-adminapps-producer.json": "b0425eaebe347b1ad01abcd8319a195f7367ac4c793df3f6905e751446073ca2",
+    "04-authenticated-transport.json": "5668778d3a5f90bd83b9d020d9ae870bb998dc5e713c9d85d50846a1c653a93d",
+    "05-ingress-provenance.json": "75b3b4a745a41196dd962e3cd1569309d86c0cccd87de4f641de87be632e2bc7",
+    "06-tenant-projection.json": "d826fc7b9c5d97e0adb4499ce8560cb36743cba566424f83184959525300d23e",
+    "07-qms-organization-command.json": "30369f114f5d5d3e6aa08ece0194e6ae229abba1271bbedb96f47466bc0200fc",
+    "08-authorization.json": "706d5461777b9d223be8ab1550e68961cc58602fae38a4f955a3e994674860bd",
+    "09-organization-event-outbox-audit.json": "13873fa07fe1291fc3d1e5f6f9b1e3970fa249b0fb01c27cf7fec8f6b543c03a",
+    "10-upstream-smoke.json": "73f2b8a3255b6113c7a1a9382091f6e60ad929ad6df794dc128e947a555b7d2c",
+    "11-blocker-closures.json": "bc070bfcc6dc05c0ec3f657434a748e1e4a01d893ea57c15ce6f53e81f2bba42",
+    "12-retry8-teardown.json": "4bd520158206bb25e079199d08308e2c719035a19840f39a0b3fd13550d4c691"
+  },
+  "full_phase31_4_retry_authorized": false,
+  "schema": "stage-ext-remediation-evidence/v1",
+  "stage_ext_verdict": "STAGE_EXT_PASS"
+}

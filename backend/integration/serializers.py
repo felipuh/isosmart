@@ -20,10 +20,18 @@ class AssistantConversationSerializer(serializers.ModelSerializer):
             'last_standard_focus', 'last_clause_focus', 'context_summary',
             'metadata', 'created_at', 'updated_at',
         ]
-        read_only_fields = ('created_at', 'updated_at')
+        read_only_fields = ('organization_id', 'user', 'created_at', 'updated_at')
 
 
 class AssistantMessageSerializer(serializers.ModelSerializer):
+    conversation = serializers.PrimaryKeyRelatedField(
+        queryset=AssistantConversation.objects.none(),
+        error_messages={
+            'does_not_exist': 'Referencia de conversación inválida.',
+            'incorrect_type': 'Referencia de conversación inválida.',
+        },
+    )
+
     class Meta:
         model = AssistantMessage
         fields = [
@@ -32,11 +40,21 @@ class AssistantMessageSerializer(serializers.ModelSerializer):
             'token_usage_completion', 'token_usage_total', 'latency_ms',
             'created_at',
         ]
-        read_only_fields = ('created_at',)
+        read_only_fields = ('organization_id', 'created_at')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        request = self.context.get('request')
+        organization_id = getattr(request, 'organization_id', None)
+        if organization_id:
+            self.fields['conversation'].queryset = AssistantConversation.objects.filter(
+                organization_id=organization_id,
+            )
 
     def validate(self, attrs):
         conversation = attrs.get('conversation') or getattr(self.instance, 'conversation', None)
-        organization_id = attrs.get('organization_id') or getattr(self.instance, 'organization_id', None)
+        request = self.context.get('request')
+        organization_id = getattr(request, 'organization_id', None)
         if conversation and organization_id and conversation.organization_id != organization_id:
             raise serializers.ValidationError({'organization_id': 'Debe coincidir con la organización de la conversación.'})
         return attrs
@@ -51,7 +69,7 @@ class AssistantOrgProfileSerializer(serializers.ModelSerializer):
             'organization_summary', 'preferred_response_style',
             'forbidden_topics', 'metadata', 'created_at', 'updated_at',
         ]
-        read_only_fields = ('created_at', 'updated_at')
+        read_only_fields = ('organization_id', 'created_at', 'updated_at')
 
 
 class AssistantMemoryItemSerializer(serializers.ModelSerializer):
@@ -63,7 +81,7 @@ class AssistantMemoryItemSerializer(serializers.ModelSerializer):
             'clause_reference', 'confidence_score', 'is_active',
             'created_at', 'updated_at',
         ]
-        read_only_fields = ('created_at', 'updated_at')
+        read_only_fields = ('organization_id', 'created_at', 'updated_at')
 
 
 class AssistantPromptConfigSerializer(serializers.ModelSerializer):
@@ -74,17 +92,64 @@ class AssistantPromptConfigSerializer(serializers.ModelSerializer):
             'response_policy', 'citation_policy', 'enabled', 'updated_by',
             'created_at', 'updated_at',
         ]
-        read_only_fields = ('created_at', 'updated_at')
+        read_only_fields = ('organization_id', 'updated_by', 'created_at', 'updated_at')
 
 
 class AssistantFeedbackSerializer(serializers.ModelSerializer):
+    conversation = serializers.PrimaryKeyRelatedField(
+        queryset=AssistantConversation.objects.none(),
+        error_messages={
+            'does_not_exist': 'Referencia de conversación inválida.',
+            'incorrect_type': 'Referencia de conversación inválida.',
+        },
+    )
+    message = serializers.PrimaryKeyRelatedField(
+        queryset=AssistantMessage.objects.none(),
+        allow_null=True,
+        required=False,
+        error_messages={
+            'does_not_exist': 'Referencia de mensaje inválida.',
+            'incorrect_type': 'Referencia de mensaje inválida.',
+        },
+    )
+
     class Meta:
         model = AssistantFeedback
         fields = [
             'id', 'organization_id', 'conversation', 'message', 'user',
             'rating', 'feedback_text', 'created_at',
         ]
-        read_only_fields = ('created_at',)
+        read_only_fields = ('organization_id', 'user', 'created_at')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        request = self.context.get('request')
+        organization_id = getattr(request, 'organization_id', None)
+        if organization_id:
+            self.fields['conversation'].queryset = AssistantConversation.objects.filter(
+                organization_id=organization_id,
+            )
+            self.fields['message'].queryset = AssistantMessage.objects.filter(
+                organization_id=organization_id,
+                conversation__organization_id=organization_id,
+            )
+
+    def validate(self, attrs):
+        conversation = attrs.get('conversation') or getattr(self.instance, 'conversation', None)
+        message = attrs.get('message') if 'message' in attrs else getattr(self.instance, 'message', None)
+        request = self.context.get('request')
+        organization_id = getattr(request, 'organization_id', None)
+
+        if not organization_id:
+            raise serializers.ValidationError('No fue posible validar la organización activa.')
+        if conversation.organization_id != organization_id:
+            raise serializers.ValidationError({'conversation': 'Referencia de conversación inválida.'})
+        if message and (
+            message.organization_id != organization_id
+            or message.conversation_id != conversation.id
+        ):
+            raise serializers.ValidationError({'message': 'Referencia de mensaje inválida.'})
+        return attrs
 
     def validate_rating(self, value):
         if value < 1 or value > 5:
@@ -99,4 +164,4 @@ class AssistantAuditLogSerializer(serializers.ModelSerializer):
             'id', 'organization_id', 'user', 'conversation', 'event_type',
             'metadata', 'created_at',
         ]
-        read_only_fields = ('created_at',)
+        read_only_fields = fields

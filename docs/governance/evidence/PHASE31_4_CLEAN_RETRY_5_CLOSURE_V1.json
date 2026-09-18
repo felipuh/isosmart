@@ -1,0 +1,19 @@
+{
+  "artifact_schema": "phase31.4-clean-retry-5-closure/v1",
+  "retry": "Phase 31.4 V2.5 Clean Retry 5",
+  "historical_retry4_preserved": true,
+  "v24_sha256": "a102d278bf2e5ca6e9b8bf282f5402a54f52d4690beed2ecbed5145c56539387",
+  "p0": 0,
+  "p1_native_registry": "CLOSED_FOR_LOCAL_RUNTIME_GATE",
+  "p1_migration_chain": "NOT_CLOSED_FOR_FULL_PROJECT_POSTGRESQL",
+  "native_registry_coverage": "PASS",
+  "postgresql_foundation_gate": "PASS",
+  "full_33_phase_live_execution": "NOT_EXECUTED",
+  "native_authority_live": "NOT_EXECUTED",
+  "capture_fields_509_live": "NOT_EXECUTED",
+  "resolved_graph": "NOT_MATERIALIZED",
+  "exact_comparison": "NOT_EXECUTED",
+  "teardown": "PASS_FOR_FOUNDATION_GATE",
+  "verdict": "NOT_PROMOTED",
+  "reason": "The local runtime registry gate and isolated Foundation PostgreSQL gate pass, but the repository does not yet provide an authorized full-project PostgreSQL Clean Retry 5 runner that executes all 33 live phases and resolves all 509 captures."
+}
