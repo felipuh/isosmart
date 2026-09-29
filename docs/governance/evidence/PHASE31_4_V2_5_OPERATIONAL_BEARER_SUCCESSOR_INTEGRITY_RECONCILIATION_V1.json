@@ -1,0 +1,78 @@
+{
+  "schema": "phase31.4-v2.5-operational-bearer-successor-integrity-reconciliation/v1",
+  "artifact_id": "PHASE31_4_V2_5_OPERATIONAL_BEARER_SUCCESSOR_INTEGRITY_RECONCILIATION_V1",
+  "created_at": "2026-09-29T13:56:00-06:00",
+  "status": "SUCCESSOR_INTEGRITY_PASS",
+  "baseline": {
+    "git_commit": "5903dba41486b41534fa8e26864c8b62314f52f1",
+    "predecessor_integrity": "PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V10",
+    "predecessor_sha256": "4d40636266ce88a8b7f63130c8f2730566f578dfa827e9320f47ef67710c1008"
+  },
+  "successor": {
+    "path": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V11.json",
+    "generation": "PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V11",
+    "sha256": "69a0eec27e96e050411e1cabf8f61aa2ca8182a736e16c3b84f67089bb4e716b",
+    "protected_sources": 29,
+    "modified_sources": 4,
+    "new_sources": 1,
+    "removed_sources": 0,
+    "missing_sources": 0,
+    "unexpected_sources": 0
+  },
+  "exact_reason": "Establish a reproducible, minimum-privilege, passwordless runtime bearer for authenticated ISO Smart readiness using the existing AdminApps identity and SimpleJWT subsystem.",
+  "changed_source_hashes": [
+    {
+      "path": "backend/foundation/phase31_4_integrity_generations.py",
+      "previous": "5ca444b57582915eea774ba7bcaf3b94b5faeedc9131f19d3814fa9dac814541",
+      "new": "c1b728d030a88c853c3e5bb8ec17655f44c851c21fbff9a03e3094e1cc7e81ac"
+    },
+    {
+      "path": "backend/foundation/phase31_4_v2_5_live_executor.py",
+      "previous": "19b1a187949813d52cf8b94f56c45a6d8a7dda5954c637541e6ac97fb510d1f0",
+      "new": "76332ce1779a8d009c217907cf29015daae01540b123678aa9d82c61448c8a05"
+    },
+    {
+      "path": "backend/foundation/phase31_4_v2_5_operational_adapters.py",
+      "previous": "c3e1b2d6b27c187857bd5e08f8757b5960691b80a622d1835689e069783fd85a",
+      "new": "5e20c596c358c96b83dc184c937a40aea5312957d8b2787bdf39a85599c1d431"
+    },
+    {
+      "path": "docs/governance/tools/phase31_4_v2_5_operational_actions.py",
+      "previous": "fe5d2b320de3db0bf9a5193da10d20cb4b9902ab522154a6f764ecdc9c36638f",
+      "new": "dfa9dc4beadb6afc55af96f92d7f26ca0dc2eb4c910b61e2ef05149cdfb337eb"
+    },
+    {
+      "path": "backend/foundation/operational_bearer_identity.py",
+      "previous": null,
+      "new": "a8b792e8f9eae8b8e10d7937236e5fe5085e23161966485cd0099d905dd34599"
+    }
+  ],
+  "tests": {
+    "focused_and_integrity": "43/43 PASS",
+    "isosmart_regression": "568/568 PASS",
+    "adminapps_regression": "180/180 PASS",
+    "python_compilation": "PASS",
+    "json_validation": "PASS"
+  },
+  "secret_scan": {
+    "result": "PASS",
+    "raw_credential_leaks": 0,
+    "signing_key_recorded": false
+  },
+  "historical_evidence": "PRESERVED_UNMODIFIED",
+  "retry_20": {
+    "historical_authorization": "SUPERSEDED_UNCONSUMED",
+    "historical_consumed": "NO",
+    "reuse": "PROHIBITED",
+    "current_authorization": "NONE",
+    "executed": "NO"
+  },
+  "sqlite_custody": {
+    "path": "backend/test_default.sqlite3",
+    "git_state": "ignored local sensitive runtime state",
+    "observed_sha256": "615c233187795dd3ad992d54778f33063f1322936e366860f7ad53c4ecfb9269",
+    "expected_sha256": "615c233187795dd3ad992d54778f33063f1322936e366860f7ad53c4ecfb9269",
+    "unchanged": true
+  },
+  "phase_31_5": "EXECUTION_HELD"
+}

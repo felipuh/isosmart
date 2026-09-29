@@ -1,0 +1,89 @@
+{
+  "schema": "phase31.4-v2.5-operational-bearer-identity-contract-implementation/v1",
+  "artifact_id": "PHASE31_4_V2_5_OPERATIONAL_BEARER_IDENTITY_CONTRACT_IMPLEMENTATION_V1",
+  "created_at": "2026-09-29T13:56:00-06:00",
+  "verdict": "OPERATIONAL_BEARER_IDENTITY_CONTRACT_PASS",
+  "decision": "SAFE_PROGRAMMATIC_BEARER_ISSUANCE_AVAILABLE",
+  "baseline_commit": "5903dba41486b41534fa8e26864c8b62314f52f1",
+  "authorization": {
+    "path": "docs/governance/authorizations/PHASE31_4_V2_5_OPERATIONAL_BEARER_IDENTITY_CONTRACT_AUTHORIZATION_V1.json",
+    "sha256": "2c59226ee86328d695e23e28c08615d5b522a55e0b6a9bf32e8098ab44e4f4bf"
+  },
+  "discovery": {
+    "path": "docs/governance/evidence/PHASE31_4_V2_5_OPERATIONAL_BEARER_IDENTITY_DISCOVERY_V1.json",
+    "sha256": "47fa5a1105d8d53da2fac582266a487d7ad03ee2eaf7b5034d1fbd3a58c06900"
+  },
+  "identity_contract": {
+    "subject": "existing fresh run-scoped AdminApps User",
+    "subject_binding": "user_id UUID plus email",
+    "tenant_binding": "active Organization and UserOrganization",
+    "product_entitlement": "enabled trial entitlement; access_allowed without a fabricated subscription",
+    "role": "viewer",
+    "administrative_privilege": false,
+    "password": "unusable; never generated or injected",
+    "issuer": "AdminApps existing SimpleJWT subsystem",
+    "credential": "access token only",
+    "lifetime_seconds": 900,
+    "transport": "Authorization Bearer header created only in memory",
+    "handoff": "anonymous inherited pipe",
+    "persistence": "none",
+    "evidence": "presence, type, subject UUID, source and SHA-256 fingerprint only",
+    "cleanup": "byte buffer overwritten and reference cleared during teardown"
+  },
+  "readiness": {
+    "adminapps": "/api/integration/health/ with persisted IntegrationAPIKey",
+    "isosmart": "/health with approved runtime Bearer",
+    "minimum_required_permission": "authenticated identity",
+    "health_permission_changed": false,
+    "provider_authentication_weakened": false,
+    "nginx_static_health_used": false
+  },
+  "focused_tests": {
+    "command": ".venv/bin/python manage.py test foundation.test_operational_bearer_identity foundation.test_phase31_4_v2_5_operational_adapters foundation.test_phase31_4_v2_5_live_executor foundation.test_phase31_4_integrity_generations foundation.test_phase31_4_v2_5_precreation_integrity -v 1",
+    "result": "43/43 PASS",
+    "failures": 0,
+    "errors": 0
+  },
+  "operational_action_boundary_tests": {
+    "result": "2/2 PASS",
+    "pytest_available": false,
+    "execution": "the two existing test functions were invoked directly without installing dependencies"
+  },
+  "security_tests": {
+    "valid_bearer": 200,
+    "missing_bearer": 401,
+    "invalid_bearer": 401,
+    "expired_bearer": 401,
+    "database_unavailable_with_valid_bearer": 503,
+    "raw_credential_leaks": 0,
+    "stdout_stderr_log_result_repr_evidence_scan": "PASS"
+  },
+  "regression": {
+    "isosmart": {
+      "runtime": "Python 3.12",
+      "result": "568/568 PASS",
+      "failures": 0,
+      "errors": 0
+    },
+    "adminapps": {
+      "runtime": "Python 3.12",
+      "result": "180/180 PASS",
+      "failures": 0,
+      "errors": 0
+    },
+    "noncanonical_adminapps_python39_attempt": "179 passed and one interpreter-syntax import error; superseded by the canonical Python 3.12 PASS"
+  },
+  "additional_gates": {
+    "python_compilation": "PASS",
+    "json_validation": "PASS",
+    "git_diff_check": "PASS",
+    "credential_scan": "PASS",
+    "governance_tests": "PASS",
+    "integrity_tests": "PASS",
+    "sqlite_custody": "PASS; ignored local file remains byte-identical to custody SHA-256 615c233187795dd3ad992d54778f33063f1322936e366860f7ad53c4ecfb9269"
+  },
+  "live_diagnostic": "NOT_EXECUTED_BY_IMPLEMENTATION_AUTHORIZATION",
+  "retry_20_authorization": "NONE",
+  "retry_20_executed": "NO",
+  "phase_31_5": "EXECUTION_HELD"
+}

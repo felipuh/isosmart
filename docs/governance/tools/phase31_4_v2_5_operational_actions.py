@@ -101,23 +101,44 @@ def django_setup(system: str):
 
 def authority():
     django_setup("admin")
+    from django.conf import settings
     from apps.integration.models import IntegrationAPIKey
     from apps.organizations.models import Organization
     from apps.products.models import OrganizationProductEntitlement, ProductSystem
     from apps.users.models import User, UserOrganization
+    from foundation.operational_bearer_identity import acquire_runtime_bearer
+    from rest_framework_simplejwt.tokens import AccessToken
     suffix=hashlib.sha256(os.environ["PHASE31_RUN_ID"].encode()).hexdigest()[:12]
-    actor=User.objects.create_user(email=f"live-{suffix}@example.test",password=None,is_active=True,is_staff=True,is_superuser=True)
+    actor=User.objects.create_user(email=f"live-{suffix}@example.test",password=None,first_name="Operational",last_name="Readiness",
+                                   role="viewer",is_active=True,is_staff=False,is_superuser=False)
     organization=Organization.objects.create(name=f"Live Evidence {suffix}",email=f"tenant-{suffix}@example.test")
-    UserOrganization.objects.create(user=actor,organization=organization,role="superadmin",is_primary=True)
+    membership=UserOrganization.objects.create(user=actor,organization=organization,role="viewer",is_primary=True)
     key=os.environ["PHASE31_INTEGRATION_KEY"]
     IntegrationAPIKey.objects.create(name=f"isosmart-{suffix}",key=key,is_active=True)
     product=ProductSystem.objects.get(code="ISO_SMART")
-    OrganizationProductEntitlement.objects.create(organization=organization,product=product,status="active",enabled=True,scopes=["qms"])
+    entitlement=OrganizationProductEntitlement.objects.create(organization=organization,product=product,status="trial",enabled=True,scopes=["qms"])
     organization.status="active"; organization.save(update_fields=["status"])
+    organization.refresh_from_db(fields=["status"])
+    credential=acquire_runtime_bearer(actor,membership,entitlement,token_class=AccessToken,
+                                      issuer=settings.SMART3AI_SSO_ISSUER,lifetime_seconds=900)
+    descriptor_value=os.environ.get("PHASE31_BEARER_FD","")
+    if not descriptor_value.isdigit():
+        credential.destroy()
+        raise RuntimeError("runtime bearer pipe is required")
+    try:
+        credential.write_to_fd(int(descriptor_value))
+        credential_evidence=credential.evidence()
+    finally:
+        os.close(int(descriptor_value))
+        credential.destroy()
     tenant_rb=Organization.objects.values("id","status").get(pk=organization.pk)
-    actor_rb=User.objects.values("id","is_active").get(pk=actor.pk)
+    actor_rb=User.objects.values("id","is_active","is_staff","is_superuser","role").get(pk=actor.pk)
     return {"status":"PASS","classification":"SYNTHETIC_TEST_AUTHORITY","tenant_id":str(organization.id),"actor_id":str(actor.id),
-            "tenant_readback":{"id":str(tenant_rb["id"]),"status":tenant_rb["status"]},"actor_readback":{"id":str(actor_rb["id"]),"active":actor_rb["is_active"]}}
+            "tenant_readback":{"id":str(tenant_rb["id"]),"status":tenant_rb["status"]},
+            "actor_readback":{"id":str(actor_rb["id"]),"active":actor_rb["is_active"],"is_staff":actor_rb["is_staff"],
+                              "is_superuser":actor_rb["is_superuser"],"role":actor_rb["role"],
+                              "has_usable_password":actor.has_usable_password()},
+            "bearer":credential_evidence}
 
 
 def delivery():

@@ -60,6 +60,10 @@ class LiveExecutorTests(unittest.TestCase):
         self.adapter.start_adminapps = lambda c: {"status":"PASS","pid":0,"readiness":"PASS","base_url":"http://x"}
         with self.assertRaisesRegex(LiveExecutorError, "ADMINAPPS_START_FAILURE"): self.executor().start_services()
 
+    def test_authority_and_bearer_acquisition_precede_service_readiness(self):
+        self.executor().start_services()
+        self.assertEqual(self.adapter.calls[:3], ["authority", "start_adminapps", "start_isosmart"])
+
     def test_stage_ext_uses_six_separate_readbacks_and_provenance(self):
         result = self.executor().resolve_stage_ext_identities()
         self.assertEqual(result["resolved_identity_count"], 6)

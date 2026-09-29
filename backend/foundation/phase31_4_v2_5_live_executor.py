@@ -141,6 +141,12 @@ class Phase31_4V25LiveEvidenceExecutor:
         return {"adminapps": admin, "isosmart": iso}
 
     def start_services(self) -> Mapping[str, Any]:
+        if self._authority is None:
+            self._authority = self._pass(
+                self.adapter.create_adminapps_authority(self.context),
+                "ADMINAPPS_AUTHORITY_FAILURE",
+                "AdminApps authority and runtime bearer acquisition",
+            )
         results: dict[str, Any] = {}
         for key, method, code in (("adminapps", self.adapter.start_adminapps, "ADMINAPPS_START_FAILURE"), ("isosmart", self.adapter.start_isosmart, "ISOSMART_START_FAILURE")):
             result = self._pass(method(self.context), code, f"{key} startup")

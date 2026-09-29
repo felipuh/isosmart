@@ -66,8 +66,9 @@ class V25CurrentOperationalIntegrityTests(unittest.TestCase):
         self.assertIn("backend/foundation/phase31_4_v2_5_live_executor.py", {item["path"] for item in manifest["sources"]})
         self.assertIn("backend/foundation/phase31_4_v2_5_operational_adapters.py", {item["path"] for item in manifest["sources"]})
         self.assertIn("docs/governance/tools/phase31_4_v2_5_operational_actions.py", {item["path"] for item in manifest["sources"]})
-        self.assertEqual(manifest["generation"], "V2.5_CURRENT_SOURCE_SUCCESSOR_V10")
-        self.assertEqual(len(manifest["sources"]), 28)
+        self.assertIn("backend/foundation/operational_bearer_identity.py", {item["path"] for item in manifest["sources"]})
+        self.assertEqual(manifest["generation"], "V2.5_CURRENT_SOURCE_SUCCESSOR_V11")
+        self.assertEqual(len(manifest["sources"]), 29)
 
     def test_v7_remains_an_immutable_predecessor_record(self):
         self.assertEqual(file_sha256(CURRENT_V7_MANIFEST), CURRENT_V7_SHA256)

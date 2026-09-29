@@ -1,0 +1,120 @@
+{
+  "schema": "phase31.4-v2.5-operational-bearer-identity-discovery/v1",
+  "artifact_id": "PHASE31_4_V2_5_OPERATIONAL_BEARER_IDENTITY_DISCOVERY_V1",
+  "created_at": "2026-09-29T13:45:32-06:00",
+  "baseline": {
+    "git_commit": "5903dba41486b41534fa8e26864c8b62314f52f1",
+    "worktree_clean_at_discovery_start": true
+  },
+  "governance_state": {
+    "previous_v8_diagnostic_cycle": "EXHAUSTED",
+    "attempt_4": "NOT_AUTHORIZED",
+    "historical_retry_20_authorization": "SUPERSEDED_UNCONSUMED",
+    "historical_retry_20_consumed": "NO",
+    "historical_retry_20_reuse": "PROHIBITED",
+    "current_retry_20_authorization": "NONE",
+    "retry_20_executed": "NO",
+    "phase_31_5": "EXECUTION_HELD"
+  },
+  "authentication_architecture": {
+    "library": "djangorestframework-simplejwt 5.4.0",
+    "isosmart_authentication_classes": [
+      "integration.sso_auth.Smart3AISSOAuthentication",
+      "rest_framework_simplejwt.authentication.JWTAuthentication"
+    ],
+    "transport": "Authorization: Bearer <redacted>",
+    "algorithm": "HS256",
+    "signing_key_comparison": "MATCH_BY_SHA256_ONLY",
+    "signing_key_material_recorded": false,
+    "isosmart_access_token_lifetime_seconds": 3600,
+    "adminapps_access_token_lifetime_seconds": 28800,
+    "normal_token_obtain_flows": [
+      "AdminApps /api/integration/sso/login/ with password and optional 2FA",
+      "ISO Smart /api/auth/login/ with password"
+    ],
+    "programmatic_issuance_evidence": [
+      "AdminApps apps.integration.sso_views._build_token_pair uses RefreshToken.for_user",
+      "ISO Smart authentication.views uses RefreshToken.for_user",
+      "Repository tests use AccessToken.for_user"
+    ],
+    "token_verification": "SimpleJWT signature, token type, expiration and active-user validation",
+    "custom_claims": [
+      "user_id",
+      "email",
+      "organization_id",
+      "organization_code",
+      "organization_name",
+      "role",
+      "iss",
+      "aud",
+      "client_id"
+    ]
+  },
+  "readiness_contract": {
+    "adminapps": {
+      "path": "/api/integration/health/",
+      "authentication": "persisted IntegrationAPIKey via X-API-Key"
+    },
+    "isosmart": {
+      "canonical_path": "/health",
+      "django_alias": "/api/health/",
+      "permission": "global IsAuthenticated",
+      "minimum_required_permission": "authenticated identity",
+      "database_failure_status": 503,
+      "nginx_static_health_used": false
+    }
+  },
+  "existing_runtime_identity": {
+    "authoritative_model": "adminapps.apps.users.models.User",
+    "primary_key": "UUID generated per run",
+    "subject_semantic": "AdminApps user_id; deterministic run-scoped email is a secondary lookup claim",
+    "tenant_binding": "active AdminApps Organization and active UserOrganization membership",
+    "organization_relationship": "UserOrganization",
+    "projection_model": "foundation.models.UserProjection",
+    "projection_semantic": "tenant-scoped mapping; explicitly not an authentication authority",
+    "current_flow_password": "unusable",
+    "current_flow_active": true,
+    "current_flow_privilege_finding": "is_staff/is_superuser and superadmin membership are excessive for readiness",
+    "authentication_eligibility": "YES",
+    "eligibility_reason": "The active authoritative AdminApps user can be issued an official SimpleJWT access token; ISO Smart's SSO authenticator accepts the shared signature and binds or creates the local authentication projection from user_id/email and organization claims. No password is required for programmatic issuance."
+  },
+  "candidate_evaluation": {
+    "programmatic_jwt_issuance": "ELIGIBLE_AND_SELECTED",
+    "existing_token_obtain_flow": "INELIGIBLE_NO_REPRODUCIBLE_PASSWORD",
+    "existing_service_account": "NOT_FOUND_FOR_THIS_IDENTITY",
+    "authority_runtime_handoff": "REQUIRED_IN_MEMORY_FROM_AUTHORITY_PROCESS_TO_RUNNER",
+    "existing_signed_assertion_exchange": "NOT_FOUND",
+    "new_oauth_exchange": "OUT_OF_SCOPE_PROHIBITED"
+  },
+  "selected_contract": {
+    "subject": "existing run-scoped AdminApps runtime user",
+    "issuer": "existing AdminApps SimpleJWT subsystem",
+    "credential": "access token only",
+    "diagnostic_lifetime_seconds": 900,
+    "transport": "Authorization: Bearer <token>",
+    "scope": "readiness as permitted by IsAuthenticated",
+    "tenant_binding": "existing active organization membership",
+    "persistence": "none",
+    "handoff": "anonymous inherited pipe; never stdout, stderr, argv, JSON or filesystem",
+    "evidence": "presence, type, identity UUID, source and SHA-256 fingerprint only",
+    "cleanup": "overwrite runner byte buffer and drop reference; token expires naturally",
+    "minimum_privilege": "active non-staff, non-superuser viewer identity"
+  },
+  "decision": "SAFE_PROGRAMMATIC_BEARER_ISSUANCE_AVAILABLE",
+  "implementation_allowed_by_discovery": true,
+  "live_execution_performed": false,
+  "retry_20_executed": "NO",
+  "phase_31_5": "EXECUTION_HELD",
+  "source_evidence_sha256": {
+    "backend/backend/settings.py": "eeede9b7588f2d5c88ec717dcec1a5f3ed46e97cf183125dcaadfdfe1d6be613",
+    "backend/backend/urls.py": "197b5e354e6982905dfed1affc5fef14dd996ac7715e1705a71a16a3995737d5",
+    "backend/integration/sso_auth.py": "7df0bac1cbdc90ca91e5dbcc7e0148a89cd20b583d8974a0365e4aea433b282e",
+    "backend/authentication/models.py": "8636ac5d754085b93fc8063c7d36ab1f8d7752219dfff21f28608ba170e195c2",
+    "backend/core/views.py": "c2f060155e9344e7df5ec98b17473a70c3074bc4be9aad9d66c5fb66946738ec",
+    "backend/foundation/models.py": "9dd94c945dd0c256c3872e82b45760b06c066a4364e3dc3d833d56c09645c244",
+    "adminapps/backend/config/settings.py": "3210f921fe9d7776fdee0088e168a8f17dd759a2cb645c653ed0460779836117",
+    "adminapps/backend/apps/integration/sso_views.py": "ece66cc516202413824aef98fa0396a2ccd2c411a913064c94ecc3431d296ce0",
+    "adminapps/backend/apps/users/models.py": "cea7f1ca875d3399d7f62c1e556651f0c913fc9482dba89833a300f2324f82cc",
+    "adminapps/backend/apps/integration/views.py": "eb13597e9cc0cd4f2e63b837d4c174e20e9f59247f4e2495215282e9840584ec"
+  }
+}

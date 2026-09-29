@@ -1,0 +1,89 @@
+{
+  "schema": "phase31.4-v2.5-operational-bearer-identity-contract-authorization/v1",
+  "authorization_id": "PHASE31_4_V2_5_OPERATIONAL_BEARER_IDENTITY_CONTRACT_AUTHORIZATION_V1",
+  "issued_at": "2026-09-29T13:45:32-06:00",
+  "status": "AUTHORIZED_FOR_MINIMAL_IMPLEMENTATION_AND_OFFLINE_VERIFICATION",
+  "baseline": {
+    "git_commit": "5903dba41486b41534fa8e26864c8b62314f52f1",
+    "worktree_clean_before_discovery": true,
+    "integrity_generation": "PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V10",
+    "integrity_sha256": "4d40636266ce88a8b7f63130c8f2730566f578dfa827e9320f47ef67710c1008"
+  },
+  "discovery": {
+    "path": "docs/governance/evidence/PHASE31_4_V2_5_OPERATIONAL_BEARER_IDENTITY_DISCOVERY_V1.json",
+    "sha256": "47fa5a1105d8d53da2fac582266a487d7ad03ee2eaf7b5034d1fbd3a58c06900",
+    "decision": "SAFE_PROGRAMMATIC_BEARER_ISSUANCE_AVAILABLE"
+  },
+  "identity": {
+    "model": "adminapps.apps.users.models.User",
+    "instance": "fresh run-scoped actor created by the existing authority bootstrap",
+    "tenant_binding": "active UserOrganization membership",
+    "required_state": "active non-staff non-superuser viewer with unusable password",
+    "local_projection": "ISO Smart Smart3AISSOAuthentication plus foundation.UserProjection"
+  },
+  "issuance": {
+    "mechanism": "rest_framework_simplejwt.tokens.AccessToken.for_user",
+    "issuer": "AdminApps existing SimpleJWT subsystem",
+    "token_type": "access",
+    "lifetime_seconds": 900,
+    "refresh_token": "PROHIBITED",
+    "password": "NOT_REQUIRED_AND_MUST_NOT_BE_ADDED",
+    "persistence": "NONE",
+    "handoff": "anonymous inherited pipe to the operational adapter",
+    "usage": "authenticated ISO Smart readiness only before Stage EXT"
+  },
+  "allowed_source_files": [
+    "backend/foundation/operational_bearer_identity.py",
+    "backend/foundation/phase31_4_v2_5_operational_adapters.py",
+    "backend/foundation/phase31_4_v2_5_live_executor.py",
+    "docs/governance/tools/phase31_4_v2_5_operational_actions.py",
+    "backend/foundation/phase31_4_integrity_generations.py"
+  ],
+  "allowed_test_files": [
+    "backend/foundation/test_operational_bearer_identity.py",
+    "backend/foundation/test_phase31_4_v2_5_operational_adapters.py",
+    "backend/foundation/test_phase31_4_v2_5_live_executor.py",
+    "backend/foundation/test_phase31_4_integrity_generations.py",
+    "backend/foundation/test_phase31_4_v2_5_precreation_integrity.py",
+    "docs/governance/tools/test_phase31_4_v2_5_operational_actions.py"
+  ],
+  "allowed_governance_outputs": [
+    "successor V11 integrity artifact and verifier updates",
+    "bearer contract implementation report and test evidence",
+    "one isolated semantic commit",
+    "a new independently authorized successor diagnostic cycle only after every gate passes"
+  ],
+  "mandatory_controls": [
+    "No raw token in stdout, stderr, traceback, subprocess argv, logs, manifest, JSON evidence or report",
+    "Record token presence, Bearer type, identity UUID, SHA-256 fingerprint and source only",
+    "Separate token acquisition from authenticated readiness usage",
+    "Use /api/integration/health/ with the persisted AdminApps IntegrationAPIKey",
+    "Use /health with the runtime ISO Smart Bearer",
+    "Keep health IsAuthenticated unchanged",
+    "Reject missing, inactive, mismatched or unentitled identity context",
+    "Destroy the runtime credential reference during teardown",
+    "Use synthetic identities in tests"
+  ],
+  "prohibitions": {
+    "provider_auth_weakening": true,
+    "allow_any_or_auth_bypass": true,
+    "password_injection": true,
+    "new_login_or_health_endpoint": true,
+    "hardcoded_or_historical_token": true,
+    "raw_credential_persistence_or_logging": true,
+    "global_jwt_lifetime_change": true,
+    "retry_20": true,
+    "phase_31_5": true,
+    "live_diagnostic_before_successor_authorization": true
+  },
+  "authorized_tests": [
+    "focused issuance, eligibility, subject, lifetime, non-persistence and redaction tests",
+    "authenticated readiness 200/401/expired/503 tests",
+    "canonical ISO Smart and AdminApps regressions",
+    "Python compilation, JSON validation, credential scan, governance and integrity tests"
+  ],
+  "live_execution_authorized_by_this_artifact": false,
+  "retry_20_authorization": "NONE",
+  "retry_20_executed": "NO",
+  "phase_31_5": "EXECUTION_HELD"
+}
