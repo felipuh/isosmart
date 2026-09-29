@@ -87,3 +87,7 @@ logs/ai/vite_dev.log
 .gitignore
 logs/ai/vite_dev_5173.log
 backend/logs/ai/django.log
+
+# Local mutable Django database; canonical fixtures must use distinct paths.
+/backend/test_default.sqlite3
+/backend/logs/
