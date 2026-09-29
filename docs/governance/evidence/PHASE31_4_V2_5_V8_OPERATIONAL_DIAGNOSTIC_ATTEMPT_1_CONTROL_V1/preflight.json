@@ -1,0 +1,106 @@
+{
+  "integrity": {
+    "status": "PASS",
+    "protected": 28,
+    "missing": 0,
+    "unexpected": 0,
+    "migration_hashes": 24,
+    "historical_v24": "PASS"
+  },
+  "history": {
+    "status": "PASS",
+    "files": 293,
+    "changed": []
+  },
+  "historical_launcher": {
+    "path": "docs/governance/tools/run_phase31_4_v2_5_operational_diagnostic.py",
+    "sha256": "c3fdeff3ea862ee56d94a706043c69646fc2618ddf82bf604a94353b22cb568f",
+    "classification": "Registered GOVERNANCE_TOOL in V7 worktree_forensics; historical V6 attempt-3 harness, excluded from new execution. Not an unregistered material implementation.",
+    "must_not_execute_or_patch_for_attempt_1": true
+  },
+  "authorization": {
+    "status": "PASS",
+    "sha256": "488d98c0d74c3ea508841285c0a744b4723d859ce0b55b7bab6d2aed57b5f225",
+    "consumed": false
+  },
+  "status": "PASS",
+  "checked_at": "2026-09-29T01:03:57.140231+00:00",
+  "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 1",
+  "planned_resources": {
+    "adminapps": {
+      "container": "p314_phase_31_4_v2_5_v8_operational_dia_e4c70a7b40_adminapps",
+      "network": "p314_phase_31_4_v2_5_v8_operational_dia_e4c70a7b40_adminapps_net",
+      "volume": "p314_phase_31_4_v2_5_v8_operational_dia_e4c70a7b40_adminapps_data",
+      "database": "p314_phase_31_4_v2_5_v8_o_adminapps_e1725e8ee0"
+    },
+    "isosmart": {
+      "container": "p314_phase_31_4_v2_5_v8_operational_dia_e4c70a7b40_isosmart",
+      "network": "p314_phase_31_4_v2_5_v8_operational_dia_e4c70a7b40_isosmart_net",
+      "volume": "p314_phase_31_4_v2_5_v8_operational_dia_e4c70a7b40_isosmart_data",
+      "database": "p314_phase_31_4_v2_5_v8_o_isosmart_f3b0ff0bc2"
+    }
+  },
+  "resource_inventory": {
+    "containers": {
+      "argv": [
+        "podman",
+        "ps",
+        "-a",
+        "--format",
+        "{{.Names}}"
+      ],
+      "started_at": "2026-09-29T01:03:55.965030+00:00",
+      "completed_at": "2026-09-29T01:03:56.361575+00:00",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "networks": {
+      "argv": [
+        "podman",
+        "network",
+        "ls",
+        "--format",
+        "{{.Name}}"
+      ],
+      "started_at": "2026-09-29T01:03:56.361605+00:00",
+      "completed_at": "2026-09-29T01:03:56.573613+00:00",
+      "returncode": 0,
+      "stdout": "podman\n",
+      "stderr": ""
+    },
+    "volumes": {
+      "argv": [
+        "podman",
+        "volume",
+        "ls",
+        "--format",
+        "{{.Name}}"
+      ],
+      "started_at": "2026-09-29T01:03:56.573633+00:00",
+      "completed_at": "2026-09-29T01:03:56.813876+00:00",
+      "returncode": 0,
+      "stdout": "9d9208aca9f6409b089266f3e9f18cd479af0c272539cec72aaedbe66e632798\n60f44ef355a97171add79f5925b88b30fec5c37734498c39593a7fdc2ab71c55\nc916518774cee42ea1b803723dc6f2b982e208cd3e6e3a683653c70b2baf5b10\n314c73efa1abb03972eaf70b847a07902c93cf530f3a56c85e9a72e4fa19d557\n3ce31196eb64dc8eb66daed8db4d5fe977b2415dc1a81e4f9aa4992a6bc98444\n1ec92fe44adf8bdac8322788129e4efb2acd22fc178480290479c8323dd0eee9\nac5d289e96cde46b20b8f4e52536fa2e154cbc1269abae5ae4989813ca381655\n",
+      "stderr": ""
+    },
+    "listeners": {
+      "argv": [
+        "ss",
+        "-ltnp"
+      ],
+      "started_at": "2026-09-29T01:03:56.813917+00:00",
+      "completed_at": "2026-09-29T01:03:56.944398+00:00",
+      "returncode": 0,
+      "stdout": "State  Recv-Q Send-Q Local Address:Port  Peer Address:PortProcess                                                                                  \nLISTEN 0      511        127.0.0.1:4173       0.0.0.0:*    users:((\"MainThread\",pid=1503,fd=18))                                                   \nLISTEN 0      511        127.0.0.1:35079      0.0.0.0:*    users:((\"MainThread\",pid=5203,fd=30))                                                   \nLISTEN 0      511        127.0.0.1:35293      0.0.0.0:*    users:((\"MainThread\",pid=3474,fd=24))                                                   \nLISTEN 0      128        127.0.0.1:42695      0.0.0.0:*    users:((\"code-04c0d99f4f\",pid=5099,fd=9))                                               \nLISTEN 0      128        127.0.0.1:44849      0.0.0.0:*    users:((\"code-2242ebbb54\",pid=2924,fd=11))                                              \nLISTEN 0      2048       127.0.0.1:8002       0.0.0.0:*    users:((\"gunicorn\",pid=1470,fd=4),(\"gunicorn\",pid=1468,fd=4),(\"gunicorn\",pid=1127,fd=4))\nLISTEN 0      2048       127.0.0.1:8000       0.0.0.0:*    users:((\"gunicorn\",pid=1476,fd=6),(\"gunicorn\",pid=1111,fd=6))                           \nLISTEN 0      128          0.0.0.0:22         0.0.0.0:*                                                                                            \nLISTEN 0      200        127.0.0.1:5432       0.0.0.0:*                                                                                            \nLISTEN 0      511          0.0.0.0:80         0.0.0.0:*                                                                                            \nLISTEN 0      511        127.0.0.1:42373      0.0.0.0:*    users:((\"MainThread\",pid=5940,fd=19))                                                   \nLISTEN 0      4096               *:9090             *:*                                                                                            \nLISTEN 0      200            [::1]:5432          [::]:*                                                                                            \nLISTEN 0      128             [::]:22            [::]:*                                                                                            \nLISTEN 0      511             [::]:80            [::]:*                                                                                            \n",
+      "stderr": ""
+    }
+  },
+  "previous_attempt_processes": [],
+  "active_manifest": "ABSENT",
+  "evidence_root": "ABSENT",
+  "ports": {
+    "status": "DYNAMIC_ALLOCATION_REQUIRED",
+    "assigned_before_allocation": [],
+    "policy": "V8 Podman 127.0.0.1::5432 and service bind(127.0.0.1,0); no fixed-port reuse"
+  }
+}

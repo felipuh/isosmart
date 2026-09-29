@@ -1,0 +1,20 @@
+{
+  "artifact_schema": "phase31.4-clean-retry-allocation/v1",
+  "retry_id": "Phase 31.4 V2.5 Clean Retry 14",
+  "retry_number": 14,
+  "allocated_at": "2026-09-21T20:28:21-06:00",
+  "status": "EXECUTED_NOT_PROMOTED",
+  "repository_scan": {
+    "confirmed_historical_retries_through": 13,
+    "retry_14_preexisting_allocation": false,
+    "retry_15_allocated": false
+  },
+  "authorization_artifact": "PHASE31_4_CLEAN_RETRY_14_AUTHORIZATION.json",
+  "authorization_status": "RETRY14_AUTHORIZED",
+  "previous_retry_state_reuse": false,
+  "resource_policy": "FRESH_ISOLATED_POSTGRESQL_18_6_ADMINAPPS_AND_ISOSMART",
+  "resources_created": true,
+  "live_result": "FAIL_CLOSED_AT_PRE_EXECUTION_PRODUCER_ASSERTION",
+  "teardown": "PASS",
+  "promotion_granted": false
+}

@@ -1,0 +1,114 @@
+{
+  "DB_resource_removed": true,
+  "allocated_at": "2026-09-18T14:10:52.234663+00:00",
+  "artifact_schema": "phase31.4-retry9-runtime-resources/v1",
+  "container_removed": true,
+  "environments": {
+    "adminapps": {
+      "container_id": "900ede684a9878535f0b84d7ad00dc8dddb7dcf35ea9dca533fa8c59dd82f4aa",
+      "container_name": "phase31_4_retry9_adminapps",
+      "container_removed": true,
+      "created_at": "2026-09-18T14:13:05.805652+00:00",
+      "creation_started_at": "2026-09-18T14:11:02.580449+00:00",
+      "database_name": "phase31_4_retry9_adminapps",
+      "environment_id": "phase31_4_retry9_adminapps",
+      "image_digest": "sha256:7341002d2b8c7c5bdd7542a671a95b36196c0b5b888daf454ae4fc33ba5346d7",
+      "image_id": "a6638641707cdf047e5d5c2781f437e2e809323cab22c70b280be8389fbb7878",
+      "network_id": "bfb27077d7d503394c8e005f471d7147781570660aaf9a57e1402845125fff5c",
+      "network_name": "phase31_4_retry9_adminapps_net",
+      "network_removed": true,
+      "observed_postgresql_version": "postgres (PostgreSQL) 18.6 (Debian 18.6-1.pgdg13+2)",
+      "port_mappings": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "37101"
+        }
+      ],
+      "postgresql_exact_version": "PostgreSQL 18.6",
+      "retired_resources": [
+        {
+          "container_id": "2ecd2e09be9b8c78a6064f49dd63756d6e97daa87a484bca7230182c9d5e67e4",
+          "created_at": null,
+          "network_id": "phase31_4_retry9_adminapps_net"
+        }
+      ],
+      "status": "REMOVED_VERIFIED",
+      "volume_id": "phase31_4_retry9_adminapps_data",
+      "volume_name": "phase31_4_retry9_adminapps_data",
+      "volume_removed": true
+    },
+    "isosmart": {
+      "container_id": "d41a2e4640e04898a8676608815018a6db091711738783a698cff7c31f28adcd",
+      "container_name": "phase31_4_retry9_isosmart",
+      "container_removed": true,
+      "created_at": "2026-09-18T14:13:21.410619+00:00",
+      "creation_started_at": "2026-09-18T14:13:18.492625+00:00",
+      "database_name": "phase31_4_retry9_isosmart",
+      "environment_id": "phase31_4_retry9_isosmart",
+      "image_digest": "sha256:7341002d2b8c7c5bdd7542a671a95b36196c0b5b888daf454ae4fc33ba5346d7",
+      "image_id": "a6638641707cdf047e5d5c2781f437e2e809323cab22c70b280be8389fbb7878",
+      "network_id": "77d8b50ee1bcf08f0a1c0297e5257de35f046973c2a2ed3c4f29369758822a1b",
+      "network_name": "phase31_4_retry9_isosmart_net",
+      "network_removed": true,
+      "observed_postgresql_version": "postgres (PostgreSQL) 18.6 (Debian 18.6-1.pgdg13+2)",
+      "port_mappings": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "46807"
+        }
+      ],
+      "postgresql_exact_version": "PostgreSQL 18.6",
+      "status": "REMOVED_VERIFIED",
+      "volume_id": "phase31_4_retry9_isosmart_data",
+      "volume_name": "phase31_4_retry9_isosmart_data",
+      "volume_removed": true
+    }
+  },
+  "execution_mode": "LIVE_NATIVE_EXECUTION",
+  "network_removed": true,
+  "podman_context": "local rootless default",
+  "podman_run_root": "/run/user/1000/containers",
+  "podman_storage_root": "/home/felipe/.local/share/containers/storage",
+  "post_teardown_inventory": {
+    "checked_at": "2026-09-18T14:18:15.259494+00:00",
+    "containers": [],
+    "networks": [
+      "podman"
+    ],
+    "retry9_names_present": [],
+    "volumes": [
+      "9d9208aca9f6409b089266f3e9f18cd479af0c272539cec72aaedbe66e632798",
+      "60f44ef355a97171add79f5925b88b30fec5c37734498c39593a7fdc2ab71c55",
+      "c916518774cee42ea1b803723dc6f2b982e208cd3e6e3a683653c70b2baf5b10",
+      "314c73efa1abb03972eaf70b847a07902c93cf530f3a56c85e9a72e4fa19d557",
+      "3ce31196eb64dc8eb66daed8db4d5fe977b2415dc1a81e4f9aa4992a6bc98444",
+      "1ec92fe44adf8bdac8322788129e4efb2acd22fc178480290479c8323dd0eee9"
+    ]
+  },
+  "post_teardown_inventory_verified": true,
+  "retry_id": "Phase 31.4 V2.5 Clean Retry 9",
+  "retry_tag": "CLEAN_RETRY_9",
+  "runtime_host": "localhost.localdomain",
+  "teardown_attempted": true,
+  "teardown_attempts": [
+    {
+      "completed_at": "2026-09-18T14:15:54.593619+00:00",
+      "errors": [
+        "verification implementation treated missing inspect objects as present; independent inventory was empty"
+      ],
+      "started_at": "2026-09-18T14:15:48.234740+00:00",
+      "status": "FAIL"
+    },
+    {
+      "completed_at": "2026-09-18T14:16:27.071535+00:00",
+      "errors": [],
+      "started_at": "2026-09-18T14:16:26.396092+00:00",
+      "status": "PASS"
+    }
+  ],
+  "teardown_completed_at": "2026-09-18T14:16:27.071535+00:00",
+  "teardown_errors": [],
+  "teardown_started_at": "2026-09-18T14:16:26.396092+00:00",
+  "teardown_status": "PASS",
+  "volume_removed": true
+}

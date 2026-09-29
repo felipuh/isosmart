@@ -1,0 +1,23 @@
+{
+  "observed_at": "2026-09-29T01:05:30.644043+00:00",
+  "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 1",
+  "observed_state": "TEARDOWN_COMPLETE",
+  "resources": {
+    "adminapps": {
+      "container_id": "90ed3955b76622e6a6a0eefe2451284425f3917aaa4ec5580aa74b6ec3dd84c8",
+      "network": "p314_phase_31_4_v2_5_v8_operational_dia_e4c70a7b40_adminapps_net",
+      "volume": "p314_phase_31_4_v2_5_v8_operational_dia_e4c70a7b40_adminapps_data",
+      "port": 40753,
+      "database": "p314_phase_31_4_v2_5_v8_o_adminapps_e1725e8ee0",
+      "observation_error": "connection to server at \"127.0.0.1\", port 40753 failed: Connection refused\n\tIs the server running on that host and accepting TCP/IP connections?\n"
+    },
+    "isosmart": {
+      "container_id": "ed3435f648c7ad37eb3730fc742064036b44aa0660754de5f08e59c727eca9ef",
+      "network": "p314_phase_31_4_v2_5_v8_operational_dia_e4c70a7b40_isosmart_net",
+      "volume": "p314_phase_31_4_v2_5_v8_operational_dia_e4c70a7b40_isosmart_data",
+      "port": 39539,
+      "database": "p314_phase_31_4_v2_5_v8_o_isosmart_f3b0ff0bc2",
+      "observation_error": "connection to server at \"127.0.0.1\", port 39539 failed: Connection refused\n\tIs the server running on that host and accepting TCP/IP connections?\n"
+    }
+  }
+}

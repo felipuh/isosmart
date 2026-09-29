@@ -285,12 +285,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Synthetic control-plane fixture identity; it does not assert a real AdminApps tenant",
-              "typed_value": "baff5462-1031-52a3-bae4-9a00a1f9bb9c"
+              "authoritative": true,
+              "capture_output": "adminapps_tenant_id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "LIVE_UPSTREAM_NATIVE_CAPTURE",
+              "native_source": "stage-ext/adminapps-tenant",
+              "reason": "live identity produced before the V2.5 phase graph; historical UUID is metadata only",
+              "retention_rule": "RETAIN_LIVE_UPSTREAM_IDENTITY_ONLY"
             }
           },
           {
@@ -367,12 +368,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "daa6bb22-660c-56f5-aadf-c63f06b01731"
+              "authoritative": true,
+              "capture_output": "tenant_projection_id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "LIVE_UPSTREAM_NATIVE_CAPTURE",
+              "native_source": "stage-ext/tenant-projection",
+              "reason": "live identity produced before the V2.5 phase graph; historical UUID is metadata only",
+              "retention_rule": "RETAIN_LIVE_UPSTREAM_IDENTITY_ONLY"
             }
           },
           {
@@ -587,11 +589,11 @@
         "member_kind": "DATABASE_ROW",
         "required_field_count": 15,
         "resolved_fields": {
-          "adminapps_tenant_id": "baff5462-1031-52a3-bae4-9a00a1f9bb9c",
+          "adminapps_tenant_id": "adminapps_tenant_id",
           "created_at": "captured:qms.tenant_projection::daa6bb22-660c-56f5-aadf-c63f06b01731.created_at",
           "deletion_requested_at": "captured:qms.tenant_projection::daa6bb22-660c-56f5-aadf-c63f06b01731.deletion_requested_at",
           "display_name_snapshot": "TEST ONLY \u2014 ISO SMART AI PHASE 31.4.4A SYNTHETIC TENANT",
-          "id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "id": "tenant_projection_id",
           "last_reconciled_at": "captured:qms.tenant_projection::daa6bb22-660c-56f5-aadf-c63f06b01731.last_reconciled_at",
           "last_synced_at": "captured:qms.tenant_projection::daa6bb22-660c-56f5-aadf-c63f06b01731.last_synced_at",
           "lifecycle_status": "pending",
@@ -664,12 +666,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "ac638304-fdd6-5ce8-96d7-62014117af94"
+              "authoritative": true,
+              "capture_output": "organization_id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "LIVE_UPSTREAM_NATIVE_CAPTURE",
+              "native_source": "stage-ext/qms-organization",
+              "reason": "live identity produced before the V2.5 phase graph; historical UUID is metadata only",
+              "retention_rule": "RETAIN_LIVE_UPSTREAM_IDENTITY_ONLY"
             }
           },
           {
@@ -745,9 +748,9 @@
         "resolved_fields": {
           "created_at": "captured:qms.organization::ac638304-fdd6-5ce8-96d7-62014117af94.created_at",
           "display_name": "PHASE31.4.4A TEST ONLY \u2014 Organization \u2014 display_name",
-          "id": "ac638304-fdd6-5ce8-96d7-62014117af94",
+          "id": "organization_id",
           "legal_name": null,
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "updated_at": "captured:qms.organization::ac638304-fdd6-5ce8-96d7-62014117af94.updated_at"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -820,12 +823,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "1e878efa-2d1e-50b4-b3e4-481a3c6ff229"
+              "authoritative": true,
+              "capture_output": "user_projection_id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "LIVE_UPSTREAM_NATIVE_CAPTURE",
+              "native_source": "stage-ext/user-projection",
+              "reason": "live identity produced before the V2.5 phase graph; historical UUID is metadata only",
+              "retention_rule": "RETAIN_LIVE_UPSTREAM_IDENTITY_ONLY"
             }
           },
           {
@@ -971,12 +975,12 @@
         "resolved_fields": {
           "adminapps_user_id": "0d071de5-d5b2-5ca5-b78a-f3bd7ac0dbc6",
           "created_at": "captured:qms.user_projection::1e878efa-2d1e-50b4-b3e4-481a3c6ff229.created_at",
-          "id": "1e878efa-2d1e-50b4-b3e4-481a3c6ff229",
+          "id": "user_projection_id",
           "last_synced_at": "captured:qms.user_projection::1e878efa-2d1e-50b4-b3e4-481a3c6ff229.last_synced_at",
           "lifecycle_status": "active",
           "source_event_id": "881034d9-0711-5655-9184-c77b107716ef",
           "source_version": 1,
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "updated_at": "captured:qms.user_projection::1e878efa-2d1e-50b4-b3e4-481a3c6ff229.updated_at"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -1020,12 +1024,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "506d920c-fe62-53c0-aac8-9c1ca8ca78ed"
+              "authoritative": true,
+              "capture_output": "process_id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "LIVE_UPSTREAM_NATIVE_CAPTURE",
+              "native_source": "stage-ext/qms-process",
+              "reason": "live identity produced before the V2.5 phase graph; historical UUID is metadata only",
+              "retention_rule": "RETAIN_LIVE_UPSTREAM_IDENTITY_ONLY"
             }
           },
           {
@@ -1184,13 +1189,13 @@
         "required_field_count": 9,
         "resolved_fields": {
           "created_at": "captured:qms.process::506d920c-fe62-53c0-aac8-9c1ca8ca78ed.created_at",
-          "id": "506d920c-fe62-53c0-aac8-9c1ca8ca78ed",
+          "id": "process_id",
           "name": "PHASE31.4.4A TEST ONLY \u2014 Process \u2014 name",
-          "organization_id": "ac638304-fdd6-5ce8-96d7-62014117af94",
+          "organization_id": "organization_id",
           "owner_id": null,
           "process_type": null,
           "status": "completed",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "updated_at": "captured:qms.process::506d920c-fe62-53c0-aac8-9c1ca8ca78ed.updated_at"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -1233,12 +1238,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "9b9a75f6-f3dc-5089-9b27-6aff45ca0556"
+              "authoritative": true,
+              "capture_output": "id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-exact-support-producer/v1",
+              "reason": "native product identity discovered by the complete V2.5 UUID audit",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -1291,7 +1297,7 @@
         "required_field_count": 4,
         "resolved_fields": {
           "code": "PHASE31.4.4A TEST ONLY \u2014 Standard \u2014 code",
-          "id": "9b9a75f6-f3dc-5089-9b27-6aff45ca0556",
+          "id": "captured:normative.standard::9b9a75f6-f3dc-5089-9b27-6aff45ca0556.id",
           "publisher": "captured:normative.standard::9b9a75f6-f3dc-5089-9b27-6aff45ca0556.publisher",
           "title": null
         },
@@ -1375,12 +1381,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "98939c5e-1a06-53c9-bbf9-07b21d81feb1"
+              "authoritative": true,
+              "capture_output": "id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-exact-support-producer/v1",
+              "reason": "native product identity discovered by the complete V2.5 UUID audit",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -1457,9 +1464,9 @@
           "edition": "PHASE31.4.4A TEST ONLY \u2014 StandardEdition \u2014 edition",
           "effective_from": null,
           "effective_to": null,
-          "id": "98939c5e-1a06-53c9-bbf9-07b21d81feb1",
+          "id": "captured:normative.standard_edition::98939c5e-1a06-53c9-bbf9-07b21d81feb1.id",
           "source_hash": "captured:normative.standard_edition::98939c5e-1a06-53c9-bbf9-07b21d81feb1.source_hash",
-          "standard_id": "9b9a75f6-f3dc-5089-9b27-6aff45ca0556",
+          "standard_id": "captured:normative.standard::9b9a75f6-f3dc-5089-9b27-6aff45ca0556.id",
           "status": "published"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -1502,12 +1509,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "cd11a240-2f3a-5239-9906-a5217b0979c4"
+              "authoritative": true,
+              "capture_output": "id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-exact-support-producer/v1",
+              "reason": "native product identity discovered by the complete V2.5 UUID audit",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -1583,9 +1591,9 @@
         "required_field_count": 5,
         "resolved_fields": {
           "code": "PHASE31.4.4A TEST ONLY \u2014 Clause \u2014 code",
-          "id": "cd11a240-2f3a-5239-9906-a5217b0979c4",
+          "id": "captured:normative.clause::cd11a240-2f3a-5239-9906-a5217b0979c4.id",
           "parent_id": null,
-          "standard_edition_id": "98939c5e-1a06-53c9-bbf9-07b21d81feb1",
+          "standard_edition_id": "captured:normative.standard_edition::98939c5e-1a06-53c9-bbf9-07b21d81feb1.id",
           "title": null
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -1674,12 +1682,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "c56a413e-00f1-5a20-81c4-dfeda4681dc7"
+              "authoritative": true,
+              "capture_output": "id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-exact-support-producer/v1",
+              "reason": "native product identity discovered by the complete V2.5 UUID audit",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -1779,11 +1788,11 @@
             "fixture": "phase31.4.4a",
             "synthetic": true
           },
-          "clause_id": "cd11a240-2f3a-5239-9906-a5217b0979c4",
+          "clause_id": "captured:normative.clause::cd11a240-2f3a-5239-9906-a5217b0979c4.id",
           "control_type": null,
-          "id": "c56a413e-00f1-5a20-81c4-dfeda4681dc7",
+          "id": "captured:normative.requirement_control::c56a413e-00f1-5a20-81c4-dfeda4681dc7.id",
           "paraphrase": "PHASE31.4.4A TEST ONLY \u2014 RequirementControl \u2014 paraphrase",
-          "standard_edition_id": "98939c5e-1a06-53c9-bbf9-07b21d81feb1",
+          "standard_edition_id": "captured:normative.standard_edition::98939c5e-1a06-53c9-bbf9-07b21d81feb1.id",
           "valid_from": "captured:normative.requirement_control::c56a413e-00f1-5a20-81c4-dfeda4681dc7.valid_from",
           "valid_to": "captured:normative.requirement_control::c56a413e-00f1-5a20-81c4-dfeda4681dc7.valid_to"
         },
@@ -1848,12 +1857,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "ca734de0-7bfe-51e4-acce-639cc5f26f1d"
+              "authoritative": true,
+              "capture_output": "id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-exact-support-producer/v1",
+              "reason": "native product identity discovered by the complete V2.5 UUID audit",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -1908,9 +1918,9 @@
         "resolved_fields": {
           "certifiability_classification": "non_certifiable_guidance",
           "created_at": "captured:normative.knowledge_layer::ca734de0-7bfe-51e4-acce-639cc5f26f1d.created_at",
-          "id": "ca734de0-7bfe-51e4-acce-639cc5f26f1d",
+          "id": "captured:normative.knowledge_layer::ca734de0-7bfe-51e4-acce-639cc5f26f1d.id",
           "layer_type": "PHASE31.4.4A TEST ONLY \u2014 KnowledgeLayer \u2014 layer_type",
-          "standard_edition_id": "98939c5e-1a06-53c9-bbf9-07b21d81feb1"
+          "standard_edition_id": "captured:normative.standard_edition::98939c5e-1a06-53c9-bbf9-07b21d81feb1.id"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
         "unbound_field_count": 0
@@ -1997,12 +2007,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "eb900d83-deed-5493-bad8-e8abc7d3f932"
+              "authoritative": true,
+              "capture_output": "id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-exact-support-producer/v1",
+              "reason": "native product identity discovered by the complete V2.5 UUID audit",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -2218,8 +2229,8 @@
             "fixture": "phase31.4.4a",
             "synthetic": true
           },
-          "id": "eb900d83-deed-5493-bad8-e8abc7d3f932",
-          "knowledge_layer_id": "ca734de0-7bfe-51e4-acce-639cc5f26f1d",
+          "id": "captured:normative.knowledge_layer_rule::eb900d83-deed-5493-bad8-e8abc7d3f932.id",
+          "knowledge_layer_id": "captured:normative.knowledge_layer::ca734de0-7bfe-51e4-acce-639cc5f26f1d.id",
           "lineage_id": "e175e315-1b2e-5f03-9237-46c2d609b058",
           "logic_json": {
             "field": "logic_json",
@@ -2342,12 +2353,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "5873aa8a-a727-5814-a932-14e85f33cba0"
+              "authoritative": true,
+              "capture_output": "id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-exact-support-producer/v1",
+              "reason": "native product identity discovered by the complete V2.5 UUID audit",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -2433,7 +2445,7 @@
           "actor_id": "PHASE31.4.4A TEST ONLY \u2014 NormativeCurationAudit:knowledge_layer.created \u2014 actor_id",
           "entity_id": "da11ade0-3ebf-5741-8628-75be919dfab3",
           "entity_type": "PHASE31.4.4A TEST ONLY \u2014 NormativeCurationAudit:knowledge_layer.created \u2014 entity_type",
-          "id": "5873aa8a-a727-5814-a932-14e85f33cba0",
+          "id": "captured:normative.curation_audit::5873aa8a-a727-5814-a932-14e85f33cba0.id",
           "occurred_at": "captured:normative.curation_audit::5873aa8a-a727-5814-a932-14e85f33cba0.occurred_at",
           "payload_hash": "captured:normative.curation_audit::5873aa8a-a727-5814-a932-14e85f33cba0.payload_hash",
           "trace_id": "431f57a1-3d19-51dd-be77-dd41f3a9b477"
@@ -2547,12 +2559,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "7fb528b2-c7a6-5def-be6c-edbe50679cd2"
+              "authoritative": true,
+              "capture_output": "id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-exact-support-producer/v1",
+              "reason": "native product identity discovered by the complete V2.5 UUID audit",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -2638,7 +2651,7 @@
           "actor_id": "PHASE31.4.4A TEST ONLY \u2014 NormativeCurationAudit:knowledge_layer_rule.created \u2014 actor_id",
           "entity_id": "61052b04-0a21-5d47-8a18-e2c39fec2f93",
           "entity_type": "PHASE31.4.4A TEST ONLY \u2014 NormativeCurationAudit:knowledge_layer_rule.created \u2014 entity_type",
-          "id": "7fb528b2-c7a6-5def-be6c-edbe50679cd2",
+          "id": "captured:normative.curation_audit::7fb528b2-c7a6-5def-be6c-edbe50679cd2.id",
           "occurred_at": "captured:normative.curation_audit::7fb528b2-c7a6-5def-be6c-edbe50679cd2.occurred_at",
           "payload_hash": "captured:normative.curation_audit::7fb528b2-c7a6-5def-be6c-edbe50679cd2.payload_hash",
           "trace_id": "d1aed81f-0ce9-551e-82c7-dda3455e5d77"
@@ -2752,12 +2765,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "e968156c-cee8-5f54-96be-8c7462e40023"
+              "authoritative": true,
+              "capture_output": "id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-exact-support-producer/v1",
+              "reason": "native product identity discovered by the complete V2.5 UUID audit",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -2843,7 +2857,7 @@
           "actor_id": "PHASE31.4.4A TEST ONLY \u2014 NormativeCurationAudit:knowledge_layer_rule.published \u2014 actor_id",
           "entity_id": "216d56c9-04ab-5bfe-b9ac-15a13fbe0f34",
           "entity_type": "PHASE31.4.4A TEST ONLY \u2014 NormativeCurationAudit:knowledge_layer_rule.published \u2014 entity_type",
-          "id": "e968156c-cee8-5f54-96be-8c7462e40023",
+          "id": "captured:normative.curation_audit::e968156c-cee8-5f54-96be-8c7462e40023.id",
           "occurred_at": "captured:normative.curation_audit::e968156c-cee8-5f54-96be-8c7462e40023.occurred_at",
           "payload_hash": "captured:normative.curation_audit::e968156c-cee8-5f54-96be-8c7462e40023.payload_hash",
           "trace_id": "0d9bd806-3046-5e92-9330-00cac26a91d4"
@@ -2973,12 +2987,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "a5308071-20ad-5872-956a-8d8eb07e5103"
+              "authoritative": true,
+              "capture_output": "evidence_id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-exact-support-producer/v1",
+              "reason": "native runtime identity; historical UUID is metadata only",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -3169,14 +3184,14 @@
           "content_hash": "captured:qms.evidence::a5308071-20ad-5872-956a-8d8eb07e5103.content_hash",
           "created_at": "captured:qms.evidence::a5308071-20ad-5872-956a-8d8eb07e5103.created_at",
           "document_version_id": null,
-          "id": "a5308071-20ad-5872-956a-8d8eb07e5103",
+          "id": "captured:qms.evidence::a5308071-20ad-5872-956a-8d8eb07e5103.id",
           "lineage_id": "5d65658c-802e-52a0-90a5-e3311ff5b2fd",
-          "organization_id": "ac638304-fdd6-5ce8-96d7-62014117af94",
+          "organization_id": "organization_id",
           "previous_revision_id": null,
           "revision": 1,
           "source_type": "synthetic_test_fixture",
           "source_uri": null,
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "trust_score": null
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -3312,12 +3327,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "2ace6d78-322e-54f1-b45e-c6ceeb6fbbdf"
+              "authoritative": true,
+              "capture_output": "id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-isolated-catalog-producer/v1",
+              "reason": "native product identity discovered by the complete V2.5 UUID audit",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -3477,7 +3493,7 @@
             "fixture": "phase31.4.4a",
             "synthetic": true
           },
-          "id": "2ace6d78-322e-54f1-b45e-c6ceeb6fbbdf",
+          "id": "captured:governance.model_policy::2ace6d78-322e-54f1-b45e-c6ceeb6fbbdf.id",
           "lineage_id": "22c6e6b3-1222-5a88-827d-e83bb66bab4a",
           "policy_key": "PHASE31.4.4A TEST ONLY \u2014 ModelPolicy \u2014 policy_key",
           "previous_revision_id": null,
@@ -3585,12 +3601,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "d8d5730c-d390-5be6-af6a-e4ab9d4cf155"
+              "authoritative": true,
+              "capture_output": "id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-isolated-catalog-producer/v1",
+              "reason": "native product identity discovered by the complete V2.5 UUID audit",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -3779,9 +3796,9 @@
           "autonomy_max": 3,
           "capability": "PHASE31.4.4A TEST ONLY \u2014 AgentDefinition \u2014 capability",
           "created_at": "captured:governance.agent_definition::d8d5730c-d390-5be6-af6a-e4ab9d4cf155.created_at",
-          "id": "d8d5730c-d390-5be6-af6a-e4ab9d4cf155",
+          "id": "captured:governance.agent_definition::d8d5730c-d390-5be6-af6a-e4ab9d4cf155.id",
           "lineage_id": "f60b647d-5cbe-5d8f-ab07-34fdd6e15435",
-          "model_policy_id": "2ace6d78-322e-54f1-b45e-c6ceeb6fbbdf",
+          "model_policy_id": "captured:governance.model_policy::2ace6d78-322e-54f1-b45e-c6ceeb6fbbdf.id",
           "name": "PHASE31.4.4A TEST ONLY \u2014 AgentDefinition \u2014 name",
           "previous_revision_id": null,
           "published_at": "captured:governance.agent_definition::d8d5730c-d390-5be6-af6a-e4ab9d4cf155.published_at",
@@ -3898,12 +3915,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "db7ac009-3d7f-50b0-9cff-ab1f72c2ede8"
+              "authoritative": true,
+              "capture_output": "id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-isolated-catalog-producer/v1",
+              "reason": "native product identity discovered by the complete V2.5 UUID audit",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -3989,7 +4007,7 @@
           "actor_id": "PHASE31.4.4A TEST ONLY \u2014 AgentCatalogCurationAudit:model_policy.created \u2014 actor_id",
           "entity_id": "da6842bc-2fc1-5f85-9058-8c86579aca47",
           "entity_type": "PHASE31.4.4A TEST ONLY \u2014 AgentCatalogCurationAudit:model_policy.created \u2014 entity_type",
-          "id": "db7ac009-3d7f-50b0-9cff-ab1f72c2ede8",
+          "id": "captured:governance.curation_audit::db7ac009-3d7f-50b0-9cff-ab1f72c2ede8.id",
           "occurred_at": "captured:governance.curation_audit::db7ac009-3d7f-50b0-9cff-ab1f72c2ede8.occurred_at",
           "payload_hash": "captured:governance.curation_audit::db7ac009-3d7f-50b0-9cff-ab1f72c2ede8.payload_hash",
           "trace_id": "0b1dc7c2-6803-5861-bbdb-980483b1afb0"
@@ -4103,12 +4121,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "c9e83da2-f1bc-5218-9c03-c4a0391f73cb"
+              "authoritative": true,
+              "capture_output": "id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-isolated-catalog-producer/v1",
+              "reason": "native product identity discovered by the complete V2.5 UUID audit",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -4194,7 +4213,7 @@
           "actor_id": "PHASE31.4.4A TEST ONLY \u2014 AgentCatalogCurationAudit:model_policy.published \u2014 actor_id",
           "entity_id": "109336df-3e61-5160-897b-03a7aa8d83ad",
           "entity_type": "PHASE31.4.4A TEST ONLY \u2014 AgentCatalogCurationAudit:model_policy.published \u2014 entity_type",
-          "id": "c9e83da2-f1bc-5218-9c03-c4a0391f73cb",
+          "id": "captured:governance.curation_audit::c9e83da2-f1bc-5218-9c03-c4a0391f73cb.id",
           "occurred_at": "captured:governance.curation_audit::c9e83da2-f1bc-5218-9c03-c4a0391f73cb.occurred_at",
           "payload_hash": "captured:governance.curation_audit::c9e83da2-f1bc-5218-9c03-c4a0391f73cb.payload_hash",
           "trace_id": "4e5c8197-0018-530b-a2f2-87df1173b603"
@@ -4308,12 +4327,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "3c42a4e6-7eca-51ea-8063-e0461ad24fa6"
+              "authoritative": true,
+              "capture_output": "id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-isolated-catalog-producer/v1",
+              "reason": "native product identity discovered by the complete V2.5 UUID audit",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -4399,7 +4419,7 @@
           "actor_id": "PHASE31.4.4A TEST ONLY \u2014 AgentCatalogCurationAudit:agent_definition.created \u2014 actor_id",
           "entity_id": "9031f357-c3ea-50de-b7bc-028575167aed",
           "entity_type": "PHASE31.4.4A TEST ONLY \u2014 AgentCatalogCurationAudit:agent_definition.created \u2014 entity_type",
-          "id": "3c42a4e6-7eca-51ea-8063-e0461ad24fa6",
+          "id": "captured:governance.curation_audit::3c42a4e6-7eca-51ea-8063-e0461ad24fa6.id",
           "occurred_at": "captured:governance.curation_audit::3c42a4e6-7eca-51ea-8063-e0461ad24fa6.occurred_at",
           "payload_hash": "captured:governance.curation_audit::3c42a4e6-7eca-51ea-8063-e0461ad24fa6.payload_hash",
           "trace_id": "d1fedda8-c0f2-586b-9821-ba7f9e48d656"
@@ -4513,12 +4533,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "22ca2229-0ffd-5a26-b178-38c976701cee"
+              "authoritative": true,
+              "capture_output": "id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-isolated-catalog-producer/v1",
+              "reason": "native product identity discovered by the complete V2.5 UUID audit",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -4604,7 +4625,7 @@
           "actor_id": "PHASE31.4.4A TEST ONLY \u2014 AgentCatalogCurationAudit:agent_definition.published \u2014 actor_id",
           "entity_id": "c66f4b75-4792-5221-b2a4-1316a74605f1",
           "entity_type": "PHASE31.4.4A TEST ONLY \u2014 AgentCatalogCurationAudit:agent_definition.published \u2014 entity_type",
-          "id": "22ca2229-0ffd-5a26-b178-38c976701cee",
+          "id": "captured:governance.curation_audit::22ca2229-0ffd-5a26-b178-38c976701cee.id",
           "occurred_at": "captured:governance.curation_audit::22ca2229-0ffd-5a26-b178-38c976701cee.occurred_at",
           "payload_hash": "captured:governance.curation_audit::22ca2229-0ffd-5a26-b178-38c976701cee.payload_hash",
           "trace_id": "f6c6d2ea-e44d-5279-8909-4c5dd6e4e409"
@@ -4899,12 +4920,12 @@
           "hypothesis": "PHASE31.4.4A TEST ONLY \u2014 Opportunity:under_evaluation:r1 \u2014 hypothesis",
           "id": "11111111-1111-4111-8111-111111111111",
           "lineage_id": "11111111-1111-4111-8111-111111111111",
-          "organization_id": "ac638304-fdd6-5ce8-96d7-62014117af94",
+          "organization_id": "organization_id",
           "previous_revision_id": null,
-          "process_id": "506d920c-fe62-53c0-aac8-9c1ca8ca78ed",
+          "process_id": "process_id",
           "revision": 1,
           "status": "under_evaluation",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731"
+          "tenant_id": "tenant_projection_id"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
         "unbound_field_count": 0
@@ -5109,12 +5130,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "b87bdcde-c623-522f-a0ac-ff81f61df8e8"
+              "authoritative": true,
+              "capture_output": "agent_run_id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-agent-provenance-producer/v1",
+              "reason": "native runtime identity; historical UUID is metadata only",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -5380,7 +5402,7 @@
         "member_kind": "DATABASE_ROW",
         "required_field_count": 22,
         "resolved_fields": {
-          "agent_definition_id": "d8d5730c-d390-5be6-af6a-e4ab9d4cf155",
+          "agent_definition_id": "captured:governance.agent_definition::d8d5730c-d390-5be6-af6a-e4ab9d4cf155.id",
           "capability": "PHASE31.4.4A TEST ONLY \u2014 AgentRun \u2014 capability",
           "causation_id": null,
           "completed_at": "captured:qms.agent_run::b87bdcde-c623-522f-a0ac-ff81f61df8e8.completed_at",
@@ -5389,18 +5411,18 @@
           "dataset_version_reference": null,
           "effective_autonomy_ceiling": 3,
           "embedding_namespace": null,
-          "id": "b87bdcde-c623-522f-a0ac-ff81f61df8e8",
+          "id": "captured:qms.agent_run::b87bdcde-c623-522f-a0ac-ff81f61df8e8.id",
           "model_identifier": "PHASE31.4.4A TEST ONLY \u2014 AgentRun \u2014 model_identifier",
-          "model_policy_id": "2ace6d78-322e-54f1-b45e-c6ceeb6fbbdf",
+          "model_policy_id": "captured:governance.model_policy::2ace6d78-322e-54f1-b45e-c6ceeb6fbbdf.id",
           "model_provider": null,
           "model_version": "PHASE31.4.4A TEST ONLY \u2014 AgentRun \u2014 model_version",
-          "organization_id": "ac638304-fdd6-5ce8-96d7-62014117af94",
+          "organization_id": "organization_id",
           "prompt_version": "PHASE31.4.4A TEST ONLY \u2014 AgentRun \u2014 prompt_version",
           "requested_autonomy": 3,
           "rule_bundle_version": "PHASE31.4.4A TEST ONLY \u2014 AgentRun \u2014 rule_bundle_version",
           "started_at": "captured:qms.agent_run::b87bdcde-c623-522f-a0ac-ff81f61df8e8.started_at",
           "status": "completed",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "trace_id": "7e5f69f8-b7dd-5a43-9164-00a521960b87"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -5497,12 +5519,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "ff0841b9-0b28-5a33-8a74-88d5c23575ac"
+              "authoritative": true,
+              "capture_output": "input_ids[0]",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-agent-provenance-producer/v1",
+              "reason": "native runtime identity; historical UUID is metadata only",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -5623,15 +5646,15 @@
         "member_kind": "DATABASE_ROW",
         "required_field_count": 9,
         "resolved_fields": {
-          "agent_run_id": "b87bdcde-c623-522f-a0ac-ff81f61df8e8",
+          "agent_run_id": "captured:qms.agent_run::b87bdcde-c623-522f-a0ac-ff81f61df8e8.id",
           "created_at": "captured:qms.agent_run_input::ff0841b9-0b28-5a33-8a74-88d5c23575ac.created_at",
           "evidence_id": "d7e4231d-b9dc-5c39-9396-6b4b862173da",
-          "id": "ff0841b9-0b28-5a33-8a74-88d5c23575ac",
-          "knowledge_layer_rule_id": "bc5f4f17-294d-5abd-b27b-2d296921ffdf",
-          "organization_id": "ac638304-fdd6-5ce8-96d7-62014117af94",
-          "requirement_control_id": "c56a413e-00f1-5a20-81c4-dfeda4681dc7",
-          "standard_edition_id": "98939c5e-1a06-53c9-bbf9-07b21d81feb1",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731"
+          "id": "captured:qms.agent_run_input::ff0841b9-0b28-5a33-8a74-88d5c23575ac.id",
+          "knowledge_layer_rule_id": "captured:normative.knowledge_layer_rule::bc5f4f17-294d-5abd-b27b-2d296921ffdf.id",
+          "organization_id": "organization_id",
+          "requirement_control_id": "captured:normative.requirement_control::c56a413e-00f1-5a20-81c4-dfeda4681dc7.id",
+          "standard_edition_id": "captured:normative.standard_edition::98939c5e-1a06-53c9-bbf9-07b21d81feb1.id",
+          "tenant_id": "tenant_projection_id"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
         "unbound_field_count": 0
@@ -5738,12 +5761,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "5a6e7f68-5d80-5c1d-a40e-76f3240e0d6d"
+              "authoritative": true,
+              "capture_output": "recommendation_id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-agent-provenance-producer/v1",
+              "reason": "native runtime identity; historical UUID is metadata only",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -5886,12 +5910,12 @@
           "body": "PHASE31.4.4A TEST ONLY \u2014 Recommendation \u2014 body",
           "confidence": "1.0000",
           "created_at": "captured:qms.recommendation::5a6e7f68-5d80-5c1d-a40e-76f3240e0d6d.created_at",
-          "id": "5a6e7f68-5d80-5c1d-a40e-76f3240e0d6d",
+          "id": "captured:qms.recommendation::5a6e7f68-5d80-5c1d-a40e-76f3240e0d6d.id",
           "impact": null,
           "intended_autonomy": 0,
-          "organization_id": "ac638304-fdd6-5ce8-96d7-62014117af94",
+          "organization_id": "organization_id",
           "status": "proposed",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "title": "PHASE31.4.4A TEST ONLY \u2014 Recommendation \u2014 title"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -6006,12 +6030,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "27eb05f3-1a75-5a4a-a03d-521c777f4ea7"
+              "authoritative": true,
+              "capture_output": "basis_ids[0]",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-agent-provenance-producer/v1",
+              "reason": "native runtime identity; historical UUID is metadata only",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -6307,19 +6332,19 @@
           "dataset_version_reference": null,
           "embedding_namespace": null,
           "evidence_id": "4201525e-11c0-5439-8698-47b508b747f9",
-          "id": "27eb05f3-1a75-5a4a-a03d-521c777f4ea7",
-          "knowledge_layer_rule_id": "bc5f4f17-294d-5abd-b27b-2d296921ffdf",
+          "id": "captured:qms.recommendation_basis::27eb05f3-1a75-5a4a-a03d-521c777f4ea7.id",
+          "knowledge_layer_rule_id": "captured:normative.knowledge_layer_rule::bc5f4f17-294d-5abd-b27b-2d296921ffdf.id",
           "model_identifier": "PHASE31.4.4A TEST ONLY \u2014 RecommendationBasis \u2014 model_identifier",
           "model_provider": null,
           "model_version": "PHASE31.4.4A TEST ONLY \u2014 RecommendationBasis \u2014 model_version",
-          "organization_id": "ac638304-fdd6-5ce8-96d7-62014117af94",
+          "organization_id": "organization_id",
           "prompt_version": "PHASE31.4.4A TEST ONLY \u2014 RecommendationBasis \u2014 prompt_version",
           "rationale": "PHASE31.4.4A TEST ONLY \u2014 RecommendationBasis \u2014 rationale",
-          "recommendation_id": "5a6e7f68-5d80-5c1d-a40e-76f3240e0d6d",
-          "requirement_control_id": "c56a413e-00f1-5a20-81c4-dfeda4681dc7",
+          "recommendation_id": "captured:qms.recommendation::5a6e7f68-5d80-5c1d-a40e-76f3240e0d6d.id",
+          "requirement_control_id": "captured:normative.requirement_control::c56a413e-00f1-5a20-81c4-dfeda4681dc7.id",
           "rule_bundle_version": "PHASE31.4.4A TEST ONLY \u2014 RecommendationBasis \u2014 rule_bundle_version",
-          "standard_edition_id": "98939c5e-1a06-53c9-bbf9-07b21d81feb1",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "standard_edition_id": "captured:normative.standard_edition::98939c5e-1a06-53c9-bbf9-07b21d81feb1.id",
+          "tenant_id": "tenant_projection_id",
           "trace_id": "f6905309-9684-5324-9f13-c955f50c1397"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -6385,12 +6410,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "fc6aea7a-491e-5dd9-860e-b3527264416b"
+              "authoritative": true,
+              "capture_output": "link_id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-agent-provenance-producer/v1",
+              "reason": "native runtime identity; historical UUID is metadata only",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -6467,12 +6493,12 @@
         "member_kind": "DATABASE_ROW",
         "required_field_count": 6,
         "resolved_fields": {
-          "agent_run_id": "b87bdcde-c623-522f-a0ac-ff81f61df8e8",
+          "agent_run_id": "captured:qms.agent_run::b87bdcde-c623-522f-a0ac-ff81f61df8e8.id",
           "created_at": "captured:qms.agent_run_recommendation::fc6aea7a-491e-5dd9-860e-b3527264416b.created_at",
-          "id": "fc6aea7a-491e-5dd9-860e-b3527264416b",
-          "organization_id": "ac638304-fdd6-5ce8-96d7-62014117af94",
-          "recommendation_id": "5a6e7f68-5d80-5c1d-a40e-76f3240e0d6d",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731"
+          "id": "captured:qms.agent_run_recommendation::fc6aea7a-491e-5dd9-860e-b3527264416b.id",
+          "organization_id": "organization_id",
+          "recommendation_id": "captured:qms.recommendation::5a6e7f68-5d80-5c1d-a40e-76f3240e0d6d.id",
+          "tenant_id": "tenant_projection_id"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
         "unbound_field_count": 0
@@ -6640,12 +6666,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "2a100aee-ebdd-5807-aab0-f8c4265e8e63"
+              "authoritative": true,
+              "capture_output": "decision_id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-controlled-opportunity-producer/v1",
+              "reason": "native runtime identity; historical UUID is metadata only",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -6774,7 +6801,7 @@
         "member_kind": "DATABASE_ROW",
         "required_field_count": 13,
         "resolved_fields": {
-          "agent_run_id": "b87bdcde-c623-522f-a0ac-ff81f61df8e8",
+          "agent_run_id": "captured:qms.agent_run::b87bdcde-c623-522f-a0ac-ff81f61df8e8.id",
           "confidence": "1.0000",
           "created_at": "captured:qms.agent_decision::2a100aee-ebdd-5807-aab0-f8c4265e8e63.created_at",
           "decision_autonomy": 3,
@@ -6785,15 +6812,15 @@
             "synthetic": true
           },
           "human_gate_required": true,
-          "id": "2a100aee-ebdd-5807-aab0-f8c4265e8e63",
-          "organization_id": "ac638304-fdd6-5ce8-96d7-62014117af94",
+          "id": "captured:qms.agent_decision::2a100aee-ebdd-5807-aab0-f8c4265e8e63.id",
+          "organization_id": "organization_id",
           "payload": {
             "field": "payload",
             "fixture": "phase31.4.4a",
             "synthetic": true
           },
-          "recommendation_id": "5a6e7f68-5d80-5c1d-a40e-76f3240e0d6d",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "recommendation_id": "captured:qms.recommendation::5a6e7f68-5d80-5c1d-a40e-76f3240e0d6d.id",
+          "tenant_id": "tenant_projection_id",
           "trace_id": "0c32aeba-840c-52a3-bb4f-6036b73a893d"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -6921,7 +6948,7 @@
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
               "authoritative": true,
-              "capture_output": "plan.id",
+              "capture_output": "action_plan_id",
               "database_type_or_schema_type": "UUIDField",
               "kind": "CAPTURE_NATIVE_OUTPUT",
               "native_source": "backend/foundation/action_authorization.py:ActionPreparationService.prepare_action_plan",
@@ -7198,13 +7225,13 @@
         "resolved_fields": {
           "action_plan_hash": "captured:qms.action_plan::ae682a8f-d782-5b27-a148-aa10a940e03a.action_plan_hash",
           "action_type": "opportunity.defer_evaluation",
-          "agent_decision_id": "2a100aee-ebdd-5807-aab0-f8c4265e8e63",
+          "agent_decision_id": "captured:qms.agent_decision::2a100aee-ebdd-5807-aab0-f8c4265e8e63.id",
           "created_at": "captured:qms.action_plan::ae682a8f-d782-5b27-a148-aa10a940e03a.created_at",
           "dry_run_supported": true,
           "id": "22222222-2222-4222-8222-222222222222",
           "idempotency_key": "PHASE31.4.4A TEST ONLY \u2014 ActionPlan \u2014 idempotency_key",
           "impact": "standard",
-          "organization_id": "ac638304-fdd6-5ce8-96d7-62014117af94",
+          "organization_id": "organization_id",
           "parameters": {
             "compensation_action_type": "opportunity.resume_evaluation",
             "policy_id": "controlled-qms-action-policy/v1"
@@ -7217,12 +7244,12 @@
               "type": "status"
             }
           ],
-          "recommendation_id": "5a6e7f68-5d80-5c1d-a40e-76f3240e0d6d",
+          "recommendation_id": "captured:qms.recommendation::5a6e7f68-5d80-5c1d-a40e-76f3240e0d6d.id",
           "required_autonomy": 3,
           "reversibility": "reversible",
           "target_id": "11111111-1111-4111-8111-111111111111",
           "target_type": "Opportunity",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "trace_id": "aab5763f-a02a-549e-913d-7edfa5bac203"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -7331,12 +7358,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "770bab9c-928d-5967-87d8-e882aab09c68"
+              "authoritative": true,
+              "capture_output": "dry_run_id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-controlled-opportunity-producer/v1",
+              "reason": "native runtime identity; historical UUID is metadata only",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -7516,7 +7544,7 @@
           "expected_affected_objects": [
             "synthetic-test-only"
           ],
-          "id": "770bab9c-928d-5967-87d8-e882aab09c68",
+          "id": "captured:qms.action_plan_dry_run::770bab9c-928d-5967-87d8-e882aab09c68.id",
           "impact_summary": {
             "field": "impact_summary",
             "fixture": "phase31.4.4a",
@@ -7527,11 +7555,11 @@
             "fixture": "phase31.4.4a",
             "synthetic": true
           },
-          "organization_id": "ac638304-fdd6-5ce8-96d7-62014117af94",
+          "organization_id": "organization_id",
           "precondition_results": [
             "synthetic-test-only"
           ],
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "trace_id": "2fa54cb2-69c5-5744-9140-04739f1e0147",
           "validation_status": "PHASE31.4.4A TEST ONLY \u2014 ActionPlanDryRun \u2014 validation_status"
         },
@@ -7730,12 +7758,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "8dece4ae-1d50-5e95-8a78-893ca3c4c231"
+              "authoritative": true,
+              "capture_output": "approval_id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-controlled-opportunity-producer/v1",
+              "reason": "native runtime identity; historical UUID is metadata only",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -7862,17 +7891,17 @@
         "resolved_fields": {
           "actor_type": "PHASE31.4.4A TEST ONLY \u2014 Approval \u2014 actor_type",
           "adminapps_user_id_snapshot": "eb4f8ec9-a69a-5dad-af0c-b34b5814b22a",
-          "agent_decision_id": "2a100aee-ebdd-5807-aab0-f8c4265e8e63",
+          "agent_decision_id": "captured:qms.agent_decision::2a100aee-ebdd-5807-aab0-f8c4265e8e63.id",
           "comments": null,
           "created_at": "captured:qms.approval::8dece4ae-1d50-5e95-8a78-893ca3c4c231.created_at",
           "decided_at": "captured:qms.approval::8dece4ae-1d50-5e95-8a78-893ca3c4c231.decided_at",
-          "decided_by_id": "1e878efa-2d1e-50b4-b3e4-481a3c6ff229",
+          "decided_by_id": "user_projection_id",
           "decision": "approve",
-          "id": "8dece4ae-1d50-5e95-8a78-893ca3c4c231",
-          "organization_id": "ac638304-fdd6-5ce8-96d7-62014117af94",
-          "recommendation_id": "5a6e7f68-5d80-5c1d-a40e-76f3240e0d6d",
+          "id": "captured:qms.approval::8dece4ae-1d50-5e95-8a78-893ca3c4c231.id",
+          "organization_id": "organization_id",
+          "recommendation_id": "captured:qms.recommendation::5a6e7f68-5d80-5c1d-a40e-76f3240e0d6d.id",
           "required_role": "PHASE31.4.4A TEST ONLY \u2014 Approval \u2014 required_role",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "trace_id": "b0d55324-2f78-5f0d-ae57-904b742853e1"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -8149,12 +8178,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "040b78af-e99d-5154-bb8f-246a87819be5"
+              "authoritative": true,
+              "capture_output": "authorization_id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-controlled-opportunity-producer/v1",
+              "reason": "native runtime identity; historical UUID is metadata only",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -8366,23 +8396,23 @@
           "action_plan_id": "22222222-2222-4222-8222-222222222222",
           "actor_id": "PHASE31.4.4A TEST ONLY \u2014 ExecutionAuthorization \u2014 actor_id",
           "actor_type": "PHASE31.4.4A TEST ONLY \u2014 ExecutionAuthorization \u2014 actor_type",
-          "agent_decision_id": "2a100aee-ebdd-5807-aab0-f8c4265e8e63",
-          "agent_definition_id": "d8d5730c-d390-5be6-af6a-e4ab9d4cf155",
-          "agent_run_id": "b87bdcde-c623-522f-a0ac-ff81f61df8e8",
+          "agent_decision_id": "captured:qms.agent_decision::2a100aee-ebdd-5807-aab0-f8c4265e8e63.id",
+          "agent_definition_id": "captured:governance.agent_definition::d8d5730c-d390-5be6-af6a-e4ab9d4cf155.id",
+          "agent_run_id": "captured:qms.agent_run::b87bdcde-c623-522f-a0ac-ff81f61df8e8.id",
           "authorization_request_hash": "captured:qms.execution_authorization::040b78af-e99d-5154-bb8f-246a87819be5.authorization_request_hash",
           "authorized_at": "captured:qms.execution_authorization::040b78af-e99d-5154-bb8f-246a87819be5.authorized_at",
-          "dry_run_id": "770bab9c-928d-5967-87d8-e882aab09c68",
-          "effective_approval_id": "8dece4ae-1d50-5e95-8a78-893ca3c4c231",
+          "dry_run_id": "captured:qms.action_plan_dry_run::770bab9c-928d-5967-87d8-e882aab09c68.id",
+          "effective_approval_id": "captured:qms.approval::8dece4ae-1d50-5e95-8a78-893ca3c4c231.id",
           "effective_autonomy_ceiling": 3,
-          "id": "040b78af-e99d-5154-bb8f-246a87819be5",
+          "id": "captured:qms.execution_authorization::040b78af-e99d-5154-bb8f-246a87819be5.id",
           "idempotency_key": "PHASE31.4.4A TEST ONLY \u2014 ExecutionAuthorization \u2014 idempotency_key",
           "impact": "standard",
-          "model_policy_id": "2ace6d78-322e-54f1-b45e-c6ceeb6fbbdf",
-          "organization_id": "ac638304-fdd6-5ce8-96d7-62014117af94",
+          "model_policy_id": "captured:governance.model_policy::2ace6d78-322e-54f1-b45e-c6ceeb6fbbdf.id",
+          "organization_id": "organization_id",
           "outcome": "authorized",
-          "recommendation_id": "5a6e7f68-5d80-5c1d-a40e-76f3240e0d6d",
+          "recommendation_id": "captured:qms.recommendation::5a6e7f68-5d80-5c1d-a40e-76f3240e0d6d.id",
           "reversibility": "reversible",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "trace_id": "d868fd4d-677e-5e8f-a84f-5bf4ad251d8d"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -8552,12 +8582,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "b64bbd57-1207-51f3-b4ef-b14b1f2d24cf"
+              "authoritative": true,
+              "capture_output": "execution_id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-controlled-opportunity-producer/v1",
+              "reason": "native runtime identity; historical UUID is metadata only",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -8751,18 +8782,18 @@
           "attempt_number": 1,
           "completed_at": "captured:qms.action_execution::b64bbd57-1207-51f3-b4ef-b14b1f2d24cf.completed_at",
           "created_at": "captured:qms.action_execution::b64bbd57-1207-51f3-b4ef-b14b1f2d24cf.created_at",
-          "execution_authorization_id": "040b78af-e99d-5154-bb8f-246a87819be5",
+          "execution_authorization_id": "captured:qms.execution_authorization::040b78af-e99d-5154-bb8f-246a87819be5.id",
           "executor_type": "controlled_opportunity",
-          "id": "b64bbd57-1207-51f3-b4ef-b14b1f2d24cf",
+          "id": "captured:qms.action_execution::b64bbd57-1207-51f3-b4ef-b14b1f2d24cf.id",
           "idempotency_key": "PHASE31.4.4A TEST ONLY \u2014 ActionExecution \u2014 idempotency_key",
-          "organization_id": "ac638304-fdd6-5ce8-96d7-62014117af94",
+          "organization_id": "organization_id",
           "precondition_results": [
             "synthetic-test-only"
           ],
           "retry_of_execution_id": null,
           "started_at": "captured:qms.action_execution::b64bbd57-1207-51f3-b4ef-b14b1f2d24cf.started_at",
           "status": "succeeded",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "trace_id": "a3d7240b-4506-506e-9e6b-060dd776f1de"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -9059,12 +9090,12 @@
           "hypothesis": "PHASE31.4.4A TEST ONLY \u2014 Opportunity:deferred:r2 \u2014 hypothesis",
           "id": "018f0000-0000-7000-8000-000000000001",
           "lineage_id": "11111111-1111-4111-8111-111111111111",
-          "organization_id": "ac638304-fdd6-5ce8-96d7-62014117af94",
+          "organization_id": "organization_id",
           "previous_revision_id": "11111111-1111-4111-8111-111111111111",
-          "process_id": "506d920c-fe62-53c0-aac8-9c1ca8ca78ed",
+          "process_id": "process_id",
           "revision": 2,
           "status": "deferred",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731"
+          "tenant_id": "tenant_projection_id"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
         "unbound_field_count": 0
@@ -9191,12 +9222,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "b2bd43b1-6dea-5bda-91c3-081172f40f57"
+              "authoritative": true,
+              "capture_output": "receipt.id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-controlled-opportunity-producer/v1",
+              "reason": "native runtime identity; historical UUID is metadata only",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -9366,13 +9398,13 @@
         "member_kind": "DATABASE_ROW",
         "required_field_count": 13,
         "resolved_fields": {
-          "action_execution_id": "b64bbd57-1207-51f3-b4ef-b14b1f2d24cf",
+          "action_execution_id": "captured:qms.action_execution::b64bbd57-1207-51f3-b4ef-b14b1f2d24cf.id",
           "action_plan_hash": "captured:qms.action_execution_receipt::b2bd43b1-6dea-5bda-91c3-081172f40f57.action_plan_hash",
           "completed_at": "captured:qms.action_execution_receipt::b2bd43b1-6dea-5bda-91c3-081172f40f57.completed_at",
           "created_at": "captured:qms.action_execution_receipt::b2bd43b1-6dea-5bda-91c3-081172f40f57.created_at",
           "executor_type": "controlled_opportunity",
-          "id": "b2bd43b1-6dea-5bda-91c3-081172f40f57",
-          "organization_id": "ac638304-fdd6-5ce8-96d7-62014117af94",
+          "id": "captured:qms.action_execution_receipt::b2bd43b1-6dea-5bda-91c3-081172f40f57.id",
+          "organization_id": "organization_id",
           "outcome": "opportunity_deferred",
           "result": {
             "field": "result",
@@ -9381,7 +9413,7 @@
           },
           "result_hash": "captured:qms.action_execution_receipt::b2bd43b1-6dea-5bda-91c3-081172f40f57.result_hash",
           "started_at": "captured:qms.action_execution_receipt::b2bd43b1-6dea-5bda-91c3-081172f40f57.started_at",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "trace_id": "104cb765-0eda-5368-90b8-b513e0b599ee"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -9509,12 +9541,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "0d913a9a-0c98-5c7c-8911-a52cb9138010"
+              "authoritative": true,
+              "capture_output": "evidence_id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-effectiveness-producer/v1",
+              "reason": "native runtime identity; historical UUID is metadata only",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -9705,14 +9738,14 @@
           "content_hash": "captured:qms.evidence::0d913a9a-0c98-5c7c-8911-a52cb9138010.content_hash",
           "created_at": "captured:qms.evidence::0d913a9a-0c98-5c7c-8911-a52cb9138010.created_at",
           "document_version_id": null,
-          "id": "0d913a9a-0c98-5c7c-8911-a52cb9138010",
+          "id": "captured:qms.evidence::0d913a9a-0c98-5c7c-8911-a52cb9138010.id",
           "lineage_id": "bd5b0fac-a8da-5d9f-9f68-a101d96996f2",
-          "organization_id": "ac638304-fdd6-5ce8-96d7-62014117af94",
+          "organization_id": "organization_id",
           "previous_revision_id": null,
           "revision": 1,
           "source_type": "synthetic_test_fixture",
           "source_uri": null,
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "trust_score": null
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -10114,12 +10147,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "868bccec-28d5-51fe-aa05-5bf621a97ed2"
+              "authoritative": true,
+              "capture_output": "effectiveness_check_id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-effectiveness-producer/v1",
+              "reason": "native runtime identity; historical UUID is metadata only",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -10443,12 +10477,12 @@
         "member_kind": "DATABASE_ROW",
         "required_field_count": 33,
         "resolved_fields": {
-          "action_execution_id": "b64bbd57-1207-51f3-b4ef-b14b1f2d24cf",
+          "action_execution_id": "captured:qms.action_execution::b64bbd57-1207-51f3-b4ef-b14b1f2d24cf.id",
           "action_plan_id": "22222222-2222-4222-8222-222222222222",
           "actor_external_id_snapshot": "captured:qms.effectiveness_check::868bccec-28d5-51fe-aa05-5bf621a97ed2.actor_external_id_snapshot",
           "actor_type": "PHASE31.4.4A TEST ONLY \u2014 EffectivenessCheck:r1 \u2014 actor_type",
-          "actor_user_projection_id": "1e878efa-2d1e-50b4-b3e4-481a3c6ff229",
-          "agent_decision_id": "2a100aee-ebdd-5807-aab0-f8c4265e8e63",
+          "actor_user_projection_id": "user_projection_id",
+          "agent_decision_id": "captured:qms.agent_decision::2a100aee-ebdd-5807-aab0-f8c4265e8e63.id",
           "assessed_at": "captured:qms.effectiveness_check::868bccec-28d5-51fe-aa05-5bf621a97ed2.assessed_at",
           "assessment_method": "human_review",
           "authority_context_version": "captured:qms.effectiveness_check::868bccec-28d5-51fe-aa05-5bf621a97ed2.authority_context_version",
@@ -10459,22 +10493,22 @@
           "created_at": "captured:qms.effectiveness_check::868bccec-28d5-51fe-aa05-5bf621a97ed2.created_at",
           "criteria_hash": "captured:qms.effectiveness_check::868bccec-28d5-51fe-aa05-5bf621a97ed2.criteria_hash",
           "due_at": "captured:qms.effectiveness_check::868bccec-28d5-51fe-aa05-5bf621a97ed2.due_at",
-          "execution_authorization_id": "040b78af-e99d-5154-bb8f-246a87819be5",
+          "execution_authorization_id": "captured:qms.execution_authorization::040b78af-e99d-5154-bb8f-246a87819be5.id",
           "explanation": null,
-          "id": "868bccec-28d5-51fe-aa05-5bf621a97ed2",
+          "id": "captured:qms.effectiveness_check::868bccec-28d5-51fe-aa05-5bf621a97ed2.id",
           "measurement_definition_id": null,
           "opportunity_lineage_id": "1beb1fc9-7ded-596d-abbb-0651821611e7",
-          "organization_id": "ac638304-fdd6-5ce8-96d7-62014117af94",
+          "organization_id": "organization_id",
           "outcome": "effective",
           "planning_context_hash": "captured:qms.effectiveness_check::868bccec-28d5-51fe-aa05-5bf621a97ed2.planning_context_hash",
           "policy_id": "complete-retained-synthetic-lifecycle-poc-policy/v2",
           "predecessor_id": null,
           "reason_code": null,
-          "receipt_id": "b2bd43b1-6dea-5bda-91c3-081172f40f57",
-          "recommendation_id": "5a6e7f68-5d80-5c1d-a40e-76f3240e0d6d",
+          "receipt_id": "captured:qms.action_execution_receipt::b2bd43b1-6dea-5bda-91c3-081172f40f57.id",
+          "recommendation_id": "captured:qms.recommendation::5a6e7f68-5d80-5c1d-a40e-76f3240e0d6d.id",
           "resulting_opportunity_revision_id": "018f0000-0000-7000-8000-000000000001",
           "revision": 1,
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "trace_id": "a92bf7c5-d5c3-5429-add1-ff1d3e4092bd"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -10660,12 +10694,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "75255780-47e7-5116-ad66-3549b533463d"
+              "authoritative": true,
+              "capture_output": "effectiveness_evidence_id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-effectiveness-producer/v1",
+              "reason": "native runtime identity; historical UUID is metadata only",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -10722,14 +10757,14 @@
         "resolved_fields": {
           "created_at": "captured:qms.effectiveness_evidence::75255780-47e7-5116-ad66-3549b533463d.created_at",
           "criterion_role": "PHASE31.4.4A TEST ONLY \u2014 EffectivenessEvidence \u2014 criterion_role",
-          "effectiveness_check_id": "868bccec-28d5-51fe-aa05-5bf621a97ed2",
+          "effectiveness_check_id": "captured:qms.effectiveness_check::868bccec-28d5-51fe-aa05-5bf621a97ed2.id",
           "evidence_content_hash_snapshot": "PHASE31.4.4A TEST ONLY \u2014 EffectivenessEvidence \u2014 evidence_content_hash_snapshot",
           "evidence_id": "569fb820-2e28-5271-a2f7-8391d181e5e7",
           "evidence_lineage_id_snapshot": "d33c7313-36bf-5c07-8caa-e9c0070f8981",
           "evidence_revision_snapshot": 1,
-          "id": "75255780-47e7-5116-ad66-3549b533463d",
-          "organization_id": "ac638304-fdd6-5ce8-96d7-62014117af94",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731"
+          "id": "captured:qms.effectiveness_evidence::75255780-47e7-5116-ad66-3549b533463d.id",
+          "organization_id": "organization_id",
+          "tenant_id": "tenant_projection_id"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
         "unbound_field_count": 0
@@ -10967,12 +11002,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "fb57055c-cbfa-5f1b-b336-a7bc530a5895"
+              "authoritative": true,
+              "capture_output": "artifact_id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-learning-signal-producer/v1",
+              "reason": "native runtime identity; historical UUID is metadata only",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -11180,7 +11216,7 @@
         "required_field_count": 20,
         "resolved_fields": {
           "actor_external_id_snapshot": "captured:qms.learning_signal::fb57055c-cbfa-5f1b-b336-a7bc530a5895.actor_external_id_snapshot",
-          "actor_user_projection_id": "1e878efa-2d1e-50b4-b3e4-481a3c6ff229",
+          "actor_user_projection_id": "user_projection_id",
           "authority_context_version": "captured:qms.learning_signal::fb57055c-cbfa-5f1b-b336-a7bc530a5895.authority_context_version",
           "authority_decision_reference": "captured:qms.learning_signal::fb57055c-cbfa-5f1b-b336-a7bc530a5895.authority_decision_reference",
           "correlation_id": null,
@@ -11189,15 +11225,15 @@
           "derivation_policy_version": "PHASE31.4.4A TEST ONLY \u2014 LearningSignal \u2014 derivation_policy_version",
           "derivation_timestamp": "captured:qms.learning_signal::fb57055c-cbfa-5f1b-b336-a7bc530a5895.derivation_timestamp",
           "effectiveness_lineage_id": "bb98b9a6-17a8-5f45-bc31-cb5214b388da",
-          "id": "fb57055c-cbfa-5f1b-b336-a7bc530a5895",
-          "organization_id": "ac638304-fdd6-5ce8-96d7-62014117af94",
+          "id": "captured:qms.learning_signal::fb57055c-cbfa-5f1b-b336-a7bc530a5895.id",
+          "organization_id": "organization_id",
           "provenance_hash": "captured:qms.learning_signal::fb57055c-cbfa-5f1b-b336-a7bc530a5895.provenance_hash",
-          "selected_effectiveness_check_id": "868bccec-28d5-51fe-aa05-5bf621a97ed2",
+          "selected_effectiveness_check_id": "captured:qms.effectiveness_check::868bccec-28d5-51fe-aa05-5bf621a97ed2.id",
           "selected_outcome_snapshot": "effective",
           "selected_predecessor_id_snapshot": null,
           "selected_revision": 1,
           "selected_was_current_leaf": false,
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "trace_id": "e087ac71-87aa-549c-8686-520b6a5cffdf"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -11284,12 +11320,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "c3b335cb-2776-585f-a05e-8f9a00906069"
+              "authoritative": true,
+              "capture_output": "link_id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-learning-signal-producer/v1",
+              "reason": "native runtime identity; historical UUID is metadata only",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -11477,16 +11514,16 @@
         "resolved_fields": {
           "check_created_at_snapshot": "captured:qms.learning_signal_effectiveness::c3b335cb-2776-585f-a05e-8f9a00906069.check_created_at_snapshot",
           "created_at": "captured:qms.learning_signal_effectiveness::c3b335cb-2776-585f-a05e-8f9a00906069.created_at",
-          "effectiveness_check_id": "868bccec-28d5-51fe-aa05-5bf621a97ed2",
-          "id": "c3b335cb-2776-585f-a05e-8f9a00906069",
+          "effectiveness_check_id": "captured:qms.effectiveness_check::868bccec-28d5-51fe-aa05-5bf621a97ed2.id",
+          "id": "captured:qms.learning_signal_effectiveness::c3b335cb-2776-585f-a05e-8f9a00906069.id",
           "is_selected_leaf": false,
-          "learning_signal_id": "fb57055c-cbfa-5f1b-b336-a7bc530a5895",
+          "learning_signal_id": "captured:qms.learning_signal::fb57055c-cbfa-5f1b-b336-a7bc530a5895.id",
           "lineage_id_snapshot": "f17baf74-78df-5105-9fd1-dae3feb59522",
-          "organization_id": "ac638304-fdd6-5ce8-96d7-62014117af94",
+          "organization_id": "organization_id",
           "outcome_snapshot": "effective",
           "predecessor_id_snapshot": null,
           "revision_snapshot": 1,
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731"
+          "tenant_id": "tenant_projection_id"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
         "unbound_field_count": 0
@@ -11822,7 +11859,7 @@
         "member_kind": "DATABASE_ROW",
         "required_field_count": 15,
         "resolved_fields": {
-          "aggregate_id": "b87bdcde-c623-522f-a0ac-ff81f61df8e8",
+          "aggregate_id": "captured:qms.agent_run::b87bdcde-c623-522f-a0ac-ff81f61df8e8.id",
           "aggregate_type": "agent_run",
           "aggregate_version": "captured:eventing.domain_event::90e2d38f-9600-5701-a34c-c9827eafc88c.aggregate_version",
           "causation_id": null,
@@ -11835,7 +11872,7 @@
           "recorded_at": "captured:eventing.domain_event::90e2d38f-9600-5701-a34c-c9827eafc88c.recorded_at",
           "schema_version": 1,
           "source": "iso-smart-agent-runtime",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "trace_id": "7e5f69f8-b7dd-5a43-9164-00a521960b87"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -11922,12 +11959,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "078ed021-9eb9-5258-96b9-3b74e2951e77"
+              "authoritative": true,
+              "capture_output": "id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-agent-provenance-producer/v1",
+              "reason": "native product identity discovered by the complete V2.5 UUID audit",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -12106,14 +12144,14 @@
           "available_at": "captured:eventing.transactional_outbox::078ed021-9eb9-5258-96b9-3b74e2951e77.available_at",
           "created_at": "captured:eventing.transactional_outbox::078ed021-9eb9-5258-96b9-3b74e2951e77.created_at",
           "domain_event_id": "1af3e9a8-65f7-5952-a991-1133872659f9",
-          "id": "078ed021-9eb9-5258-96b9-3b74e2951e77",
+          "id": "captured:eventing.transactional_outbox::078ed021-9eb9-5258-96b9-3b74e2951e77.id",
           "last_error_code": null,
           "lease_expires_at": "captured:eventing.transactional_outbox::078ed021-9eb9-5258-96b9-3b74e2951e77.lease_expires_at",
           "lease_owner": null,
           "publish_attempts": 0,
           "published_at": "captured:eventing.transactional_outbox::078ed021-9eb9-5258-96b9-3b74e2951e77.published_at",
           "status": "pending",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "updated_at": "captured:eventing.transactional_outbox::078ed021-9eb9-5258-96b9-3b74e2951e77.updated_at"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -12532,7 +12570,7 @@
           "after_hash": "captured:audit.immutable_audit_log::OUTPUT:agent-run-start:audit_id.after_hash",
           "before_hash": "captured:audit.immutable_audit_log::OUTPUT:agent-run-start:audit_id.before_hash",
           "created_at": "captured:audit.immutable_audit_log::OUTPUT:agent-run-start:audit_id.created_at",
-          "entity_id": "b87bdcde-c623-522f-a0ac-ff81f61df8e8",
+          "entity_id": "captured:qms.agent_run::b87bdcde-c623-522f-a0ac-ff81f61df8e8.id",
           "entity_type": "agent_run",
           "entry_hash": "captured:audit.immutable_audit_log::OUTPUT:agent-run-start:audit_id.entry_hash",
           "id": "captured:audit.immutable_audit_log::OUTPUT:agent-run-start:audit_id.id",
@@ -12541,9 +12579,9 @@
           "payload_hash": "captured:audit.immutable_audit_log::OUTPUT:agent-run-start:audit_id.payload_hash",
           "previous_entry_hash": "captured:audit.immutable_audit_log::OUTPUT:agent-run-start:audit_id.previous_entry_hash",
           "sequence_number": "captured:audit.immutable_audit_log::OUTPUT:agent-run-start:audit_id.sequence_number",
-          "stream_id": "b87bdcde-c623-522f-a0ac-ff81f61df8e8",
+          "stream_id": "captured:qms.agent_run::b87bdcde-c623-522f-a0ac-ff81f61df8e8.id",
           "stream_type": "agent_run",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "trace_id": "7e5f69f8-b7dd-5a43-9164-00a521960b87"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -12880,7 +12918,7 @@
         "member_kind": "DATABASE_ROW",
         "required_field_count": 15,
         "resolved_fields": {
-          "aggregate_id": "b87bdcde-c623-522f-a0ac-ff81f61df8e8",
+          "aggregate_id": "captured:qms.agent_run::b87bdcde-c623-522f-a0ac-ff81f61df8e8.id",
           "aggregate_type": "agent_run",
           "aggregate_version": "captured:eventing.domain_event::47be0b7e-10d0-5e96-94fd-fcaa8ad14cfd.aggregate_version",
           "causation_id": null,
@@ -12893,7 +12931,7 @@
           "recorded_at": "captured:eventing.domain_event::47be0b7e-10d0-5e96-94fd-fcaa8ad14cfd.recorded_at",
           "schema_version": 1,
           "source": "iso-smart-agent-runtime",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "trace_id": "7e5f69f8-b7dd-5a43-9164-00a521960b87"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -12980,12 +13018,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "51dd5c7a-52d3-5779-ad95-ea6910747874"
+              "authoritative": true,
+              "capture_output": "id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-agent-provenance-producer/v1",
+              "reason": "native product identity discovered by the complete V2.5 UUID audit",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -13164,14 +13203,14 @@
           "available_at": "captured:eventing.transactional_outbox::51dd5c7a-52d3-5779-ad95-ea6910747874.available_at",
           "created_at": "captured:eventing.transactional_outbox::51dd5c7a-52d3-5779-ad95-ea6910747874.created_at",
           "domain_event_id": "954c3c1e-1c0f-5e80-a638-ab37fa84294d",
-          "id": "51dd5c7a-52d3-5779-ad95-ea6910747874",
+          "id": "captured:eventing.transactional_outbox::51dd5c7a-52d3-5779-ad95-ea6910747874.id",
           "last_error_code": null,
           "lease_expires_at": "captured:eventing.transactional_outbox::51dd5c7a-52d3-5779-ad95-ea6910747874.lease_expires_at",
           "lease_owner": null,
           "publish_attempts": 0,
           "published_at": "captured:eventing.transactional_outbox::51dd5c7a-52d3-5779-ad95-ea6910747874.published_at",
           "status": "pending",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "updated_at": "captured:eventing.transactional_outbox::51dd5c7a-52d3-5779-ad95-ea6910747874.updated_at"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -13590,7 +13629,7 @@
           "after_hash": "captured:audit.immutable_audit_log::OUTPUT:agent-run-complete:audit_id.after_hash",
           "before_hash": "captured:audit.immutable_audit_log::OUTPUT:agent-run-complete:audit_id.before_hash",
           "created_at": "captured:audit.immutable_audit_log::OUTPUT:agent-run-complete:audit_id.created_at",
-          "entity_id": "b87bdcde-c623-522f-a0ac-ff81f61df8e8",
+          "entity_id": "captured:qms.agent_run::b87bdcde-c623-522f-a0ac-ff81f61df8e8.id",
           "entity_type": "agent_run",
           "entry_hash": "captured:audit.immutable_audit_log::OUTPUT:agent-run-complete:audit_id.entry_hash",
           "id": "captured:audit.immutable_audit_log::OUTPUT:agent-run-complete:audit_id.id",
@@ -13599,9 +13638,9 @@
           "payload_hash": "captured:audit.immutable_audit_log::OUTPUT:agent-run-complete:audit_id.payload_hash",
           "previous_entry_hash": "captured:audit.immutable_audit_log::OUTPUT:agent-run-complete:audit_id.previous_entry_hash",
           "sequence_number": "captured:audit.immutable_audit_log::OUTPUT:agent-run-complete:audit_id.sequence_number",
-          "stream_id": "b87bdcde-c623-522f-a0ac-ff81f61df8e8",
+          "stream_id": "captured:qms.agent_run::b87bdcde-c623-522f-a0ac-ff81f61df8e8.id",
           "stream_type": "agent_run",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "trace_id": "7e5f69f8-b7dd-5a43-9164-00a521960b87"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -13937,7 +13976,7 @@
         "member_kind": "DATABASE_ROW",
         "required_field_count": 15,
         "resolved_fields": {
-          "aggregate_id": "2a100aee-ebdd-5807-aab0-f8c4265e8e63",
+          "aggregate_id": "captured:qms.agent_decision::2a100aee-ebdd-5807-aab0-f8c4265e8e63.id",
           "aggregate_type": "agent_decision",
           "aggregate_version": 1,
           "causation_id": null,
@@ -13950,7 +13989,7 @@
           "recorded_at": "captured:eventing.domain_event::b043e2e7-7210-5c11-a718-c22aa97574db.recorded_at",
           "schema_version": 1,
           "source": "iso-smart-agent-runtime",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "trace_id": "0c32aeba-840c-52a3-bb4f-6036b73a893d"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -14037,12 +14076,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "aef69cfe-2e84-58ae-9f37-89e45640f400"
+              "authoritative": true,
+              "capture_output": "id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-controlled-opportunity-producer/v1",
+              "reason": "native product identity discovered by the complete V2.5 UUID audit",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -14221,14 +14261,14 @@
           "available_at": "captured:eventing.transactional_outbox::aef69cfe-2e84-58ae-9f37-89e45640f400.available_at",
           "created_at": "captured:eventing.transactional_outbox::aef69cfe-2e84-58ae-9f37-89e45640f400.created_at",
           "domain_event_id": "6b590f54-512c-594c-aeb3-c5d4fcb7f04f",
-          "id": "aef69cfe-2e84-58ae-9f37-89e45640f400",
+          "id": "captured:eventing.transactional_outbox::aef69cfe-2e84-58ae-9f37-89e45640f400.id",
           "last_error_code": null,
           "lease_expires_at": "captured:eventing.transactional_outbox::aef69cfe-2e84-58ae-9f37-89e45640f400.lease_expires_at",
           "lease_owner": null,
           "publish_attempts": 0,
           "published_at": "captured:eventing.transactional_outbox::aef69cfe-2e84-58ae-9f37-89e45640f400.published_at",
           "status": "pending",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "updated_at": "captured:eventing.transactional_outbox::aef69cfe-2e84-58ae-9f37-89e45640f400.updated_at"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -14646,7 +14686,7 @@
           "after_hash": "captured:audit.immutable_audit_log::OUTPUT:agent-decision:audit_id.after_hash",
           "before_hash": null,
           "created_at": "captured:audit.immutable_audit_log::OUTPUT:agent-decision:audit_id.created_at",
-          "entity_id": "2a100aee-ebdd-5807-aab0-f8c4265e8e63",
+          "entity_id": "captured:qms.agent_decision::2a100aee-ebdd-5807-aab0-f8c4265e8e63.id",
           "entity_type": "agent_decision",
           "entry_hash": "captured:audit.immutable_audit_log::OUTPUT:agent-decision:audit_id.entry_hash",
           "id": "captured:audit.immutable_audit_log::OUTPUT:agent-decision:audit_id.id",
@@ -14655,9 +14695,9 @@
           "payload_hash": "captured:audit.immutable_audit_log::OUTPUT:agent-decision:audit_id.payload_hash",
           "previous_entry_hash": "captured:audit.immutable_audit_log::OUTPUT:agent-decision:audit_id.previous_entry_hash",
           "sequence_number": "captured:audit.immutable_audit_log::OUTPUT:agent-decision:audit_id.sequence_number",
-          "stream_id": "2a100aee-ebdd-5807-aab0-f8c4265e8e63",
+          "stream_id": "captured:qms.agent_decision::2a100aee-ebdd-5807-aab0-f8c4265e8e63.id",
           "stream_type": "agent_decision",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "trace_id": "0c32aeba-840c-52a3-bb4f-6036b73a893d"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -15007,7 +15047,7 @@
           "recorded_at": "captured:eventing.domain_event::d087529c-6a0e-5386-ad10-39992d4f5405.recorded_at",
           "schema_version": 1,
           "source": "iso-smart-action-preparation",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "trace_id": "aab5763f-a02a-549e-913d-7edfa5bac203"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -15094,12 +15134,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "d10bbec9-3fde-5d9b-87f3-4856d3a7116d"
+              "authoritative": true,
+              "capture_output": "id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-controlled-opportunity-producer/v1",
+              "reason": "native product identity discovered by the complete V2.5 UUID audit",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -15278,14 +15319,14 @@
           "available_at": "captured:eventing.transactional_outbox::d10bbec9-3fde-5d9b-87f3-4856d3a7116d.available_at",
           "created_at": "captured:eventing.transactional_outbox::d10bbec9-3fde-5d9b-87f3-4856d3a7116d.created_at",
           "domain_event_id": "abfed568-9117-5157-831d-cae719b7691e",
-          "id": "d10bbec9-3fde-5d9b-87f3-4856d3a7116d",
+          "id": "captured:eventing.transactional_outbox::d10bbec9-3fde-5d9b-87f3-4856d3a7116d.id",
           "last_error_code": null,
           "lease_expires_at": "captured:eventing.transactional_outbox::d10bbec9-3fde-5d9b-87f3-4856d3a7116d.lease_expires_at",
           "lease_owner": null,
           "publish_attempts": 0,
           "published_at": "captured:eventing.transactional_outbox::d10bbec9-3fde-5d9b-87f3-4856d3a7116d.published_at",
           "status": "pending",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "updated_at": "captured:eventing.transactional_outbox::d10bbec9-3fde-5d9b-87f3-4856d3a7116d.updated_at"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -15714,7 +15755,7 @@
           "sequence_number": "captured:audit.immutable_audit_log::OUTPUT:action-plan-prepared:audit_id.sequence_number",
           "stream_id": "22222222-2222-4222-8222-222222222222",
           "stream_type": "action_plan",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "trace_id": "aab5763f-a02a-549e-913d-7edfa5bac203"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -16050,7 +16091,7 @@
         "member_kind": "DATABASE_ROW",
         "required_field_count": 15,
         "resolved_fields": {
-          "aggregate_id": "8dece4ae-1d50-5e95-8a78-893ca3c4c231",
+          "aggregate_id": "captured:qms.approval::8dece4ae-1d50-5e95-8a78-893ca3c4c231.id",
           "aggregate_type": "approval",
           "aggregate_version": 1,
           "causation_id": null,
@@ -16063,7 +16104,7 @@
           "recorded_at": "captured:eventing.domain_event::bc7bdbed-f01c-50f1-9ad9-8dea8106f586.recorded_at",
           "schema_version": 1,
           "source": "iso-smart-human-decision-gate",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "trace_id": "b0d55324-2f78-5f0d-ae57-904b742853e1"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -16150,12 +16191,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "e0145d7c-945f-5702-b535-e4651ed4c629"
+              "authoritative": true,
+              "capture_output": "id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-controlled-opportunity-producer/v1",
+              "reason": "native product identity discovered by the complete V2.5 UUID audit",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -16334,14 +16376,14 @@
           "available_at": "captured:eventing.transactional_outbox::e0145d7c-945f-5702-b535-e4651ed4c629.available_at",
           "created_at": "captured:eventing.transactional_outbox::e0145d7c-945f-5702-b535-e4651ed4c629.created_at",
           "domain_event_id": "acd0ed25-69de-597f-8e99-9d92d1047606",
-          "id": "e0145d7c-945f-5702-b535-e4651ed4c629",
+          "id": "captured:eventing.transactional_outbox::e0145d7c-945f-5702-b535-e4651ed4c629.id",
           "last_error_code": null,
           "lease_expires_at": "captured:eventing.transactional_outbox::e0145d7c-945f-5702-b535-e4651ed4c629.lease_expires_at",
           "lease_owner": null,
           "publish_attempts": 0,
           "published_at": "captured:eventing.transactional_outbox::e0145d7c-945f-5702-b535-e4651ed4c629.published_at",
           "status": "pending",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "updated_at": "captured:eventing.transactional_outbox::e0145d7c-945f-5702-b535-e4651ed4c629.updated_at"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -16759,7 +16801,7 @@
           "after_hash": "captured:audit.immutable_audit_log::OUTPUT:human-approval:audit_id.after_hash",
           "before_hash": null,
           "created_at": "captured:audit.immutable_audit_log::OUTPUT:human-approval:audit_id.created_at",
-          "entity_id": "8dece4ae-1d50-5e95-8a78-893ca3c4c231",
+          "entity_id": "captured:qms.approval::8dece4ae-1d50-5e95-8a78-893ca3c4c231.id",
           "entity_type": "approval",
           "entry_hash": "captured:audit.immutable_audit_log::OUTPUT:human-approval:audit_id.entry_hash",
           "id": "captured:audit.immutable_audit_log::OUTPUT:human-approval:audit_id.id",
@@ -16768,9 +16810,9 @@
           "payload_hash": "captured:audit.immutable_audit_log::OUTPUT:human-approval:audit_id.payload_hash",
           "previous_entry_hash": "captured:audit.immutable_audit_log::OUTPUT:human-approval:audit_id.previous_entry_hash",
           "sequence_number": "captured:audit.immutable_audit_log::OUTPUT:human-approval:audit_id.sequence_number",
-          "stream_id": "8dece4ae-1d50-5e95-8a78-893ca3c4c231",
+          "stream_id": "captured:qms.approval::8dece4ae-1d50-5e95-8a78-893ca3c4c231.id",
           "stream_type": "approval",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "trace_id": "b0d55324-2f78-5f0d-ae57-904b742853e1"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -17107,7 +17149,7 @@
         "member_kind": "DATABASE_ROW",
         "required_field_count": 15,
         "resolved_fields": {
-          "aggregate_id": "040b78af-e99d-5154-bb8f-246a87819be5",
+          "aggregate_id": "captured:qms.execution_authorization::040b78af-e99d-5154-bb8f-246a87819be5.id",
           "aggregate_type": "execution_authorization",
           "aggregate_version": "captured:eventing.domain_event::87e477b2-b854-55e2-95a5-2ed0785d6f39.aggregate_version",
           "causation_id": null,
@@ -17120,7 +17162,7 @@
           "recorded_at": "captured:eventing.domain_event::87e477b2-b854-55e2-95a5-2ed0785d6f39.recorded_at",
           "schema_version": 1,
           "source": "iso-smart-execution-authorization",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "trace_id": "d868fd4d-677e-5e8f-a84f-5bf4ad251d8d"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -17207,12 +17249,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "d9138ae4-37a2-52a6-bbdb-02a6f523b42c"
+              "authoritative": true,
+              "capture_output": "id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-controlled-opportunity-producer/v1",
+              "reason": "native product identity discovered by the complete V2.5 UUID audit",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -17391,14 +17434,14 @@
           "available_at": "captured:eventing.transactional_outbox::d9138ae4-37a2-52a6-bbdb-02a6f523b42c.available_at",
           "created_at": "captured:eventing.transactional_outbox::d9138ae4-37a2-52a6-bbdb-02a6f523b42c.created_at",
           "domain_event_id": "9711da23-56c6-5be4-9a92-6c0e4b03f3f0",
-          "id": "d9138ae4-37a2-52a6-bbdb-02a6f523b42c",
+          "id": "captured:eventing.transactional_outbox::d9138ae4-37a2-52a6-bbdb-02a6f523b42c.id",
           "last_error_code": null,
           "lease_expires_at": "captured:eventing.transactional_outbox::d9138ae4-37a2-52a6-bbdb-02a6f523b42c.lease_expires_at",
           "lease_owner": null,
           "publish_attempts": 0,
           "published_at": "captured:eventing.transactional_outbox::d9138ae4-37a2-52a6-bbdb-02a6f523b42c.published_at",
           "status": "pending",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "updated_at": "captured:eventing.transactional_outbox::d9138ae4-37a2-52a6-bbdb-02a6f523b42c.updated_at"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -17816,7 +17859,7 @@
           "after_hash": "captured:audit.immutable_audit_log::OUTPUT:execution-authorization:audit_id.after_hash",
           "before_hash": null,
           "created_at": "captured:audit.immutable_audit_log::OUTPUT:execution-authorization:audit_id.created_at",
-          "entity_id": "040b78af-e99d-5154-bb8f-246a87819be5",
+          "entity_id": "captured:qms.execution_authorization::040b78af-e99d-5154-bb8f-246a87819be5.id",
           "entity_type": "execution_authorization",
           "entry_hash": "captured:audit.immutable_audit_log::OUTPUT:execution-authorization:audit_id.entry_hash",
           "id": "captured:audit.immutable_audit_log::OUTPUT:execution-authorization:audit_id.id",
@@ -17825,9 +17868,9 @@
           "payload_hash": "captured:audit.immutable_audit_log::OUTPUT:execution-authorization:audit_id.payload_hash",
           "previous_entry_hash": "captured:audit.immutable_audit_log::OUTPUT:execution-authorization:audit_id.previous_entry_hash",
           "sequence_number": "captured:audit.immutable_audit_log::OUTPUT:execution-authorization:audit_id.sequence_number",
-          "stream_id": "040b78af-e99d-5154-bb8f-246a87819be5",
+          "stream_id": "captured:qms.execution_authorization::040b78af-e99d-5154-bb8f-246a87819be5.id",
           "stream_type": "execution_authorization",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "trace_id": "d868fd4d-677e-5e8f-a84f-5bf4ad251d8d"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -18164,7 +18207,7 @@
         "member_kind": "DATABASE_ROW",
         "required_field_count": 15,
         "resolved_fields": {
-          "aggregate_id": "b64bbd57-1207-51f3-b4ef-b14b1f2d24cf",
+          "aggregate_id": "captured:qms.action_execution::b64bbd57-1207-51f3-b4ef-b14b1f2d24cf.id",
           "aggregate_type": "action_execution",
           "aggregate_version": "captured:eventing.domain_event::77465ad0-559f-5317-9c26-c029e0cb16f6.aggregate_version",
           "causation_id": null,
@@ -18177,7 +18220,7 @@
           "recorded_at": "captured:eventing.domain_event::77465ad0-559f-5317-9c26-c029e0cb16f6.recorded_at",
           "schema_version": 1,
           "source": "iso-smart-controlled-qms-execution",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "trace_id": "a3d7240b-4506-506e-9e6b-060dd776f1de"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -18264,12 +18307,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "552e26a9-233b-5df9-9361-2cd8e05ecc5d"
+              "authoritative": true,
+              "capture_output": "id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-controlled-opportunity-producer/v1",
+              "reason": "native product identity discovered by the complete V2.5 UUID audit",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -18448,14 +18492,14 @@
           "available_at": "captured:eventing.transactional_outbox::552e26a9-233b-5df9-9361-2cd8e05ecc5d.available_at",
           "created_at": "captured:eventing.transactional_outbox::552e26a9-233b-5df9-9361-2cd8e05ecc5d.created_at",
           "domain_event_id": "e1e24ee0-18d1-51dc-82a1-6c27a6046f28",
-          "id": "552e26a9-233b-5df9-9361-2cd8e05ecc5d",
+          "id": "captured:eventing.transactional_outbox::552e26a9-233b-5df9-9361-2cd8e05ecc5d.id",
           "last_error_code": null,
           "lease_expires_at": "captured:eventing.transactional_outbox::552e26a9-233b-5df9-9361-2cd8e05ecc5d.lease_expires_at",
           "lease_owner": null,
           "publish_attempts": 0,
           "published_at": "captured:eventing.transactional_outbox::552e26a9-233b-5df9-9361-2cd8e05ecc5d.published_at",
           "status": "pending",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "updated_at": "captured:eventing.transactional_outbox::552e26a9-233b-5df9-9361-2cd8e05ecc5d.updated_at"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -18873,7 +18917,7 @@
           "after_hash": "captured:audit.immutable_audit_log::OUTPUT:controlled-opportunity-execution:audit_id.after_hash",
           "before_hash": null,
           "created_at": "captured:audit.immutable_audit_log::OUTPUT:controlled-opportunity-execution:audit_id.created_at",
-          "entity_id": "b64bbd57-1207-51f3-b4ef-b14b1f2d24cf",
+          "entity_id": "captured:qms.action_execution::b64bbd57-1207-51f3-b4ef-b14b1f2d24cf.id",
           "entity_type": "action_execution",
           "entry_hash": "captured:audit.immutable_audit_log::OUTPUT:controlled-opportunity-execution:audit_id.entry_hash",
           "id": "captured:audit.immutable_audit_log::OUTPUT:controlled-opportunity-execution:audit_id.id",
@@ -18882,9 +18926,9 @@
           "payload_hash": "captured:audit.immutable_audit_log::OUTPUT:controlled-opportunity-execution:audit_id.payload_hash",
           "previous_entry_hash": "captured:audit.immutable_audit_log::OUTPUT:controlled-opportunity-execution:audit_id.previous_entry_hash",
           "sequence_number": "captured:audit.immutable_audit_log::OUTPUT:controlled-opportunity-execution:audit_id.sequence_number",
-          "stream_id": "b64bbd57-1207-51f3-b4ef-b14b1f2d24cf",
+          "stream_id": "captured:qms.action_execution::b64bbd57-1207-51f3-b4ef-b14b1f2d24cf.id",
           "stream_type": "action_execution",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "trace_id": "a3d7240b-4506-506e-9e6b-060dd776f1de"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -19220,7 +19264,7 @@
         "member_kind": "DATABASE_ROW",
         "required_field_count": 15,
         "resolved_fields": {
-          "aggregate_id": "868bccec-28d5-51fe-aa05-5bf621a97ed2",
+          "aggregate_id": "captured:qms.effectiveness_check::868bccec-28d5-51fe-aa05-5bf621a97ed2.id",
           "aggregate_type": "effectiveness_check",
           "aggregate_version": 1,
           "causation_id": null,
@@ -19233,7 +19277,7 @@
           "recorded_at": "captured:eventing.domain_event::39b7cc2f-00ff-589d-b0c4-812cb35595e8.recorded_at",
           "schema_version": 1,
           "source": "iso-smart-effectiveness-governance",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "trace_id": "a92bf7c5-d5c3-5429-add1-ff1d3e4092bd"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -19320,12 +19364,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "58d06fb9-deba-5d1f-9161-44fbc3152c03"
+              "authoritative": true,
+              "capture_output": "id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-effectiveness-producer/v1",
+              "reason": "native product identity discovered by the complete V2.5 UUID audit",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -19504,14 +19549,14 @@
           "available_at": "captured:eventing.transactional_outbox::58d06fb9-deba-5d1f-9161-44fbc3152c03.available_at",
           "created_at": "captured:eventing.transactional_outbox::58d06fb9-deba-5d1f-9161-44fbc3152c03.created_at",
           "domain_event_id": "85750134-28e1-5c1f-b54b-c2cc02569f62",
-          "id": "58d06fb9-deba-5d1f-9161-44fbc3152c03",
+          "id": "captured:eventing.transactional_outbox::58d06fb9-deba-5d1f-9161-44fbc3152c03.id",
           "last_error_code": null,
           "lease_expires_at": "captured:eventing.transactional_outbox::58d06fb9-deba-5d1f-9161-44fbc3152c03.lease_expires_at",
           "lease_owner": null,
           "publish_attempts": 0,
           "published_at": "captured:eventing.transactional_outbox::58d06fb9-deba-5d1f-9161-44fbc3152c03.published_at",
           "status": "pending",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "updated_at": "captured:eventing.transactional_outbox::58d06fb9-deba-5d1f-9161-44fbc3152c03.updated_at"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -19929,7 +19974,7 @@
           "after_hash": "captured:audit.immutable_audit_log::OUTPUT:effectiveness-check:audit_id.after_hash",
           "before_hash": null,
           "created_at": "captured:audit.immutable_audit_log::OUTPUT:effectiveness-check:audit_id.created_at",
-          "entity_id": "868bccec-28d5-51fe-aa05-5bf621a97ed2",
+          "entity_id": "captured:qms.effectiveness_check::868bccec-28d5-51fe-aa05-5bf621a97ed2.id",
           "entity_type": "effectiveness_check",
           "entry_hash": "captured:audit.immutable_audit_log::OUTPUT:effectiveness-check:audit_id.entry_hash",
           "id": "captured:audit.immutable_audit_log::OUTPUT:effectiveness-check:audit_id.id",
@@ -19938,9 +19983,9 @@
           "payload_hash": "captured:audit.immutable_audit_log::OUTPUT:effectiveness-check:audit_id.payload_hash",
           "previous_entry_hash": "captured:audit.immutable_audit_log::OUTPUT:effectiveness-check:audit_id.previous_entry_hash",
           "sequence_number": "captured:audit.immutable_audit_log::OUTPUT:effectiveness-check:audit_id.sequence_number",
-          "stream_id": "b64bbd57-1207-51f3-b4ef-b14b1f2d24cf",
+          "stream_id": "captured:qms.action_execution::b64bbd57-1207-51f3-b4ef-b14b1f2d24cf.id",
           "stream_type": "effectiveness_check",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "trace_id": "a92bf7c5-d5c3-5429-add1-ff1d3e4092bd"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -20276,7 +20321,7 @@
         "member_kind": "DATABASE_ROW",
         "required_field_count": 15,
         "resolved_fields": {
-          "aggregate_id": "fb57055c-cbfa-5f1b-b336-a7bc530a5895",
+          "aggregate_id": "captured:qms.learning_signal::fb57055c-cbfa-5f1b-b336-a7bc530a5895.id",
           "aggregate_type": "learning_signal",
           "aggregate_version": 1,
           "causation_id": null,
@@ -20289,7 +20334,7 @@
           "recorded_at": "captured:eventing.domain_event::8f2146ff-48c5-5095-b034-73bb2f0b5894.recorded_at",
           "schema_version": 1,
           "source": "iso-smart-learning-governance",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "trace_id": "e087ac71-87aa-549c-8686-520b6a5cffdf"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -20376,12 +20421,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "114a4b5d-6dd0-5128-b6f7-a9d08fe64ced"
+              "authoritative": true,
+              "capture_output": "id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-learning-signal-producer/v1",
+              "reason": "native product identity discovered by the complete V2.5 UUID audit",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -20560,14 +20606,14 @@
           "available_at": "captured:eventing.transactional_outbox::114a4b5d-6dd0-5128-b6f7-a9d08fe64ced.available_at",
           "created_at": "captured:eventing.transactional_outbox::114a4b5d-6dd0-5128-b6f7-a9d08fe64ced.created_at",
           "domain_event_id": "218c3ede-4f51-51c0-9168-6773d688a079",
-          "id": "114a4b5d-6dd0-5128-b6f7-a9d08fe64ced",
+          "id": "captured:eventing.transactional_outbox::114a4b5d-6dd0-5128-b6f7-a9d08fe64ced.id",
           "last_error_code": null,
           "lease_expires_at": "captured:eventing.transactional_outbox::114a4b5d-6dd0-5128-b6f7-a9d08fe64ced.lease_expires_at",
           "lease_owner": null,
           "publish_attempts": 0,
           "published_at": "captured:eventing.transactional_outbox::114a4b5d-6dd0-5128-b6f7-a9d08fe64ced.published_at",
           "status": "pending",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "updated_at": "captured:eventing.transactional_outbox::114a4b5d-6dd0-5128-b6f7-a9d08fe64ced.updated_at"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -20985,7 +21031,7 @@
           "after_hash": "captured:audit.immutable_audit_log::OUTPUT:learning-signal:audit_id.after_hash",
           "before_hash": null,
           "created_at": "captured:audit.immutable_audit_log::OUTPUT:learning-signal:audit_id.created_at",
-          "entity_id": "fb57055c-cbfa-5f1b-b336-a7bc530a5895",
+          "entity_id": "captured:qms.learning_signal::fb57055c-cbfa-5f1b-b336-a7bc530a5895.id",
           "entity_type": "learning_signal",
           "entry_hash": "captured:audit.immutable_audit_log::OUTPUT:learning-signal:audit_id.entry_hash",
           "id": "captured:audit.immutable_audit_log::OUTPUT:learning-signal:audit_id.id",
@@ -20994,9 +21040,9 @@
           "payload_hash": "captured:audit.immutable_audit_log::OUTPUT:learning-signal:audit_id.payload_hash",
           "previous_entry_hash": "captured:audit.immutable_audit_log::OUTPUT:learning-signal:audit_id.previous_entry_hash",
           "sequence_number": "captured:audit.immutable_audit_log::OUTPUT:learning-signal:audit_id.sequence_number",
-          "stream_id": "fb57055c-cbfa-5f1b-b336-a7bc530a5895",
+          "stream_id": "captured:qms.learning_signal::fb57055c-cbfa-5f1b-b336-a7bc530a5895.id",
           "stream_type": "learning_signal",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "trace_id": "e087ac71-87aa-549c-8686-520b6a5cffdf"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -21084,12 +21130,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "bc5f4f17-294d-5abd-b27b-2d296921ffdf"
+              "authoritative": true,
+              "capture_output": "id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "knowledge-layer-rule-root-bootstrap-producer/v1",
+              "reason": "native product identity discovered by the complete V2.5 UUID audit",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -21305,8 +21352,8 @@
             "fixture": "phase31.4.4a",
             "synthetic": true
           },
-          "id": "bc5f4f17-294d-5abd-b27b-2d296921ffdf",
-          "knowledge_layer_id": "ca734de0-7bfe-51e4-acce-639cc5f26f1d",
+          "id": "captured:normative.knowledge_layer_rule::bc5f4f17-294d-5abd-b27b-2d296921ffdf.id",
+          "knowledge_layer_id": "captured:normative.knowledge_layer::ca734de0-7bfe-51e4-acce-639cc5f26f1d.id",
           "lineage_id": "f5f5bf46-062c-549f-90f7-9d6e8cf033a1",
           "logic_json": {
             "field": "logic_json",
@@ -21429,12 +21476,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "805875c2-6505-5b82-ad41-40c2519293d2"
+              "authoritative": true,
+              "capture_output": "id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "knowledge-layer-rule-root-bootstrap-producer/v1",
+              "reason": "native product identity discovered by the complete V2.5 UUID audit",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -21520,7 +21568,7 @@
           "actor_id": "PHASE31.4.4A TEST ONLY \u2014 NormativeCurationAudit:root-created \u2014 actor_id",
           "entity_id": "83dbd910-0342-5c32-8e88-13e789be54ea",
           "entity_type": "PHASE31.4.4A TEST ONLY \u2014 NormativeCurationAudit:root-created \u2014 entity_type",
-          "id": "805875c2-6505-5b82-ad41-40c2519293d2",
+          "id": "captured:normative.curation_audit::805875c2-6505-5b82-ad41-40c2519293d2.id",
           "occurred_at": "captured:normative.curation_audit::805875c2-6505-5b82-ad41-40c2519293d2.occurred_at",
           "payload_hash": "captured:normative.curation_audit::805875c2-6505-5b82-ad41-40c2519293d2.payload_hash",
           "trace_id": "6f6ecd49-b779-5360-a4a6-f5068dc113d2"
@@ -21849,12 +21897,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
+              "authoritative": true,
+              "capture_output": "id",
               "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "4649111b-a555-5368-ac91-9a47d48ef3b1"
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "migration-0022-native-release-service/v1",
+              "reason": "native product identity discovered by the complete V2.5 UUID audit",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -22141,17 +22190,17 @@
           "authorized_at": "captured:normative.knowledge_layer_rule_publication::4649111b-a555-5368-ac91-9a47d48ef3b1.authorized_at",
           "claim_id": "captured:normative.knowledge_layer_rule_governance_claim::4649111b-a555-5368-ac91-9a47d48ef3b1.id",
           "created_at": "captured:normative.knowledge_layer_rule_publication::4649111b-a555-5368-ac91-9a47d48ef3b1.created_at",
-          "curation_audit_id": "805875c2-6505-5b82-ad41-40c2519293d2",
+          "curation_audit_id": "captured:normative.curation_audit::805875c2-6505-5b82-ad41-40c2519293d2.id",
           "event_id": "f7ffffec-8832-5c79-ac4d-574d229c18f3",
           "evidence_imported_at": "captured:normative.knowledge_layer_rule_publication::4649111b-a555-5368-ac91-9a47d48ef3b1.evidence_imported_at",
           "evidence_kind": "NATIVE",
           "evidence_reference": "PHASE31.4.4A TEST ONLY \u2014 RootPublication \u2014 evidence_reference",
           "governance_policy_version": "PHASE31.4.4A TEST ONLY \u2014 RootPublication \u2014 governance_policy_version",
           "historical_published_at": "captured:normative.knowledge_layer_rule_publication::4649111b-a555-5368-ac91-9a47d48ef3b1.historical_published_at",
-          "id": "4649111b-a555-5368-ac91-9a47d48ef3b1",
+          "id": "captured:normative.knowledge_layer_rule_publication::4649111b-a555-5368-ac91-9a47d48ef3b1.id",
           "idempotency_key_hash": "captured:normative.knowledge_layer_rule_publication::4649111b-a555-5368-ac91-9a47d48ef3b1.idempotency_key_hash",
-          "knowledge_layer_id": "ca734de0-7bfe-51e4-acce-639cc5f26f1d",
-          "knowledge_layer_rule_id": "bc5f4f17-294d-5abd-b27b-2d296921ffdf",
+          "knowledge_layer_id": "captured:normative.knowledge_layer::ca734de0-7bfe-51e4-acce-639cc5f26f1d.id",
+          "knowledge_layer_rule_id": "captured:normative.knowledge_layer_rule::bc5f4f17-294d-5abd-b27b-2d296921ffdf.id",
           "lineage_id": "12427266-ca23-51b2-b2be-cf4a546fa1dc",
           "operation_material_hash": "captured:normative.knowledge_layer_rule_publication::4649111b-a555-5368-ac91-9a47d48ef3b1.operation_material_hash",
           "outbox_id": "e8dc55e5-a82c-5803-a902-6f27490b0d3a",
@@ -22767,7 +22816,7 @@
           },
           "payload_hash": "captured:normative.knowledge_layer_rule_governance_event::4e0deea0-f061-4dc9-87ab-e70fd33a8674.payload_hash",
           "schema_version": 1,
-          "target_rule_id": "bc5f4f17-294d-5abd-b27b-2d296921ffdf",
+          "target_rule_id": "captured:normative.knowledge_layer_rule::bc5f4f17-294d-5abd-b27b-2d296921ffdf.id",
           "trace_id": "cd7da47b-d8ea-59e5-b119-569e6fc925e4"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -23203,7 +23252,7 @@
           "operation_kind": "PUBLICATION",
           "operation_material_hash": "captured:audit.knowledge_layer_rule_governance_audit::e2e922a4-5baa-4df2-8b1e-689c25d13f62.operation_material_hash",
           "payload_hash": "captured:audit.knowledge_layer_rule_governance_audit::e2e922a4-5baa-4df2-8b1e-689c25d13f62.payload_hash",
-          "target_rule_id": "bc5f4f17-294d-5abd-b27b-2d296921ffdf",
+          "target_rule_id": "captured:normative.knowledge_layer_rule::bc5f4f17-294d-5abd-b27b-2d296921ffdf.id",
           "trace_id": "7dddc68a-d1f4-5f86-9573-f31b31ce3334"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -23681,12 +23730,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "5d1d1c61-1bdb-5550-8605-2c9a54d51340"
+              "authoritative": true,
+              "capture_output": "artifact_id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-governed-learning-producer/v2",
+              "reason": "native runtime identity; historical UUID is metadata only",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -24141,7 +24191,7 @@
         "required_field_count": 33,
         "resolved_fields": {
           "actor_external_id_snapshot": "captured:qms.learning_proposal::5d1d1c61-1bdb-5550-8605-2c9a54d51340.actor_external_id_snapshot",
-          "actor_user_projection_id": "1e878efa-2d1e-50b4-b3e4-481a3c6ff229",
+          "actor_user_projection_id": "user_projection_id",
           "authority_context_version": "captured:qms.learning_proposal::5d1d1c61-1bdb-5550-8605-2c9a54d51340.authority_context_version",
           "authority_decision_reference": "captured:qms.learning_proposal::5d1d1c61-1bdb-5550-8605-2c9a54d51340.authority_decision_reference",
           "canonical_delta_id": null,
@@ -24152,10 +24202,10 @@
           "delta_hash": "captured:qms.learning_proposal::5d1d1c61-1bdb-5550-8605-2c9a54d51340.delta_hash",
           "delta_schema_version": "learning-knowledge-layer-rule-source-reference-correction-delta-v1",
           "expected_effect": "PHASE31.4.4A TEST ONLY \u2014 LearningProposal:v2 \u2014 expected_effect",
-          "id": "5d1d1c61-1bdb-5550-8605-2c9a54d51340",
+          "id": "captured:qms.learning_proposal::5d1d1c61-1bdb-5550-8605-2c9a54d51340.id",
           "operation_id": "learning.knowledge_layer_rule.source_reference.correct",
           "operation_version": "v1",
-          "organization_id": "ac638304-fdd6-5ce8-96d7-62014117af94",
+          "organization_id": "organization_id",
           "policy_id": "complete-retained-synthetic-lifecycle-poc-policy/v2",
           "predecessor_id": null,
           "proposed_change_hash": "captured:qms.learning_proposal::5d1d1c61-1bdb-5550-8605-2c9a54d51340.proposed_change_hash",
@@ -24179,7 +24229,7 @@
           },
           "target_type": "KnowledgeLayerRule",
           "target_version": "PHASE31.4.4A TEST ONLY \u2014 LearningProposal:v2 \u2014 target_version",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "trace_id": "e10fcddd-d79e-5ded-b6aa-7888471564f1"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -24252,12 +24302,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "0b4e8100-4862-5de2-a595-8d8d9f901e22"
+              "authoritative": true,
+              "capture_output": "signal_link_id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-governed-learning-producer/v2",
+              "reason": "native runtime identity; historical UUID is metadata only",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -24378,12 +24429,12 @@
         "resolved_fields": {
           "created_at": "captured:qms.learning_proposal_signal::0b4e8100-4862-5de2-a595-8d8d9f901e22.created_at",
           "effectiveness_lineage_id_snapshot": "84aeccf7-6ab7-5abc-af66-6dde34fe5c1e",
-          "id": "0b4e8100-4862-5de2-a595-8d8d9f901e22",
-          "learning_proposal_id": "5d1d1c61-1bdb-5550-8605-2c9a54d51340",
-          "learning_signal_id": "fb57055c-cbfa-5f1b-b336-a7bc530a5895",
-          "organization_id": "ac638304-fdd6-5ce8-96d7-62014117af94",
+          "id": "captured:qms.learning_proposal_signal::0b4e8100-4862-5de2-a595-8d8d9f901e22.id",
+          "learning_proposal_id": "captured:qms.learning_proposal::5d1d1c61-1bdb-5550-8605-2c9a54d51340.id",
+          "learning_signal_id": "captured:qms.learning_signal::fb57055c-cbfa-5f1b-b336-a7bc530a5895.id",
+          "organization_id": "organization_id",
           "signal_provenance_hash_snapshot": "PHASE31.4.4A TEST ONLY \u2014 LearningProposalSignal \u2014 signal_provenance_hash_snapshot",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731"
+          "tenant_id": "tenant_projection_id"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
         "unbound_field_count": 0
@@ -24529,12 +24580,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
+              "authoritative": true,
+              "capture_output": "canonical_delta_id",
               "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "82486439-2035-5153-9851-c4fc0e5d5184"
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-governed-learning-producer/v2",
+              "reason": "native runtime identity; historical UUID is metadata only",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -24793,7 +24845,7 @@
           },
           "delta_hash": "captured:qms.learning_proposal_canonical_delta::82486439-2035-5153-9851-c4fc0e5d5184.delta_hash",
           "delta_schema_version": "learning-knowledge-layer-rule-source-reference-correction-delta-v1",
-          "id": "82486439-2035-5153-9851-c4fc0e5d5184",
+          "id": "captured:qms.learning_proposal_canonical_delta::82486439-2035-5153-9851-c4fc0e5d5184.id",
           "learning_proposal_id": "c2920f90-e2c2-523d-ae5e-34a4ebb0f98c",
           "operation_id": "learning.knowledge_layer_rule.source_reference.correct",
           "operation_version": "v1",
@@ -24803,7 +24855,7 @@
           "target_lineage_id": "719b0d9e-5d3c-5eac-a12f-f2130b7b2d53",
           "target_type": "KnowledgeLayerRule",
           "target_version": "PHASE31.4.4A TEST ONLY \u2014 LearningProposalCanonicalDelta:v2 \u2014 target_version",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731"
+          "tenant_id": "tenant_projection_id"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
         "unbound_field_count": 0
@@ -25035,12 +25087,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
+              "authoritative": true,
+              "capture_output": "artifact_id",
               "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "6c267f9c-705f-5e7b-9aa2-149acc9f8fab"
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-governed-learning-producer/v2",
+              "reason": "native runtime identity; historical UUID is metadata only",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -25525,7 +25578,7 @@
             "synthetic": true
           },
           "governance_scope": "global",
-          "id": "6c267f9c-705f-5e7b-9aa2-149acc9f8fab",
+          "id": "captured:qms.learning_proposal_review::6c267f9c-705f-5e7b-9aa2-149acc9f8fab.id",
           "learning_proposal_id": "31308f96-fae6-59f4-9222-c06b7e6beb0e",
           "operation_id": "learning.knowledge_layer_rule.source_reference.correct",
           "operation_version": "v1",
@@ -25546,7 +25599,7 @@
           "target_status_snapshot": "valid",
           "target_type": "KnowledgeLayerRule",
           "target_version": "PHASE31.4.4A TEST ONLY \u2014 LearningProposalReview:v2 \u2014 target_version",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "trace_id": "9c623426-5981-5ae6-a2af-132e63e1e111"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -25825,12 +25878,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
+              "authoritative": true,
+              "capture_output": "artifact_id",
               "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "6610b249-87f3-543e-b096-0aac01ffc404"
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-governed-learning-producer/v2",
+              "reason": "native runtime identity; historical UUID is metadata only",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -26284,7 +26338,7 @@
           "delta_hash": "captured:qms.learning_proposal_decision::6610b249-87f3-543e-b096-0aac01ffc404.delta_hash",
           "delta_schema_version": "learning-knowledge-layer-rule-source-reference-correction-delta-v1",
           "governance_scope": "global",
-          "id": "6610b249-87f3-543e-b096-0aac01ffc404",
+          "id": "captured:qms.learning_proposal_decision::6610b249-87f3-543e-b096-0aac01ffc404.id",
           "learning_proposal_id": "95e35b82-52c0-59b3-aa8f-b64454f38d12",
           "operation_id": "learning.knowledge_layer_rule.source_reference.correct",
           "operation_version": "v1",
@@ -26304,7 +26358,7 @@
           "target_lineage_id": "b7ae4c2d-d228-5eb8-93e0-c7433bbf22ac",
           "target_type": "KnowledgeLayerRule",
           "target_version": "PHASE31.4.4A TEST ONLY \u2014 LearningProposalDecision:v2 \u2014 target_version",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "trace_id": "1ab8e55f-6632-5dd9-99d1-3b804e9f94c7"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -26624,12 +26678,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
+              "authoritative": true,
+              "capture_output": "artifact_id",
               "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "d67a9e62-7f96-546c-b053-55ff4db91f72"
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-governed-learning-producer/v2",
+              "reason": "native runtime identity; historical UUID is metadata only",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -27052,7 +27107,7 @@
           "delta_hash": "captured:qms.learning_application_authorization::d67a9e62-7f96-546c-b053-55ff4db91f72.delta_hash",
           "delta_schema_version": "learning-knowledge-layer-rule-source-reference-correction-delta-v1",
           "governance_scope": "global",
-          "id": "d67a9e62-7f96-546c-b053-55ff4db91f72",
+          "id": "captured:qms.learning_application_authorization::d67a9e62-7f96-546c-b053-55ff4db91f72.id",
           "idempotency_hash": "captured:qms.learning_application_authorization::d67a9e62-7f96-546c-b053-55ff4db91f72.idempotency_hash",
           "idempotency_key": "PHASE31.4.4A TEST ONLY \u2014 LearningApplicationAuthorization:v2 \u2014 idempotency_key",
           "learning_proposal_decision_id": "ebdef34e-b57b-52b7-a4d3-b980bb89409c",
@@ -27068,7 +27123,7 @@
           "target_lineage_id": "8adb5e57-b4cf-512e-95cd-cd9720a7faf4",
           "target_type": "KnowledgeLayerRule",
           "target_version": "PHASE31.4.4A TEST ONLY \u2014 LearningApplicationAuthorization:v2 \u2014 target_version",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "trace_id": "c59c0d64-457a-5c68-a359-32bdf1bd19aa"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -27404,7 +27459,7 @@
         "member_kind": "DATABASE_ROW",
         "required_field_count": 15,
         "resolved_fields": {
-          "aggregate_id": "5d1d1c61-1bdb-5550-8605-2c9a54d51340",
+          "aggregate_id": "captured:qms.learning_proposal::5d1d1c61-1bdb-5550-8605-2c9a54d51340.id",
           "aggregate_type": "learning_proposal",
           "aggregate_version": 1,
           "causation_id": null,
@@ -27417,7 +27472,7 @@
           "recorded_at": "captured:eventing.domain_event::005da83c-7a57-5fc5-8162-fa657a75304b.recorded_at",
           "schema_version": 1,
           "source": "iso-smart-learning-governance",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "trace_id": "e10fcddd-d79e-5ded-b6aa-7888471564f1"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -27504,12 +27559,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "c4ec5480-f91d-5779-9c93-bceaa2a165e0"
+              "authoritative": true,
+              "capture_output": "id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-governed-learning-producer/v2",
+              "reason": "native product identity discovered by the complete V2.5 UUID audit",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -27688,14 +27744,14 @@
           "available_at": "captured:eventing.transactional_outbox::c4ec5480-f91d-5779-9c93-bceaa2a165e0.available_at",
           "created_at": "captured:eventing.transactional_outbox::c4ec5480-f91d-5779-9c93-bceaa2a165e0.created_at",
           "domain_event_id": "a583ac9f-ab8b-5998-86ba-794bd14b865a",
-          "id": "c4ec5480-f91d-5779-9c93-bceaa2a165e0",
+          "id": "captured:eventing.transactional_outbox::c4ec5480-f91d-5779-9c93-bceaa2a165e0.id",
           "last_error_code": null,
           "lease_expires_at": "captured:eventing.transactional_outbox::c4ec5480-f91d-5779-9c93-bceaa2a165e0.lease_expires_at",
           "lease_owner": null,
           "publish_attempts": 0,
           "published_at": "captured:eventing.transactional_outbox::c4ec5480-f91d-5779-9c93-bceaa2a165e0.published_at",
           "status": "pending",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "updated_at": "captured:eventing.transactional_outbox::c4ec5480-f91d-5779-9c93-bceaa2a165e0.updated_at"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -28113,7 +28169,7 @@
           "after_hash": "captured:audit.immutable_audit_log::OUTPUT:learning-proposal:audit_id.after_hash",
           "before_hash": null,
           "created_at": "captured:audit.immutable_audit_log::OUTPUT:learning-proposal:audit_id.created_at",
-          "entity_id": "5d1d1c61-1bdb-5550-8605-2c9a54d51340",
+          "entity_id": "captured:qms.learning_proposal::5d1d1c61-1bdb-5550-8605-2c9a54d51340.id",
           "entity_type": "learning_proposal",
           "entry_hash": "captured:audit.immutable_audit_log::OUTPUT:learning-proposal:audit_id.entry_hash",
           "id": "captured:audit.immutable_audit_log::OUTPUT:learning-proposal:audit_id.id",
@@ -28122,9 +28178,9 @@
           "payload_hash": "captured:audit.immutable_audit_log::OUTPUT:learning-proposal:audit_id.payload_hash",
           "previous_entry_hash": "captured:audit.immutable_audit_log::OUTPUT:learning-proposal:audit_id.previous_entry_hash",
           "sequence_number": "captured:audit.immutable_audit_log::OUTPUT:learning-proposal:audit_id.sequence_number",
-          "stream_id": "5d1d1c61-1bdb-5550-8605-2c9a54d51340",
+          "stream_id": "captured:qms.learning_proposal::5d1d1c61-1bdb-5550-8605-2c9a54d51340.id",
           "stream_type": "learning_proposal",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "trace_id": "e10fcddd-d79e-5ded-b6aa-7888471564f1"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -28460,7 +28516,7 @@
         "member_kind": "DATABASE_ROW",
         "required_field_count": 15,
         "resolved_fields": {
-          "aggregate_id": "6c267f9c-705f-5e7b-9aa2-149acc9f8fab",
+          "aggregate_id": "captured:qms.learning_proposal_review::6c267f9c-705f-5e7b-9aa2-149acc9f8fab.id",
           "aggregate_type": "learning_proposal_review",
           "aggregate_version": 1,
           "causation_id": null,
@@ -28473,7 +28529,7 @@
           "recorded_at": "captured:eventing.domain_event::7fc5b06e-b3ca-5a98-a250-d96ee3307b4c.recorded_at",
           "schema_version": 1,
           "source": "iso-smart-learning-governance",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "trace_id": "9c623426-5981-5ae6-a2af-132e63e1e111"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -28560,12 +28616,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "5f2fc242-cf86-5308-b46f-1a5bd260fa24"
+              "authoritative": true,
+              "capture_output": "id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-governed-learning-producer/v2",
+              "reason": "native product identity discovered by the complete V2.5 UUID audit",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -28744,14 +28801,14 @@
           "available_at": "captured:eventing.transactional_outbox::5f2fc242-cf86-5308-b46f-1a5bd260fa24.available_at",
           "created_at": "captured:eventing.transactional_outbox::5f2fc242-cf86-5308-b46f-1a5bd260fa24.created_at",
           "domain_event_id": "f92dd71f-a6db-56a2-a193-3829ca9354ba",
-          "id": "5f2fc242-cf86-5308-b46f-1a5bd260fa24",
+          "id": "captured:eventing.transactional_outbox::5f2fc242-cf86-5308-b46f-1a5bd260fa24.id",
           "last_error_code": null,
           "lease_expires_at": "captured:eventing.transactional_outbox::5f2fc242-cf86-5308-b46f-1a5bd260fa24.lease_expires_at",
           "lease_owner": null,
           "publish_attempts": 0,
           "published_at": "captured:eventing.transactional_outbox::5f2fc242-cf86-5308-b46f-1a5bd260fa24.published_at",
           "status": "pending",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "updated_at": "captured:eventing.transactional_outbox::5f2fc242-cf86-5308-b46f-1a5bd260fa24.updated_at"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -29169,7 +29226,7 @@
           "after_hash": "captured:audit.immutable_audit_log::OUTPUT:learning-review:audit_id.after_hash",
           "before_hash": null,
           "created_at": "captured:audit.immutable_audit_log::OUTPUT:learning-review:audit_id.created_at",
-          "entity_id": "6c267f9c-705f-5e7b-9aa2-149acc9f8fab",
+          "entity_id": "captured:qms.learning_proposal_review::6c267f9c-705f-5e7b-9aa2-149acc9f8fab.id",
           "entity_type": "learning_proposal_review",
           "entry_hash": "captured:audit.immutable_audit_log::OUTPUT:learning-review:audit_id.entry_hash",
           "id": "captured:audit.immutable_audit_log::OUTPUT:learning-review:audit_id.id",
@@ -29178,9 +29235,9 @@
           "payload_hash": "captured:audit.immutable_audit_log::OUTPUT:learning-review:audit_id.payload_hash",
           "previous_entry_hash": "captured:audit.immutable_audit_log::OUTPUT:learning-review:audit_id.previous_entry_hash",
           "sequence_number": "captured:audit.immutable_audit_log::OUTPUT:learning-review:audit_id.sequence_number",
-          "stream_id": "6c267f9c-705f-5e7b-9aa2-149acc9f8fab",
+          "stream_id": "captured:qms.learning_proposal_review::6c267f9c-705f-5e7b-9aa2-149acc9f8fab.id",
           "stream_type": "learning_proposal_review",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "trace_id": "9c623426-5981-5ae6-a2af-132e63e1e111"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -29516,7 +29573,7 @@
         "member_kind": "DATABASE_ROW",
         "required_field_count": 15,
         "resolved_fields": {
-          "aggregate_id": "6610b249-87f3-543e-b096-0aac01ffc404",
+          "aggregate_id": "captured:qms.learning_proposal_decision::6610b249-87f3-543e-b096-0aac01ffc404.id",
           "aggregate_type": "learning_proposal_decision",
           "aggregate_version": 1,
           "causation_id": null,
@@ -29529,7 +29586,7 @@
           "recorded_at": "captured:eventing.domain_event::82dd0d51-fc95-50c4-8047-d31b0acc1ea4.recorded_at",
           "schema_version": 1,
           "source": "iso-smart-learning-governance",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "trace_id": "1ab8e55f-6632-5dd9-99d1-3b804e9f94c7"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -29616,12 +29673,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "e1858a0f-bb75-5f79-b29c-05fad2a9f2e6"
+              "authoritative": true,
+              "capture_output": "id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-governed-learning-producer/v2",
+              "reason": "native product identity discovered by the complete V2.5 UUID audit",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -29800,14 +29858,14 @@
           "available_at": "captured:eventing.transactional_outbox::e1858a0f-bb75-5f79-b29c-05fad2a9f2e6.available_at",
           "created_at": "captured:eventing.transactional_outbox::e1858a0f-bb75-5f79-b29c-05fad2a9f2e6.created_at",
           "domain_event_id": "92479268-2291-5467-b7ca-95c9612e86ec",
-          "id": "e1858a0f-bb75-5f79-b29c-05fad2a9f2e6",
+          "id": "captured:eventing.transactional_outbox::e1858a0f-bb75-5f79-b29c-05fad2a9f2e6.id",
           "last_error_code": null,
           "lease_expires_at": "captured:eventing.transactional_outbox::e1858a0f-bb75-5f79-b29c-05fad2a9f2e6.lease_expires_at",
           "lease_owner": null,
           "publish_attempts": 0,
           "published_at": "captured:eventing.transactional_outbox::e1858a0f-bb75-5f79-b29c-05fad2a9f2e6.published_at",
           "status": "pending",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "updated_at": "captured:eventing.transactional_outbox::e1858a0f-bb75-5f79-b29c-05fad2a9f2e6.updated_at"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -30225,7 +30283,7 @@
           "after_hash": "captured:audit.immutable_audit_log::OUTPUT:learning-decision:audit_id.after_hash",
           "before_hash": null,
           "created_at": "captured:audit.immutable_audit_log::OUTPUT:learning-decision:audit_id.created_at",
-          "entity_id": "6610b249-87f3-543e-b096-0aac01ffc404",
+          "entity_id": "captured:qms.learning_proposal_decision::6610b249-87f3-543e-b096-0aac01ffc404.id",
           "entity_type": "learning_proposal_decision",
           "entry_hash": "captured:audit.immutable_audit_log::OUTPUT:learning-decision:audit_id.entry_hash",
           "id": "captured:audit.immutable_audit_log::OUTPUT:learning-decision:audit_id.id",
@@ -30234,9 +30292,9 @@
           "payload_hash": "captured:audit.immutable_audit_log::OUTPUT:learning-decision:audit_id.payload_hash",
           "previous_entry_hash": "captured:audit.immutable_audit_log::OUTPUT:learning-decision:audit_id.previous_entry_hash",
           "sequence_number": "captured:audit.immutable_audit_log::OUTPUT:learning-decision:audit_id.sequence_number",
-          "stream_id": "6610b249-87f3-543e-b096-0aac01ffc404",
+          "stream_id": "captured:qms.learning_proposal_decision::6610b249-87f3-543e-b096-0aac01ffc404.id",
           "stream_type": "learning_proposal_decision",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "trace_id": "1ab8e55f-6632-5dd9-99d1-3b804e9f94c7"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -30572,7 +30630,7 @@
         "member_kind": "DATABASE_ROW",
         "required_field_count": 15,
         "resolved_fields": {
-          "aggregate_id": "d67a9e62-7f96-546c-b053-55ff4db91f72",
+          "aggregate_id": "captured:qms.learning_application_authorization::d67a9e62-7f96-546c-b053-55ff4db91f72.id",
           "aggregate_type": "learning_application_authorization",
           "aggregate_version": 1,
           "causation_id": null,
@@ -30585,7 +30643,7 @@
           "recorded_at": "captured:eventing.domain_event::8bf2bb5b-4cea-5aa0-9a05-18fec0cf049c.recorded_at",
           "schema_version": 1,
           "source": "iso-smart-learning-governance",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "trace_id": "c59c0d64-457a-5c68-a359-32bdf1bd19aa"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -30672,12 +30730,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-              "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "2913dd61-f579-50f7-a38a-23772f2cbcfb"
+              "authoritative": true,
+              "capture_output": "id",
+              "database_type_or_schema_type": "UUIDField",
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "phase31.4.4-governed-learning-producer/v2",
+              "reason": "native product identity discovered by the complete V2.5 UUID audit",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -30856,14 +30915,14 @@
           "available_at": "captured:eventing.transactional_outbox::2913dd61-f579-50f7-a38a-23772f2cbcfb.available_at",
           "created_at": "captured:eventing.transactional_outbox::2913dd61-f579-50f7-a38a-23772f2cbcfb.created_at",
           "domain_event_id": "45319c4e-1820-5a60-b24c-6287fd3532fd",
-          "id": "2913dd61-f579-50f7-a38a-23772f2cbcfb",
+          "id": "captured:eventing.transactional_outbox::2913dd61-f579-50f7-a38a-23772f2cbcfb.id",
           "last_error_code": null,
           "lease_expires_at": "captured:eventing.transactional_outbox::2913dd61-f579-50f7-a38a-23772f2cbcfb.lease_expires_at",
           "lease_owner": null,
           "publish_attempts": 0,
           "published_at": "captured:eventing.transactional_outbox::2913dd61-f579-50f7-a38a-23772f2cbcfb.published_at",
           "status": "pending",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "updated_at": "captured:eventing.transactional_outbox::2913dd61-f579-50f7-a38a-23772f2cbcfb.updated_at"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -31281,7 +31340,7 @@
           "after_hash": "captured:audit.immutable_audit_log::OUTPUT:learning-authorization:audit_id.after_hash",
           "before_hash": null,
           "created_at": "captured:audit.immutable_audit_log::OUTPUT:learning-authorization:audit_id.created_at",
-          "entity_id": "d67a9e62-7f96-546c-b053-55ff4db91f72",
+          "entity_id": "captured:qms.learning_application_authorization::d67a9e62-7f96-546c-b053-55ff4db91f72.id",
           "entity_type": "learning_application_authorization",
           "entry_hash": "captured:audit.immutable_audit_log::OUTPUT:learning-authorization:audit_id.entry_hash",
           "id": "captured:audit.immutable_audit_log::OUTPUT:learning-authorization:audit_id.id",
@@ -31290,9 +31349,9 @@
           "payload_hash": "captured:audit.immutable_audit_log::OUTPUT:learning-authorization:audit_id.payload_hash",
           "previous_entry_hash": "captured:audit.immutable_audit_log::OUTPUT:learning-authorization:audit_id.previous_entry_hash",
           "sequence_number": "captured:audit.immutable_audit_log::OUTPUT:learning-authorization:audit_id.sequence_number",
-          "stream_id": "d67a9e62-7f96-546c-b053-55ff4db91f72",
+          "stream_id": "captured:qms.learning_application_authorization::d67a9e62-7f96-546c-b053-55ff4db91f72.id",
           "stream_type": "learning_application_authorization",
-          "tenant_id": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+          "tenant_id": "tenant_projection_id",
           "trace_id": "c59c0d64-457a-5c68-a359-32bdf1bd19aa"
         },
         "schema_source": "frozen-migrations-0001-0023-via-PHASE31_4_3-source_metadata-census-plus-V2-explicit-columns",
@@ -31520,7 +31579,7 @@
         "required_field_count": 9,
         "resolved_fields": {
           "application_identity": "PHASE31.4.4A TEST ONLY \u2014 ApplicationClaim \u2014 application_identity",
-          "authorization_id": "d67a9e62-7f96-546c-b053-55ff4db91f72",
+          "authorization_id": "captured:qms.learning_application_authorization::d67a9e62-7f96-546c-b053-55ff4db91f72.id",
           "created_at": "captured:qms.learning_target_application_claim::29c6f7d5-989b-5bf0-a494-7d22d83a6a18.created_at",
           "forward_receipt_id": null,
           "id": null,
@@ -31835,7 +31894,7 @@
             "synthetic": true
           },
           "id": null,
-          "knowledge_layer_id": "ca734de0-7bfe-51e4-acce-639cc5f26f1d",
+          "knowledge_layer_id": "captured:normative.knowledge_layer::ca734de0-7bfe-51e4-acce-639cc5f26f1d.id",
           "lineage_id": "608642ae-708f-58d3-a372-228e1b40b387",
           "logic_json": {
             "field": "logic_json",
@@ -33256,14 +33315,14 @@
           "application_actor": "PHASE31.4.4A TEST ONLY \u2014 ApplicationReceipt \u2014 application_actor",
           "application_audit_id": "8fd0360f-3e0a-57d0-acb3-d57b5403f3e3",
           "application_identity": "PHASE31.4.4A TEST ONLY \u2014 ApplicationReceipt \u2014 application_identity",
-          "authorization_id": "d67a9e62-7f96-546c-b053-55ff4db91f72",
+          "authorization_id": "captured:qms.learning_application_authorization::d67a9e62-7f96-546c-b053-55ff4db91f72.id",
           "before_hash": "captured:qms.learning_target_application_receipt::b35d11e1-6848-50b2-b760-dd09d38f0acb.before_hash",
           "before_rule_id": null,
           "before_version": "PHASE31.4.4A TEST ONLY \u2014 ApplicationReceipt \u2014 before_version",
           "canonicalization_version": "iso-smart-learning-delta-canonical-v1",
           "compensation_eligible": true,
           "created_at": "captured:qms.learning_target_application_receipt::b35d11e1-6848-50b2-b760-dd09d38f0acb.created_at",
-          "decision_id": "6610b249-87f3-543e-b096-0aac01ffc404",
+          "decision_id": "captured:qms.learning_proposal_decision::6610b249-87f3-543e-b096-0aac01ffc404.id",
           "delta_hash": "captured:qms.learning_target_application_receipt::b35d11e1-6848-50b2-b760-dd09d38f0acb.delta_hash",
           "delta_schema_version": "learning-knowledge-layer-rule-source-reference-correction-delta-v1",
           "external_effects": false,
@@ -33273,7 +33332,7 @@
           "operation_version": "v1",
           "organization_id": "6ba378ea-fd9b-54ce-9394-55de2dd0a912",
           "predecessor_id": "e212054f-0f5b-547c-917d-3034742d7567",
-          "proposal_id": "5d1d1c61-1bdb-5550-8605-2c9a54d51340",
+          "proposal_id": "captured:qms.learning_proposal::5d1d1c61-1bdb-5550-8605-2c9a54d51340.id",
           "result_published": false,
           "result_status": "draft",
           "review_ids": [
@@ -33624,7 +33683,7 @@
         "required_field_count": 13,
         "resolved_fields": {
           "actor_id": "d1f221c1-cb73-5934-93f9-0d93e565905e",
-          "authorization_id": "d67a9e62-7f96-546c-b053-55ff4db91f72",
+          "authorization_id": "captured:qms.learning_application_authorization::d67a9e62-7f96-546c-b053-55ff4db91f72.id",
           "delta_hash": "captured:qms.learning_target_application_audit::c71bd788-df60-5d1a-895e-8a8274624886.delta_hash",
           "id": null,
           "occurred_at": "captured:qms.learning_target_application_audit::c71bd788-df60-5d1a-895e-8a8274624886.occurred_at",
@@ -33961,12 +34020,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
+              "authoritative": true,
+              "capture_output": "id",
               "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "cf4db0d2-a312-5a44-91cf-6e14f5cd600e"
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "migration-0022-native-release-service/v1",
+              "reason": "native product identity discovered by the complete V2.5 UUID audit",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -34260,9 +34320,9 @@
           "evidence_reference": "PHASE31.4.4A TEST ONLY \u2014 Publication \u2014 evidence_reference",
           "governance_policy_version": "PHASE31.4.4A TEST ONLY \u2014 Publication \u2014 governance_policy_version",
           "historical_published_at": "captured:normative.knowledge_layer_rule_publication::cf4db0d2-a312-5a44-91cf-6e14f5cd600e.historical_published_at",
-          "id": "cf4db0d2-a312-5a44-91cf-6e14f5cd600e",
+          "id": "captured:normative.knowledge_layer_rule_publication::cf4db0d2-a312-5a44-91cf-6e14f5cd600e.id",
           "idempotency_key_hash": "captured:normative.knowledge_layer_rule_publication::cf4db0d2-a312-5a44-91cf-6e14f5cd600e.idempotency_key_hash",
-          "knowledge_layer_id": "ca734de0-7bfe-51e4-acce-639cc5f26f1d",
+          "knowledge_layer_id": "captured:normative.knowledge_layer::ca734de0-7bfe-51e4-acce-639cc5f26f1d.id",
           "knowledge_layer_rule_id": null,
           "lineage_id": "64ac1600-0055-5f8f-9d5d-f865e3fb6bd5",
           "operation_material_hash": "captured:normative.knowledge_layer_rule_publication::cf4db0d2-a312-5a44-91cf-6e14f5cd600e.operation_material_hash",
@@ -35766,12 +35826,13 @@
             },
             "taxonomy_classification": "PREBOUND_STATIC",
             "value_binding": {
-              "canonical_representation": "canonical-json-rfc8785-compatible/v1",
+              "authoritative": true,
+              "capture_output": "id",
               "database_type_or_schema_type": "uuid",
-              "kind": "EXACT_LITERAL",
-              "provenance": "Phase31.4.4A exact synthetic fixture design",
-              "reason": "Authoritative qualified member identity fixed by V2",
-              "typed_value": "676ad5e4-e167-5336-93ae-5a9f1d4388d3"
+              "kind": "CAPTURE_NATIVE_OUTPUT",
+              "native_source": "migration-0022-native-release-service/v1",
+              "reason": "native product identity discovered by the complete V2.5 UUID audit",
+              "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
             }
           },
           {
@@ -36085,15 +36146,15 @@
           "created_at": "captured:normative.knowledge_layer_rule_activation::676ad5e4-e167-5336-93ae-5a9f1d4388d3.created_at",
           "event_id": "fcb080de-e873-553a-8b91-7bc0b7dac746",
           "governance_policy_version": "PHASE31.4.4A TEST ONLY \u2014 Activation \u2014 governance_policy_version",
-          "id": "676ad5e4-e167-5336-93ae-5a9f1d4388d3",
+          "id": "captured:normative.knowledge_layer_rule_activation::676ad5e4-e167-5336-93ae-5a9f1d4388d3.id",
           "idempotency_key_hash": "captured:normative.knowledge_layer_rule_activation::676ad5e4-e167-5336-93ae-5a9f1d4388d3.idempotency_key_hash",
-          "knowledge_layer_id": "ca734de0-7bfe-51e4-acce-639cc5f26f1d",
+          "knowledge_layer_id": "captured:normative.knowledge_layer::ca734de0-7bfe-51e4-acce-639cc5f26f1d.id",
           "knowledge_layer_rule_id": null,
           "lineage_id": "e21196d2-060b-5255-98a1-21243266fff6",
           "operation_material_hash": "captured:normative.knowledge_layer_rule_activation::676ad5e4-e167-5336-93ae-5a9f1d4388d3.operation_material_hash",
           "outbox_id": "cd0ffa28-73c4-5a97-af58-fe2868947b1a",
           "predecessor_activation_id": null,
-          "publication_id": "cf4db0d2-a312-5a44-91cf-6e14f5cd600e",
+          "publication_id": "captured:normative.knowledge_layer_rule_publication::cf4db0d2-a312-5a44-91cf-6e14f5cd600e.id",
           "reason": "PHASE31.4.4A TEST ONLY \u2014 Activation \u2014 reason",
           "rule_material_hash": "captured:normative.knowledge_layer_rule_activation::676ad5e4-e167-5336-93ae-5a9f1d4388d3.rule_material_hash",
           "rule_version": "PHASE31.4.4A TEST ONLY \u2014 Activation \u2014 rule_version",
@@ -44237,10 +44298,11 @@
     },
     "machine_counts_v2_5": {
       "ADR0017_MAPPED_OUTPUT": 7,
-      "CAPTURE_NATIVE_OUTPUT": 509,
+      "CAPTURE_NATIVE_OUTPUT": 565,
       "DERIVED_RUNTIME_INVARIANT": 1,
       "DETERMINISTIC_DERIVATION": 143,
-      "EXACT_LITERAL": 722,
+      "EXACT_LITERAL": 661,
+      "LIVE_UPSTREAM_NATIVE_CAPTURE": 5,
       "REFERENCE_RESOLVED_BINDING": 282
     },
     "member_count": 118,
@@ -47548,6 +47610,14 @@
         "postcommit canonical retention before downstream use"
       ]
     },
+    "systemic_live_identity_remediation": {
+      "additional_runtime_identities": 33,
+      "historical_qms_identity_fields_after": 0,
+      "historical_qms_identity_fields_before": 28,
+      "literal_fallback_for_live_bindings": false,
+      "native_runtime_captures": 23,
+      "upstream_native_captures": 5
+    },
     "tenant_projection_fixture_boundary": {
       "adminapps_contact": false,
       "caller_controlled": false,
@@ -47670,5 +47740,5 @@
     }
   },
   "resolution_mode": "offline_regression_fixture",
-  "sha256": "682becf930f980bddbd061cfcc90f6bdd5ac8af85c79b05837dbed2482e5c765"
+  "sha256": "d6723f0fa64fce046d47ad9a64a01c60c33ac6205b26949131b675a4744dddc0"
 }

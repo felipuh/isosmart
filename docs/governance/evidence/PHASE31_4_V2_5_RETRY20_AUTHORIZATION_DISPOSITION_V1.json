@@ -1,0 +1,100 @@
+{
+  "schema": "phase31.4-v2.5-retry20-authorization-disposition/v1",
+  "artifact_id": "PHASE31_4_V2_5_RETRY20_AUTHORIZATION_DISPOSITION_V1",
+  "created_at": "2026-09-28T20:38:21-06:00",
+  "principle": "Preserve historical truth without preserving obsolete execution authority.",
+  "historical_authorization": {
+    "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_20/PHASE31_4_V2_5_CLEAN_RETRY_20_AUTHORIZATION.json",
+    "sha256": "0ca3036204c9821e17663d41e31a5734f10cd6a4c8b9f8d4d7f6585db5c1135b",
+    "authorization_identity": "historical-retry20-v5-0ca3036204c9",
+    "run_id": "Phase 31.4 V2.5 Clean Retry 20",
+    "canonical_run_slug": "Phase_31.4_V2.5_Clean_Retry_20",
+    "issued_at": "2026-09-23T00:00:00Z",
+    "original_authorization_status": "DISPOSABLE_EVIDENCE_RUN_AUTHORIZED",
+    "historical_validity": "VALID_FOR_THE_ORIGINAL_AUTHORIZED_CONTEXT",
+    "one_shot": true,
+    "consumed": false,
+    "run_executed": "NO",
+    "preservation": "PRESERVED_UNMODIFIED"
+  },
+  "historical_authorization_index": {
+    "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_20/AUTHORIZATION_INDEX.json",
+    "sha256": "659c3705a3efe507d384bffcc4dd7302e85f1ec06b6dcaa3ba7535aa3d2aea91",
+    "append_only": true,
+    "recorded_status": "SUPERSEDED",
+    "recorded_consumed": false,
+    "do_not_consume": true,
+    "formal_successor_authorization_created": false,
+    "updated_at": "2026-09-24T00:03:00Z"
+  },
+  "predecessor_context": {
+    "source_integrity_generation": "PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V5",
+    "source_integrity_sha256": "64127fbf818dc77c1cdd37221ce3a16f2dc2089342268b4eecb157b487c3ca64",
+    "retry_19_status": "CONSUMED_FAILED_NOT_RESUMABLE",
+    "retry_20_execution_kind": "EVIDENCE_EXECUTION"
+  },
+  "subsequent_governance_and_diagnostic_context": [
+    {
+      "artifact": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V6.json",
+      "sha256": "6f1a4499d993de3813a12ed0f8b79d392251a82dbcfae1fdaa53c892ec3b6b23"
+    },
+    {
+      "artifact": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V7.json",
+      "sha256": "44b161084700ae3892cb3e49d054de35ef1403409c69eeae9d370b46565d2ca8"
+    },
+    {
+      "artifact": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V8.json",
+      "sha256": "ed7bed0108e790c93e0c40625b215dde02ae25566b2397533b11b6aae7040946"
+    },
+    {
+      "artifact": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V9.json",
+      "sha256": "8834bc546ccb585c917b501e20ba25bf37a4a7f1efc23b7b379ea1fd1f34933e"
+    },
+    {
+      "artifact": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V10.json",
+      "sha256": "4d40636266ce88a8b7f63130c8f2730566f578dfa827e9320f47ef67710c1008"
+    },
+    {
+      "artifact": "docs/governance/evidence/PHASE31_4_V2_5_V8_OPERATIONAL_DIAGNOSTIC_CYCLE_REVIEW_EVIDENCE_V1.json",
+      "sha256": "c7eccf9f2ee9f0dfeaae9b94cc6c7294e228b36d3892af080314a02ccfeab355"
+    },
+    {
+      "artifact": "docs/governance/evidence/PHASE31_4_V2_5_V8_OPERATIONAL_DIAGNOSTIC_ATTEMPT_3_FINAL_REPORT_V1.md",
+      "sha256": "332565c078f3710b5189753846020db1ba045085ba39ca740825fff18c5c88e1",
+      "result": "ATTEMPT_3_FAIL"
+    },
+    {
+      "artifact": "docs/governance/evidence/PHASE31_4_V2_5_V8_OPERATIONAL_DIAGNOSTIC_ATTEMPT_3_READINESS_BLOCKER_V1.json",
+      "sha256": "e5f5b62445334f5c7c6b798bb53191373c79c05760b03a166d49b966b40a56c0",
+      "result": "V8_CYCLE_EXHAUSTED_ATTEMPT_4_NOT_AUTHORIZED"
+    }
+  ],
+  "supersession": {
+    "previous_retry20_authorization_status": "SUPERSEDED_UNCONSUMED",
+    "previous_retry20_execution": "NO",
+    "previous_retry20_consumed": false,
+    "current_retry20_authorization": "NONE",
+    "reuse_of_previous_authorization": "PROHIBITED",
+    "eligible_for_current_execution": false,
+    "reason": "The authorization remains historically valid for its original context, but later operational remediations, source-integrity generations, diagnostic cycles, reconciliations, and newly discovered blockers materially superseded that context. It is no longer eligible for present execution.",
+    "retroactive_history_change": "NONE"
+  },
+  "current_project_state": {
+    "previous_v8_diagnostic_cycle": "EXHAUSTED",
+    "attempt_4": "NOT_AUTHORIZED",
+    "retry_20_executed": "NO",
+    "phase_31_5": "EXECUTION_HELD",
+    "new_diagnostic_cycle": "NOT_CREATED",
+    "health_to_api_ready_remediation": "NOT_APPLIED",
+    "residual_resources": "ZERO_RESIDUAL_RESOURCES"
+  },
+  "verification": {
+    "historical_retry20_authorization_exists": true,
+    "historical_authorization_consumed": false,
+    "historical_authorization_preserved": true,
+    "historical_authorization_eligible_for_current_execution": false,
+    "current_retry20_authorization": "NONE",
+    "retry20_executed": "NO"
+  },
+  "disposition_status": "PASS"
+}

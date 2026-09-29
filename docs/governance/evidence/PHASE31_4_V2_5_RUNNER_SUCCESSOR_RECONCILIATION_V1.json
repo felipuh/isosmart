@@ -1,0 +1,123 @@
+{
+  "schema": "phase31.4-v2.5-runner-successor-reconciliation/v1",
+  "generation_id": "PHASE31_4_V2_5_RUNNER_SUCCESSOR_RECONCILIATION_V1",
+  "generated_at": "2026-09-23",
+  "verdict": "RUNNER_SUCCESSOR_RECONCILIATION_PASS",
+  "v4": {
+    "path": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V4.json",
+    "sha256": "960f2a133f72e939842762986ce3ad43762302b0caa447799732740fc4571f25",
+    "preserved": true,
+    "historical_predecessors_preserved": ["V1", "V2", "V3", "V2.4", "Retry 16", "Retry 17", "Retry 18", "Retry 19", "provenance discontinuity"]
+  },
+  "v5": {
+    "path": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V5.json",
+    "sha256": "64127fbf818dc77c1cdd37221ce3a16f2dc2089342268b4eecb157b487c3ca64",
+    "governance_predecessor": "V4",
+    "protected_source_count": 25,
+    "statement": "V5 is a verified successor of V4 for the explicitly reviewed disposable evidence runner remediation.",
+    "byte_continuity_across_historical_gap_claimed": false
+  },
+  "materiality": {
+    "v4_count": 23,
+    "current_count": 25,
+    "unchanged": 22,
+    "modified": ["backend/foundation/phase31_4_integrity_generations.py"],
+    "new": ["backend/foundation/phase31_4_v2_5_disposable_runner.py", "docs/governance/tools/phase31_4_v2_5_disposable_runner.py"],
+    "removed": [],
+    "missing": [],
+    "unexpected": [],
+    "classification": "MATERIAL_EXECUTION_SOURCE",
+    "test_only_changes": ["backend/foundation/test_phase31_4_integrity_generations.py", "backend/foundation/test_phase31_4_v2_5_precreation_integrity.py"],
+    "documentation_only": ["docs/adr/0022-phase31-4-disposable-evidence-runner.md"],
+    "unrelated_preexisting_worktree": "Present outside the reviewed V4-to-V5 material inventory; not promoted or treated as current execution authority."
+  },
+  "runner_graph": {
+    "wrapper": "docs/governance/tools/phase31_4_v2_5_disposable_runner.py -> cli_main",
+    "main": "backend/foundation/phase31_4_v2_5_disposable_runner.py -> DisposableEvidenceRunner",
+    "canonicalization": "backend/foundation/phase31_4_v2_5_disposable_runner.py:canonical_run_slug -> backend/foundation/phase31_4_v2_5_precreation_integrity.py:_safe_run_slug",
+    "integrity_guard": "backend/foundation/phase31_4_integrity_generations.py:verify_v25_current_integrity",
+    "resource_environment": "backend/foundation/phase31_4_postgres18_environment.py",
+    "manifest_and_cleanup": "DisposableEvidenceRunner.atomic_write_json, _persist, cleanup, recover_for_cleanup"
+  },
+  "canonical_identity": {
+    "mapping": "run ID -> canonical run slug -> evidence root",
+    "independent_slug_construction": false,
+    "canonical_source": "backend/foundation/phase31_4_v2_5_disposable_runner.py:canonical_run_slug",
+    "evidence_root_check": "basename must equal resolved canonical slug"
+  },
+  "authorization": {
+    "order": ["validation", "durable exclusive consumption", "allocation"],
+    "consumption_before_material_effect": true,
+    "replay_code": "AUTHORIZATION_ALREADY_CONSUMED",
+    "alternate_wrapper_bypass": false,
+    "retry_19": "CONSUMED / FAILED"
+  },
+  "state_machine": {
+    "states": ["AUTHORIZED", "ALLOCATING", "RESOURCES_ALLOCATED", "BOOTSTRAPPING", "READY", "PRECREATION_RUNNING", "PRECREATION_PASS", "STAGE_EXT_RUNNING", "STAGE_EXT_PASS", "FAILED", "COMPLETED", "TEARDOWN_COMPLETE"],
+    "recovery": "cleanup-only; no business resumption",
+    "persistence": "same-filesystem temp file, fsync, atomic replace, directory fsync",
+    "history": "state transitions and resource events append durably"
+  },
+  "resource_ownership": {
+    "labels": ["io.isosmart.phase31-4.run-slug", "io.isosmart.phase31-4.authorization-sha256", "io.isosmart.phase31-4.resource-role"],
+    "cleanup_scope": "manifest-named resources with exact matching labels",
+    "global_prune": false,
+    "broad_name_pattern_deletion": false
+  },
+  "failure_classifications": {
+    "tooling": "DISPOSABLE_EXECUTION_TOOLING_BLOCKER",
+    "allocation": ["VOLUME_CREATION_FAILURE", "NETWORK_CREATION_FAILURE", "CONTAINER_CREATION_FAILURE"],
+    "port": "PORT_PUBLICATION_FAILURE",
+    "postgresql": ["POSTGRES_STARTUP_FAILURE", "POSTGRES_READINESS_TIMEOUT", "DB_AUTHENTICATION_FAILURE", "POSTGRES_CONNECTION_FAILURE", "POSTGRES_QUERY_FAILURE"],
+    "bootstrap_boundary_preserved": true
+  },
+  "diagnostic": {
+    "reference": "docs/governance/evidence/runs/Phase_31.4_V2.5_Runner_Environment_Diagnostic_20260923/RESOURCE_MANIFEST.json",
+    "classification": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+    "postgresql": "18.6",
+    "approved_image": "docker.io/library/postgres@sha256:7341002d2b8c7c5bdd7542a671a95b36196c0b5b888daf454ae4fc33ba5346d7",
+    "host_port": 33971,
+    "connection": "PASS",
+    "select_1": "PASS",
+    "teardown": "PASS",
+    "post_teardown_resources": "NONE",
+    "does_not_prove": ["PRECREATION", "Stage EXT", "Retry 20", "Phase 31.4 completion"]
+  },
+  "hashes": {
+    "settings.py": "eeede9b7588f2d5c88ec717dcec1a5f3ed46e97cf183125dcaadfdfe1d6be613",
+    "AdminApps client": "9edceb9510fd70e1c2c5e7c1c7040a8c16d74a26f8c143abce62b976f4e6639a",
+    "runtime": "70997fb33eb22c9576cb7def0cd5ccdff9d61deebad4621072920b5acf5efb19",
+    "verifier": "61a6fa21f01c27bd6713154512045926c4d3d65d410d0d572922ea1ef21dc639",
+    "PRECREATION helper": "9fc0efcc14fee9587a041b8c81dffde2d447f82e16d4df495571b7358cb854eb",
+    "integrity guard": "27e0b20ff2f7cc0421adf583e56cb6b93fa7f97d82787c530571561b6f011319",
+    "runner": "fb54ae34d5df2ecad692601a253224c6083f293fc2f640052a97d98e86c1f487",
+    "wrapper": "1182854657d4165eb6b095906e161317d9bf84ece07caf439760ea69231fa8b9"
+  },
+  "migrations": {
+    "v2_4": "23/23 PASS",
+    "v2_5": "24/24 PASS",
+    "pending": 0,
+    "new": 0,
+    "fake": 0,
+    "manual_patches": 0,
+    "makemigrations_check": "PASS"
+  },
+  "tests": {
+    "focused_runner_integrity_precreation": "37/37 PASS",
+    "governance_and_guard_integration": "79/79 PASS",
+    "full_backend_regression": "537/537 PASS",
+    "errors": 0,
+    "failures": 0
+  },
+  "historical_status": {
+    "retry_19": "CONSUMED / FAILED",
+    "retry_19_stage_ext": "LIVE_REVALIDATION_PENDING",
+    "phase31_5": "EXECUTION_HELD",
+    "retry_20_executed": "NO",
+    "historical_artifacts_modified": "NONE",
+    "diagnostic_repeated": "NO"
+  },
+  "checkpoint": {"p0": 0, "p1": 0, "runner_blocker": "REMEDIATED / INTEGRITY_RECONCILED"},
+  "readiness": "READY_FOR_SEPARATE_RETRY20_GOVERNANCE_REVIEW",
+  "exact_next_step": "Perform a separately authorized Retry 20 governance review; do not execute it as part of this reconciliation."
+}

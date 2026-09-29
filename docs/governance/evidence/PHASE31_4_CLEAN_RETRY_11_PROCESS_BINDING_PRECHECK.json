@@ -1,0 +1,12 @@
+{
+  "artifact_schema": "phase31.4-retry11-process-binding-precheck/v1",
+  "retry_id": "Phase 31.4 V2.5 Clean Retry 11",
+  "process_row_exists": true,
+  "captured_process_id": "4a4ead4c-5e09-4d95-92d3-d8537d1b88da",
+  "persisted_process_id": "4a4ead4c-5e09-4d95-92d3-d8537d1b88da",
+  "provenance": "LIVE_UPSTREAM_NATIVE_CAPTURE",
+  "resolved_process_binding": "4a4ead4c-5e09-4d95-92d3-d8537d1b88da",
+  "historical_process_fixture": "506d920c-fe62-53c0-aac8-9c1ca8ca78ed",
+  "historical_fixture_substitution": false,
+  "process_runtime_binding": "PASS"
+}

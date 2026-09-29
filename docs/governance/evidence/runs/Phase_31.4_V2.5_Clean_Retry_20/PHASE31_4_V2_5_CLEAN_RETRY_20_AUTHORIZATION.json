@@ -1,0 +1,157 @@
+{
+  "schema": "phase31.4-v2.5-disposable-evidence-run-authorization/v1",
+  "authorization_status": "DISPOSABLE_EVIDENCE_RUN_AUTHORIZED",
+  "run_id": "Phase 31.4 V2.5 Clean Retry 20",
+  "canonical_run_slug": "Phase_31.4_V2.5_Clean_Retry_20",
+  "evidence_root": "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_20",
+  "issued_at": "2026-09-23T00:00:00Z",
+  "one_shot": true,
+  "consumed": false,
+  "run_executed": "NO",
+  "execution_kind": "EVIDENCE_EXECUTION",
+  "current_authoritative_state": "RUNNER_SUCCESSOR_RECONCILIATION_PASS",
+  "identity_verification": "V5_IDENTITY_VERIFICATION_PASS",
+  "integrity": {
+    "path": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V5.json",
+    "generation": "PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V5",
+    "sha256": "64127fbf818dc77c1cdd37221ce3a16f2dc2089342268b4eecb157b487c3ca64",
+    "protected_source_count": 25,
+    "missing_sources": [],
+    "unexpected_sources": [],
+    "unregistered_material_runner_components": [],
+    "current_drift": false,
+    "gate": "PASS"
+  },
+  "runner_sources": {
+    "backend/foundation/phase31_4_v2_5_disposable_runner.py": "fb54ae34d5df2ecad692601a253224c6083f293fc2f640052a97d98e86c1f487",
+    "docs/governance/tools/phase31_4_v2_5_disposable_runner.py": "1182854657d4165eb6b095906e161317d9bf84ece07caf439760ea69231fa8b9"
+  },
+  "runner_gate": {
+    "canonical_run_slug_and_evidence_root": "PASS",
+    "one_shot_authorization": "PASS",
+    "durable_consumption_before_allocation": "PASS",
+    "atomic_resource_manifest": "PASS",
+    "explicit_state_transitions": "PASS",
+    "run_scoped_labels": "PASS",
+    "owned_resource_cleanup_only": "PASS",
+    "cleanup_only_recovery": "PASS",
+    "failure_separation": "PASS",
+    "replay_code": "AUTHORIZATION_ALREADY_CONSUMED"
+  },
+  "historical_preservation": {
+    "v2_4": "PRESERVED",
+    "v1": "PRESERVED",
+    "v2": "PRESERVED",
+    "v3": "PRESERVED",
+    "v4": "PRESERVED",
+    "provenance_discontinuity": "PRESERVED",
+    "retry_16": "PRESERVED",
+    "retry_17": "PRESERVED",
+    "retry_18": "PRESERVED",
+    "retry_19": "CONSUMED / FAILED",
+    "retry_19_resumable": false,
+    "historical_artifacts_modified": "NONE"
+  },
+  "environment_diagnostic": {
+    "reference": "docs/governance/evidence/runs/Phase_31.4_V2.5_Runner_Environment_Diagnostic_20260923/RESOURCE_MANIFEST.json",
+    "postgresql": "18.6",
+    "approved_image": "docker.io/library/postgres@sha256:7341002d2b8c7c5bdd7542a671a95b36196c0b5b888daf454ae4fc33ba5346d7",
+    "dynamic_host_port": true,
+    "actual_connection": "PASS",
+    "select_1": "PASS",
+    "teardown": "PASS",
+    "post_teardown_absence": "PASS",
+    "rerun_during_review": false
+  },
+  "adminapps_endpoint": {
+    "authoritative_variable": "ADMIN_APPS_BASE_URL",
+    "dynamic_port_supported": true,
+    "localhost_operational_fallback": false,
+    "missing_endpoint": "FAIL_CLOSED",
+    "malformed_endpoint": "FAIL_CLOSED",
+    "unreachable_endpoint": "FAIL_CLOSED",
+    "shared_adminapps_client": "PASS",
+    "status": "REMEDIATED / LIVE_REVALIDATION_PENDING"
+  },
+  "tests": {
+    "runner_integrity_precreation_verifier_runtime_guard": "79/79 PASS",
+    "full_backend_regression": "537/537 PASS",
+    "stale_evidence_check": "PASS"
+  },
+  "migrations": {
+    "v2_4": "23/23 PASS",
+    "v2_5": "24/24 PASS",
+    "pending": 0,
+    "fake": 0,
+    "manual_patches": 0,
+    "makemigrations_check": "PASS",
+    "applied_during_review": false
+  },
+  "checkpoint": {
+    "p0": 0,
+    "p1": 0
+  },
+  "retry_20_mission": {
+    "primary": "Stage EXT = 6/6",
+    "required_identities": [
+      "external AdminApps tenant",
+      "external AdminApps actor/user",
+      "ISO Smart TenantProjection",
+      "ISO Smart UserProjection",
+      "QMS Organization",
+      "Process"
+    ],
+    "required_for_each": [
+      "actual returned value",
+      "persisted/readback value",
+      "provenance",
+      "equality",
+      "run ID",
+      "timestamp"
+    ],
+    "precreation_first": true,
+    "precreation_phase": "PRECREATION_INTEGRITY",
+    "precreation_required": "PASS",
+    "secondary": "If Stage EXT reaches 6/6, continue the fail-closed evidence chain until the first genuine blocker or complete trustworthy execution."
+  },
+  "resource_isolation": {
+    "fresh_adminapps_postgresql": "PostgreSQL 18.6",
+    "fresh_iso_smart_postgresql": "PostgreSQL 18.6",
+    "fresh_containers_networks_volumes_databases_ports_manifest_labels": true,
+    "reuse_retry_19_or_historical_resources": false
+  },
+  "fail_closed_policy": {
+    "tooling_allocation_postgres_bootstrap_precreation_stage_ext_executor_operation_assertion_evidence_readback_provenance_exception": "STOP",
+    "live_run_remediation": false
+  },
+  "evidence_retention": {
+    "incremental_retention_required": true,
+    "areas": [
+      "authorization consumption",
+      "state transitions",
+      "resource allocation",
+      "bootstrap",
+      "migrations",
+      "PRECREATION",
+      "Stage EXT",
+      "phase results",
+      "captures/readbacks",
+      "event/outbox/audit",
+      "security",
+      "transaction guarantees",
+      "graph/exact comparison if reached",
+      "teardown",
+      "post-teardown absence"
+    ]
+  },
+  "cleanup_policy": {
+    "cleanup_only_run_owned_resources": true,
+    "global_prune": false,
+    "cleanup_result_persisted": true,
+    "post_teardown_absence_required": true
+  },
+  "phase_31_5": "EXECUTION_HELD",
+  "excluded_authorizations": ["WS-A", "pilot", "production", "RuntimeAdoption"],
+  "governance_verdict": "DISPOSABLE_EVIDENCE_RUN_AUTHORIZED",
+  "exact_next_step": "Execute exactly one Retry 20 disposable evidence run under this authorization."
+}

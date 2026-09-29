@@ -1,0 +1,22 @@
+{
+  "actual": "Fresh PostgreSQL 18.6 database lacked the required foundation runtime role settings; migration raised exception and rolled back",
+  "artifact_schema": "phase31.4-retry9-live-blocker/v1",
+  "detected_at": "2026-09-18T14:15:39.084491+00:00",
+  "execution_mode": "LIVE_NATIVE_EXECUTION",
+  "expected": "Existing LOGIN roles and connection settings supplied by isolated cluster bootstrap before the complete migration chain",
+  "id": "P1-RETRY9-ISOSMART-MIGRATION-BOOTSTRAP-ROLES-MISSING",
+  "member_or_field": "foundation.app_role, foundation.worker_role",
+  "migration_log": "PHASE31_4_CLEAN_RETRY_9_ISOSMART_MIGRATIONS.log",
+  "operation": "foundation.0001_foundation_tenant_projection",
+  "phase": "MIGRATIONS",
+  "product": "ISO Smart",
+  "promotion": "NOT_PROMOTED",
+  "required_remediation": "Add an approved isolated cluster bootstrap that creates the required scoped LOGIN principals and configures foundation.*_role connection settings before invoking the complete migration chain; rerun under a new clean retry ID.",
+  "retry_id": "Phase 31.4 V2.5 Clean Retry 9",
+  "retry_tag": "CLEAN_RETRY_9",
+  "service": "Django migration executor / foundation PostgreSQL bootstrap",
+  "severity": "P1",
+  "stack_or_error": "psycopg2.errors.RaiseException: foundation runtime roles were not supplied by cluster bootstrap",
+  "upstream_chain_executed": false,
+  "v25_phases_executed": 0
+}

@@ -1,0 +1,372 @@
+{
+  "artifact_schema": "phase31.4-v2.5-phase-verifier-audit/v1",
+  "state": "PHASE31_4_V2_5_EVIDENCE_RECONCILIATION",
+  "audited_at": "2026-09-22T19:05:47-06:00",
+  "scope": "Static audit of the 33 Retry 16 phase executors and retained evidence; no retry or Phase 31.5 execution performed.",
+  "executor_source": "backend/foundation/phase31_4_v2_5_runtime.py",
+  "phase_topology_source": "backend/foundation/phase31_4_v2_5_executable_graph.py",
+  "retained_phase_result_source": "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_16_LIVE_BRIDGE.json",
+  "classification_rules": {
+    "FULLY_VERIFIED": "The executor performs the claimed operation, asserts its result and retains identifiable evidence sufficient to independently verify the claim.",
+    "PARTIALLY_VERIFIED": "A relevant operation executes, but the assertion or retained evidence does not prove the complete claimed guarantee.",
+    "STRUCTURAL_ONLY": "Only static shape, registration or dependency structure is checked.",
+    "NO_OP": "The executor returns PASS without a valid phase operation or assertion.",
+    "OVERCLAIMED": "The executor's assertion is materially weaker than the phase guarantee while the retained result reports PASS."
+  },
+  "summary": {
+    "phase_count": 33,
+    "FULLY_VERIFIED": 0,
+    "PARTIALLY_VERIFIED": 9,
+    "STRUCTURAL_ONLY": 0,
+    "NO_OP": 12,
+    "OVERCLAIMED": 12,
+    "pass_logically_proves_claimed_guarantee": 0
+  },
+  "systemic_findings": [
+    "PhaseExecutionResult.status is ignored by V25ExecutionSession.run_phase; any callback return without exception is rewritten to PASS.",
+    "Twelve phases have neither native_operation nor direct service and therefore take the default PASS branch at runtime.py:571-579.",
+    "EVENT_OUTBOX_ASSERTIONS checks only for authorization_id in session.composition and performs no event, outbox or audit query.",
+    "Eleven late phases share one branch that checks only authorization_id and returns verify_live_phase_evidence PASS; it does not materialize a graph, compare values, test security, inspect migrations, emit closure evidence or verify teardown.",
+    "The retained live bridge serializes phase_id/status/error only; it drops PhaseExecutionResult operation, native source, metadata, assertions and in-memory captures."
+  ],
+  "phases": [
+    {
+      "phase_name": "PRECREATION_INTEGRITY",
+      "claimed_guarantee": "Pre-creation source, authority and material integrity are established before runtime effects.",
+      "actual_executor": "_NativePhaseExecutor default branch",
+      "actual_assertion": "None; returns a PASS-shaped PhaseExecutionResult.",
+      "db_or_native_operation_performed": "None by this phase executor.",
+      "evidence_produced": "Only phase_id/status/error in LIVE_BRIDGE.",
+      "pass_logically_proves_claimed_guarantee": false,
+      "classification": "NO_OP"
+    },
+    {
+      "phase_name": "ENVIRONMENT_CREATE",
+      "claimed_guarantee": "A disposable PostgreSQL environment is created and accepted.",
+      "actual_executor": "_NativePhaseExecutor default branch",
+      "actual_assertion": "None.",
+      "db_or_native_operation_performed": "None by this phase executor; separate resource artifacts exist outside the verifier.",
+      "evidence_produced": "Only phase PASS; resource manifest is not queried by the executor.",
+      "pass_logically_proves_claimed_guarantee": false,
+      "classification": "NO_OP"
+    },
+    {
+      "phase_name": "RENDER_PROFILE",
+      "claimed_guarantee": "The approved runtime/render profile is applied and verified.",
+      "actual_executor": "_NativePhaseExecutor default branch",
+      "actual_assertion": "None.",
+      "db_or_native_operation_performed": "None.",
+      "evidence_produced": "Only phase PASS.",
+      "pass_logically_proves_claimed_guarantee": false,
+      "classification": "NO_OP"
+    },
+    {
+      "phase_name": "MIGRATIONS",
+      "claimed_guarantee": "Required migrations execute successfully with no pending/fake/manual patches.",
+      "actual_executor": "_NativePhaseExecutor default branch",
+      "actual_assertion": "None; it does not read migration state or logs.",
+      "db_or_native_operation_performed": "None by this phase executor; migration execution occurred earlier in retry orchestration.",
+      "evidence_produced": "Only phase PASS; separate BOOTSTRAP_MIGRATIONS and logs support a narrower external claim.",
+      "pass_logically_proves_claimed_guarantee": false,
+      "classification": "NO_OP"
+    },
+    {
+      "phase_name": "NATIVE_BINDING_ASSERTIONS",
+      "claimed_guarantee": "All native field bindings are bound to valid runtime producers.",
+      "actual_executor": "_NativePhaseExecutor default branch",
+      "actual_assertion": "None.",
+      "db_or_native_operation_performed": "None.",
+      "evidence_produced": "Only phase PASS; executable graph validation before the loop is structural and is not serialized per phase.",
+      "pass_logically_proves_claimed_guarantee": false,
+      "classification": "NO_OP"
+    },
+    {
+      "phase_name": "AUTHORITY_ASSERTIONS",
+      "claimed_guarantee": "Runtime principals and authorities are source-backed and sufficient.",
+      "actual_executor": "_NativePhaseExecutor default branch",
+      "actual_assertion": "None.",
+      "db_or_native_operation_performed": "None.",
+      "evidence_produced": "Only phase PASS.",
+      "pass_logically_proves_claimed_guarantee": false,
+      "classification": "NO_OP"
+    },
+    {
+      "phase_name": "CAPTURE_REGISTRY_ASSERTIONS",
+      "claimed_guarantee": "All required runtime captures are present, typed and provenance-valid.",
+      "actual_executor": "_NativePhaseExecutor default branch",
+      "actual_assertion": "None.",
+      "db_or_native_operation_performed": "None.",
+      "evidence_produced": "Only phase PASS; in-memory capture registry is not serialized.",
+      "pass_logically_proves_claimed_guarantee": false,
+      "classification": "NO_OP"
+    },
+    {
+      "phase_name": "REFERENCE_BINDING_ASSERTIONS",
+      "claimed_guarantee": "Reference-resolved bindings point to retained live values.",
+      "actual_executor": "_NativePhaseExecutor default branch",
+      "actual_assertion": "None.",
+      "db_or_native_operation_performed": "None.",
+      "evidence_produced": "Only phase PASS.",
+      "pass_logically_proves_claimed_guarantee": false,
+      "classification": "NO_OP"
+    },
+    {
+      "phase_name": "INVARIANT_ASSERTIONS",
+      "claimed_guarantee": "Runtime invariants hold over materialized live rows.",
+      "actual_executor": "_NativePhaseExecutor default branch",
+      "actual_assertion": "None.",
+      "db_or_native_operation_performed": "None.",
+      "evidence_produced": "Only phase PASS.",
+      "pass_logically_proves_claimed_guarantee": false,
+      "classification": "NO_OP"
+    },
+    {
+      "phase_name": "TRANSACTION_ASSERTIONS",
+      "claimed_guarantee": "Atomicity, rollback and transaction boundaries are verified.",
+      "actual_executor": "_NativePhaseExecutor default branch",
+      "actual_assertion": "None.",
+      "db_or_native_operation_performed": "None; retry16_live.py calls runtime.run_clean_retry without entering V25ExecutionSession's atomic context manager.",
+      "evidence_produced": "Only phase PASS.",
+      "pass_logically_proves_claimed_guarantee": false,
+      "classification": "NO_OP"
+    },
+    {
+      "phase_name": "SOURCE_TO_RUNTIME_PROOF",
+      "claimed_guarantee": "Original/source contract values are traceably realized by live runtime outputs.",
+      "actual_executor": "_NativePhaseExecutor default branch",
+      "actual_assertion": "None.",
+      "db_or_native_operation_performed": "None.",
+      "evidence_produced": "Only phase PASS.",
+      "pass_logically_proves_claimed_guarantee": false,
+      "classification": "NO_OP"
+    },
+    {
+      "phase_name": "OPERATION_PRECONDITIONS",
+      "claimed_guarantee": "All operation preconditions are checked before effects.",
+      "actual_executor": "_NativePhaseExecutor default branch",
+      "actual_assertion": "None.",
+      "db_or_native_operation_performed": "None.",
+      "evidence_produced": "Only phase PASS.",
+      "pass_logically_proves_claimed_guarantee": false,
+      "classification": "NO_OP"
+    },
+    {
+      "phase_name": "INITIAL_OPPORTUNITY",
+      "claimed_guarantee": "A native Opportunity is created from the retained Stage EXT process and read back from PostgreSQL.",
+      "actual_executor": "RiskOpportunityObjectiveCommandService.create_opportunity",
+      "actual_assertion": "Returned entity_id is used to fetch Opportunity and an in-memory returned/persisted equality capture is created.",
+      "db_or_native_operation_performed": "Yes: Opportunity create plus row readback.",
+      "evidence_produced": "LIVE_BRIDGE retains PASS and input process/tenant/actor IDs, but not the Opportunity ID, row snapshot or capture.",
+      "pass_logically_proves_claimed_guarantee": false,
+      "classification": "PARTIALLY_VERIFIED"
+    },
+    {
+      "phase_name": "CATALOG_ASSERTIONS",
+      "claimed_guarantee": "Agent, model policy, normative catalog, knowledge rule and evidence composition are valid.",
+      "actual_executor": "_execute_catalog_assertions",
+      "actual_assertion": "Creates and publishes synthetic model policy, agent definition, synthetic standard/clause/control/rule and evidence; service exceptions fail the phase.",
+      "db_or_native_operation_performed": "Yes, on live PostgreSQL, but with synthetic test material.",
+      "evidence_produced": "Only phase PASS; generated IDs and rows are not retained.",
+      "pass_logically_proves_claimed_guarantee": false,
+      "classification": "PARTIALLY_VERIFIED"
+    },
+    {
+      "phase_name": "NATIVE_IDENTITY_CAPTURE",
+      "claimed_guarantee": "A native AgentRun identity and frozen inputs are persisted.",
+      "actual_executor": "AgentRunCommandService.start_agent_run",
+      "actual_assertion": "Service return without exception; AgentRun ID captured only in memory.",
+      "db_or_native_operation_performed": "Yes: synthetic AgentRun start.",
+      "evidence_produced": "Only phase PASS; run ID, row and event/outbox/audit rows are not retained.",
+      "pass_logically_proves_claimed_guarantee": false,
+      "classification": "PARTIALLY_VERIFIED"
+    },
+    {
+      "phase_name": "RUNTIME_COMPOSITION_PROOF",
+      "claimed_guarantee": "AgentRun completion and Recommendation are linked with reconstructible provenance.",
+      "actual_executor": "AgentRunCommandService.complete_agent_run_with_recommendation",
+      "actual_assertion": "Service return without exception; Recommendation ID captured only in memory.",
+      "db_or_native_operation_performed": "Yes: synthetic recommendation completion.",
+      "evidence_produced": "Only phase PASS; rows and provenance basis are not retained.",
+      "pass_logically_proves_claimed_guarantee": false,
+      "classification": "PARTIALLY_VERIFIED"
+    },
+    {
+      "phase_name": "PHASE_EVIDENCE",
+      "claimed_guarantee": "The agent decision and its evidence are materialized and traceable.",
+      "actual_executor": "AgentDecisionCommandService.record_agent_decision",
+      "actual_assertion": "Service return without exception; Decision ID captured only in memory.",
+      "db_or_native_operation_performed": "Yes: synthetic AgentDecision creation.",
+      "evidence_produced": "Only phase PASS; decision row and linked evidence are not retained.",
+      "pass_logically_proves_claimed_guarantee": false,
+      "classification": "PARTIALLY_VERIFIED"
+    },
+    {
+      "phase_name": "ACTION_PLAN_PREPARATION",
+      "claimed_guarantee": "A governed ActionPlan is prepared and persisted.",
+      "actual_executor": "ActionPreparationService.prepare_action_plan",
+      "actual_assertion": "Returned action_plan_id is fetched from PostgreSQL under tenant context and equality-captured in memory.",
+      "db_or_native_operation_performed": "Yes: ActionPlan create plus row readback.",
+      "evidence_produced": "Only phase PASS; ActionPlan ID, row and capture are not retained.",
+      "pass_logically_proves_claimed_guarantee": false,
+      "classification": "PARTIALLY_VERIFIED"
+    },
+    {
+      "phase_name": "ACTION_PLAN_DRY_RUN",
+      "claimed_guarantee": "A dry run validates preconditions and intended state delta.",
+      "actual_executor": "ActionPreparationService.run_action_plan_dry_run",
+      "actual_assertion": "Service return without exception using harness-supplied expected objects, state delta and passed validation literals.",
+      "db_or_native_operation_performed": "Yes: dry-run record creation.",
+      "evidence_produced": "Only phase PASS; dry-run ID, inputs and results are not retained.",
+      "pass_logically_proves_claimed_guarantee": false,
+      "classification": "PARTIALLY_VERIFIED"
+    },
+    {
+      "phase_name": "EXECUTION_AUTHORIZATION",
+      "claimed_guarantee": "A source-authorized human approves and an A3 execution authorization is granted.",
+      "actual_executor": "HumanDecisionGateService.record_human_approval plus ExecutionAuthorizationService.evaluate_execution_authorization",
+      "actual_assertion": "Requires authorized outcome and non-null authorization_id.",
+      "db_or_native_operation_performed": "Yes, but AuthorizedHumanContext injects the literal role quality_approver rather than reading AdminApps authority.",
+      "evidence_produced": "Only phase PASS; approval and authorization rows/IDs are not retained.",
+      "pass_logically_proves_claimed_guarantee": false,
+      "classification": "PARTIALLY_VERIFIED"
+    },
+    {
+      "phase_name": "CONTROLLED_TRANSITION",
+      "claimed_guarantee": "The authorized controlled Opportunity transition executes with exact successor evidence.",
+      "actual_executor": "ControlledOpportunityActionService controlled transition binding",
+      "actual_assertion": "Native service invocation must return without exception.",
+      "db_or_native_operation_performed": "Yes: controlled Opportunity transition is invoked.",
+      "evidence_produced": "Only phase PASS; before/after Opportunity rows, execution receipt and successor ID are not retained.",
+      "pass_logically_proves_claimed_guarantee": false,
+      "classification": "PARTIALLY_VERIFIED"
+    },
+    {
+      "phase_name": "EVENT_OUTBOX_ASSERTIONS",
+      "claimed_guarantee": "Expected DomainEvent, TransactionalOutbox and ImmutableAuditLog rows exist and agree with the controlled transition.",
+      "actual_executor": "Special EVENT_OUTBOX_ASSERTIONS branch",
+      "actual_assertion": "Checks only that authorization_id exists in session.composition.",
+      "db_or_native_operation_performed": "None; no event/outbox/audit query.",
+      "evidence_produced": "Only phase PASS.",
+      "pass_logically_proves_claimed_guarantee": false,
+      "classification": "OVERCLAIMED"
+    },
+    {
+      "phase_name": "RESOLVED_GRAPH",
+      "claimed_guarantee": "The complete 118-member/1664-field graph is resolved from retained live captures.",
+      "actual_executor": "Shared late-phase verify_live_phase_evidence branch",
+      "actual_assertion": "Checks only that authorization_id exists.",
+      "db_or_native_operation_performed": "None; no graph materialization.",
+      "evidence_produced": "Only phase PASS; referenced resolved graph is an offline regression fixture.",
+      "pass_logically_proves_claimed_guarantee": false,
+      "classification": "OVERCLAIMED"
+    },
+    {
+      "phase_name": "EXACT_COMPARISON",
+      "claimed_guarantee": "A live materialized graph exactly matches the V2.5 contract with zero mismatches.",
+      "actual_executor": "Shared late-phase verify_live_phase_evidence branch",
+      "actual_assertion": "Checks only that authorization_id exists.",
+      "db_or_native_operation_performed": "None; no comparison.",
+      "evidence_produced": "Only phase PASS; later LIVE_EXACT_COMPARISON reuses the offline graph hash.",
+      "pass_logically_proves_claimed_guarantee": false,
+      "classification": "OVERCLAIMED"
+    },
+    {
+      "phase_name": "SECURITY_EVIDENCE",
+      "claimed_guarantee": "Required security, role, RLS and fail-closed controls are exercised and evidenced.",
+      "actual_executor": "Shared late-phase verify_live_phase_evidence branch",
+      "actual_assertion": "Checks only that authorization_id exists.",
+      "db_or_native_operation_performed": "None; no positive/negative security probe.",
+      "evidence_produced": "Only phase PASS.",
+      "pass_logically_proves_claimed_guarantee": false,
+      "classification": "OVERCLAIMED"
+    },
+    {
+      "phase_name": "LIVE_MIGRATION_EVIDENCE",
+      "claimed_guarantee": "Live migration state is queried and retained.",
+      "actual_executor": "Shared late-phase verify_live_phase_evidence branch",
+      "actual_assertion": "Checks only that authorization_id exists.",
+      "db_or_native_operation_performed": "None by this phase.",
+      "evidence_produced": "Only phase PASS; separate logs support migration execution but are not asserted here.",
+      "pass_logically_proves_claimed_guarantee": false,
+      "classification": "OVERCLAIMED"
+    },
+    {
+      "phase_name": "LIVE_AUTHORITY_EVIDENCE",
+      "claimed_guarantee": "Actor, approver and execution authority are proven from their authoritative source.",
+      "actual_executor": "Shared late-phase verify_live_phase_evidence branch",
+      "actual_assertion": "Checks only that authorization_id exists.",
+      "db_or_native_operation_performed": "None.",
+      "evidence_produced": "Only phase PASS; quality_approver is a harness literal.",
+      "pass_logically_proves_claimed_guarantee": false,
+      "classification": "OVERCLAIMED"
+    },
+    {
+      "phase_name": "LIVE_OPERATION_EVIDENCE",
+      "claimed_guarantee": "Native operation outputs and persisted readbacks are retained for independent verification.",
+      "actual_executor": "Shared late-phase verify_live_phase_evidence branch",
+      "actual_assertion": "Checks only that authorization_id exists.",
+      "db_or_native_operation_performed": "None.",
+      "evidence_produced": "Only phase PASS; in-memory outputs were discarded.",
+      "pass_logically_proves_claimed_guarantee": false,
+      "classification": "OVERCLAIMED"
+    },
+    {
+      "phase_name": "CLOSURE_PRECONDITIONS",
+      "claimed_guarantee": "All closure gates and evidence dependencies are satisfied.",
+      "actual_executor": "Shared late-phase verify_live_phase_evidence branch",
+      "actual_assertion": "Checks only that authorization_id exists.",
+      "db_or_native_operation_performed": "None.",
+      "evidence_produced": "Only phase PASS.",
+      "pass_logically_proves_claimed_guarantee": false,
+      "classification": "OVERCLAIMED"
+    },
+    {
+      "phase_name": "CLOSURE_REPORT",
+      "claimed_guarantee": "A closure report is generated from verified evidence.",
+      "actual_executor": "Shared late-phase verify_live_phase_evidence branch",
+      "actual_assertion": "Checks only that authorization_id exists.",
+      "db_or_native_operation_performed": "None; it does not generate or validate a closure report.",
+      "evidence_produced": "Only phase PASS.",
+      "pass_logically_proves_claimed_guarantee": false,
+      "classification": "OVERCLAIMED"
+    },
+    {
+      "phase_name": "TEARDOWN_GATE",
+      "claimed_guarantee": "Teardown is authorized only after evidence retention and closure.",
+      "actual_executor": "Shared late-phase verify_live_phase_evidence branch",
+      "actual_assertion": "Checks only that authorization_id exists.",
+      "db_or_native_operation_performed": "None.",
+      "evidence_produced": "Only phase PASS.",
+      "pass_logically_proves_claimed_guarantee": false,
+      "classification": "OVERCLAIMED"
+    },
+    {
+      "phase_name": "TEARDOWN",
+      "claimed_guarantee": "All disposable resources are removed.",
+      "actual_executor": "Shared late-phase verify_live_phase_evidence branch",
+      "actual_assertion": "Checks only that authorization_id exists.",
+      "db_or_native_operation_performed": "None by the phase; actual teardown occurs later in external orchestration.",
+      "evidence_produced": "Only phase PASS; RESOURCE_MANIFEST separately records removal flags.",
+      "pass_logically_proves_claimed_guarantee": false,
+      "classification": "OVERCLAIMED"
+    },
+    {
+      "phase_name": "POST_TEARDOWN_VERIFY",
+      "claimed_guarantee": "Resource absence is independently verified after teardown.",
+      "actual_executor": "Shared late-phase verify_live_phase_evidence branch",
+      "actual_assertion": "Checks only that authorization_id exists and runs before external teardown.",
+      "db_or_native_operation_performed": "None; no post-removal lookup.",
+      "evidence_produced": "Only phase PASS.",
+      "pass_logically_proves_claimed_guarantee": false,
+      "classification": "OVERCLAIMED"
+    }
+  ],
+  "required_design_correction": {
+    "default_pass": "Reject registration or execution when a phase lacks an operation and explicit assertions; PhaseExecutionResult.FAIL must propagate and PASS must require non-empty evidence references.",
+    "exact_comparison": "Serialize every live capture/readback, resolve all 1664 fields from those retained values, reject captured:* and fixture identities, then compare independently canonicalized live and expected graphs.",
+    "security_evidence": "Execute named positive and negative role/RLS/tenant/authorization probes and retain query, principal, expected outcome and observed outcome.",
+    "event_outbox_assertions": "Query DomainEvent, TransactionalOutbox and ImmutableAuditLog by retained IDs/trace_id and compare payload hashes, aggregate identities and transaction linkage.",
+    "teardown": "Run teardown outside the business phase loop, then perform a separate post-teardown inspection of containers, networks, volumes, ports and database reachability.",
+    "phase_evidence": "Each phase result must retain executor identity, inputs hash, operation/readback IDs, assertion list, artifact paths and hashes."
+  }
+}

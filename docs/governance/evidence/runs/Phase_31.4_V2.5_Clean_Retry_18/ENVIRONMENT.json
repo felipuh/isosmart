@@ -1,0 +1,46 @@
+{
+  "adminapps": {
+    "database": "phase31_4_retry18_adminapps",
+    "host": "127.0.0.1",
+    "port": 41491
+  },
+  "artifact_schema": "phase31.4-v2.5-clean-retry18-runtime-environment/v1",
+  "isosmart": {
+    "database": "phase31_4_retry18_isosmart",
+    "host": "127.0.0.1",
+    "port": 37319,
+    "role_names": {
+      "agent_catalog_curator": "phase31_4_retry18_agent_catalog_curator",
+      "app": "phase31_4_retry18_app",
+      "audit_writer": "phase31_4_retry18_audit_writer",
+      "database": "phase31_4_retry18_isosmart",
+      "execution_authorizer": "phase31_4_retry18_execution_authorizer",
+      "executor": "phase31_4_retry18_executor",
+      "human_approver": "phase31_4_retry18_human_approver",
+      "knowledge_rule_application_owner": "phase31_4_retry18_knowledge_rule_application_owner",
+      "learning_application_executor": "phase31_4_retry18_learning_application_executor",
+      "learning_approver": "phase31_4_retry18_learning_approver",
+      "learning_authorizer": "phase31_4_retry18_learning_authorizer",
+      "learning_governance": "phase31_4_retry18_learning_governance",
+      "learning_reviewer": "phase31_4_retry18_learning_reviewer",
+      "migrator": "phase31_4_retry18_migrator",
+      "normative_curator": "phase31_4_retry18_normative_curator",
+      "projector": "phase31_4_retry18_projector",
+      "qms_action_owner": "phase31_4_retry18_qms_action_owner",
+      "release_controller": "phase31_4_retry18_release_controller",
+      "release_repair": "phase31_4_retry18_release_repair",
+      "rule_activator": "phase31_4_retry18_rule_activator",
+      "rule_adopter": "phase31_4_retry18_rule_adopter",
+      "rule_governance_owner": "phase31_4_retry18_rule_governance_owner",
+      "rule_publisher": "phase31_4_retry18_rule_publisher",
+      "rule_resolver": "phase31_4_retry18_rule_resolver",
+      "worker": "phase31_4_retry18_worker"
+    },
+    "session_options": "-c foundation.migrator_role=phase31_4_retry18_migrator -c foundation.app_role=phase31_4_retry18_app -c foundation.worker_role=phase31_4_retry18_worker -c foundation.projector_role=phase31_4_retry18_projector -c foundation.audit_writer_role=phase31_4_retry18_audit_writer -c foundation.normative_curator_role=phase31_4_retry18_normative_curator -c foundation.agent_catalog_curator_role=phase31_4_retry18_agent_catalog_curator -c foundation.human_approver_role=phase31_4_retry18_human_approver -c foundation.execution_authorizer_role=phase31_4_retry18_execution_authorizer -c foundation.executor_role=phase31_4_retry18_executor -c foundation.learning_governance_role=phase31_4_retry18_learning_governance -c foundation.learning_reviewer_role=phase31_4_retry18_learning_reviewer -c foundation.learning_approver_role=phase31_4_retry18_learning_approver -c foundation.learning_authorizer_role=phase31_4_retry18_learning_authorizer -c foundation.learning_application_executor_role=phase31_4_retry18_learning_application_executor -c foundation.rule_publisher_role=phase31_4_retry18_rule_publisher -c foundation.rule_activator_role=phase31_4_retry18_rule_activator -c foundation.rule_adopter_role=phase31_4_retry18_rule_adopter -c foundation.rule_resolver_role=phase31_4_retry18_rule_resolver -c foundation.release_repair_role=phase31_4_retry18_release_repair -c foundation.release_controller_role=phase31_4_retry18_release_controller -c foundation.qms_action_owner_role=phase31_4_retry18_qms_action_owner -c foundation.knowledge_rule_application_owner_role=phase31_4_retry18_knowledge_rule_application_owner -c foundation.rule_governance_owner_role=phase31_4_retry18_rule_governance_owner"
+  },
+  "postgresql_version": "18.6",
+  "recorded_at": "2026-09-23T21:15:53.853241+00:00",
+  "run_id": "Phase 31.4 V2.5 Clean Retry 18",
+  "secrets_retained_in_evidence": false,
+  "status": "PASS"
+}

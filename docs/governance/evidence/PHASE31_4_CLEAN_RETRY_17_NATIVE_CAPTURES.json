@@ -1,0 +1,14 @@
+{
+  "artifact_schema": "phase31.4-v2.5-disposable-evidence-native-captures/v1",
+  "captures": [],
+  "expected": 565,
+  "fixture_identity_substitutions": 0,
+  "historical_literal_fallbacks": 0,
+  "placeholders": 0,
+  "reason": "mandatory PRECREATION_INTEGRITY phase has no registered operation/assertions/evidence contract",
+  "resolved": 0,
+  "run_id": "Phase 31.4 V2.5 Clean Retry 17",
+  "stage_ext_bridge_records_excluded": 5,
+  "status": "FAIL",
+  "unresolved": 565
+}

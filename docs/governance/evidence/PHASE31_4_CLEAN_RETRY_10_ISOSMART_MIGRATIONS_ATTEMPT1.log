@@ -1,0 +1,104 @@
+Operations to perform:
+  Apply all migrations: admin, asb, auth, authentication, contenttypes, core, foundation, improvement, integration, leadership, operations, performance, planning, resources, sessions, sie, spm
+Running migrations:
+  Applying contenttypes.0001_initial... OK
+  Applying contenttypes.0002_remove_content_type_name... OK
+  Applying auth.0001_initial... OK
+  Applying auth.0002_alter_permission_name_max_length... OK
+  Applying auth.0003_alter_user_email_max_length... OK
+  Applying auth.0004_alter_user_username_opts... OK
+  Applying auth.0005_alter_user_last_login_null... OK
+  Applying auth.0006_require_contenttypes_0002... OK
+  Applying auth.0007_alter_validators_add_error_messages... OK
+  Applying auth.0008_alter_user_username_max_length... OK
+  Applying auth.0009_alter_user_last_name_max_length... OK
+  Applying auth.0010_alter_group_name_max_length... OK
+  Applying auth.0011_update_proxy_permissions... OK
+  Applying auth.0012_alter_user_first_name_max_length... OK
+  Applying authentication.0001_initial... OK
+  Applying admin.0001_initial... OK
+  Applying admin.0002_logentry_remove_auto_add... OK
+  Applying admin.0003_logentry_add_action_flag_choices... OK
+  Applying core.0001_initial... OK
+  Applying asb.0001_initial... OK
+  Applying asb.0002_scopedefinition_organization_id... OK
+  Applying asb.0003_scopedefinition_climate_readiness_score_and_more... OK
+  Applying core.0002_alter_document_file_path... OK
+  Applying core.0003_organization_userprofile_organizationsettings_and_more... OK
+  Applying authentication.0002_userprofile... OK
+  Applying authentication.0003_alter_user_first_name_alter_user_is_active_and_more... OK
+  Applying authentication.0004_refresh_token_hash... OK
+  Applying authentication.0005_password_reset_token... OK
+  Applying authentication.0006_user_login_lockout... OK
+  Applying authentication.0007_user_must_change_password... OK
+  Applying authentication.0008_user_password_history... OK
+  Applying authentication.0009_user_temporary_password_set_at... OK
+  Applying authentication.0010_alter_refreshtokenblacklist_token_hash... OK
+  Applying core.0004_delete_userprofile... OK
+  Applying core.0005_organization_external_id... OK
+  Applying core.0006_onboarding_and_multi_standard... OK
+  Applying core.0007_add_preferred_language_to_settings... OK
+  Applying core.0008_organizationsettings_preferred_language... OK
+  Applying core.0009_organizationsettings_onboarding_profile_and_tone... OK
+  Applying core.0010_onboardinginsightsnapshot... OK
+  Applying core.0011_billing_models... OK
+  Applying core.0012_billingpayment_evidence_fields... OK
+  Applying core.0013_contextanalysis_organization_document_organization_and_more... OK
+  Applying core.0014_backfill_and_enforce_organization_not_null... OK
+  Applying core.0015_notificationdelivery... OK
+  Applying core.0016_contextanalysis_climate_fields... OK
+  Applying core.0017_rename_notificatio_organiz_6e1f3f_idx_notificatio_organiz_a85fc0_idx_and_more... OK
+  Applying core.0018_externalcontextsignal_environmentalriskalert_and_more... OK
+  Applying core.0019_featureflag... OK
+  Applying foundation.0001_foundation_tenant_projection... OK
+  Applying foundation.0002_projection_organization_user_foundation... OK
+  Applying foundation.0003_eventing_immutable_audit_foundation... OK
+  Applying foundation.0004_qms_harmonized_context_foundation... OK
+  Applying foundation.0005_risk_opportunity_objective_foundation... OK
+  Applying foundation.0006_change_performance_measurement_foundation... OK
+  Applying foundation.0007_document_evidence_foundation... OK
+  Applying foundation.0008_evidence_coverage_normative_core_foundation... OK
+  Applying foundation.0009_knowledge_layer_foundation... OK
+  Applying foundation.0010_governed_recommendation_foundation... OK
+  Applying foundation.0011_agent_definition_run_provenance_foundation... OK
+  Applying foundation.0012_agent_decision_human_decision_gate_foundation... OK
+  Applying foundation.0013_action_execution_preparation_authorization_foundation... OK
+  Applying foundation.0014_action_execution_synthetic_foundation... OK
+  Applying foundation.0015_first_controlled_qms_mutation_poc... OK
+  Applying foundation.0016_controlled_execution_recovery_hardening...Traceback (most recent call last):
+  File "/home/felipe/proyectos/isosmart/backend/manage.py", line 22, in <module>
+    main()
+  File "/home/felipe/proyectos/isosmart/backend/manage.py", line 18, in main
+    execute_from_command_line(sys.argv)
+  File "/home/felipe/proyectos/isosmart/backend/.venv/lib/python3.12/site-packages/django/core/management/__init__.py", line 442, in execute_from_command_line
+    utility.execute()
+  File "/home/felipe/proyectos/isosmart/backend/.venv/lib/python3.12/site-packages/django/core/management/__init__.py", line 436, in execute
+    self.fetch_command(subcommand).run_from_argv(self.argv)
+  File "/home/felipe/proyectos/isosmart/backend/.venv/lib/python3.12/site-packages/django/core/management/base.py", line 412, in run_from_argv
+    self.execute(*args, **cmd_options)
+  File "/home/felipe/proyectos/isosmart/backend/.venv/lib/python3.12/site-packages/django/core/management/base.py", line 458, in execute
+    output = self.handle(*args, **options)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/felipe/proyectos/isosmart/backend/.venv/lib/python3.12/site-packages/django/core/management/base.py", line 106, in wrapper
+    res = handle_func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/felipe/proyectos/isosmart/backend/.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py", line 356, in handle
+    post_migrate_state = executor.migrate(
+                         ^^^^^^^^^^^^^^^^^
+  File "/home/felipe/proyectos/isosmart/backend/.venv/lib/python3.12/site-packages/django/db/migrations/executor.py", line 135, in migrate
+    state = self._migrate_all_forwards(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/felipe/proyectos/isosmart/backend/.venv/lib/python3.12/site-packages/django/db/migrations/executor.py", line 167, in _migrate_all_forwards
+    state = self.apply_migration(
+            ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/felipe/proyectos/isosmart/backend/.venv/lib/python3.12/site-packages/django/db/migrations/executor.py", line 252, in apply_migration
+    state = migration.apply(state, schema_editor)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/felipe/proyectos/isosmart/backend/.venv/lib/python3.12/site-packages/django/db/migrations/migration.py", line 132, in apply
+    operation.database_forwards(
+  File "/home/felipe/proyectos/isosmart/backend/.venv/lib/python3.12/site-packages/django/db/migrations/operations/special.py", line 193, in database_forwards
+    self.code(from_state.apps, schema_editor)
+  File "/home/felipe/proyectos/isosmart/backend/foundation/migrations/0016_controlled_execution_recovery_hardening.py", line 274, in apply_phase17
+    owner_role = schema_editor.connection.settings_dict["OPTIONS"]["options"].split(
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+KeyError: 'options'

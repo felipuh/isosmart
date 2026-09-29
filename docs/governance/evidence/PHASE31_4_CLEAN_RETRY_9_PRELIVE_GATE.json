@@ -1,0 +1,19 @@
+{
+  "artifact_schema": "phase31.4-retry9-pre-live-gate/v1",
+  "capture_producer_coverage": "509/509 PASS",
+  "checked_at": "2026-09-18T14:10:43.341498+00:00",
+  "current_p0": 0,
+  "current_p1": 0,
+  "execution_mode": "LIVE_NATIVE_EXECUTION",
+  "gate": "PASS",
+  "historical_retry_8_resource_hygiene": "SATISFIED_BY_PRESENT_ABSENCE_CLOSURE",
+  "native_operation_coverage": "16/16 PASS",
+  "native_phase_composition": "33/33 PASS",
+  "retry_tag": "CLEAN_RETRY_9",
+  "runtime_composition": "PASS",
+  "scope": "pre-live structural and accepted upstream gates; live outcomes not inferred",
+  "stage_a": "PASS",
+  "stage_ext": "PASS",
+  "v24_sha256": "a102d278bf2e5ca6e9b8bf282f5402a54f52d4690beed2ecbed5145c56539387",
+  "v24_sha_pass": true
+}

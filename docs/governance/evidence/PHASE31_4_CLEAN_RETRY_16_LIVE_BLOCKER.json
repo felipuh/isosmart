@@ -1,0 +1,31 @@
+{
+  "artifact_schema": "phase31.4-retry16-live-blocker/v1",
+  "retry_id": "Phase 31.4 V2.5 Clean Retry 16",
+  "id": "P1-RETRY16-V25-COMPOSITION-AGENT-DEFINITION-BINDINGS-MISSING",
+  "severity": "P1",
+  "status": "CLOSED_LIVE_RETRY16",
+  "result": "NOT_PROMOTED_PENDING_EXACT_COMPARISON_EVIDENCE",
+  "bridge_status": "CLOSED_LIVE_RETRY16",
+  "bridge_evidence": {
+    "live_capture_bridge": "PASS",
+    "upstream_expected": 5,
+    "upstream_imported": 5,
+    "upstream_missing": 0,
+    "provenance": "LIVE_UPSTREAM_NATIVE_CAPTURE",
+    "initial_opportunity_process_resolved": true,
+    "historical_process_fallback": false,
+    "teardown": "PASS"
+  },
+  "failure": null,
+  "live_execution": {
+    "phases": "33/33 PASS",
+    "agent_chain": "PASS",
+    "controlled_opportunity_successor": "PASS",
+    "event_outbox_audit": "PASS",
+    "teardown": "PASS"
+  },
+  "remaining_promotion_gap": "Explicit live exact comparison artifact with mismatches=0 is not yet serialized by the runtime harness.",
+  "retry15_blocker_disposition": "CLOSED_LIVE_RETRY16",
+  "promotion": "NOT_GRANTED",
+  "v24_historical_records_modified": false
+}

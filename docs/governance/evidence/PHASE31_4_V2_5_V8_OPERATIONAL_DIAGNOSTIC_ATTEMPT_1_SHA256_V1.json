@@ -1,0 +1,30 @@
+{
+  "schema": "phase31.4-v2.5-v8-attempt-sha256/v1",
+  "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 1",
+  "generated_at": "2026-09-29T01:10:17.870097+00:00",
+  "files": {
+    "docs/governance/evidence/PHASE31_4_V2_5_V8_OPERATIONAL_DIAGNOSTIC_ATTEMPT_1_AUTHORIZATION_V1.json": "488d98c0d74c3ea508841285c0a744b4723d859ce0b55b7bab6d2aed57b5f225",
+    "docs/governance/evidence/PHASE31_4_V2_5_V8_OPERATIONAL_DIAGNOSTIC_ATTEMPT_1_CONTROL_V1/attempt_driver.py": "8a0afd99ebcc370f6f954ac204fb01f5308fbd44b5d3a6d41a89569b850a3781",
+    "docs/governance/evidence/PHASE31_4_V2_5_V8_OPERATIONAL_DIAGNOSTIC_ATTEMPT_1_CONTROL_V1/blocker_source_evidence.json": "cf6ba743409101c21c42b489454bc14c07d2f24c835b686b0f7c97a19a1a3c15",
+    "docs/governance/evidence/PHASE31_4_V2_5_V8_OPERATIONAL_DIAGNOSTIC_ATTEMPT_1_CONTROL_V1/execution_outcome.json": "1dd0042ff5ea0c2b69903b5d2d8573493b89d96d8669dc7ab7d6d73b0d1888bc",
+    "docs/governance/evidence/PHASE31_4_V2_5_V8_OPERATIONAL_DIAGNOSTIC_ATTEMPT_1_CONTROL_V1/final_integrity.json": "49efafa9993032ef82be42e33aa267a697c4c30a06c2864826c833e0ea4a2287",
+    "docs/governance/evidence/PHASE31_4_V2_5_V8_OPERATIONAL_DIAGNOSTIC_ATTEMPT_1_CONTROL_V1/git_status_after.bin": "de4c8cc582b9f6d0a74c3630ec1f7cdd5101b92f470acebf68bb58f3b4802fce",
+    "docs/governance/evidence/PHASE31_4_V2_5_V8_OPERATIONAL_DIAGNOSTIC_ATTEMPT_1_CONTROL_V1/git_status_before.bin": "50ec7e9607998e0e977e1385e882008d2cb68287606c648895bbc82ca128c3d6",
+    "docs/governance/evidence/PHASE31_4_V2_5_V8_OPERATIONAL_DIAGNOSTIC_ATTEMPT_1_CONTROL_V1/historical_hashes_before.json": "541835f71c60940f32b7056defd40e83cf30974ce96f4903988a97efdbb2b813",
+    "docs/governance/evidence/PHASE31_4_V2_5_V8_OPERATIONAL_DIAGNOSTIC_ATTEMPT_1_CONTROL_V1/independent_database_observation.json": "bb600e5c677716209fb8da301a55b84dcd66c6a46c6dfa7c5acfa98dd48e35fd",
+    "docs/governance/evidence/PHASE31_4_V2_5_V8_OPERATIONAL_DIAGNOSTIC_ATTEMPT_1_CONTROL_V1/independent_teardown.json": "fd4350d2e8dc164b63af31be58c51778c273e3d21bb033be0ac4f543a3403a71",
+    "docs/governance/evidence/PHASE31_4_V2_5_V8_OPERATIONAL_DIAGNOSTIC_ATTEMPT_1_CONTROL_V1/preflight.json": "ca21a907bb2a08c85c11382935e4242b0a72a7c49805ae7933880706a2010d9e",
+    "docs/governance/evidence/PHASE31_4_V2_5_V8_OPERATIONAL_DIAGNOSTIC_ATTEMPT_1_CONTROL_V1/protected_hashes_before.json": "e5ed81789e3d3de417e84df6825752b52f12f225bf5a6ff82c85a442ddefc5e7",
+    "docs/governance/evidence/PHASE31_4_V2_5_V8_OPERATIONAL_DIAGNOSTIC_ATTEMPT_1_CONTROL_V1/technical_launch_once.json": "d4614927ca69e3312bd36d57d4511fd0959e444e114bf57c8136a86341f8fbbf",
+    "docs/governance/evidence/PHASE31_4_V2_5_V8_OPERATIONAL_DIAGNOSTIC_ATTEMPT_1_EVIDENCE_V1.json": "fffcf07de770118f5cbbea0d28daf8b5469f317e852cd062971b4791f0ebe6b3",
+    "docs/governance/evidence/PHASE31_4_V2_5_V8_OPERATIONAL_DIAGNOSTIC_ATTEMPT_1_REPORT_V1.md": "5bc0f3598025da52d69bac0ea227b8993f91cf6e9eeb2f82371437ce94553bf5",
+    "docs/governance/evidence/diagnostic_authorization_consumptions/488d98c0d74c3ea508841285c0a744b4723d859ce0b55b7bab6d2aed57b5f225.json": "b36e4fc3645e5bc71e74df7424a3eb659ba98795b1782d4aed88fed66a7b962b",
+    "docs/governance/evidence/runs/Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1/AUTHORIZATION_CONSUMPTION.json": "b36e4fc3645e5bc71e74df7424a3eb659ba98795b1782d4aed88fed66a7b962b",
+    "docs/governance/evidence/runs/Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1/PRECREATION_INTEGRITY/precreation_integrity.json": "803259b4895fa7510d44780fe931c741dc49540c59dd6ba6d7c08abfd588dd02",
+    "docs/governance/evidence/runs/Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1/RESOURCE_MANIFEST.json": "681265c5fa844245a249b74287b703a03b58c8730a54775ca21abaac1b49c38a",
+    "docs/governance/evidence/runs/Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1/adminapps_service.log": "17717209c0d689c72f6abff337beb65f13e99fce054d86b8d137aafadb081883",
+    "docs/governance/evidence/runs/Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1/bootstrap_adminapps.log": "a3c18e91f1f4fb31b453cc8b62a51a340b5a2ca16a6aedcb61cf12672306299f",
+    "docs/governance/evidence/runs/Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1/bootstrap_isosmart.log": "e8800c65f1d6c47758f4a72f024d2bafc2a718fc08398cb9d6121b1d3188b415"
+  },
+  "self_hash_policy": "Excluded to avoid recursive self-reference; index hash reported separately"
+}

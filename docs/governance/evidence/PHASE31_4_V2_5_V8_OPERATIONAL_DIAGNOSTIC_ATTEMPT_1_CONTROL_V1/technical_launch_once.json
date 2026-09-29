@@ -1,0 +1,11 @@
+{
+  "at": "2026-09-29T01:04:11.802209+00:00",
+  "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 1",
+  "attempt": 1,
+  "argv": [
+    "docs/governance/evidence/PHASE31_4_V2_5_V8_OPERATIONAL_DIAGNOSTIC_ATTEMPT_1_CONTROL_V1/attempt_driver.py",
+    "launch"
+  ],
+  "authorization_sha256": "488d98c0d74c3ea508841285c0a744b4723d859ce0b55b7bab6d2aed57b5f225",
+  "boundary": "LAUNCHER_STARTED"
+}

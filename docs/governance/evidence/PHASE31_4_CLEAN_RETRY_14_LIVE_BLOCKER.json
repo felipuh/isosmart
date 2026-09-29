@@ -1,0 +1,41 @@
+{
+  "artifact_schema": "phase31.4-retry14-live-blocker/v1",
+  "id": "P1-RETRY14-V25-EXECUTABLE-PRODUCER-GRAPH-INCOMPLETE",
+  "severity": "P1",
+  "status": "OPEN_LIVE_RETRY14_PREEXECUTION",
+  "retry_id": "Phase 31.4 V2.5 Clean Retry 14",
+  "phase": "PRE_EXECUTION_PRODUCER_ASSERTION",
+  "native_producer": "V2.5 production runtime phase registry",
+  "consumer": "ACTION_PLAN_PREPARATION",
+  "expected": "AgentDefinition -> AgentRun -> Recommendation -> AgentDecision -> ActionPlan -> Authorization is reachable in dependency order with bound inputs and persist/re-read captures.",
+  "actual": "AgentRun is scheduled after ActionPlan/Authorization; Recommendation and AgentDecision are not scheduled; AgentDefinition is scheduled with no bound inputs.",
+  "live_upstream_ids": {
+    "adminapps_tenant_id": "22b31708-73de-4079-bd8c-0d366d02e94c",
+    "tenant_projection_id": "5b83cc50-6269-459d-8934-93a7b82c8c6d",
+    "adminapps_user_id": "b4c23f6e-2ff3-4c09-8a38-8caca5dddf25",
+    "user_projection_id": "b74eb3ec-806a-4028-8e64-092527f1e4d0",
+    "qms_organization_id": "32957eb7-fd1f-4927-b7fd-6738a58fbe3e",
+    "process_id": "a6ef9cd8-1d8a-4b9b-bee4-27e749845329"
+  },
+  "agent_definition_id": null,
+  "agent_run_id": null,
+  "recommendation_id": null,
+  "agent_decision_id": null,
+  "action_plan_id": null,
+  "authorization_id": null,
+  "error": "EXECUTABLE_PRODUCER_GRAPH assertion failed before Phase 1",
+  "source_anchors": [
+    "backend/foundation/phase31_4_v2_5_runtime.py:480",
+    "backend/foundation/phase31_4_v2_5_runtime.py:618",
+    "backend/foundation/phase31_4_v2_5_runtime.py:619",
+    "backend/foundation/phase31_4_v2_5_runtime.py:640",
+    "backend/foundation/phase31_4_v2_5_runtime.py:641",
+    "backend/foundation/phase31_4_v2_5_runtime.py:1017",
+    "backend/foundation/phase31_4_v2_5_runtime.py:1018"
+  ],
+  "evidence": [
+    "PHASE31_4_CLEAN_RETRY_14_STAGE_EXT.json",
+    "PHASE31_4_CLEAN_RETRY_14_EXECUTABLE_PRODUCER_GRAPH.json"
+  ],
+  "disposition": "Do not execute Phase 1 and do not remediate during this live retry. Complete teardown and return NOT_PROMOTED."
+}

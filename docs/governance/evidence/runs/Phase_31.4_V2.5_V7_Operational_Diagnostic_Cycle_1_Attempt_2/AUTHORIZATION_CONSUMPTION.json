@@ -1,0 +1,11 @@
+{
+  "authorization_path": "docs/governance/evidence/runs/Phase_31.4_V2.5_V7_Operational_Diagnostic_Cycle_1_Attempt_2/authorization_diagnostic_only_v1.json",
+  "authorization_sha256": "dec1e515a3bc4f0317e73bcc2fa1041fd7172f330a697ec1743587aa43e77ad1",
+  "consumed_at": "2026-09-24T17:49:27.376496+00:00",
+  "evidence_root": "docs/governance/evidence/runs/Phase_31.4_V2.5_V7_Operational_Diagnostic_Cycle_1_Attempt_2",
+  "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+  "one_shot": true,
+  "run_id": "Phase 31.4 V2.5 V7 Operational Diagnostic Cycle 1 Attempt 2",
+  "run_slug": "Phase_31.4_V2.5_V7_Operational_Diagnostic_Cycle_1_Attempt_2",
+  "schema": "phase31.4-v2.5-one-shot-authorization-consumption/v1"
+}

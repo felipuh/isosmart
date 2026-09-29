@@ -1,0 +1,32 @@
+{
+  "artifact_schema": "phase31.4-retry14-evidence-package/v1",
+  "retry_id": "Phase 31.4 V2.5 Clean Retry 14",
+  "result": "PASS_COMPLETE_FAILURE_EVIDENCE",
+  "promotion": "NOT_PROMOTED",
+  "artifacts": {
+    "authorization": "PHASE31_4_CLEAN_RETRY_14_AUTHORIZATION.json",
+    "allocation": "PHASE31_4_CLEAN_RETRY_14_ALLOCATION.json",
+    "resource_manifest": "PHASE31_4_CLEAN_RETRY_14_RESOURCE_MANIFEST.json",
+    "environment_and_pre_live_gates": "PHASE31_4_CLEAN_RETRY_14_AUTHORIZATION.json",
+    "bootstrap_and_migrations": "PHASE31_4_CLEAN_RETRY_14_BOOTSTRAP_MIGRATIONS.json",
+    "adminapps_migration_log": "PHASE31_4_CLEAN_RETRY_14_ADMINAPPS_MIGRATIONS.log",
+    "isosmart_migration_log": "PHASE31_4_CLEAN_RETRY_14_ISOSMART_MIGRATIONS.log",
+    "stage_ext_and_upstream_captures": "PHASE31_4_CLEAN_RETRY_14_STAGE_EXT.json",
+    "user_projection": "PHASE31_4_CLEAN_RETRY_14_STAGE_EXT.json",
+    "producer_graph": "PHASE31_4_CLEAN_RETRY_14_EXECUTABLE_PRODUCER_GRAPH.json",
+    "phase_execution_and_native_captures": "PHASE31_4_CLEAN_RETRY_14_NATIVE_RUNTIME.json",
+    "live_blocker": "PHASE31_4_CLEAN_RETRY_14_LIVE_BLOCKER.json",
+    "authority_a3": "PHASE31_4_CLEAN_RETRY_14_CLOSURE.json",
+    "action_plan": "PHASE31_4_CLEAN_RETRY_14_CLOSURE.json",
+    "former_blocker_closure": "PHASE31_4_CLEAN_RETRY_14_CLOSURE.json",
+    "revision_references_invariants_transactions_event_audit": "PHASE31_4_CLEAN_RETRY_14_CLOSURE.json",
+    "resolved_graph_and_exact_comparison": "PHASE31_4_CLEAN_RETRY_14_CLOSURE.json",
+    "v2_4_and_v2_5_integrity": "PHASE31_4_CLEAN_RETRY_14_CLOSURE.json",
+    "final_p0_p1": "PHASE31_4_CLEAN_RETRY_14_CLOSURE.json",
+    "teardown": "PHASE31_4_CLEAN_RETRY_14_RESOURCE_MANIFEST.json",
+    "closure": "PHASE31_4_CLEAN_RETRY_14_CLOSURE.json",
+    "sha256_manifest": "PHASE31_4_CLEAN_RETRY_14_SHA256.json"
+  },
+  "required_artifacts_present": true,
+  "teardown": "PASS"
+}

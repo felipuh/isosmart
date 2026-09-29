@@ -1,0 +1,63 @@
+{
+  "adminapps": {
+    "applied_count": 61,
+    "exit_code": 0,
+    "fake_migrations": 0,
+    "log": "PHASE31_4_CLEAN_RETRY_14_ADMINAPPS_MIGRATIONS.log",
+    "log_sha256": "642e4f1806409323b31941157e06e779a9736881ef7240fc9e47087992f308cf",
+    "manual_schema_patches": 0,
+    "result": "PASS"
+  },
+  "artifact_schema": "phase31.4-retry11-bootstrap-migrations/v1",
+  "db_target_guard": {
+    "database": "phase31_4_retry14_isosmart",
+    "host_port": 37523,
+    "server_port": 5432,
+    "server_version": "18.6 (Debian 18.6-1.pgdg13+2)",
+    "sqlite_write_prohibited": true,
+    "vendor": "postgresql"
+  },
+  "django_db_session_options": "-c foundation.app_role=phase31_4_retry14_app -c foundation.worker_role=phase31_4_retry14_worker -c foundation.projector_role=phase31_4_retry14_projector -c foundation.audit_writer_role=phase31_4_retry14_audit_writer -c foundation.normative_curator_role=phase31_4_retry14_normative_curator -c foundation.agent_catalog_curator_role=phase31_4_retry14_agent_catalog_curator -c foundation.human_approver_role=phase31_4_retry14_human_approver -c foundation.execution_authorizer_role=phase31_4_retry14_execution_authorizer -c foundation.executor_role=phase31_4_retry14_executor -c foundation.learning_governance_role=phase31_4_retry14_learning_governance -c foundation.learning_reviewer_role=phase31_4_retry14_learning_reviewer -c foundation.learning_approver_role=phase31_4_retry14_learning_approver -c foundation.learning_authorizer_role=phase31_4_retry14_learning_authorizer -c foundation.learning_application_executor_role=phase31_4_retry14_learning_application_executor -c foundation.rule_publisher_role=phase31_4_retry14_rule_publisher -c foundation.rule_activator_role=phase31_4_retry14_rule_activator -c foundation.rule_adopter_role=phase31_4_retry14_rule_adopter -c foundation.rule_resolver_role=phase31_4_retry14_rule_resolver -c foundation.release_repair_role=phase31_4_retry14_release_repair -c foundation.release_controller_role=phase31_4_retry14_release_controller -c foundation.qms_action_owner_role=phase31_4_retry14_qms_action_owner -c foundation.knowledge_rule_application_owner_role=phase31_4_retry14_knowledge_rule_application_owner -c foundation.rule_governance_owner_role=phase31_4_retry14_rule_governance_owner -c foundation.database_role=phase31_4_retry14_isosmart",
+  "fake_migrations": 0,
+  "function_owner_roles": [
+    "phase31_4_retry14_qms_action_owner",
+    "phase31_4_retry14_knowledge_rule_application_owner",
+    "phase31_4_retry14_rule_governance_owner"
+  ],
+  "isosmart": {
+    "applied_count": 92,
+    "exit_code": 0,
+    "fake_migrations": 0,
+    "log": "PHASE31_4_CLEAN_RETRY_14_ISOSMART_MIGRATIONS.log",
+    "log_sha256": "f5f496625edfcd0c735398178748dab7d79e6ccd321ea7907a5e34d54250afb0",
+    "manual_schema_patches": 0,
+    "result": "PASS"
+  },
+  "manual_schema_patches": 0,
+  "pending_migrations": 0,
+  "required_login_roles": [
+    "phase31_4_retry14_migrator",
+    "phase31_4_retry14_app",
+    "phase31_4_retry14_worker",
+    "phase31_4_retry14_projector",
+    "phase31_4_retry14_audit_writer",
+    "phase31_4_retry14_normative_curator",
+    "phase31_4_retry14_agent_catalog_curator",
+    "phase31_4_retry14_human_approver",
+    "phase31_4_retry14_execution_authorizer",
+    "phase31_4_retry14_executor",
+    "phase31_4_retry14_learning_governance",
+    "phase31_4_retry14_learning_reviewer",
+    "phase31_4_retry14_learning_approver",
+    "phase31_4_retry14_learning_authorizer",
+    "phase31_4_retry14_learning_application_executor",
+    "phase31_4_retry14_rule_publisher",
+    "phase31_4_retry14_rule_activator",
+    "phase31_4_retry14_rule_adopter",
+    "phase31_4_retry14_rule_resolver",
+    "phase31_4_retry14_release_repair",
+    "phase31_4_retry14_release_controller"
+  ],
+  "retry_id": "Phase 31.4 V2.5 Clean Retry 14",
+  "role_bootstrap": "PASS"
+}

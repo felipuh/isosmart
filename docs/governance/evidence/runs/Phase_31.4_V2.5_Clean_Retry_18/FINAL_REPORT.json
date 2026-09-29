@@ -1,0 +1,278 @@
+{
+  "artifact_schema": "phase31.4-v2.5-clean-retry18-final-report/v1",
+  "authority": {
+    "execution_authorization": "NOT_RUN",
+    "human_approval": "NOT_RUN",
+    "label": "SYNTHETIC_TEST_AUTHORITY",
+    "status": "PARTIAL"
+  },
+  "environment": {
+    "adminapps": {
+      "container_id": "fda4fcbd5554483fc1319ecb264f085beb9628b44df8739c4fdf7388c4133680",
+      "database": "phase31_4_retry18_adminapps",
+      "network": "phase31_4_retry18_adminapps_net",
+      "port": 41491,
+      "volume": "phase31_4_retry18_adminapps_data"
+    },
+    "image_digest": "sha256:7341002d2b8c7c5bdd7542a671a95b36196c0b5b888daf454ae4fc33ba5346d7",
+    "isosmart": {
+      "container_id": "2bc9989e1200b7c2b82461c7b1ab62384e2cb4f5ab59a1d1814fa89ee737337e",
+      "database": "phase31_4_retry18_isosmart",
+      "network": "phase31_4_retry18_isosmart_net",
+      "port": 37319,
+      "volume": "phase31_4_retry18_isosmart_data"
+    },
+    "postgresql": "18.6",
+    "reused_retry17_resources": false,
+    "shared_resources": false,
+    "status": "PASS"
+  },
+  "event_outbox_audit": {
+    "reason": "corresponding phase not reached",
+    "status": "NOT_RUN"
+  },
+  "exact_comparison": {
+    "offline_fixture_reused": false,
+    "retry16_hash_reused": false,
+    "status": "NOT_RUN"
+  },
+  "exact_remediation_recommendation": "Bind ADMIN_APPS_BASE_URL to the allocated Retry 18 AdminApps HTTP endpoint before Django settings initialization in any future separately authorized retry; then verify the live entitlement readback before creating QMS Organization. No further retry is authorized by this artifact.",
+  "first_blocker": {
+    "assigned_to": "ISO Smart disposable runtime configuration owner",
+    "category": "configuration",
+    "cause": "AdminApps product entitlement validation used http://127.0.0.1:8000 instead of the allocated isolated AdminApps HTTP endpoint; connection failed and fail-closed authorization returned AdminApps product entitlement denied.",
+    "missing_or_incorrect_evidence": [
+      "QMS Organization ID was not created",
+      "Process ID was not created",
+      "Stage EXT resolved 4/6 identities"
+    ],
+    "operation": "QmsOrganizationCommandService.create_organization",
+    "phase": "STAGE_EXT",
+    "severity": "P1",
+    "violated_contract": "All six Stage EXT identities must be created with returned/readback equality and valid provenance before later phases."
+  },
+  "generated_at": "2026-09-23T21:26:41.207438+00:00",
+  "historical_artifacts_modified": [],
+  "live_graph": {
+    "fields": 0,
+    "hash": null,
+    "members": 0,
+    "status": "NOT_RUN",
+    "unresolved": 1664
+  },
+  "migrations": {
+    "adminapps": {
+      "applied_count": 61,
+      "command": [
+        "/home/felipe/proyectos/adminapps/backend/.venv/bin/python",
+        "manage.py",
+        "migrate",
+        "--noinput"
+      ],
+      "exit_code": 0,
+      "fake_migrations": 0,
+      "log": "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_18/ADMINAPPS_MIGRATIONS.log",
+      "log_sha256": "642e4f1806409323b31941157e06e779a9736881ef7240fc9e47087992f308cf",
+      "manual_schema_patches": 0,
+      "status": "PASS"
+    },
+    "db_session_config": "PASS",
+    "fake": 0,
+    "isosmart": {
+      "applied_count": 92,
+      "command": [
+        "/home/felipe/proyectos/isosmart/backend/.venv/bin/python",
+        "manage.py",
+        "migrate",
+        "--noinput"
+      ],
+      "exit_code": 0,
+      "fake_migrations": 0,
+      "log": "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_18/ISOSMART_MIGRATIONS.log",
+      "log_sha256": "f5f496625edfcd0c735398178748dab7d79e6ccd321ea7907a5e34d54250afb0",
+      "manual_schema_patches": 0,
+      "status": "PASS"
+    },
+    "manual_patches": 0,
+    "pending": 0,
+    "runtime_roles": {
+      "login_roles": 21,
+      "memberships": 3,
+      "owner_roles": 3,
+      "status": "PASS"
+    },
+    "status": "PASS"
+  },
+  "native_captures": {
+    "expected": 565,
+    "resolved": 0,
+    "status": "NOT_RUN",
+    "unresolved": 565
+  },
+  "p0_p1": {
+    "p0": 0,
+    "p1": 1
+  },
+  "phase31_5": "EXECUTION_HELD",
+  "phases": {
+    "executed": 1,
+    "fail": 0,
+    "not_run": 32,
+    "note": "STAGE_EXT is a prerequisite outside the 33-phase runtime topology and failed after PRECREATION_INTEGRITY; all later runtime phases remained NOT_RUN.",
+    "pass": 1,
+    "required": 33
+  },
+  "pilot_staging_production_actions": false,
+  "post_teardown_verification": {
+    "checks": 10,
+    "containers_absent": true,
+    "databases_unreachable": true,
+    "networks_absent": true,
+    "ports_closed": true,
+    "status": "PASS",
+    "volumes_absent": true
+  },
+  "pre_flight": {
+    "authorization_sha256": "2ac3d53e7909a2669ea1e3740dd3f43a8f1be49b76a5f3ff7e995e75bd842b9e",
+    "evidence_root_collision": false,
+    "p0": 0,
+    "p1": 0,
+    "protected_sources": "22/22 PASS",
+    "source_drift": [],
+    "status": "PASS",
+    "v3_integrity": "PASS",
+    "v3_sha256": "c47c62a52af65cab5b13f830b048017b101425d29c8c80501f9669d2647d7def"
+  },
+  "precreation_integrity": {
+    "assertions": "9/9 PASS",
+    "evidence": "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_18/PRECREATION_INTEGRITY/precreation_integrity.json",
+    "executor": "PrecreationIntegrityExecutor",
+    "independent_readback": "PASS",
+    "operation": "verify_precreation_integrity",
+    "sha256": "ec1e873dbd23c11d343c96ae4d8cf089fc2d4e267fb725fbe67de955e05b3ac7",
+    "status": "PASS"
+  },
+  "promotion_declared": false,
+  "run_id": "Phase 31.4 V2.5 Clean Retry 18",
+  "security": {
+    "probes_executed": 0,
+    "status": "NOT_RUN"
+  },
+  "sha_manifest": {
+    "exclusion": "manifest itself only",
+    "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_18/SHA256_MANIFEST.json",
+    "status": "PASS"
+  },
+  "stage_ext": {
+    "artifact": "STAGE_EXT.json",
+    "identities_expected": 6,
+    "resolved": 4,
+    "status": "FAIL",
+    "unresolved": 2
+  },
+  "teardown": {
+    "global_prune": false,
+    "scope": "Retry 18 only",
+    "status": "PASS"
+  },
+  "transactions": {
+    "idempotency": "NOT_RUN",
+    "rollback": "NOT_RUN",
+    "status": "NOT_RUN"
+  },
+  "upstream_external_identities": {
+    "authority": "SYNTHETIC_TEST_AUTHORITY",
+    "categories": {
+      "iso_smart_native_unresolved": [
+        "qms_organization_id",
+        "process_id"
+      ],
+      "local_projection": [
+        "tenant_projection_id",
+        "user_projection_id"
+      ],
+      "upstream_external": [
+        "external_adminapps_tenant_id",
+        "external_adminapps_actor_user_id"
+      ]
+    },
+    "identities": [
+      {
+        "equality": true,
+        "name": "external_adminapps_tenant_id",
+        "provenance": "UPSTREAM_EXTERNAL_NATIVE",
+        "readback": "a2ef8793-eabd-44d1-80ee-d9922073d0c2",
+        "returned": "a2ef8793-eabd-44d1-80ee-d9922073d0c2",
+        "run_id": "Phase 31.4 V2.5 Clean Retry 18",
+        "source": "AdminApps Organization model",
+        "timestamp": "2026-09-23T21:23:25.466479+00:00",
+        "type": "uuid",
+        "value": "a2ef8793-eabd-44d1-80ee-d9922073d0c2"
+      },
+      {
+        "equality": true,
+        "name": "external_adminapps_actor_user_id",
+        "provenance": "UPSTREAM_EXTERNAL_NATIVE",
+        "readback": "cd50b9b2-09c4-4137-8cc1-184d5f9189ba",
+        "returned": "cd50b9b2-09c4-4137-8cc1-184d5f9189ba",
+        "run_id": "Phase 31.4 V2.5 Clean Retry 18",
+        "source": "AdminApps User model",
+        "timestamp": "2026-09-23T21:23:25.466479+00:00",
+        "type": "uuid",
+        "value": "cd50b9b2-09c4-4137-8cc1-184d5f9189ba"
+      },
+      {
+        "equality": true,
+        "name": "tenant_projection_id",
+        "provenance": "LOCAL_TRACEABLE_PROJECTION",
+        "readback": "ad6ba514-d91e-4620-9251-46b5f0943981",
+        "returned": "ad6ba514-d91e-4620-9251-46b5f0943981",
+        "run_id": "Phase 31.4 V2.5 Clean Retry 18",
+        "source": "TenantProjection",
+        "timestamp": "2026-09-23T21:23:25.466479+00:00",
+        "type": "uuid",
+        "value": "ad6ba514-d91e-4620-9251-46b5f0943981"
+      },
+      {
+        "equality": true,
+        "name": "user_projection_id",
+        "provenance": "LOCAL_TRACEABLE_PROJECTION",
+        "readback": "76320029-a1b6-4c35-bd96-d77c8e0e636a",
+        "returned": "76320029-a1b6-4c35-bd96-d77c8e0e636a",
+        "run_id": "Phase 31.4 V2.5 Clean Retry 18",
+        "source": "UserProjection",
+        "timestamp": "2026-09-23T21:23:25.466479+00:00",
+        "type": "uuid",
+        "value": "76320029-a1b6-4c35-bd96-d77c8e0e636a"
+      },
+      {
+        "equality": false,
+        "name": "qms_organization_id",
+        "provenance": "ISO_SMART_NATIVE_QMS_OBJECT",
+        "readback": null,
+        "returned": null,
+        "run_id": "Phase 31.4 V2.5 Clean Retry 18",
+        "source": "QmsOrganizationCommandService",
+        "status": "UNRESOLVED_NOT_CREATED",
+        "timestamp": "2026-09-23T21:23:25.466479+00:00",
+        "type": "uuid",
+        "value": null
+      },
+      {
+        "equality": false,
+        "name": "process_id",
+        "provenance": "ISO_SMART_NATIVE_QMS_OBJECT",
+        "readback": null,
+        "returned": null,
+        "run_id": "Phase 31.4 V2.5 Clean Retry 18",
+        "source": "QmsContextCommandService",
+        "status": "UNRESOLVED_NOT_CREATED",
+        "timestamp": "2026-09-23T21:23:25.466479+00:00",
+        "type": "uuid",
+        "value": null
+      }
+    ],
+    "production_authority_claimed": false
+  },
+  "verdict": "EVIDENCE_RUN_FAIL"
+}

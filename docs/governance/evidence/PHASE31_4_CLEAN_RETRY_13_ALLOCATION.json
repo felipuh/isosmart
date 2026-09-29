@@ -1,0 +1,12 @@
+{
+  "artifact_schema": "phase31.4-retry13-allocation/v1",
+  "retry_id": "Phase 31.4 V2.5 Clean Retry 13",
+  "status": "EXECUTED_NOT_PROMOTED",
+  "repository_search": "UNUSED_BEFORE_ALLOCATION",
+  "resource_policy": "FRESH_POSTGRESQL_18_6_ADMINAPPS_AND_ISOSMART",
+  "previous_retry_state_reuse": false,
+  "live_execution_gate": "OFFLINE_250_OF_250_PASS_P0_0_P1_0",
+  "resources_created": true,
+  "live_result": "FAIL_AT_ACTION_PLAN_PREPARATION_AFTER_14_OF_33_PHASES",
+  "teardown": "PASS"
+}

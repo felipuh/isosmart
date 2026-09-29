@@ -1,0 +1,57 @@
+{
+  "artifact_schema": "phase31.4-v2.5-disposable-evidence-teardown/v1",
+  "completed_at": "2026-09-23T19:56:15.821706+00:00",
+  "global_prune": false,
+  "results": [
+    {
+      "container": {
+        "exit_code": 0,
+        "removed": true,
+        "stderr": "",
+        "stdout": "phase31_4_retry17_adminapps",
+        "target": "phase31_4_retry17_adminapps"
+      },
+      "network": {
+        "exit_code": 0,
+        "removed": true,
+        "stderr": "",
+        "stdout": "phase31_4_retry17_adminapps_net",
+        "target": "phase31_4_retry17_adminapps_net"
+      },
+      "role": "adminapps",
+      "volume": {
+        "exit_code": 0,
+        "removed": true,
+        "stderr": "",
+        "stdout": "phase31_4_retry17_adminapps_data",
+        "target": "phase31_4_retry17_adminapps_data"
+      }
+    },
+    {
+      "container": {
+        "exit_code": 0,
+        "removed": true,
+        "stderr": "",
+        "stdout": "phase31_4_retry17_isosmart",
+        "target": "phase31_4_retry17_isosmart"
+      },
+      "network": {
+        "exit_code": 0,
+        "removed": true,
+        "stderr": "",
+        "stdout": "phase31_4_retry17_isosmart_net",
+        "target": "phase31_4_retry17_isosmart_net"
+      },
+      "role": "isosmart",
+      "volume": {
+        "exit_code": 0,
+        "removed": true,
+        "stderr": "",
+        "stdout": "phase31_4_retry17_isosmart_data",
+        "target": "phase31_4_retry17_isosmart_data"
+      }
+    }
+  ],
+  "run_id": "Phase 31.4 V2.5 Clean Retry 17",
+  "status": "PASS"
+}

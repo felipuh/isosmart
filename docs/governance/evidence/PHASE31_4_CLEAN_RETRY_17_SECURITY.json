@@ -1,0 +1,9 @@
+{
+  "artifact_schema": "phase31.4-v2.5-disposable-evidence-security/v1",
+  "executed_probe_count": 0,
+  "expected_probe_count": 8,
+  "probes": [],
+  "reason": "mandatory PRECREATION_INTEGRITY phase has no registered operation/assertions/evidence contract",
+  "run_id": "Phase 31.4 V2.5 Clean Retry 17",
+  "status": "FAIL"
+}

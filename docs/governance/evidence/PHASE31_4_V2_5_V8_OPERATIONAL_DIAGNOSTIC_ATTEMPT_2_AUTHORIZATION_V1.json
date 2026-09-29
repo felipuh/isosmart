@@ -1,0 +1,76 @@
+{
+  "schema": "phase31.4-v2.5-v8-operational-diagnostic-attempt-authorization/v1",
+  "authorization_id": "PHASE31_4_V2_5_V8_OPERATIONAL_DIAGNOSTIC_ATTEMPT_2_AUTHORIZATION_V1",
+  "issued_at": "2026-09-29T00:00:00Z",
+  "cycle_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1",
+  "attempt": 2,
+  "previous_attempt": 1,
+  "validation_attempt": 2,
+  "previous_blocker": "ADMINAPPS_START_FAILURE",
+  "remediation": "absolute manage.py resolution in service()",
+  "authorization_mode": "DIAGNOSTIC_ONLY",
+  "authorization_scope": "DIAGNOSTIC_ONLY_AUTHORIZATION",
+  "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+  "authorization_status": "RUNNER_ENVIRONMENT_DIAGNOSTIC_AUTHORIZED",
+  "one_shot": true,
+  "consumed": false,
+  "run_executed": false,
+  "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 2",
+  "canonical_run_slug": "Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_2",
+  "evidence_root": "docs/governance/evidence/runs/Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_2",
+  "workspace": "/home/felipe/proyectos/isosmart",
+  "git_state": {
+    "commit": "0d2ddfdead408b7cc6cb9c6dbc08707281cb9fb7",
+    "dirty": true,
+    "preexisting_changes_preserved": true,
+    "exact_state_note": "Authorization binds the verified source/integrity state; unrelated pre-existing worktree changes are preserved."
+  },
+  "integrity": {
+    "artifact_path": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V9.json",
+    "sha256": "8834bc546ccb585c917b501e20ba25bf37a4a7f1efc23b7b379ea1fd1f34933e",
+    "generation": "PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V9",
+    "predecessor": "PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V8.json",
+    "predecessor_sha256": "ed7bed0108e790c93e0c40625b215dde02ae25566b2397533b11b6aae7040946"
+  },
+  "parent_cycle_authorization": {
+    "artifact_path": "docs/governance/evidence/PHASE31_4_V2_5_V8_OPERATIONAL_DIAGNOSTIC_CYCLE_AUTHORIZATION_V1.json",
+    "sha256": "c8633d150784c23170585627b1bf3bd738bcf62197998d5ea8e7bd3d9d08aac9"
+  },
+  "successor_integrity": {
+    "artifact_path": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V9.json",
+    "sha256": "8834bc546ccb585c917b501e20ba25bf37a4a7f1efc23b7b379ea1fd1f34933e",
+    "status": "PASS"
+  },
+  "maximum_target": "STAGE_EXT_6_OF_6 + CAPTURE_BUNDLE_READY",
+  "runner_method": "DisposableEvidenceRunner.run_evidence",
+  "executor_mode": "diagnostic",
+  "allow_runtime_execution": false,
+  "stop_boundary": "CAPTURE_BUNDLE_READY; STOP before Retry 20; mandatory teardown",
+  "prohibited": [
+    "Retry 20",
+    "full 33-phase execution",
+    "Phase 31.5",
+    "promotion",
+    "Attempt 3",
+    "historical resource reuse",
+    "previous diagnostic manifest reuse",
+    "opportunistic remediations"
+  ],
+  "fresh_required": [
+    "AdminApps PostgreSQL 18.6",
+    "ISO Smart PostgreSQL 18.6",
+    "databases",
+    "networks",
+    "volumes",
+    "dynamic loopback database and service ports",
+    "service process identities",
+    "evidence directory",
+    "manifest"
+  ],
+  "consumption_registry": "docs/governance/evidence/diagnostic_authorization_consumptions",
+  "cleanup_requirement": "ZERO RESIDUAL RESOURCES",
+  "retry20_authorization": "NONE",
+  "retry20_executed": false,
+  "phase31_5": "EXECUTION_HELD",
+  "attempt_3": "NOT_AUTHORIZED_BY_THIS_ARTIFACT"
+}

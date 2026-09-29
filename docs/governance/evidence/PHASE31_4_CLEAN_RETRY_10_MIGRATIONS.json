@@ -1,0 +1,30 @@
+{
+  "adminapps": {
+    "applied_count": 61,
+    "exit_code": 0,
+    "fake": 0,
+    "log": "PHASE31_4_CLEAN_RETRY_10_ADMINAPPS_MIGRATIONS.log",
+    "log_sha256": "642e4f1806409323b31941157e06e779a9736881ef7240fc9e47087992f308cf",
+    "manual_schema_patch": 0,
+    "pending": 0,
+    "postgresql_ledger_count": 61,
+    "result": "PASS"
+  },
+  "first_postgresql_attempt_blocker": "P1-RETRY10-ISOSMART-MIGRATION-CONNECTION-OPTIONS-MISSING",
+  "foundation_0001": "PASS",
+  "initial_sqlite_result_rejected": true,
+  "isosmart": {
+    "applied_count": 92,
+    "exit_code": 0,
+    "fake": 0,
+    "log": "PHASE31_4_CLEAN_RETRY_10_ISOSMART_MIGRATIONS.log",
+    "log_sha256": "f5f496625edfcd0c735398178748dab7d79e6ccd321ea7907a5e34d54250afb0",
+    "manual_schema_patch": 0,
+    "pending": 0,
+    "postgresql_ledger_count": 92,
+    "result": "PASS",
+    "verified_backend": "postgresql"
+  },
+  "pending": 0,
+  "retry_id": "Phase 31.4 V2.5 Clean Retry 10"
+}

@@ -1,0 +1,143 @@
+{
+  "artifact_schema": "phase31.4-v2.5-adminapps-endpoint-successor-reconciliation/v1",
+  "verdict": "ADMINAPPS_ENDPOINT_SUCCESSOR_RECONCILIATION_PASS",
+  "scope": "AdminApps Endpoint Remediation - Current Integrity Successor Reconciliation",
+  "retry_18_blocker": "P1 - STAGE_EXT / QmsOrganizationCommandService.create_organization",
+  "phase31_5": "EXECUTION_HELD",
+  "live_execution": "NO",
+  "retry_19": "NOT_EXECUTED",
+  "v3": {
+    "path": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V3.json",
+    "sha256": "c47c62a52af65cab5b13f830b048017b101425d29c8c80501f9669d2647d7def",
+    "preserved": true,
+    "historical_artifacts_modified": "NONE"
+  },
+  "v4": {
+    "path": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V4.json",
+    "sha256": "960f2a133f72e939842762986ce3ad43762302b0caa447799732740fc4571f25",
+    "governance_predecessor": "V3",
+    "successor_claim": "V4 is a verified successor of V3 for the explicitly reviewed AdminApps endpoint remediation changes."
+  },
+  "original_regression": {
+    "reported_total": 6,
+    "reported_failures": 2,
+    "reported_errors": 4,
+    "records": [
+      {
+        "record": 1,
+        "test_name": "foundation.test_phase31_4_3_supporting_contract_audit.SupportingContractAuditTests.test_protected_sources_match",
+        "direct_exception": "IntegrityGenerationError: V2.5 protected source drift: backend/foundation/phase31_4_v2_5_runtime.py",
+        "protected_source": "backend/foundation/phase31_4_v2_5_runtime.py",
+        "expected_sha256": "7ed7430abe798d6fd31b2bc27344abde35a7ab7df9e2ef13b51f1ddb7b03fd00",
+        "observed_sha256": "70997fb33eb22c9576cb7def0cd5ccdff9d61deebad4621072920b5acf5efb19",
+        "direct_or_transitive": "direct",
+        "classification": "TRANSITIVE_INTEGRITY_FAILURE"
+      },
+      {
+        "record": 2,
+        "test_name": "foundation.test_phase31_4_integrity_generations.V25CurrentOperationalIntegrityTests.test_current_manifest_passes",
+        "direct_exception": "IntegrityGenerationError: V2.5 protected source drift: backend/foundation/phase31_4_v2_5_runtime.py",
+        "protected_source": "backend/foundation/phase31_4_v2_5_runtime.py",
+        "expected_sha256": "7ed7430abe798d6fd31b2bc27344abde35a7ab7df9e2ef13b51f1ddb7b03fd00",
+        "observed_sha256": "70997fb33eb22c9576cb7def0cd5ccdff9d61deebad4621072920b5acf5efb19",
+        "direct_or_transitive": "direct",
+        "classification": "TRANSITIVE_INTEGRITY_FAILURE"
+      },
+      {
+        "record": 3,
+        "test_name": "foundation.test_phase31_4_integrity_generations.V25CurrentOperationalIntegrityTests.test_discontinuity_artifact_is_explicit",
+        "direct_exception": "IntegrityGenerationError: V2.5 protected source drift: backend/foundation/phase31_4_v2_5_runtime.py",
+        "protected_source": "backend/foundation/phase31_4_v2_5_runtime.py",
+        "expected_sha256": "7ed7430abe798d6fd31b2bc27344abde35a7ab7df9e2ef13b51f1ddb7b03fd00",
+        "observed_sha256": "70997fb33eb22c9576cb7def0cd5ccdff9d61deebad4621072920b5acf5efb19",
+        "direct_or_transitive": "transitive",
+        "classification": "TRANSITIVE_INTEGRITY_FAILURE"
+      },
+      {
+        "record": 4,
+        "test_name": "foundation.test_phase31_4_retry5_operational_manifest.Retry5ManifestTests.test_authoritative_manifest_and_external_hash",
+        "direct_exception": "ManifestVerificationError: unapproved successor: backend/backend/settings.py; chained cause: IntegrityGenerationError on backend/foundation/phase31_4_v2_5_runtime.py",
+        "protected_source": "backend/backend/settings.py",
+        "expected_sha256": "historical manifest value",
+        "observed_sha256": "current endpoint-remediated settings bytes",
+        "direct_or_transitive": "transitive",
+        "classification": "TRANSITIVE_INTEGRITY_FAILURE"
+      },
+      {
+        "record": 5,
+        "test_name": null,
+        "direct_exception": null,
+        "protected_source": null,
+        "expected_sha256": null,
+        "observed_sha256": null,
+        "direct_or_transitive": "unrecoverable from retained evidence",
+        "classification": "UNRECOVERED_HISTORICAL_RECORD"
+      },
+      {
+        "record": 6,
+        "test_name": null,
+        "direct_exception": null,
+        "protected_source": null,
+        "expected_sha256": null,
+        "observed_sha256": null,
+        "direct_or_transitive": "unrecoverable from retained evidence",
+        "classification": "UNRECOVERED_HISTORICAL_RECORD"
+      }
+    ],
+    "evidence_gap": "The repository retains the four integrity-error records above but no exact test names or traces for the two reported failures. They were not reconstructed or invented."
+  },
+  "classification_summary": {
+    "functional_regressions": 0,
+    "unexpected_drift": 0,
+    "transitive_integrity_failures": 4,
+    "unrecovered_historical_records": 2
+  },
+  "authorized_changes": {
+    "settings_semantics": "ADMIN_APPS_BASE_URL is authoritative; missing or malformed values fail closed; no operational localhost fallback.",
+    "material_client": "backend/integration/client.py uses the shared configured endpoint, supports dynamic ports, contains no hardcoded 8000 fallback, and preserves deny-by-default entitlement errors.",
+    "new_protected_source": "backend/integration/client.py",
+    "remediation_artifact": "docs/governance/evidence/PHASE31_4_V2_5_ADMINAPPS_ENDPOINT_REMEDIATION_V1.json"
+  },
+  "protected_sources": {
+    "v3_count": 22,
+    "v4_count": 23,
+    "modified": [
+      "backend/backend/settings.py",
+      "backend/foundation/phase31_4_integrity_generations.py"
+    ],
+    "new": ["backend/integration/client.py"],
+    "removed": [],
+    "missing": [],
+    "unexpected": []
+  },
+  "hashes": {
+    "settings": "eeede9b7588f2d5c88ec717dcec1a5f3ed46e97cf183125dcaadfdfe1d6be613",
+    "adminapps_client": "9edceb9510fd70e1c2c5e7c1c7040a8c16d74a26f8c143abce62b976f4e6639a",
+    "runtime": "70997fb33eb22c9576cb7def0cd5ccdff9d61deebad4621072920b5acf5efb19",
+    "verifier_remediation": "61a6fa21f01c27bd6713154512045926c4d3d65d410d0d572922ea1ef21dc639",
+    "precreation": "9fc0efcc14fee9587a041b8c81dffde2d447f82e16d4df495571b7358cb854eb",
+    "integrity_guard": "d236123c3385ed9ce3f808e9d88f930a7eb1c4471116f77948fc0bc135e8d33b"
+  },
+  "localhost_fallback_scan": {
+    "operational_runtime": ["backend/integration/client.py", "nginx_isosmart.conf"],
+    "client_result": "No operational AdminApps localhost fallback; endpoint is validated and fail-closed.",
+    "nginx_result": "Development/proxy upstream reference retained; not an ISO Smart client fallback and not removed."
+  },
+  "migrations": {
+    "v2_4": "23/23 PASS",
+    "v2_5": "24/24 PASS",
+    "pending": 0,
+    "new": 0,
+    "makemigrations_check_dry_run": "PASS"
+  },
+  "tests": {
+    "endpoint_remediation": "8/8 PASS",
+    "stage_ext_offline": "11/11 PASS",
+    "precreation": "10/10 PASS",
+    "verifier_runtime_integrity_focused": "56/56 PASS",
+    "full_backend_regression": "519/519 PASS; failures=0; errors=0; skips=0"
+  },
+  "checkpoint": {"current_source_integrity": {"p0": 0, "p1": 0}, "retry_18": "REMEDIATED / LIVE_REVALIDATION_PENDING"},
+  "disposable_evidence_run": "READY_FOR_SEPARATE_DISPOSABLE_EVIDENCE_RUN_REVIEW",
+  "exact_next_step": "Conduct a separate governance review for a disposable evidence run; do not execute Retry 19 or allocate resources in this reconciliation."
+}

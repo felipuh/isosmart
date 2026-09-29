@@ -1,0 +1,10 @@
+{
+  "delivery": "PASS",
+  "organization_id": "fb8cf305-506e-49a5-ad40-71e8250c0787",
+  "persisted_process_id": "4a4ead4c-5e09-4d95-92d3-d8537d1b88da",
+  "process_id": "4a4ead4c-5e09-4d95-92d3-d8537d1b88da",
+  "projection_id": "c8f7b227-5a4a-4d2f-baeb-735c8d52181c",
+  "provenance": "LIVE_UPSTREAM_NATIVE_CAPTURE",
+  "result": "PASS",
+  "tenant_id": "0d3bfc6c-04c7-48c0-91c1-3a4c39787066"
+}

@@ -1,0 +1,40 @@
+{
+  "artifact_schema": "phase31.4-v2.5-disposable-evidence-pre-run-gates/v1",
+  "checked_at": "2026-09-23T19:48:34.360011+00:00",
+  "current_integrity_v2": {
+    "manifest_sha256": "3897da9ed8b2538924e527af3d79e5ef56c35c6178fe0330613187b5e70aa7c5",
+    "protected_sources": "21/21",
+    "status": "PASS"
+  },
+  "focused_verifier": {
+    "status": "PASS",
+    "tests": "29/29",
+    "working_directory": "backend"
+  },
+  "full_backend_regression": {
+    "status": "PASS",
+    "tests": "500/500"
+  },
+  "historical_integrity": {
+    "provenance_continuity": "NOT_PROVEN",
+    "status": "PASS"
+  },
+  "integrity_v1_v2": {
+    "status": "PASS",
+    "tests": "8/8"
+  },
+  "migration_integrity": {
+    "files": "24/24",
+    "makemigrations_check": "PASS",
+    "status": "PASS"
+  },
+  "operator_note": "An initial focused-suite invocation from repository root produced path-context errors; it was not treated as a verifier result. The authoritative rerun from backend passed 29/29.",
+  "p0": 0,
+  "p1_current_baseline_remediation": 0,
+  "protected_source_drift": {
+    "status": "PASS",
+    "uncommitted_or_unexplained": 0
+  },
+  "run_id": "Phase 31.4 V2.5 Clean Retry 17",
+  "status": "PASS"
+}

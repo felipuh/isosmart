@@ -1,0 +1,222 @@
+{
+  "artifact_schema": "phase31.4-v2.5-disposable-evidence-run-authorization/v1",
+  "generated_at": "2026-09-23T15:01:05-06:00",
+  "verdict": "DISPOSABLE_EVIDENCE_RUN_AUTHORIZED",
+  "authoritative_state": "PRECREATION_INTEGRITY_SUCCESSOR_RECONCILIATION_PASS",
+  "status": "CODE_REMEDIATED / INTEGRITY_RECONCILED / LIVE_EXECUTION_PENDING",
+  "run_id": "Phase 31.4 V2.5 Clean Retry 18",
+  "run_tag": "CLEAN_RETRY_18",
+  "run_executed": false,
+  "resources_allocated": false,
+  "baseline": {
+    "path": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V3.json",
+    "sha256": "c47c62a52af65cab5b13f830b048017b101425d29c8c80501f9669d2647d7def",
+    "schema": "phase31.4-v2.5-current-source-integrity/v3",
+    "generation": "V2.5_CURRENT_SOURCE_SUCCESSOR_V3",
+    "status": "PASS"
+  },
+  "protected_sources": {
+    "expected": 22,
+    "observed": 22,
+    "matched": 22,
+    "missing": [],
+    "unexpected": [],
+    "unregistered_material_helpers": [],
+    "unexplained_drift": [],
+    "status": "PASS",
+    "sha256": {
+      "backend/backend/settings.py": "bd72cff98c15a7cbcd494a9e791e3682fcf33a539ae0f1a6e05ecefb99bbe7c0",
+      "backend/backend/urls.py": "197b5e354e6982905dfed1affc5fef14dd996ac7715e1705a71a16a3995737d5",
+      "backend/foundation/projection_contract.py": "a58f227440dca739b7371631d81ee20ba0158de979868c948aed2c2523301e7f",
+      "backend/foundation/adminapps_ingress.py": "6985bb68d7a2d1327c507ea7d668e95dd722bf8fc172be2b81b0b1e8d6b9d5c4",
+      "backend/foundation/qms_organization.py": "e157193b1e7b4e736fdb7d34a399f459e6954dd31d4fcb0fbb776371387d390f",
+      "backend/foundation/migrations/0024_adminapps_ingress_receipt.py": "3a3e4da38c4119f1d53cb96b4cb1ffc5d93a2df25f76eaa64aaef1cbf66b9ce1",
+      "backend/foundation/postgres_foundation_gate.py": "081ae073ffe7f66721974c0ea88dbc954b473016b9ea888dae92e3509de10fe2",
+      "backend/foundation/phase31_4_v2_5_runtime.py": "70997fb33eb22c9576cb7def0cd5ccdff9d61deebad4621072920b5acf5efb19",
+      "backend/foundation/phase31_4_v2_5_structural_gate.py": "80f5608360647270233408c8c039afd460f026217973027050e26ee1b4da4234",
+      "backend/foundation/phase31_4_v2_5_executable_graph.py": "2b9dcd98c7fc749c5ebefc1b5edd30d8b3dcea21c84535dc397b240956f8d7c0",
+      "backend/foundation/adminapps_adapter.py": "3d1c3f8f8e2c3f4d6e73d6f8733d642aa3c407358e1794dbff0dc7ebbc27b102",
+      "backend/foundation/projection_writer.py": "1881740fe0c3bcc182c63d4466ac6aba003450c62364158a6ef70a71c7216bae",
+      "docs/governance/fixtures/PHASE31_4_5C_ROW_LEVEL_EXECUTION_CONTRACT_V2_5.json": "51f57160131a831c1fa180b7c5de5fdcb15a8fd895a53a077149c9a5955eca9c",
+      "backend/foundation/phase31_4_4a_field_binding_validator.py": "971eaac142159b251ca5741b6c45356c25ccc11c575578bc5aeb609834cd7378",
+      "backend/foundation/phase31_4_4b_strict_type_validator.py": "a9d01519ef196a987609b2f980ef2ca68b2f3bff5317d49b44286aca25a6d1db",
+      "backend/foundation/phase31_4_5a_retry1_source_reachability_validator.py": "cb894354cdb6a8709d81f3a1832a3eadb193c66c63d0c10da981ccc13f85e14a",
+      "backend/foundation/phase31_4_5b_source_reachability_validator.py": "6beede5a72f8fc552811eec9d76f35047254630be2a6838958e5ea539968c67a",
+      "backend/foundation/phase31_4_operational_manifest.py": "5f7956c6159e48750b0da1811ae6df0d4bcc51666757ff354d78ae20aa3d7902",
+      "backend/foundation/phase31_4_integrity_generations.py": "1856e074553da7de3713c4bf11dea5b4dc6c3e6c8b7884fddac81b866199d9c2",
+      "backend/foundation/phase31_4_postgres18_environment.py": "5f58ec95a377ffb07b13930d8a1be7101bb2375bb55f81afd0bd8f3a4387339e",
+      "backend/foundation/phase31_4_v2_5_verifier_remediation.py": "61a6fa21f01c27bd6713154512045926c4d3d65d410d0d572922ea1ef21dc639",
+      "backend/foundation/phase31_4_v2_5_precreation_integrity.py": "9fc0efcc14fee9587a041b8c81dffde2d447f82e16d4df495571b7358cb854eb"
+    }
+  },
+  "tests": {
+    "precreation": {"tests": 10, "result": "PASS"},
+    "verifier": {"tests": 4, "result": "PASS"},
+    "runtime": {"tests": 25, "result": "PASS"},
+    "focused_total": {"tests": 39, "result": "PASS", "executed_in_review": true},
+    "integrity_generation": {"tests": 9, "result": "PASS", "executed_in_review": true},
+    "guard_integration": {"tests": 2, "result": "PASS", "executed_in_review": true},
+    "full_backend_regression": {
+      "tests": 511,
+      "failures": 0,
+      "errors": 0,
+      "result": "PASS",
+      "executed_in_review": true
+    }
+  },
+  "migrations": {
+    "v2_4": "23/23 PASS",
+    "v2_5": "24/24 PASS",
+    "local_applied_foundation_migrations": "24/24",
+    "pending": 0,
+    "fake": 0,
+    "manual_schema_patches": 0,
+    "makemigrations_check_dry_run": "PASS",
+    "applied_during_review": false,
+    "status": "PASS",
+    "evidence_note": "Migration membership and hashes, the local applied plan, and makemigrations dry-run were revalidated. Fake/manual counts remain bound to preserved Retry 17 live migration evidence; this review did not execute or apply migrations."
+  },
+  "retry_17_blocker_closure": {
+    "historical_blocker": "PRECREATION_INTEGRITY missing executable contract",
+    "historical_artifact": "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_17_LIVE_BLOCKER.json",
+    "historical_artifact_status_preserved": "OPEN_AT_RETRY_17_FAILURE",
+    "successor_reconciliation": "docs/governance/evidence/PHASE31_4_V2_5_PRECREATION_INTEGRITY_SUCCESSOR_RECONCILIATION_V1.json",
+    "successor_reconciliation_sha256": "bf2ca2bf26473626cf56d7a3d453db3e70225bc7707d5c1c701391ce23f1ee32",
+    "successor_verdict": "PRECREATION_INTEGRITY_SUCCESSOR_RECONCILIATION_PASS",
+    "current_status": "CLOSED",
+    "retry_17_reopened": false
+  },
+  "severity": {
+    "p0": 0,
+    "p1": 0,
+    "status": "PASS"
+  },
+  "historical_artifacts": {
+    "modified": [],
+    "v2_4_integrity": "PASS",
+    "v2_4_contract_sha256": "a102d278bf2e5ca6e9b8bf282f5402a54f52d4690beed2ecbed5145c56539387",
+    "v2_5_current_v1": {
+      "path": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V1.json",
+      "sha256": "8e77d62e1cccc42d0dbeaf7c00e9007c7120201b97af2f46484bbf81893a1db0",
+      "preserved": true
+    },
+    "v2_5_current_v2": {
+      "path": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V2.json",
+      "sha256": "3897da9ed8b2538924e527af3d79e5ef56c35c6178fe0330613187b5e70aa7c5",
+      "preserved": true
+    },
+    "provenance_discontinuity": {
+      "path": "docs/governance/evidence/PHASE31_4_V2_5_RUNTIME_PROVENANCE_DISCONTINUITY_V1.json",
+      "sha256": "c6e852af3bd378e61683ff0516c21564874db424414d8af630a3fd32a3a175e5",
+      "status": "PROVENANCE_DISCONTINUITY",
+      "preserved": true,
+      "reinterpreted": false
+    }
+  },
+  "resource_policy": {
+    "status": "PASS",
+    "allocation_state": "NOT_ALLOCATED",
+    "execution_mode": "DISPOSABLE_EVIDENCE_RUN",
+    "postgresql_exact_version": "18.6",
+    "environments": ["AdminApps", "ISO Smart"],
+    "requirements": {
+      "dedicated_containers": true,
+      "dedicated_networks": true,
+      "dedicated_volumes": true,
+      "unique_databases": true,
+      "unique_ports": true,
+      "run_scoped_resource_manifest": true,
+      "teardown": true,
+      "post_teardown_absence_verification": true
+    },
+    "production": false,
+    "staging": false,
+    "shared_development_resources": false
+  },
+  "evidence_policy": {
+    "status": "PASS",
+    "root": "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_18/",
+    "precreation_path": "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_18/PRECREATION_INTEGRITY/precreation_integrity.json",
+    "path_collision_at_authorization": false,
+    "append_only": true,
+    "exclusive_creation": true,
+    "historical_overwrite_prohibited": true,
+    "incremental_serialization_required": true,
+    "required_if_reached": [
+      "environment",
+      "migrations",
+      "Stage EXT",
+      "phase results",
+      "native IDs",
+      "persisted readbacks",
+      "provenance",
+      "event/outbox/audit",
+      "security",
+      "transactions",
+      "resolved graph",
+      "exact comparison"
+    ]
+  },
+  "precreation_gate": {
+    "must_execute_first": true,
+    "executor": "PrecreationIntegrityExecutor",
+    "operation": "verify_precreation_integrity",
+    "actual_executor_required": true,
+    "actual_assertions_required": true,
+    "retained_evidence_required": true,
+    "independent_inspection_required": true,
+    "stop_immediately_on_fail": true
+  },
+  "fail_closed_policy": {
+    "status": "PASS",
+    "no_registered_executor": "FAIL",
+    "missing_operation": "FAIL",
+    "missing_assertion": "FAIL",
+    "missing_evidence": "FAIL",
+    "returned_fail": "FAIL",
+    "exception": "FAIL",
+    "missing_required_readback": "FAIL",
+    "invalid_provenance": "FAIL",
+    "implicit_pass": false,
+    "stop_at_first_genuine_blocker": true,
+    "code_remediation_during_run": false
+  },
+  "blocker_strategy": {
+    "on_failure": [
+      "preserve evidence",
+      "classify blocker",
+      "teardown resources",
+      "verify absence",
+      "return one exact remediation recommendation"
+    ]
+  },
+  "adminapps_authority": {
+    "external_tenant": "EXTERNAL_ADMINAPPS_PROVENANCE_REQUIRED",
+    "external_actor": "EXTERNAL_ADMINAPPS_PROVENANCE_REQUIRED",
+    "tenant_projection": "LOCAL_TRACEABLE_PROJECTION_ONLY",
+    "user_projection": "LOCAL_TRACEABLE_PROJECTION_ONLY",
+    "qms_organization": "ISO_SMART_NATIVE_QMS_OBJECT_WITH_EXTERNAL_TENANT_TRACEABILITY",
+    "process": "ISO_SMART_NATIVE_QMS_OBJECT_WITH_EXTERNAL_TENANT_TRACEABILITY",
+    "synthetic_or_test_authority": "MUST_REMAIN_EXPLICITLY_LABELED",
+    "real_approval_authority_claimed": false
+  },
+  "authorization_scope": {
+    "quantity": 1,
+    "purpose": "Continue the fail-closed evidence chain until the next real blocker or until all required guarantees are genuinely proven and retained.",
+    "authorized_action": "Execute exactly one isolated disposable evidence run under this authorization."
+  },
+  "explicit_exclusions": [
+    "promotion",
+    "Phase 31.5 execution",
+    "production readiness declaration",
+    "WS-A",
+    "pilot",
+    "production",
+    "staging",
+    "RuntimeAdoption",
+    "shared development resources",
+    "optimizing for 33 PASS at any cost"
+  ],
+  "phase31_5": "EXECUTION_HELD",
+  "exact_next_step": "Execute exactly one disposable evidence run under this authorization."
+}

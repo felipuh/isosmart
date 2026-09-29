@@ -1,0 +1,14 @@
+{
+  "actor_id": "7473b43a-ac7b-4ad3-9ecd-ff216bcbc3dc",
+  "adminapps_tenant_id": "d3ab78a2-f32a-4ca2-a2fc-a20714423abb",
+  "delivery": "PASS",
+  "organization_tenant_id": "27b3a066-b7fc-449c-9cdc-977faa87658e",
+  "persisted_process_id": "dee0b48c-ae65-45d7-88e8-ac2577c2ed71",
+  "process_id": "dee0b48c-ae65-45d7-88e8-ac2577c2ed71",
+  "process_organization_id": "20c445b2-0c22-41d8-bda0-8371a9b1f28d",
+  "process_tenant_id": "27b3a066-b7fc-449c-9cdc-977faa87658e",
+  "provenance": "LIVE_UPSTREAM_NATIVE_CAPTURE",
+  "qms_organization_id": "20c445b2-0c22-41d8-bda0-8371a9b1f28d",
+  "result": "PASS",
+  "tenant_projection_id": "27b3a066-b7fc-449c-9cdc-977faa87658e"
+}

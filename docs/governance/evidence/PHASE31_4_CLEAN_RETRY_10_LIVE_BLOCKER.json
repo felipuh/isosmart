@@ -1,0 +1,24 @@
+{
+  "actual": {
+    "error": "Process matching query does not exist.",
+    "fresh_process_id": "35ae9e96-478d-40d9-8cdd-be52a0c7048d"
+  },
+  "artifact_schema": "phase31.4-retry10-live-blocker/v1",
+  "evidence": [
+    "PHASE31_4_CLEAN_RETRY_10_NATIVE_RUNTIME.json",
+    "PHASE31_4_CLEAN_RETRY_10_STAGE_EXT.json"
+  ],
+  "expected": {
+    "contract_process_member_id": "506d920c-fe62-53c0-aac8-9c1ca8ca78ed",
+    "requirement": "bind to the Process created by the fresh native upstream chain"
+  },
+  "id": "P1-RETRY10-V25-INITIAL-OPPORTUNITY-PROCESS-BINDING-MISMATCH",
+  "operation": "create_opportunity",
+  "phase": "INITIAL_OPPORTUNITY",
+  "remediation": "Resolve the contract reference against the captured fresh Process identity through the approved V2.5 binding mechanism; do not substitute a fixture ID or synthesize a Process row.",
+  "service": "RiskOpportunityObjectiveCommandService",
+  "severity": "P1",
+  "source": "backend/foundation/phase31_4_v2_5_runtime.py:584",
+  "stack": "Traceback (most recent call last):\n  File \"/home/felipe/proyectos/isosmart/docs/governance/tools/retry10_runtime.py\", line 50, in <module>\n    runtime.run_clean_retry()\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_runtime.py\", line 564, in run_clean_retry\n    result = self.phase_registry.execute(phase_id, self.session, context)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_runtime.py\", line 474, in execute\n    return self.get(phase_id).execute(session, context)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_runtime.py\", line 404, in execute\n    method(**metadata)\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/risk_objective.py\", line 214, in create_opportunity\n    return self._create(model=Opportunity, aggregate_type=\"opportunity\", event_type=\"opportunity.created\",\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/risk_objective.py\", line 109, in _create\n    organization_id = Process.objects.using(self.using).get(pk=fields[\"process_id\"]).organization_id\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/.venv/lib/python3.12/site-packages/django/db/models/query.py\", line 637, in get\n    raise self.model.DoesNotExist(\nfoundation.models.Process.DoesNotExist: Process matching query does not exist.\n",
+  "status": "OPEN"
+}

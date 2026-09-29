@@ -1,0 +1,40 @@
+{
+  "adminapps_migrations": "PASS (61 applied)",
+  "artifact_schema": "phase31.4-retry9-closure/v1",
+  "blocker_id": "P1-RETRY9-ISOSMART-MIGRATION-BOOTSTRAP-ROLES-MISSING",
+  "captures": {
+    "expected": 509,
+    "resolved": 0,
+    "unresolved": 509
+  },
+  "closed_at": "2026-09-18T14:17:42.540205+00:00",
+  "current_p0": 0,
+  "current_p1": 1,
+  "exact_comparison": "NOT_EXECUTED",
+  "execution_mode": "LIVE_NATIVE_EXECUTION",
+  "historical_retry8_resource_hygiene": "SATISFIED_BY_PRESENT_ABSENCE_CLOSURE",
+  "isosmart_migrations": "FAIL (49 applied before foundation.0001 failed; zero fake; zero manual patches)",
+  "native_phases": {
+    "executed": 0,
+    "expected": 33,
+    "failed": 0,
+    "passed": 0
+  },
+  "pre_live_gate": "PASS",
+  "reason": "ISO Smart full migration chain failed at foundation.0001 because required isolated cluster runtime roles were not supplied",
+  "resolved_graph": {
+    "expected_fields": 1664,
+    "expected_members": 118,
+    "materialized_fields": 0,
+    "materialized_members": 0
+  },
+  "retry_id": "Phase 31.4 V2.5 Clean Retry 9",
+  "retry_tag": "CLEAN_RETRY_9",
+  "teardown_inventory_verified": true,
+  "teardown_status": "PASS",
+  "upstream_chain": "NOT_EXECUTED",
+  "v24_sha256": "a102d278bf2e5ca6e9b8bf282f5402a54f52d4690beed2ecbed5145c56539387",
+  "v24_sha_pass": true,
+  "v25_contract_sha256": "12f048fcada1a36d02d26ff0e4efaa247d04687161c7d1dcb6cbc196ae69001b",
+  "verdict": "NOT_PROMOTED"
+}

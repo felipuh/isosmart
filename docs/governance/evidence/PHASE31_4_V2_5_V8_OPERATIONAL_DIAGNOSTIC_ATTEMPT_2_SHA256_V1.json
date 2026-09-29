@@ -1,0 +1,23 @@
+{
+  "schema": "phase31.4-v2.5-v8-operational-diagnostic-attempt-sha256-index/v1",
+  "verdict": "ATTEMPT_2_FAIL_EVIDENCE_INDEX_COMPLETE",
+  "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 2",
+  "artifacts": {
+    "remediation_review": {"path": "docs/governance/evidence/PHASE31_4_V2_5_V8_OPERATIONAL_DIAGNOSTIC_REMEDIATION_REVIEW_V1.json", "sha256": "97216e81c698c8137a3971058f75e0521fbfdd516d0dd1a27920ba0744137236"},
+    "focused_tests": {"path": "docs/governance/evidence/PHASE31_4_V2_5_V8_OPERATIONAL_DIAGNOSTIC_FOCUSED_TEST_EVIDENCE_V1.json", "sha256": "47d005e6127c2ef54c0828d7fbfe4f4426eb54c7373d8e57a577d1ad8e094dac"},
+    "integrity_successor": {"path": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V9.json", "sha256": "8834bc546ccb585c917b501e20ba25bf37a4a7f1efc23b7b379ea1fd1f34933e"},
+    "attempt_2_authorization": {"path": "docs/governance/evidence/PHASE31_4_V2_5_V8_OPERATIONAL_DIAGNOSTIC_ATTEMPT_2_AUTHORIZATION_V1.json", "sha256": "7e8eb5b86fd2573f81092f301e18d5502c9809e3d117d7e05ef0aefb267d86b0"},
+    "preflight": {"path": "docs/governance/evidence/PHASE31_4_V2_5_V8_OPERATIONAL_DIAGNOSTIC_ATTEMPT_2_PREFLIGHT_V1.json", "sha256": "6fcb311d95e83ef3f6b745df2169dd637c933ff1381f05df447f7fe0d3749c9b"},
+    "authorization_consumption": {"path": "docs/governance/evidence/runs/Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_2/AUTHORIZATION_CONSUMPTION.json", "sha256": "45589f5557ff204139f5f915411f23f43ddebf6957201f31ab78673643f0eb6e"},
+    "resource_manifest": {"path": "docs/governance/evidence/runs/Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_2/RESOURCE_MANIFEST.json", "sha256": "5d51da7aa8bba68c1fde7f3db39b3456daa793d64321367b6d3c46a3984cfacc"},
+    "execution_outcome": {"path": "docs/governance/evidence/runs/Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_2/execution_outcome.json", "sha256": "0229de608ae539a183c3b06844fd601bcc9f34661c9f8b899cae9e6203fa3499"},
+    "independent_residual_check": {"path": "docs/governance/evidence/runs/Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_2/independent_residual_check.json", "sha256": "d4c963172691de065b38d5a612e48d214ab83c93c9dfb3c685085146b67fa7a0"},
+    "teardown": {"path": "docs/governance/evidence/runs/Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_2/teardown.json", "sha256": "0e7d4ba7600de79f6a79af6b4f7164dfd808c1df1dbd222c2fcb061c79273b58"},
+    "final_report": {"path": "docs/governance/evidence/PHASE31_4_V2_5_V8_OPERATIONAL_DIAGNOSTIC_ATTEMPT_2_FINAL_REPORT_V1.md", "sha256": "d387701c55428ff75103e07231ab2e1fb9027ff5de2b2856c30748670c5b22ce"}
+  },
+  "historical_v8_preserved": true,
+  "retry20_authorization": "NONE",
+  "retry20_executed": false,
+  "phase31_5": "EXECUTION_HELD",
+  "attempt_3": "NOT_STARTED"
+}

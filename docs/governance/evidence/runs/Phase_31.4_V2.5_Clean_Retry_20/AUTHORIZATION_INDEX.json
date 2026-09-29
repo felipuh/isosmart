@@ -1,0 +1,23 @@
+{
+  "schema": "phase31.4-v2.5-versioned-authorization-index/v1",
+  "run_id": "Phase 31.4 V2.5 Clean Retry 20",
+  "canonical_run_slug": "Phase_31.4_V2.5_Clean_Retry_20",
+  "append_only": true,
+  "authorizations": [
+    {
+      "authorization_id": "historical-retry20-v5-0ca3036204c9",
+      "artifact": "PHASE31_4_V2_5_CLEAN_RETRY_20_AUTHORIZATION.json",
+      "authorization_sha256": "0ca3036204c9821e17663d41e31a5734f10cd6a4c8b9f8d4d7f6585db5c1135b",
+      "baseline_generation": "PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V5",
+      "baseline_sha256": "64127fbf818dc77c1cdd37221ce3a16f2dc2089342268b4eecb157b487c3ca64",
+      "issued_at": "2026-09-23T00:00:00Z",
+      "consumed": false,
+      "status": "SUPERSEDED",
+      "superseded_reason": "MATERIAL_OPERATIONAL_EXECUTOR_REMEDIATION_REQUIRES_SUCCESSOR_INTEGRITY",
+      "successor_authorization": null,
+      "do_not_consume": true
+    }
+  ],
+  "formal_successor_authorization_created": false,
+  "updated_at": "2026-09-24T00:03:00Z"
+}

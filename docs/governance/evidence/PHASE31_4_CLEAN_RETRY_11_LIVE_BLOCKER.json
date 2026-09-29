@@ -1,0 +1,25 @@
+{
+  "artifact_schema": "phase31.4-retry11-live-blocker/v1",
+  "id": "P1-RETRY11-V25-INITIAL-OPPORTUNITY-TENANT-BINDING-MISMATCH",
+  "severity": "P1",
+  "status": "OPEN",
+  "phase": "INITIAL_OPPORTUNITY",
+  "operation": "create_opportunity",
+  "binding_classification": "REFERENCE_RESOLVED_BINDING",
+  "defect_layer": "contract_or_resolver",
+  "live_process_id": "4a4ead4c-5e09-4d95-92d3-d8537d1b88da",
+  "persisted_process_id": "4a4ead4c-5e09-4d95-92d3-d8537d1b88da",
+  "process_binding_status": "PASS",
+  "process_fixture_fallback_used": false,
+  "contract_tenant_source_member": "qms.tenant_projection::daa6bb22-660c-56f5-aadf-c63f06b01731",
+  "live_tenant_projection_id": "c8f7b227-5a4a-4d2f-baeb-735c8d52181c",
+  "native_opportunity_id_returned": null,
+  "persisted_opportunity_process_id": null,
+  "error": "Process matching query does not exist.",
+  "evidence": [
+    "PHASE31_4_CLEAN_RETRY_11_STAGE_EXT.json",
+    "PHASE31_4_CLEAN_RETRY_11_PROCESS_BINDING_PRECHECK.json",
+    "PHASE31_4_CLEAN_RETRY_11_NATIVE_RUNTIME.json"
+  ],
+  "policy": "Do not inject a frozen UUID; resolve the live tenant capture before INITIAL_OPPORTUNITY."
+}

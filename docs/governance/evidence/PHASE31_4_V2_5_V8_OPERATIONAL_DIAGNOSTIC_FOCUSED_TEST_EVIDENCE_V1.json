@@ -1,0 +1,26 @@
+{
+  "schema": "phase31.4-v2.5-v8-operational-diagnostic-focused-test-evidence/v1",
+  "verdict": "PASS",
+  "tests": [
+    {
+      "name": "test_adminapps_service_uses_absolute_manage_path_and_preserves_launch_contract",
+      "result": "PASS"
+    },
+    {
+      "name": "test_isosmart_service_uses_absolute_manage_path_and_preserves_launch_contract",
+      "result": "PASS"
+    }
+  ],
+  "focused_command": "backend/.venv/bin/python direct invocation of both focused test functions",
+  "focused_result": "2 passed",
+  "pytest_attempt": "NOT_EXECUTED: backend/.venv/bin/python has no pytest module",
+  "related_regression_command": "backend/.venv/bin/python docs/governance/tools/test_phase31_4_v2_5.py",
+  "related_regression_result": "V2.5 focused regression: PASS",
+  "syntax_check": "PASS",
+  "assertions": [
+    "AdminApps argv contains the absolute application-root manage.py",
+    "ISO Smart argv contains the absolute application-root manage.py",
+    "Python executable, subsequent arguments, port, environment, and service identity are preserved",
+    "relative manage.py regression is rejected"
+  ]
+}

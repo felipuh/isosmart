@@ -1,0 +1,138 @@
+{
+  "algorithm": "sha256",
+  "artifact_schema": "phase31.4-retry10-sha256-manifest/v1",
+  "artifacts": [
+    {
+      "bytes": 18965,
+      "path": "backend/backend/settings.py",
+      "sha256": "f2630ca38b5ab0eedc2dcbb1fbcea32a23aa4a5c0b671a961182435ecf87ccc8"
+    },
+    {
+      "bytes": 21309,
+      "path": "backend/foundation/postgres_foundation_gate.py",
+      "sha256": "081ae073ffe7f66721974c0ea88dbc954b473016b9ea888dae92e3509de10fe2"
+    },
+    {
+      "bytes": 2461,
+      "path": "docs/adr/0020-postgresql-foundation-role-bootstrap.md",
+      "sha256": "f840cc4a639f3e0bc596ae26e64bff8eb7467b164760a1772fe9ebfb768405e1"
+    },
+    {
+      "bytes": 3727,
+      "path": "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_10_ADMINAPPS_MIGRATIONS.log",
+      "sha256": "642e4f1806409323b31941157e06e779a9736881ef7240fc9e47087992f308cf"
+    },
+    {
+      "bytes": 321,
+      "path": "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_10_ADMINAPPS_SERVER.log",
+      "sha256": "06094a119b9b087a888cbed19b4077cfd453fb69f264d723ac56649084050a26"
+    },
+    {
+      "bytes": 407,
+      "path": "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_10_ALLOCATION.json",
+      "sha256": "e421407634a84f0489a90dbaa33f7a883626734687adcfec09964e5f0c6399da"
+    },
+    {
+      "bytes": 853,
+      "path": "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_10_CLOSURE.json",
+      "sha256": "a9473ac1e7461fb60b10e4cbdc724889ffd956f2a69aa51d0fd349c327bd1b3c"
+    },
+    {
+      "bytes": 5861,
+      "path": "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_10_ISOSMART_MIGRATIONS.log",
+      "sha256": "f5f496625edfcd0c735398178748dab7d79e6ccd321ea7907a5e34d54250afb0"
+    },
+    {
+      "bytes": 7107,
+      "path": "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_10_ISOSMART_MIGRATIONS_ATTEMPT1.log",
+      "sha256": "f57d03e280f140f7aa4f9136f0340d154519c86497522bec3fe87885fa96e35d"
+    },
+    {
+      "bytes": 0,
+      "path": "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_10_ISOSMART_SERVER.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 2689,
+      "path": "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_10_LIVE_BLOCKER.json",
+      "sha256": "16bf3f66b99beda6b89f401b7cff5d7ef071b1035e8daf04adeabc218279b8e2"
+    },
+    {
+      "bytes": 944,
+      "path": "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_10_MIGRATIONS.json",
+      "sha256": "d4baf94e94f254fbfcf4649d1a3b26d5bae5b2f2b2cca91eff972194ed953bcf"
+    },
+    {
+      "bytes": 1079,
+      "path": "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_10_MIGRATION_CONFIG_BLOCKER.json",
+      "sha256": "bbfea0e25e9b527f167cc7aa8d19eb9367fc1a274c73601f9280329589678589"
+    },
+    {
+      "bytes": 3492,
+      "path": "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_10_NATIVE_RUNTIME.json",
+      "sha256": "06c32704c0eca7bef919c9302c2955735f92c312cb1b8069d7aba216c6d22661"
+    },
+    {
+      "bytes": 3774,
+      "path": "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_10_RESOURCE_MANIFEST.json",
+      "sha256": "c4a8b199fbb811d34095055c9c34376e4ab2a5a0685f479690e1245828d68a4d"
+    },
+    {
+      "bytes": 1381,
+      "path": "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_10_STAGE_EXT.json",
+      "sha256": "047c0f484bee38c19127b5bad4ed7f429722c85c6bef5bc0f4c7d75bb5d09e5f"
+    },
+    {
+      "bytes": 242693,
+      "path": "docs/governance/evidence/PHASE31_4_POSTGRES_RUNTIME_ROLE_BOOTSTRAP_V1.json",
+      "sha256": "af5551e54c61ea04a20aa7c15ef4360f57998b24b54973f105b21478105d4760"
+    },
+    {
+      "bytes": 2078030,
+      "path": "docs/governance/fixtures/PHASE31_4_5B_ROW_LEVEL_EXECUTION_CONTRACT_V2_4.json",
+      "sha256": "a102d278bf2e5ca6e9b8bf282f5402a54f52d4690beed2ecbed5145c56539387"
+    },
+    {
+      "bytes": 3201,
+      "path": "docs/governance/tools/retry10_admin_create.py",
+      "sha256": "1cc7784b22c2c8c0ecfc35c9766691cef9165f95183bf6a77a056804c59d0f92"
+    },
+    {
+      "bytes": 4148,
+      "path": "docs/governance/tools/retry10_iso_native.py",
+      "sha256": "2023148703ec01bef7dd6d57ec9b0568ff360fa89c026363268e496efe383918"
+    },
+    {
+      "bytes": 12473,
+      "path": "docs/governance/tools/retry10_resources.py",
+      "sha256": "98234a958bacb9311603d2dd85f53a5ad4fb5b2acd658750c0bf32a02dffefab"
+    },
+    {
+      "bytes": 9220,
+      "path": "docs/governance/tools/retry10_run.py",
+      "sha256": "d47f1a903ffabdeff760315ab4dd4fb522ab3517dd0f3006a42b453ece628dda"
+    },
+    {
+      "bytes": 3534,
+      "path": "docs/governance/tools/retry10_runtime.py",
+      "sha256": "4ac7db29d88deb6726da90441d374babeca221ff1c8c8cf26389e18cc8ba9231"
+    },
+    {
+      "bytes": 6464,
+      "path": "docs/governance/tools/retry10_stage_ext.py",
+      "sha256": "648229b6259248cfeadafab3a01c497216e45a9c35b56c621c009502aa5378c1"
+    },
+    {
+      "bytes": 9793,
+      "path": "docs/governance/tools/retry10_validate.py",
+      "sha256": "57f3b9bfefb6b0b9b818ebb2ffe5380b534afcd5e8ec6cce9a7a5d5616d63832"
+    },
+    {
+      "bytes": 4756,
+      "path": "docs/transformation/PHASE31_4_CLEAN_RETRY_10_REPORT.md",
+      "sha256": "5775e052e5d6a53a77a2841e4ce7a33a2e6fee96650cfb9fa3274de8c7d385c6"
+    }
+  ],
+  "created_at": "2026-09-18T14:48:35.991025+00:00",
+  "retry_id": "Phase 31.4 V2.5 Clean Retry 10"
+}

@@ -1,0 +1,16 @@
+{
+  "artifact_schema": "phase31.4-v2.5-runtime-provenance-discontinuity/v1",
+  "status": "PROVENANCE_DISCONTINUITY",
+  "target_file": "backend/foundation/phase31_4_v2_5_runtime.py",
+  "predecessor_sha256": "5be7650ac78eae653f4e6cd0b656ab0ccd9556a75f9c41cb3edd512d6a012cfd",
+  "current_sha256": "7ed7430abe798d6fd31b2bc27344abde35a7ab7df9e2ef13b51f1ddb7b03fd00",
+  "recovery_search_scope": "current branch history, refs, tags, reflogs, worktrees, stashes, reachable and unreachable Git objects, local recovery artifacts, and governance evidence",
+  "recovery_attempted": true,
+  "recovery_result": "EXACT_PREDECESSOR_NOT_FOUND",
+  "continuity_status": "NOT_PROVEN",
+  "exact_diff_available": false,
+  "byte_for_byte_continuity_provable": false,
+  "impact": "The current runtime cannot be attributed byte-for-byte to verifier remediation alone; unrelated drift cannot be excluded historically.",
+  "governance_decision": "Establish an independent current-source baseline while preserving V1 and the recovery failure record unchanged.",
+  "successor_baseline_reference": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V2.json"
+}

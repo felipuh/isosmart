@@ -1,0 +1,66 @@
+{
+  "artifact_schema": "phase31.4-v2.5-promoted-baseline-handoff/v1",
+  "artifact_nature": "summary_of_existing_evidence",
+  "phase": "Phase 31.4 V2.5",
+  "status": "PROMOTED_BASELINE",
+  "successful_retry": "Phase 31.4 V2.5 Clean Retry 16",
+  "promotion_timestamp": "2026-09-22T23:23:10.484835Z",
+  "results": {
+    "live_phases": {"passed": 33, "expected": 33, "result": "PASS"},
+    "native_captures": {"resolved": 565, "expected": 565},
+    "upstream_captures": {"resolved": 5, "expected": 5},
+    "live_graph": {
+      "resolved_members": 118,
+      "expected_members": 118,
+      "resolved_fields": 1664,
+      "expected_fields": 1664,
+      "unresolved": 0,
+      "sha256": "d6723f0fa64fce046d47ad9a64a01c60c33ac6205b26949131b675a4744dddc0"
+    },
+    "exact_comparison": {"result": "PASS", "total_mismatches": 0},
+    "event_outbox_audit": "PASS",
+    "transaction": "PASS",
+    "teardown": "PASS"
+  },
+  "blockers": {
+    "current_v25": {"P0": 0, "P1": 0},
+    "historical_v24_preserved": true,
+    "intermediate_retry16_blocker_record_is_historical": true
+  },
+  "preserved_v24": {
+    "result": "PASS",
+    "contract": "docs/governance/fixtures/PHASE31_4_5B_ROW_LEVEL_EXECUTION_CONTRACT_V2_4.json",
+    "sha256": "a102d278bf2e5ca6e9b8bf282f5402a54f52d4690beed2ecbed5145c56539387"
+  },
+  "evidence": {
+    "promotion_closure": "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_16_PROMOTION_CLOSURE.json",
+    "live_exact_comparison": "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_16_LIVE_EXACT_COMPARISON.json",
+    "sha256_manifest": "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_16_SHA256.json",
+    "sha256_manifest_hash": "d6e514f439e9b03fc9afa0d1bda47e9ff5c198ad9417d6244ce13f2bf1e62cb3",
+    "retry16_migration_closure": "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_16_BOOTSTRAP_MIGRATIONS.json",
+    "current_source_integrity": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V1.json",
+    "v24_preservation": "docs/governance/evidence/PHASE31_4_V2_4_HISTORICAL_MIGRATION_MANIFEST_V1.json",
+    "historical_blocker_preservation": "docs/governance/evidence/PHASE31_4_V25_FROZEN_BLOCKER_DISPOSITION_V1.json"
+  },
+  "read_only_verification": {
+    "date": "2026-09-22",
+    "retry16_sha_manifest_members": "PASS",
+    "current_source_entries": "20/20 PASS",
+    "migration_hashes": "24/24 PASS",
+    "v24_contract_hash": "PASS"
+  },
+  "freeze": {
+    "development_phase_open": false,
+    "new_retry_authorized": false,
+    "binding_corrections_authorized": false,
+    "contract_changes_authorized": false,
+    "historical_evidence_changes_authorized": false,
+    "reopen_condition": "separately governed future demonstrated regression"
+  },
+  "authority_granted": {
+    "new_technical_evidence": false,
+    "deployment": false,
+    "production": false,
+    "runtime_adoption": false
+  }
+}

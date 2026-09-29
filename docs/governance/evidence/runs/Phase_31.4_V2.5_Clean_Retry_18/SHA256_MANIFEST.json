@@ -1,0 +1,154 @@
+{
+  "aggregate_sha256": "dc6c84543fbb8938638c77173dc95a563c22b9b81e439f4884400dfee6433a83",
+  "algorithm": "SHA-256",
+  "artifact_count": 28,
+  "artifact_schema": "phase31.4-v2.5-clean-retry18-sha256-manifest/v1",
+  "entries": [
+    {
+      "bytes": 106,
+      "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_18/ADMINAPPS_EVENT_DELIVERY.log",
+      "sha256": "ab4e1f5595518c3dee32cdcab6ce7337ac277de2270b230278af4f75128b5a6e"
+    },
+    {
+      "bytes": 3727,
+      "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_18/ADMINAPPS_MIGRATIONS.log",
+      "sha256": "642e4f1806409323b31941157e06e779a9736881ef7240fc9e47087992f308cf"
+    },
+    {
+      "bytes": 2786,
+      "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_18/ADMINAPPS_MIGRATION_PLAN.log",
+      "sha256": "c4bd5c2e856d1907861e698d18fc51a4f482c01e20bfb8ca0639ec1650289bed"
+    },
+    {
+      "bytes": 0,
+      "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_18/ADMINAPPS_SERVER.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 409,
+      "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_18/AUTHORITY.json",
+      "sha256": "5c92566fe1f6bdb32c1410e0aa0059636516d5c4a533a71556616bfed41b6648"
+    },
+    {
+      "bytes": 4068,
+      "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_18/BOOTSTRAP_MIGRATIONS.json",
+      "sha256": "86f650c2526528c688f52c89cc36821ff6c058ee684950d84de1b2de4fd8b31d"
+    },
+    {
+      "bytes": 1226,
+      "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_18/BUSINESS_EXECUTION_END.json",
+      "sha256": "dea4c29d251fc55abe78a8ce0f6c367f0835e900116f07e39678b6f316ee9a80"
+    },
+    {
+      "bytes": 3789,
+      "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_18/ENVIRONMENT.json",
+      "sha256": "06ccb8b55bc09b68c09a0adb7df1ba2ff8b493c39e91aff35bae557ea1052a80"
+    },
+    {
+      "bytes": 285,
+      "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_18/EVENT_OUTBOX_AUDIT.json",
+      "sha256": "ff78daf72a2db3b61171ef361690277702f1dca27017427d5099486aa61f116f"
+    },
+    {
+      "bytes": 283,
+      "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_18/EXACT_COMPARISON.json",
+      "sha256": "7bb03ae890abf10b73d93ca98c582d0dcecc00e3a5bb5dc0cab22ff5e6b412c9"
+    },
+    {
+      "bytes": 9461,
+      "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_18/FINAL_REPORT.json",
+      "sha256": "0033fd3c28d18f743490c32055f2a25d9cb48697e637f00598cd2eaff6950cd5"
+    },
+    {
+      "bytes": 2984,
+      "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_18/FINAL_REPORT.md",
+      "sha256": "622bc48672fcc32f57856d6b8f25becef68db6cb2c9b30d6acee5a53797df2f0"
+    },
+    {
+      "bytes": 5861,
+      "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_18/ISOSMART_MIGRATIONS.log",
+      "sha256": "f5f496625edfcd0c735398178748dab7d79e6ccd321ea7907a5e34d54250afb0"
+    },
+    {
+      "bytes": 4521,
+      "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_18/ISOSMART_MIGRATION_PLAN.log",
+      "sha256": "035d525cead888ba535bff24a88d0e23813d803b409c414d40abf0377f88b3bb"
+    },
+    {
+      "bytes": 176,
+      "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_18/ISOSMART_SERVER.log",
+      "sha256": "5700d00be75d6505d20e3f2161cd02ba93ae2bff80159b628ba4b748deb1c73e"
+    },
+    {
+      "bytes": 1061,
+      "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_18/LIVE_BLOCKER.json",
+      "sha256": "9734bfe476d7bed883201d2127a9022377751606d97b6726eded23b36cbeb7be"
+    },
+    {
+      "bytes": 404,
+      "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_18/NATIVE_CAPTURES.json",
+      "sha256": "16163ff7c4b513b2dd720809abba34490f26132f9bc3da6ac116987d7004bd22"
+    },
+    {
+      "bytes": 8263,
+      "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_18/PHASE_RESULTS.json",
+      "sha256": "c46f7436c96dfdc0a86a5fdb2658cb136c66abe89a13d5014111308aff49d889"
+    },
+    {
+      "bytes": 2029,
+      "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_18/POST_TEARDOWN_VERIFICATION.json",
+      "sha256": "0b3889d9bb4d99fed13abcf89cdc86e37776d1bae3322eb1ed9a43e42c42e0ea"
+    },
+    {
+      "bytes": 3219,
+      "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_18/PRECREATION_EXECUTION.json",
+      "sha256": "a408f7e8274e327de5069598afe81091b94c8d5b022c1de30fc89c538c187bff"
+    },
+    {
+      "bytes": 5380,
+      "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_18/PRECREATION_INTEGRITY/precreation_integrity.json",
+      "sha256": "ec1e873dbd23c11d343c96ae4d8cf089fc2d4e267fb725fbe67de955e05b3ac7"
+    },
+    {
+      "bytes": 985,
+      "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_18/PREFLIGHT.json",
+      "sha256": "25d386ea3e07549e094668b4e65c286e13d1ac676c04b5a5686ec27e02ed4725"
+    },
+    {
+      "bytes": 320,
+      "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_18/RESOLVED_GRAPH.json",
+      "sha256": "3843c895157255b746a13c5312ba99944d2cdb3f084c5260b9f58c3b429b8bf2"
+    },
+    {
+      "bytes": 3827,
+      "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_18/RESOURCE_MANIFEST.json",
+      "sha256": "1aa5268add0df935f609e0202b9b31dd9e9e6babbdfd7fdad3c1ae02c7545b74"
+    },
+    {
+      "bytes": 188,
+      "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_18/SECURITY.json",
+      "sha256": "4d15074297068c3b9e29b71069bd90cb61fbfe20f6aaf0fa89134485668663c8"
+    },
+    {
+      "bytes": 4268,
+      "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_18/STAGE_EXT.json",
+      "sha256": "ac3abdbf16efcd5cb56ad3740e61e53d89b805852e38504e1fd6df2e3266277a"
+    },
+    {
+      "bytes": 2066,
+      "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_18/TEARDOWN.json",
+      "sha256": "20bb6654e648ad12124ea8015362a0afbe1c5cb2a493354d486cd8c617221b74"
+    },
+    {
+      "bytes": 247,
+      "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_18/TRANSACTIONS.json",
+      "sha256": "cb1d697c0239ae322a07563ccb3e18e0bb86a6af83d44c6da8dc0950f7b80b71"
+    }
+  ],
+  "excluded": [
+    "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_18/SHA256_MANIFEST.json"
+  ],
+  "generated_at": "2026-09-23T21:26:41.213135+00:00",
+  "readback_verification": "PASS",
+  "run_id": "Phase 31.4 V2.5 Clean Retry 18"
+}

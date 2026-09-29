@@ -1,0 +1,45 @@
+{
+  "schema": "phase31.4-v2.5-v8-operational-diagnostic-attempt-readiness-blocker/v1",
+  "verdict": "ATTEMPT_2_BLOCKER_CONFIRMED",
+  "cycle_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1",
+  "attempt": 2,
+  "previous_blocker": "ADMINAPPS_START_FAILURE: relative manage.py",
+  "current_blocker": "ADMINAPPS_START_FAILURE: readiness HTTP 401 Unauthorized",
+  "component": "SubprocessOperationalAdapter._start readiness probe",
+  "expected": {
+    "endpoint": "/api/integration/health/",
+    "http_status": "2xx",
+    "purpose": "authenticated integration health endpoint or explicitly public readiness endpoint"
+  },
+  "observed": {
+    "endpoint": "/api/integration/health/",
+    "http_status": 401,
+    "log": "docs/governance/evidence/runs/Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_2/adminapps_service.log",
+    "response_pattern": "Unauthorized throughout readiness timeout"
+  },
+  "root_cause_evidence": {
+    "adminapps_route": "/home/felipe/proyectos/adminapps/backend/integration/views.py:health_check",
+    "authentication": "api_key_required",
+    "required_header": "X-API-Key",
+    "key_lifecycle": "Attempt 2 authority creates IntegrationAPIKey after service startup",
+    "adapter_probe": "urllib.request.urlopen(base_url + health_path) sends no X-API-Key header",
+    "public_alternative": "/api/health/ via apps.api.views.HealthCheckView with AllowAny"
+  },
+  "single_remediation_candidate": {
+    "status": "CANDIDATE_ONLY_NOT_APPLIED",
+    "change": "Use AdminApps public /api/health/ as the readiness path in repository_operational_environment().",
+    "file": "backend/foundation/phase31_4_v2_5_operational_adapters.py",
+    "why": "Preserves the protected integration endpoint and avoids requiring authority before the service can become ready.",
+    "not_combined_with": ["API-key injection into readiness probe", "authority creation before service startup", "changes to AdminApps authentication"]
+  },
+  "execution_boundary": {
+    "attempt_2_verdict": "ATTEMPT_2_FAIL",
+    "teardown": "PASS",
+    "zero_residual_resources": true,
+    "stage_ext": "0/6",
+    "capture_bundle": "NOT_REACHED",
+    "attempt_3": "NOT_AUTHORIZED_BY_ATTEMPT_2_ARTIFACT",
+    "retry_20": "NOT_AUTHORIZED",
+    "phase31_5": "EXECUTION_HELD"
+  }
+}

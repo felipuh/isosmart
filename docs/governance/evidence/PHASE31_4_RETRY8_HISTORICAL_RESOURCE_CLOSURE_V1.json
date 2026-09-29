@@ -1,0 +1,162 @@
+{
+  "artifact_schema": "phase31.4-retry8-historical-resource-closure/v1",
+  "artifact_type": "HISTORICAL_RESOURCE_CLOSURE",
+  "generated_at": "2026-09-18T13:57:34Z",
+  "scope": "Phase 31.4 Retry 8 resource governance only; Phase 31.4 was not executed and Retry 9 was not allocated",
+  "original_retry_8": {
+    "retry": "Phase 31.4 V2.5 Clean Retry 8",
+    "original_teardown_state": "PENDING",
+    "historical_teardown_proven": false,
+    "historical_evidence_modified": false,
+    "historical_artifact": "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_8_V2_5_LIVE_BLOCKER_20260917.json"
+  },
+  "present_state": {
+    "classification": "UNRESOLVED_RESOURCE_NOT_PRESENT_IN_ANY_KNOWN_RUNTIME_CONTEXT",
+    "attributable_resource_present": false,
+    "podman_containers": "no match",
+    "podman_pods": "no match",
+    "podman_networks": "no match",
+    "podman_volumes": "anonymous volumes present; none attributable to Retry 8",
+    "relevant_images": "generic PostgreSQL 18.6 image present; no Retry 8-specific image match",
+    "postgresql_specific_retry_8_resource": "no match",
+    "known_local_postgresql": "read-only inspection found PostgreSQL 18.4 without phase31_4_retry8",
+    "active_postgresql_listener": "no evidence attributable to Retry 8",
+    "positive_historical_resource_match": false
+  },
+  "runtime_contexts_inspected": [
+    {
+      "context": "default Podman context",
+      "result": "empty inventory"
+    },
+    {
+      "context": "workspace Podman context and known storage roots",
+      "result": "no attributable Retry 8 resource; older exited smart3ai-postgres18 reviewed and not matched"
+    },
+    {
+      "context": "known local PostgreSQL instances",
+      "result": "read-only inspection; PostgreSQL 18.4 has no phase31_4_retry8 database"
+    }
+  ],
+  "resources_inspected": [
+    "Podman contexts",
+    "Podman storage roots",
+    "containers",
+    "pods",
+    "networks",
+    "volumes",
+    "relevant images",
+    "known local PostgreSQL instances and active listeners"
+  ],
+  "historical_identifiers_searched": [
+    "phase31_4_retry8",
+    "Phase 31.4 V2.5 Clean Retry 8",
+    "PostgreSQL 18.6 (Debian 18.6-1.pgdg13+2)",
+    "P1-V25-LIVE-INITIAL-OPPORTUNITY-UPSTREAM-PROCESS-MISSING-20260917"
+  ],
+  "candidate_resources_reviewed": [
+    {
+      "candidate": "older exited smart3ai-postgres18 workspace container",
+      "attributable_to_retry_8": false,
+      "action": "none"
+    },
+    {
+      "candidate": "generic PostgreSQL 18.6 image",
+      "attributable_to_retry_8": false,
+      "action": "none"
+    },
+    {
+      "candidate": "anonymous volumes",
+      "attributable_to_retry_8": false,
+      "action": "none"
+    }
+  ],
+  "match_results": {
+    "resource_identifier_match": false,
+    "runtime_context_match": false,
+    "database_identifier_match": false,
+    "safe_delete_candidate": false,
+    "shared_resource_modified": false,
+    "global_prune_performed": false,
+    "destructive_actions_performed": "none"
+  },
+  "closure_conditions": {
+    "all_known_podman_contexts_inspected": true,
+    "all_known_podman_storage_roots_inspected": true,
+    "containers_inspected": true,
+    "pods_inspected": true,
+    "networks_inspected": true,
+    "volumes_inspected": true,
+    "relevant_images_inspected": true,
+    "known_local_postgresql_instances_inspected_read_only": true,
+    "historical_retry_identifiers_searched_repository_wide": true,
+    "no_positive_resource_match": true,
+    "no_candidate_safely_deletable": true,
+    "no_shared_resource_modified": true,
+    "no_global_prune": true,
+    "inspection_evidence_preserved": true,
+    "governance_accepts_historical_proof_vs_present_absence_distinction": true
+  },
+  "governance_decision": {
+    "verdict": "CLOSURE_ACCEPTED",
+    "historical_resource_closure": "CLOSED_BY_EXHAUSTIVE_ABSENCE_EVIDENCE",
+    "meaning": "The original teardown was not positively proven. After exhaustive inspection of all known runtime contexts, no resource attributable to historical Retry 8 remains identifiable or safely actionable.",
+    "historical_teardown_proven": false,
+    "attributable_resource_present": false,
+    "resource_hygiene_gate": "SATISFIED_BY_PRESENT_ABSENCE_CLOSURE",
+    "safety_assessment": {
+      "resource_contamination": "no attributable resource remains identifiable",
+      "accidental_reuse": "no attributable resource is safely actionable or reusable",
+      "cross_retry_state_leakage": "no attributable runtime resource remains in known contexts",
+      "destructive_ambiguity": "preserved by taking no deletion or prune action"
+    }
+  },
+  "retry_9_consequence": {
+    "repository_wide_numbering_check": "performed; no executed Retry 9 artifact found",
+    "retry_9": "AUTHORIZED_AFTER_ALL_OTHER_GATES_PASS",
+    "allocated": false,
+    "executed": false,
+    "fresh_unique_resource_labels_required": true,
+    "authorization_basis": "The accepted closure satisfies the resource-hygiene precondition only. It does not authorize Phase 31.4 execution or bypass any other gate."
+  },
+  "future_teardown_policy": {
+    "status": "NOT_IMPLEMENTED",
+    "required_before_future_live_retry_closure": [
+      "retry ID",
+      "container ID",
+      "image digest",
+      "volume IDs/names",
+      "network ID/name",
+      "DB name",
+      "port mapping",
+      "Podman storage root/context",
+      "creation timestamp",
+      "teardown timestamp",
+      "teardown command/result",
+      "post-teardown verification"
+    ],
+    "enforcement": "Teardown evidence must be persisted before final retry closure."
+  },
+  "limitations": [
+    "No positive evidence proves that the historical Retry 8 teardown occurred.",
+    "The PostgreSQL 18.4 read-only absence check cannot prove historical teardown of the named PostgreSQL 18.6 resource.",
+    "This closure is not a historical teardown PASS and must never be encoded as one."
+  ],
+  "supporting_evidence": [
+    {
+      "path": "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_8_V2_5_LIVE_BLOCKER_20260917.json",
+      "sha256": "3826383f4cd950558d816a1ead5e01762f1771bef8501f4e7a19a6fc84e18833"
+    },
+    {
+      "path": "docs/governance/evidence/stage_ext_20260917/12-retry8-teardown.json",
+      "sha256": "4bd520158206bb25e079199d08308e2c719035a19840f39a0b3fd13550d4c691"
+    },
+    {
+      "path": "docs/governance/evidence/stage_ext_20260917/manifest.json",
+      "sha256": "b49a53ded4384d2bb75d1a73cf5d26a88ddc43b959ed1febde0b215999447879"
+    },
+    {
+      "path": "docs/transformation/STAGE_EXT_REMEDIATION_REPORT_20260917.md",
+      "sha256": "ce5958d13a2bcdfd58c1f9c1c4c943fde5323f5f98b3b81b43c43232cb7d458c"
+    }
+  ]
+}

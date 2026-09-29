@@ -1,0 +1,216 @@
+{
+  "artifact_schema": "phase31.4-v2.5-verifier-remediation-integrity-reconciliation/v1",
+  "generated_at": "2026-09-22T20:51:44-06:00",
+  "independent_review_completed_at": "2026-09-22T21:01:25-06:00",
+  "repository": {
+    "head_commit": "0d2ddfdead408b7cc6cb9c6dbc08707281cb9fb7",
+    "worktree_state": "DIRTY_UNCOMMITTED",
+    "commit_anchored_current_bytes": false
+  },
+  "scope": "Verifier Remediation Current-Integrity Reconciliation only; no live retry, Retry 17, WS-A, V2.4 rewrite, Retry 16 rewrite, source-artifact change, or Phase 31.5 execution.",
+  "verdict": "VERIFIER_REMEDIATION_INTEGRITY_FAIL",
+  "governance_decision": {
+    "state": "STOPPED_FAIL_CLOSED",
+    "blocker": "The exact predecessor bytes whose SHA-256 is 5be7650ac78eae653f4e6cd0b656ab0ccd9556a75f9c41cb3edd512d6a012cfd are not available as a Git blob, snapshot, or recoverable patch. The current runtime is consistent with verifier-remediation intent, but a byte-complete predecessor-to-current diff cannot be produced and unrelated drift cannot be excluded.",
+    "candidate_successor_created_during_assessment": true,
+    "candidate_successor_removed": true,
+    "authoritative_successor_adopted": false,
+    "authoritative_successor_present": false,
+    "candidate_successor_disposition": "WITHDRAWN_AND_REMOVED",
+    "authoritative_current_generation": {
+      "path": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V1.json",
+      "schema": "phase31.4-v2.5-current-source-integrity/v1",
+      "generation": "V2.5_CURRENT",
+      "sha256": "8e77d62e1cccc42d0dbeaf7c00e9007c7120201b97af2f46484bbf81893a1db0"
+    },
+    "successor_generation": null
+  },
+  "original_regression": {
+    "command": "./.venv/bin/python manage.py test -v 0",
+    "tests": 498,
+    "failures": 0,
+    "errors": 3,
+    "distinct_protected_source_drifts": 1,
+    "failing_tests": [
+      {
+        "test": "foundation.test_phase31_4_3_supporting_contract_audit.SupportingContractAuditTests.test_protected_sources_match",
+        "surface_error": "IntegrityGenerationError: V2.5 protected source drift: backend/foundation/phase31_4_v2_5_runtime.py",
+        "protected_file": "backend/foundation/phase31_4_v2_5_runtime.py",
+        "expected_sha256": "5be7650ac78eae653f4e6cd0b656ab0ccd9556a75f9c41cb3edd512d6a012cfd",
+        "observed_sha256": "7ed7430abe798d6fd31b2bc27344abde35a7ab7df9e2ef13b51f1ddb7b03fd00",
+        "integrity_generation": "V2.5_CURRENT / v1 after the V2.4 historical check passed",
+        "why_hash_changed": "The current runtime contains verifier-remediation behavior, but the exact predecessor bytes are unavailable, so the complete byte delta cannot be attributed exclusively to that work.",
+        "entirely_explained_by_verifier_remediation": false,
+        "classification": "UNEXPECTED_SOURCE_DRIFT"
+      },
+      {
+        "test": "foundation.test_phase31_4_integrity_generations.V25CurrentOperationalIntegrityTests.test_current_manifest_passes",
+        "surface_error": "IntegrityGenerationError: V2.5 protected source drift: backend/foundation/phase31_4_v2_5_runtime.py",
+        "protected_file": "backend/foundation/phase31_4_v2_5_runtime.py",
+        "expected_sha256": "5be7650ac78eae653f4e6cd0b656ab0ccd9556a75f9c41cb3edd512d6a012cfd",
+        "observed_sha256": "7ed7430abe798d6fd31b2bc27344abde35a7ab7df9e2ef13b51f1ddb7b03fd00",
+        "integrity_generation": "V2.5_CURRENT / v1",
+        "why_hash_changed": "Same single runtime divergence as the supporting-contract audit; exact byte causality is not provable from retained repository evidence.",
+        "entirely_explained_by_verifier_remediation": false,
+        "classification": "UNEXPECTED_SOURCE_DRIFT"
+      },
+      {
+        "test": "foundation.test_phase31_4_retry5_operational_manifest.Retry5ManifestTests.test_authoritative_manifest_and_external_hash",
+        "surface_error": "ManifestVerificationError: unapproved successor: backend/backend/settings.py",
+        "surface_protected_file": "backend/backend/settings.py",
+        "root_protected_file": "backend/foundation/phase31_4_v2_5_runtime.py",
+        "settings_historical_sha256": "1da64d5f1c8248a2c2e2e9cc586424bde185c85efd467923be28d5c1f2d170ba",
+        "settings_observed_sha256": "bd72cff98c15a7cbcd494a9e791e3682fcf33a539ae0f1a6e05ecefb99bbe7c0",
+        "settings_v1_status": "APPROVED_SUCCESSOR_AND_MATCHING",
+        "runtime_expected_sha256": "5be7650ac78eae653f4e6cd0b656ab0ccd9556a75f9c41cb3edd512d6a012cfd",
+        "runtime_observed_sha256": "7ed7430abe798d6fd31b2bc27344abde35a7ab7df9e2ef13b51f1ddb7b03fd00",
+        "integrity_generation": "V2.4 historical precheck PASS; Retry 5 historical member check then delegated transitively to V2.5_CURRENT / v1",
+        "why_hash_changed": "Settings is not the new drift. Its approved V1 successor check invoked the complete current-generation guard, which failed on the runtime and was rethrown with the currently iterated settings path.",
+        "entirely_explained_by_verifier_remediation": false,
+        "classification": "UNEXPECTED_SOURCE_DRIFT",
+        "diagnostic_note": "TRANSITIVE_FAILURE_WITH_MISLEADING_SURFACE_PATH; not an independent settings drift and not a historical-integrity violation."
+      }
+    ]
+  },
+  "causality_assessment": {
+    "required_links": [
+      "docs/governance/evidence/PHASE31_4_V2_5_EVIDENCE_RECONCILIATION_V1.json",
+      "docs/governance/evidence/PHASE31_4_V2_5_VERIFIER_REMEDIATION_V1.json"
+    ],
+    "required_link_sha256": {
+      "docs/governance/evidence/PHASE31_4_V2_5_EVIDENCE_RECONCILIATION_V1.json": "b16402b0893d03b7c17dcb199122cc5c2bbab1cf938e1e97e89444590a801067",
+      "docs/governance/evidence/PHASE31_4_V2_5_VERIFIER_REMEDIATION_V1.json": "51cce2a90eee07421ea8c3b63deb64e8e1fd0e14eec5efaf0d2c004d017f315e"
+    },
+    "available_evidence_supports_intended_causality": true,
+    "predecessor_bytes_available": false,
+    "exhaustive_predecessor_to_current_diff_available": false,
+    "byte_level_exhaustiveness_proven": false,
+    "runtime_implemented_scope_observed": [
+      "fail-closed/default-PASS removal",
+      "PhaseExecutionResult propagation",
+      "capture/readback retention hooks",
+      "teardown separation"
+    ],
+    "staged_material_file": {
+      "path": "backend/foundation/phase31_4_v2_5_verifier_remediation.py",
+      "sha256": "a716e139f15d4b3f247ec4db56b339bad0e8a29ef06030a00aa9542e7195a35f",
+      "status": "STAGED_NOT_LIVE_EXECUTED",
+      "integration_observation": "Graph, exact-comparison, event/outbox/audit, and security primitives are implemented in this standalone module; the current runtime does not import it directly."
+    }
+  },
+  "protected_sources": {
+    "generation": "V2.5_CURRENT / v1",
+    "expected_count": 20,
+    "present_count": 20,
+    "matching_count": 19,
+    "changed_count": 1,
+    "changed": [
+      {
+        "path": "backend/foundation/phase31_4_v2_5_runtime.py",
+        "expected_sha256": "5be7650ac78eae653f4e6cd0b656ab0ccd9556a75f9c41cb3edd512d6a012cfd",
+        "observed_sha256": "7ed7430abe798d6fd31b2bc27344abde35a7ab7df9e2ef13b51f1ddb7b03fd00",
+        "classification": "UNEXPECTED_SOURCE_DRIFT"
+      }
+    ],
+    "unchanged_count": 19,
+    "unchanged": [
+      "backend/backend/settings.py",
+      "backend/backend/urls.py",
+      "backend/foundation/projection_contract.py",
+      "backend/foundation/adminapps_ingress.py",
+      "backend/foundation/qms_organization.py",
+      "backend/foundation/migrations/0024_adminapps_ingress_receipt.py",
+      "backend/foundation/postgres_foundation_gate.py",
+      "backend/foundation/phase31_4_v2_5_structural_gate.py",
+      "backend/foundation/phase31_4_v2_5_executable_graph.py",
+      "backend/foundation/adminapps_adapter.py",
+      "backend/foundation/projection_writer.py",
+      "docs/governance/fixtures/PHASE31_4_5C_ROW_LEVEL_EXECUTION_CONTRACT_V2_5.json",
+      "backend/foundation/phase31_4_4a_field_binding_validator.py",
+      "backend/foundation/phase31_4_4b_strict_type_validator.py",
+      "backend/foundation/phase31_4_5a_retry1_source_reachability_validator.py",
+      "backend/foundation/phase31_4_5b_source_reachability_validator.py",
+      "backend/foundation/phase31_4_operational_manifest.py",
+      "backend/foundation/phase31_4_integrity_generations.py",
+      "backend/foundation/phase31_4_postgres18_environment.py"
+    ],
+    "missing": [],
+    "unexpected_within_authoritative_membership": [],
+    "unprotected_material_candidates": [
+      "backend/foundation/phase31_4_v2_5_verifier_remediation.py"
+    ]
+  },
+  "historical_integrity": {
+    "result": "PASS",
+    "v2_4_contract_sha256": "a102d278bf2e5ca6e9b8bf282f5402a54f52d4690beed2ecbed5145c56539387",
+    "v2_4_historical_manifest_sha256": "8f055dee53d7ef34a3b47ccb9fed9885c39c0b616cc0c582c75e49edf2e0cda3",
+    "retry16_sha_manifest_sha256": "d6e514f439e9b03fc9afa0d1bda47e9ff5c198ad9417d6244ce13f2bf1e62cb3",
+    "retry16_promotion_closure_sha256": "08b8af8c9911963844759808adbef5c2b3b663a26c34df494fbaca0cf985f328",
+    "previous_v2_5_current_manifest_sha256": "8e77d62e1cccc42d0dbeaf7c00e9007c7120201b97af2f46484bbf81893a1db0",
+    "historical_artifacts_modified_by_task": false
+  },
+  "migration_integrity": {
+    "result": "PASS",
+    "v2_4_historical_migration_count": 23,
+    "v2_5_current_expected_count": 24,
+    "v2_5_current_actual_count": 24,
+    "membership_match": true,
+    "hash_drift": [],
+    "makemigrations_check": "No changes detected",
+    "migration_diff": "EMPTY"
+  },
+  "validation": {
+    "historical_integrity_suite": {
+      "command": "./.venv/bin/python manage.py test foundation.test_phase31_4_integrity_generations.V24HistoricalIntegrityTests --verbosity 1",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "result": "PASS"
+    },
+    "current_integrity_suite": {
+      "command": "./.venv/bin/python manage.py test foundation.test_phase31_4_integrity_generations --verbosity 1",
+      "tests": 6,
+      "failures": 0,
+      "errors": 1,
+      "result": "FAIL_CLOSED",
+      "error": "V2.5 protected source drift: backend/foundation/phase31_4_v2_5_runtime.py"
+    },
+    "focused_verifier_suite": {
+      "command": "./.venv/bin/python manage.py test foundation.test_phase31_4_v2_5_runtime foundation.test_phase31_4_v2_5_verifier_remediation --verbosity 1",
+      "tests": 29,
+      "failures": 0,
+      "errors": 0,
+      "result": "PASS"
+    },
+    "full_backend_regression": {
+      "command": "./.venv/bin/python manage.py test -v 0",
+      "tests": 498,
+      "failures": 0,
+      "errors": 3,
+      "duration_seconds": 45.276,
+      "result": "FAIL"
+    }
+  },
+  "source_alignment": {
+    "requirement_interpretation_count": 63,
+    "requirement_interpretation_modified_by_task": false,
+    "onboarding_stage_count": 17,
+    "onboarding_interpretation_modified_by_task": false,
+    "source_artifacts_modified_by_task": false,
+    "phase31_5_functional_scope_modified_by_task": false
+  },
+  "authorization": {
+    "checkpoint_findings": {
+      "P0": 1,
+      "P1": 0,
+      "P0_reason": "Protected runtime evolution is not byte-exhaustively attributable to verifier remediation.",
+      "P1_reason": "The material standalone remediation module is staged and not part of the authoritative current generation; the P0 already blocks successor adoption, so it is recorded as a candidate rather than a second admitted-generation finding."
+    },
+    "live_retry_executed": false,
+    "retry17_created": false,
+    "phase31_5": "EXECUTION_HELD",
+    "ws_a_executed": false,
+    "disposable_evidence_run_status": "NOT_READY"
+  },
+  "exact_next_step": "Recover and supply the exact predecessor runtime blob whose SHA-256 is 5be7650ac78eae653f4e6cd0b656ab0ccd9556a75f9c41cb3edd512d6a012cfd."
+}

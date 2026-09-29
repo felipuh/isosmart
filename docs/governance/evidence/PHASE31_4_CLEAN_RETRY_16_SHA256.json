@@ -1,0 +1,19 @@
+{
+  "artifact_schema": "phase31.4-retry16-sha256-manifest/v1",
+  "files": {
+    "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_16_BOOTSTRAP_MIGRATIONS.json": "481949041d0602c370524982014df978ce9f434899fa7786267e49869cacb61d",
+    "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_16_LIVE_BLOCKER.json": "cd2fbeabd3a7972b1917860ca03ba42c3bed6b8156008e9aa2cda601a8331abd",
+    "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_16_LIVE_BRIDGE.json": "7c85c0b675e5f05e498faad9a81dedaab7ca7a80105af50a5ebc822169d8b360",
+    "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_16_LIVE_EXACT_COMPARISON.json": "6dac3bd5e8ec6b673e48995324cd35b512dc1c978da694642f69bbf358b66cb0",
+    "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_16_RESOURCE_MANIFEST.json": "6ab8c77823278ce6d9fcf511c925e0c5c24c7492f61570be84c88c29ddf877f3",
+    "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_16_RUNTIME_ENV.json": "0d99804e28e2131b6cb279bda3df64f6f58400e44d042f96a02cbae7da3b5b0b",
+    "docs/governance/evidence/PHASE31_4_V25_FROZEN_BLOCKER_DISPOSITION_V1.json": "fc600a060f435ae9db805665299a1208c4bdb26f4988d8dc4803c985955d99d4",
+    "docs/governance/evidence/PHASE31_4_V2_4_HISTORICAL_MIGRATION_MANIFEST_V1.json": "8f055dee53d7ef34a3b47ccb9fed9885c39c0b616cc0c582c75e49edf2e0cda3",
+    "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V1.json": "8e77d62e1cccc42d0dbeaf7c00e9007c7120201b97af2f46484bbf81893a1db0",
+    "docs/governance/fixtures/PHASE31_4_5C_ROW_LEVEL_EXECUTION_CONTRACT_V2_5.json": "51f57160131a831c1fa180b7c5de5fdcb15a8fd895a53a077149c9a5955eca9c"
+  },
+  "generated_at": "2026-09-22T23:23:10.484215Z",
+  "retry_id": "Phase 31.4 V2.5 Clean Retry 16",
+  "self_excluded": true,
+  "verification": "PASS"
+}

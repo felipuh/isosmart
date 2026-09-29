@@ -1,0 +1,201 @@
+{
+  "artifact_schema": "phase31.4-retry16-live-bridge/v1",
+  "finished_at": "2026-09-22T05:25:52.678336+00:00",
+  "initial_opportunity_bridge": {
+    "actor_id": "d1911e2c-b18d-4742-ba74-1904fbee7464",
+    "historical_process_fallback": false,
+    "process_id": "9ed96df8-e153-45ce-8b21-15da61c945a4",
+    "tenant_projection_id": "5128bade-b812-4665-9420-b614fa6dded8"
+  },
+  "live_capture_bridge": "PASS",
+  "native_runtime": "PASS",
+  "phase_count": 33,
+  "phases": [
+    {
+      "error": null,
+      "phase_id": "PRECREATION_INTEGRITY",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "ENVIRONMENT_CREATE",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "RENDER_PROFILE",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "MIGRATIONS",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "NATIVE_BINDING_ASSERTIONS",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "AUTHORITY_ASSERTIONS",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "CAPTURE_REGISTRY_ASSERTIONS",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "REFERENCE_BINDING_ASSERTIONS",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "INVARIANT_ASSERTIONS",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "TRANSACTION_ASSERTIONS",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "SOURCE_TO_RUNTIME_PROOF",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "OPERATION_PRECONDITIONS",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "INITIAL_OPPORTUNITY",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "CATALOG_ASSERTIONS",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "NATIVE_IDENTITY_CAPTURE",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "RUNTIME_COMPOSITION_PROOF",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "PHASE_EVIDENCE",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "ACTION_PLAN_PREPARATION",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "ACTION_PLAN_DRY_RUN",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "EXECUTION_AUTHORIZATION",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "CONTROLLED_TRANSITION",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "EVENT_OUTBOX_ASSERTIONS",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "RESOLVED_GRAPH",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "EXACT_COMPARISON",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "SECURITY_EVIDENCE",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "LIVE_MIGRATION_EVIDENCE",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "LIVE_AUTHORITY_EVIDENCE",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "LIVE_OPERATION_EVIDENCE",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "CLOSURE_PRECONDITIONS",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "CLOSURE_REPORT",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "TEARDOWN_GATE",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "TEARDOWN",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "POST_TEARDOWN_VERIFY",
+      "status": "PASS"
+    }
+  ],
+  "result": "PASS",
+  "retry_id": "Phase 31.4 V2.5 Clean Retry 16",
+  "stage_ext": {
+    "checks": {
+      "organization": true,
+      "process": true,
+      "tenant_external": true,
+      "tenant_projection": true,
+      "user_projection": true
+    },
+    "provenance": [
+      "LIVE_UPSTREAM_NATIVE_CAPTURE"
+    ],
+    "result": "PASS",
+    "upstream_captures": {
+      "expected": 5,
+      "imported": 5,
+      "missing": 0
+    }
+  },
+  "started_at": "2026-09-22T05:25:44.817679+00:00"
+}

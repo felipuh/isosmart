@@ -5,7 +5,7 @@
   "all_logical_members_defined": true,
   "artifact_schema": "phase31.4-v2.5-offline-binding-proof/v1",
   "contract": "PHASE31_4_5C_ROW_LEVEL_EXECUTION_CONTRACT_V2_5.json",
-  "contract_sha256": "12f048fcada1a36d02d26ff0e4efaa247d04687161c7d1dcb6cbc196ae69001b",
+  "contract_sha256": "51f57160131a831c1fa180b7c5de5fdcb15a8fd895a53a077149c9a5955eca9c",
   "execution_scope": "offline_only",
   "fields": 1664,
   "known_defects_closed": true,

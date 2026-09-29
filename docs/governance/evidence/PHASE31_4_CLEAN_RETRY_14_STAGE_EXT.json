@@ -1,0 +1,70 @@
+{
+  "adminapps_tenant_id": "22b31708-73de-4079-bd8c-0d366d02e94c",
+  "adminapps_user_id": "b4c23f6e-2ff3-4c09-8a38-8caca5dddf25",
+  "artifact_schema": "phase31.4-retry14-stage-ext/v1",
+  "delivery": "PASS",
+  "identity_separation": {
+    "adminapps_tenant_id": "22b31708-73de-4079-bd8c-0d366d02e94c",
+    "adminapps_user_id": "b4c23f6e-2ff3-4c09-8a38-8caca5dddf25",
+    "all_six_values_distinct": true,
+    "process_id": "a6ef9cd8-1d8a-4b9b-bee4-27e749845329",
+    "qms_organization_id": "32957eb7-fd1f-4927-b7fd-6738a58fbe3e",
+    "tenant_projection_id": "5b83cc50-6269-459d-8934-93a7b82c8c6d",
+    "user_projection_id": "b74eb3ec-806a-4028-8e64-092527f1e4d0"
+  },
+  "persisted_process_id": "a6ef9cd8-1d8a-4b9b-bee4-27e749845329",
+  "process_id": "a6ef9cd8-1d8a-4b9b-bee4-27e749845329",
+  "provenance": "LIVE_UPSTREAM_NATIVE_CAPTURE",
+  "qms_organization_id": "32957eb7-fd1f-4927-b7fd-6738a58fbe3e",
+  "result": "PASS",
+  "retry_id": "Phase 31.4 V2.5 Clean Retry 14",
+  "tenant_projection_id": "5b83cc50-6269-459d-8934-93a7b82c8c6d",
+  "upstream_capture_resolution": {
+    "expected": 5,
+    "resolved": 5,
+    "unresolved": 0
+  },
+  "upstream_captures": [
+    {
+      "contract_binding": "qms.tenant_projection.adminapps_tenant_id",
+      "equality_result": "PASS",
+      "native_external_source": "AdminApps Organization API + transactional outbox",
+      "persisted_value": "22b31708-73de-4079-bd8c-0d366d02e94c",
+      "returned_value": "22b31708-73de-4079-bd8c-0d366d02e94c",
+      "semantic_identity": "AdminApps canonical tenant ID"
+    },
+    {
+      "contract_binding": "qms.tenant_projection.id",
+      "equality_result": "PASS",
+      "native_external_source": "authenticated ISO Smart tenant ingress",
+      "persisted_value": "5b83cc50-6269-459d-8934-93a7b82c8c6d",
+      "returned_value": "5b83cc50-6269-459d-8934-93a7b82c8c6d",
+      "semantic_identity": "TenantProjection ID"
+    },
+    {
+      "contract_binding": "qms.organization.id",
+      "equality_result": "PASS",
+      "native_external_source": "QmsOrganizationCommandService.create_organization",
+      "persisted_value": "32957eb7-fd1f-4927-b7fd-6738a58fbe3e",
+      "returned_value": "32957eb7-fd1f-4927-b7fd-6738a58fbe3e",
+      "semantic_identity": "QMS Organization ID"
+    },
+    {
+      "contract_binding": "qms.user_projection.id",
+      "equality_result": "PASS",
+      "native_external_source": "ProjectionWriterService.apply(AdminApps canonical user)",
+      "persisted_value": "b74eb3ec-806a-4028-8e64-092527f1e4d0",
+      "returned_value": "b74eb3ec-806a-4028-8e64-092527f1e4d0",
+      "semantic_identity": "UserProjection ID"
+    },
+    {
+      "contract_binding": "qms.process.id",
+      "equality_result": "PASS",
+      "native_external_source": "QmsContextCommandService.create_process",
+      "persisted_value": "a6ef9cd8-1d8a-4b9b-bee4-27e749845329",
+      "returned_value": "a6ef9cd8-1d8a-4b9b-bee4-27e749845329",
+      "semantic_identity": "Process ID"
+    }
+  ],
+  "user_projection_id": "b74eb3ec-806a-4028-8e64-092527f1e4d0"
+}

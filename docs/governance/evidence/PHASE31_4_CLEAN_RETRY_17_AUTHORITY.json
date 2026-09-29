@@ -1,0 +1,34 @@
+{
+  "actor_identity": {
+    "classification": "REAL_ISOLATED_ADMINAPPS_TEST_IDENTITY",
+    "id": "597130f2-9e2a-45af-9a17-a83298de0206",
+    "source": "AdminApps User"
+  },
+  "approval_authority_source": {
+    "classification": "NOT_EXECUTED_BECAUSE_PRECREATION_PHASE_FAILED",
+    "value": null
+  },
+  "artifact_schema": "phase31.4-v2.5-disposable-evidence-authority/v1",
+  "entitlement_source": {
+    "classification": "REAL_ISOLATED_ADMINAPPS_TEST_ENTITLEMENT",
+    "source": "AdminApps OrganizationProductEntitlement",
+    "value": {
+      "enabled": true,
+      "id": "17c0f862-908e-41f2-9e41-1d83749d077e",
+      "product": "ISO_SMART",
+      "readback": "17c0f862-908e-41f2-9e41-1d83749d077e",
+      "scopes": [
+        "qms"
+      ],
+      "status": "active"
+    }
+  },
+  "full_real_authority_proof": false,
+  "role_source": {
+    "classification": "SYNTHETIC_TEST_AUTHORITY",
+    "source": "AdminApps UserOrganization.role",
+    "value": "superadmin"
+  },
+  "run_id": "Phase 31.4 V2.5 Clean Retry 17",
+  "status": "ACCURATELY_CLASSIFIED"
+}

@@ -1,0 +1,12 @@
+=== BOOTSTRAP RETRY19 ===
+Traceback (most recent call last):
+  File "/tmp/retry19.bIrwL4/retry19_bootstrap_migrate.py", line 16, in <module>
+    MANIFEST = json.loads((EVIDENCE / "PHASE31_4_CLEAN_RETRY_19_RESOURCE_MANIFEST.json").read_text())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/felipe/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/pathlib.py", line 1027, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/felipe/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/felipe/proyectos/isosmart/docs/governance/evidence/PHASE31_4_CLEAN_RETRY_19_RESOURCE_MANIFEST.json'

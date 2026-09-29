@@ -1,0 +1,117 @@
+{
+  "artifact_schema": "phase31.4-v2.5-clean-retry18-stage-ext/v1",
+  "authority": "SYNTHETIC_TEST_AUTHORITY",
+  "blocker": {
+    "assigned_to": "ISO Smart disposable runtime configuration owner",
+    "category": "configuration",
+    "code_modified_during_run": false,
+    "detected_at": "2026-09-23T21:23:25.466479+00:00",
+    "exact_cause": "AdminApps product entitlement validation used http://127.0.0.1:8000 instead of the allocated isolated AdminApps HTTP endpoint; connection failed and fail-closed authorization returned AdminApps product entitlement denied.",
+    "missing_or_incorrect_evidence": [
+      "QMS Organization ID was not created",
+      "Process ID was not created",
+      "Stage EXT resolved 4/6 identities"
+    ],
+    "operation": "QmsOrganizationCommandService.create_organization",
+    "phase": "STAGE_EXT",
+    "severity": "P1",
+    "violated_contract": "All six Stage EXT identities must be created with returned/readback equality and valid provenance before later phases.",
+    "workaround_attempted": false
+  },
+  "completed_at": "2026-09-23T21:23:25.466479+00:00",
+  "expected_identities": 6,
+  "identities": [
+    {
+      "equality": true,
+      "name": "external_adminapps_tenant_id",
+      "provenance": "UPSTREAM_EXTERNAL_NATIVE",
+      "readback": "a2ef8793-eabd-44d1-80ee-d9922073d0c2",
+      "returned": "a2ef8793-eabd-44d1-80ee-d9922073d0c2",
+      "run_id": "Phase 31.4 V2.5 Clean Retry 18",
+      "source": "AdminApps Organization model",
+      "timestamp": "2026-09-23T21:23:25.466479+00:00",
+      "type": "uuid",
+      "value": "a2ef8793-eabd-44d1-80ee-d9922073d0c2"
+    },
+    {
+      "equality": true,
+      "name": "external_adminapps_actor_user_id",
+      "provenance": "UPSTREAM_EXTERNAL_NATIVE",
+      "readback": "cd50b9b2-09c4-4137-8cc1-184d5f9189ba",
+      "returned": "cd50b9b2-09c4-4137-8cc1-184d5f9189ba",
+      "run_id": "Phase 31.4 V2.5 Clean Retry 18",
+      "source": "AdminApps User model",
+      "timestamp": "2026-09-23T21:23:25.466479+00:00",
+      "type": "uuid",
+      "value": "cd50b9b2-09c4-4137-8cc1-184d5f9189ba"
+    },
+    {
+      "equality": true,
+      "name": "tenant_projection_id",
+      "provenance": "LOCAL_TRACEABLE_PROJECTION",
+      "readback": "ad6ba514-d91e-4620-9251-46b5f0943981",
+      "returned": "ad6ba514-d91e-4620-9251-46b5f0943981",
+      "run_id": "Phase 31.4 V2.5 Clean Retry 18",
+      "source": "TenantProjection",
+      "timestamp": "2026-09-23T21:23:25.466479+00:00",
+      "type": "uuid",
+      "value": "ad6ba514-d91e-4620-9251-46b5f0943981"
+    },
+    {
+      "equality": true,
+      "name": "user_projection_id",
+      "provenance": "LOCAL_TRACEABLE_PROJECTION",
+      "readback": "76320029-a1b6-4c35-bd96-d77c8e0e636a",
+      "returned": "76320029-a1b6-4c35-bd96-d77c8e0e636a",
+      "run_id": "Phase 31.4 V2.5 Clean Retry 18",
+      "source": "UserProjection",
+      "timestamp": "2026-09-23T21:23:25.466479+00:00",
+      "type": "uuid",
+      "value": "76320029-a1b6-4c35-bd96-d77c8e0e636a"
+    },
+    {
+      "equality": false,
+      "name": "qms_organization_id",
+      "provenance": "ISO_SMART_NATIVE_QMS_OBJECT",
+      "readback": null,
+      "returned": null,
+      "run_id": "Phase 31.4 V2.5 Clean Retry 18",
+      "source": "QmsOrganizationCommandService",
+      "status": "UNRESOLVED_NOT_CREATED",
+      "timestamp": "2026-09-23T21:23:25.466479+00:00",
+      "type": "uuid",
+      "value": null
+    },
+    {
+      "equality": false,
+      "name": "process_id",
+      "provenance": "ISO_SMART_NATIVE_QMS_OBJECT",
+      "readback": null,
+      "returned": null,
+      "run_id": "Phase 31.4 V2.5 Clean Retry 18",
+      "source": "QmsContextCommandService",
+      "status": "UNRESOLVED_NOT_CREATED",
+      "timestamp": "2026-09-23T21:23:25.466479+00:00",
+      "type": "uuid",
+      "value": null
+    }
+  ],
+  "provenance_categories": {
+    "iso_smart_native_unresolved": [
+      "qms_organization_id",
+      "process_id"
+    ],
+    "local_projection": [
+      "tenant_projection_id",
+      "user_projection_id"
+    ],
+    "upstream_external": [
+      "external_adminapps_tenant_id",
+      "external_adminapps_actor_user_id"
+    ]
+  },
+  "resolved_identities": 4,
+  "run_id": "Phase 31.4 V2.5 Clean Retry 18",
+  "status": "FAIL",
+  "unresolved_identities": 2
+}

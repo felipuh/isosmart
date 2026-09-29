@@ -1,0 +1,535 @@
+{
+  "artifact_schema": "phase31.5-environment-reproducibility-audit/v1",
+  "phase": "Phase 31.5 — Production Readiness / Operational Hardening",
+  "predecessor": "Phase 31.4 V2.5 — PROMOTED BASELINE / Clean Retry 16",
+  "generated_at": "2026-09-23T00:32:43Z",
+  "audit_mode": {
+    "kind": "READ_ONLY_CONFIGURATION_AND_EVIDENCE_AUDIT",
+    "environment_provisioned": false,
+    "database_created": false,
+    "migrations_applied": false,
+    "services_started": false,
+    "live_adminapps_contacted": false,
+    "packages_installed": false,
+    "destructive_tests_executed": false,
+    "product_code_modified": false
+  },
+  "repository": {
+    "workspace": "/home/felipe/proyectos/isosmart",
+    "observed_git_commit": "0d2ddfdead408b7cc6cb9c6dbc08707281cb9fb7",
+    "working_tree": "DIRTY_PREEXISTING",
+    "audit_note": "Pre-existing Phase 31.4 changes were preserved. The 20/20 current-source and 24/24 migration hashes in the promoted integrity generation were reverified from current bytes."
+  },
+  "python": {
+    "authoritative_supported_baseline": "Python 3.12",
+    "range": "NOT_DECLARED",
+    "observed_repository_venv": "backend/.venv",
+    "observed_version": "3.12.13",
+    "venv_mechanism": "stdlib venv",
+    "version_pin_file": "ABSENT",
+    "evidence": [
+      "docs/QA_EVIDENCE.md",
+      "backend/.venv/pyvenv.cfg"
+    ],
+    "status": "NOT_PROVEN",
+    "reason": "Python 3.12 is documented and observed, but no repository-owned exact interpreter pin or clean bootstrap specification exists."
+  },
+  "django": {
+    "authoritative_version": "4.2.22",
+    "declared_range": "==4.2.22",
+    "observed_version": "4.2.22",
+    "evidence": [
+      "backend/requirements.txt",
+      "backend/.venv"
+    ],
+    "status": "PASS"
+  },
+  "dependencies": {
+    "backend_authoritative_file": {
+      "path": "backend/requirements.txt",
+      "sha256": "37090a844a59c51eebea73c8989cadcd0dfc22917b0a07ff7375a7ef91f2b307",
+      "authority": "docs/QA_EVIDENCE.md and docs/SECURITY_NOTES.md identify this as the validated backend set",
+      "all_direct_entries_version_pinned": true,
+      "hash_locked": false
+    },
+    "root_requirements_file": {
+      "path": "requirements.txt",
+      "sha256": "f46e7deebbd2ae4036c63a2550550c00cfa562115354c9bc1a01af283a96a5d6",
+      "authority": "NOT_AUTHORITATIVE_FOR_BACKEND",
+      "known_hazard": "Repository governance records it as incompatible with the validated backend bootstrap; it also contains platform-sensitive packages and direct GitHub wheel sources."
+    },
+    "frontend": {
+      "package_manifest": "frontend/package.json",
+      "package_manifest_sha256": "bac15730f376efd1cbd58ee4450a490a838fd066b6a9e76399ba687997bc8ab3",
+      "lock_file": "frontend/package-lock.json",
+      "lock_sha256": "13431d0b132b0eea796a5da64a217de93375971b24f523acf6d62024b2d40f6d",
+      "lockfile_version": 3,
+      "install_method": "npm ci",
+      "node_requirement_derived_from_vite": "^20.19.0 || >=22.12.0",
+      "repository_node_pin": "ABSENT",
+      "status": "NOT_PROVEN"
+    },
+    "package_indexes": {
+      "backend": "implicit pip default; no index URL or mirror policy declared",
+      "frontend": "implicit npm registry; lockfile contains resolved artifacts",
+      "special_sources": [
+        "Root requirements contains two hash-addressed GitHub spaCy model wheels.",
+        "Root requirements contains PyTorch +cpu variants without a repository-declared matching package index."
+      ]
+    },
+    "platform_specific_hazards": [
+      "psycopg2-binary, Pillow, numpy, chromadb and transitive native wheels depend on interpreter/platform availability.",
+      "The repository tracks 13,473 files under backend virtualenv paths; these are platform-coupled and are not a clean environment lock.",
+      "Two requirements scopes exist and only narrative documentation selects backend/requirements.txt.",
+      "No hashes lock backend distributions and no base operating-system image is declared."
+    ],
+    "reproducible_install_method": "NOT_PROVEN",
+    "status": "NOT_PROVEN"
+  },
+  "postgresql": {
+    "version": "18.6",
+    "approved_image": "docker.io/library/postgres@sha256:7341002d2b8c7c5bdd7542a671a95b36196c0b5b888daf454ae4fc33ba5346d7",
+    "approved_image_id": "a6638641707cdf047e5d5c2781f437e2e809323cab22c70b280be8389fbb7878",
+    "tag_policy": "A mutable tag is insufficient; WS-A must use the approved digest and record the observed exact server version and image ID.",
+    "runtime_engine": "Podman rootless local context is the predecessor-proven model; Docker is not repository-declared.",
+    "runtime_query_status": "NOT_REPEATED_DURING_AUDIT",
+    "runtime_query_note": "A read-only Podman information query could not initialize its run-root in the audit sandbox. Predecessor evidence remains the authoritative model; no resource was allocated.",
+    "role_bootstrap": {
+      "owner": "backend/foundation/postgres_foundation_gate.py",
+      "order": "cluster roles and database before Django migrations",
+      "migrator_owns_database": true,
+      "runtime_superuser": false,
+      "runtime_createdb": false,
+      "runtime_createrole": false,
+      "runtime_bypassrls": false,
+      "function_owner_roles_nologin": true,
+      "status": "PASS_AS_BASELINE_DEFINITION"
+    },
+    "db_session_configuration": {
+      "variable": "DB_SESSION_OPTIONS",
+      "purpose": "Declare foundation.* role identifiers to migration SQL and PostgreSQL sessions.",
+      "required_for_ws_a": true,
+      "status": "DECLARED"
+    },
+    "rls_prerequisites": [
+      "Dedicated migrator owns protected tables.",
+      "Runtime LOGIN roles own no protected tables and have no BYPASSRLS.",
+      "ENABLE and FORCE RLS plus tenant session context are required.",
+      "Role attribute, membership, database ownership and session-option drift must fail closed."
+    ],
+    "status": "PASS_BASELINE_ONLY"
+  },
+  "disposable_environment_policy": {
+    "policy_status": "APPROVED",
+    "scope": "Phase 31.5 isolated workstreams only",
+    "prohibited_targets": [
+      "production",
+      "staging",
+      "shared development",
+      "any unidentified or pre-existing database/container/volume/network"
+    ],
+    "runtime_context": {
+      "engine": "Podman",
+      "mode": "local rootless default",
+      "storage_root": "/home/felipe/.local/share/containers/storage",
+      "run_root": "/run/user/1000/containers",
+      "binding": "All published database ports bind to 127.0.0.1 only and use dynamically allocated host ports recorded in the manifest."
+    },
+    "naming": {
+      "run_id_format": "phase31_5_wsa_<utc-compact>_<nonce8>",
+      "resource_format": "<run_id>_<component>_<kind>",
+      "components": [
+        "adminapps",
+        "isosmart",
+        "redis",
+        "backend",
+        "frontend",
+        "worker"
+      ],
+      "requirements": [
+        "deterministic from serialized run_id",
+        "workstream-specific",
+        "collision checked before creation",
+        "exact IDs recorded immediately after creation"
+      ]
+    },
+    "target_guard": {
+      "required_before_creation": true,
+      "conditions": [
+        "run_id starts with phase31_5_wsa_",
+        "all resource names derive exactly from run_id",
+        "database hosts resolve only to the two newly created loopback-bound PostgreSQL containers",
+        "database names and roles carry the run_id prefix",
+        "no configured URL or inventory identity matches production, staging or shared development",
+        "inventory proves every deletion candidate was created by this run"
+      ],
+      "failure_action": "STOP_WITHOUT_CREATING_OR_DELETING_ANY_RESOURCE",
+      "implementation_status": "REQUIRED_FOR_WS_A; NOT YET IMPLEMENTED AS A PHASE31_5 DEPLOYMENT ENTRYPOINT"
+    },
+    "resource_model": {
+      "postgresql": {
+        "version": "18.6",
+        "digest": "sha256:7341002d2b8c7c5bdd7542a671a95b36196c0b5b888daf454ae4fc33ba5346d7",
+        "clusters": 2
+      },
+      "adminapps": {
+        "postgres_container": "<run_id>_adminapps_postgres",
+        "database": "<run_id>_adminapps",
+        "volume": "<run_id>_adminapps_data",
+        "network": "<run_id>_adminapps_net",
+        "runtime": "isolated AdminApps checkout/runtime; exact source commit recorded",
+        "required_for_ws_a": true
+      },
+      "isosmart": {
+        "postgres_container": "<run_id>_isosmart_postgres",
+        "foundation_database": "<run_id>_isosmart",
+        "additional_database_names": [
+          "<run_id>_isosmart_ai",
+          "<run_id>_isosmart_audit"
+        ],
+        "additional_database_disposition": "MUST_BE_RESOLVED_BY_THE_DEPLOYMENT_DEFINITION_BEFORE_WS_A; settings declare them but Phase 31.4 only proved the foundation/default target.",
+        "volume": "<run_id>_isosmart_data",
+        "network": "<run_id>_isosmart_net"
+      },
+      "redis": {
+        "resource": "<run_id>_redis",
+        "network": "dedicated run-owned network only",
+        "volume": "none unless the WS-A manifest explicitly declares and owns one",
+        "required_if_celery_or_product_worker_is included": true
+      },
+      "application_services": [
+        "isolated AdminApps backend",
+        "ISO Smart backend",
+        "ISO Smart frontend build/runtime if deployment proof includes browser surface",
+        "Celery worker and beat only when declared by the WS-A scenario",
+        "foundation outbox dispatcher process once an executable entrypoint is defined"
+      ],
+      "ports": "loopback-only dynamic host ports, unique per run and recorded after allocation",
+      "resource_manifest_required": true
+    },
+    "teardown_contract": {
+      "mandatory_per_resource_fields": [
+        "resource_created",
+        "resource_id",
+        "created_at",
+        "teardown_attempted",
+        "teardown_completed",
+        "container_removed",
+        "database_removed",
+        "volume_removed",
+        "dedicated_network_removed",
+        "inventory_verified",
+        "teardown_result"
+      ],
+      "additional_fields": [
+        "run_id",
+        "resource_type",
+        "resource_name",
+        "creator_workstream",
+        "preexisting=false",
+        "teardown_attempted_at",
+        "teardown_completed_at",
+        "post_teardown_inventory",
+        "errors"
+      ],
+      "required_closure_status": "PASS",
+      "pending_at_workstream_close_allowed": false,
+      "unrelated_resource_deletion_allowed": false,
+      "deletion_rule": "Delete only exact IDs recorded as created by this run; never prune globally or select by an unvalidated partial name."
+    }
+  },
+  "multi_database_topology": {
+    "adminapps": "Independent PostgreSQL 18.6 container/cluster and database.",
+    "isosmart_foundation": "Independent PostgreSQL 18.6 container/cluster; predecessor proof used one default/foundation database.",
+    "isosmart_declared_aliases": [
+      "default",
+      "ai_db",
+      "audit_db",
+      "app",
+      "projector",
+      "worker",
+      "agent_catalog_curator",
+      "normative_curator",
+      "human_approver",
+      "execution_authorizer",
+      "executor",
+      "qms_action_owner"
+    ],
+    "alias_semantics": "Foundation runtime aliases are separate principals against the foundation database. ai_db and audit_db default to separately named databases but no deployment composition or routing policy proves their creation/use.",
+    "worker_outbox_store": "Foundation transactional outbox is stored in the ISO Smart foundation PostgreSQL database; Celery uses Redis broker DB 1 and result DB 2.",
+    "frontend_backend": "Vite frontend calls the Django API using VITE_API_BASE_URL; Django/Gunicorn, Redis/Celery and both PostgreSQL services are independent processes.",
+    "deployment_assumption": "MULTIPLE_CLUSTERS_AND_INDEPENDENT_SERVICES",
+    "status": "NOT_PROVEN",
+    "blocker": "The settings-level topology is broader than the predecessor live proof and no authoritative deployment manifest resolves it."
+  },
+  "adminapps_dependency": {
+    "tenant_authority": "AdminApps is the system of record; ISO Smart stores traceable tenant projections keyed by external identity.",
+    "user_identity_source": "AdminApps SSO JWT and user projection/synchronization.",
+    "entitlement_dependency": "AdminApps product-access validation for ISO_SMART; non-development failure is fail-closed.",
+    "outbox_ingress_dependency": "AdminApps tenant events are delivered to authenticated Stage EXT ingress with receipt, payload hash, idempotency and projection processing.",
+    "ws_a_runtime": "An isolated AdminApps runtime and isolated AdminApps PostgreSQL are required for the full WS-A deployment proof.",
+    "contract_only_mock_mode": {
+      "permitted": true,
+      "scope": "unit/contract-only subchecks that do not claim deployment or integration reproducibility",
+      "prohibited_for": [
+        "WS-A final PASS",
+        "entitlement fail-closed proof",
+        "outbox/ingress end-to-end proof"
+      ]
+    },
+    "live_contact_allowed": false,
+    "source_pin_status": "NOT_PROVEN_FOR_WS_A",
+    "observed_sibling_commit": "836c4433e63f91b13af4dac8fce339d429f154f5",
+    "status": "NOT_PROVEN"
+  },
+  "sqlite_risk": {
+    "operational_runtime_can_enable_sqlite": true,
+    "mechanism": "USE_SQLITE_DATABASE=true selects three SQLite aliases even when DJANGO_ENV is production; no production guard rejects the combination.",
+    "official_test_suite_uses_sqlite": true,
+    "test_settings": "backend/backend/settings_test.py",
+    "postgresql_live_baseline_exists": true,
+    "deployment_docs_clearly_prohibit_sqlite": false,
+    "classification": "P1",
+    "status": "CURRENT_BLOCKER"
+  },
+  "jwt_storage_risk": {
+    "access_token_storage": "browser localStorage",
+    "refresh_token_storage": "browser localStorage",
+    "bearer_use": "Axios request interceptor reads access_token and sends Authorization: Bearer",
+    "attack_surface": "Any successful same-origin script injection can read and exfiltrate both bearer tokens; refresh persistence increases exposure.",
+    "secure_alternative_implemented": false,
+    "documented_future_alternative": "HttpOnly, Secure, SameSite cookies with CSRF protection",
+    "evidence": [
+      "frontend/src/context/AuthContext.jsx",
+      "frontend/src/services/authService.js",
+      "frontend/src/services/api.js",
+      "docs/FRONTEND_AUTH_SECURITY.md"
+    ],
+    "classification": "P1",
+    "status": "CONFIRMED_PHASE31_5_SECURITY_BLOCKER"
+  },
+  "backup_prerequisites": {
+    "destination": "NOT_DEFINED",
+    "retention_model": "NOT_DEFINED",
+    "encryption_expectation": "DESIGN_INTENT_ONLY; no executable policy",
+    "restore_source": "NOT_DEFINED",
+    "backup_naming": "NOT_DEFINED",
+    "integrity_verification": "NOT_DEFINED",
+    "actual_database_backup_execution": false,
+    "ui_endpoint_behavior": "The current manual backup action updates last_backup_at and writes an audit-log entry; it does not create a database backup.",
+    "classification": "P1",
+    "status": "NOT_READY"
+  },
+  "worker_outbox": {
+    "celery_start_model": "Celery app exists, but no repository service unit/container/compose/runbook declares worker and beat lifecycle.",
+    "celery_broker": "redis://localhost:6379/1",
+    "celery_result_backend": "redis://localhost:6379/2",
+    "configuration_externalized": false,
+    "task_retry": "Selected Celery tasks declare bounded retries; no global production retry policy is defined.",
+    "foundation_outbox": {
+      "store": "ISO Smart PostgreSQL foundation database",
+      "claim": "tenant-scoped SELECT FOR UPDATE SKIP LOCKED with lease expiry",
+      "delivery": "at-least-once",
+      "idempotency": "consumer receipt keyed by consumer and event identity",
+      "failure_state": "FAILED with error code; expired PROCESSING leases may be reclaimed",
+      "dispatcher_entrypoint": "ABSENT",
+      "restart_supervision": "ABSENT",
+      "backlog_failed_metrics": "ABSENT"
+    },
+    "monitoring_hooks": "Structured application logging exists; no outbox backlog/failed-ingress metrics, health contract or alert routing is implemented.",
+    "classification": "P1",
+    "status": "NOT_READY"
+  },
+  "secret_handling": {
+    "configuration_sources": [
+      "process environment",
+      "ignored backend/.env for local development",
+      "tracked placeholder example files",
+      "ephemeral generated Phase 31.4 isolation credentials"
+    ],
+    "secret_manager_or_reference_scheme": "NOT_DEFINED",
+    "rotation_mechanism": "NOT_DEFINED",
+    "committed_secret_values": {
+      "status": "FAIL",
+      "values_serialized_here": false,
+      "locations": [
+        {
+          "path": "backend/authentication/scripts/create_initial_user.py",
+          "type": "hard-coded initial administrator password and credential-print path"
+        },
+        {
+          "path": "backend/backend/settings.py",
+          "type": "hard-coded development AdminApps integration credential fallback"
+        }
+      ]
+    },
+    "ignored_local_env": {
+      "path": "backend/.env",
+      "tracked": false,
+      "values_inspected_or_serialized": false
+    },
+    "classification": "P0",
+    "status": "NOT_READY"
+  },
+  "environment_variables": {
+    "inventory_policy": "Names and purpose only; no secret values are serialized.",
+    "variables": [
+      {"name":"DJANGO_ENV","component":"backend","required":"WS-A required","purpose":"Select production-safe settings behavior","secret":false,"default_allowed":false,"workstreams":["WS-A","WS-F","WS-G"]},
+      {"name":"DEBUG","component":"backend","required":"WS-A required","purpose":"Disable debug behavior","secret":false,"default_allowed":false,"workstreams":["WS-A","WS-F","WS-G"]},
+      {"name":"SECRET_KEY","component":"backend","required":"required","purpose":"Django cryptographic signing key","secret":true,"default_allowed":false,"workstreams":["WS-A","WS-F","WS-G"]},
+      {"name":"SMART3AI_SSO_JWT_SECRET","component":"backend/auth","required":"required","purpose":"SSO JWT signing/validation key","secret":true,"default_allowed":false,"workstreams":["WS-A","WS-F","WS-G","WS-K"]},
+      {"name":"SMART3AI_SSO_ISSUER","component":"backend/auth","required":"required","purpose":"Accepted AdminApps SSO issuer","secret":false,"default_allowed":false,"workstreams":["WS-A","WS-F","WS-K"]},
+      {"name":"SMART3AI_SSO_AUDIENCE","component":"backend/auth","required":"required by documented environment contract","purpose":"Accepted SSO audience","secret":false,"default_allowed":false,"workstreams":["WS-A","WS-F","WS-K"]},
+      {"name":"ALLOWED_HOSTS","component":"backend","required":"required","purpose":"Django host allowlist","secret":false,"default_allowed":false,"workstreams":["WS-A","WS-F","WS-G"]},
+      {"name":"CORS_ALLOWED_ORIGINS","component":"backend","required":"required","purpose":"Browser origin allowlist","secret":false,"default_allowed":false,"workstreams":["WS-A","WS-F","WS-G"]},
+      {"name":"CSRF_TRUSTED_ORIGINS","component":"backend","required":"required","purpose":"Trusted CSRF origins","secret":false,"default_allowed":false,"workstreams":["WS-A","WS-F","WS-G"]},
+      {"name":"SECURE_SSL_REDIRECT","component":"backend","required":"required","purpose":"HTTPS redirect policy","secret":false,"default_allowed":false,"workstreams":["WS-A","WS-F"]},
+      {"name":"SESSION_COOKIE_SECURE","component":"backend","required":"required","purpose":"Secure session cookie policy","secret":false,"default_allowed":false,"workstreams":["WS-A","WS-F"]},
+      {"name":"CSRF_COOKIE_SECURE","component":"backend","required":"required","purpose":"Secure CSRF cookie policy","secret":false,"default_allowed":false,"workstreams":["WS-A","WS-F"]},
+      {"name":"SECURE_HSTS_SECONDS","component":"backend","required":"required","purpose":"HSTS duration","secret":false,"default_allowed":false,"workstreams":["WS-A","WS-F"]},
+      {"name":"SECURE_HSTS_INCLUDE_SUBDOMAINS","component":"backend","required":"optional policy input","purpose":"HSTS subdomain policy","secret":false,"default_allowed":true,"workstreams":["WS-A","WS-F"]},
+      {"name":"SECURE_HSTS_PRELOAD","component":"backend","required":"optional policy input","purpose":"HSTS preload policy","secret":false,"default_allowed":true,"workstreams":["WS-A","WS-F"]},
+      {"name":"DB_NAME","component":"ISO Smart PostgreSQL","required":"required","purpose":"Primary database name","secret":false,"default_allowed":false,"workstreams":["WS-A","WS-B","WS-C","WS-F"]},
+      {"name":"DB_USER","component":"ISO Smart PostgreSQL","required":"required","purpose":"Migration/default database principal","secret":false,"default_allowed":false,"workstreams":["WS-A","WS-B","WS-F"]},
+      {"name":"DB_PASSWORD","component":"ISO Smart PostgreSQL","required":"required","purpose":"Primary database credential","secret":true,"default_allowed":false,"workstreams":["WS-A","WS-B","WS-C","WS-F","WS-G"]},
+      {"name":"DB_HOST","component":"ISO Smart PostgreSQL","required":"required","purpose":"Isolated database host","secret":false,"default_allowed":false,"workstreams":["WS-A","WS-B","WS-C","WS-F"]},
+      {"name":"DB_PORT","component":"ISO Smart PostgreSQL","required":"required","purpose":"Loopback host port","secret":false,"default_allowed":false,"workstreams":["WS-A","WS-B","WS-C","WS-F"]},
+      {"name":"DB_CONN_MAX_AGE","component":"backend","required":"optional","purpose":"Database connection lifetime","secret":false,"default_allowed":true,"workstreams":["WS-A","WS-I","WS-J"]},
+      {"name":"DB_SESSION_OPTIONS","component":"foundation migrations/runtime","required":"required","purpose":"Run-scoped foundation role identifiers","secret":false,"default_allowed":false,"workstreams":["WS-A","WS-B","WS-F"]},
+      {"name":"FOUNDATION_DB_NAME","component":"foundation runtime","required":"required","purpose":"Foundation database target","secret":false,"default_allowed":false,"workstreams":["WS-A","WS-B","WS-F"]},
+      {"name":"FOUNDATION_DB_HOST","component":"foundation runtime","required":"required","purpose":"Foundation isolated host","secret":false,"default_allowed":false,"workstreams":["WS-A","WS-B","WS-F"]},
+      {"name":"FOUNDATION_DB_PORT","component":"foundation runtime","required":"required","purpose":"Foundation loopback port","secret":false,"default_allowed":false,"workstreams":["WS-A","WS-B","WS-F"]},
+      {"name":"AI_DB_NAME","component":"AI database alias","required":"topology decision required","purpose":"AI database name","secret":false,"default_allowed":false,"workstreams":["WS-A"]},
+      {"name":"AI_DB_USER","component":"AI database alias","required":"topology decision required","purpose":"AI database principal","secret":false,"default_allowed":false,"workstreams":["WS-A","WS-G"]},
+      {"name":"AI_DB_PASSWORD","component":"AI database alias","required":"topology decision required","purpose":"AI database credential","secret":true,"default_allowed":false,"workstreams":["WS-A","WS-G"]},
+      {"name":"AI_DB_HOST","component":"AI database alias","required":"topology decision required","purpose":"AI database host","secret":false,"default_allowed":false,"workstreams":["WS-A"]},
+      {"name":"AI_DB_PORT","component":"AI database alias","required":"topology decision required","purpose":"AI database port","secret":false,"default_allowed":false,"workstreams":["WS-A"]},
+      {"name":"AUDIT_DB_NAME","component":"audit database alias","required":"topology decision required","purpose":"Audit database name","secret":false,"default_allowed":false,"workstreams":["WS-A"]},
+      {"name":"AUDIT_DB_USER","component":"audit database alias","required":"topology decision required","purpose":"Audit database principal","secret":false,"default_allowed":false,"workstreams":["WS-A","WS-G"]},
+      {"name":"AUDIT_DB_PASSWORD","component":"audit database alias","required":"topology decision required","purpose":"Audit database credential","secret":true,"default_allowed":false,"workstreams":["WS-A","WS-G"]},
+      {"name":"AUDIT_DB_HOST","component":"audit database alias","required":"topology decision required","purpose":"Audit database host","secret":false,"default_allowed":false,"workstreams":["WS-A"]},
+      {"name":"AUDIT_DB_PORT","component":"audit database alias","required":"topology decision required","purpose":"Audit database port","secret":false,"default_allowed":false,"workstreams":["WS-A"]},
+      {"name":"ADMIN_APPS_BASE_URL","component":"AdminApps integration","required":"required","purpose":"Isolated AdminApps API base URL","secret":false,"default_allowed":false,"workstreams":["WS-A","WS-F","WS-K"]},
+      {"name":"ADMIN_APPS_API_KEY","component":"AdminApps integration","required":"required","purpose":"Service integration credential","secret":true,"default_allowed":false,"workstreams":["WS-A","WS-F","WS-G","WS-K"]},
+      {"name":"ADMINAPPS_TENANT_EVENT_KEY_SHA256","component":"Stage EXT ingress","required":"required","purpose":"Safe fingerprint used to authenticate isolated tenant events","secret":false,"default_allowed":false,"workstreams":["WS-A","WS-F","WS-K"]},
+      {"name":"ADMIN_APPS_TIMEOUT","component":"AdminApps integration","required":"optional","purpose":"Request timeout","secret":false,"default_allowed":true,"workstreams":["WS-A","WS-K"]},
+      {"name":"ADMIN_APPS_CACHE_TTL","component":"AdminApps integration","required":"optional","purpose":"Projection/access cache duration","secret":false,"default_allowed":true,"workstreams":["WS-A","WS-K"]},
+      {"name":"ADMIN_APPS_SYNC_USERS","component":"AdminApps integration","required":"optional","purpose":"User synchronization control","secret":false,"default_allowed":true,"workstreams":["WS-A","WS-K"]},
+      {"name":"ISO_SMART_PRODUCT_CODE","component":"AdminApps integration","required":"required","purpose":"Entitlement product identity","secret":false,"default_allowed":true,"workstreams":["WS-A","WS-F","WS-K"]},
+      {"name":"ALLOW_LOCAL_AUTH_FALLBACK","component":"backend/auth","required":"required false","purpose":"Prohibit authority fallback","secret":false,"default_allowed":false,"workstreams":["WS-A","WS-F","WS-K"]},
+      {"name":"ALLOW_LOCAL_AUTH_BYPASS_FOR_TESTS","component":"backend/auth","required":"required false for WS-A","purpose":"Prohibit local bypass","secret":false,"default_allowed":false,"workstreams":["WS-A","WS-F"]},
+      {"name":"USE_SQLITE_DATABASE","component":"backend database selection","required":"required false for WS-A","purpose":"Prohibit SQLite operational target","secret":false,"default_allowed":false,"workstreams":["WS-A","WS-B","WS-C","WS-F"]},
+      {"name":"AI_ASSISTANT_API_URL","component":"AI assistant","required":"optional for WS-A","purpose":"Provider endpoint","secret":false,"default_allowed":true,"workstreams":["WS-A","WS-G"]},
+      {"name":"AI_ASSISTANT_API_KEY","component":"AI assistant","required":"optional unless assistant exercised","purpose":"Provider credential","secret":true,"default_allowed":false,"workstreams":["WS-A","WS-G"]},
+      {"name":"AI_ASSISTANT_MODEL","component":"AI assistant","required":"optional unless assistant exercised","purpose":"Provider model ID","secret":false,"default_allowed":true,"workstreams":["WS-A"]},
+      {"name":"ISOSMART_LOG_DIR","component":"backend observability","required":"optional","purpose":"Writable log destination","secret":false,"default_allowed":true,"workstreams":["WS-A","WS-H"]},
+      {"name":"FRONTEND_BASE_URL","component":"backend notifications/auth","required":"required when browser flows run","purpose":"Frontend origin","secret":false,"default_allowed":false,"workstreams":["WS-A","WS-F"]},
+      {"name":"VITE_API_BASE_URL","component":"frontend","required":"required by deployment","purpose":"Backend API route","secret":false,"default_allowed":true,"workstreams":["WS-A"]},
+      {"name":"VITE_LOCAL_AUTH_BYPASS","component":"frontend","required":"required 0","purpose":"Prohibit frontend test bypass","secret":false,"default_allowed":false,"workstreams":["WS-A","WS-F"]},
+      {"name":"SUPERUSER_PASSWORD","component":"bootstrap","required":"optional; only if a synthetic bootstrap user is authorized","purpose":"Synthetic administrator bootstrap credential","secret":true,"default_allowed":false,"workstreams":["WS-A","WS-G"]}
+    ],
+    "role_identity_variables": {
+      "component": "foundation PostgreSQL role bootstrap",
+      "required": "required for roles used by the WS-A migration and runtime inventory",
+      "purpose": "Run-scoped least-privilege role names; also serialized into DB_SESSION_OPTIONS",
+      "secret": false,
+      "default_allowed": false,
+      "workstreams": ["WS-A","WS-B","WS-F"],
+      "names": [
+        "FOUNDATION_MIGRATOR_ROLE","FOUNDATION_APP_ROLE","FOUNDATION_WORKER_ROLE","FOUNDATION_PROJECTOR_ROLE","FOUNDATION_AUDIT_WRITER_ROLE","FOUNDATION_NORMATIVE_CURATOR_ROLE","FOUNDATION_AGENT_CATALOG_CURATOR_ROLE","FOUNDATION_HUMAN_APPROVER_ROLE","FOUNDATION_EXECUTION_AUTHORIZER_ROLE","FOUNDATION_EXECUTOR_ROLE","FOUNDATION_LEARNING_GOVERNANCE_ROLE","FOUNDATION_LEARNING_REVIEWER_ROLE","FOUNDATION_LEARNING_APPROVER_ROLE","FOUNDATION_LEARNING_AUTHORIZER_ROLE","FOUNDATION_LEARNING_APPLICATION_EXECUTOR_ROLE","FOUNDATION_RULE_PUBLISHER_ROLE","FOUNDATION_RULE_ACTIVATOR_ROLE","FOUNDATION_RULE_ADOPTER_ROLE","FOUNDATION_RULE_RESOLVER_ROLE","FOUNDATION_RELEASE_REPAIR_ROLE","FOUNDATION_RELEASE_CONTROLLER_ROLE","FOUNDATION_QMS_ACTION_OWNER_ROLE","FOUNDATION_KNOWLEDGE_RULE_APPLICATION_OWNER_ROLE","FOUNDATION_RULE_GOVERNANCE_OWNER_ROLE"
+      ]
+    },
+    "role_secret_variables": {
+      "component": "foundation PostgreSQL role bootstrap/runtime",
+      "required": "required only for LOGIN roles; NOLOGIN owner roles must not receive passwords",
+      "purpose": "Ephemeral run-scoped database credentials",
+      "secret": true,
+      "default_allowed": false,
+      "workstreams": ["WS-A","WS-B","WS-F","WS-G"],
+      "names": [
+        "FOUNDATION_MIGRATOR_PASSWORD","FOUNDATION_APP_PASSWORD","FOUNDATION_WORKER_PASSWORD","FOUNDATION_PROJECTOR_PASSWORD","FOUNDATION_AUDIT_WRITER_PASSWORD","FOUNDATION_NORMATIVE_CURATOR_PASSWORD","FOUNDATION_AGENT_CATALOG_CURATOR_PASSWORD","FOUNDATION_HUMAN_APPROVER_PASSWORD","FOUNDATION_EXECUTION_AUTHORIZER_PASSWORD","FOUNDATION_EXECUTOR_PASSWORD","FOUNDATION_LEARNING_GOVERNANCE_PASSWORD","FOUNDATION_LEARNING_REVIEWER_PASSWORD","FOUNDATION_LEARNING_APPROVER_PASSWORD","FOUNDATION_LEARNING_AUTHORIZER_PASSWORD","FOUNDATION_LEARNING_APPLICATION_EXECUTOR_PASSWORD","FOUNDATION_RULE_PUBLISHER_PASSWORD","FOUNDATION_RULE_ACTIVATOR_PASSWORD","FOUNDATION_RULE_ADOPTER_PASSWORD","FOUNDATION_RULE_RESOLVER_PASSWORD","FOUNDATION_RELEASE_REPAIR_PASSWORD","FOUNDATION_RELEASE_CONTROLLER_PASSWORD"
+      ]
+    }
+  },
+  "test_data_policy": {
+    "status": "APPROVED",
+    "allowed": [
+      "deterministic synthetic fixtures",
+      "sanitized non-production fixtures whose approval and sanitization method are recorded",
+      "synthetic tenant-separated identities and business records",
+      "synthetic/test-scoped actor identities clearly labeled in evidence"
+    ],
+    "requires_explicit_separate_approval": [
+      "any non-synthetic source",
+      "any dataset derived from production even after claimed sanitization"
+    ],
+    "forbidden": [
+      "production customer data",
+      "production credentials",
+      "personal secrets",
+      "unredacted evidence",
+      "shared tenant identities",
+      "fixtures that erase tenant separation"
+    ]
+  },
+  "destructive_boundaries": {
+    "status": "APPROVED",
+    "allowed_only_after_target_guard_in_disposable_environment": [
+      "database drop",
+      "restore",
+      "migration failure simulation",
+      "container restart",
+      "service stop/start",
+      "network interruption",
+      "rollback tests",
+      "worker interruption"
+    ],
+    "forbidden": [
+      "production destructive actions",
+      "staging destructive actions",
+      "shared development destructive actions",
+      "global Podman prune",
+      "deleting unidentified volumes",
+      "destructive actions against unrelated containers or databases",
+      "deleting any resource not recorded as created by the exact run"
+    ]
+  },
+  "evidence_redaction": {
+    "status": "APPROVED",
+    "never_serialize": [
+      "database passwords",
+      "API secrets",
+      "service keys",
+      "tokens",
+      "JWTs",
+      "raw production credentials",
+      "private keys",
+      "raw idempotency keys",
+      "personal secrets"
+    ],
+    "safe_fields": [
+      "credential_configured boolean",
+      "credential source/type",
+      "one-way fingerprint only when safe and non-reversible",
+      "secret-manager or reference identifier",
+      "rotation/retrieval status",
+      "redaction verification result"
+    ],
+    "failure_action": "Quarantine and regenerate the affected evidence; never commit the unredacted artifact."
+  },
+  "findings": [
+    {"id":"P0-31_5-ENTRY-COMMITTED-CREDENTIALS","severity":"P0","status":"OPEN","summary":"Versioned source contains hard-coded credential material for an initial administrator and an AdminApps development integration fallback.","blocks":["entry_gate","WS-A"],"remediation":"Remove credential values from versioned sources, rotate any value that may have been used, require injected synthetic bootstrap credentials, and perform an approved repository secret scan without serializing values."},
+    {"id":"P1-31_5-ENTRY-DEPLOYMENT-REPRODUCIBILITY","severity":"P1","status":"OPEN","summary":"No authoritative deployment composition pins interpreter/base image, selects one backend dependency scope, provisions all declared stores and services, or performs two equivalent clean builds.","blocks":["environment_reproducibility","WS-A"],"remediation":"Create a governance-approved WS-A deployment definition with pinned runtime/base images, dependency integrity, isolated AdminApps/ISO/Redis topology and target guard."},
+    {"id":"P1-31_5-ENTRY-SQLITE-OPERATIONAL-ESCAPE","severity":"P1","status":"OPEN","summary":"SQLite remains selectable in operational settings and the official regression suite is SQLite-only; production/deployment documentation does not enforce PostgreSQL.","blocks":["environment_reproducibility","WS-A"],"remediation":"Before WS-A, define a deployment guard that rejects SQLite outside explicit unit-test settings and add PostgreSQL-backed deployment validation."},
+    {"id":"P1-31_5-ENTRY-JWT-LOCALSTORAGE","severity":"P1","status":"OPEN","summary":"Access and refresh JWTs are currently persisted in browser localStorage and no secure alternative is implemented.","blocks":["entry_security","WS-A"],"remediation":"Govern and implement the approved secure token transport/storage design in an authorized follow-up; do not remediate in this audit."},
+    {"id":"P1-31_5-ENTRY-BACKUP-NOT-IMPLEMENTED","severity":"P1","status":"OPEN","summary":"Backup destination, retention, encryption, naming, restore source and integrity verification are undefined; the current manual action records metadata only.","blocks":["operational_readiness","WS-A"],"remediation":"Define executable backup/restore prerequisites and correct the operational contract before claiming backup readiness."},
+    {"id":"P1-31_5-ENTRY-WORKER-OUTBOX-OPERABILITY","severity":"P1","status":"OPEN","summary":"Celery tasks and outbox primitives exist, but service lifecycle, an outbox dispatcher entrypoint, restart supervision, backlog metrics and alerting are not defined.","blocks":["environment_reproducibility","WS-A"],"remediation":"Declare worker/beat/dispatcher processes, externalize broker configuration, and define health, restart and backlog/failure signals."}
+  ],
+  "severity_counts": {
+    "P0": 1,
+    "P1": 5,
+    "P2": 0
+  },
+  "reproducibility_verdict": "ENVIRONMENT_REPRODUCIBILITY_NOT_READY",
+  "ws_a_prerequisite_satisfied": false
+}

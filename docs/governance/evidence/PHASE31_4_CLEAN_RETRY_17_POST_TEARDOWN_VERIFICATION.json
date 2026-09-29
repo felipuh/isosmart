@@ -1,0 +1,33 @@
+{
+  "artifact_schema": "phase31.4-v2.5-disposable-evidence-post-teardown/v1",
+  "checked_at": "2026-09-23T19:56:17.045155+00:00",
+  "details": [
+    {
+      "checked_at": "2026-09-23T19:56:16.234083+00:00",
+      "container_present": false,
+      "database_reachable": true,
+      "network_present": false,
+      "port_allocated": true,
+      "role": "adminapps",
+      "volume_present": false
+    },
+    {
+      "checked_at": "2026-09-23T19:56:17.045128+00:00",
+      "container_present": false,
+      "database_reachable": false,
+      "network_present": false,
+      "port_allocated": false,
+      "role": "isosmart",
+      "volume_present": false
+    }
+  ],
+  "observed_presence": {
+    "allocated_ports": true,
+    "containers": false,
+    "db_reachability": true,
+    "networks": false,
+    "volumes": false
+  },
+  "run_id": "Phase 31.4 V2.5 Clean Retry 17",
+  "status": "FAIL"
+}

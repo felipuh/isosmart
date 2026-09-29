@@ -1,0 +1,83 @@
+{
+  "artifact_schema": "phase31.4-retry11-native-runtime/v1",
+  "captures_resolved": 1,
+  "error": "Process matching query does not exist.",
+  "error_type": "DoesNotExist",
+  "executed": 13,
+  "expected_phases": 33,
+  "factory": "build_v25_runtime",
+  "finished_at": "2026-09-18T16:06:03.109898+00:00",
+  "live_process_id": "4a4ead4c-5e09-4d95-92d3-d8537d1b88da",
+  "passed": 13,
+  "phases": [
+    {
+      "error": null,
+      "phase_id": "PRECREATION_INTEGRITY",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "ENVIRONMENT_CREATE",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "RENDER_PROFILE",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "MIGRATIONS",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "CATALOG_ASSERTIONS",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "NATIVE_BINDING_ASSERTIONS",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "AUTHORITY_ASSERTIONS",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "CAPTURE_REGISTRY_ASSERTIONS",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "REFERENCE_BINDING_ASSERTIONS",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "INVARIANT_ASSERTIONS",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "TRANSACTION_ASSERTIONS",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "SOURCE_TO_RUNTIME_PROOF",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "OPERATION_PRECONDITIONS",
+      "status": "PASS"
+    }
+  ],
+  "result": "FAIL",
+  "retry_id": "Phase 31.4 V2.5 Clean Retry 11",
+  "stack": "Traceback (most recent call last):\n  File \"/home/felipe/proyectos/isosmart/docs/governance/tools/retry11_runtime.py\", line 20, in <module>\n    runtime.run_clean_retry(); report[\"result\"]=\"PASS\"\n    ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_runtime.py\", line 567, in run_clean_retry\n    result = self.phase_registry.execute(phase_id, self.session, context)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_runtime.py\", line 477, in execute\n    return self.get(phase_id).execute(session, context)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_runtime.py\", line 407, in execute\n    method(**metadata)\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/risk_objective.py\", line 214, in create_opportunity\n    return self._create(model=Opportunity, aggregate_type=\"opportunity\", event_type=\"opportunity.created\",\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/risk_objective.py\", line 109, in _create\n    organization_id = Process.objects.using(self.using).get(pk=fields[\"process_id\"]).organization_id\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/.venv/lib/python3.12/site-packages/django/db/models/query.py\", line 637, in get\n    raise self.model.DoesNotExist(\nfoundation.models.Process.DoesNotExist: Process matching query does not exist.\n",
+  "started_at": "2026-09-18T16:06:03.075367+00:00"
+}

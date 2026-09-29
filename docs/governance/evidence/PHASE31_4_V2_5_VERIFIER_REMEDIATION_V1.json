@@ -1,0 +1,59 @@
+{
+  "artifact_schema": "phase31.4-v2.5-verifier-remediation/v1",
+  "date": "2026-09-22",
+  "verdict": "VERIFIER_REMEDIATION_PASS",
+  "status": "CODE_REMEDIATED / LIVE_EVIDENCE_EXECUTION_PENDING",
+  "scope": "Verifier and evidence governance only. No disposable retry, PostgreSQL disposable infrastructure, WS-A, V2.4, source artifact, or product feature was changed.",
+  "historical_preservation": {
+    "retry16_promoted_record_modified": false,
+    "v2_4_modified": false,
+    "source_artifacts_modified": false,
+    "phase31_5_status": "CONCEPTUALLY_ALIGNED / EXECUTION_HELD"
+  },
+  "defects_addressed": [
+    "PhaseExecutionResult status is retained and callback results without an explicit result fail closed.",
+    "Unimplemented phase branches no longer manufacture PASS.",
+    "Phase registration contract requires executor, claim, assertions, and evidence types.",
+    "Serializable live capture schema requires persisted readback, equality, retry identity, and provenance.",
+    "Resolved graph materialization rejects placeholders, unresolved references, and synthetic live labels.",
+    "Independent exact comparison reports member, field, type, value, reference, and invariant mismatches.",
+    "Event/outbox/audit verification requires aggregate, trace, and payload-hash-linked records.",
+    "Security probe records require principal, tenant, operation, expected/observed result, DB role, and status.",
+    "Post-teardown verification requires independent absence observations after completed teardown.",
+    "Evidence artifact storage is append-only per retry and emits a SHA-256 manifest on finalization.",
+    "Teardown phases execute outside the business phase loop."
+  ],
+  "source_alignment_guard": "118/1664 contract verification is POC evidence and is not equivalent to proving the 63 source requirements or 17 onboarding stages.",
+  "files_changed": [
+    "backend/foundation/phase31_4_v2_5_runtime.py",
+    "backend/foundation/phase31_4_v2_5_verifier_remediation.py",
+    "backend/foundation/test_phase31_4_v2_5_runtime.py",
+    "backend/foundation/test_phase31_4_v2_5_verifier_remediation.py",
+    "docs/governance/evidence/PHASE31_4_V2_5_VERIFIER_REMEDIATION_V1.json",
+    "docs/transformation/PHASE31_4_V2_5_VERIFIER_REMEDIATION_REPORT.md"
+  ],
+  "tests": {
+    "focused": {
+      "command": "backend/.venv/bin/python manage.py test foundation.test_phase31_4_v2_5_runtime foundation.test_phase31_4_v2_5_verifier_remediation",
+      "result": "PASS",
+      "tests": 29
+    },
+    "full_backend_regression": {
+      "command": "backend/.venv/bin/python manage.py test --verbosity 0",
+      "result": "FAIL",
+      "tests": 498,
+      "failures": 3,
+      "failure_class": "protected-source integrity generation checks",
+      "failing_tests": [
+        "foundation.test_phase31_4_3_supporting_contract_audit.SupportingContractAuditTests.test_protected_sources_match",
+        "foundation.test_phase31_4_integrity_generations.V25CurrentOperationalIntegrityTests.test_current_manifest_passes",
+        "foundation.test_phase31_4_retry5_operational_manifest.Retry5ManifestTests.test_authoritative_manifest_and_external_hash"
+      ],
+      "note": "The runtime hash changed as an intentional remediation edit; the worktree also contains a pre-existing settings.py modification. No integrity manifest was rewritten automatically."
+    }
+  },
+  "live_retry_executed": false,
+  "retry17_created": false,
+  "ready_for_separate_disposable_evidence_run_review": true,
+  "next_step": "Obtain separate approval for one disposable evidence-only run review; do not execute it as part of this remediation."
+}

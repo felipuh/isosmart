@@ -1,0 +1,64 @@
+{
+  "schema": "phase31.4-v2.5-adminapps-endpoint-remediation/v1",
+  "remediation_id": "PHASE31_4_V2_5_ADMINAPPS_ENDPOINT_REMEDIATION_V1",
+  "status": "CODE_PASS_INTEGRITY_RECONCILIATION_REQUIRED",
+  "run_blocker": {
+    "run": "Phase 31.4 V2.5 Clean Retry 18",
+    "phase": "STAGE_EXT",
+    "severity": "P1",
+    "operation": "QmsOrganizationCommandService.create_organization",
+    "faulty_endpoint": "http://127.0.0.1:8000/api/integration",
+    "observed_result": "AdminApps product entitlement denied"
+  },
+  "root_cause": "ADMIN_APPS_BASE_URL was not supplied from the isolated run allocation before Django settings initialization. backend.settings.py supplied a localhost default, and integration.client.AdminAppsClient supplied a second localhost default when the settings mapping was absent.",
+  "authoritative_config_key": "ADMIN_APPS_BASE_URL",
+  "corrected_resolution_path": [
+    "resource allocation manifest provides the isolated AdminApps host port",
+    "the authorized runner injects ADMIN_APPS_BASE_URL before Django settings initialization",
+    "backend.settings.ADMIN_APPS_INTEGRATION.BASE_URL reads that value without a localhost default",
+    "integration.client.AdminAppsClient uses the same BASE_URL for entitlement and all AdminApps calls",
+    "QmsOrganizationCommandService.create_organization validates entitlement with allow_local_fallback=false"
+  ],
+  "fallback_behavior": {
+    "localhost_default": "removed from settings and client",
+    "missing_or_malformed_endpoint": "request is rejected locally and entitlement resolves fail-closed",
+    "unreachable_or_wrong_endpoint": "AdminApps error resolves fail-closed",
+    "local_entitlement_bypass": "not permitted by the QMS command"
+  },
+  "tests": {
+    "file": "backend/integration/test_adminapps_endpoint_remediation.py",
+    "cases": [
+      "run-specific dynamic endpoint",
+      "non-8000 endpoint overrides localhost",
+      "missing endpoint",
+      "malformed endpoint",
+      "unreachable endpoint",
+      "entitlement denied",
+      "entitlement allowed"
+    ],
+    "focused_result": "8 tests passed"
+  },
+  "files_changed": [
+    "backend/backend/settings.py",
+    "backend/integration/client.py",
+    "backend/integration/test_adminapps_endpoint_remediation.py",
+    "docs/governance/evidence/PHASE31_4_V2_5_ADMINAPPS_ENDPOINT_REMEDIATION_V1.json",
+    "docs/governance/evidence/PHASE31_4_V2_5_ADMINAPPS_ENDPOINT_REMEDIATION_REPORT.md"
+  ],
+  "integrity_impact": {
+    "current_generation": "PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V3",
+    "protected_source_changed": true,
+    "v3_modified": false,
+    "required_action": "create and verify the normal successor current-integrity generation before future live authorization"
+  },
+  "historical_artifacts_modified": [],
+  "live_execution": {
+    "retry_19": "NO",
+    "stage_ext_live": "NO",
+    "postgresql_started": "NO",
+    "containers_allocated": "NO"
+  },
+  "phase31_5": "EXECUTION_HELD",
+  "p1_disposition": "P1_CLOSED_PENDING_INTEGRITY_AND_LIVE_REVALIDATION",
+  "exact_next_step": "Perform successor current-integrity reconciliation for the protected-source changes; do not authorize a live retry until it passes."
+}

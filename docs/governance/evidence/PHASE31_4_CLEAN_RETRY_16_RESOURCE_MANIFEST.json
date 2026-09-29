@@ -1,0 +1,62 @@
+{
+  "allocated_at": "2026-09-22T05:24:59.536875+00:00",
+  "approved_image": "docker.io/library/postgres@sha256:7341002d2b8c7c5bdd7542a671a95b36196c0b5b888daf454ae4fc33ba5346d7",
+  "approved_image_id": "a6638641707cdf047e5d5c2781f437e2e809323cab22c70b280be8389fbb7878",
+  "artifact_schema": "phase31.4-clean-retry-runtime-resources/v1",
+  "environments": {
+    "adminapps": {
+      "container_id": "1ad7d28465f94180d1403371ece14c133345d108ea04cbdc9f153e35bda7fb70",
+      "container_name": "phase31_4_retry16_adminapps",
+      "container_removed": true,
+      "database_name": "phase31_4_retry16_adminapps",
+      "environment_id": "phase31_4_retry16_adminapps",
+      "image_digest": "sha256:7341002d2b8c7c5bdd7542a671a95b36196c0b5b888daf454ae4fc33ba5346d7",
+      "image_id": "a6638641707cdf047e5d5c2781f437e2e809323cab22c70b280be8389fbb7878",
+      "network_id": "phase31_4_retry16_adminapps_net",
+      "network_name": "phase31_4_retry16_adminapps_net",
+      "network_removed": true,
+      "observed_postgresql_version": "postgres (PostgreSQL) 18.6 (Debian 18.6-1.pgdg13+2)",
+      "port_mappings": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "42391"
+        }
+      ],
+      "postgresql_exact_version": "PostgreSQL 18.6",
+      "status": "RUNNING_VERIFIED",
+      "volume_id": "phase31_4_retry16_adminapps_data",
+      "volume_name": "phase31_4_retry16_adminapps_data",
+      "volume_removed": true
+    },
+    "isosmart": {
+      "container_id": "ee1be989bc62ea6215a63c0c1be23244a3afc1e274a61fa488f77f80becebfc6",
+      "container_name": "phase31_4_retry16_isosmart",
+      "container_removed": true,
+      "database_name": "phase31_4_retry16_isosmart",
+      "environment_id": "phase31_4_retry16_isosmart",
+      "image_digest": "sha256:7341002d2b8c7c5bdd7542a671a95b36196c0b5b888daf454ae4fc33ba5346d7",
+      "image_id": "a6638641707cdf047e5d5c2781f437e2e809323cab22c70b280be8389fbb7878",
+      "network_id": "phase31_4_retry16_isosmart_net",
+      "network_name": "phase31_4_retry16_isosmart_net",
+      "network_removed": true,
+      "observed_postgresql_version": "postgres (PostgreSQL) 18.6 (Debian 18.6-1.pgdg13+2)",
+      "port_mappings": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "39609"
+        }
+      ],
+      "postgresql_exact_version": "PostgreSQL 18.6",
+      "status": "RUNNING_VERIFIED",
+      "volume_id": "phase31_4_retry16_isosmart_data",
+      "volume_name": "phase31_4_retry16_isosmart_data",
+      "volume_removed": true
+    }
+  },
+  "execution_mode": "LIVE_NATIVE_EXECUTION",
+  "retry_id": "Phase 31.4 V2.5 Clean Retry 16",
+  "retry_tag": "CLEAN_RETRY_16",
+  "teardown_completed_at": "2026-09-22T05:26:10.595883+00:00",
+  "teardown_errors": [],
+  "teardown_status": "PASS"
+}
