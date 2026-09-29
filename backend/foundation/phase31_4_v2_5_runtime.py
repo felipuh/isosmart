@@ -9,30 +9,37 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
+from hashlib import sha256
 from pathlib import Path
 from typing import Any, Callable, Protocol
-from uuid import UUID
+from uuid import UUID, uuid5
 import json
 
-from django.db import transaction
+from django.db import connections, transaction
 
-from .action_authorization import ActionPreparationService
+from .action_authorization import ActionPreparationService, ExecutionAuthorizationService, ExecutionAuthorizerContext
 from .agent_runtime import AgentCatalogCommandService, AgentRunCommandService
 from .audit import AuditWriterService
+from .human_decision import AgentDecisionCommandService, AuthorizedHumanContext, HumanDecisionGateService
+from .recommendation import RecommendationCommandService
 from .controlled_opportunity import ControlledOpportunityActionService
+from .canonical import canonical_hash
 from .effectiveness import EffectivenessCheckCommandService
 from .governed_learning import LearningProposalCommandService, LearningSignalCommandService
 from .governed_learning_application import KnowledgeLayerRuleGovernedApplicationService
 from .knowledge_layer import KnowledgeLayerCommandService
 from .knowledge_rule_release import KnowledgeLayerRulePublicationService
-from .models import ActionPlan, ExecutionAuthorization
+from .document_evidence import DocumentEvidenceCommandService
+from .models import ActionPlan, ExecutionAuthorization, Opportunity, UserProjection
 from .normative_coverage import NormativeCatalogCommandService
 from .risk_objective import RiskOpportunityObjectiveCommandService
-from .tenant_context import TrustedTenantIdentity
+from .tenant_context import TrustedTenantIdentity, trusted_tenant_context
 from .phase31_4_v2_4_support_producer import (
     execute_freeze0, retain_b2_compatibility, retain_full_closure,
     retain_publication_checkpoint, retain_publication_closure,
 )
+from .phase31_4_v2_5_executable_graph import PHASE_TOPOLOGY, build_executable_producer_graph
+from .phase31_4_v2_5_precreation_integrity import verify_precreation_integrity
 
 
 class V25RuntimeError(RuntimeError):
@@ -62,10 +69,66 @@ class CaptureRecord:
     expected_type: str
     phase: str
     captured_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    retry_id: str | None = None
+    provenance: str = "NATIVE_CAPTURE"
 
     @property
     def equality_assertion(self) -> bool:
         return self.returned_value == self.persisted_value
+
+
+@dataclass(frozen=True)
+class CaptureBundle:
+    """Fresh Stage EXT captures accepted by one clean retry only."""
+
+    retry_id: str
+    captures: tuple[CaptureRecord, ...]
+
+    @classmethod
+    def from_stage_ext(cls, stage_ext: dict[str, Any], *, retry_id: str) -> "CaptureBundle":
+        expected_retry_id = stage_ext.get("retry_id")
+        if expected_retry_id != retry_id:
+            raise V25RuntimeError(
+                f"capture bundle retry mismatch: expected {retry_id}, got {expected_retry_id}"
+            )
+        values = (
+            ("adminapps.tenant::live", "id", "AdminApps", "create_tenant", stage_ext["tenant_id"]),
+            ("qms.tenant_projection::live", "id", "TenantProjectionWriter", "project_tenant_event", stage_ext["tenant_projection_id"]),
+            ("qms.user_projection::live", "adminapps_user_id", "AdminApps", "create_user", stage_ext["actor_id"]),
+            ("qms.organization::live", "id", "QmsOrganizationCommandService", "create_organization", stage_ext["organization_id"]),
+            ("qms.process::live", "id", "QmsContextCommandService", "create_process", stage_ext["process_id"]),
+        )
+        return cls(
+            retry_id=retry_id,
+            captures=tuple(
+                CaptureRecord(
+                    logical_member=member,
+                    logical_field=field_name,
+                    source_service=service,
+                    source_operation=operation,
+                    returned_value=value,
+                    persisted_value=value,
+                    expected_type="uuid",
+                    phase="STAGE_EXT",
+                    retry_id=retry_id,
+                    provenance="LIVE_UPSTREAM_NATIVE_CAPTURE",
+                )
+                for member, field_name, service, operation, value in values
+            ),
+        )
+
+    def validate_for_retry(self, retry_id: str) -> None:
+        if self.retry_id != retry_id:
+            raise V25RuntimeError(
+                f"capture bundle retry mismatch: expected {retry_id}, got {self.retry_id}"
+            )
+        if len(self.captures) != 5:
+            raise V25RuntimeError(f"capture bundle expected 5 captures, got {len(self.captures)}")
+        for record in self.captures:
+            if record.retry_id != retry_id:
+                raise V25RuntimeError(f"capture record retry mismatch: {record.logical_member}.{record.logical_field}")
+            if record.provenance != "LIVE_UPSTREAM_NATIVE_CAPTURE":
+                raise V25RuntimeError(f"invalid live capture provenance: {record.logical_member}.{record.logical_field}")
 
 
 class NativeCaptureRegistry:
@@ -73,6 +136,23 @@ class NativeCaptureRegistry:
 
     def __init__(self) -> None:
         self._records: dict[tuple[str, str], CaptureRecord] = {}
+        self._aliases: dict[tuple[str, str], tuple[str, str]] = {}
+
+    def bind_alias(
+        self,
+        logical_member: str,
+        logical_field: str,
+        captured_member: str,
+        captured_field: str,
+    ) -> None:
+        """Bind a contract identity to a live capture without copying its value."""
+        target = (logical_member, logical_field)
+        source = (captured_member, captured_field)
+        if target in self._records or target in self._aliases:
+            raise V25RuntimeError(f"duplicate native capture alias: {target[0]}.{target[1]}")
+        if target == source:
+            raise V25RuntimeError(f"self-referential native capture alias: {target[0]}.{target[1]}")
+        self._aliases[target] = source
 
     def capture(self, record: CaptureRecord) -> CaptureRecord:
         if not record.equality_assertion:
@@ -92,10 +172,19 @@ class NativeCaptureRegistry:
         return record
 
     def get(self, logical_member: str, logical_field: str) -> CaptureRecord:
+        requested = (logical_member, logical_field)
+        key = requested
+        visited: set[tuple[str, str]] = set()
+        while key in self._aliases:
+            if key in visited:
+                raise V25RuntimeError(f"cyclic native capture alias: {key[0]}.{key[1]}")
+            visited.add(key)
+            key = self._aliases[key]
         try:
-            return self._records[(logical_member, logical_field)]
+            return self._records[key]
         except KeyError as exc:
-            raise MissingCaptureError(f"missing capture: {logical_member}.{logical_field}") from exc
+            label = "missing live capture" if requested in self._aliases else "missing capture"
+            raise MissingCaptureError(f"{label}: {logical_member}.{logical_field}") from exc
 
     def values(self) -> tuple[CaptureRecord, ...]:
         return tuple(self._records.values())
@@ -129,17 +218,38 @@ class ResolvedBindingRegistry:
             kind = item.get("kind")
             if kind == "EXACT_LITERAL":
                 value = item.get("typed_value")
-            elif kind == "CAPTURE_NATIVE_OUTPUT":
+            elif kind in {"CAPTURE_NATIVE_OUTPUT", "LIVE_UPSTREAM_NATIVE_CAPTURE"}:
                 value = captures.get(*current).returned_value
+            elif kind == "DETERMINISTIC_DERIVATION":
+                inputs = item.get("all_preimage_inputs", {})
+                if item.get("algorithm_id") != "RFC4122-UUIDv5-SHA1":
+                    raise BindingResolutionError(
+                        f"unsupported deterministic derivation: {current[0]}.{current[1]}"
+                    )
+                try:
+                    value = str(uuid5(UUID(inputs["namespace_uuid"]), inputs["utf8_name"]))
+                except (KeyError, TypeError, ValueError) as exc:
+                    raise BindingResolutionError(
+                        f"invalid deterministic derivation: {current[0]}.{current[1]}"
+                    ) from exc
+                if value != item.get("expected_output"):
+                    raise BindingResolutionError(
+                        f"deterministic derivation mismatch: {current[0]}.{current[1]}"
+                    )
             elif kind == "REFERENCE_RESOLVED_BINDING":
                 source = (item.get("source_member"), item.get("source_field"))
                 value = visit(source)
             elif kind == "DERIVED_RUNTIME_INVARIANT":
                 source = item.get("source_binding")
+                if source is None:
+                    sources = item.get("source_bindings", [])
+                    source = sources[0] if len(sources) == 1 else None
                 if not isinstance(source, str) or "." not in source:
                     raise BindingResolutionError(f"invalid invariant source: {current}")
                 source_member, source_field = source.rsplit(".", 1)
                 value = visit((source_member, source_field)) + 1
+            elif kind == "ADR0017_MAPPED_OUTPUT":
+                value = item.get("output_identity")
             else:
                 raise BindingResolutionError(f"unsupported binding: {current[0]}.{current[1]}")
             visiting.remove(current)
@@ -359,11 +469,22 @@ class NativePhaseExecutor(Protocol):
 @dataclass(frozen=True)
 class PhaseExecutionResult:
     phase_id: str
-    status: str = "PASS"
+    status: str = "FAIL"
     operation: str | None = None
     native_source: str | None = None
     source_service: str | None = None
     metadata: dict[str, Any] = field(default_factory=dict)
+    executor: str | None = None
+    inputs_hash: str | None = None
+    output_ids: tuple[str, ...] = ()
+    readback_ids: tuple[str, ...] = ()
+    assertions: tuple[dict[str, Any], ...] = ()
+    evidence_artifacts: tuple[str, ...] = ()
+    evidence_hashes: tuple[str, ...] = ()
+    provenance: tuple[dict[str, Any], ...] = ()
+    error: str | None = None
+    started_at: str | None = None
+    completed_at: str | None = None
 
 
 @dataclass
@@ -388,41 +509,372 @@ class _NativePhaseExecutor:
         self.source_service = source_service
         self.source_operation = source_operation
 
+    @staticmethod
+    def _resolve_runtime_service(service_name: str, *, using: str = "default"):
+        services = {
+            "AgentCatalogCommandService": AgentCatalogCommandService(using=using),
+            "AgentRunCommandService": AgentRunCommandService(using=using),
+            "RecommendationCommandService": RecommendationCommandService(using=using),
+            "AgentDecisionCommandService": AgentDecisionCommandService(using=using),
+            "ActionPreparationService": ActionPreparationService(using=using),
+            "ExecutionAuthorizationService": ExecutionAuthorizationService(using=using),
+        }
+        try:
+            return services[service_name]
+        except KeyError as exc:
+            raise V25RuntimeError(f"unsupported direct native phase service: {service_name}") from exc
+
+    @staticmethod
+    def _service_using(session: V25ExecutionSession, logical_alias: str) -> str:
+        from django.db import connections
+        return logical_alias if logical_alias in connections.databases else session.using
+
     def execute(self, session: V25ExecutionSession, context: PhaseExecutionContext) -> PhaseExecutionResult:
+        if self.phase_id == "PRECREATION_INTEGRITY":
+            outcome = verify_precreation_integrity(root=session.project_root, run_id=session.retry_id)
+            return PhaseExecutionResult(
+                phase_id=self.phase_id,
+                status=outcome.status,
+                operation="verify_precreation_integrity",
+                native_source="foundation.phase31_4_v2_5_precreation_integrity.verify_precreation_integrity",
+                source_service="PrecreationIntegrityExecutor",
+                metadata=outcome.details,
+                executor="PrecreationIntegrityExecutor",
+                inputs_hash=outcome.details.get("current_integrity_artifact", {}).get("sha256"),
+                assertions=outcome.assertions,
+                evidence_artifacts=((outcome.evidence_path,) if outcome.evidence_path else ()),
+                evidence_hashes=((outcome.evidence_sha256,) if outcome.evidence_sha256 else ()),
+                error=outcome.error,
+                started_at=outcome.started_at,
+                completed_at=outcome.completed_at,
+            )
+        if self.phase_id == "CATALOG_ASSERTIONS":
+            return self._execute_catalog_assertions(session)
+        if self.phase_id == "NATIVE_IDENTITY_CAPTURE":
+            return self._execute_agent_run_start(session)
+        if self.phase_id == "RUNTIME_COMPOSITION_PROOF":
+            return self._execute_agent_run_completion(session)
+        if self.phase_id == "PHASE_EVIDENCE":
+            return self._execute_agent_decision(session)
+        if self.phase_id == "ACTION_PLAN_DRY_RUN":
+            return self._execute_action_plan_dry_run(session)
+        if self.phase_id == "EXECUTION_AUTHORIZATION":
+            return self._execute_execution_authorization(session)
+        if self.phase_id == "EVENT_OUTBOX_ASSERTIONS":
+            if "authorization_id" not in session.composition:
+                raise V25RuntimeError("event/outbox assertions require live authorization")
+            return PhaseExecutionResult(
+                self.phase_id, status="FAIL", operation="verify_controlled_event_outbox_audit",
+                native_source="controlled_opportunity.transition", source_service="AuditWriterService",
+                metadata={"verified": False, "authorization_id": str(session.composition["authorization_id"]),
+                          "error": "event/outbox/audit readback verifier is required"},
+                error="event/outbox/audit readback verifier is required",
+            )
+        if self.phase_id in {
+            "RESOLVED_GRAPH", "EXACT_COMPARISON", "SECURITY_EVIDENCE",
+            "LIVE_MIGRATION_EVIDENCE", "LIVE_AUTHORITY_EVIDENCE", "LIVE_OPERATION_EVIDENCE",
+            "CLOSURE_PRECONDITIONS", "CLOSURE_REPORT", "TEARDOWN_GATE", "TEARDOWN",
+            "POST_TEARDOWN_VERIFY",
+        }:
+            if "authorization_id" not in session.composition:
+                raise V25RuntimeError(f"{self.phase_id} requires completed live authorization")
+            return PhaseExecutionResult(
+                self.phase_id, status="FAIL", operation="verify_live_phase_evidence",
+                native_source="V25ExecutionSession.composition", source_service="V25Runtime",
+                metadata={"verified": False, "authorization_id": str(session.composition["authorization_id"]),
+                          "error": "phase-specific evidence verifier is required"},
+                error="phase-specific evidence verifier is required",
+            )
         if self.native_operation is not None:
             binding = self.operation_registry.resolve(self.native_operation)
             service = binding.service
-            method = getattr(service, binding.source_operation, None)
-            if callable(method):
-                method_name = binding.source_operation
-                metadata = dict(context.metadata)
-                if self.native_operation in {"root.bootstrap.publish", "opportunity.create"} and not metadata:
-                    if context.contract is None:
-                        raise V25RuntimeError("native phase context lacks authoritative contract")
-                    metadata = context.contract.native_phase_inputs(self.phase_id)
-                try:
-                    method(**metadata)
-                except TypeError as exc:
-                    raise V25RuntimeError(
-                        f"native phase invocation requires bound inputs: {self.phase_id} "
-                        f"-> {binding.source_service}.{binding.source_operation}"
-                    ) from exc
-                return PhaseExecutionResult(
-                    phase_id=self.phase_id,
-                    status="PASS",
-                    operation=self.native_operation,
-                    native_source=binding.native_source,
-                    source_service=binding.source_service,
-                    metadata={"service": binding.source_service, "method": method_name, "bound_inputs": tuple(sorted(metadata))},
+            method_name = binding.source_operation
+            native_source = binding.native_source
+            source_service = binding.source_service
+            if self.native_operation == "action_plan.prepare":
+                service = ActionPreparationService(using=self._service_using(session, "worker"))
+            if self.native_operation == "opportunity.controlled_transition":
+                service = ControlledOpportunityActionService(using=self._service_using(session, "executor"))
+        elif self.source_service is not None and self.source_operation is not None:
+            service = self._resolve_runtime_service(self.source_service, using=getattr(session, "using", "default"))
+            if self.source_service == "ActionPreparationService":
+                service = ActionPreparationService(using=self._service_using(session, "worker"))
+            method_name = self.source_operation
+            native_source = self.source_service
+            source_service = self.source_service
+        else:
+            return PhaseExecutionResult(
+                phase_id=self.phase_id,
+                status="FAIL",
+                operation=self.native_operation,
+                native_source=self.native_operation,
+                source_service=self.source_service,
+                metadata={"mode": "native-phase-composition", "phase": self.phase_id,
+                          "error": "phase has no registered operation"},
+                error="phase has no registered operation",
+            )
+
+        method = getattr(service, method_name, None)
+        if callable(method):
+            metadata = dict(context.metadata)
+            if self.phase_id == "CONTROLLED_TRANSITION" and not metadata:
+                state = session.composition
+                metadata = {
+                    "identity": state["identity"],
+                    "authorization_id": state["authorization_id"],
+                    "idempotency_key": "phase31.4-v2.5-live-controlled-transition",
+                }
+            elif self.phase_id in {"INITIAL_OPPORTUNITY", "ACTION_PLAN_PREPARATION", "EXECUTION_AUTHORIZATION"} and not metadata:
+                if context.contract is None:
+                    raise V25RuntimeError("native phase context lacks authoritative contract")
+                metadata = context.contract.native_phase_inputs(
+                    self.phase_id,
+                    session=context.session,
                 )
+            try:
+                result = method(**metadata)
+                if self.native_operation == "opportunity.create" and result is not None:
+                    entity_id = getattr(result, "entity_id", None)
+                    if entity_id is not None:
+                        persisted = Opportunity.objects.using("default").get(pk=entity_id)
+                        session.captures.capture(CaptureRecord(
+                            logical_member="qms.opportunity::live",
+                            logical_field="id",
+                            source_service=source_service,
+                            source_operation=method_name,
+                            returned_value=entity_id,
+                            persisted_value=persisted.id,
+                            expected_type="uuid",
+                            phase=self.phase_id,
+                        ))
+                if self.native_operation == "action_plan.prepare" and result is not None:
+                    action_plan_id = getattr(result, "action_plan_id", None)
+                    if action_plan_id is not None:
+                        service_using = getattr(service, "using", "default")
+                        with trusted_tenant_context(
+                            metadata["identity"], actor_id=metadata["actor_id"],
+                            trace_id=metadata["trace_id"], using=service_using,
+                        ):
+                            persisted = ActionPlan.objects.using(service_using).get(pk=action_plan_id)
+                        session.captures.capture(CaptureRecord(
+                            logical_member="qms.action_plan::ae682a8f-d782-5b27-a148-aa10a940e03a",
+                            logical_field="id",
+                            source_service=source_service,
+                            source_operation=method_name,
+                            returned_value=action_plan_id,
+                            persisted_value=persisted.id,
+                            expected_type="uuid",
+                            phase=self.phase_id,
+                        ))
+                        session.composition["action_plan_id"] = action_plan_id
+            except TypeError as exc:
+                raise V25RuntimeError(
+                    f"native phase invocation requires bound inputs: {self.phase_id} "
+                    f"-> {source_service}.{method_name}"
+                ) from exc
+            return PhaseExecutionResult(
+                phase_id=self.phase_id,
+                status="PASS",
+                operation=self.native_operation,
+                native_source=native_source,
+                source_service=source_service,
+                metadata={"service": source_service, "method": method_name, "bound_inputs": tuple(sorted(metadata))},
+            )
         return PhaseExecutionResult(
             phase_id=self.phase_id,
-            status="PASS",
+            status="FAIL",
             operation=self.native_operation,
-            native_source=self.native_operation,
-            source_service=self.source_service,
-            metadata={"mode": "native-phase-composition", "phase": self.phase_id},
+            native_source=native_source if self.native_operation is not None else self.source_service,
+            source_service=source_service,
+            metadata={"mode": "native-phase-composition", "phase": self.phase_id,
+                      "error": "registered native operation is not callable"},
+            error="registered native operation is not callable",
         )
+
+    def _execute_catalog_assertions(self, session: V25ExecutionSession) -> PhaseExecutionResult:
+        service = AgentCatalogCommandService(using=self._service_using(session, "agent_catalog_curator"))
+        actor_id = "phase31.4-v2.5-agent-catalog"
+        trace_id = uuid5(UUID("00000000-0000-0000-0000-000000000031"), "catalog")
+        policy_id = service.create_model_policy(
+            policy_key="phase31.4-v2.5-live-policy", version="v1",
+            approved_models=["synthetic-no-execution"],
+            data_classes=["synthetic-test-only"],
+            guardrails={"allowed_capabilities": ["synthetic-analysis"], "autonomy_max": 3},
+            human_gate_rules={"required_autonomy_levels": ["A3"], "required_role": "quality_approver"},
+            actor_id=actor_id, trace_id=trace_id,
+        )
+        service.publish_model_policy(model_policy_id=policy_id, actor_id=actor_id, trace_id=trace_id)
+        definition_id = service.create_agent_definition(
+            agent_key="phase31.4-v2.5-live-agent", name="Phase 31.4 V2.5 live agent",
+            version="v1", purpose="Governed synthetic recommendation composition.",
+            capability="synthetic-analysis", autonomy_max=3, model_policy_id=policy_id,
+            actor_id=actor_id, trace_id=trace_id,
+        )
+        service.publish_agent_definition(agent_definition_id=definition_id, actor_id=actor_id, trace_id=trace_id)
+        tenant_id = session.captures.get("qms.tenant_projection::live", "id").returned_value
+        organization_id = session.captures.get("qms.organization::live", "id").returned_value
+        user_id = session.captures.get("qms.user_projection::live", "adminapps_user_id").returned_value
+        identity = TrustedTenantIdentity("phase31.4-v2.5-agent-chain", tenant_id)
+        normative = NormativeCatalogCommandService(using=self._service_using(session, "normative_curator"))
+        standard_id = normative.create_standard(
+            code="PHASE31.4-V25-LIVE", title="Synthetic live execution standard",
+            publisher="ISO Smart", actor_id=actor_id, trace_id=trace_id,
+        )
+        edition_id = normative.create_standard_edition(
+            standard_id=standard_id, edition="v1", source_hash=sha256(b"phase31.4-v25-live").hexdigest(),
+            actor_id=actor_id, trace_id=trace_id,
+        )
+        clause_id = normative.add_clause(
+            standard_edition_id=edition_id, code="LIVE-1", title="Synthetic live clause",
+            actor_id=actor_id, trace_id=trace_id,
+        )
+        control_id = normative.add_requirement_control(
+            standard_edition_id=edition_id, clause_id=clause_id,
+            paraphrase="Synthetic live control for governed composition.",
+            applicability_rule={"synthetic": True}, control_type="synthetic_test",
+            actor_id=actor_id, trace_id=trace_id,
+        )
+        normative.publish_standard_edition(standard_edition_id=edition_id, actor_id=actor_id, trace_id=trace_id)
+        knowledge = KnowledgeLayerCommandService(using=self._service_using(session, "normative_curator"))
+        layer_id = knowledge.create_knowledge_layer(
+            standard_edition_id=edition_id, layer_type="Quality Intelligence",
+            actor_id=actor_id, trace_id=trace_id,
+        )
+        rule_id = knowledge.create_knowledge_layer_rule(
+            knowledge_layer_id=layer_id, rule_key="phase31.4-v25-live-rule", version="v1",
+            logic_json={"synthetic": True}, evidence_expectation={"synthetic": True},
+            source_reference="synthetic://phase31.4-v25-live", actor_id=actor_id, trace_id=trace_id,
+        )
+        knowledge.publish_knowledge_layer_rule(rule_id=rule_id, actor_id=actor_id, trace_id=trace_id)
+        evidence = DocumentEvidenceCommandService(using=self._service_using(session, "app")).create_evidence(
+            identity=identity, organization_id=organization_id, source_type="synthetic_test",
+            source_uri="synthetic://phase31.4-v25-live-evidence",
+            content_hash=sha256(b"phase31.4-v25-live-evidence").hexdigest(),
+            captured_at=datetime.now(timezone.utc), actor_id=user_id, trace_id=trace_id,
+        )
+        session.composition.update({
+            "model_policy_id": policy_id, "agent_definition_id": definition_id,
+            "catalog_actor_id": actor_id, "catalog_trace_id": trace_id,
+            "identity": identity, "organization_id": organization_id, "actor_id": user_id,
+            "standard_edition_id": edition_id, "requirement_control_id": control_id,
+            "knowledge_layer_rule_id": rule_id, "evidence_id": evidence.entity_id,
+        })
+        for member, value, operation in (
+            ("governance.model_policy::live", policy_id, "create_model_policy"),
+            ("governance.agent_definition::live", definition_id, "create_agent_definition"),
+        ):
+            session.captures.capture(CaptureRecord(
+                logical_member=member, logical_field="id",
+                source_service="AgentCatalogCommandService", source_operation=operation,
+                returned_value=value, persisted_value=value, expected_type="uuid",
+                phase=self.phase_id,
+            ))
+        return PhaseExecutionResult(
+            phase_id=self.phase_id, status="PASS", operation="create_agent_definition",
+            native_source="AgentCatalogCommandService.create_agent_definition",
+            source_service="AgentCatalogCommandService",
+            metadata={"model_policy_id": str(policy_id), "agent_definition_id": str(definition_id)},
+        )
+
+    def _composition_capture(self, session: V25ExecutionSession, member: str, value: Any, operation: str, phase: str) -> None:
+        session.captures.capture(CaptureRecord(
+            logical_member=member, logical_field="id", source_service="V25Composition",
+            source_operation=operation, returned_value=value, persisted_value=value,
+            expected_type="uuid", phase=phase,
+        ))
+
+    def _execute_agent_run_start(self, session: V25ExecutionSession) -> PhaseExecutionResult:
+        state = session.composition
+        service = AgentRunCommandService(using=self._service_using(session, "worker"))
+        trace_id = uuid5(UUID("00000000-0000-0000-0000-000000000031"), "agent-run")
+        frozen_input = {
+            "standard_edition_id": state["standard_edition_id"],
+            "requirement_control_id": state["requirement_control_id"],
+            "knowledge_layer_rule_id": state["knowledge_layer_rule_id"],
+            "evidence_id": state["evidence_id"],
+        }
+        result = service.start_agent_run(
+            identity=state["identity"], organization_id=state["organization_id"],
+            agent_definition_id=state["agent_definition_id"], model_policy_id=state["model_policy_id"],
+            capability="synthetic-analysis", requested_autonomy=3,
+            model_provider="synthetic", model_identifier="synthetic-no-execution",
+            model_version="v1", prompt_version="v1", rule_bundle_version="v1",
+            inputs=[frozen_input], actor_id=state["actor_id"], trace_id=trace_id,
+        )
+        state.update({"agent_run_id": result.agent_run_id, "agent_run_input": frozen_input, "agent_run_trace_id": trace_id})
+        self._composition_capture(session, "qms.agent_run::live", result.agent_run_id, "start_agent_run", self.phase_id)
+        return PhaseExecutionResult(self.phase_id, status="PASS", operation="start_agent_run", native_source="AgentRunCommandService.start_agent_run", source_service="AgentRunCommandService", metadata={"agent_run_id": str(result.agent_run_id)})
+
+    def _execute_agent_run_completion(self, session: V25ExecutionSession) -> PhaseExecutionResult:
+        state = session.composition
+        result = AgentRunCommandService(using=self._service_using(session, "worker")).complete_agent_run_with_recommendation(
+            identity=state["identity"], agent_run_id=state["agent_run_id"],
+            title="Phase 31.4 V2.5 live recommendation",
+            body="Synthetic governed recommendation; no execution.", confidence="1.0000",
+            assumptions=["Fresh live captures remain current"],
+            basis=[dict(state["agent_run_input"], rationale="Synthetic live governed basis")],
+            actor_id=state["actor_id"], impact="standard",
+        )
+        state["recommendation_id"] = result.recommendation_id
+        self._composition_capture(session, "qms.recommendation::live", result.recommendation_id, "complete_agent_run_with_recommendation", self.phase_id)
+        return PhaseExecutionResult(self.phase_id, status="PASS", operation="complete_agent_run_with_recommendation", native_source="AgentRunCommandService.complete_agent_run_with_recommendation", source_service="AgentRunCommandService", metadata={"recommendation_id": str(result.recommendation_id)})
+
+    def _execute_agent_decision(self, session: V25ExecutionSession) -> PhaseExecutionResult:
+        state = session.composition
+        result = AgentDecisionCommandService(using=self._service_using(session, "worker")).record_agent_decision(
+            identity=state["identity"], agent_run_id=state["agent_run_id"],
+            decision_type="prepare", payload={"synthetic": True}, confidence="1.0000",
+            explainability={"synthetic": True}, decision_autonomy=3, actor_id=state["actor_id"],
+        )
+        state["agent_decision_id"] = result.decision_id
+        self._composition_capture(session, "qms.agent_decision::live", result.decision_id, "record_agent_decision", self.phase_id)
+        return PhaseExecutionResult(self.phase_id, status="PASS", operation="record_agent_decision", native_source="AgentDecisionCommandService.record_agent_decision", source_service="AgentDecisionCommandService", metadata={"agent_decision_id": str(result.decision_id)})
+
+    def _execute_action_plan_dry_run(self, session: V25ExecutionSession) -> PhaseExecutionResult:
+        state = session.composition
+        result = ActionPreparationService(using=self._service_using(session, "worker")).run_action_plan_dry_run(
+            identity=state["identity"], action_plan_id=state["action_plan_id"],
+            expected_affected_objects=[{"type": "Opportunity", "id": str(session.captures.get("qms.opportunity::live", "id").returned_value)}],
+            intended_state_delta={"status": {"from": "active", "to": "deferred"}},
+            validation_status="passed",
+            precondition_results=[{"identity": "opportunity.status", "status": "satisfied"}],
+            impact_summary={"impact": "standard", "simulation_only": True},
+            actor_id=state["actor_id"], trace_id=state["agent_run_trace_id"],
+        )
+        state["dry_run_id"] = result.dry_run_id
+        self._composition_capture(session, "qms.action_plan_dry_run::live", result.dry_run_id, "run_action_plan_dry_run", self.phase_id)
+        return PhaseExecutionResult(self.phase_id, status="PASS", operation="run_action_plan_dry_run", native_source="ActionPreparationService.run_action_plan_dry_run", source_service="ActionPreparationService", metadata={"dry_run_id": str(result.dry_run_id)})
+
+    def _execute_execution_authorization(self, session: V25ExecutionSession) -> PhaseExecutionResult:
+        state = session.composition
+        using = self._service_using(session, "human_approver")
+        with trusted_tenant_context(
+            state["identity"], actor_id=state["actor_id"],
+            trace_id=state["agent_run_trace_id"], using=using,
+        ):
+            user = UserProjection.objects.using(using).get(
+                adminapps_user_id=state["actor_id"],
+                lifecycle_status=UserProjection.LifecycleStatus.ACTIVE,
+            )
+        human_authority = AuthorizedHumanContext(
+            identity=state["identity"], user_projection_id=user.id,
+            adminapps_user_id=state["actor_id"], authorized_roles=("quality_approver",),
+        )
+        approval = HumanDecisionGateService(using=using).record_human_approval(
+            authority=human_authority, agent_decision_id=state["agent_decision_id"],
+            comments="Phase 31.4 V2.5 live governance approval.", trace_id=state["agent_run_trace_id"],
+        )
+        state["approval_id"] = approval.approval_id
+        authorization = ExecutionAuthorizationService(using=self._service_using(session, "execution_authorizer")).evaluate_execution_authorization(
+            authority=ExecutionAuthorizerContext(identity=state["identity"]),
+            action_plan_id=state["action_plan_id"], dry_run_id=state["dry_run_id"],
+            idempotency_key="phase31.4-v2.5-live-authorization", trace_id=state["agent_run_trace_id"],
+        )
+        if authorization.outcome != "authorized" or authorization.authorization_id is None:
+            raise AuthorityDenied(f"live execution authorization denied: {authorization.reason_code}")
+        state["authorization_id"] = authorization.authorization_id
+        self._composition_capture(session, "qms.execution_authorization::live", authorization.authorization_id, "evaluate_execution_authorization", self.phase_id)
+        return PhaseExecutionResult(self.phase_id, status="PASS", operation="evaluate_execution_authorization", native_source="ExecutionAuthorizationService.evaluate_execution_authorization", source_service="ExecutionAuthorizationService", metadata={"authorization_id": str(authorization.authorization_id)})
 
 
 class NativePhaseRegistry:
@@ -503,16 +955,16 @@ def build_v25_native_phase_registry(
         "OPERATION_PRECONDITIONS": None,
         "INITIAL_OPPORTUNITY": "opportunity.create",
         "ACTION_PLAN_PREPARATION": "action_plan.prepare",
-        "ACTION_PLAN_DRY_RUN": "action_plan.prepare",
-        "EXECUTION_AUTHORIZATION": "action_plan.prepare",
-        "NATIVE_IDENTITY_CAPTURE": "opportunity.create",
+        "ACTION_PLAN_DRY_RUN": None,
+        "EXECUTION_AUTHORIZATION": None,
+        "NATIVE_IDENTITY_CAPTURE": None,
         "CONTROLLED_TRANSITION": "opportunity.controlled_transition",
         "EVENT_OUTBOX_ASSERTIONS": "audit.append",
         "RESOLVED_GRAPH": "application.reference_path",
         "EXACT_COMPARISON": "publication.native",
         "SECURITY_EVIDENCE": "action_plan.prepare",
-        "PHASE_EVIDENCE": "audit.append",
-        "RUNTIME_COMPOSITION_PROOF": "opportunity.create",
+        "PHASE_EVIDENCE": None,
+        "RUNTIME_COMPOSITION_PROOF": None,
         "LIVE_MIGRATION_EVIDENCE": "publication.native",
         "LIVE_AUTHORITY_EVIDENCE": "action_plan.prepare",
         "LIVE_OPERATION_EVIDENCE": "opportunity.create",
@@ -522,11 +974,22 @@ def build_v25_native_phase_registry(
         "TEARDOWN": "publication.checkpoint",
         "POST_TEARDOWN_VERIFY": "publication.checkpoint",
     }
+    direct_phase_services = {
+        "PRECREATION_INTEGRITY": ("PrecreationIntegrityExecutor", "verify_precreation_integrity"),
+        "CATALOG_ASSERTIONS": ("AgentCatalogCommandService", "create_agent_definition"),
+        "NATIVE_IDENTITY_CAPTURE": ("AgentRunCommandService", "start_agent_run"),
+        "RUNTIME_COMPOSITION_PROOF": ("AgentRunCommandService", "complete_agent_run_with_recommendation"),
+        "PHASE_EVIDENCE": ("AgentDecisionCommandService", "record_agent_decision"),
+        "ACTION_PLAN_DRY_RUN": ("ActionPreparationService", "run_action_plan_dry_run"),
+        "EXECUTION_AUTHORIZATION": ("ExecutionAuthorizationService", "evaluate_execution_authorization"),
+    }
     for phase_id in expected:
-        native_operation = phase_to_operation.get(phase_id, "opportunity.create")
+        native_operation = phase_to_operation.get(phase_id)
         source_service = None
         source_operation = None
-        if native_operation is not None:
+        if phase_id in direct_phase_services:
+            source_service, source_operation = direct_phase_services[phase_id]
+        elif native_operation is not None:
             source_service = operation_registry.resolve(native_operation).source_service
             source_operation = operation_registry.resolve(native_operation).source_operation
         executor = _NativePhaseExecutor(
@@ -542,6 +1005,8 @@ def build_v25_native_phase_registry(
 
 
 class V25Runtime:
+    TEARDOWN_PHASES = ("TEARDOWN_GATE", "TEARDOWN", "POST_TEARDOWN_VERIFY")
+
     def __init__(self, *, contract: V25Contract, operation_registry: NativeOperationRegistry, phase_registry: NativePhaseRegistry, session: V25ExecutionSession, using: str = "default") -> None:
         self.contract = contract
         self.operation_registry = operation_registry
@@ -550,8 +1015,23 @@ class V25Runtime:
         self.using = using
         self.authority_reader = NativeAuthorityReader(using=using)
 
+    def executable_producer_graph(self) -> dict[str, Any]:
+        return build_executable_producer_graph(self.contract.raw)
+
+    def assert_executable_producer_graph(self) -> dict[str, Any]:
+        report = self.executable_producer_graph()
+        if report["executable_producer_graph"] != "PASS":
+            raise V25RuntimeError(
+                "EXECUTABLE_PRODUCER_GRAPH failed: "
+                f"phases={report['reachable_phases']}/{report['phase_count']} "
+                f"captures={report['reachable_capture_producers']}/{report['capture_count']} "
+                f"missing={report['missing_producers']}"
+            )
+        return report
+
     def run_clean_retry(self) -> tuple[str, ...]:
         self.phase_registry.validate_required()
+        self.assert_executable_producer_graph()
         context = PhaseExecutionContext(
             session=self.session,
             contract=self.contract,
@@ -560,19 +1040,49 @@ class V25Runtime:
             capture_registry=self.session.captures,
             invariant_engine=RuntimeInvariantEngine,
         )
-        for phase_id in self.phase_registry.phase_ids():
+        business_phases = tuple(
+            phase_id for phase_id in self.phase_registry.phase_ids()
+            if phase_id not in self.TEARDOWN_PHASES
+        )
+        for phase_id in business_phases:
             result = self.phase_registry.execute(phase_id, self.session, context)
             self.session.run_phase(phase_id, lambda result=result: result)
+            if result.status != "PASS":
+                return self.phase_registry.phase_ids()
+        self.run_teardown(context)
         return self.phase_registry.phase_ids()
 
+    def run_teardown(self, context: PhaseExecutionContext | None = None) -> tuple[PhaseRecord, ...]:
+        """Run teardown only after business evidence retention is complete."""
+        if context is None:
+            context = PhaseExecutionContext(
+                session=self.session,
+                contract=self.contract,
+                operation_registry=self.operation_registry,
+                authority_reader=self.authority_reader,
+                capture_registry=self.session.captures,
+                invariant_engine=RuntimeInvariantEngine,
+            )
+        for phase_id in self.TEARDOWN_PHASES:
+            result = self.phase_registry.execute(phase_id, self.session, context)
+            self.session.run_phase(phase_id, lambda result=result: result)
+        return tuple(self.session.phases)
 
-def build_v25_runtime(*, project_root: str | Path = ".", contract_path: str | Path | None = None, using: str = "default") -> V25Runtime:
+
+def build_v25_runtime(*, project_root: str | Path = ".", contract_path: str | Path | None = None,
+                      using: str = "default", capture_bundle: CaptureBundle | None = None,
+                      retry_id: str | None = None) -> V25Runtime:
     root = Path(project_root)
     contract_file = Path(contract_path) if contract_path is not None else root / "docs" / "governance" / "fixtures" / "PHASE31_4_5C_ROW_LEVEL_EXECUTION_CONTRACT_V2_5.json"
     contract = V25Contract.from_path(contract_file)
     operation_registry = NativeOperationRegistry.product_default(using=using)
     phase_registry = build_v25_native_phase_registry(operation_registry, required_phase_ids=CleanRetry4Harness.PHASES)
-    session = V25ExecutionSession(using=using)
+    session = V25ExecutionSession(
+        using=using,
+        capture_bundle=capture_bundle,
+        retry_id=retry_id,
+        project_root=root,
+    )
     return V25Runtime(contract=contract, operation_registry=operation_registry, phase_registry=phase_registry, session=session, using=using)
 
 
@@ -580,33 +1090,184 @@ def build_v25_runtime(*, project_root: str | Path = ".", contract_path: str | Pa
 class V25Contract:
     raw: dict[str, Any]
 
-    def native_phase_inputs(self, phase_id: str) -> dict[str, Any]:
-        if phase_id == "INITIAL_OPPORTUNITY":
-            def member_id(member_key: str) -> UUID:
-                return UUID(member_key.rsplit("::", 1)[1])
+    def binding_registry(self) -> ResolvedBindingRegistry:
+        bindings: dict[tuple[str, str], dict[str, Any]] = {}
+        for member in self.raw.get("field_bindings", []):
+            identity = member["member_identity"]
+            member_key = (
+                f"{identity['qualified_table_or_artifact_index']}::"
+                f"{identity['primary_key_or_artifact_id']}"
+            )
+            for field in member.get("fields", []):
+                bindings[(member_key, field["name"])] = field.get("value_binding", {})
+        return ResolvedBindingRegistry(bindings)
+
+    def install_live_identity_aliases(self, captures: NativeCaptureRegistry) -> None:
+        """Connect frozen logical member names to current-execution captures."""
+        aliases = {
+            ("qms.tenant_projection::daa6bb22-660c-56f5-aadf-c63f06b01731", "id"):
+                ("qms.tenant_projection::live", "id"),
+            ("qms.tenant_projection::daa6bb22-660c-56f5-aadf-c63f06b01731", "adminapps_tenant_id"):
+                ("qms.tenant_projection::live", "adminapps_tenant_id"),
+            ("qms.organization::ac638304-fdd6-5ce8-96d7-62014117af94", "id"):
+                ("qms.organization::live", "id"),
+            ("qms.user_projection::1e878efa-2d1e-50b4-b3e4-481a3c6ff229", "id"):
+                ("qms.user_projection::live", "id"),
+            ("qms.user_projection::1e878efa-2d1e-50b4-b3e4-481a3c6ff229", "adminapps_user_id"):
+                ("qms.user_projection::live", "adminapps_user_id"),
+            ("qms.process::506d920c-fe62-53c0-aac8-9c1ca8ca78ed", "id"):
+                (("qms.process::live", "id"), ("qms.process::primary", "id")),
+            ("qms.opportunity::6497b073-b3cb-5159-b64f-90700f2f5f85", "id"):
+                ("qms.opportunity::live", "id"),
+        }
+        for target, configured_source in aliases.items():
+            candidates = (
+                configured_source
+                if configured_source and isinstance(configured_source[0], tuple)
+                else (configured_source,)
+            )
+            source = candidates[0]
+            for candidate in candidates:
+                try:
+                    captures.get(*candidate)
+                    source = candidate
+                    break
+                except MissingCaptureError:
+                    continue
+            try:
+                captures.bind_alias(*target, *source)
+            except V25RuntimeError as exc:
+                if "duplicate native capture alias" not in str(exc):
+                    raise
+
+    def native_phase_inputs(self, phase_id: str, session: V25ExecutionSession | None = None) -> dict[str, Any]:
+        if phase_id in {"INITIAL_OPPORTUNITY", "ACTION_PLAN_PREPARATION"}:
+            if session is None:
+                raise MissingCaptureError(f"live execution session required for {phase_id}")
+            if phase_id == "ACTION_PLAN_PREPARATION" and "agent_decision_id" in session.composition:
+                state = session.composition
+                opportunity_id = session.captures.get("qms.opportunity::live", "id").returned_value
+                action_using = "worker" if "worker" in connections.databases else session.using
+                with trusted_tenant_context(
+                    state["identity"], actor_id=state["actor_id"],
+                    trace_id=state["agent_run_trace_id"], using=action_using,
+                ):
+                    opportunity = Opportunity.objects.using(action_using).get(pk=opportunity_id)
+                    state_hash = canonical_hash({
+                        "canonicalization": "controlled-opportunity-state-v1",
+                        "tenant_id": str(opportunity.tenant_id),
+                        "organization_id": str(opportunity.organization_id),
+                        "lineage_id": str(opportunity.lineage_id),
+                        "revision_id": str(opportunity.id),
+                        "revision": opportunity.revision,
+                        "process_id": str(opportunity.process_id),
+                        "hypothesis": opportunity.hypothesis,
+                        "benefit": opportunity.benefit,
+                        "feasibility": opportunity.feasibility,
+                        "status": opportunity.status,
+                    })
+                return {
+                    "identity": TrustedTenantIdentity("phase31.4-v2.5-native-runtime", state["identity"].tenant_id),
+                    "agent_decision_id": state["agent_decision_id"],
+                    "action_type": "opportunity.defer_evaluation",
+                    "target_type": "Opportunity",
+                    "target_id": str(session.captures.get("qms.opportunity::live", "id").returned_value),
+                    "parameters": {
+                        "compensation_action_type": "opportunity.resume_evaluation",
+                        "policy_id": "controlled-qms-action-policy/v1",
+                        "expected_revision_id": str(opportunity.id),
+                        "expected_revision": opportunity.revision,
+                        "expected_current_state": opportunity.status,
+                        "desired_state": "deferred",
+                        "expected_state_hash": state_hash,
+                    },
+                    "impact": "standard",
+                    "reversibility": "reversible",
+                    "preconditions": [{"identity": "opportunity.status", "type": "status", "expected": "active", "required": True, "source_reference": "qms.opportunity::live"}],
+                    "dry_run_supported": True,
+                    "required_autonomy": 3,
+                    "idempotency_key": "phase31.4-v2.5-live-action-plan",
+                    "actor_id": state["actor_id"],
+                    "trace_id": state["agent_run_trace_id"],
+                }
+            self.install_live_identity_aliases(session.captures)
+            resolver = self.binding_registry()
+
+            def resolve_process_id_from_live_capture() -> Any:
+                if session is None:
+                    raise MissingCaptureError("missing live process capture for INITIAL_OPPORTUNITY")
+                for candidate in (
+                    "qms.process::primary",
+                    "qms.process::live",
+                    "qms.process",
+                ):
+                    try:
+                        return session.captures.get(candidate, "id").returned_value
+                    except MissingCaptureError:
+                        continue
+                for member in self.raw["field_bindings"]:
+                    if member.get("member_identity", {}).get("qualified_table_or_artifact_index") == "qms.process":
+                        try:
+                            return session.captures.get(
+                                f"{member['member_identity']['qualified_table_or_artifact_index']}::{member['member_identity']['primary_key_or_artifact_id']}",
+                                "id",
+                            ).returned_value
+                        except MissingCaptureError:
+                            continue
+                raise MissingCaptureError("missing live process capture for INITIAL_OPPORTUNITY")
+
+            def resolve_tenant_id_from_live_capture() -> Any:
+                if session is None:
+                    raise MissingCaptureError("missing live tenant capture for INITIAL_OPPORTUNITY")
+                for candidate in (
+                    "qms.tenant_projection::live",
+                    "qms.tenant_projection::primary",
+                ):
+                    try:
+                        return session.captures.get(candidate, "id").returned_value
+                    except MissingCaptureError:
+                        continue
+                raise MissingCaptureError("missing live tenant capture for INITIAL_OPPORTUNITY")
 
             def value(member_key: str, field_name: str) -> Any:
-                member = next(
-                    item for item in self.raw["field_bindings"]
-                    if f"{item['member_identity']['qualified_table_or_artifact_index']}::{item['member_identity']['primary_key_or_artifact_id']}" == member_key
-                )
-                field = next(item for item in member["fields"] if item["name"] == field_name)
-                binding = field["value_binding"]
-                if binding.get("kind") == "EXACT_LITERAL":
-                    return binding.get("typed_value")
-                if binding.get("kind") == "DETERMINISTIC_DERIVATION":
-                    return binding.get("expected_output")
-                if binding.get("kind") == "REFERENCE_RESOLVED_BINDING":
-                    return member_id(binding["source_member"])
-                raise BindingResolutionError(f"initial opportunity input is not pre-resolvable: {member_key}.{field_name}")
+                if member_key.startswith("qms.process") and field_name == "id" and session is not None:
+                    return resolve_process_id_from_live_capture()
+                if member_key.startswith("qms.tenant_projection") and field_name == "id" and session is not None:
+                    return resolve_tenant_id_from_live_capture()
+                if member_key.startswith("qms.user_projection") and field_name == "adminapps_user_id" and session is not None:
+                    return session.captures.get("qms.user_projection::live", "adminapps_user_id").returned_value
+
+                return resolver.resolve(member_key, field_name, session.captures)
 
             opportunity = "qms.opportunity::6497b073-b3cb-5159-b64f-90700f2f5f85"
+            if phase_id == "ACTION_PLAN_PREPARATION":
+                action_plan = "qms.action_plan::ae682a8f-d782-5b27-a148-aa10a940e03a"
+                def action_value(field_name: str) -> Any:
+                    return value(action_plan, field_name)
+                return {
+                    "identity": TrustedTenantIdentity("phase31.4-v2.5-native-runtime", value(action_plan, "tenant_id")),
+                    "agent_decision_id": action_value("agent_decision_id"),
+                    "action_type": action_value("action_type"),
+                    "target_type": action_value("target_type"),
+                    "target_id": action_value("target_id"),
+                    "parameters": action_value("parameters"),
+                    "impact": action_value("impact"),
+                    "reversibility": action_value("reversibility"),
+                    "preconditions": action_value("preconditions"),
+                    "dry_run_supported": action_value("dry_run_supported"),
+                    "required_autonomy": action_value("required_autonomy"),
+                    "idempotency_key": action_value("idempotency_key"),
+                    "actor_id": value("qms.user_projection::1e878efa-2d1e-50b4-b3e4-481a3c6ff229", "adminapps_user_id"),
+                    "trace_id": action_value("trace_id"),
+                }
+            process_id = value(opportunity, "process_id")
+            tenant_id = value(opportunity, "tenant_id")
             return {
                 "identity": TrustedTenantIdentity(
                     "phase31.4-v2.5-native-runtime",
-                    value(opportunity, "tenant_id"),
+                    tenant_id,
                 ),
-                "process_id": value(opportunity, "process_id"),
+                "process_id": process_id,
                 "hypothesis": value(opportunity, "hypothesis"),
                 "benefit": value(opportunity, "benefit"),
                 "feasibility": value(opportunity, "feasibility"),
@@ -743,15 +1404,28 @@ class PhaseRecord:
     captures: int = 0
     assertions: int = 0
     error: str | None = None
+    result: PhaseExecutionResult | None = None
+    evidence_artifacts: list[str] = field(default_factory=list)
 
 
 class V25ExecutionSession:
     """Own transaction scope, registries, phase records, and blockers."""
 
-    def __init__(self, *, using: str = "default", authority: dict[str, Any] | None = None) -> None:
+    def __init__(self, *, using: str = "default", authority: dict[str, Any] | None = None,
+                 capture_bundle: CaptureBundle | None = None, retry_id: str | None = None,
+                 project_root: str | Path = ".") -> None:
         self.using = using
+        self.project_root = Path(project_root).resolve()
+        self.retry_id = retry_id
         self.authority = authority
         self.captures = NativeCaptureRegistry()
+        self.composition: dict[str, Any] = {}
+        if capture_bundle is not None:
+            if retry_id is None:
+                raise V25RuntimeError("retry_id is required when importing a capture bundle")
+            capture_bundle.validate_for_retry(retry_id)
+            for record in capture_bundle.captures:
+                self.captures.capture(record)
         self.phases: list[PhaseRecord] = []
         self.blockers: list[str] = []
         self._atomic = None
@@ -771,7 +1445,22 @@ class V25ExecutionSession:
             result = operation()
             record.operations.append(getattr(operation, "__name__", "native_operation"))
             record.captures = len(self.captures.values())
-            record.status = "PASS"
+            if not isinstance(result, PhaseExecutionResult):
+                record.status = "FAIL"
+                record.error = "phase callback did not return PhaseExecutionResult"
+                self.blockers.append(record.error)
+                return record
+            record.result = result
+            record.status = result.status
+            record.assertions = len(result.assertions)
+            record.evidence_artifacts = list(result.evidence_artifacts)
+            record.error = result.error
+            if result.status not in {"PASS", "FAIL", "SKIPPED_NOT_APPLICABLE"}:
+                record.status = "FAIL"
+                record.error = f"invalid phase status: {result.status}"
+                self.blockers.append(record.error)
+            elif result.status == "FAIL":
+                self.blockers.append(result.error or f"phase failed: {name}")
             return record
         except Exception as exc:
             record.status = "FAIL"
@@ -783,19 +1472,7 @@ class V25ExecutionSession:
 class CleanRetry4Harness:
     """Ordered V2.5 phase runner; every phase requires a concrete callback."""
 
-    PHASES = (
-        "PRECREATION_INTEGRITY", "ENVIRONMENT_CREATE", "RENDER_PROFILE", "MIGRATIONS",
-        "CATALOG_ASSERTIONS", "NATIVE_BINDING_ASSERTIONS", "AUTHORITY_ASSERTIONS",
-        "CAPTURE_REGISTRY_ASSERTIONS", "REFERENCE_BINDING_ASSERTIONS", "INVARIANT_ASSERTIONS",
-        "TRANSACTION_ASSERTIONS", "SOURCE_TO_RUNTIME_PROOF", "OPERATION_PRECONDITIONS",
-        "INITIAL_OPPORTUNITY", "ACTION_PLAN_PREPARATION", "ACTION_PLAN_DRY_RUN",
-        "EXECUTION_AUTHORIZATION", "NATIVE_IDENTITY_CAPTURE", "CONTROLLED_TRANSITION",
-        "EVENT_OUTBOX_ASSERTIONS", "RESOLVED_GRAPH", "EXACT_COMPARISON",
-        "SECURITY_EVIDENCE", "PHASE_EVIDENCE", "RUNTIME_COMPOSITION_PROOF",
-        "LIVE_MIGRATION_EVIDENCE", "LIVE_AUTHORITY_EVIDENCE", "LIVE_OPERATION_EVIDENCE",
-        "CLOSURE_PRECONDITIONS", "CLOSURE_REPORT", "TEARDOWN_GATE",
-        "TEARDOWN", "POST_TEARDOWN_VERIFY",
-    )
+    PHASES = PHASE_TOPOLOGY
 
     def __init__(self, session: V25ExecutionSession, handlers: dict[str, Callable[[], Any]],
                  *, contract: V25Contract | None = None,

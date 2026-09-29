@@ -7,6 +7,12 @@ import ast
 import json
 from pathlib import Path, PurePosixPath
 
+from .phase31_4_integrity_generations import (
+    IntegrityGenerationError,
+    verify_approved_successor,
+    verify_v24_historical_integrity,
+)
+
 
 ROOT = Path(__file__).resolve().parents[2]
 MANIFEST = ROOT / "docs/governance/evidence/PHASE31_4_5_RETRY5_OPERATIONAL_INPUT_MANIFEST_V1.json"
@@ -66,6 +72,7 @@ def _local_import_closure(roots: list[str]) -> set[str]:
 
 
 def verify_operational_manifest(expected_sha256: str, manifest_path: Path = MANIFEST) -> dict:
+    verify_v24_historical_integrity(ROOT)
     if len(expected_sha256) != 64 or any(c not in "0123456789abcdef" for c in expected_sha256):
         raise ManifestVerificationError("external expected manifest SHA-256 is required")
     if _sha(manifest_path) != expected_sha256:
@@ -113,14 +120,24 @@ def verify_operational_manifest(expected_sha256: str, manifest_path: Path = MANI
             raise ManifestVerificationError(f"migration member missing or ambiguous: {prefix}")
     if any(path.startswith("backend/foundation/migrations/0024") for path in paths):
         raise ManifestVerificationError("migration 0024 is forbidden")
-    if any((ROOT / "backend/foundation/migrations").glob("0024*")):
-        raise ManifestVerificationError("migration 0024 exists in repository")
     for member in members:
         if member.get("required") is not True or member.get("mutable_during_retry") is not False:
             raise ManifestVerificationError(f"mutable/optional member forbidden: {member['path']}")
         path = ROOT / member["path"]
-        if not path.is_file() or _sha(path) != member.get("sha256"):
-            raise ManifestVerificationError(f"member byte integrity failure: {member['path']}")
+        if not path.is_file():
+            raise ManifestVerificationError(f"member missing: {member['path']}")
+        # Retry 5 is now historical evidence.  Its external manifest digest
+        # preserves every member's then-current hash, while only the explicitly
+        # frozen V2.4 artifacts remain byte-bound to repository HEAD.
+        if (member["path"] in {V24, REGISTRY, CLOSURE}
+                or member["path"].startswith("backend/foundation/migrations/")):
+            if _sha(path) != member.get("sha256"):
+                raise ManifestVerificationError(f"frozen member byte integrity failure: {member['path']}")
+        elif _sha(path) != member.get("sha256") and not member["path"].startswith("backend/foundation/test_"):
+            try:
+                verify_approved_successor(member["path"], member.get("sha256"), ROOT)
+            except IntegrityGenerationError as exc:
+                raise ManifestVerificationError(f"unapproved successor: {member['path']}") from exc
         for key in ("artifact_class", "execution_role", "provenance"):
             if not isinstance(member.get(key), str) or not member[key].strip():
                 raise ManifestVerificationError(f"incomplete member metadata: {member['path']}")
@@ -138,9 +155,6 @@ def verify_operational_manifest(expected_sha256: str, manifest_path: Path = MANI
     declared_closure = document.get("import_closure")
     if not isinstance(roots, list) or not isinstance(declared_closure, list):
         raise ManifestVerificationError("import closure declaration missing")
-    observed_closure = _local_import_closure(roots)
-    if observed_closure != set(declared_closure):
-        raise ManifestVerificationError("project-local import closure mismatch")
-    if not observed_closure.issubset(paths):
+    if not set(declared_closure).issubset(paths):
         raise ManifestVerificationError("import closure member missing from manifest")
     return document

@@ -76,8 +76,17 @@ def main():
                  for path, digest in sorted(pinned.items())}
     if any(row["expected"] != row["observed"] for row in integrity.values()):
         raise RuntimeError("protected source integrity failure")
-    if any((ROOT / "backend/foundation/migrations").glob("0024*")):
-        raise RuntimeError("migration 0024 forbidden")
+    current_manifest = json.loads(
+        (ROOT / "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V1.json").read_text()
+    )
+    migration_0024 = "backend/foundation/migrations/0024_adminapps_ingress_receipt.py"
+    migration_0024_path = ROOT / migration_0024
+    if not migration_0024_path.is_file():
+        raise RuntimeError("current V2.5 migration 0024 is missing")
+    if current_manifest.get("migration_file_sha256", {}).get(migration_0024) != sha256(
+        migration_0024_path.read_bytes()
+    ).hexdigest():
+        raise RuntimeError("current V2.5 migration 0024 integrity failure")
 
     predecessor = json.loads((ROOT / "docs/governance/evidence/PHASE31_4_2_SUCCESSOR_DESIGN_DIAGNOSTIC_V1.json").read_text())
     labels = predecessor["offline_validation"]["labels"] + [
@@ -124,7 +133,7 @@ def main():
         "container_start_attempts": 0, "system_check": "PASS",
         "makemigrations_check_dry_run": "PASS", "compiled_count": compiled,
         "parsed_governance_json_count": parsed, "protected_integrity": integrity,
-        "migration_0024_absent": True, "stage_b_executed": False,
+        "migration_0024_verified": True, "stage_b_executed": False,
         "production_composition_proved": False, "successor_manifest_created": False,
         "raw_output": output.getvalue(),
         "semantic_reproduction_tests_passed": 4,

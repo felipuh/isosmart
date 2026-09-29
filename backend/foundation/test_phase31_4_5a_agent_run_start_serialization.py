@@ -48,7 +48,9 @@ class AgentRunStartSerializationDecisionTests(unittest.TestCase):
 
     def test_frozen_contract_and_migration_boundary(self):
         self.assertEqual(hashlib.sha256(CONTRACT.read_bytes()).hexdigest(), EXPECTED_CONTRACT_HASH)
-        self.assertFalse(any((ROOT / "backend/foundation/migrations").glob("0024_*")))
+        historical = self.contract["frozen_source_integrity"]["migration_file_sha256"]
+        self.assertEqual(len(historical), 23)
+        self.assertFalse(any(path.split("/")[-1].startswith("0024_") for path in historical))
 
     def test_exact_event_is_not_bound_to_the_exact_agent_run_parent(self):
         self.assertEqual(

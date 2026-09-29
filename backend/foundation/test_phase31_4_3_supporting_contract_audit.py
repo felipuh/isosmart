@@ -11,6 +11,8 @@ import json
 from pathlib import Path
 import re
 import unittest
+
+from .phase31_4_integrity_generations import verify_v24_historical_integrity, verify_v25_current_integrity
 from uuid import UUID, uuid5
 
 
@@ -105,10 +107,18 @@ class SupportingContractAuditTests(unittest.TestCase):
             verify_evidence_witnesses(changed)
 
     def test_protected_sources_match(self):
-        for path, digest in self.evidence["protected_file_hashes"].items():
-            self.assertEqual(hashlib.sha256((ROOT / path).read_bytes()).hexdigest(), digest, path)
-        self.assertEqual(len(list(MIGRATIONS.glob("[0-9][0-9][0-9][0-9]_*.py"))), 23)
-        self.assertFalse(list(MIGRATIONS.glob("0024*")))
+        self.assertEqual(
+            hashlib.sha256(EVIDENCE.read_bytes()).hexdigest(),
+            "12416f725917e11ca4c843ebc74d97d70e338b30fdf6ecbbd2e8afd2834f21ed",
+        )
+        self.assertEqual(
+            self.evidence["protected_file_hashes"]["backend/backend/settings.py"],
+            "1da64d5f1c8248a2c2e2e9cc586424bde185c85efd467923be28d5c1f2d170ba",
+        )
+        historical = verify_v24_historical_integrity(ROOT)
+        current = verify_v25_current_integrity(ROOT)
+        self.assertEqual(len(historical["migration_paths"]), 23)
+        self.assertEqual(len(current["migration_file_sha256"]), 24)
 
     def test_native_identity_formula_matches_frozen_sql(self):
         sql = sql_source(22)

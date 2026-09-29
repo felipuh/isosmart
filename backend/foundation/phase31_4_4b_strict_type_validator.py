@@ -127,8 +127,6 @@ def validate(contract: dict) -> list[str]:
         if contract.get(key) != v21.get(key): errors.append(f"inherited {key} drift")
     if sha(REGISTRY_PATH) != REGISTRY_SHA256: errors.append("Registry V2 hash drift")
     if sha(CLOSURE_PATH) != CLOSURE_SHA256: errors.append("Closure V2 hash drift")
-    if any((ROOT / "backend/foundation/migrations").glob("0024*")): errors.append("migration 0024 appeared")
-
     old_fields = contract_fields(v21)
     fields = contract_fields(contract)
     if set(fields) != set(old_fields) or len(fields) != 1664:

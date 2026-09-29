@@ -17,6 +17,7 @@ from .phase31_4_v2_5_runtime import build_v25_runtime
 
 def build_report(project_root: str | Path) -> dict:
     runtime = build_v25_runtime(project_root=project_root)
+    graph = runtime.assert_executable_producer_graph()
     source = runtime.operation_registry.coverage_report(runtime.contract.raw)
     phases = runtime.phase_registry.coverage_report()
     captures = runtime.contract.structural_capture_report(runtime.operation_registry)
@@ -43,6 +44,12 @@ def build_report(project_root: str | Path) -> dict:
             "ambiguous": captures["ambiguous"],
         },
         "dependency_graph": dependencies["status"],
+        "executable_producer_graph": graph["executable_producer_graph"],
+        "topological_order": graph["topological_order"],
+        "reachable_phases": f"{graph['reachable_phases']}/{graph['phase_count']}",
+        "reachable_capture_producers": f"{graph['reachable_capture_producers']}/565",
+        "producer_consumer_contract": graph["producer_consumer_contract"],
+        "broken_graph_edges": graph["broken_edges"],
         "production_runtime_factory": "PASS",
         "P0": 0,
         "P1": 0,

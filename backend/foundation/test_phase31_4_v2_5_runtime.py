@@ -1,9 +1,11 @@
 import json
 import unittest
 from unittest.mock import Mock
+from uuid import uuid4
 
 from .phase31_4_v2_5_runtime import (
     BindingResolutionError,
+    CaptureBundle,
     CaptureRecord,
     CleanRetry4Harness,
     MissingCaptureError,
@@ -25,7 +27,7 @@ class V25RuntimeTests(unittest.TestCase):
         report = build_report("..")
         self.assertEqual(report["native_sources"], {"required": 16, "registered": 16, "unresolved": 0, "duplicates": 0})
         self.assertEqual(report["native_phases"], {"required": 33, "registered": 33, "missing": 0, "duplicates": 0, "concrete_executors": 33})
-        self.assertEqual(report["capture_producers"], {"expected": 509, "covered": 509, "uncovered": 0, "ambiguous": 0})
+        self.assertEqual(report["capture_producers"], {"expected": 565, "covered": 565, "uncovered": 0, "ambiguous": 0})
         self.assertEqual(report["production_runtime_factory"], "PASS")
 
     def test_structural_gate_rejects_missing_source_phase_and_capture_producer(self):
@@ -78,6 +80,8 @@ class V25RuntimeTests(unittest.TestCase):
         runtime = build_v25_runtime(project_root="..")
         executor = runtime.phase_registry.get("PRECREATION_INTEGRITY")
         self.assertIsNone(executor.native_operation)
+        self.assertEqual(executor.source_service, "PrecreationIntegrityExecutor")
+        self.assertEqual(executor.source_operation, "verify_precreation_integrity")
     def test_product_registry_resolves_only_real_native_operations(self):
         registry = NativeOperationRegistry.product_default()
 
@@ -169,8 +173,257 @@ class V25RuntimeTests(unittest.TestCase):
         successor = {"id": "native-successor", "lineage_id": "native-initial", "revision": 2, "previous_revision_id": "native-initial"}
         RuntimeInvariantEngine.assert_revision(initial=initial, successor=successor)
 
+    def test_initial_opportunity_uses_live_native_process_capture_not_historical_fixture(self):
+        contract = V25Contract.from_path(
+            "../docs/governance/fixtures/PHASE31_4_5C_ROW_LEVEL_EXECUTION_CONTRACT_V2_5.json"
+        )
+        session = V25ExecutionSession()
+        process_id = "35ae9e96-478d-40d9-8cdd-be52a0c7048d"
+        session.captures.capture(CaptureRecord(
+            logical_member="qms.process::primary",
+            logical_field="id",
+            source_service="QmsContextCommandService",
+            source_operation="create_process",
+            returned_value=process_id,
+            persisted_value=process_id,
+            expected_type="uuid",
+            phase="UPSTREAM_NATIVE_CHAIN",
+        ))
+        session.captures.capture(CaptureRecord(
+            logical_member="qms.tenant_projection::live",
+            logical_field="id",
+            source_service="TenantProjectionWriter",
+            source_operation="project_tenant_event",
+            returned_value="live-tenant",
+            persisted_value="live-tenant",
+            expected_type="uuid",
+            phase="AUTHENTICATED_TENANT_PROJECTION",
+        ))
+        session.captures.capture(CaptureRecord(
+            logical_member="qms.user_projection::live",
+            logical_field="adminapps_user_id",
+            source_service="AdminApps",
+            source_operation="create_user",
+            returned_value="live-actor",
+            persisted_value="live-actor",
+            expected_type="uuid",
+            phase="AUTHENTICATED_TENANT_PROJECTION",
+        ))
 
-    def test_clean_retry_4_requires_and_runs_all_33_phases(self):
+        payload = contract.native_phase_inputs("INITIAL_OPPORTUNITY", session=session)
+
+        self.assertEqual(str(payload["process_id"]), process_id)
+        self.assertEqual(str(payload["identity"].tenant_id), "live-tenant")
+        self.assertNotEqual(str(payload["process_id"]), "506d920c-fe62-53c0-aac8-9c1ca8ca78ed")
+
+    def test_live_external_and_local_tenant_ids_remain_distinct(self):
+        external_tenant = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
+        local_projection = "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb"
+        self.assertNotEqual(external_tenant, local_projection)
+        session = V25ExecutionSession()
+        session.captures.capture(CaptureRecord(
+            logical_member="qms.process::live", logical_field="id",
+            source_service="QmsContextCommandService", source_operation="create_process",
+            returned_value="cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+            persisted_value="cccccccc-cccc-4ccc-8ccc-cccccccccccc", expected_type="uuid",
+            phase="UPSTREAM_NATIVE_CAPTURE",
+        ))
+        session.captures.capture(CaptureRecord(
+            logical_member="qms.tenant_projection::live", logical_field="id",
+            source_service="TenantProjectionWriter", source_operation="project_tenant_event",
+            returned_value=local_projection, persisted_value=local_projection, expected_type="uuid",
+            phase="AUTHENTICATED_TENANT_PROJECTION",
+        ))
+        session.captures.capture(CaptureRecord(
+            logical_member="qms.user_projection::live", logical_field="adminapps_user_id",
+            source_service="AdminApps", source_operation="create_user",
+            returned_value="live-actor", persisted_value="live-actor", expected_type="uuid",
+            phase="AUTHENTICATED_TENANT_PROJECTION",
+        ))
+        contract = V25Contract.from_path(
+            "../docs/governance/fixtures/PHASE31_4_5C_ROW_LEVEL_EXECUTION_CONTRACT_V2_5.json"
+        )
+        payload = contract.native_phase_inputs("INITIAL_OPPORTUNITY", session=session)
+        self.assertEqual(str(payload["identity"].tenant_id), local_projection)
+        self.assertNotEqual(str(payload["identity"].tenant_id), external_tenant)
+
+    def test_initial_opportunity_requires_live_process_capture_before_invocation(self):
+        contract = V25Contract.from_path(
+            "../docs/governance/fixtures/PHASE31_4_5C_ROW_LEVEL_EXECUTION_CONTRACT_V2_5.json"
+        )
+        session = V25ExecutionSession()
+
+        with self.assertRaises(MissingCaptureError):
+            contract.native_phase_inputs("INITIAL_OPPORTUNITY", session=session)
+
+    def test_initial_opportunity_requires_live_tenant_capture_for_identity(self):
+        contract = V25Contract.from_path(
+            "../docs/governance/fixtures/PHASE31_4_5C_ROW_LEVEL_EXECUTION_CONTRACT_V2_5.json"
+        )
+        session = V25ExecutionSession()
+        session.captures.capture(CaptureRecord(
+            logical_member="qms.process::live",
+            logical_field="id",
+            source_service="QmsContextCommandService",
+            source_operation="create_process",
+            returned_value="live-process",
+            persisted_value="live-process",
+            expected_type="uuid",
+            phase="UPSTREAM_NATIVE_CAPTURE",
+        ))
+
+        with self.assertRaisesRegex(MissingCaptureError, "missing live capture"):
+            contract.native_phase_inputs("INITIAL_OPPORTUNITY", session=session)
+
+    def test_stage_ext_capture_bridge_imports_five_fresh_captures_before_initial_opportunity(self):
+        retry_id = "Phase 31.4 V2.5 Clean Retry 16"
+        stage_ext = {
+            "retry_id": retry_id,
+            "tenant_id": "11111111-1111-4111-8111-111111111111",
+            "tenant_projection_id": "22222222-2222-4222-8222-222222222222",
+            "actor_id": "33333333-3333-4333-8333-333333333333",
+            "organization_id": "44444444-4444-4444-8444-444444444444",
+            "process_id": "55555555-5555-4555-8555-555555555555",
+        }
+        bundle = CaptureBundle.from_stage_ext(stage_ext, retry_id=retry_id)
+        runtime = build_v25_runtime(
+            project_root="..",
+            capture_bundle=bundle,
+            retry_id=retry_id,
+        )
+
+        self.assertEqual(len(bundle.captures), 5)
+        self.assertEqual(len(runtime.session.captures.values()), 5)
+        self.assertTrue(all(
+            record.provenance == "LIVE_UPSTREAM_NATIVE_CAPTURE"
+            for record in runtime.session.captures.values()
+        ))
+        payload = runtime.contract.native_phase_inputs("INITIAL_OPPORTUNITY", session=runtime.session)
+        self.assertEqual(str(payload["process_id"]), stage_ext["process_id"])
+        self.assertEqual(str(payload["identity"].tenant_id), stage_ext["tenant_projection_id"])
+        self.assertEqual(payload["actor_id"], stage_ext["actor_id"])
+        self.assertNotEqual(str(payload["process_id"]), "506d920c-fe62-53c0-aac8-9c1ca8ca78ed")
+
+    def test_stage_ext_capture_bridge_rejects_bundle_from_another_retry(self):
+        retry_id = "Phase 31.4 V2.5 Clean Retry 16"
+        stage_ext = {
+            "retry_id": retry_id,
+            "tenant_id": "11111111-1111-4111-8111-111111111111",
+            "tenant_projection_id": "22222222-2222-4222-8222-222222222222",
+            "actor_id": "33333333-3333-4333-8333-333333333333",
+            "organization_id": "44444444-4444-4444-8444-444444444444",
+            "process_id": "55555555-5555-4555-8555-555555555555",
+        }
+        bundle = CaptureBundle.from_stage_ext(stage_ext, retry_id=retry_id)
+
+        with self.assertRaisesRegex(RuntimeError, "capture bundle retry mismatch"):
+            build_v25_runtime(project_root="..", capture_bundle=bundle, retry_id="Retry 17")
+
+    def _contract_and_randomized_identity_captures(self):
+        contract = V25Contract.from_path(
+            "../docs/governance/fixtures/PHASE31_4_5C_ROW_LEVEL_EXECUTION_CONTRACT_V2_5.json"
+        )
+        captures = NativeCaptureRegistry()
+        for member in contract.raw["field_bindings"]:
+            identity = member["member_identity"]
+            member_key = (
+                f"{identity['qualified_table_or_artifact_index']}::"
+                f"{identity['primary_key_or_artifact_id']}"
+            )
+            for field in member["fields"]:
+                kind = field["value_binding"].get("kind")
+                if kind not in {"CAPTURE_NATIVE_OUTPUT", "LIVE_UPSTREAM_NATIVE_CAPTURE"}:
+                    continue
+                value = str(uuid4())
+                captures.capture(CaptureRecord(
+                    logical_member=member_key, logical_field=field["name"],
+                    source_service="randomized-native-producer", source_operation="produce",
+                    returned_value=value, persisted_value=value, expected_type="string",
+                    phase="WHOLE_GRAPH_NATIVE_IDENTITY_INDEPENDENCE",
+                ))
+        return contract, captures
+
+    def test_action_plan_native_identity_is_used_by_downstream_references(self):
+        contract, captures = self._contract_and_randomized_identity_captures()
+        member = "qms.action_plan::ae682a8f-d782-5b27-a148-aa10a940e03a"
+        live_id = captures.get(member, "id").returned_value
+        resolver = contract.binding_registry()
+        self.assertEqual(resolver.resolve(member, "id", captures), live_id)
+        self.assertNotEqual(live_id, member.rsplit("::", 1)[1])
+
+    def test_agent_run_native_identity_is_used_by_decision(self):
+        contract, captures = self._contract_and_randomized_identity_captures()
+        run = "qms.agent_run::b87bdcde-c623-522f-a0ac-ff81f61df8e8"
+        decision = "qms.agent_decision::2a100aee-ebdd-5807-aab0-f8c4265e8e63"
+        self.assertEqual(
+            contract.binding_registry().resolve(decision, "agent_run_id", captures),
+            captures.get(run, "id").returned_value,
+        )
+
+    def test_decision_native_identity_is_used_by_action_plan_and_authorization(self):
+        contract, captures = self._contract_and_randomized_identity_captures()
+        decision = "qms.agent_decision::2a100aee-ebdd-5807-aab0-f8c4265e8e63"
+        live_id = captures.get(decision, "id").returned_value
+        resolver = contract.binding_registry()
+        for member in (
+            "qms.action_plan::ae682a8f-d782-5b27-a148-aa10a940e03a",
+            "qms.execution_authorization::040b78af-e99d-5154-bb8f-246a87819be5",
+        ):
+            self.assertEqual(resolver.resolve(member, "agent_decision_id", captures), live_id)
+
+    def test_missing_action_plan_agent_run_and_decision_captures_fail_closed(self):
+        contract = V25Contract.from_path(
+            "../docs/governance/fixtures/PHASE31_4_5C_ROW_LEVEL_EXECUTION_CONTRACT_V2_5.json"
+        )
+        for member in (
+            "qms.action_plan::ae682a8f-d782-5b27-a148-aa10a940e03a",
+            "qms.agent_run::b87bdcde-c623-522f-a0ac-ff81f61df8e8",
+            "qms.agent_decision::2a100aee-ebdd-5807-aab0-f8c4265e8e63",
+        ):
+            with self.subTest(member=member), self.assertRaises(MissingCaptureError):
+                contract.binding_registry().resolve(member, "id", NativeCaptureRegistry())
+
+    def test_historical_identity_cannot_substitute_for_missing_capture(self):
+        contract = V25Contract.from_path(
+            "../docs/governance/fixtures/PHASE31_4_5C_ROW_LEVEL_EXECUTION_CONTRACT_V2_5.json"
+        )
+        member = "qms.agent_decision::2a100aee-ebdd-5807-aab0-f8c4265e8e63"
+        with self.assertRaises(MissingCaptureError):
+            contract.binding_registry().resolve(member, "id", NativeCaptureRegistry())
+
+    def test_whole_graph_native_identity_independence(self):
+        contract, captures = self._contract_and_randomized_identity_captures()
+        resolver = contract.binding_registry()
+        resolved = 0
+        for member in contract.raw["field_bindings"]:
+            identity = member["member_identity"]
+            member_key = (
+                f"{identity['qualified_table_or_artifact_index']}::"
+                f"{identity['primary_key_or_artifact_id']}"
+            )
+            for field in member["fields"]:
+                resolver.resolve(member_key, field["name"], captures)
+                resolved += 1
+        self.assertEqual(resolved, 1664)
+
+    def test_uuid_audit_has_zero_exact_literal_physical_identities(self):
+        contract = V25Contract.from_path(
+            "../docs/governance/fixtures/PHASE31_4_5C_ROW_LEVEL_EXECUTION_CONTRACT_V2_5.json"
+        )
+        literals = []
+        for member in contract.raw["field_bindings"]:
+            for field in member["fields"]:
+                binding = field["value_binding"]
+                value = binding.get("typed_value")
+                if binding.get("kind") == "EXACT_LITERAL" and isinstance(value, str):
+                    try:
+                        __import__("uuid").UUID(value)
+                    except ValueError:
+                        continue
+                    literals.append(value)
+        self.assertEqual(literals, [])
+
+    def test_clean_retry_4_rejects_callbacks_without_phase_results(self):
         session = V25ExecutionSession()
         called = []
         handlers = {
@@ -188,5 +441,6 @@ class V25RuntimeTests(unittest.TestCase):
         ).run()
 
         self.assertEqual(len(records), 33)
-        self.assertTrue(all(record.status == "PASS" for record in records))
+        self.assertTrue(all(record.status == "FAIL" for record in records))
+        self.assertTrue(all("PhaseExecutionResult" in record.error for record in records))
         self.assertEqual(called, list(CleanRetry4Harness.PHASES))

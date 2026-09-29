@@ -11,6 +11,7 @@ import requests
 from django.conf import settings
 from django.core.cache import cache
 import logging
+from urllib.parse import urlsplit
 
 logger = logging.getLogger(__name__)
 
@@ -37,7 +38,7 @@ class AdminAppsClient:
     
     def __init__(self):
         config = getattr(settings, 'ADMIN_APPS_INTEGRATION', {})
-        self.base_url = config.get('BASE_URL', 'http://localhost:8000/api/integration')
+        self.base_url = str(config.get('BASE_URL') or '').strip().rstrip('/')
         self.api_key = config.get('API_KEY', '')
         self.timeout = config.get('TIMEOUT', 10)
         self.cache_ttl = config.get('CACHE_TTL', 300)
@@ -69,6 +70,12 @@ class AdminAppsClient:
     
     def _make_request(self, method, endpoint, data=None, use_cache=False, cache_key=None):
         """Realiza una petición a Admin Apps"""
+        parsed_base_url = urlsplit(self.base_url)
+        if not self.base_url or parsed_base_url.scheme not in ('http', 'https') or not parsed_base_url.netloc:
+            return {
+                'error': 'Admin Apps endpoint is missing or invalid',
+                'code': 'invalid_adminapps_endpoint',
+            }
         url = f"{self.base_url}{endpoint}"
         
         # Verificar caché si aplica

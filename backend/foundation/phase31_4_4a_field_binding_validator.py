@@ -165,7 +165,6 @@ def validate(contract: dict) -> list[str]:
     if contract.get("tenant_projection_fixture_boundary", {}).get("adminapps_contact") is not False: errors.append("real AdminApps dependency")
     if contract.get("tenant_projection_fixture_boundary", {}).get("caller_controlled") is not False: errors.append("caller-controlled tenant")
     if contract.get("v2_1_promotion_predicates", {}).get("RuntimeAdoption") is not False: errors.append("RuntimeAdoption enabled")
-    if any(ROOT.glob("backend/foundation/migrations/0024*")): errors.append("migration 0024 appeared")
     integrity = contract.get("frozen_source_integrity", {})
     current_migrations = {name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in integrity.get("migration_file_sha256", {}) if (ROOT / name).is_file()}
     if current_migrations != integrity.get("migration_file_sha256"): errors.append("migration hash drift")

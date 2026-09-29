@@ -105,8 +105,7 @@ INSTALLED_APPS = [
 
 # Configuración de integración
 ADMIN_APPS_INTEGRATION = {
-    'BASE_URL': os.getenv('ADMIN_APPS_BASE_URL', 'http://127.0.0.1:8000/api/integration'),
-    # Keep env override as primary source; fallback keeps local/dev auth integration functional.
+    'BASE_URL': os.getenv('ADMIN_APPS_BASE_URL', '').strip(),
     'API_KEY': os.getenv('ADMIN_APPS_API_KEY', 'isosmart-integration-key-2025' if IS_DEVELOPMENT else ''),
     'TIMEOUT': int(os.getenv('ADMIN_APPS_TIMEOUT', '10')),
     'CACHE_TTL': int(os.getenv('ADMIN_APPS_CACHE_TTL', '300')),
@@ -266,6 +265,11 @@ else:
             'CONN_MAX_AGE': int(os.getenv('DB_CONN_MAX_AGE', '60')),
         }
     }
+    # Foundation migrations inspect Django's connection options when assigning
+    # restricted function ownership. Provisioning supplies these non-secret
+    # role identifiers; PostgreSQL receives the same options on connection.
+    if os.getenv('DB_SESSION_OPTIONS'):
+        DATABASES['default']['OPTIONS'] = {'options': os.environ['DB_SESSION_OPTIONS']}
 
 #Configurar modelo de usuario
 ADMINAPPS_TENANT_EVENT_KEY_SHA256 = os.getenv('ADMINAPPS_TENANT_EVENT_KEY_SHA256', '')
@@ -273,7 +277,15 @@ ADMINAPPS_TENANT_EVENT_KEY_SHA256 = os.getenv('ADMINAPPS_TENANT_EVENT_KEY_SHA256
 # Foundation SQL uses distinct least-privilege PostgreSQL principals. Missing
 # credentials leave the production ingress/commands unavailable by design.
 if not _env_bool('USE_SQLITE_DATABASE', default=False):
-    for alias, prefix in (('app', 'FOUNDATION_APP'), ('projector', 'FOUNDATION_PROJECTOR')):
+    foundation_aliases = (
+        ('app', 'FOUNDATION_APP'), ('projector', 'FOUNDATION_PROJECTOR'),
+        ('worker', 'FOUNDATION_WORKER'), ('agent_catalog_curator', 'FOUNDATION_AGENT_CATALOG_CURATOR'),
+        ('normative_curator', 'FOUNDATION_NORMATIVE_CURATOR'), ('human_approver', 'FOUNDATION_HUMAN_APPROVER'),
+        ('execution_authorizer', 'FOUNDATION_EXECUTION_AUTHORIZER'),
+        ('executor', 'FOUNDATION_EXECUTOR'),
+        ('qms_action_owner', 'FOUNDATION_QMS_ACTION_OWNER'),
+    )
+    for alias, prefix in foundation_aliases:
         user = os.getenv(f'{prefix}_DB_USER') or os.getenv(f'{prefix}_ROLE', '')
         password = os.getenv(f'{prefix}_DB_PASSWORD') or os.getenv(f'{prefix}_PASSWORD', '')
         if user and password:

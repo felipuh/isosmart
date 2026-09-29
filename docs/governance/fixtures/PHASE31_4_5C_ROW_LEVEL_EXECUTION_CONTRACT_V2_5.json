@@ -283,12 +283,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Synthetic control-plane fixture identity; it does not assert a real AdminApps tenant",
-            "typed_value": "baff5462-1031-52a3-bae4-9a00a1f9bb9c"
+            "authoritative": true,
+            "capture_output": "adminapps_tenant_id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "LIVE_UPSTREAM_NATIVE_CAPTURE",
+            "native_source": "stage-ext/adminapps-tenant",
+            "reason": "live identity produced before the V2.5 phase graph; historical UUID is metadata only",
+            "retention_rule": "RETAIN_LIVE_UPSTREAM_IDENTITY_ONLY"
           }
         },
         {
@@ -365,12 +366,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "daa6bb22-660c-56f5-aadf-c63f06b01731"
+            "authoritative": true,
+            "capture_output": "tenant_projection_id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "LIVE_UPSTREAM_NATIVE_CAPTURE",
+            "native_source": "stage-ext/tenant-projection",
+            "reason": "live identity produced before the V2.5 phase graph; historical UUID is metadata only",
+            "retention_rule": "RETAIN_LIVE_UPSTREAM_IDENTITY_ONLY"
           }
         },
         {
@@ -645,12 +647,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "ac638304-fdd6-5ce8-96d7-62014117af94"
+            "authoritative": true,
+            "capture_output": "organization_id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "LIVE_UPSTREAM_NATIVE_CAPTURE",
+            "native_source": "stage-ext/qms-organization",
+            "reason": "live identity produced before the V2.5 phase graph; historical UUID is metadata only",
+            "retention_rule": "RETAIN_LIVE_UPSTREAM_IDENTITY_ONLY"
           }
         },
         {
@@ -793,12 +796,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "1e878efa-2d1e-50b4-b3e4-481a3c6ff229"
+            "authoritative": true,
+            "capture_output": "user_projection_id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "LIVE_UPSTREAM_NATIVE_CAPTURE",
+            "native_source": "stage-ext/user-projection",
+            "reason": "live identity produced before the V2.5 phase graph; historical UUID is metadata only",
+            "retention_rule": "RETAIN_LIVE_UPSTREAM_IDENTITY_ONLY"
           }
         },
         {
@@ -982,12 +986,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "506d920c-fe62-53c0-aac8-9c1ca8ca78ed"
+            "authoritative": true,
+            "capture_output": "process_id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "LIVE_UPSTREAM_NATIVE_CAPTURE",
+            "native_source": "stage-ext/qms-process",
+            "reason": "live identity produced before the V2.5 phase graph; historical UUID is metadata only",
+            "retention_rule": "RETAIN_LIVE_UPSTREAM_IDENTITY_ONLY"
           }
         },
         {
@@ -1184,12 +1189,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "9b9a75f6-f3dc-5089-9b27-6aff45ca0556"
+            "authoritative": true,
+            "capture_output": "id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-exact-support-producer/v1",
+            "reason": "native product identity discovered by the complete V2.5 UUID audit",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -1320,12 +1326,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "98939c5e-1a06-53c9-bbf9-07b21d81feb1"
+            "authoritative": true,
+            "capture_output": "id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-exact-support-producer/v1",
+            "reason": "native product identity discovered by the complete V2.5 UUID audit",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -1438,12 +1445,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "cd11a240-2f3a-5239-9906-a5217b0979c4"
+            "authoritative": true,
+            "capture_output": "id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-exact-support-producer/v1",
+            "reason": "native product identity discovered by the complete V2.5 UUID audit",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -1603,12 +1611,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "c56a413e-00f1-5a20-81c4-dfeda4681dc7"
+            "authoritative": true,
+            "capture_output": "id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-exact-support-producer/v1",
+            "reason": "native product identity discovered by the complete V2.5 UUID audit",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -1763,12 +1772,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "ca734de0-7bfe-51e4-acce-639cc5f26f1d"
+            "authoritative": true,
+            "capture_output": "id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-exact-support-producer/v1",
+            "reason": "native product identity discovered by the complete V2.5 UUID audit",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -1905,12 +1915,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "eb900d83-deed-5493-bad8-e8abc7d3f932"
+            "authoritative": true,
+            "capture_output": "id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-exact-support-producer/v1",
+            "reason": "native product identity discovered by the complete V2.5 UUID audit",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -2227,12 +2238,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "5873aa8a-a727-5814-a932-14e85f33cba0"
+            "authoritative": true,
+            "capture_output": "id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-exact-support-producer/v1",
+            "reason": "native product identity discovered by the complete V2.5 UUID audit",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -2422,12 +2434,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "7fb528b2-c7a6-5def-be6c-edbe50679cd2"
+            "authoritative": true,
+            "capture_output": "id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-exact-support-producer/v1",
+            "reason": "native product identity discovered by the complete V2.5 UUID audit",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -2617,12 +2630,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "e968156c-cee8-5f54-96be-8c7462e40023"
+            "authoritative": true,
+            "capture_output": "id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-exact-support-producer/v1",
+            "reason": "native product identity discovered by the complete V2.5 UUID audit",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -2828,12 +2842,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "a5308071-20ad-5872-956a-8d8eb07e5103"
+            "authoritative": true,
+            "capture_output": "evidence_id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-exact-support-producer/v1",
+            "reason": "native runtime identity; historical UUID is metadata only",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -3151,12 +3166,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "2ace6d78-322e-54f1-b45e-c6ceeb6fbbdf"
+            "authoritative": true,
+            "capture_output": "id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-isolated-catalog-producer/v1",
+            "reason": "native product identity discovered by the complete V2.5 UUID audit",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -3398,12 +3414,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "d8d5730c-d390-5be6-af6a-e4ab9d4cf155"
+            "authoritative": true,
+            "capture_output": "id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-isolated-catalog-producer/v1",
+            "reason": "native product identity discovered by the complete V2.5 UUID audit",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -3696,12 +3713,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "db7ac009-3d7f-50b0-9cff-ab1f72c2ede8"
+            "authoritative": true,
+            "capture_output": "id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-isolated-catalog-producer/v1",
+            "reason": "native product identity discovered by the complete V2.5 UUID audit",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -3891,12 +3909,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "c9e83da2-f1bc-5218-9c03-c4a0391f73cb"
+            "authoritative": true,
+            "capture_output": "id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-isolated-catalog-producer/v1",
+            "reason": "native product identity discovered by the complete V2.5 UUID audit",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -4086,12 +4105,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "3c42a4e6-7eca-51ea-8063-e0461ad24fa6"
+            "authoritative": true,
+            "capture_output": "id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-isolated-catalog-producer/v1",
+            "reason": "native product identity discovered by the complete V2.5 UUID audit",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -4281,12 +4301,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "22ca2229-0ffd-5a26-b178-38c976701cee"
+            "authoritative": true,
+            "capture_output": "id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-isolated-catalog-producer/v1",
+            "reason": "native product identity discovered by the complete V2.5 UUID audit",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -4852,12 +4873,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "b87bdcde-c623-522f-a0ac-ff81f61df8e8"
+            "authoritative": true,
+            "capture_output": "agent_run_id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-agent-provenance-producer/v1",
+            "reason": "native runtime identity; historical UUID is metadata only",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -5216,12 +5238,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "ff0841b9-0b28-5a33-8a74-88d5c23575ac"
+            "authoritative": true,
+            "capture_output": "input_ids[0]",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-agent-provenance-producer/v1",
+            "reason": "native runtime identity; historical UUID is metadata only",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -5446,12 +5469,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "5a6e7f68-5d80-5c1d-a40e-76f3240e0d6d"
+            "authoritative": true,
+            "capture_output": "recommendation_id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-agent-provenance-producer/v1",
+            "reason": "native runtime identity; historical UUID is metadata only",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -5697,12 +5721,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "27eb05f3-1a75-5a4a-a03d-521c777f4ea7"
+            "authoritative": true,
+            "capture_output": "basis_ids[0]",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-agent-provenance-producer/v1",
+            "reason": "native runtime identity; historical UUID is metadata only",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -6056,12 +6081,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "fc6aea7a-491e-5dd9-860e-b3527264416b"
+            "authoritative": true,
+            "capture_output": "link_id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-agent-provenance-producer/v1",
+            "reason": "native runtime identity; historical UUID is metadata only",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -6303,12 +6329,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "2a100aee-ebdd-5807-aab0-f8c4265e8e63"
+            "authoritative": true,
+            "capture_output": "decision_id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-controlled-opportunity-producer/v1",
+            "reason": "native runtime identity; historical UUID is metadata only",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -6561,7 +6588,7 @@
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
             "authoritative": true,
-            "capture_output": "plan.id",
+            "capture_output": "action_plan_id",
             "database_type_or_schema_type": "UUIDField",
             "kind": "CAPTURE_NATIVE_OUTPUT",
             "native_source": "backend/foundation/action_authorization.py:ActionPreparationService.prepare_action_plan",
@@ -6941,12 +6968,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "770bab9c-928d-5967-87d8-e882aab09c68"
+            "authoritative": true,
+            "capture_output": "dry_run_id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-controlled-opportunity-producer/v1",
+            "reason": "native runtime identity; historical UUID is metadata only",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -7314,12 +7342,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "8dece4ae-1d50-5e95-8a78-893ca3c4c231"
+            "authoritative": true,
+            "capture_output": "approval_id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-controlled-opportunity-producer/v1",
+            "reason": "native runtime identity; historical UUID is metadata only",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -7717,12 +7746,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "040b78af-e99d-5154-bb8f-246a87819be5"
+            "authoritative": true,
+            "capture_output": "authorization_id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-controlled-opportunity-producer/v1",
+            "reason": "native runtime identity; historical UUID is metadata only",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -8096,12 +8126,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "b64bbd57-1207-51f3-b4ef-b14b1f2d24cf"
+            "authoritative": true,
+            "capture_output": "execution_id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-controlled-opportunity-producer/v1",
+            "reason": "native runtime identity; historical UUID is metadata only",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -8700,12 +8731,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "b2bd43b1-6dea-5bda-91c3-081172f40f57"
+            "authoritative": true,
+            "capture_output": "receipt.id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-controlled-opportunity-producer/v1",
+            "reason": "native runtime identity; historical UUID is metadata only",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -8999,12 +9031,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "0d913a9a-0c98-5c7c-8911-a52cb9138010"
+            "authoritative": true,
+            "capture_output": "evidence_id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-effectiveness-producer/v1",
+            "reason": "native runtime identity; historical UUID is metadata only",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -9588,12 +9621,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "868bccec-28d5-51fe-aa05-5bf621a97ed2"
+            "authoritative": true,
+            "capture_output": "effectiveness_check_id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-effectiveness-producer/v1",
+            "reason": "native runtime identity; historical UUID is metadata only",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -10099,12 +10133,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "75255780-47e7-5116-ad66-3549b533463d"
+            "authoritative": true,
+            "capture_output": "effectiveness_evidence_id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-effectiveness-producer/v1",
+            "reason": "native runtime identity; historical UUID is metadata only",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -10394,12 +10429,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "fb57055c-cbfa-5f1b-b336-a7bc530a5895"
+            "authoritative": true,
+            "capture_output": "artifact_id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-learning-signal-producer/v1",
+            "reason": "native runtime identity; historical UUID is metadata only",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -10689,12 +10725,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "c3b335cb-2776-585f-a05e-8f9a00906069"
+            "authoritative": true,
+            "capture_output": "link_id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-learning-signal-producer/v1",
+            "reason": "native runtime identity; historical UUID is metadata only",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -11296,12 +11333,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "078ed021-9eb9-5258-96b9-3b74e2951e77"
+            "authoritative": true,
+            "capture_output": "id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-agent-provenance-producer/v1",
+            "reason": "native product identity discovered by the complete V2.5 UUID audit",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -12302,12 +12340,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "51dd5c7a-52d3-5779-ad95-ea6910747874"
+            "authoritative": true,
+            "capture_output": "id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-agent-provenance-producer/v1",
+            "reason": "native product identity discovered by the complete V2.5 UUID audit",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -13307,12 +13346,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "aef69cfe-2e84-58ae-9f37-89e45640f400"
+            "authoritative": true,
+            "capture_output": "id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-controlled-opportunity-producer/v1",
+            "reason": "native product identity discovered by the complete V2.5 UUID audit",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -14312,12 +14352,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "d10bbec9-3fde-5d9b-87f3-4856d3a7116d"
+            "authoritative": true,
+            "capture_output": "id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-controlled-opportunity-producer/v1",
+            "reason": "native product identity discovered by the complete V2.5 UUID audit",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -15316,12 +15357,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "e0145d7c-945f-5702-b535-e4651ed4c629"
+            "authoritative": true,
+            "capture_output": "id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-controlled-opportunity-producer/v1",
+            "reason": "native product identity discovered by the complete V2.5 UUID audit",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -16321,12 +16363,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "d9138ae4-37a2-52a6-bbdb-02a6f523b42c"
+            "authoritative": true,
+            "capture_output": "id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-controlled-opportunity-producer/v1",
+            "reason": "native product identity discovered by the complete V2.5 UUID audit",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -17326,12 +17369,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "552e26a9-233b-5df9-9361-2cd8e05ecc5d"
+            "authoritative": true,
+            "capture_output": "id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-controlled-opportunity-producer/v1",
+            "reason": "native product identity discovered by the complete V2.5 UUID audit",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -18330,12 +18374,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "58d06fb9-deba-5d1f-9161-44fbc3152c03"
+            "authoritative": true,
+            "capture_output": "id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-effectiveness-producer/v1",
+            "reason": "native product identity discovered by the complete V2.5 UUID audit",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -19334,12 +19379,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "114a4b5d-6dd0-5128-b6f7-a9d08fe64ced"
+            "authoritative": true,
+            "capture_output": "id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-learning-signal-producer/v1",
+            "reason": "native product identity discovered by the complete V2.5 UUID audit",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -20007,12 +20053,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "bc5f4f17-294d-5abd-b27b-2d296921ffdf"
+            "authoritative": true,
+            "capture_output": "id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "knowledge-layer-rule-root-bootstrap-producer/v1",
+            "reason": "native product identity discovered by the complete V2.5 UUID audit",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -20329,12 +20376,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "805875c2-6505-5b82-ad41-40c2519293d2"
+            "authoritative": true,
+            "capture_output": "id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "knowledge-layer-rule-root-bootstrap-producer/v1",
+            "reason": "native product identity discovered by the complete V2.5 UUID audit",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -20739,12 +20787,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
+            "authoritative": true,
+            "capture_output": "id",
             "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "4649111b-a555-5368-ac91-9a47d48ef3b1"
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "migration-0022-native-release-service/v1",
+            "reason": "native product identity discovered by the complete V2.5 UUID audit",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -22477,12 +22526,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "5d1d1c61-1bdb-5550-8605-2c9a54d51340"
+            "authoritative": true,
+            "capture_output": "artifact_id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-governed-learning-producer/v2",
+            "reason": "native runtime identity; historical UUID is metadata only",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -23005,12 +23055,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "0b4e8100-4862-5de2-a595-8d8d9f901e22"
+            "authoritative": true,
+            "capture_output": "signal_link_id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-governed-learning-producer/v2",
+            "reason": "native runtime identity; historical UUID is metadata only",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -23272,12 +23323,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
+            "authoritative": true,
+            "capture_output": "canonical_delta_id",
             "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "82486439-2035-5153-9851-c4fc0e5d5184"
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-governed-learning-producer/v2",
+            "reason": "native runtime identity; historical UUID is metadata only",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -23755,12 +23807,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
+            "authoritative": true,
+            "capture_output": "artifact_id",
             "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "6c267f9c-705f-5e7b-9aa2-149acc9f8fab"
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-governed-learning-producer/v2",
+            "reason": "native runtime identity; historical UUID is metadata only",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -24506,12 +24559,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
+            "authoritative": true,
+            "capture_output": "artifact_id",
             "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "6610b249-87f3-543e-b096-0aac01ffc404"
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-governed-learning-producer/v2",
+            "reason": "native runtime identity; historical UUID is metadata only",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -25269,12 +25323,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
+            "authoritative": true,
+            "capture_output": "artifact_id",
             "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "d67a9e62-7f96-546c-b053-55ff4db91f72"
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-governed-learning-producer/v2",
+            "reason": "native runtime identity; historical UUID is metadata only",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -26098,12 +26153,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "c4ec5480-f91d-5779-9c93-bceaa2a165e0"
+            "authoritative": true,
+            "capture_output": "id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-governed-learning-producer/v2",
+            "reason": "native product identity discovered by the complete V2.5 UUID audit",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -27102,12 +27158,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "5f2fc242-cf86-5308-b46f-1a5bd260fa24"
+            "authoritative": true,
+            "capture_output": "id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-governed-learning-producer/v2",
+            "reason": "native product identity discovered by the complete V2.5 UUID audit",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -28106,12 +28163,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "e1858a0f-bb75-5f79-b29c-05fad2a9f2e6"
+            "authoritative": true,
+            "capture_output": "id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-governed-learning-producer/v2",
+            "reason": "native product identity discovered by the complete V2.5 UUID audit",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -29110,12 +29168,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
-            "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "2913dd61-f579-50f7-a38a-23772f2cbcfb"
+            "authoritative": true,
+            "capture_output": "id",
+            "database_type_or_schema_type": "UUIDField",
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "phase31.4.4-governed-learning-producer/v2",
+            "reason": "native product identity discovered by the complete V2.5 UUID audit",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -32241,12 +32300,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
+            "authoritative": true,
+            "capture_output": "id",
             "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "cf4db0d2-a312-5a44-91cf-6e14f5cd600e"
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "migration-0022-native-release-service/v1",
+            "reason": "native product identity discovered by the complete V2.5 UUID audit",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -33952,12 +34012,13 @@
           },
           "taxonomy_classification": "PREBOUND_STATIC",
           "value_binding": {
-            "canonical_representation": "canonical-json-rfc8785-compatible/v1",
+            "authoritative": true,
+            "capture_output": "id",
             "database_type_or_schema_type": "uuid",
-            "kind": "EXACT_LITERAL",
-            "provenance": "Phase31.4.4A exact synthetic fixture design",
-            "reason": "Authoritative qualified member identity fixed by V2",
-            "typed_value": "676ad5e4-e167-5336-93ae-5a9f1d4388d3"
+            "kind": "CAPTURE_NATIVE_OUTPUT",
+            "native_source": "migration-0022-native-release-service/v1",
+            "reason": "native product identity discovered by the complete V2.5 UUID audit",
+            "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL"
           }
         },
         {
@@ -41917,10 +41978,11 @@
   },
   "machine_counts_v2_5": {
     "ADR0017_MAPPED_OUTPUT": 7,
-    "CAPTURE_NATIVE_OUTPUT": 509,
+    "CAPTURE_NATIVE_OUTPUT": 565,
     "DERIVED_RUNTIME_INVARIANT": 1,
     "DETERMINISTIC_DERIVATION": 143,
-    "EXACT_LITERAL": 722,
+    "EXACT_LITERAL": 661,
+    "LIVE_UPSTREAM_NATIVE_CAPTURE": 5,
     "REFERENCE_RESOLVED_BINDING": 282
   },
   "member_count": 118,
@@ -45227,6 +45289,14 @@
       "COMMIT",
       "postcommit canonical retention before downstream use"
     ]
+  },
+  "systemic_live_identity_remediation": {
+    "additional_runtime_identities": 33,
+    "historical_qms_identity_fields_after": 0,
+    "historical_qms_identity_fields_before": 28,
+    "literal_fallback_for_live_bindings": false,
+    "native_runtime_captures": 23,
+    "upstream_native_captures": 5
   },
   "tenant_projection_fixture_boundary": {
     "adminapps_contact": false,

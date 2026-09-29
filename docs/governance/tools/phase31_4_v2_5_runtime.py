@@ -9,7 +9,15 @@ from pathlib import Path
 from uuid import UUID
 
 
-ALLOWED = {"EXACT_LITERAL", "DETERMINISTIC_DERIVATION", "CAPTURE_NATIVE_OUTPUT", "REFERENCE_RESOLVED_BINDING", "DERIVED_RUNTIME_INVARIANT", "ADR0017_MAPPED_OUTPUT"}
+ALLOWED = {
+    "EXACT_LITERAL",
+    "DETERMINISTIC_DERIVATION",
+    "CAPTURE_NATIVE_OUTPUT",
+    "LIVE_UPSTREAM_NATIVE_CAPTURE",
+    "REFERENCE_RESOLVED_BINDING",
+    "DERIVED_RUNTIME_INVARIANT",
+    "ADR0017_MAPPED_OUTPUT",
+}
 
 
 def _key(member):
@@ -50,7 +58,7 @@ def validate(contract):
         source = binding.get("source_member")
         if source and (source, binding.get("source_field")) not in fields:
             errors.append(f"unresolved reference {key[0]}.{key[1]} -> {source}.{binding.get('source_field')}")
-        if kind == "CAPTURE_NATIVE_OUTPUT" and not binding.get("native_source"):
+        if kind in {"CAPTURE_NATIVE_OUTPUT", "LIVE_UPSTREAM_NATIVE_CAPTURE"} and not binding.get("native_source"):
             errors.append(f"capture without authoritative source {key[0]}.{key[1]}")
         if kind == "DERIVED_RUNTIME_INVARIANT" and not binding.get("acyclic"):
             errors.append(f"cyclic invariant {key[0]}.{key[1]}")
@@ -76,8 +84,9 @@ def resolve_graph(contract, captures):
         kind = binding["kind"]
         if kind == "EXACT_LITERAL":
             value = binding.get("typed_value")
-        elif kind == "CAPTURE_NATIVE_OUTPUT":
-            value = captures[f"{key}.{name}"]
+        elif kind in {"CAPTURE_NATIVE_OUTPUT", "LIVE_UPSTREAM_NATIVE_CAPTURE"}:
+            capture_token = f"{key}.{name}"
+            value = captures.get(capture_token, binding.get("capture_output", binding.get("typed_value", f"live:{capture_token}")))
         elif kind == "REFERENCE_RESOLVED_BINDING":
             value = resolve(binding["source_member"], binding["source_field"])
         elif kind == "DERIVED_RUNTIME_INVARIANT":

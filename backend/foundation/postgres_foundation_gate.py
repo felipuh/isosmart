@@ -134,6 +134,76 @@ def bootstrap(port, super_password, names, passwords):
     connection.close()
 
 
+LOGIN_ROLES = (
+    "migrator", "app", "worker", "projector", "audit_writer",
+    "normative_curator", "agent_catalog_curator", "human_approver",
+    "execution_authorizer", "executor", "learning_governance",
+    "learning_reviewer", "learning_approver", "learning_authorizer",
+    "learning_application_executor", "rule_publisher", "rule_activator",
+    "rule_adopter", "rule_resolver", "release_repair", "release_controller",
+)
+OWNER_ROLES = (
+    "qms_action_owner", "knowledge_rule_application_owner", "rule_governance_owner",
+)
+
+
+def bootstrap_idempotent(port, super_password, names, passwords):
+    """Reuse the foundation gate bootstrap, refusing preexisting security drift.
+
+    A partially initialized cluster requires DBA review instead of automatic
+    reconciliation. A complete matching bootstrap is safe to invoke again.
+    """
+    import psycopg2
+
+    role_names = [names[key] for key in (*LOGIN_ROLES, *OWNER_ROLES)]
+    if len(set(role_names)) != len(role_names) or names["database"] == "postgres":
+        raise ValueError("foundation role/database names are invalid or duplicated")
+    connection = psycopg2.connect(
+        dbname="postgres", user="postgres", password=super_password,
+        host="127.0.0.1", port=port,
+    )
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "SELECT rolname, rolcanlogin, rolinherit, rolsuper, rolcreatedb, "
+                "rolcreaterole, rolbypassrls FROM pg_roles WHERE rolname=ANY(%s)",
+                [role_names],
+            )
+            found = {row[0]: tuple(row[1:]) for row in cursor.fetchall()}
+            cursor.execute(
+                "SELECT pg_get_userbyid(datdba) FROM pg_database WHERE datname=%s",
+                [names["database"]],
+            )
+            database = cursor.fetchone()
+            if not found and database is None:
+                connection.close()
+                bootstrap(port, super_password, names, passwords)
+                return bootstrap_idempotent(port, super_password, names, passwords)
+            if database != (names["migrator"],) or len(found) != len(role_names):
+                raise RuntimeError("partial or incorrectly owned foundation bootstrap")
+            for key in (*LOGIN_ROLES, *OWNER_ROLES):
+                expected = (key in LOGIN_ROLES, False, False, False, False, False)
+                if found.get(names[key]) != expected:
+                    raise RuntimeError(f"unsafe foundation role attributes: {names[key]}")
+            cursor.execute(
+                "SELECT parent.rolname, member.rolname, m.set_option, m.admin_option "
+                "FROM pg_auth_members m JOIN pg_roles parent ON parent.oid=m.roleid "
+                "JOIN pg_roles member ON member.oid=m.member "
+                "WHERE parent.rolname=ANY(%s) OR member.rolname=ANY(%s)",
+                [role_names, role_names],
+            )
+            memberships = set(cursor.fetchall())
+            expected_memberships = {
+                (names[key], names["migrator"], True, False) for key in OWNER_ROLES
+            }
+            if memberships != expected_memberships:
+                raise RuntimeError("foundation role memberships differ from approved bootstrap")
+            return {"roles": found, "database_owner": database[0], "memberships": sorted(memberships)}
+    finally:
+        if not connection.closed:
+            connection.close()
+
+
 def drop_database_and_roles(port, super_password, names):
     import psycopg2
     from psycopg2 import sql
