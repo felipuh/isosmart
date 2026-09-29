@@ -222,9 +222,13 @@ def repository_operational_environment(repository_root: str | Path,
     if not python.is_file() or not actions.is_file():
         raise LiveExecutorError("OPERATIONAL_ADAPTER_REQUIRED", "repository operational runtime is incomplete")
     env = dict(base or {})
+    admin_python = Path(env.get("PHASE31_ADMINAPPS_PYTHON", str(python)))
+    if not admin_python.is_file():
+        raise LiveExecutorError("OPERATIONAL_ADAPTER_REQUIRED", "AdminApps runtime interpreter is unavailable")
     for operation, variable in SubprocessOperationalAdapter._COMMANDS.items():
-        env.setdefault(variable, shlex.join((str(python), str(actions), operation)))
-    env.setdefault("PHASE31_ADMINAPPS_START_COMMAND", shlex.join((str(python), str(actions), "service", "adminapps")))
+        interpreter = admin_python if operation in {"bootstrap_adminapps", "authority"} else python
+        env.setdefault(variable, shlex.join((str(interpreter), str(actions), operation)))
+    env.setdefault("PHASE31_ADMINAPPS_START_COMMAND", shlex.join((str(admin_python), str(actions), "service", "adminapps")))
     env.setdefault("PHASE31_ISOSMART_START_COMMAND", shlex.join((str(python), str(actions), "service", "isosmart")))
     env.setdefault("PHASE31_ADMINAPPS_READINESS_PATH", "/api/integration/health/")
     env.setdefault("PHASE31_ISOSMART_READINESS_PATH", "/health")

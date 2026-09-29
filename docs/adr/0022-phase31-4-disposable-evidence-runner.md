@@ -96,3 +96,24 @@ V4 is not edited or silently rehashed. It remains the immutable historical prede
 - This decision does not execute Retry 20, request or consume its authorization, contact live AdminApps, or start Phase 31.5. Phase 31.5 remains `EXECUTION_HELD`.
 - The governing operational status remains `LIVE_REVALIDATION_BLOCKED_REQUIRES_NEW_AUTHORIZATION`.
 - No test result or runner-environment diagnostic result is established by this ADR; those require separate retained evidence.
+
+### V11 cycle dependency parity successor (2026-09-29)
+
+Attempt 1 used ISO Smart's Python environment for the AdminApps authority action,
+while AdminApps migrations used its own host environment. The canonical AdminApps
+`backend/requirements.txt` declares `django-apscheduler==0.7.0`; the ISO Smart
+interpreter did not provide that module.
+
+The V12 tooling successor provides `disposable_adminapps_runtime` as a context
+covering provisioning through service teardown. It creates an isolated temporary
+venv, installs the complete canonical AdminApps manifest, checks dependencies,
+and removes the venv on exit. The resulting `PHASE31_ADMINAPPS_PYTHON` is used for
+AdminApps bootstrap, management commands, authority and HTTP service. ISO Smart
+keeps its own interpreter, since the products have distinct pinned requirements.
+The diagnostic driver validates real AdminApps settings and `django.setup()` in
+that runtime before resource allocation. No dependency list, scheduler behavior,
+authentication contract or index is changed. Provisioning or import failure
+blocks eligibility; it does not justify consuming an attempt or installing an
+individual package manually. Existing callers without the runtime override keep
+their historical command construction; the Attempt 2 driver explicitly owns the
+new context and its cleanup.

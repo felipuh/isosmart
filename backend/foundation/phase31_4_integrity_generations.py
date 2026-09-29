@@ -23,7 +23,8 @@ CURRENT_V8_MANIFEST = ROOT / "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SO
 CURRENT_V9_MANIFEST = ROOT / "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V9.json"
 CURRENT_V10_MANIFEST = ROOT / "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V10.json"
 CURRENT_V11_MANIFEST = ROOT / "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V11.json"
-CURRENT_BASELINE_MANIFEST = CURRENT_V11_MANIFEST
+CURRENT_V12_MANIFEST = ROOT / "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V12.json"
+CURRENT_BASELINE_MANIFEST = CURRENT_V12_MANIFEST
 CURRENT_V2_SHA256 = "3897da9ed8b2538924e527af3d79e5ef56c35c6178fe0330613187b5e70aa7c5"
 CURRENT_V3_SHA256 = "c47c62a52af65cab5b13f830b048017b101425d29c8c80501f9669d2647d7def"
 CURRENT_V4_SHA256 = "960f2a133f72e939842762986ce3ad43762302b0caa447799732740fc4571f25"
@@ -83,6 +84,8 @@ def verify_v25_current_integrity(
 ) -> dict[str, Any]:
     """Verify the promoted current source generation without weakening history."""
     document = dict(manifest) if manifest is not None else _load(root / CURRENT_BASELINE_MANIFEST.relative_to(ROOT))
+    if document.get("schema") == "phase31.4-v2.5-current-source-integrity/v12":
+        return verify_v25_v12_current_integrity(root, document)
     if document.get("schema") == "phase31.4-v2.5-current-source-integrity/v11":
         return verify_v25_v11_current_integrity(root, document)
     if document.get("schema") == "phase31.4-v2.5-current-source-integrity/v9":
@@ -98,6 +101,51 @@ def verify_v25_current_integrity(
     if document.get("schema") == "phase31.4-v2.5-current-source-integrity/v5":
         return verify_v25_v5_current_integrity(root, document)
     return verify_v25_v4_historical_record(root, document)
+
+
+def verify_v25_v12_current_integrity(root: Path = ROOT, document=None) -> dict[str, Any]:
+    """Verify canonical AdminApps runtime parity without rewriting V11."""
+    document = dict(document) if document is not None else _load(root / CURRENT_V12_MANIFEST.relative_to(ROOT))
+    predecessor_path = CURRENT_V11_MANIFEST.relative_to(ROOT).as_posix()
+    predecessor_sha = "69a0eec27e96e050411e1cabf8f61aa2ca8182a736e16c3b84f67089bb4e716b"
+    if (document.get("schema") != "phase31.4-v2.5-current-source-integrity/v12"
+            or document.get("generation") != "V2.5_CURRENT_SOURCE_SUCCESSOR_V12"
+            or document.get("governance_predecessor") != predecessor_path
+            or document.get("governance_predecessor_sha256") != predecessor_sha
+            or file_sha256(root / predecessor_path) != predecessor_sha):
+        raise IntegrityGenerationError("V12 predecessor or identity mismatch")
+    predecessor = _load(root / predecessor_path)
+    old = {entry["path"]: entry for entry in predecessor["sources"]}
+    entries = document.get("sources", [])
+    current = {entry["path"]: entry for entry in entries}
+    added = "backend/foundation/phase31_4_adminapps_runtime.py"
+    changed = {"backend/foundation/phase31_4_integrity_generations.py",
+               "backend/foundation/phase31_4_v2_5_operational_adapters.py",
+               "docs/governance/tools/phase31_4_v2_5_operational_actions.py"}
+    if len(entries) != 30 or set(current) != set(old) | {added}:
+        raise IntegrityGenerationError("V12 protected-source membership drift")
+    for path, entry in current.items():
+        if not entry.get("semantic_role") or not entry.get("approval_evidence"):
+            raise IntegrityGenerationError(f"unjustified V12 source: {path}")
+        for evidence in entry["approval_evidence"]:
+            if not (root / evidence).is_file():
+                raise IntegrityGenerationError(f"missing approval evidence: {evidence}")
+        if not (root / path).is_file() or file_sha256(root / path) != entry.get("sha256"):
+            raise IntegrityGenerationError(f"V12 protected source drift: {path}")
+        if path in changed and entry.get("predecessor_sha256") != old[path]["sha256"]:
+            raise IntegrityGenerationError(f"V12 predecessor digest missing: {path}")
+    observed = {path for path in old if current[path].get("sha256") != old[path]["sha256"]}
+    if observed != changed or {entry["path"] for entry in document.get("changed_sources", [])} != changed:
+        raise IntegrityGenerationError("V12 changed-source declaration drift")
+    if {entry["path"] for entry in document.get("new_sources", [])} != {added}:
+        raise IntegrityGenerationError("V12 new-source declaration drift")
+    if document.get("migration_file_sha256") != predecessor["migration_file_sha256"]:
+        raise IntegrityGenerationError("V12 migration inheritance mismatch")
+    if any(document.get(key) for key in ("removed_sources", "missing_sources", "unexpected_sources")):
+        raise IntegrityGenerationError("V12 unresolved source drift")
+    if document.get("retry_20_executed") is not False or document.get("phase_31_5") != "EXECUTION_HELD":
+        raise IntegrityGenerationError("V12 governance hold mismatch")
+    return document
 
 
 def verify_v25_v11_current_integrity(

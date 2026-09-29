@@ -1,0 +1,1035 @@
+{
+  "allocation_state": "SUCCEEDED",
+  "approved_postgres": {
+    "image": "docker.io/library/postgres@sha256:7341002d2b8c7c5bdd7542a671a95b36196c0b5b888daf454ae4fc33ba5346d7",
+    "image_id": "a6638641707cdf047e5d5c2781f437e2e809323cab22c70b280be8389fbb7878",
+    "version": "PostgreSQL 18.6"
+  },
+  "authorization": {
+    "artifact_path": "docs/governance/evidence/PHASE31_4_V2_5_V11_OPERATIONAL_DIAGNOSTIC_CYCLE_1_ATTEMPT_1_AUTHORIZATION_V1.json",
+    "consumed": true,
+    "consumed_at": "2026-09-29T20:06:02.189863+00:00",
+    "registry_record": "docs/governance/evidence/diagnostic_authorization_consumptions/f172c6dde39007fcbb3fdbe1e85b2af404f5dc0eacf1f8cfbbd9d9d26ee828f2.json",
+    "sha256": "f172c6dde39007fcbb3fdbe1e85b2af404f5dc0eacf1f8cfbbd9d9d26ee828f2"
+  },
+  "business_outcome": "FAILED",
+  "cleanup": {
+    "completed_at": "2026-09-29T20:07:19.661761+00:00",
+    "errors": [],
+    "post_teardown_absence_verified": true,
+    "remaining_resources": [],
+    "started_at": "2026-09-29T20:07:06.373902+00:00",
+    "status": "PASS"
+  },
+  "command_history": [
+    {
+      "argv": [
+        "podman",
+        "image",
+        "inspect",
+        "--format",
+        "{{json .}}",
+        "docker.io/library/postgres@sha256:7341002d2b8c7c5bdd7542a671a95b36196c0b5b888daf454ae4fc33ba5346d7"
+      ],
+      "completed_at": "2026-09-29T20:06:02.546472+00:00",
+      "returncode": 0,
+      "sequence": 1,
+      "started_at": "2026-09-29T20:06:02.270321+00:00",
+      "status": "PASS",
+      "stderr": "",
+      "stdout": "{\"Id\":\"a6638641707cdf047e5d5c2781f437e2e809323cab22c70b280be8389fbb7878\",\"Digest\":\"sha256:7341002d2b8c7c5bdd7542a671a95b36196c0b5b888daf454ae4fc33ba5346d7\",\"RepoTags\":[\"docker.io/library/postgres:18.6\"],\"RepoDigests\":[\"docker.io/library/postgres@sha256:1957b2ff3137e4ef7f3bc813e74fff50b1e1ffddc85c8b9d6f14ade972be8687\",\"docker.io/library/postgres@sha256:4ef4dbc939d61acea57712655ddb4b4ab27419c913f94cca0cd57cb3ea3c2280\",\"docker.io/library/postgres@sha256:7341002d2b8c7c5bdd7542a671a95b36196c0b5b888daf454ae4fc33ba5346d7\"],\"Parent\":\"\",\"Comment\":\"debuerreotype 0.17\",\"Created\":\"2026-08-25T00:41:16.064197635Z\",\"Config\":{\"ExposedPorts\":{\"5432/tcp\":{}},\"Env\":[\"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib/postgresql/18/bin\",\"GOSU_VERSION=1.19\",\"LANG=en_US.utf8\",\"PG_MAJOR=18\",\"PG_VERSION=18.6-1.pgdg13+2\",\"PGDATA=/var/lib/postgresql/18/docker\"],\"Entrypoint\":[\"docker-entrypoint.sh\"],\"Cmd\":[\"postgres\"],\"Volumes\":{\"/var/lib/postgresql\":{}},\"StopSignal\":\"SIGINT\"},\"Version\":\"\",\"Author\":\"\",\"Architecture\":\"amd64\",\"Os\":\"linux\",\"Size\":463774728,\"VirtualSize\":463774728,\"GraphDriver\":{\"Name\":\"overlay\",\"Data\":{\"LowerDir\":\"/home/felipe/.local/share/containers/storage/overlay/29f2ffa59faf1a720e318f8da155fed1ddef792b6942dcfaf53a4f08c98a8756/diff:/home/felipe/.local/share/containers/storage/overlay/77721b2d8b538309aaafd7fb4c21780c4c828180834e8e7f5b2561af6f370f93/diff:/home/felipe/.local/share/containers/storage/overlay/549fb738a35e573dedeaa416bc66fef1d51126b363bf552a902e59c5ea772532/diff:/home/felipe/.local/share/containers/storage/overlay/6643866b189346c33b66e07ddd8ee640af836b96a466514f4b2f3cf325a646a7/diff:/home/felipe/.local/share/containers/storage/overlay/ba1ddf21291022348863162e53e16ee24b2e096d7ef7d938a8ceb70b83f5b5a3/diff:/home/felipe/.local/share/containers/storage/overlay/a876fc7adc0bcba267cd3652a687e2b4eae2b4c5a5e48fcce09eb59a39886f39/diff:/home/felipe/.local/share/containers/storage/overlay/53c06fdcd73334f873db5f27b4f197600990f58269f603f6cf436fc712bbcb91/diff:/home/felipe/.local/share/containers/storage/overlay/f0e0133c8fea6efc71134359d6046ad3f35f733782fc450fbaa8966d24a3d32e/diff:/home/felipe/.local/share/containers/storage/overlay/5c3c0fb1786063d7c8bd13d19127e1eaed4dc24786a52fc82fbaea06fc0ff7dc/diff:/home/felipe/.local/share/containers/storage/overlay/70ce027539149001ec5357ef935f315e1e50dc971c1c66b4e5c4b85219f214d4/diff:/home/felipe/.local/share/containers/storage/overlay/0c89a0377aba37a02b9a247280c37f47c6a6b98deaa483135eab911b8ec80691/diff:/home/felipe/.local/share/containers/storage/overlay/411a86676185cb54d695a805b238194a64e9b77e0c723f3802fbb87d333ea0b3/diff\",\"UpperDir\":\"/home/felipe/.local/share/containers/storage/overlay/98ef6c8e762222bf0f35ef872b543d8bbf4661f49b0a8aa91a838e0ac29dbd7f/diff\",\"WorkDir\":\"/home/felipe/.local/share/containers/storage/overlay/98ef6c8e762222bf0f35ef872b543d8bbf4661f49b0a8aa91a838e0ac29dbd7f/work\"}},\"RootFS\":{\"Type\":\"layers\",\"Layers\":[\"sha256:411a86676185cb54d695a805b238194a64e9b77e0c723f3802fbb87d333ea0b3\",\"sha256:057b95407e6ef3d2a36fe9842762fad2ccaf4e110ff92b74fee42f148027a07a\",\"sha256:7f2c0f88578a81555725968fc8b9c6f67248f5496dda4c15efa7be395cac9953\",\"sha256:705feaa6976169682fd2e6e87aa3a9189b83165761e5f5c6ee5ec83a77b83bc5\",\"sha256:0a13633af0a626347aa71296aa0c4cebe3f836439318716696caeb2762e0801f\",\"sha256:e933b3c77d2b9d94a1f3730d7692ed39250bcb26fa603c03cc4ba4366bc7bfbe\",\"sha256:4770728d2d1589739faaf00d9ca3b0e8cdf840b828198c8767468940879f95b1\",\"sha256:90e71c7bb2d6fbe52c7de8fe6277ad35502df27f1cd808c7cbdcca40821e0d24\",\"sha256:2faf9b09266f083b395fd7c8d82ae7e2c079a95ac1d2929dcf8fffcc26604fc8\",\"sha256:40f254190f92cd359c37b597343520632c2bce38698b41fca35c2e99e0937455\",\"sha256:ec3792d25182008f1b0aa7e702e64534ae97fe8876eff11e7be3929b6e78d4fa\",\"sha256:2648e536062b624c9206e899729d7ba8742bcc9043076a9ec62588c65651ca84\",\"sha256:e1538743df51f586f7cc7ef1cb6fba65505aa6fb8ab5853532cc16c48a842e38\"]},\"Labels\":null,\"Annotations\":{\"com.docker.official-images.bashbrew.arch\":\"amd64\",\"org.opencontainers.image.base.digest\":\"sha256:abc9cb88a5587630d7f915f47b23b0668fe250fbfc6457aa4d52b534c1bbf73f\",\"org.opencontainers.image.base.name\":\"debian:trixie-slim\",\"org.opencontainers.image.created\":\"2026-08-25T00:40:33Z\",\"org.opencontainers.image.revision\":\"e00e1bd34ec5c8a8e7ad89b273b3d42efaf6d5bc\",\"org.opencontainers.image.source\":\"https://github.com/docker-library/postgres.git#e00e1bd34ec5c8a8e7ad89b273b3d42efaf6d5bc:18/trixie\",\"org.opencontainers.image.url\":\"https://hub.docker.com/_/postgres\",\"org.opencontainers.image.version\":\"18.6\"},\"ManifestType\":\"application/vnd.oci.image.manifest.v1+json\",\"User\":\"\",\"History\":[{\"created\":\"2026-08-24T00:00:00Z\",\"created_by\":\"# debian.sh --arch 'amd64' out/ 'trixie' '@1787529600'\",\"comment\":\"debuerreotype 0.17\"},{\"created\":\"2026-08-25T00:40:36.224680682Z\",\"created_by\":\"RUN /bin/sh -c set -eux; \\tgroupadd -r postgres --gid=999; \\tuseradd -r -g postgres --uid=999 --home-dir=/var/lib/postgresql --shell=/bin/bash postgres; \\tinstall --verbose --directory --owner postgres --group postgres --mode 1777 /var/lib/postgresql # buildkit\",\"comment\":\"buildkit.dockerfile.v0\"},{\"created\":\"2026-08-25T00:40:42.169349848Z\",\"created_by\":\"RUN /bin/sh -c set -ex; \\tapt-get update; \\tapt-get install -y --no-install-recommends \\t\\tgnupg \\t\\tless \\t; \\trm -rf /var/lib/apt/lists/* # buildkit\",\"comment\":\"buildkit.dockerfile.v0\"},{\"created\":\"2026-08-25T00:40:49.602446205Z\",\"created_by\":\"ENV GOSU_VERSION=1.19\",\"comment\":\"buildkit.dockerfile.v0\",\"empty_layer\":true},{\"created\":\"2026-08-25T00:40:49.602446205Z\",\"created_by\":\"RUN /bin/sh -c set -eux; \\tsavedAptMark=\\\"$(apt-mark showmanual)\\\"; \\tapt-get update; \\tapt-get install -y --no-install-recommends ca-certificates wget; \\trm -rf /var/lib/apt/lists/*; \\tdpkgArch=\\\"$(dpkg --print-architecture | awk -F- '{ print $NF }')\\\"; \\twget -O /usr/local/bin/gosu \\\"https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch\\\"; \\twget -O /usr/local/bin/gosu.asc \\\"https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch.asc\\\"; \\texport GNUPGHOME=\\\"$(mktemp -d)\\\"; \\tgpg --batch --keyserver hkps://keys.openpgp.org --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4; \\tgpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu; \\tgpgconf --kill all; \\trm -rf \\\"$GNUPGHOME\\\" /usr/local/bin/gosu.asc; \\tapt-mark auto '.*' > /dev/null; \\t[ -z \\\"$savedAptMark\\\" ] || apt-mark manual $savedAptMark > /dev/null; \\tapt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \\tchmod +x /usr/local/bin/gosu; \\tgosu --version; \\tgosu nobody true # buildkit\",\"comment\":\"buildkit.dockerfile.v0\"},{\"created\":\"2026-08-25T00:40:54.904736397Z\",\"created_by\":\"RUN /bin/sh -c set -eux; \\tif [ -f /etc/dpkg/dpkg.cfg.d/docker ]; then \\t\\tgrep -q '/usr/share/locale' /etc/dpkg/dpkg.cfg.d/docker; \\t\\tsed -ri '/\\\\/usr\\\\/share\\\\/locale/d' /etc/dpkg/dpkg.cfg.d/docker; \\t\\t! grep -q '/usr/share/locale' /etc/dpkg/dpkg.cfg.d/docker; \\tfi; \\tapt-get update; apt-get install -y --no-install-recommends locales; rm -rf /var/lib/apt/lists/*; \\techo 'en_US.UTF-8 UTF-8' >> /etc/locale.gen; \\tlocale-gen; \\tlocale -a | grep 'en_US.utf8' # buildkit\",\"comment\":\"buildkit.dockerfile.v0\"},{\"created\":\"2026-08-25T00:40:54.904736397Z\",\"created_by\":\"ENV LANG=en_US.utf8\",\"comment\":\"buildkit.dockerfile.v0\",\"empty_layer\":true},{\"created\":\"2026-08-25T00:40:58.317172034Z\",\"created_by\":\"RUN /bin/sh -c set -eux; \\tapt-get update; \\tapt-get install -y --no-install-recommends \\t\\tlibnss-wrapper \\t\\txz-utils \\t\\tzstd \\t; \\trm -rf /var/lib/apt/lists/* # buildkit\",\"comment\":\"buildkit.dockerfile.v0\"},{\"created\":\"2026-08-25T00:40:58.414465462Z\",\"created_by\":\"RUN /bin/sh -c mkdir /docker-entrypoint-initdb.d # buildkit\",\"comment\":\"buildkit.dockerfile.v0\"},{\"created\":\"2026-08-25T00:40:59.005133119Z\",\"created_by\":\"RUN /bin/sh -c set -ex; \\tkey='B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8'; \\texport GNUPGHOME=\\\"$(mktemp -d)\\\"; \\tmkdir -p /usr/local/share/keyrings/; \\tgpg --batch --keyserver keyserver.ubuntu.com --recv-keys \\\"$key\\\"; \\tgpg --batch --export --armor \\\"$key\\\" > /usr/local/share/keyrings/postgres.gpg.asc; \\tgpgconf --kill all; \\trm -rf \\\"$GNUPGHOME\\\" # buildkit\",\"comment\":\"buildkit.dockerfile.v<truncated>",
+      "step": "verify_postgres_image"
+    },
+    {
+      "argv": [
+        "podman",
+        "volume",
+        "create",
+        "--label",
+        "io.isosmart.phase31-4.authorization-sha256=f172c6dde39007fcbb3fdbe1e85b2af404f5dc0eacf1f8cfbbd9d9d26ee828f2",
+        "--label",
+        "io.isosmart.phase31-4.resource-role=adminapps",
+        "--label",
+        "io.isosmart.phase31-4.run-slug=Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1",
+        "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps_data"
+      ],
+      "completed_at": "2026-09-29T20:06:02.852020+00:00",
+      "returncode": 0,
+      "sequence": 2,
+      "started_at": "2026-09-29T20:06:02.605572+00:00",
+      "status": "PASS",
+      "stderr": "",
+      "stdout": "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps_data\n",
+      "step": "allocate_adminapps_volume"
+    },
+    {
+      "argv": [
+        "podman",
+        "network",
+        "create",
+        "--disable-dns",
+        "--label",
+        "io.isosmart.phase31-4.authorization-sha256=f172c6dde39007fcbb3fdbe1e85b2af404f5dc0eacf1f8cfbbd9d9d26ee828f2",
+        "--label",
+        "io.isosmart.phase31-4.resource-role=adminapps",
+        "--label",
+        "io.isosmart.phase31-4.run-slug=Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1",
+        "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps_net"
+      ],
+      "completed_at": "2026-09-29T20:06:03.135422+00:00",
+      "returncode": 0,
+      "sequence": 3,
+      "started_at": "2026-09-29T20:06:02.889729+00:00",
+      "status": "PASS",
+      "stderr": "",
+      "stdout": "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps_net\n",
+      "step": "allocate_adminapps_network"
+    },
+    {
+      "argv": [
+        "podman",
+        "create",
+        "--pull=never",
+        "--name",
+        "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps",
+        "--label",
+        "io.isosmart.phase31-4.authorization-sha256=f172c6dde39007fcbb3fdbe1e85b2af404f5dc0eacf1f8cfbbd9d9d26ee828f2",
+        "--label",
+        "io.isosmart.phase31-4.resource-role=adminapps",
+        "--label",
+        "io.isosmart.phase31-4.run-slug=Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1",
+        "--network",
+        "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps_net",
+        "--publish",
+        "127.0.0.1::5432",
+        "--volume",
+        "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps_data:/var/lib/postgresql",
+        "--env",
+        "POSTGRES_DB=p314_phase_31_4_v2_5_v11_adminapps_213426f416",
+        "--env",
+        "POSTGRES_HOST_AUTH_METHOD=trust",
+        "docker.io/library/postgres@sha256:7341002d2b8c7c5bdd7542a671a95b36196c0b5b888daf454ae4fc33ba5346d7"
+      ],
+      "completed_at": "2026-09-29T20:06:03.642548+00:00",
+      "returncode": 0,
+      "sequence": 4,
+      "started_at": "2026-09-29T20:06:03.177522+00:00",
+      "status": "PASS",
+      "stderr": "",
+      "stdout": "4970b394c6a323c53db9cb80d8d1795ca43533816518f48fd7ea0353d7489f97\n",
+      "step": "allocate_adminapps_container"
+    },
+    {
+      "argv": [
+        "podman",
+        "container",
+        "inspect",
+        "--format",
+        "{{json .NetworkSettings.Ports}}",
+        "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps"
+      ],
+      "completed_at": "2026-09-29T20:06:03.893633+00:00",
+      "returncode": 0,
+      "sequence": 5,
+      "started_at": "2026-09-29T20:06:03.683158+00:00",
+      "status": "PASS",
+      "stderr": "",
+      "stdout": "{\"5432/tcp\":[{\"HostIp\":\"127.0.0.1\",\"HostPort\":\"45713\"}]}\n",
+      "step": "inspect_adminapps_published_port"
+    },
+    {
+      "argv": [
+        "podman",
+        "volume",
+        "create",
+        "--label",
+        "io.isosmart.phase31-4.authorization-sha256=f172c6dde39007fcbb3fdbe1e85b2af404f5dc0eacf1f8cfbbd9d9d26ee828f2",
+        "--label",
+        "io.isosmart.phase31-4.resource-role=isosmart",
+        "--label",
+        "io.isosmart.phase31-4.run-slug=Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1",
+        "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart_data"
+      ],
+      "completed_at": "2026-09-29T20:06:04.226897+00:00",
+      "returncode": 0,
+      "sequence": 6,
+      "started_at": "2026-09-29T20:06:03.931010+00:00",
+      "status": "PASS",
+      "stderr": "",
+      "stdout": "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart_data\n",
+      "step": "allocate_isosmart_volume"
+    },
+    {
+      "argv": [
+        "podman",
+        "network",
+        "create",
+        "--disable-dns",
+        "--label",
+        "io.isosmart.phase31-4.authorization-sha256=f172c6dde39007fcbb3fdbe1e85b2af404f5dc0eacf1f8cfbbd9d9d26ee828f2",
+        "--label",
+        "io.isosmart.phase31-4.resource-role=isosmart",
+        "--label",
+        "io.isosmart.phase31-4.run-slug=Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1",
+        "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart_net"
+      ],
+      "completed_at": "2026-09-29T20:06:04.514462+00:00",
+      "returncode": 0,
+      "sequence": 7,
+      "started_at": "2026-09-29T20:06:04.267764+00:00",
+      "status": "PASS",
+      "stderr": "",
+      "stdout": "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart_net\n",
+      "step": "allocate_isosmart_network"
+    },
+    {
+      "argv": [
+        "podman",
+        "create",
+        "--pull=never",
+        "--name",
+        "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart",
+        "--label",
+        "io.isosmart.phase31-4.authorization-sha256=f172c6dde39007fcbb3fdbe1e85b2af404f5dc0eacf1f8cfbbd9d9d26ee828f2",
+        "--label",
+        "io.isosmart.phase31-4.resource-role=isosmart",
+        "--label",
+        "io.isosmart.phase31-4.run-slug=Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1",
+        "--network",
+        "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart_net",
+        "--publish",
+        "127.0.0.1::5432",
+        "--volume",
+        "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart_data:/var/lib/postgresql",
+        "--env",
+        "POSTGRES_DB=p314_phase_31_4_v2_5_v11_isosmart_b5933506a8",
+        "--env",
+        "POSTGRES_HOST_AUTH_METHOD=trust",
+        "docker.io/library/postgres@sha256:7341002d2b8c7c5bdd7542a671a95b36196c0b5b888daf454ae4fc33ba5346d7"
+      ],
+      "completed_at": "2026-09-29T20:06:04.938746+00:00",
+      "returncode": 0,
+      "sequence": 8,
+      "started_at": "2026-09-29T20:06:04.557905+00:00",
+      "status": "PASS",
+      "stderr": "",
+      "stdout": "ef0bc2dbd9eef4feeee199229a55194b55c20de98439fd3c6937679a937640d0\n",
+      "step": "allocate_isosmart_container"
+    },
+    {
+      "argv": [
+        "podman",
+        "container",
+        "inspect",
+        "--format",
+        "{{json .NetworkSettings.Ports}}",
+        "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart"
+      ],
+      "completed_at": "2026-09-29T20:06:05.226956+00:00",
+      "returncode": 0,
+      "sequence": 9,
+      "started_at": "2026-09-29T20:06:04.978231+00:00",
+      "status": "PASS",
+      "stderr": "",
+      "stdout": "{\"5432/tcp\":[{\"HostIp\":\"127.0.0.1\",\"HostPort\":\"37095\"}]}\n",
+      "step": "inspect_isosmart_published_port"
+    },
+    {
+      "argv": [
+        "podman",
+        "start",
+        "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps"
+      ],
+      "completed_at": "2026-09-29T20:06:07.875738+00:00",
+      "returncode": 0,
+      "sequence": 10,
+      "started_at": "2026-09-29T20:06:05.332812+00:00",
+      "status": "PASS",
+      "stderr": "",
+      "stdout": "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps\n",
+      "step": "start_adminapps_postgres"
+    },
+    {
+      "argv": [
+        "podman",
+        "exec",
+        "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps",
+        "postgres",
+        "--version"
+      ],
+      "completed_at": "2026-09-29T20:06:08.609909+00:00",
+      "returncode": 0,
+      "sequence": 11,
+      "started_at": "2026-09-29T20:06:07.932523+00:00",
+      "status": "PASS",
+      "stderr": "",
+      "stdout": "postgres (PostgreSQL) 18.6 (Debian 18.6-1.pgdg13+2)\n",
+      "step": "verify_adminapps_postgres_version"
+    },
+    {
+      "argv": [
+        "podman",
+        "start",
+        "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart"
+      ],
+      "completed_at": "2026-09-29T20:06:15.975027+00:00",
+      "returncode": 0,
+      "sequence": 12,
+      "started_at": "2026-09-29T20:06:14.967151+00:00",
+      "status": "PASS",
+      "stderr": "",
+      "stdout": "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart\n",
+      "step": "start_isosmart_postgres"
+    },
+    {
+      "argv": [
+        "podman",
+        "exec",
+        "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart",
+        "postgres",
+        "--version"
+      ],
+      "completed_at": "2026-09-29T20:06:16.567453+00:00",
+      "returncode": 0,
+      "sequence": 13,
+      "started_at": "2026-09-29T20:06:16.015506+00:00",
+      "status": "PASS",
+      "stderr": "",
+      "stdout": "postgres (PostgreSQL) 18.6 (Debian 18.6-1.pgdg13+2)\n",
+      "step": "verify_isosmart_postgres_version"
+    },
+    {
+      "argv": [
+        "podman",
+        "container",
+        "exists",
+        "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps"
+      ],
+      "completed_at": "2026-09-29T20:07:06.706781+00:00",
+      "returncode": 0,
+      "sequence": 14,
+      "started_at": "2026-09-29T20:07:06.392404+00:00",
+      "status": "PASS",
+      "stderr": "",
+      "stdout": "",
+      "step": "cleanup_exists_container_p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps"
+    },
+    {
+      "argv": [
+        "podman",
+        "container",
+        "inspect",
+        "--format",
+        "{{json .Config.Labels}}",
+        "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps"
+      ],
+      "completed_at": "2026-09-29T20:07:07.033832+00:00",
+      "returncode": 0,
+      "sequence": 15,
+      "started_at": "2026-09-29T20:07:06.733051+00:00",
+      "status": "PASS",
+      "stderr": "",
+      "stdout": "{\"io.isosmart.phase31-4.authorization-sha256\":\"f172c6dde39007fcbb3fdbe1e85b2af404f5dc0eacf1f8cfbbd9d9d26ee828f2\",\"io.isosmart.phase31-4.resource-role\":\"adminapps\",\"io.isosmart.phase31-4.run-slug\":\"Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1\"}\n",
+      "step": "cleanup_inspect_container_p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps"
+    },
+    {
+      "argv": [
+        "podman",
+        "rm",
+        "--force",
+        "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps"
+      ],
+      "completed_at": "2026-09-29T20:07:10.128804+00:00",
+      "returncode": 0,
+      "sequence": 16,
+      "started_at": "2026-09-29T20:07:07.058288+00:00",
+      "status": "PASS",
+      "stderr": "",
+      "stdout": "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps\n",
+      "step": "cleanup_remove_container_p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps"
+    },
+    {
+      "argv": [
+        "podman",
+        "container",
+        "exists",
+        "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps"
+      ],
+      "completed_at": "2026-09-29T20:07:10.356639+00:00",
+      "returncode": 1,
+      "sequence": 17,
+      "started_at": "2026-09-29T20:07:10.146976+00:00",
+      "status": "FAIL",
+      "stderr": "",
+      "stdout": "",
+      "step": "cleanup_exists_container_p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps"
+    },
+    {
+      "argv": [
+        "podman",
+        "volume",
+        "exists",
+        "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps_data"
+      ],
+      "completed_at": "2026-09-29T20:07:10.620142+00:00",
+      "returncode": 0,
+      "sequence": 18,
+      "started_at": "2026-09-29T20:07:10.395753+00:00",
+      "status": "PASS",
+      "stderr": "",
+      "stdout": "",
+      "step": "cleanup_exists_volume_p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps_data"
+    },
+    {
+      "argv": [
+        "podman",
+        "volume",
+        "inspect",
+        "--format",
+        "{{json .Labels}}",
+        "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps_data"
+      ],
+      "completed_at": "2026-09-29T20:07:10.895203+00:00",
+      "returncode": 0,
+      "sequence": 19,
+      "started_at": "2026-09-29T20:07:10.644344+00:00",
+      "status": "PASS",
+      "stderr": "",
+      "stdout": "{\"io.isosmart.phase31-4.authorization-sha256\":\"f172c6dde39007fcbb3fdbe1e85b2af404f5dc0eacf1f8cfbbd9d9d26ee828f2\",\"io.isosmart.phase31-4.resource-role\":\"adminapps\",\"io.isosmart.phase31-4.run-slug\":\"Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1\"}\n",
+      "step": "cleanup_inspect_volume_p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps_data"
+    },
+    {
+      "argv": [
+        "podman",
+        "volume",
+        "rm",
+        "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps_data"
+      ],
+      "completed_at": "2026-09-29T20:07:11.319750+00:00",
+      "returncode": 0,
+      "sequence": 20,
+      "started_at": "2026-09-29T20:07:10.920362+00:00",
+      "status": "PASS",
+      "stderr": "",
+      "stdout": "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps_data\n",
+      "step": "cleanup_remove_volume_p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps_data"
+    },
+    {
+      "argv": [
+        "podman",
+        "volume",
+        "exists",
+        "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps_data"
+      ],
+      "completed_at": "2026-09-29T20:07:11.594578+00:00",
+      "returncode": 1,
+      "sequence": 21,
+      "started_at": "2026-09-29T20:07:11.365530+00:00",
+      "status": "FAIL",
+      "stderr": "",
+      "stdout": "",
+      "step": "cleanup_exists_volume_p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps_data"
+    },
+    {
+      "argv": [
+        "podman",
+        "network",
+        "exists",
+        "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps_net"
+      ],
+      "completed_at": "2026-09-29T20:07:11.867072+00:00",
+      "returncode": 0,
+      "sequence": 22,
+      "started_at": "2026-09-29T20:07:11.640718+00:00",
+      "status": "PASS",
+      "stderr": "",
+      "stdout": "",
+      "step": "cleanup_exists_network_p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps_net"
+    },
+    {
+      "argv": [
+        "podman",
+        "network",
+        "inspect",
+        "--format",
+        "{{json .Labels}}",
+        "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps_net"
+      ],
+      "completed_at": "2026-09-29T20:07:12.145804+00:00",
+      "returncode": 0,
+      "sequence": 23,
+      "started_at": "2026-09-29T20:07:11.894173+00:00",
+      "status": "PASS",
+      "stderr": "",
+      "stdout": "{\"io.isosmart.phase31-4.authorization-sha256\":\"f172c6dde39007fcbb3fdbe1e85b2af404f5dc0eacf1f8cfbbd9d9d26ee828f2\",\"io.isosmart.phase31-4.resource-role\":\"adminapps\",\"io.isosmart.phase31-4.run-slug\":\"Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1\"}\n",
+      "step": "cleanup_inspect_network_p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps_net"
+    },
+    {
+      "argv": [
+        "podman",
+        "network",
+        "rm",
+        "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps_net"
+      ],
+      "completed_at": "2026-09-29T20:07:12.426635+00:00",
+      "returncode": 0,
+      "sequence": 24,
+      "started_at": "2026-09-29T20:07:12.171859+00:00",
+      "status": "PASS",
+      "stderr": "",
+      "stdout": "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps_net\n",
+      "step": "cleanup_remove_network_p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps_net"
+    },
+    {
+      "argv": [
+        "podman",
+        "network",
+        "exists",
+        "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps_net"
+      ],
+      "completed_at": "2026-09-29T20:07:12.692509+00:00",
+      "returncode": 1,
+      "sequence": 25,
+      "started_at": "2026-09-29T20:07:12.448183+00:00",
+      "status": "FAIL",
+      "stderr": "",
+      "stdout": "",
+      "step": "cleanup_exists_network_p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps_net"
+    },
+    {
+      "argv": [
+        "podman",
+        "container",
+        "exists",
+        "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart"
+      ],
+      "completed_at": "2026-09-29T20:07:12.953604+00:00",
+      "returncode": 0,
+      "sequence": 26,
+      "started_at": "2026-09-29T20:07:12.734130+00:00",
+      "status": "PASS",
+      "stderr": "",
+      "stdout": "",
+      "step": "cleanup_exists_container_p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart"
+    },
+    {
+      "argv": [
+        "podman",
+        "container",
+        "inspect",
+        "--format",
+        "{{json .Config.Labels}}",
+        "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart"
+      ],
+      "completed_at": "2026-09-29T20:07:13.215542+00:00",
+      "returncode": 0,
+      "sequence": 27,
+      "started_at": "2026-09-29T20:07:12.977696+00:00",
+      "status": "PASS",
+      "stderr": "",
+      "stdout": "{\"io.isosmart.phase31-4.authorization-sha256\":\"f172c6dde39007fcbb3fdbe1e85b2af404f5dc0eacf1f8cfbbd9d9d26ee828f2\",\"io.isosmart.phase31-4.resource-role\":\"isosmart\",\"io.isosmart.phase31-4.run-slug\":\"Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1\"}\n",
+      "step": "cleanup_inspect_container_p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart"
+    },
+    {
+      "argv": [
+        "podman",
+        "rm",
+        "--force",
+        "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart"
+      ],
+      "completed_at": "2026-09-29T20:07:17.041917+00:00",
+      "returncode": 0,
+      "sequence": 28,
+      "started_at": "2026-09-29T20:07:13.237593+00:00",
+      "status": "PASS",
+      "stderr": "",
+      "stdout": "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart\n",
+      "step": "cleanup_remove_container_p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart"
+    },
+    {
+      "argv": [
+        "podman",
+        "container",
+        "exists",
+        "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart"
+      ],
+      "completed_at": "2026-09-29T20:07:17.281661+00:00",
+      "returncode": 1,
+      "sequence": 29,
+      "started_at": "2026-09-29T20:07:17.065268+00:00",
+      "status": "FAIL",
+      "stderr": "",
+      "stdout": "",
+      "step": "cleanup_exists_container_p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart"
+    },
+    {
+      "argv": [
+        "podman",
+        "volume",
+        "exists",
+        "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart_data"
+      ],
+      "completed_at": "2026-09-29T20:07:17.538463+00:00",
+      "returncode": 0,
+      "sequence": 30,
+      "started_at": "2026-09-29T20:07:17.325896+00:00",
+      "status": "PASS",
+      "stderr": "",
+      "stdout": "",
+      "step": "cleanup_exists_volume_p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart_data"
+    },
+    {
+      "argv": [
+        "podman",
+        "volume",
+        "inspect",
+        "--format",
+        "{{json .Labels}}",
+        "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart_data"
+      ],
+      "completed_at": "2026-09-29T20:07:17.795390+00:00",
+      "returncode": 0,
+      "sequence": 31,
+      "started_at": "2026-09-29T20:07:17.563146+00:00",
+      "status": "PASS",
+      "stderr": "",
+      "stdout": "{\"io.isosmart.phase31-4.authorization-sha256\":\"f172c6dde39007fcbb3fdbe1e85b2af404f5dc0eacf1f8cfbbd9d9d26ee828f2\",\"io.isosmart.phase31-4.resource-role\":\"isosmart\",\"io.isosmart.phase31-4.run-slug\":\"Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1\"}\n",
+      "step": "cleanup_inspect_volume_p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart_data"
+    },
+    {
+      "argv": [
+        "podman",
+        "volume",
+        "rm",
+        "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart_data"
+      ],
+      "completed_at": "2026-09-29T20:07:18.257463+00:00",
+      "returncode": 0,
+      "sequence": 32,
+      "started_at": "2026-09-29T20:07:17.821044+00:00",
+      "status": "PASS",
+      "stderr": "",
+      "stdout": "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart_data\n",
+      "step": "cleanup_remove_volume_p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart_data"
+    },
+    {
+      "argv": [
+        "podman",
+        "volume",
+        "exists",
+        "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart_data"
+      ],
+      "completed_at": "2026-09-29T20:07:18.541357+00:00",
+      "returncode": 1,
+      "sequence": 33,
+      "started_at": "2026-09-29T20:07:18.308970+00:00",
+      "status": "FAIL",
+      "stderr": "",
+      "stdout": "",
+      "step": "cleanup_exists_volume_p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart_data"
+    },
+    {
+      "argv": [
+        "podman",
+        "network",
+        "exists",
+        "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart_net"
+      ],
+      "completed_at": "2026-09-29T20:07:18.816150+00:00",
+      "returncode": 0,
+      "sequence": 34,
+      "started_at": "2026-09-29T20:07:18.587503+00:00",
+      "status": "PASS",
+      "stderr": "",
+      "stdout": "",
+      "step": "cleanup_exists_network_p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart_net"
+    },
+    {
+      "argv": [
+        "podman",
+        "network",
+        "inspect",
+        "--format",
+        "{{json .Labels}}",
+        "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart_net"
+      ],
+      "completed_at": "2026-09-29T20:07:19.085066+00:00",
+      "returncode": 0,
+      "sequence": 35,
+      "started_at": "2026-09-29T20:07:18.837367+00:00",
+      "status": "PASS",
+      "stderr": "",
+      "stdout": "{\"io.isosmart.phase31-4.authorization-sha256\":\"f172c6dde39007fcbb3fdbe1e85b2af404f5dc0eacf1f8cfbbd9d9d26ee828f2\",\"io.isosmart.phase31-4.resource-role\":\"isosmart\",\"io.isosmart.phase31-4.run-slug\":\"Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1\"}\n",
+      "step": "cleanup_inspect_network_p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart_net"
+    },
+    {
+      "argv": [
+        "podman",
+        "network",
+        "rm",
+        "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart_net"
+      ],
+      "completed_at": "2026-09-29T20:07:19.342055+00:00",
+      "returncode": 0,
+      "sequence": 36,
+      "started_at": "2026-09-29T20:07:19.109637+00:00",
+      "status": "PASS",
+      "stderr": "",
+      "stdout": "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart_net\n",
+      "step": "cleanup_remove_network_p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart_net"
+    },
+    {
+      "argv": [
+        "podman",
+        "network",
+        "exists",
+        "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart_net"
+      ],
+      "completed_at": "2026-09-29T20:07:19.616682+00:00",
+      "returncode": 1,
+      "sequence": 37,
+      "started_at": "2026-09-29T20:07:19.367553+00:00",
+      "status": "FAIL",
+      "stderr": "",
+      "stdout": "",
+      "step": "cleanup_exists_network_p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart_net"
+    }
+  ],
+  "created_at": "2026-09-29T20:06:02.189863+00:00",
+  "current_state": "TEARDOWN_COMPLETE",
+  "database_names": [
+    "p314_phase_31_4_v2_5_v11_adminapps_213426f416",
+    "p314_phase_31_4_v2_5_v11_isosmart_b5933506a8"
+  ],
+  "evidence_root": "docs/governance/evidence/runs/Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1",
+  "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+  "execution_state": "FAILED",
+  "failure": {
+    "at": "2026-09-29T20:07:06.347969+00:00",
+    "code": "UNCLASSIFIED_RUNNER_FAILURE",
+    "command": null,
+    "domain": "DISPOSABLE_EXECUTION_TOOLING_BLOCKER",
+    "exception": "OPERATIONAL_COMMAND_FAILURE: authority exited 1; log=/home/felipe/proyectos/isosmart/docs/governance/evidence/runs/Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1/authority.log",
+    "exception_type": "LiveExecutorError",
+    "runner_step": "verify_isosmart_postgres_version",
+    "state_at_failure": "STAGE_EXT_RUNNING",
+    "traceback": "Traceback (most recent call last):\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_disposable_runner.py\", line 1424, in run_evidence\n    stage_result = dict(stage_ext(self.manifest))\n                        ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/docs/governance/evidence/PHASE31_4_V2_5_V11_OPERATIONAL_DIAGNOSTIC_CYCLE_1_ATTEMPT_1_CONTROL_V1/attempt_driver.py\", line 149, in stage\n    result = dict(live().stage_ext(manifest))\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_live_executor.py\", line 206, in stage_ext\n    self.bootstrap_runtime(); self.start_services(); return self.resolve_stage_ext_identities()\n                              ^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_live_executor.py\", line 146, in start_services\n    self.adapter.create_adminapps_authority(self.context),\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_operational_adapters.py\", line 189, in create_adminapps_authority\n    return self._run(\"authority\", context, credential_name=\"isosmart_bearer\")\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_operational_adapters.py\", line 116, in _run\n    raise LiveExecutorError(\"OPERATIONAL_COMMAND_FAILURE\", f\"{operation} exited {completed.returncode}; log={log_path}\", step=operation)\nfoundation.phase31_4_v2_5_live_executor.LiveExecutorError: OPERATIONAL_COMMAND_FAILURE: authority exited 1; log=/home/felipe/proyectos/isosmart/docs/governance/evidence/runs/Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1/authority.log\n"
+  },
+  "host_ports": [
+    45713,
+    37095
+  ],
+  "integrity": {
+    "artifact_path": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V11.json",
+    "generation": "PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V11",
+    "reconciliation_required": false,
+    "runner_sources_protected": true,
+    "sha256": "69a0eec27e96e050411e1cabf8f61aa2ca8182a736e16c3b84f67089bb4e716b"
+  },
+  "last_confirmed_state": "TEARDOWN_COMPLETE",
+  "manifest_revision": 111,
+  "phase_results": {
+    "PRECREATION": {
+      "assertions": 9,
+      "evidence_path": "docs/governance/evidence/runs/Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1/PRECREATION_INTEGRITY/precreation_integrity.json",
+      "evidence_sha256": "31a4f82f2a6a88779d255deaa311407ab76e188e3a4e423a835da9400808c846",
+      "executor": "PrecreationIntegrityExecutor",
+      "status": "PASS"
+    }
+  },
+  "resource_events": [
+    {
+      "at": "2026-09-29T20:06:02.566065+00:00",
+      "event": "RESOURCE_INTENT_PERSISTED",
+      "role": "adminapps",
+      "sequence": 1
+    },
+    {
+      "at": "2026-09-29T20:06:02.585452+00:00",
+      "event": "RESOURCE_INTENT_PERSISTED",
+      "role": "isosmart",
+      "sequence": 2
+    },
+    {
+      "at": "2026-09-29T20:06:02.874302+00:00",
+      "event": "VOLUME_CREATED",
+      "name": "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps_data",
+      "role": "adminapps",
+      "sequence": 3
+    },
+    {
+      "at": "2026-09-29T20:06:03.160164+00:00",
+      "event": "NETWORK_CREATED",
+      "name": "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps_net",
+      "role": "adminapps",
+      "sequence": 4
+    },
+    {
+      "at": "2026-09-29T20:06:03.661740+00:00",
+      "event": "CONTAINER_CREATED",
+      "name": "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps",
+      "role": "adminapps",
+      "sequence": 5
+    },
+    {
+      "at": "2026-09-29T20:06:03.915331+00:00",
+      "event": "HOST_PORT_CONFIRMED",
+      "host_port": 45713,
+      "role": "adminapps",
+      "sequence": 6
+    },
+    {
+      "at": "2026-09-29T20:06:04.248715+00:00",
+      "event": "VOLUME_CREATED",
+      "name": "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart_data",
+      "role": "isosmart",
+      "sequence": 7
+    },
+    {
+      "at": "2026-09-29T20:06:04.539774+00:00",
+      "event": "NETWORK_CREATED",
+      "name": "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart_net",
+      "role": "isosmart",
+      "sequence": 8
+    },
+    {
+      "at": "2026-09-29T20:06:04.959087+00:00",
+      "event": "CONTAINER_CREATED",
+      "name": "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart",
+      "role": "isosmart",
+      "sequence": 9
+    },
+    {
+      "at": "2026-09-29T20:06:05.253623+00:00",
+      "event": "HOST_PORT_CONFIRMED",
+      "host_port": 37095,
+      "role": "isosmart",
+      "sequence": 10
+    },
+    {
+      "at": "2026-09-29T20:07:10.378449+00:00",
+      "event": "RESOURCE_REMOVED",
+      "kind": "container",
+      "name": "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps",
+      "role": "adminapps",
+      "sequence": 11
+    },
+    {
+      "at": "2026-09-29T20:07:11.621646+00:00",
+      "event": "RESOURCE_REMOVED",
+      "kind": "volume",
+      "name": "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps_data",
+      "role": "adminapps",
+      "sequence": 12
+    },
+    {
+      "at": "2026-09-29T20:07:12.715336+00:00",
+      "event": "RESOURCE_REMOVED",
+      "kind": "network",
+      "name": "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps_net",
+      "role": "adminapps",
+      "sequence": 13
+    },
+    {
+      "at": "2026-09-29T20:07:17.306072+00:00",
+      "event": "RESOURCE_REMOVED",
+      "kind": "container",
+      "name": "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart",
+      "role": "isosmart",
+      "sequence": 14
+    },
+    {
+      "at": "2026-09-29T20:07:18.564854+00:00",
+      "event": "RESOURCE_REMOVED",
+      "kind": "volume",
+      "name": "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart_data",
+      "role": "isosmart",
+      "sequence": 15
+    },
+    {
+      "at": "2026-09-29T20:07:19.642456+00:00",
+      "event": "RESOURCE_REMOVED",
+      "kind": "network",
+      "name": "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart_net",
+      "role": "isosmart",
+      "sequence": 16
+    }
+  ],
+  "resources": {
+    "adminapps": {
+      "cleanup_required": false,
+      "connection_result": "PASS",
+      "container_id": "4970b394c6a323c53db9cb80d8d1795ca43533816518f48fd7ea0353d7489f97",
+      "container_name": "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps",
+      "container_port": 5432,
+      "container_status": "REMOVED_VERIFIED",
+      "created_at": "2026-09-29T20:06:03.661706+00:00",
+      "database_name": "p314_phase_31_4_v2_5_v11_adminapps_213426f416",
+      "host_ip": "127.0.0.1",
+      "host_port": 45713,
+      "labels": {
+        "io.isosmart.phase31-4.authorization-sha256": "f172c6dde39007fcbb3fdbe1e85b2af404f5dc0eacf1f8cfbbd9d9d26ee828f2",
+        "io.isosmart.phase31-4.resource-role": "adminapps",
+        "io.isosmart.phase31-4.run-slug": "Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1"
+      },
+      "network_id": "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps_net",
+      "network_name": "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps_net",
+      "network_status": "REMOVED_VERIFIED",
+      "observed_postgresql_version": "postgres (PostgreSQL) 18.6 (Debian 18.6-1.pgdg13+2)",
+      "postgresql_status": "READY",
+      "ready_at": "2026-09-29T20:06:14.947901+00:00",
+      "role": "adminapps",
+      "select_one_result": 1,
+      "volume_id": "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps_data",
+      "volume_name": "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_adminapps_data",
+      "volume_status": "REMOVED_VERIFIED"
+    },
+    "isosmart": {
+      "cleanup_required": false,
+      "connection_result": "PASS",
+      "container_id": "ef0bc2dbd9eef4feeee199229a55194b55c20de98439fd3c6937679a937640d0",
+      "container_name": "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart",
+      "container_port": 5432,
+      "container_status": "REMOVED_VERIFIED",
+      "created_at": "2026-09-29T20:06:04.959048+00:00",
+      "database_name": "p314_phase_31_4_v2_5_v11_isosmart_b5933506a8",
+      "host_ip": "127.0.0.1",
+      "host_port": 37095,
+      "labels": {
+        "io.isosmart.phase31-4.authorization-sha256": "f172c6dde39007fcbb3fdbe1e85b2af404f5dc0eacf1f8cfbbd9d9d26ee828f2",
+        "io.isosmart.phase31-4.resource-role": "isosmart",
+        "io.isosmart.phase31-4.run-slug": "Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1"
+      },
+      "network_id": "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart_net",
+      "network_name": "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart_net",
+      "network_status": "REMOVED_VERIFIED",
+      "observed_postgresql_version": "postgres (PostgreSQL) 18.6 (Debian 18.6-1.pgdg13+2)",
+      "postgresql_status": "READY",
+      "ready_at": "2026-09-29T20:06:23.067608+00:00",
+      "role": "isosmart",
+      "select_one_result": 1,
+      "volume_id": "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart_data",
+      "volume_name": "p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart_data",
+      "volume_status": "REMOVED_VERIFIED"
+    }
+  },
+  "run_id": "Phase 31.4 V2.5 V11 Operational Diagnostic Cycle 1 Attempt 1",
+  "run_slug": "Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1",
+  "runner_step": "cleanup_exists_network_p314_phase_31_4_v2_5_v11_operational_di_b25644eb76_isosmart_net",
+  "schema": "phase31.4-v2.5-disposable-run-resource-manifest/v1",
+  "state_transitions": [
+    {
+      "at": "2026-09-29T20:06:02.189863+00:00",
+      "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+      "from": null,
+      "reason": "authorization verified and atomically consumed",
+      "run_id": "Phase 31.4 V2.5 V11 Operational Diagnostic Cycle 1 Attempt 1",
+      "run_slug": "Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1",
+      "sequence": 1,
+      "to": "AUTHORIZED",
+      "validation_attempt": 1
+    },
+    {
+      "at": "2026-09-29T20:06:02.231716+00:00",
+      "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+      "from": "AUTHORIZED",
+      "reason": "resource allocation started",
+      "run_id": "Phase 31.4 V2.5 V11 Operational Diagnostic Cycle 1 Attempt 1",
+      "run_slug": "Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1",
+      "sequence": 2,
+      "to": "ALLOCATING",
+      "validation_attempt": 1
+    },
+    {
+      "at": "2026-09-29T20:06:05.291828+00:00",
+      "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+      "from": "ALLOCATING",
+      "reason": "containers, networks, volumes, and host ports persisted",
+      "run_id": "Phase 31.4 V2.5 V11 Operational Diagnostic Cycle 1 Attempt 1",
+      "run_slug": "Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1",
+      "sequence": 3,
+      "to": "RESOURCES_ALLOCATED",
+      "validation_attempt": 1
+    },
+    {
+      "at": "2026-09-29T20:06:05.312905+00:00",
+      "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+      "from": "RESOURCES_ALLOCATED",
+      "reason": "PostgreSQL startup/readiness started",
+      "run_id": "Phase 31.4 V2.5 V11 Operational Diagnostic Cycle 1 Attempt 1",
+      "run_slug": "Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1",
+      "sequence": 4,
+      "to": "BOOTSTRAPPING",
+      "validation_attempt": 1
+    },
+    {
+      "at": "2026-09-29T20:06:23.090833+00:00",
+      "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+      "from": "BOOTSTRAPPING",
+      "reason": "all PostgreSQL resources accept SELECT 1",
+      "run_id": "Phase 31.4 V2.5 V11 Operational Diagnostic Cycle 1 Attempt 1",
+      "run_slug": "Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1",
+      "sequence": 5,
+      "to": "READY",
+      "validation_attempt": 1
+    },
+    {
+      "at": "2026-09-29T20:06:23.108129+00:00",
+      "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+      "from": "READY",
+      "reason": "PRECREATION callback started",
+      "run_id": "Phase 31.4 V2.5 V11 Operational Diagnostic Cycle 1 Attempt 1",
+      "run_slug": "Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1",
+      "sequence": 6,
+      "to": "PRECREATION_RUNNING",
+      "validation_attempt": 1
+    },
+    {
+      "at": "2026-09-29T20:06:23.224357+00:00",
+      "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+      "from": "PRECREATION_RUNNING",
+      "reason": "PRECREATION evidence persisted",
+      "run_id": "Phase 31.4 V2.5 V11 Operational Diagnostic Cycle 1 Attempt 1",
+      "run_slug": "Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1",
+      "sequence": 7,
+      "to": "PRECREATION_PASS",
+      "validation_attempt": 1
+    },
+    {
+      "at": "2026-09-29T20:06:23.244651+00:00",
+      "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+      "from": "PRECREATION_PASS",
+      "reason": "Stage EXT callback started",
+      "run_id": "Phase 31.4 V2.5 V11 Operational Diagnostic Cycle 1 Attempt 1",
+      "run_slug": "Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1",
+      "sequence": 8,
+      "to": "STAGE_EXT_RUNNING",
+      "validation_attempt": 1
+    },
+    {
+      "at": "2026-09-29T20:07:06.348008+00:00",
+      "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+      "from": "STAGE_EXT_RUNNING",
+      "reason": "UNCLASSIFIED_RUNNER_FAILURE",
+      "run_id": "Phase 31.4 V2.5 V11 Operational Diagnostic Cycle 1 Attempt 1",
+      "run_slug": "Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1",
+      "sequence": 9,
+      "to": "FAILED",
+      "validation_attempt": 1
+    },
+    {
+      "at": "2026-09-29T20:07:19.686295+00:00",
+      "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+      "from": "FAILED",
+      "reason": "run-scoped resource absence verified",
+      "run_id": "Phase 31.4 V2.5 V11 Operational Diagnostic Cycle 1 Attempt 1",
+      "run_slug": "Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1",
+      "sequence": 10,
+      "to": "TEARDOWN_COMPLETE",
+      "validation_attempt": 1
+    }
+  ],
+  "teardown_state": "TEARDOWN_COMPLETE",
+  "updated_at": "2026-09-29T20:07:19.686354+00:00",
+  "validation_attempt": 1
+}

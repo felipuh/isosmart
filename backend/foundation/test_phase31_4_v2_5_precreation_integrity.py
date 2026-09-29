@@ -38,18 +38,19 @@ class PrecreationIntegrityTests(unittest.TestCase):
         self._copy("docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V9.json")
         self._copy("docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V10.json")
         self._copy("docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V11.json")
+        self._copy("docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V12.json")
         for migration in sorted((ROOT / "backend/foundation/migrations").glob("[0-9][0-9][0-9][0-9]_*.py")):
             self._copy(migration.relative_to(ROOT).as_posix())
         approval = self.root / "approval.md"
         approval.write_text("approved test fixture\n", encoding="utf-8")
         self.manifest = json.loads(
-            (ROOT / "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V11.json")
+            (ROOT / "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V12.json")
             .read_text(encoding="utf-8")
         )
         for source in self.manifest["sources"]:
             self._copy(source["path"])
             source["approval_evidence"] = ["approval.md"]
-        self.manifest_path = self.root / "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V11.json"
+        self.manifest_path = self.root / "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V12.json"
         self._write_manifest()
 
     def tearDown(self):

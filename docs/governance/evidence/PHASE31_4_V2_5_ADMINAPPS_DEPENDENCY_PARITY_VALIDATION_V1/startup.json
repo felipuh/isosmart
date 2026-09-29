@@ -1,0 +1,14 @@
+{
+  "import_django": "PASS",
+  "DJANGO_SETTINGS_MODULE_load": "PASS",
+  "django_setup": "PASS",
+  "django_apscheduler_import": "PASS",
+  "canonical_manifest": "/home/felipe/proyectos/adminapps/backend/requirements.txt",
+  "manifest_sha256": "cf804dcb0092c3daaa97831806e1eefa2c91edcabdb1a7e4f9ca21dea7bfb29f",
+  "python": "3.12.13 (main, Jun 11 2026, 04:03:26) [Clang 22.1.3 ]",
+  "interpreter": "/tmp/phase31-adminapps-parity-validation/bin/python",
+  "prefix": "/tmp/phase31-adminapps-parity-validation",
+  "package": "django-apscheduler",
+  "installed_version": "0.7.0",
+  "environment_type": "isolated_temporary_venv"
+}

@@ -1,0 +1,54 @@
+{
+  "status": "PASS",
+  "checked_at": "2026-09-29T20:07:20.435379+00:00",
+  "run_id": "Phase 31.4 V2.5 V11 Operational Diagnostic Cycle 1 Attempt 1",
+  "matching_processes": [],
+  "observations": {
+    "containers": {
+      "argv": [
+        "podman",
+        "ps",
+        "-a",
+        "--format",
+        "{{.Names}}"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "networks": {
+      "argv": [
+        "podman",
+        "network",
+        "ls",
+        "--format",
+        "{{.Name}}"
+      ],
+      "returncode": 0,
+      "stdout": "podman\n",
+      "stderr": ""
+    },
+    "volumes": {
+      "argv": [
+        "podman",
+        "volume",
+        "ls",
+        "--format",
+        "{{.Name}}"
+      ],
+      "returncode": 0,
+      "stdout": "9d9208aca9f6409b089266f3e9f18cd479af0c272539cec72aaedbe66e632798\n60f44ef355a97171add79f5925b88b30fec5c37734498c39593a7fdc2ab71c55\nc916518774cee42ea1b803723dc6f2b982e208cd3e6e3a683653c70b2baf5b10\n314c73efa1abb03972eaf70b847a07902c93cf530f3a56c85e9a72e4fa19d557\n3ce31196eb64dc8eb66daed8db4d5fe977b2415dc1a81e4f9aa4992a6bc98444\n1ec92fe44adf8bdac8322788129e4efb2acd22fc178480290479c8323dd0eee9\nac5d289e96cde46b20b8f4e52536fa2e154cbc1269abae5ae4989813ca381655\n",
+      "stderr": ""
+    },
+    "listeners": {
+      "argv": [
+        "ss",
+        "-ltnp"
+      ],
+      "returncode": 0,
+      "stdout": "State  Recv-Q Send-Q Local Address:Port Peer Address:PortProcess                                                                                  \nLISTEN 0      128          0.0.0.0:22        0.0.0.0:*                                                                                            \nLISTEN 0      511          0.0.0.0:80        0.0.0.0:*                                                                                            \nLISTEN 0      511        127.0.0.1:4173      0.0.0.0:*    users:((\"MainThread\",pid=1516,fd=18))                                                   \nLISTEN 0      2048       127.0.0.1:8000      0.0.0.0:*    users:((\"gunicorn\",pid=2243,fd=6),(\"gunicorn\",pid=2237,fd=6))                           \nLISTEN 0      2048       127.0.0.1:8002      0.0.0.0:*    users:((\"gunicorn\",pid=2245,fd=4),(\"gunicorn\",pid=2242,fd=4),(\"gunicorn\",pid=2239,fd=4))\nLISTEN 0      200        127.0.0.1:5432      0.0.0.0:*                                                                                            \nLISTEN 0      128             [::]:22           [::]:*                                                                                            \nLISTEN 0      511             [::]:80           [::]:*                                                                                            \nLISTEN 0      4096               *:9090            *:*                                                                                            \nLISTEN 0      200            [::1]:5432         [::]:*                                                                                            \n",
+      "stderr": ""
+    }
+  },
+  "zero_residual_resources": true
+}

@@ -1,0 +1,14 @@
+Creating test database for alias 'default'...
+Found 50 test(s).
+System check identified no issues (0 silenced).
+WARNING 2026-09-29 14:31:56,219 views request_id=1acde841-1f3b-48cc-bce7-d7cd91a136fc Health check failed
+ERROR 2026-09-29 14:31:56,220 log request_id=1acde841-1f3b-48cc-bce7-d7cd91a136fc Service Unavailable: /health
+.WARNING 2026-09-29 14:31:56,249 log request_id=f36ac85a-ccfd-475c-9084-5f05d5d812f6 Unauthorized: /health
+.WARNING 2026-09-29 14:31:56,255 log request_id=bdcfcd6e-6bec-486c-bb44-32f6ddd98863 Unauthorized: /health
+WARNING 2026-09-29 14:31:56,257 log request_id=e59c0124-afd5-4150-b083-70b5c8695b0b Unauthorized: /health
+................................................
+----------------------------------------------------------------------
+Ran 50 tests in 1.920s
+
+OK
+Destroying test database for alias 'default'...

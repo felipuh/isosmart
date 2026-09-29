@@ -1,0 +1,20 @@
+{
+  "status": "PASS",
+  "sha256_by_path": {
+    "/home/felipe/proyectos/isosmart/docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V11.json": "69a0eec27e96e050411e1cabf8f61aa2ca8182a736e16c3b84f67089bb4e716b",
+    "/home/felipe/proyectos/isosmart/docs/governance/evidence/PHASE31_4_V2_5_V11_OPERATIONAL_DIAGNOSTIC_CYCLE_1_AUTHORIZATION_V1.json": "d5508dc362fc93b653c5c316c5259103da63b7b520d7ccbf05a6f0be8096a72f",
+    "/home/felipe/proyectos/isosmart/docs/governance/evidence/PHASE31_4_V2_5_V11_OPERATIONAL_DIAGNOSTIC_CYCLE_1_ATTEMPT_1_AUTHORIZATION_V1.json": "f172c6dde39007fcbb3fdbe1e85b2af404f5dc0eacf1f8cfbbd9d9d26ee828f2",
+    "/home/felipe/proyectos/isosmart/docs/governance/evidence/runs/Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1/AUTHORIZATION_CONSUMPTION.json": "8ad54d46eb274b9ec20a9a1daf1a12e9ec1ebe643b9e6d1968df427a48f0d69b",
+    "/home/felipe/proyectos/isosmart/docs/governance/evidence/runs/Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1/RESOURCE_MANIFEST.json": "8178a29a28345689e574e70c1d166114761d82aa9b6acfe4799eea89a230a4a4",
+    "/home/felipe/proyectos/isosmart/docs/governance/evidence/runs/Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1/bootstrap_adminapps.log": "a717c57557f00c95b7173520204ce81e1936abb4e938bebcb68d220671cdfaa0",
+    "/home/felipe/proyectos/isosmart/docs/governance/evidence/runs/Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1/bootstrap_isosmart.log": "d58ca23fcf80e5743aeaaaef159a53211222c493590b7f259818ce314c81661c",
+    "/home/felipe/proyectos/isosmart/docs/governance/evidence/runs/Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1/authority.log": "976e4f3b660285412e70f7e24044a41f0d5f5dbdcf8d171eb95489a2ab1372c4",
+    "/home/felipe/proyectos/isosmart/docs/governance/evidence/runs/Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1/execution_outcome.json": "0ece821b5404f079046763c3f71c8a354d75ca08568fd23c7d5dadfd2ba294ce",
+    "/home/felipe/proyectos/isosmart/docs/governance/evidence/runs/Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1/independent_residual_check.json": "3b27d023bb92a0db4dd0e94e8afe10261c08b57b4ce1dbc0873bfdb1118d90e5",
+    "/home/felipe/proyectos/isosmart/docs/governance/evidence/runs/Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1/FINAL_REPORT.md": "0c633ed45d502b3997d245bbf61ca1ef712e892348a81b7b585822344da74275",
+    "/home/felipe/proyectos/isosmart/docs/governance/evidence/runs/Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1/PRECREATION_INTEGRITY/precreation_integrity.json": "31a4f82f2a6a88779d255deaa311407ab76e188e3a4e423a835da9400808c846",
+    "/home/felipe/proyectos/isosmart/docs/governance/evidence/diagnostic_authorization_consumptions/f172c6dde39007fcbb3fdbe1e85b2af404f5dc0eacf1f8cfbbd9d9d26ee828f2.json": "8ad54d46eb274b9ec20a9a1daf1a12e9ec1ebe643b9e6d1968df427a48f0d69b",
+    "/home/felipe/proyectos/isosmart/docs/governance/evidence/PHASE31_4_V2_5_V11_OPERATIONAL_DIAGNOSTIC_CYCLE_1_ATTEMPT_1_CONTROL_V1/attempt_driver.py": "c798128fdef020a65f4648105aa809e016f3da56640422a26954da7852b0d1a3",
+    "/home/felipe/proyectos/isosmart/docs/governance/evidence/PHASE31_4_V2_5_V11_OPERATIONAL_DIAGNOSTIC_CYCLE_1_ATTEMPT_1_CONTROL_V1/preflight.json": "1dbf0a0d9ef486ddfeac9ab0e9c34c9d2eabfd050cdcea0ffa572c9cfdf34ef9"
+  }
+}

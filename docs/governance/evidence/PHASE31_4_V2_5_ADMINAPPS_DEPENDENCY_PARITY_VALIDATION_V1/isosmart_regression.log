@@ -1,0 +1,142 @@
+Creating test database for alias 'default'...
+Found 575 test(s).
+System check identified no issues (0 silenced).
+INFO 2026-09-29 14:32:54,839 backends request_id=506a9178-3ae8-43fc-83d8-003e02b174b1 Autenticación fallida para lockme@isosmart.local: Credenciales inválidas
+WARNING 2026-09-29 14:32:54,847 log request_id=506a9178-3ae8-43fc-83d8-003e02b174b1 Bad Request: /api/auth/login/
+INFO 2026-09-29 14:32:54,851 backends request_id=f804650d-aa12-483c-a8e8-bc09aa369a8d Autenticación fallida para lockme@isosmart.local: Credenciales inválidas
+WARNING 2026-09-29 14:32:54,856 log request_id=f804650d-aa12-483c-a8e8-bc09aa369a8d Bad Request: /api/auth/login/
+INFO 2026-09-29 14:32:54,860 backends request_id=dfe2eb88-1ae0-4b01-9c24-f72baa680762 Autenticación fallida para lockme@isosmart.local: Credenciales inválidas
+WARNING 2026-09-29 14:32:54,862 log request_id=dfe2eb88-1ae0-4b01-9c24-f72baa680762 Bad Request: /api/auth/login/
+..INFO 2026-09-29 14:32:54,960 backends request_id=103ab26f-dd35-42a6-afac-b62969893eb0 Autenticación fallida para lockme@isosmart.local: Credenciales inválidas
+WARNING 2026-09-29 14:32:54,972 log request_id=103ab26f-dd35-42a6-afac-b62969893eb0 Bad Request: /api/auth/login/
+.INFO 2026-09-29 14:32:54,989 backends request_id=ef2b027c-a508-44fe-b037-e89f79515d3e Autenticación fallida para lockme@isosmart.local: Credenciales inválidas
+WARNING 2026-09-29 14:32:54,992 log request_id=ef2b027c-a508-44fe-b037-e89f79515d3e Bad Request: /api/auth/login/
+INFO 2026-09-29 14:32:54,995 backends request_id=cb05bc6a-dbe5-4216-b55c-85a27f74fe46 Autenticación fallida para lockme@isosmart.local: Credenciales inválidas
+WARNING 2026-09-29 14:32:54,997 log request_id=cb05bc6a-dbe5-4216-b55c-85a27f74fe46 Bad Request: /api/auth/login/
+INFO 2026-09-29 14:32:54,999 backends request_id=a34be1f0-2fe6-49f3-bc63-cbe56948661e Autenticación fallida para lockme@isosmart.local: Credenciales inválidas
+WARNING 2026-09-29 14:32:55,006 log request_id=a34be1f0-2fe6-49f3-bc63-cbe56948661e Bad Request: /api/auth/login/
+WARNING 2026-09-29 14:32:55,010 log request_id=d734346c-69b2-47ee-8769-d9c101424568 Bad Request: /api/auth/login/
+.INFO 2026-09-29 14:32:55,022 backends request_id=264acb71-a783-44d4-a5a7-1c557a23a5a9 Autenticación fallida para lockme@isosmart.local: Credenciales inválidas
+WARNING 2026-09-29 14:32:55,025 log request_id=264acb71-a783-44d4-a5a7-1c557a23a5a9 Bad Request: /api/auth/login/
+.WARNING 2026-09-29 14:32:55,057 log request_id=5d5e65ba-d655-4d9d-b1b9-3dc77287f199 Bad Request: /api/auth/login/
+..Bad Request: /api/auth/password-reset/confirm/
+WARNING 2026-09-29 14:32:55,092 log request_id=118b92d3-ebe0-497b-9700-f0ce3cf2838f Bad Request: /api/auth/password-reset/confirm/
+.Bad Request: /api/auth/password-reset/confirm/
+WARNING 2026-09-29 14:32:55,109 log request_id=1617b807-b461-486d-af2f-9f369e0cb81b Bad Request: /api/auth/password-reset/confirm/
+.....WARNING 2026-09-29 14:32:55,215 log request_id=7bd2cff6-459e-4ac3-b61a-895d22b70a86 Bad Request: /api/auth/change-password/
+..WARNING 2026-09-29 14:32:55,269 log request_id=f6138ce6-a2ae-4d32-bcd4-7d2e2eacf710 Bad Request: /api/auth/login/
+..WARNING 2026-09-29 14:32:55,299 log request_id=139b2dab-6883-41cd-bdf6-5433dc109c5d Forbidden: /api/billing/update_payer/
+..WARNING 2026-09-29 14:32:55,364 log request_id=4a64224b-3944-4657-8c44-1532982f1bdc Forbidden: /api/iso-clauses/initialize_standards/
+..WARNING 2026-09-29 14:32:55,392 log request_id=d4a97e0d-97fa-43e8-b493-6f5f01ca6c06 Forbidden: /api/settings/update_notifications/
+.WARNING 2026-09-29 14:32:55,401 log request_id=6439683c-9862-44b3-b4d2-4960cbba4478 Forbidden: /api/users/create_user/
+./home/felipe/proyectos/isosmart/backend/.venv/lib/python3.12/site-packages/rest_framework/pagination.py:207: UnorderedObjectListWarning: Pagination may yield inconsistent results with an unordered object_list: <class 'authentication.models.UserProfile'> QuerySet.
+  paginator = self.django_paginator_class(queryset, page_size)
+.WARNING 2026-09-29 14:32:55,435 log request_id=a19c0645-2780-4478-80c2-32e3e2e87c98 Forbidden: /api/users/
+..WARNING 2026-09-29 14:32:55,463 log request_id=46e55434-8238-4aa0-b910-946ce20d4696 Bad Request: /api/settings/business_report/
+.WARNING 2026-09-29 14:32:55,471 log request_id=306e5418-4499-4b55-b399-f0f23678e299 Bad Request: /api/settings/business_report/
+...........WARNING 2026-09-29 14:32:55,996 log request_id=68c53b1b-edf9-4221-8adb-1bad7b8d72d5 Unauthorized: /api/settings/business_report/
+.......WARNING 2026-09-29 14:32:56,030 log request_id=3088a91d-0401-4e36-ae1b-8cb0cc19375d Unauthorized: /api/feature-flags/
+..WARNING 2026-09-29 14:32:56,067 log request_id=a23d3706-60cd-4fee-90c0-46d578b634f7 Forbidden: /api/dashboard/summary/
+WARNING 2026-09-29 14:32:56,069 log request_id=55bcfd71-b5e2-46ac-a619-0c842fcf0ebb Forbidden: /api/risks/matrix/
+WARNING 2026-09-29 14:32:56,070 log request_id=c56c279c-6dd6-4aa5-aecc-2f928a8ba3a7 Forbidden: /api/risks/stats/
+WARNING 2026-09-29 14:32:56,072 log request_id=534aaa9b-7e33-4cc4-bb3d-7d3a446aac8f Forbidden: /api/context/latest/
+.WARNING 2026-09-29 14:32:56,085 log request_id=96dcf3c5-e8cc-45ab-8289-6b59fd6fef22 Unauthorized: /api/dashboard/summary/
+WARNING 2026-09-29 14:32:56,087 log request_id=dbd8cb7f-aecc-4f06-9c6f-7fc6c422213a Unauthorized: /api/risks/matrix/
+WARNING 2026-09-29 14:32:56,088 log request_id=a1c2a9d8-65d3-4cd7-bc91-f871f317b10d Unauthorized: /api/risks/stats/
+WARNING 2026-09-29 14:32:56,088 log request_id=1b3ba2be-0fb0-409b-94f8-7854cab45b00 Unauthorized: /api/context/latest/
+.WARNING 2026-09-29 14:32:56,096 log request_id=003d9bc3-36a9-4db9-a4e4-0c05336641b8 Bad Request: /api/dashboard/summary/
+WARNING 2026-09-29 14:32:56,097 log request_id=b1996b82-b4ef-4036-8e71-60abef5d6bf0 Bad Request: /api/risks/matrix/
+WARNING 2026-09-29 14:32:56,098 log request_id=76403da7-8ddc-4432-be5c-3a60d771801d Bad Request: /api/risks/stats/
+WARNING 2026-09-29 14:32:56,098 log request_id=ad96babf-99e9-4dc2-8e70-cea13791eb8f Bad Request: /api/context/latest/
+..WARNING 2026-09-29 14:32:56,145 log request_id=84636f56-4ccc-4d12-b6fc-d48b03b6bc60 Not Found: /api/risks/2/
+...INFO 2026-09-29 14:32:56,224 stakeholder_tasks request_id=6380e40a-0bb8-46c9-8e24-c214e383982f Verificando alertas críticas...
+INFO 2026-09-29 14:32:56,233 stakeholder_tasks request_id=6380e40a-0bb8-46c9-8e24-c214e383982f 1 alertas enviadas
+INFO 2026-09-29 14:32:56,233 tasks request_id=6380e40a-0bb8-46c9-8e24-c214e383982f Evaluación automática de notificaciones operativas completada: {'risk_notifications': 1, 'objective_notifications': 2, 'stakeholder_alerts': 1}
+...WARNING 2026-09-29 14:32:56,265 log request_id=req-isosmart-001 Unauthorized: /api/feature-flags/
+.WARNING 2026-09-29 14:32:56,267 log request_id=ecd0ec96-4685-419b-ace4-70c7c894daec Unauthorized: /api/feature-flags/
+.WARNING 2026-09-29 14:32:56,305 log request_id=12912d31-1ce3-4f87-a754-39078405afac Forbidden: /api/settings/update_notifications/
+WARNING 2026-09-29 14:32:56,311 log request_id=3848e3f9-1768-443d-839c-a0778c70ea15 Forbidden: /api/settings/update_notifications/
+WARNING 2026-09-29 14:32:56,316 log request_id=b1b70386-36ae-4baa-8ae1-6b6d1650bab1 Forbidden: /api/settings/update_notifications/
+WARNING 2026-09-29 14:32:56,328 log request_id=2aef53b6-14b7-4b6b-84a5-7d580ad24002 Forbidden: /api/users/
+WARNING 2026-09-29 14:32:56,331 log request_id=bec8d976-7ae4-4d24-8508-959fdd6d6d3b Forbidden: /api/users/
+WARNING 2026-09-29 14:32:56,333 log request_id=927a0c4e-0ea4-49c2-bdc2-1c03f09fa9ee Forbidden: /api/users/
+WARNING 2026-09-29 14:32:56,335 log request_id=5984b7d6-c418-4ddc-8602-a6869a2ee361 Forbidden: /api/users/
+WARNING 2026-09-29 14:32:56,369 log request_id=b2c9692b-48a5-4032-9fde-b726e632e19f Forbidden: /api/billing/update_payer/
+WARNING 2026-09-29 14:32:56,375 log request_id=d6993be4-4f3c-48d6-afba-fba638b4b37c Forbidden: /api/billing/update_payer/
+WARNING 2026-09-29 14:32:56,379 log request_id=2339fff3-897b-4b72-9b47-ebb0ea815321 Forbidden: /api/billing/update_payer/
+WARNING 2026-09-29 14:32:56,444 log request_id=0e1fd7ba-92d7-4fa0-ba93-3fb80886beb3 Forbidden: /api/iso-clauses/initialize_standards/
+WARNING 2026-09-29 14:32:56,448 log request_id=6c83cc55-7f21-4ae2-843a-e4e8b6abe709 Forbidden: /api/iso-clauses/initialize_standards/
+WARNING 2026-09-29 14:32:56,451 log request_id=0bc55a6e-810c-4b3d-b60a-bba865b0afb1 Forbidden: /api/iso-clauses/initialize_standards/
+WARNING 2026-09-29 14:32:56,491 log request_id=ec8846b8-d773-4135-b8c8-8e0129abb2c1 Forbidden: /api/organizations/2/
+WARNING 2026-09-29 14:32:56,507 log request_id=19d06a52-1cce-42c9-b725-27fdf3bd9899 Forbidden: /api/organizations/2/
+WARNING 2026-09-29 14:32:56,514 log request_id=0979342d-97cb-4f7b-9cf7-53915c7f6221 Forbidden: /api/organizations/2/
+WARNING 2026-09-29 14:32:56,519 log request_id=e48ffe91-1694-4d66-9ca5-968e28a9d745 Forbidden: /api/organizations/2/
+..WARNING 2026-09-29 14:32:56,548 log request_id=98089f9b-29ce-4a73-90b6-482726041fce Bad Request: /api/settings/complete_onboarding/
+.WARNING 2026-09-29 14:32:56,558 log request_id=69243ae8-466f-4fb3-9785-045d0b146f7b Bad Request: /api/settings/complete_onboarding/
+........WARNING 2026-09-29 14:32:56,725 log request_id=ad004e58-4dd7-4d01-9719-44603bdf14ef Forbidden: /api/settings/run_onboarding_orchestration/
+..WARNING 2026-09-29 14:32:56,754 log request_id=35cf5aa7-4821-4895-8a78-e76de8454a51 Forbidden: /api/settings/backups/
+.....WARNING 2026-09-29 14:32:56,839 log request_id=06064fe5-476e-4d27-9532-7114bc7e4988 Bad Request: /api/scope/latest/
+WARNING 2026-09-29 14:32:56,842 log request_id=ff5b69f4-ec76-414e-8bea-da2ef3431293 Bad Request: /api/processes/latest/
+WARNING 2026-09-29 14:32:56,845 log request_id=c50b7fa9-afdb-4c40-94a4-42a0faa290cf Forbidden: /api/scope/latest/
+WARNING 2026-09-29 14:32:56,847 log request_id=dd3f17ee-9aad-4033-b8c2-8d1a5fe93d24 Forbidden: /api/processes/latest/
+.WARNING 2026-09-29 14:32:56,887 log request_id=c4b6368a-8d2e-456e-b0d9-fe48f79e2ea9 Unauthorized: /api/scope/latest/
+WARNING 2026-09-29 14:32:56,889 log request_id=5257b59a-a938-47a6-8aa7-d6d8038a4f83 Unauthorized: /api/processes/latest/
+..WARNING 2026-09-29 14:32:56,933 views request_id=7c04b053-ff89-49fa-acfb-98e55e6db4d5 Health check failed
+ERROR 2026-09-29 14:32:56,933 log request_id=7c04b053-ff89-49fa-acfb-98e55e6db4d5 Service Unavailable: /health
+.WARNING 2026-09-29 14:32:56,960 log request_id=8e5d757d-0644-4855-a4ee-94806d447f92 Unauthorized: /health
+.WARNING 2026-09-29 14:32:56,966 log request_id=5b1ebed8-840c-4884-b4c3-16df4c688a1f Unauthorized: /health
+WARNING 2026-09-29 14:32:56,968 log request_id=4e6ed543-ecbd-496a-ab63-14c0077db923 Unauthorized: /health
+.....WARNING 2026-09-29 14:32:57,057 log request_id=7c011ae9-36fd-4956-8491-fd91df2fc1a5 Method Not Allowed: /api/integration/assistant/audit-logs/
+WARNING 2026-09-29 14:32:57,064 log request_id=a83d1857-d1dc-43cc-a858-1aa5085df4bf Method Not Allowed: /api/integration/assistant/audit-logs/1/
+WARNING 2026-09-29 14:32:57,069 log request_id=1409e908-8164-45ba-bb51-310ddccbfdfc Method Not Allowed: /api/integration/assistant/audit-logs/1/
+WARNING 2026-09-29 14:32:57,076 log request_id=5cbe8e7d-25d5-4684-8f2a-b3afbbcb7131 Method Not Allowed: /api/integration/assistant/audit-logs/1/
+..WARNING 2026-09-29 14:32:57,145 log request_id=cd1c10de-f01e-4585-aef7-cb6cea7afe59 Bad Request: /api/integration/assistant/feedback/
+WARNING 2026-09-29 14:32:57,154 log request_id=bad27b25-4047-4ae3-bf8a-bf44e8e7dabc Bad Request: /api/integration/assistant/feedback/
+WARNING 2026-09-29 14:32:57,161 log request_id=bc4d4891-6939-4af6-91fc-2091da849c91 Bad Request: /api/integration/assistant/feedback/
+WARNING 2026-09-29 14:32:57,167 log request_id=b796a156-26b8-4fb8-b80e-1946cec2d57b Bad Request: /api/integration/assistant/feedback/
+.WARNING 2026-09-29 14:32:57,249 log request_id=7a0e594b-dd3e-4929-add6-d6343e97c419 Not Found: /api/integration/assistant/memory-items/1/
+WARNING 2026-09-29 14:32:57,258 log request_id=f2b927a9-bbad-4cf0-b663-56075f910b78 Not Found: /api/integration/assistant/memory-items/1/
+WARNING 2026-09-29 14:32:57,265 log request_id=67c85572-66af-4410-b91c-77aaf1abb144 Not Found: /api/integration/assistant/memory-items/1/
+../home/felipe/proyectos/isosmart/backend/.venv/lib/python3.12/site-packages/rest_framework/pagination.py:207: UnorderedObjectListWarning: Pagination may yield inconsistent results with an unordered object_list: <class 'integration.models.AssistantPromptConfig'> QuerySet.
+  paginator = self.django_paginator_class(queryset, page_size)
+WARNING 2026-09-29 14:32:57,344 log request_id=8de5723d-8137-4a97-99bc-0b40b063f3ad Not Found: /api/integration/assistant/prompt-configs/1/
+WARNING 2026-09-29 14:32:57,352 log request_id=a4f5d4eb-5776-457a-b93e-771346f7f674 Not Found: /api/integration/assistant/prompt-configs/1/
+WARNING 2026-09-29 14:32:57,358 log request_id=6a28c9ec-b104-46c2-a078-bf8d461f193a Not Found: /api/integration/assistant/prompt-configs/1/
+WARNING 2026-09-29 14:32:57,374 log request_id=51ceec7a-fc71-4d31-8764-835d1bf34d79 Not Found: /api/integration/assistant/feedback/1/
+WARNING 2026-09-29 14:32:57,383 log request_id=21d44705-47f2-45fb-a5d2-7b98c4cfe706 Not Found: /api/integration/assistant/feedback/1/
+WARNING 2026-09-29 14:32:57,390 log request_id=3a379d14-4d74-4f56-956a-7eb26128392e Not Found: /api/integration/assistant/feedback/1/
+WARNING 2026-09-29 14:32:57,402 log request_id=fcb6d23b-bc66-43d8-a3d8-01f0f99c2a71 Not Found: /api/integration/assistant/audit-logs/1/
+..INFO 2026-09-29 14:32:57,534 posthog request_id=33e2b1d8-1e68-4b3c-a9d6-08f0185ba6eb Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+WARNING 2026-09-29 14:32:58,207 connectionpool request_id=- Retrying (Retry(total=1, connect=1, read=2, redirect=None, status=None)) after connection broken by 'NameResolutionError("HTTPSConnection(host='us.i.posthog.com', port=443): Failed to resolve 'us.i.posthog.com' ([Errno -2] Name or service not known)")': /batch/
+WARNING 2026-09-29 14:32:58,219 connectionpool request_id=- Retrying (Retry(total=0, connect=0, read=2, redirect=None, status=None)) after connection broken by 'NameResolutionError("HTTPSConnection(host='us.i.posthog.com', port=443): Failed to resolve 'us.i.posthog.com' ([Errno -2] Name or service not known)")': /batch/
+INFO 2026-09-29 14:32:58,243 _common request_id=- Backing off send_request(...) for 0.3s (requests.exceptions.ConnectionError: HTTPSConnectionPool(host='us.i.posthog.com', port=443): Max retries exceeded with url: /batch/ (Caused by NameResolutionError("HTTPSConnection(host='us.i.posthog.com', port=443): Failed to resolve 'us.i.posthog.com' ([Errno -2] Name or service not known)")))
+.WARNING 2026-09-29 14:32:58,300 log request_id=bb020370-6820-4c5f-bf55-46ae5a9ded1d Bad Request: /api/leadership/evidence-edges/
+WARNING 2026-09-29 14:32:58,312 log request_id=9ae836dc-3c84-4a42-9bb1-ba775dce2bf9 Bad Request: /api/leadership/evidence-edges/
+./home/felipe/proyectos/isosmart/backend/.venv/lib/python3.12/site-packages/rest_framework/pagination.py:207: UnorderedObjectListWarning: Pagination may yield inconsistent results with an unordered object_list: <class 'leadership.models.EvidenceEdge'> QuerySet.
+  paginator = self.django_paginator_class(queryset, page_size)
+WARNING 2026-09-29 14:32:58,346 log request_id=6b338629-3c6e-407d-9681-9ec53a4ca21c Not Found: /api/leadership/evidence-edges/1/
+WARNING 2026-09-29 14:32:58,357 log request_id=bc9c8bf0-e9f5-4371-93cf-b5a360d0d9d5 Not Found: /api/leadership/evidence-edges/1/
+WARNING 2026-09-29 14:32:58,366 log request_id=1f4a4ef7-92f2-4082-8879-701dcf56a42d Not Found: /api/leadership/evidence-edges/1/
+..WARNING 2026-09-29 14:32:58,435 log request_id=b5cf7c4e-6647-422f-9ff6-17a76a177302 Bad Request: /api/leadership/evidence-edges/
+WARNING 2026-09-29 14:32:58,444 log request_id=505e0025-ab0f-4c9c-abd1-d6a107099e8f Bad Request: /api/leadership/evidence-edges/
+WARNING 2026-09-29 14:32:58,453 log request_id=3a4a4265-c039-4b80-9b92-e4c625604767 Bad Request: /api/leadership/evidence-edges/
+.WARNING 2026-09-29 14:32:58,469 log request_id=7738f318-9cab-4b1c-bce3-1c057d21a306 Bad Request: /api/leadership/evidence-edges/1/
+.WARNING 2026-09-29 14:32:58,472 client request_id=7738f318-9cab-4b1c-bce3-1c057d21a306 Admin Apps falló (down), usando fallback de BD local
+.ERROR 2026-09-29 14:32:58,473 client request_id=7738f318-9cab-4b1c-bce3-1c057d21a306 Admin Apps unavailable and local fallback disabled. code=connection_error error=down
+.ERROR 2026-09-29 14:32:58,474 client request_id=7738f318-9cab-4b1c-bce3-1c057d21a306 Admin Apps unavailable and local fallback disabled. code=connection_error error=down
+.........................................................................WARNING 2026-09-29 14:32:58,542 connectionpool request_id=- Retrying (Retry(total=1, connect=1, read=2, redirect=None, status=None)) after connection broken by 'NameResolutionError("HTTPSConnection(host='us.i.posthog.com', port=443): Failed to resolve 'us.i.posthog.com' ([Errno -2] Name or service not known)")': /batch/
+WARNING 2026-09-29 14:32:58,546 connectionpool request_id=- Retrying (Retry(total=0, connect=0, read=2, redirect=None, status=None)) after connection broken by 'NameResolutionError("HTTPSConnection(host='us.i.posthog.com', port=443): Failed to resolve 'us.i.posthog.com' ([Errno -2] Name or service not known)")': /batch/
+INFO 2026-09-29 14:32:58,549 _common request_id=- Backing off send_request(...) for 0.9s (requests.exceptions.ConnectionError: HTTPSConnectionPool(host='us.i.posthog.com', port=443): Max retries exceeded with url: /batch/ (Caused by NameResolutionError("HTTPSConnection(host='us.i.posthog.com', port=443): Failed to resolve 'us.i.posthog.com' ([Errno -2] Name or service not known)")))
+..................................................ERROR 2026-09-29 14:32:58,587 client request_id=7738f318-9cab-4b1c-bce3-1c057d21a306 Error de conexión a Admin Apps: http://127.0.0.1:49123/api/integration/organizations/tenant-1/products/ISO_SMART/validate/
+.........................................................................................................................WARNING 2026-09-29 14:32:59,501 connectionpool request_id=- Retrying (Retry(total=1, connect=1, read=2, redirect=None, status=None)) after connection broken by 'NameResolutionError("HTTPSConnection(host='us.i.posthog.com', port=443): Failed to resolve 'us.i.posthog.com' ([Errno -2] Name or service not known)")': /batch/
+WARNING 2026-09-29 14:32:59,502 connectionpool request_id=- Retrying (Retry(total=0, connect=0, read=2, redirect=None, status=None)) after connection broken by 'NameResolutionError("HTTPSConnection(host='us.i.posthog.com', port=443): Failed to resolve 'us.i.posthog.com' ([Errno -2] Name or service not known)")': /batch/
+INFO 2026-09-29 14:32:59,503 _common request_id=- Backing off send_request(...) for 2.3s (requests.exceptions.ConnectionError: HTTPSConnectionPool(host='us.i.posthog.com', port=443): Max retries exceeded with url: /batch/ (Caused by NameResolutionError("HTTPSConnection(host='us.i.posthog.com', port=443): Failed to resolve 'us.i.posthog.com' ([Errno -2] Name or service not known)")))
+..........WARNING 2026-09-29 14:33:01,834 connectionpool request_id=- Retrying (Retry(total=1, connect=1, read=2, redirect=None, status=None)) after connection broken by 'NameResolutionError("HTTPSConnection(host='us.i.posthog.com', port=443): Failed to resolve 'us.i.posthog.com' ([Errno -2] Name or service not known)")': /batch/
+WARNING 2026-09-29 14:33:01,835 connectionpool request_id=- Retrying (Retry(total=0, connect=0, read=2, redirect=None, status=None)) after connection broken by 'NameResolutionError("HTTPSConnection(host='us.i.posthog.com', port=443): Failed to resolve 'us.i.posthog.com' ([Errno -2] Name or service not known)")': /batch/
+ERROR 2026-09-29 14:33:01,837 _common request_id=- Giving up send_request(...) after 4 tries (requests.exceptions.ConnectionError: HTTPSConnectionPool(host='us.i.posthog.com', port=443): Max retries exceeded with url: /batch/ (Caused by NameResolutionError("HTTPSConnection(host='us.i.posthog.com', port=443): Failed to resolve 'us.i.posthog.com' ([Errno -2] Name or service not known)")))
+...........................................................................................................................................................................................................................
+----------------------------------------------------------------------
+Ran 575 tests in 63.949s
+
+OK
+Destroying test database for alias 'default'...

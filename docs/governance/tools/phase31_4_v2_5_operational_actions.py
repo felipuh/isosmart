@@ -40,8 +40,14 @@ def env_for(name: str) -> dict[str, str]:
     return env
 
 
+def runtime_python(root: Path, env: dict[str, str]) -> Path:
+    if root == ADMIN and env.get("PHASE31_ADMINAPPS_PYTHON"):
+        return Path(env["PHASE31_ADMINAPPS_PYTHON"])
+    return root / ".venv/bin/python"
+
+
 def run_manage(root: Path, env: dict[str, str], *args: str) -> dict:
-    python = root / ".venv/bin/python"
+    python = runtime_python(root, env)
     result = subprocess.run([str(python), "manage.py", *args], cwd=root, env=env,
                             text=True, capture_output=True)
     if result.returncode: raise RuntimeError(result.stdout + result.stderr)
@@ -50,7 +56,7 @@ def run_manage(root: Path, env: dict[str, str], *args: str) -> dict:
 
 
 def pending(root: Path, env: dict[str, str]) -> int:
-    python = root / ".venv/bin/python"
+    python = runtime_python(root, env)
     result = subprocess.run([str(python), "manage.py", "showmigrations", "--plan"], cwd=root,
                             env=env, text=True, capture_output=True, check=True)
     return sum(1 for line in result.stdout.splitlines() if "[ ]" in line)
@@ -197,7 +203,8 @@ def service(system: str):
     env=env_for("PHASE31_ADMINAPPS_DB_ENDPOINT" if system=="adminapps" else "PHASE31_ISOSMART_DB_ENDPOINT")
     if system=="adminapps": env["RETRY16_INTEGRATION_KEY"]=os.environ["PHASE31_INTEGRATION_KEY"]
     else: env.update(ADMIN_APPS_API_KEY=os.environ["PHASE31_INTEGRATION_KEY"],ADMINAPPS_TENANT_EVENT_KEY_SHA256=hashlib.sha256(os.environ["PHASE31_EVENT_KEY"].encode()).hexdigest(),ADMIN_APPS_BASE_URL=os.environ["ADMIN_APPS_BASE_URL"].rstrip("/")+"/api/integration")
-    os.execve(str(root/".venv/bin/python"),[str(root/".venv/bin/python"),str(root/"manage.py"),"runserver","--noreload",f"127.0.0.1:{os.environ['PORT']}"],env)
+    python = runtime_python(root, env)
+    os.execve(str(python),[str(python),str(root/"manage.py"),"runserver","--noreload",f"127.0.0.1:{os.environ['PORT']}"],env)
 
 
 if __name__=="__main__":
