@@ -1,0 +1,33 @@
+{
+  "status": "LIVE_EXECUTOR_CODE_PASS / INTEGRITY_RECONCILIATION_REQUIRED",
+  "scope": "Phase31_4 V2.5 live evidence executor bridge",
+  "guardrails": [
+    "No Retry 20 authorization consumption.",
+    "No Retry 20 execution.",
+    "No Phase 31.5 start.",
+    "The bridge only hands off to runtime composition; it does not trigger a formal clean retry execution unless explicitly allowed by the caller.",
+    "Fresh Stage EXT values are required; history/fixture-based fallback is rejected."
+  ],
+  "implementation_files": [
+    "backend/foundation/phase31_4_v2_5_live_executor.py",
+    "backend/foundation/test_phase31_4_v2_5_live_executor.py"
+  ],
+  "changes": [
+    "Added a fail-closed LiveExecutorError with concrete service codes in the error message.",
+    "Normalized the Stage EXT identity contract to the six required live identities: tenant, actor, tenant_projection, user_projection, organization, and process.",
+    "Ensured the executor validates and packages a CaptureBundle from fresh Stage EXT values only.",
+    "Allowed runtime handoff to inject a session proxy when the runtime stub is partial, while still preserving the no-execution contract unless explicitly enabled.",
+    "Kept the bridge independent from Retry 20 and from Phase 31.5 execution.",
+    "Verified the focused fix with the project Django test target."
+  ],
+  "verification": {
+    "command": "cd /home/felipe/proyectos/isosmart/backend && PYTHONPATH=/home/felipe/proyectos/isosmart/backend DJANGO_SETTINGS_MODULE=backend.settings /home/felipe/proyectos/isosmart/backend/.venv/bin/python -m django test foundation.test_phase31_4_v2_5_live_executor --verbosity 2",
+    "result": "9 tests ran, 9 passed",
+    "exit_code": 0
+  },
+  "reconciliation_required": {
+    "classification": "INTEGRITY_RECONCILIATION_REQUIRED",
+    "reason": "The bridge code and focused runtime contract tests are passing, but broader operational integrity and authorization reconciliation across the full repository ecosystem remain outside the isolated live-executor proof. This does not imply Retry 20 execution or Phase 31.5 activation; it means a wider repository integrity review is still required before broader operational claims.",
+    "status": "code-valid-but-not-fully-reconciled-at-enterprise-integrity-level"
+  }
+}

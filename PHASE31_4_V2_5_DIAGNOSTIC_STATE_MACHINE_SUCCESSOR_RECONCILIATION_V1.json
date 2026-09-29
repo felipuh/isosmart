@@ -1,0 +1,110 @@
+{
+  "schema": "phase31.4-v2.5-diagnostic-state-machine-successor-reconciliation/v1",
+  "artifact_id": "PHASE31_4_V2_5_DIAGNOSTIC_STATE_MACHINE_SUCCESSOR_RECONCILIATION_V1",
+  "generated_at": "2026-09-28T18:34:00-06:00",
+  "verdict": "DIAGNOSTIC_STATE_MACHINE_SUCCESSOR_RECONCILIATION_PASS",
+  "v7": {
+    "path": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V7.json",
+    "sha256": "44b161084700ae3892cb3e49d054de35ef1403409c69eeae9d370b46565d2ca8",
+    "preserved": true,
+    "protected_source_count": 28
+  },
+  "v8": {
+    "path": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V8.json",
+    "sha256": "ed7bed0108e790c93e0c40625b215dde02ae25566b2397533b11b6aae7040946",
+    "generation_id": "PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V8",
+    "protected_source_count": 28,
+    "successor_relation": "V8 is a verified successor of V7 for the explicitly reviewed diagnostic state-machine remediation."
+  },
+  "v7_blocker": "V7 correctly rejected the remediated runner SHA as protected-source drift until a reviewed successor was established.",
+  "root_cause": "The diagnostic graph replaced the formal READY successor set and omitted PRECREATION_RUNNING, although the operational diagnostic calls run_evidence and the formal graph already permitted READY -> PRECREATION_RUNNING.",
+  "corrected_graph": {
+    "diagnostic_ready_successors": ["PRECREATION_RUNNING", "COMPLETED", "FAILED"],
+    "formal_ready_successors": ["PRECREATION_RUNNING", "FAILED"],
+    "required_operational_order": ["READY", "PRECREATION_RUNNING", "PRECREATION_PASS", "STAGE_EXT_RUNNING"],
+    "failure_destination": "FAILED",
+    "explicit_allowlist": true,
+    "arbitrary_forward_transition": false,
+    "any_state_to_any_state": false,
+    "precreation_skip": false,
+    "stage_ext_before_precreation_pass": false,
+    "terminal_state_replay": false,
+    "cleanup_bypass": false
+  },
+  "ready_invariants": [
+    "allocation_state == SUCCEEDED",
+    "resources is a non-empty persisted mapping containing adminapps and isosmart",
+    "host_ports and database_names match resource cardinality and are unique",
+    "each resource has CREATED volume and network, RUNNING container, READY PostgreSQL, PASS connection, and SELECT 1 == 1",
+    "each resource host port and database identity is present in the persisted binding lists",
+    "each observed PostgreSQL version begins with postgres (PostgreSQL) 18.6",
+    "the on-disk atomic manifest remains at READY with the same revision and resources"
+  ],
+  "minimal_diagnostic_stop": {
+    "transition": "READY -> COMPLETED",
+    "caller": "DisposableEvidenceRunner.run_diagnostic",
+    "execution_kind_required": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+    "operational_diagnostic_uses": "run_evidence",
+    "formal_retry_uses": "run_evidence",
+    "mandatory_evidence_bypass": false
+  },
+  "manifest_history": {
+    "fields": ["from", "to", "at", "reason", "run_id", "run_slug", "execution_kind", "validation_attempt"],
+    "persistence": "temporary file write + file fsync + os.replace + parent-directory fsync",
+    "atomic_crash_safe": true
+  },
+  "source_evolution": {
+    "unchanged": 26,
+    "modified": 2,
+    "new": 0,
+    "removed": 0,
+    "missing": 0,
+    "unexpected": 0,
+    "modified_protected_sources": [
+      {"path":"backend/foundation/phase31_4_v2_5_disposable_runner.py","classification":"LEGITIMATE_DIAGNOSTIC_STATE_MACHINE_EVOLUTION","v7_sha256":"5d9a9cb42a28db33bc2df8c70652a98682eac90cc2b68c5c36d14b1e7dff40d9","v8_sha256":"376626b5a06d066f2c1f82f5b22dea136071fdd9a5f37fb732daa39101874fc5"},
+      {"path":"backend/foundation/phase31_4_integrity_generations.py","classification":"GOVERNANCE_ARTIFACT","v7_sha256":"c8ec3af921a13a02fcd983762623a29652a0898923f3add82b2b1a51c334c15b","v8_sha256":"f6ceb77e72d2f321f56379b6fe4c6c59444fba72f5aa21349623fed9f33f5684"}
+    ],
+    "test_only": [
+      "backend/foundation/test_phase31_4_v2_5_disposable_runner.py",
+      "backend/foundation/test_phase31_4_integrity_generations.py",
+      "backend/foundation/test_phase31_4_v2_5_precreation_integrity.py"
+    ],
+    "governance_artifacts": [
+      "PHASE31_4_V2_5_DIAGNOSTIC_STATE_MACHINE_REMEDIATION_V1.json",
+      "PHASE31_4_V2_5_DIAGNOSTIC_STATE_MACHINE_REMEDIATION_REPORT.md",
+      "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V8.json",
+      "PHASE31_4_V2_5_DIAGNOSTIC_STATE_MACHINE_SUCCESSOR_RECONCILIATION_V1.json",
+      "PHASE31_4_V2_5_DIAGNOSTIC_STATE_MACHINE_SUCCESSOR_RECONCILIATION_V1.md"
+    ],
+    "worktree_classification_rule": "Every current worktree difference not listed as state-machine evolution, test-only, or governance artifact above is UNRELATED_PREEXISTING. V7 SHA comparison is authoritative for protected-source drift.",
+    "unexpected_source_drift": []
+  },
+  "selected_sha256": {
+    "disposable_runner": "376626b5a06d066f2c1f82f5b22dea136071fdd9a5f37fb732daa39101874fc5",
+    "live_executor": "19b1a187949813d52cf8b94f56c45a6d8a7dda5954c637541e6ac97fb510d1f0",
+    "operational_adapters": "442c74eb180e6e9788d42f82c5861c91433f396cc84ad660443afe5bdbe05453",
+    "operational_actions_launcher": "fad970765a7e589d0a5f55df68d06618f912c7fdf241cccbd4296446a1959973",
+    "precreation": "9fc0efcc14fee9587a041b8c81dffde2d447f82e16d4df495571b7358cb854eb",
+    "runtime": "70997fb33eb22c9576cb7def0cd5ccdff9d61deebad4621072920b5acf5efb19",
+    "verifier": "61a6fa21f01c27bd6713154512045926c4d3d65d410d0d572922ea1ef21dc639",
+    "adminapps_client": "9edceb9510fd70e1c2c5e7c1c7040a8c16d74a26f8c143abce62b976f4e6639a",
+    "settings": "eeede9b7588f2d5c88ec717dcec1a5f3ed46e97cf183125dcaadfdfe1d6be613",
+    "integrity_generation_guard": "f6ceb77e72d2f321f56379b6fe4c6c59444fba72f5aa21349623fed9f33f5684"
+  },
+  "migration_integrity": {"v2_4":"23/23 PASS","v2_5":"24/24 PASS","pending":0,"new":0,"fake":0,"manual_patches":0,"makemigrations_check_dry_run":"PASS"},
+  "tests": {
+    "focused": {"total":112,"passed":112,"failures":0,"errors":0},
+    "integrity": {"total":13,"passed":13,"failures":0,"errors":0},
+    "full_backend_regression": {"total":559,"passed":559,"failures":0,"errors":0}
+  },
+  "scope_limits": {"live_diagnostic_attempts":0,"podman":false,"postgresql_allocated":false,"django_service_started":false,"authorization_created_or_consumed":false},
+  "checkpoint": {"source_integrity":"PASS","p0":0,"p1":0},
+  "operational_readiness": "NOT_READY",
+  "stage_ext": "LIVE_REVALIDATION_PENDING",
+  "last_diagnostic": "0/6 / 3 of 3 exhausted",
+  "retry_20_authorization": "NONE",
+  "retry_20_executed": "NO",
+  "phase31_5": "EXECUTION_HELD",
+  "new_diagnostic_cycle_readiness": "READY_FOR_NEW_V8_OPERATIONAL_DIAGNOSTIC_CYCLE",
+  "exact_next_step": "Authorize one separately bounded V8 operational diagnostic cycle."
+}

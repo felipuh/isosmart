@@ -1,0 +1,148 @@
+{
+  "artifact_schema": "phase31.4-v2.5-diagnostic-state-machine-remediation/v1",
+  "artifact_id": "PHASE31_4_V2_5_DIAGNOSTIC_STATE_MACHINE_REMEDIATION_V1",
+  "generated_at": "2026-09-24T18:17:21Z",
+  "verdict": "DIAGNOSTIC_STATE_MACHINE_CODE_PASS / INTEGRITY_RECONCILIATION_REQUIRED",
+  "scope": {
+    "live_diagnostic_executed": false,
+    "retry_20_executed": false,
+    "retry_20_authorization_created": false,
+    "stage_ext_executed": false,
+    "phase_31_5": "EXECUTION_HELD"
+  },
+  "attempt_3_blocker": {
+    "cycle": "V7 NEW CYCLE",
+    "attempt": 3,
+    "furthest_boundary": "POSTGRES_READY",
+    "rejected_transition": "READY -> PRECREATION_RUNNING",
+    "error": "INVALID_STATE_TRANSITION",
+    "postgresql_readiness": "PASS for adminapps and isosmart",
+    "cleanup": "PASS"
+  },
+  "root_cause": {
+    "state_model_source": "backend/foundation/phase31_4_v2_5_disposable_runner.py",
+    "validator": "DisposableEvidenceRunner._transition",
+    "caller": "DisposableEvidenceRunner.run_evidence",
+    "diagnostic_caller": "docs/governance/tools/run_phase31_4_v2_5_operational_diagnostic.py",
+    "explanation": "DIAGNOSTIC_TRANSITIONS copied EVIDENCE_TRANSITIONS and then replaced every READY successor with COMPLETED and FAILED. The operational diagnostic legitimately calls run_evidence, which requires READY -> PRECREATION_RUNNING, so the diagnostic-only override rejected the protected operational path that the formal graph already allowed."
+  },
+  "transition_graph": {
+    "old_diagnostic_ready_successors": [
+      "COMPLETED",
+      "FAILED"
+    ],
+    "corrected_diagnostic_ready_successors": [
+      "PRECREATION_RUNNING",
+      "COMPLETED",
+      "FAILED"
+    ],
+    "operational_success_path": [
+      "AUTHORIZED",
+      "ALLOCATING",
+      "RESOURCES_ALLOCATED",
+      "BOOTSTRAPPING",
+      "READY",
+      "PRECREATION_RUNNING",
+      "PRECREATION_PASS",
+      "STAGE_EXT_RUNNING",
+      "STAGE_EXT_PASS",
+      "COMPLETED",
+      "TEARDOWN_COMPLETE"
+    ],
+    "failure_path": [
+      "FAILED",
+      "TEARDOWN_COMPLETE"
+    ],
+    "minimal_diagnostic_intentional_stop_preserved": "READY -> COMPLETED -> TEARDOWN_COMPLETE",
+    "global_relaxation": false
+  },
+  "ready_to_precreation_invariants": [
+    "allocation_state is SUCCEEDED",
+    "adminapps and isosmart resources are both present",
+    "host-port and database-name bindings are complete and unique",
+    "every volume and network is CREATED",
+    "every container is RUNNING",
+    "every PostgreSQL version starts with postgres (PostgreSQL) 18.6",
+    "every PostgreSQL status is READY",
+    "every connection result is PASS and SELECT 1 equals 1",
+    "the on-disk atomic resource manifest is at READY with the current revision and resources"
+  ],
+  "state_history": {
+    "atomic_manifest": "RESOURCE_MANIFEST.json",
+    "per_transition_fields": [
+      "sequence",
+      "from",
+      "to",
+      "reason",
+      "at",
+      "run_id",
+      "run_slug",
+      "execution_kind",
+      "validation_attempt"
+    ],
+    "invisible_state_changes_allowed": false
+  },
+  "tests": {
+    "focused_functional": {
+      "command": ".venv/bin/python manage.py test foundation.test_phase31_4_v2_5_disposable_runner foundation.test_phase31_4_v2_5_live_executor --verbosity 1",
+      "total": 33,
+      "passed": 33,
+      "failed": 0,
+      "errors": 0
+    },
+    "focused_with_precreation": {
+      "command": ".venv/bin/python manage.py test foundation.test_phase31_4_v2_5_disposable_runner foundation.test_phase31_4_v2_5_live_executor foundation.test_phase31_4_v2_5_precreation_integrity --verbosity 1",
+      "total": 43,
+      "passed": 41,
+      "failed": 2,
+      "errors": 0,
+      "classification": "The two PRECREATION failures are expected fail-closed responses to the deliberate protected-source drift."
+    },
+    "integrity_guard": {
+      "command": ".venv/bin/python manage.py test foundation.test_phase31_4_integrity_generations --verbosity 1",
+      "total": 12,
+      "passed": 10,
+      "failed": 0,
+      "errors": 2,
+      "classification": "Both errors are the expected V7 protected-source drift for the remediated runner."
+    },
+    "full_backend_regression": {
+      "command": ".venv/bin/python manage.py test --verbosity 1",
+      "total": 558,
+      "passed": 552,
+      "failed": 2,
+      "errors": 4,
+      "unrelated_functional_failures": 0,
+      "classification": "All six non-passing tests derive from the expected V7 protected-source drift; no unrelated functional regression was observed."
+    }
+  },
+  "modified_files": [
+    {
+      "path": "backend/foundation/phase31_4_v2_5_disposable_runner.py",
+      "sha256_after": "376626b5a06d066f2c1f82f5b22dea136071fdd9a5f37fb732daa39101874fc5",
+      "v7_protected": true
+    },
+    {
+      "path": "backend/foundation/test_phase31_4_v2_5_disposable_runner.py",
+      "sha256_after": "5df6ad3b0d56ebff579243f340575b104f84ef41e2398207db3b573e2f298757",
+      "v7_protected": false
+    },
+    {
+      "path": "PHASE31_4_V2_5_DIAGNOSTIC_STATE_MACHINE_REMEDIATION_V1.json",
+      "v7_protected": false
+    },
+    {
+      "path": "PHASE31_4_V2_5_DIAGNOSTIC_STATE_MACHINE_REMEDIATION_REPORT.md",
+      "v7_protected": false
+    }
+  ],
+  "integrity_impact": {
+    "authoritative_generation": "PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V7.json",
+    "authoritative_generation_sha256_unchanged": "44b161084700ae3892cb3e49d054de35ef1403409c69eeae9d370b46565d2ca8",
+    "previous_status": "28/28 PASS",
+    "current_status": "INTEGRITY_RECONCILIATION_REQUIRED",
+    "v7_updated": false
+  },
+  "stage_ext": "LIVE_REVALIDATION_PENDING / last diagnostic 0/6",
+  "exact_next_step": "Perform a V8 successor integrity reconciliation before opening a new operational diagnostic cycle."
+}

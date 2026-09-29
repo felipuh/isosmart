@@ -1,0 +1,86 @@
+{
+  "target_path": "backend/foundation/phase31_4_v2_5_runtime.py",
+  "target_predecessor_sha256": "5be7650ac78eae653f4e6cd0b656ab0ccd9556a75f9c41cb3edd512d6a012cfd",
+  "current_sha256": "7ed7430abe798d6fd31b2bc27344abde35a7ab7df9e2ef13b51f1ddb7b03fd00",
+  "recovery_status": "EXACT_PREDECESSOR_NOT_FOUND",
+  "recovery_source": null,
+  "git_commit": null,
+  "git_ref": null,
+  "git_blob_id": null,
+  "current_git_commit": "0d2ddfdead408b7cc6cb9c6dbc08707281cb9fb7",
+  "current_git_blob_id": "e683d3012d5c3f561f8719faa67a4ebd26fb446b",
+  "exact_match_verification": {
+    "performed": true,
+    "match": false,
+    "matching_git_blob_found": false,
+    "matching_workspace_file_found": false
+  },
+  "recovery_method": "READ_ONLY_FORENSIC_SEARCH",
+  "provenance_classification": null,
+  "recovered_artifact_path": null,
+  "search_locations_checked": [
+    "current branch history",
+    "all local and remote refs",
+    "tags",
+    "HEAD and all available reflogs",
+    "path history for the target file",
+    "merge-base-reachable history through refs and reflogs",
+    "registered Git worktrees",
+    "all stashes",
+    "reachable and unreachable Git objects",
+    "dangling commits, trees, and blobs from git fsck",
+    "all local Git blobs hashed with SHA-256",
+    "repository-local backup, orig, bak, patch, diff, snapshot, and recovery candidates",
+    "repository-local and workspace-local files hashed with SHA-256",
+    "governance evidence and verifier-remediation reports"
+  ],
+  "git_findings": {
+    "path_history_commits": [
+      "0d2ddfdead408b7cc6cb9c6dbc08707281cb9fb7"
+    ],
+    "path_history_blob_ids": [
+      "e683d3012d5c3f561f8719faa67a4ebd26fb446b"
+    ],
+    "dangling_objects": [
+      "unreachable blob 360879612e111ba39538231592b68a8765c8022b",
+      "unreachable commit 96b9f7c9c31391f60e8026ac6f01a6dbcae1435c",
+      "unreachable commit c9fa0af8ebab59c5a0908e7b776bd00bd9e32780",
+      "unreachable tree 9b91bba405c9f5129bc1accca8cf729fb4d799fe"
+    ],
+    "dangling_blob_sha256": {
+      "360879612e111ba39538231592b68a8765c8022b": "d0cb2cc9175ca220562fc0e01b989931b00ed853ed469de7cfef606d54c1d12f"
+    },
+    "all_git_blobs_target_matches": 0
+  },
+  "diff_classification": {
+    "performed": false,
+    "reason": "The exact predecessor blob was not recovered; an authoritative predecessor-to-current diff cannot be computed.",
+    "verifier_remediation_expected_count": 0,
+    "unrelated_change_count": 0,
+    "ambiguous_change_count": 0,
+    "unrelated_changes": [],
+    "ambiguous_changes": []
+  },
+  "execution_controls": {
+    "product_code_modified_by_this_task": false,
+    "manifests_modified_by_this_task": false,
+    "v2_4_modified": false,
+    "retry_16_artifacts_modified": false,
+    "new_integrity_generation_created": false,
+    "retry_17_executed": false,
+    "phase_31_5_executed": false,
+    "live_retry_executed": false
+  },
+  "working_tree_observation": {
+    "runtime_status_at_validation": "modified; pre-existing working-tree change, not modified by this task",
+    "pre_existing_governance_artifacts": "present; not modified by this task"
+  },
+  "forensic_verdict": "EXACT_PREDECESSOR_NOT_FOUND",
+  "ready_for_integrity_reconciliation_retry": false,
+  "timestamp_utc": "2026-09-23T03:29:21Z",
+  "notes": [
+    "No exact SHA-256 match was found in Git history, reflogs, stashes, worktrees, Git objects, or searched local artifacts.",
+    "No recovery copy was created because no authoritative exact blob was found.",
+    "Phase 31.5 and live retry execution remain held."
+  ]
+}

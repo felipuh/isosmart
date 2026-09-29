@@ -1,0 +1,14 @@
+{
+  "authorization_status": "RUNNER_ENVIRONMENT_DIAGNOSTIC_AUTHORIZED",
+  "canonical_run_slug": "Phase_31.4_V2.5_Runner_Environment_Diagnostic_20260923",
+  "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+  "integrity": {
+    "artifact_path": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V4.json",
+    "sha256": "960f2a133f72e939842762986ce3ad43762302b0caa447799732740fc4571f25"
+  },
+  "one_shot": true,
+  "run_executed": "NO",
+  "run_id": "Phase 31.4 V2.5 Runner Environment Diagnostic 20260923",
+  "validation_attempt": 1,
+  "evidence_root": "docs/governance/evidence/runs/Phase_31.4_V2.5_Runner_Environment_Diagnostic_20260923"
+}
