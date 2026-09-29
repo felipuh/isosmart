@@ -1,0 +1,59 @@
+{
+  "verdict": "V11_ATTEMPT_2_FAIL",
+  "attempt_1": "CONSUMED / FAIL; evidence unchanged",
+  "attempt_2": "CONSUMED / FAIL",
+  "attempt_3": "NOT_STARTED",
+  "dependency_parity": "PASS",
+  "remediation_count": 1,
+  "remediation_commit": "7b45775192c8d9f8906d9e2b00cedde2e8cae0a7",
+  "execution_git_head": "7b45775192c8d9f8906d9e2b00cedde2e8cae0a7",
+  "worktree_clean_before_authorization": true,
+  "root_cause_classification": "DISPOSABLE_DEPENDENCY_INSTALLATION_GAP_CONFIRMED",
+  "tests": {
+    "focused": 50,
+    "focused_pass": 50,
+    "isosmart": 575,
+    "isosmart_pass": 575,
+    "adminapps": 180,
+    "adminapps_pass": 180,
+    "operational_boundary": 2,
+    "operational_boundary_pass": 2
+  },
+  "integrity": {
+    "path": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V12.json",
+    "sha256": "685e04fa2e94513c357bbd6d333c2fe785e967b172234cd93faae777e25f79c2",
+    "status": "PASS"
+  },
+  "reconciliation": {
+    "path": "docs/governance/evidence/PHASE31_4_V2_5_ADMINAPPS_DEPENDENCY_PARITY_SUCCESSOR_RECONCILIATION_V1.json",
+    "sha256": "8e1a0c0febdf9c06ec34d3abc062dcf595574ef89decc0f938771cbcd1e8318c"
+  },
+  "authorization": {
+    "path": "docs/governance/evidence/PHASE31_4_V2_5_V11_OPERATIONAL_DIAGNOSTIC_CYCLE_1_ATTEMPT_2_AUTHORIZATION_V1.json",
+    "sha256": "7d085832f05bef5498f029eaa59f7bc3fbddf62c9f0cd515c10ad0198ad40c23",
+    "status": "CONSUMED"
+  },
+  "preflight": "PASS",
+  "ADMINAPPS_DISPOSABLE_DJANGO_SETUP": "PASS",
+  "postgresql": "PASS; both 18.6 and SELECT 1",
+  "migrations": {
+    "adminapps": 0,
+    "isosmart": 0
+  },
+  "precreation": "PASS",
+  "adminapps_authority": "PASS",
+  "adminapps_readiness": "PASS; GET /api/integration/health/ HTTP 200",
+  "bearer_issuance": "PASS",
+  "isosmart_readiness": "PASS; canonical authenticated DB-aware /health HTTP 200",
+  "stage_ext": "NOT_COMPLETE; 0/6 formally certified; tenant/actor authority readbacks separately demonstrated",
+  "capture_bundle": "NOT_CREATED",
+  "new_blocker": "foundation.models.TenantProjection.DoesNotExist: TenantProjection matching query does not exist.",
+  "teardown": "PASS",
+  "zero_residual_resources": true,
+  "RAW_CREDENTIAL_LEAKS": 0,
+  "current_retry20_authorization": "NONE",
+  "retry20_executed": false,
+  "historical_retry20_authorization": "SUPERSEDED_UNCONSUMED",
+  "phase31_5": "EXECUTION_HELD",
+  "historical_files_byte_identical": 15
+}

@@ -1,0 +1,7 @@
+{
+  "canonical_manifest": "/home/felipe/proyectos/adminapps/backend/requirements.txt",
+  "manifest_sha256": "cf804dcb0092c3daaa97831806e1eefa2c91edcabdb1a7e4f9ca21dea7bfb29f",
+  "interpreter": "/tmp/phase31-adminapps-runtime-3w7lk3sg/bin/python",
+  "environment_type": "isolated_temporary_venv",
+  "system_site_packages": false
+}
