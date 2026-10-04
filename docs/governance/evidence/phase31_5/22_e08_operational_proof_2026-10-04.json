@@ -1,0 +1,32 @@
+{
+  "evidence_id": "22",
+  "date": "2026-10-04",
+  "phase_state": "EXECUTION_HELD",
+  "frozen_evidence": {"manifest": "18_sha256.json", "status": "not modified by this cycle"},
+  "executed": {
+    "postgresql_regression": "PASS — 32/32; RLS, persistence, outbox, lineage and idempotency; disposable resources cleaned",
+    "rollback_acceptance": "PASS — 18 assertions",
+    "backup_restore": "PASS — synthetic archive, pg_restore list, SHA-256 verification, fresh database restore, production encryption refusal, invalid manifest rejection",
+    "frontend_build": "PASS",
+    "frontend_lint": "PASS",
+    "django_check_test_settings": "PASS",
+    "shell_syntax": "PASS",
+    "git_diff_check": "PASS"
+  },
+  "corrected_defects": [
+    "PostgreSQL healthcheck now uses PostgreSQL image variables; redundant DB credential aliases removed from the deployment example and Django supports the canonical variables.",
+    "Unused Redis service removed; web port is loopback-bound.",
+    "Worker requires explicit enablement and exact deployment-configured tenant identifier.",
+    "PostgreSQL regression tests restored RLS context and migration-leaf assertions; WP2 acceptance fixture now supplies complete precondition evidence and asserts immutable rollback idempotency."
+  ],
+  "prerequisites": {
+    "P1-31_5-ENTRY-SQLITE-OPERATIONAL-ESCAPE": "CLOSED (preserved)",
+    "P1-31_5-ENTRY-BACKUP-NOT-IMPLEMENTED": "CLOSED — local executable proof",
+    "P1-31_5-ENTRY-DEPLOYMENT-REPRODUCIBILITY": "OPEN — no Compose provider and Python base image absent; container build/startup not executed",
+    "P1-31_5-ENTRY-JWT-LOCALSTORAGE": "OPEN — frontend static/build evidence exists but required PostgreSQL-backed cookie/CSRF/refresh/logout runtime suite was not executed",
+    "P1-31_5-ENTRY-WORKER-OUTBOX-OPERABILITY": "OPEN — existing PostgreSQL test covers functional failure/retry/idempotency; command lifecycle, concurrent workers and signal shutdown were not independently executed"
+  },
+  "e07": "FAIL — AUTHENTIC ROTATION EVIDENCE REQUIRED",
+  "e08": "FAIL — three executable proof requirements remain",
+  "external_effects": {"adminapps": 0, "production": 0, "staging": 0, "external_api": 0, "external_delivery": 0, "customer_data": 0}
+}

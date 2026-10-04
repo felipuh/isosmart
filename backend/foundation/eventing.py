@@ -11,7 +11,14 @@ from django.utils import timezone
 
 from .audit import AuditAppend, AuditWriterService
 from .canonical import canonical_hash
-from .models import ConsumerReceipt, DomainEvent, Organization, TransactionalOutbox
+from .models import (
+    ConsumerReceipt,
+    DomainEvent,
+    Organization,
+    QuizAttempt,
+    TransactionalOutbox,
+)
+from .onboarding import OnboardingWorkflowService
 from .tenant_context import trusted_tenant_context
 
 
@@ -127,12 +134,19 @@ class OutboxDeliveryService:
         self.using = using
         self.lease_duration = lease_duration or timedelta(minutes=5)
 
-    def claim_next(self, *, identity, worker_id, trace_id):
+    def claim_next(self, *, identity, worker_id, trace_id, event_type=None):
         with trusted_tenant_context(
             identity, actor_id=worker_id, trace_id=trace_id, using=self.using
         ):
+            candidates = TransactionalOutbox.objects.using(self.using)
+            if event_type is not None:
+                # A subquery avoids locking the immutable event and avoids
+                # Django 4.2's schema-qualified FOR UPDATE OF rendering.
+                candidates = candidates.filter(domain_event_id__in=DomainEvent.objects.using(self.using).filter(
+                    event_type=event_type,
+                ).values("event_id"))
             row = (
-                TransactionalOutbox.objects.using(self.using)
+                candidates
                 .select_for_update(skip_locked=True)
                 .filter(
                     available_at__lte=timezone.now(),
@@ -278,3 +292,98 @@ class ReplayService:
                     },
                 )
             )
+
+
+class FoundationCompletionConsumer:
+    """Idempotent downstream consumer for the Foundation Gate unlock."""
+
+    consumer_name = "onboarding.foundation_completion"
+    event_type = "iso9000.foundation.completed"
+
+    def __init__(self, *, using="worker"):
+        self.using = using
+        self.read_using = "app"
+
+    def consume(self, *, identity, event_id, payload, actor_id, trace_id):
+        attempt_id = payload.get("attempt_id") if isinstance(payload, dict) else None
+        if not attempt_id:
+            raise ValueError("Foundation completion payload requires attempt_id")
+        with trusted_tenant_context(identity, actor_id=actor_id, trace_id=trace_id, using=self.read_using):
+            event = DomainEvent.objects.using(self.read_using).get(
+                event_id=event_id, tenant_id=identity.tenant_id, event_type=self.event_type, schema_version=1,
+            )
+            if event.payload_hash != canonical_hash(payload) or event.payload != payload:
+                raise PayloadIntegrityConflict("Foundation payload does not match the persisted event")
+
+        def handle(received):
+            with trusted_tenant_context(
+                identity, actor_id=actor_id, trace_id=trace_id, using=self.read_using,
+            ):
+                attempt = QuizAttempt.objects.using(self.read_using).get(
+                    id=received["attempt_id"], tenant_id=identity.tenant_id, passed=True,
+                )
+                _, _, duplicate = OnboardingWorkflowService(using=self.read_using).transition(
+                    identity=identity, user_id=attempt.user_id, step_key="foundation_gate",
+                    to_status="complete", event_id=event_id, event_type=self.event_type,
+                    source_reference=f"domain_event:{event_id}", actor_id=actor_id, trace_id=trace_id,
+                    state={"attempt_id": str(attempt.id), "question_bank_version": attempt.question_bank_version},
+                )
+                if duplicate:
+                    return
+                AuditWriterService(using=self.read_using).append(AuditAppend(
+                    tenant_id=identity.tenant_id,
+                    stream_type="onboarding",
+                    stream_id=attempt.id,
+                    actor_type="consumer",
+                    actor_id=str(actor_id),
+                    action="onboarding.foundation_unlocked",
+                    entity_type="quiz_attempt",
+                    entity_id=attempt.id,
+                    trace_id=trace_id,
+                    occurred_at=timezone.now(),
+                    metadata={
+                        "consumer_name": self.consumer_name,
+                        "event_id": str(event_id),
+                        "question_bank_version": attempt.question_bank_version,
+                        "provenance_hash": attempt.provenance_hash,
+                    },
+                ))
+
+        return ConsumerReceiptService(using=self.using).receive(
+            identity=identity,
+            consumer_name=self.consumer_name,
+            event_id=event_id,
+            payload=payload,
+            trace_id=trace_id,
+            handler=handle,
+        )
+
+
+class FoundationCompletionDelivery:
+    """Deliver persisted Foundation outbox events to the local consumer.
+
+    Failures retain a retryable outbox row. A lost receipt after the application
+    commit replays the exact transition without duplicating its audit record.
+    Other event families are not claimed by this dispatcher.
+    """
+
+    def deliver_next(self, *, identity, worker_id, trace_id):
+        delivery = OutboxDeliveryService()
+        outbox_id = delivery.claim_next(identity=identity, worker_id=worker_id, trace_id=trace_id,
+                                        event_type=FoundationCompletionConsumer.event_type)
+        if outbox_id is None:
+            return None
+        try:
+            with trusted_tenant_context(identity, actor_id=worker_id, trace_id=trace_id, using="worker"):
+                row = TransactionalOutbox.objects.using("worker").select_related("domain_event").get(id=outbox_id)
+                event = row.domain_event
+            result = FoundationCompletionConsumer().consume(
+                identity=identity, event_id=event.event_id, payload=event.payload,
+                actor_id=worker_id, trace_id=event.trace_id,
+            )
+            delivery.mark_published(identity=identity, outbox_id=outbox_id, worker_id=worker_id, trace_id=trace_id)
+            return result
+        except Exception:
+            delivery.mark_failed(identity=identity, outbox_id=outbox_id, worker_id=worker_id,
+                                 trace_id=trace_id, error_code="FOUNDATION_DELIVERY_FAILED")
+            raise

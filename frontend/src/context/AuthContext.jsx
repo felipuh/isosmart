@@ -1,6 +1,6 @@
 /**
  * AuthContext - Contexto de Autenticación para ISO Smart
- * Maneja el estado de autenticación, tokens JWT y usuario actual
+ * Maneja el estado de autenticación mediante cookies HttpOnly.
  */
 
 /* eslint-disable react-refresh/only-export-components */
@@ -8,26 +8,6 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import api from '../services/api';
 import { useI18n } from './I18nContext';
-
-const getTokenPayload = (token) => {
-  if (!token) return null;
-  const parts = token.split('.');
-  if (parts.length !== 3) return null;
-  try {
-    const payload = parts[1].replace(/-/g, '+').replace(/_/g, '/');
-    const decoded = atob(payload);
-    return JSON.parse(decoded);
-  } catch {
-    return null;
-  }
-};
-
-const isTokenExpired = (token) => {
-  const payload = getTokenPayload(token);
-  if (!payload || !payload.exp) return true;
-  const nowSeconds = Math.floor(Date.now() / 1000);
-  return payload.exp <= nowSeconds;
-};
 
 const clearOnboardingSessionFlags = () => {
   if (typeof window === 'undefined') {
@@ -79,38 +59,15 @@ export const AuthProvider = ({ children }) => {
     setIsAuthenticated(true);
   };
 
-  // Verificar token existente
+  // Verify the server-managed session on initial load.
   const checkAuth = async () => {
     if (window.location.pathname === '/login') {
       setLoading(false);
       return;
     }
 
-    const token = localStorage.getItem('access_token');
-    const refreshTokenValue = localStorage.getItem('refresh_token');
-    
-    if (!token) {
-      setLoading(false);
-      return;
-    }
-
-    if (!refreshTokenValue || isTokenExpired(refreshTokenValue)) {
-      clearAuth();
-      setLoading(false);
-      return;
-    }
-
     try {
-      if (token && isTokenExpired(token)) {
-        localStorage.removeItem('access_token');
-      } else if (token) {
-        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      }
-
-      const refreshed = await refreshToken({ reloadUser: true });
-      if (!refreshed) {
-        clearAuth();
-      }
+      await loadCurrentUser();
     } catch (error) {
       console.error('Error verificando autenticación:', error);
       clearAuth();
@@ -128,17 +85,9 @@ export const AuthProvider = ({ children }) => {
         payload.organization_id = organizationId;
       }
 
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('refresh_token');
-      delete api.defaults.headers.common['Authorization'];
-
+      await api.get('/auth/csrf/');
       const response = await api.post('/auth/login/', payload);
-      const { access, refresh, user: userData, profile: profileData, organizations: orgs } = response.data;
-
-      // Guardar tokens
-      localStorage.setItem('access_token', access);
-      localStorage.setItem('refresh_token', refresh);
-      api.defaults.headers.common['Authorization'] = `Bearer ${access}`;
+      const { user: userData, profile: profileData, organizations: orgs } = response.data;
 
       // Actualizar estado
       setUser(userData);
@@ -186,10 +135,7 @@ export const AuthProvider = ({ children }) => {
   // Logout
   const logout = async () => {
     try {
-      const refresh = localStorage.getItem('refresh_token');
-      if (refresh) {
-        await api.post('/auth/logout/', { refresh });
-      }
+      await api.post('/auth/logout/');
     } catch (error) {
       console.error('Error en logout:', error);
     } finally {
@@ -199,10 +145,7 @@ export const AuthProvider = ({ children }) => {
 
   // Limpiar autenticación
   const clearAuth = () => {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
     clearOnboardingSessionFlags();
-    delete api.defaults.headers.common['Authorization'];
     setUser(null);
     setProfile(null);
     setOrganizations([]);
@@ -213,26 +156,8 @@ export const AuthProvider = ({ children }) => {
 
   // Refresh token
   const refreshToken = async ({ reloadUser = true } = {}) => {
-    const refresh = localStorage.getItem('refresh_token');
-    
-    if (!refresh) {
-      return false;
-    }
-
-    if (isTokenExpired(refresh)) {
-      clearAuth();
-      return false;
-    }
-
     try {
-      const response = await api.post('/auth/refresh/', { refresh });
-      const { access, refresh: newRefresh } = response.data;
-
-      localStorage.setItem('access_token', access);
-      if (newRefresh) {
-        localStorage.setItem('refresh_token', newRefresh);
-      }
-      api.defaults.headers.common['Authorization'] = `Bearer ${access}`;
+      await api.post('/auth/refresh/');
 
       if (reloadUser) {
         await loadCurrentUser();
@@ -251,12 +176,7 @@ export const AuthProvider = ({ children }) => {
         organization_id: organizationId,
       });
 
-      const { access, refresh, profile: profileData, organizations: orgs } = response.data;
-
-      // Actualizar tokens
-      localStorage.setItem('access_token', access);
-      localStorage.setItem('refresh_token', refresh);
-      api.defaults.headers.common['Authorization'] = `Bearer ${access}`;
+      const { profile: profileData, organizations: orgs } = response.data;
 
       // Actualizar estado
       setProfile(profileData);

@@ -107,7 +107,7 @@ class RiskOpportunityObjectiveCommandService:
         with trusted_tenant_context(identity, actor_id=actor_id, trace_id=trace_id, using=self.using):
             if organization_id is None:
                 organization_id = Process.objects.using(self.using).get(pk=fields["process_id"]).organization_id
-            Organization.objects.using(self.using).get(pk=organization_id)
+            Organization.objects.using(self.using).only("id").get(pk=organization_id)
             row = model.objects.using(self.using).create(
                 id=entity_id,
                 tenant_id=identity.tenant_id,

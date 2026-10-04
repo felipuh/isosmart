@@ -1,0 +1,36 @@
+services:
+  database:
+    image: postgres:16.4-bookworm
+    env_file: ../backend/.env.production
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+    restart: unless-stopped
+  migrate:
+    build: { context: .., dockerfile: deploy/Dockerfile }
+    env_file: ../backend/.env.production
+    command: ["python", "manage.py", "migrate", "--noinput"]
+    depends_on:
+      database: { condition: service_healthy }
+    restart: "no"
+  web:
+    build: { context: .., dockerfile: deploy/Dockerfile }
+    env_file: ../backend/.env.production
+    depends_on:
+      migrate: { condition: service_completed_successfully }
+    ports: ["127.0.0.1:8000:8000"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+  outbox-worker:
+    build: { context: .., dockerfile: deploy/Dockerfile }
+    env_file: ../backend/.env.production
+    command: ["sh", "-c", "python manage.py run_outbox_worker --tenant-id $$WORKER_TENANT_ID"]
+    depends_on:
+      migrate: { condition: service_completed_successfully }
+    restart: unless-stopped

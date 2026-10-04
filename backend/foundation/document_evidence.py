@@ -20,13 +20,17 @@ from .models import (
     TransactionalOutbox,
 )
 from .qms_context import MaterialMutationResult
-from .tenant_context import trusted_tenant_context
+from .tenant_context import (
+    bind_trusted_tenant_context_in_transaction,
+    trusted_tenant_context,
+)
 
 
 EVENT_CONTRACTS = {
     "document.created": 1,
     "document.metadata_revised": 1,
     "document.version_created": 1,
+    "document.updated": 1,
     "evidence.created": 1,
     "evidence.superseded": 1,
 }
@@ -59,14 +63,14 @@ class DocumentEvidenceCommandService:
         self.using = using
 
     def _emit(self, *, identity, aggregate_type, aggregate_id, event_type, payload,
-              actor_id, trace_id, occurred_at, before=None, after=None):
+              actor_id, trace_id, occurred_at, before=None, after=None, event_id=None):
         normalized_payload = json.loads(canonical_json(payload))["value"]
         aggregate_version = (
             DomainEvent.objects.using(self.using)
             .filter(aggregate_type=aggregate_type, aggregate_id=aggregate_id)
             .aggregate(value=Max("aggregate_version"))["value"] or 0
         ) + 1
-        event_id = uuid4()
+        event_id = event_id or uuid4()
         DomainEvent.objects.using(self.using).create(
             event_id=event_id, tenant_id=identity.tenant_id, event_type=event_type,
             schema_version=EVENT_CONTRACTS[event_type], aggregate_type=aggregate_type,
@@ -155,6 +159,16 @@ class DocumentEvidenceCommandService:
                 }}, actor_id=actor_id, trace_id=trace_id, occurred_at=occurred_at,
                 before=before, after=after,
             )
+            updated_event = self._emit(
+                identity=identity, aggregate_type="document", aggregate_id=row.id,
+                event_type="document.updated",
+                payload={"document_id": str(row.id), "changes": {
+                    key: {"before": before[key], "after": after[key]}
+                    for key in ("document_type", "owner_id") if before[key] != after[key]
+                }, "current_version_id": str(row.current_version_id) if row.current_version_id else None},
+                actor_id=actor_id, trace_id=trace_id, occurred_at=occurred_at,
+                before=before, after=after,
+            )
             if fail_before_commit: raise RuntimeError("deliberate Phase 7 rollback before commit")
             return MaterialMutationResult(row.id, row.id, *emitted, trace_id)
 
@@ -181,6 +195,20 @@ class DocumentEvidenceCommandService:
                 payload={"document_id": str(document.id), "document_version_id": str(row.id), "state": state},
                 actor_id=actor_id, trace_id=trace_id, occurred_at=occurred_at, after=state,
             )
+            self._emit(
+                identity=identity, aggregate_type="document", aggregate_id=document.id,
+                event_type="document.updated",
+                payload={
+                    "document_id": str(document.id),
+                    "changes": {"current_version_id": {
+                        "before": str(row.predecessor_id) if row.predecessor_id else None,
+                        "after": str(row.id),
+                    }},
+                    "document_version_id": str(row.id),
+                    "content_hash": row.content_hash,
+                }, actor_id=actor_id, trace_id=trace_id,
+                occurred_at=occurred_at, after=state,
+            )
             if fail_before_commit: raise RuntimeError("deliberate Phase 7 rollback before commit")
             return MaterialMutationResult(entity_id, document.id, *emitted, trace_id)
 
@@ -196,31 +224,49 @@ class DocumentEvidenceCommandService:
 
     def create_evidence(self, *, identity, organization_id, source_type, captured_at,
                         actor_id, trace_id, source_uri=None, content_hash=None,
-                        trust_score=None, document_version_id=None,
+                        trust_score=None, document_version_id=None, event_id=None,
                         change_reason=None, fail_before_commit=False):
-        trace_id = UUID(str(trace_id)); occurred_at = timezone.now(); entity_id = uuid4()
         with trusted_tenant_context(identity, actor_id=actor_id, trace_id=trace_id, using=self.using):
-            Organization.objects.using(self.using).get(pk=organization_id)
-            source_type, source_uri, content_hash = self._source(
-                document_version_id=document_version_id, source_type=source_type,
-                source_uri=source_uri, content_hash=content_hash,
+            return self.create_evidence_in_current_transaction(
+                identity=identity, organization_id=organization_id, source_type=source_type,
+                captured_at=captured_at, actor_id=actor_id, trace_id=trace_id,
+                source_uri=source_uri, content_hash=content_hash, trust_score=trust_score,
+                document_version_id=document_version_id, event_id=event_id,
+                change_reason=change_reason,
+                fail_before_commit=fail_before_commit,
             )
-            row = Evidence.objects.using(self.using).create(
-                id=entity_id, tenant_id=identity.tenant_id, organization_id=organization_id,
-                lineage_id=entity_id, revision=1, source_type=source_type,
-                source_uri=source_uri, content_hash=content_hash, captured_at=captured_at,
-                trust_score=Decimal(str(trust_score)) if trust_score is not None else None,
-                document_version_id=document_version_id, change_reason=change_reason,
-            )
-            state = self._evidence_state(row)
-            emitted = self._emit(
-                identity=identity, aggregate_type="evidence", aggregate_id=entity_id,
-                event_type="evidence.created",
-                payload={"lineage_id": str(entity_id), "revision_id": str(entity_id), "state": state},
-                actor_id=actor_id, trace_id=trace_id, occurred_at=occurred_at, after=state,
-            )
-            if fail_before_commit: raise RuntimeError("deliberate Phase 7 rollback before commit")
-            return MaterialMutationResult(entity_id, entity_id, *emitted, trace_id)
+
+    def create_evidence_in_current_transaction(
+        self, *, identity, organization_id, source_type, captured_at, actor_id, trace_id,
+        source_uri=None, content_hash=None, trust_score=None, document_version_id=None,
+        change_reason=None, fail_before_commit=False, event_id=None,
+    ):
+        bind_trusted_tenant_context_in_transaction(
+            identity, actor_id=actor_id, trace_id=trace_id, using=self.using,
+        )
+        trace_id = UUID(str(trace_id)); occurred_at = timezone.now(); entity_id = uuid4()
+        Organization.objects.using(self.using).only("id").get(pk=organization_id)
+        source_type, source_uri, content_hash = self._source(
+            document_version_id=document_version_id, source_type=source_type,
+            source_uri=source_uri, content_hash=content_hash,
+        )
+        row = Evidence.objects.using(self.using).create(
+            id=entity_id, tenant_id=identity.tenant_id, organization_id=organization_id,
+            lineage_id=entity_id, revision=1, source_type=source_type,
+            source_uri=source_uri, content_hash=content_hash, captured_at=captured_at,
+            trust_score=Decimal(str(trust_score)) if trust_score is not None else None,
+            document_version_id=document_version_id, change_reason=change_reason,
+        )
+        state = self._evidence_state(row)
+        emitted = self._emit(
+            identity=identity, aggregate_type="evidence", aggregate_id=entity_id,
+            event_type="evidence.created",
+            payload={"lineage_id": str(entity_id), "revision_id": str(entity_id), "state": state},
+            actor_id=actor_id, trace_id=trace_id, occurred_at=occurred_at, after=state,
+            event_id=UUID(str(event_id)) if event_id else None,
+        )
+        if fail_before_commit: raise RuntimeError("deliberate Phase 7 rollback before commit")
+        return MaterialMutationResult(entity_id, entity_id, *emitted, trace_id)
 
     def supersede_evidence(self, *, identity, evidence_id, source_type, captured_at,
                            actor_id, trace_id, source_uri=None, content_hash=None,

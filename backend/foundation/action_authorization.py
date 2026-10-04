@@ -377,7 +377,7 @@ class ExecutionAuthorizationService:
                     id=approval.decided_by_id,
                     adminapps_user_id=approval.adminapps_user_id_snapshot,
                     lifecycle_status=UserProjection.LifecycleStatus.ACTIVE,
-                ).first()
+                ).only("id", "adminapps_user_id", "lifecycle_status").first()
                 required_role = policy.human_gate_rules.get("required_role")
                 if actor is None or approval.required_role != required_role:
                     denial = "approval_authority_unverifiable"

@@ -15,11 +15,12 @@ import re
 from typing import Any
 
 from .phase31_4_integrity_generations import (
-    CURRENT_BASELINE_MANIFEST,
+    BASELINE_ADOPTION_MANIFEST,
+    ROOT,
     V24_CONTRACT_SHA256,
     file_sha256,
+    select_v25_current_baseline,
     verify_v24_historical_integrity,
-    verify_v25_current_integrity,
 )
 from .phase31_4_v2_5_verifier_remediation import (
     CAPTURE_READBACK_SCHEMA_VERSION,
@@ -192,14 +193,20 @@ def verify_precreation_integrity(*, root: str | Path, run_id: str | None) -> Pre
             "historical_evidence_overwrite": False,
         }))
 
-        manifest_path = project_root / CURRENT_BASELINE_MANIFEST.relative_to(
-            CURRENT_BASELINE_MANIFEST.parents[3]
-        )
-        current = _load_object(manifest_path)
-        verified_current = verify_v25_current_integrity(project_root, current)
+        manifest_path, verified_current = select_v25_current_baseline(project_root)
         manifest_hash = file_sha256(manifest_path)
         details["current_integrity_artifact"] = {
             "path": manifest_path.relative_to(project_root).as_posix(), "sha256": manifest_hash,
+        }
+        adoption_path = project_root / BASELINE_ADOPTION_MANIFEST.relative_to(ROOT)
+        details["baseline_selection"] = {
+            "kind": "EXPLICIT_SUCCESSOR_ADOPTION" if adoption_path.is_file() else "INITIAL_V12_BASELINE",
+            "manifest_path": manifest_path.relative_to(project_root).as_posix(),
+            "manifest_sha256": manifest_hash,
+            "adoption_decision": ({
+                "path": adoption_path.relative_to(project_root).as_posix(),
+                "sha256": file_sha256(adoption_path),
+            } if adoption_path.is_file() else None),
         }
         assertions.append(_assertion("current_source_integrity", True, details["current_integrity_artifact"]))
 
@@ -264,6 +271,7 @@ def verify_precreation_integrity(*, root: str | Path, run_id: str | None) -> Pre
             input_paths = [
                 details.get("current_integrity_artifact", {}).get("path"),
                 details.get("contract_integrity_result", {}).get("path"),
+                (details.get("baseline_selection", {}).get("adoption_decision") or {}).get("path"),
             ]
             payload["evidence_hashes"] = {
                 path: file_sha256(project_root / path) for path in input_paths if path

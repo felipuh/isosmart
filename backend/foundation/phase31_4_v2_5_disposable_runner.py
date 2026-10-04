@@ -615,12 +615,12 @@ def verify_authorization(inputs: RunInputs) -> VerifiedAuthorization:
     if inputs.current_integrity_generation not in generations:
         raise RunnerError("INTEGRITY_GENERATION_MISMATCH", "current integrity generation differs")
     protected = _verify_integrity_contents(root, integrity_document)
-    if integrity_document.get("schema") in {
-        "phase31.4-v2.5-current-source-integrity/v4",
-        "phase31.4-v2.5-current-source-integrity/v5",
-    }:
+    integrity_schema = integrity_document.get("schema")
+    if isinstance(integrity_schema, str) and integrity_schema.startswith(
+        "phase31.4-v2.5-current-source-integrity/v"
+    ):
         try:
-            verify_v25_current_integrity(root, integrity_document)
+            verify_v25_current_integrity(root, integrity_document, manifest_path=integrity_path)
         except IntegrityGenerationError as exc:
             raise RunnerError(
                 "CURRENT_INTEGRITY_MISMATCH",

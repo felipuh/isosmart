@@ -14,6 +14,8 @@ from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.db import IntegrityError
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.utils.decorators import method_decorator
 from datetime import timedelta
 import logging
 import secrets
@@ -36,10 +38,21 @@ from .serializers import (
     UserRegistrationSerializer,
 )
 from .permissions import IsOrgAdmin
+from .cookies import REFRESH_COOKIE, clear_auth_cookies, set_auth_cookies
 
 logger = logging.getLogger(__name__)
 
 PASSWORD_REUSE_REASON_CODE = 'PASSWORD_REUSE_RECENT'
+
+
+def _token_pair_for_profile(user, profile):
+    refresh = RefreshToken.for_user(user)
+    access = refresh.access_token
+    for token in (refresh, access):
+        token['organization_id'] = profile.organization_id
+        token['role'] = profile.role
+        token['profile_id'] = profile.id
+    return refresh, access
 
 
 def _password_history_limit():
@@ -160,18 +173,7 @@ class LoginView(APIView):
         user = serializer.validated_data['user']
         profile = serializer.validated_data['profile']
         
-        # Generar tokens
-        refresh = RefreshToken.for_user(user)
-        
-        # Agregar claims personalizados al token
-        refresh['organization_id'] = profile.organization_id
-        refresh['role'] = profile.role
-        refresh['profile_id'] = profile.id
-        
-        access = refresh.access_token
-        access['organization_id'] = profile.organization_id
-        access['role'] = profile.role
-        access['profile_id'] = profile.id
+        refresh, access = _token_pair_for_profile(user, profile)
         
         # Actualizar último login
         user.last_login = timezone.now()
@@ -194,8 +196,6 @@ class LoginView(APIView):
         ]
         
         response_data = {
-            'access': str(access),
-            'refresh': str(refresh),
             'user': UserSerializer(user).data,
             'profile': UserProfileSerializer(profile).data,
             'organizations': organizations,
@@ -203,7 +203,7 @@ class LoginView(APIView):
         if serializer.validated_data.get('temp_password_warning'):
             response_data['security_alert'] = serializer.validated_data['temp_password_warning']
         
-        return Response(response_data, status=status.HTTP_200_OK)
+        return set_auth_cookies(Response(response_data, status=status.HTTP_200_OK), access=access, refresh=refresh)
 
 
 class LogoutView(APIView):
@@ -216,18 +216,17 @@ class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
     
     def post(self, request):
-        serializer = LogoutSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        
         try:
-            refresh_token_str = serializer.validated_data['refresh']
+            refresh_token_str = request.COOKIES.get(REFRESH_COOKIE)
+            if not refresh_token_str:
+                raise TokenError('missing refresh cookie')
             RefreshToken(refresh_token_str)
 
             token_hash = RefreshTokenBlacklist.hash_token(refresh_token_str)
             RefreshTokenBlacklist.objects.get_or_create(
                 token_hash=token_hash,
                 defaults={
-                    'token': refresh_token_str,
+                    'token': '',
                     'user': request.user,
                 }
             )
@@ -235,10 +234,10 @@ class LogoutView(APIView):
         except TokenError:
             pass  # Token ya expirado o inválido, ignorar
         
-        return Response(
+        return clear_auth_cookies(Response(
             {'detail': 'Sesión cerrada exitosamente.'},
             status=status.HTTP_200_OK
-        )
+        ))
 
 
 class RefreshTokenView(APIView):
@@ -249,11 +248,11 @@ class RefreshTokenView(APIView):
     permission_classes = [AllowAny]
     
     def post(self, request):
-        serializer = RefreshTokenSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        
         try:
-            refresh = RefreshToken(serializer.validated_data['refresh'])
+            refresh_token_str = request.COOKIES.get(REFRESH_COOKIE)
+            if not refresh_token_str:
+                raise TokenError('missing refresh cookie')
+            refresh = RefreshToken(refresh_token_str)
             
             # Verificar que no esté en lista negra
             refresh_token_str = str(refresh)
@@ -266,17 +265,14 @@ class RefreshTokenView(APIView):
             # Generar nuevo access token
             access = refresh.access_token
             
-            response_data = {
-                'access': str(access),
-            }
-            
-            # Rotar refresh token si está configurado
             if settings.SIMPLE_JWT.get('ROTATE_REFRESH_TOKENS', False):
+                RefreshTokenBlacklist.objects.get_or_create(
+                    token_hash=RefreshTokenBlacklist.hash_token(refresh_token_str),
+                    defaults={'token': '', 'user_id': refresh['user_id']},
+                )
                 refresh.set_jti()
                 refresh.set_exp()
-                response_data['refresh'] = str(refresh)
-            
-            return Response(response_data, status=status.HTTP_200_OK)
+            return set_auth_cookies(Response({'detail': 'Sesión renovada.'}), access=access, refresh=refresh)
             
         except TokenError as e:
             return Response(
@@ -360,16 +356,7 @@ class SwitchOrganizationView(APIView):
             is_active=True
         ).select_related('organization').first()
         
-        # Generar nuevos tokens
-        refresh = RefreshToken.for_user(user)
-        refresh['organization_id'] = profile.organization_id
-        refresh['role'] = profile.role
-        refresh['profile_id'] = profile.id
-        
-        access = refresh.access_token
-        access['organization_id'] = profile.organization_id
-        access['role'] = profile.role
-        access['profile_id'] = profile.id
+        refresh, access = _token_pair_for_profile(user, profile)
         
         # Obtener todas las organizaciones
         all_profiles = UserProfile.objects.filter(
@@ -388,14 +375,20 @@ class SwitchOrganizationView(APIView):
         ]
         
         response_data = {
-            'access': str(access),
-            'refresh': str(refresh),
             'user': UserSerializer(user).data,
             'profile': UserProfileSerializer(profile).data,
             'organizations': organizations,
         }
         
-        return Response(response_data, status=status.HTTP_200_OK)
+        return set_auth_cookies(Response(response_data, status=status.HTTP_200_OK), access=access, refresh=refresh)
+
+
+@method_decorator(ensure_csrf_cookie, name='dispatch')
+class CsrfCookieView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        return Response({'detail': 'CSRF cookie issued.'})
 
 
 class ChangePasswordView(APIView):

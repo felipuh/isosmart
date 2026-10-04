@@ -23,6 +23,7 @@ from .tenant_context import trusted_tenant_context
 
 EVENT_CONTRACTS = {
     "change.created": 1,
+    "change.requested": 1,
     "change.revised": 1,
     "change.status_changed": 1,
     "measurement_definition.created": 1,
@@ -138,6 +139,17 @@ class ChangePerformanceCommandService:
                 event_type="change.created",
                 payload={"lineage_id": str(entity_id), "revision_id": str(entity_id), "state": state},
                 actor_id=actor_id, trace_id=trace_id, occurred_at=occurred_at, after=state,
+            )
+            self._emit(
+                identity=identity, aggregate_type="change", aggregate_id=entity_id,
+                event_type="change.requested",
+                payload={
+                    "change_id": str(entity_id), "lineage_id": str(entity_id),
+                    "revision_id": 1, "type": row.change_type,
+                    "purpose": row.purpose, "impact": row.impact,
+                    "status": row.status, "affected_process_ids": state["process_ids"],
+                }, actor_id=actor_id, trace_id=trace_id,
+                occurred_at=occurred_at, after=state,
             )
             if fail_before_commit:
                 raise RuntimeError("deliberate Phase 6 rollback before commit")

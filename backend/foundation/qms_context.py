@@ -17,22 +17,27 @@ from .models import (
     Process,
     QmsScope,
     QmsScopeProcess,
+    Site,
     Stakeholder,
     StakeholderRequirement,
     TransactionalOutbox,
 )
 from .tenant_context import trusted_tenant_context
+from django.utils import timezone as django_timezone
 
 
 EVENT_CONTRACTS = {
+    "site.created": 1,
     "stakeholder.created": 1,
     "stakeholder.updated": 1,
     "stakeholder_requirement.created": 1,
     "stakeholder_requirement.superseded": 1,
+    "stakeholder.requirement.changed": 1,
     "process.created": 1,
     "process.updated": 1,
     "context_item.created": 1,
     "context_item.superseded": 1,
+    "context.signal.detected": 1,
     "qms_scope.created": 1,
     "qms_scope.revised": 1,
 }
@@ -116,7 +121,7 @@ class QmsContextCommandService:
         state = {"stakeholder_type": _required(stakeholder_type, "stakeholder_type"),
                  "name": _required(name, "name"), "relevance_score": relevance_score}
         with trusted_tenant_context(identity, actor_id=actor_id, trace_id=trace_id, using=self.using):
-            Organization.objects.using(self.using).get(pk=organization_id)
+            Organization.objects.using(self.using).only("id").get(pk=organization_id)
             Stakeholder.objects.using(self.using).create(
                 id=entity_id, tenant_id=identity.tenant_id, organization_id=organization_id, **state
             )
@@ -146,13 +151,36 @@ class QmsContextCommandService:
                                  trace_id=trace_id, occurred_at=occurred_at, before=before, after=after)
             return self._result(row.id, row.id, emitted, trace_id, fail_before_commit)
 
+    def create_site(self, *, identity, organization_id, country, timezone, criticality,
+                    actor_id, trace_id, fail_before_commit=False):
+        trace_id = UUID(str(trace_id)); occurred_at = django_timezone.now(); entity_id = uuid4()
+        fields = {
+            "country": _required(country, "country"),
+            "timezone": _required(timezone, "timezone"),
+            "criticality": _required(criticality, "criticality"),
+        }
+        with trusted_tenant_context(identity, actor_id=actor_id, trace_id=trace_id, using=self.using):
+            Organization.objects.using(self.using).get(pk=organization_id)
+            Site.objects.using(self.using).create(
+                id=entity_id, tenant_id=identity.tenant_id,
+                organization_id=organization_id, **fields,
+            )
+            emitted = self._emit(
+                identity=identity, aggregate_type="site", aggregate_id=entity_id,
+                event_type="site.created",
+                payload={"site_id": str(entity_id), "organization_id": str(organization_id),
+                         "state": fields},
+                actor_id=actor_id, trace_id=trace_id, occurred_at=occurred_at, after=fields,
+            )
+            return self._result(entity_id, entity_id, emitted, trace_id, fail_before_commit)
+
     def create_process(self, *, identity, organization_id, name, actor_id, trace_id,
                        owner_id=None, process_type=None, status="active", fail_before_commit=False):
         trace_id = UUID(str(trace_id)); occurred_at = timezone.now(); entity_id = uuid4()
         state = {"name": _required(name, "name"), "owner_id": str(owner_id) if owner_id else None,
                  "process_type": process_type, "status": _required(status, "status")}
         with trusted_tenant_context(identity, actor_id=actor_id, trace_id=trace_id, using=self.using):
-            Organization.objects.using(self.using).get(pk=organization_id)
+            Organization.objects.using(self.using).only("id").get(pk=organization_id)
             Process.objects.using(self.using).create(
                 id=entity_id, tenant_id=identity.tenant_id, organization_id=organization_id,
                 name=state["name"], owner_id=owner_id, process_type=process_type, status=state["status"],
@@ -228,6 +256,26 @@ class QmsContextCommandService:
             emitted = self._emit(identity=identity, aggregate_type="stakeholder_requirement", aggregate_id=prior.lineage_id,
                                  event_type="stakeholder_requirement.superseded", payload=payload, actor_id=actor_id,
                                  trace_id=trace_id, occurred_at=occurred_at, before=before, after=after)
+            self._emit(
+                identity=identity, aggregate_type="stakeholder_requirement",
+                aggregate_id=prior.lineage_id,
+                event_type="stakeholder.requirement.changed",
+                payload={
+                    "stakeholder_requirement_id": str(entity_id),
+                    "lineage_id": str(prior.lineage_id),
+                    "revision": after["revision"],
+                    "stakeholder_id": str(prior.stakeholder_id),
+                    "organization_id": str(prior.organization_id),
+                    "previous_revision_id": str(prior.id),
+                    "changed_fields": {
+                        name: {"before": before[name], "after": after[name]}
+                        for name in ("requirement_text", "qms_addressed", "owner_process_id")
+                        if before[name] != after[name]
+                    },
+                },
+                actor_id=actor_id, trace_id=trace_id, occurred_at=occurred_at,
+                before=before, after=after,
+            )
             return self._result(entity_id, prior.lineage_id, emitted, trace_id, fail_before_commit)
 
     def create_context_item(self, *, identity, organization_id, issue_type, description,
@@ -273,6 +321,17 @@ class QmsContextCommandService:
             emitted = self._emit(identity=identity, aggregate_type=aggregate_type, aggregate_id=entity_id,
                                  event_type=event_type, payload={"revision_id": str(entity_id), "state": state},
                                  actor_id=actor_id, trace_id=trace_id, occurred_at=occurred_at, after=state)
+            if model is ContextItem:
+                self._emit(
+                    identity=identity, aggregate_type="context_item", aggregate_id=entity_id,
+                    event_type="context.signal.detected",
+                    payload={
+                        "context_item_id": str(entity_id), "lineage_id": str(entity_id),
+                        "revision": 1, "organization_id": str(organization_id),
+                        "issue_type": fields["issue_type"],
+                    }, actor_id=actor_id, trace_id=trace_id, occurred_at=occurred_at,
+                    after=state,
+                )
             return self._result(entity_id, entity_id, emitted, trace_id, fail_before_commit)
 
     def _supersede_revision(self, model, aggregate_type, event_type, prior_id, *, identity,
@@ -297,6 +356,18 @@ class QmsContextCommandService:
                                           "new_revision_id": str(entity_id), "before": before, "after": after},
                                  actor_id=actor_id, trace_id=trace_id, occurred_at=occurred_at,
                                  before=before, after=after)
+            if model is ContextItem:
+                self._emit(
+                    identity=identity, aggregate_type="context_item", aggregate_id=prior.lineage_id,
+                    event_type="context.signal.detected",
+                    payload={
+                        "context_item_id": str(entity_id), "lineage_id": str(prior.lineage_id),
+                        "previous_revision_id": str(prior.id), "revision": prior.revision + 1,
+                        "organization_id": str(prior.organization_id),
+                        "issue_type": fields["issue_type"],
+                    }, actor_id=actor_id, trace_id=trace_id, occurred_at=occurred_at,
+                    before=before, after=after,
+                )
             return self._result(entity_id, prior.lineage_id, emitted, trace_id, fail_before_commit)
 
     def _set_scope_processes(self, model, scope_revision_id, tenant_id, organization_id, process_ids):

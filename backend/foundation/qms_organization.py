@@ -8,8 +8,6 @@ from django.conf import settings
 from django.db import connections
 from django.utils import timezone
 
-from integration.client import admin_apps_client
-
 from .audit import AuditAppend, AuditWriterService
 from .canonical import canonical_hash
 from .models import DomainEvent, Organization, TenantProjection, TransactionalOutbox
@@ -41,10 +39,14 @@ class QmsOrganizationCommandService:
 
     def __init__(self, *, using='app', authority=None):
         self.using = using
-        self.authority = authority or admin_apps_client
+        if authority is None:
+            from integration.client import admin_apps_client
+            authority = admin_apps_client
+        self.authority = authority
 
     def create_organization(self, *, identity, display_name, actor_id, trace_id,
                             request_key, legal_name=None, correlation_id=None,
+                            sector=None, size=None, maturity=None,
                             fail_before_commit=False):
         if not isinstance(identity, TrustedTenantIdentity):
             raise TypeError('trusted tenant identity is required')
@@ -54,11 +56,17 @@ class QmsOrganizationCommandService:
         correlation_id = UUID(str(correlation_id)) if correlation_id else None
         display_name = str(display_name or '').strip()
         legal_name = str(legal_name or '').strip() or None
+        profile = {}
+        for field_name, value in (("sector", sector), ("size", size), ("maturity", maturity)):
+            if value is not None:
+                if not isinstance(value, str) or not value.strip():
+                    raise ValueError(f"{field_name} must be a nonblank string when supplied")
+                profile[field_name] = value.strip()
         if not display_name or len(display_name) > 255 or (legal_name and len(legal_name) > 255):
             raise ValueError('valid organization display name and legal name are required')
         request_hash = canonical_hash({'tenant_id': str(identity.tenant_id),
                                        'actor_id': str(actor_id), 'display_name': display_name,
-                                       'legal_name': legal_name})
+                                       'legal_name': legal_name, **profile})
         with trusted_tenant_context(identity, actor_id=actor_id, trace_id=trace_id, using=self.using):
             try:
                 tenant = TenantProjection.objects.using(self.using).get(pk=identity.tenant_id)
@@ -101,10 +109,13 @@ class QmsOrganizationCommandService:
             occurred_at = timezone.now()
             organization = Organization.objects.using(self.using).create(
                 tenant_id=identity.tenant_id, display_name=display_name, legal_name=legal_name,
+                sector=profile.get("sector"), size=profile.get("size"),
+                maturity=profile.get("maturity"),
             )
             event_id = uuid4()
             payload = {'organization_id': str(organization.id), 'tenant_id': str(identity.tenant_id),
                        'display_name': display_name, 'legal_name': legal_name,
+                       **profile,
                        'actor_id': str(actor_id), 'request_key': str(request_key)}
             DomainEvent.objects.using(self.using).create(
                 event_id=event_id, tenant_id=identity.tenant_id,

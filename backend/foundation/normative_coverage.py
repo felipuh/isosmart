@@ -16,18 +16,20 @@ from .models import (
     DomainEvent,
     Evidence,
     EvidenceCoverage,
+    IndustryProfile,
     NormativeCurationAudit,
     Organization,
     RequirementControl,
     Standard,
     StandardEdition,
+    StandardPack,
     TransactionalOutbox,
 )
 from .qms_context import MaterialMutationResult
 from .tenant_context import trusted_tenant_context
 
 
-EVENT_CONTRACTS = {"evidence_coverage.recorded": 1}
+EVENT_CONTRACTS = {"evidence_coverage.recorded": 1, "standard_pack.created": 1}
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 
 
@@ -67,6 +69,26 @@ class NormativeCatalogCommandService:
             Standard.objects.using(self.using).create(id=entity_id, **state)
             self._audit(action="standard.created", entity_type="standard", entity_id=entity_id,
                         actor_id=actor_id, trace_id=trace_id, payload=state)
+        return entity_id
+
+    def create_industry_profile(
+        self, *, code, name, manufacturing_service_route, terminology_pack,
+        actor_id, trace_id,
+    ):
+        trace_id = UUID(str(trace_id)); entity_id = uuid4()
+        state = {
+            "code": _required(code, "code"), "name": _required(name, "name"),
+            "manufacturing_service_route": _required(
+                manufacturing_service_route, "manufacturing_service_route",
+            ),
+            "terminology_pack": _required(terminology_pack, "terminology_pack"),
+        }
+        with transaction.atomic(using=self.using):
+            IndustryProfile.objects.using(self.using).create(id=entity_id, **state)
+            self._audit(
+                action="industry_profile.created", entity_type="industry_profile",
+                entity_id=entity_id, actor_id=actor_id, trace_id=trace_id, payload=state,
+            )
         return entity_id
 
     def create_standard_edition(self, *, standard_id, edition, actor_id, trace_id,
@@ -151,6 +173,51 @@ class NormativeCatalogCommandService:
             if fail_before_commit:
                 raise RuntimeError("deliberate Phase 8 publication rollback before commit")
         return edition.id
+
+
+class StandardPackCommandService:
+    """Create a tenant binding to an exact StandardEdition without copying its content."""
+
+    def __init__(self, *, using="app"):
+        self.using = using
+
+    def create_standard_pack(self, *, identity, standard_edition_id, status,
+                             actor_id, trace_id, fail_before_commit=False):
+        trace_id = UUID(str(trace_id)); occurred_at = timezone.now(); pack_id = uuid4()
+        status = _required(status, "status")
+        with trusted_tenant_context(identity, actor_id=actor_id, trace_id=trace_id, using=self.using):
+            edition = StandardEdition.objects.using(self.using).get(id=standard_edition_id)
+            row = StandardPack.objects.using(self.using).create(
+                id=pack_id, tenant_id=identity.tenant_id,
+                standard_edition_id=edition.id, status=status,
+            )
+            payload = {
+                "pack_id": str(row.id), "tenant_id": str(identity.tenant_id),
+                "standard_edition_id": str(edition.id), "status": row.status,
+            }
+            event_id = uuid4()
+            DomainEvent.objects.using(self.using).create(
+                event_id=event_id, tenant_id=identity.tenant_id,
+                event_type="standard_pack.created", schema_version=EVENT_CONTRACTS["standard_pack.created"],
+                aggregate_type="standard_pack", aggregate_id=row.id, aggregate_version=1,
+                occurred_at=occurred_at, trace_id=trace_id, source="iso-smart-qms",
+                payload=payload, payload_hash=canonical_hash(payload),
+            )
+            outbox = TransactionalOutbox.objects.using(self.using).create(
+                tenant_id=identity.tenant_id, domain_event_id=event_id,
+                status=TransactionalOutbox.Status.PENDING, publish_attempts=0,
+                available_at=occurred_at,
+            )
+            audit_id = AuditWriterService(using=self.using).append(AuditAppend(
+                tenant_id=identity.tenant_id, stream_type="standard_pack", stream_id=row.id,
+                actor_type="user", actor_id=str(actor_id), action="standard_pack.created",
+                entity_type="standard_pack", entity_id=row.id, trace_id=trace_id,
+                occurred_at=occurred_at, after_hash=canonical_hash(payload),
+                metadata={"event_id": str(event_id), "schema_version": 1},
+            ))
+            if fail_before_commit:
+                raise RuntimeError("deliberate StandardPack creation rollback")
+            return MaterialMutationResult(row.id, row.id, event_id, outbox.id, audit_id, trace_id)
 
 
 class EvidenceCoverageCommandService:

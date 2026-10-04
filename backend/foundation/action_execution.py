@@ -9,7 +9,7 @@ import json
 from dataclasses import dataclass
 from uuid import UUID, uuid4
 
-from django.db import connections
+from django.db import IntegrityError, connections, transaction
 from django.db.models import Max
 from django.utils import timezone
 
@@ -24,6 +24,7 @@ from .audit import AuditAppend, AuditWriterService
 from .canonical import canonical_hash, canonical_json
 from .models import (
     ActionExecution,
+    ActionExecutionRollback,
     ActionExecutionReceipt,
     ActionPlan,
     AgentDecision,
@@ -275,7 +276,7 @@ class ActionExecutionService:
             id=approval.decided_by_id,
             adminapps_user_id=approval.adminapps_user_id_snapshot,
             lifecycle_status=UserProjection.LifecycleStatus.ACTIVE,
-        ).first()
+        ).only("id", "adminapps_user_id", "lifecycle_status").first()
         _reject_unless(actor is not None and
                        approval.required_role == policy.human_gate_rules.get("required_role"),
                        "approval_authority_unverifiable")
@@ -472,3 +473,112 @@ class ActionExecutionService:
 
         return ActionExecutionResult(execution_id, receipt_id, terminal_status,
                                      False, plan.action_plan_hash)
+
+    def rollback_controlled_opportunity(self, *, principal, original_execution_id,
+                                        compensation_authorization_id,
+                                        idempotency_key, reason):
+        """Execute the one source-backed compensation and persist its lineage.
+
+        A rollback is not a generic inverse-operation endpoint.  The only
+        supported contract is the existing controlled Opportunity transition:
+        a succeeded ``defer_evaluation`` may be compensated by its separately
+        authorized ``resume_evaluation`` action.  Other executions fail closed
+        as ``not_reversible``.
+        """
+        if not isinstance(principal, ExecutionPrincipalContext):
+            raise TypeError("principal must be a server-resolved ExecutionPrincipalContext")
+        original_execution_id = UUID(str(original_execution_id))
+        compensation_authorization_id = UUID(str(compensation_authorization_id))
+        idempotency_key = _required(idempotency_key, "idempotency_key")
+        reason = _required(reason, "reason")
+
+        # Import here to avoid making the general synthetic boundary depend on
+        # the controlled capability at module import time.
+        from .controlled_opportunity import ControlledOpportunityActionService
+
+        with trusted_tenant_context(principal.identity, actor_id=principal.actor_id,
+                                    trace_id=UUID(str(principal.identity.tenant_id)), using=self.using):
+            original = ActionExecution.objects.using(self.using).select_related(
+                "receipt", "action_plan"
+            ).filter(id=original_execution_id).first()
+            if original is None or original.tenant_id != principal.identity.tenant_id:
+                raise ExecutionRejected("rollback_execution_not_found")
+            existing = ActionExecutionRollback.objects.using(self.using).filter(
+                original_execution_id=original.id
+            ).first()
+            if existing:
+                if existing.idempotency_key != idempotency_key:
+                    raise IdempotencyConflict("rollback idempotency key is bound to another request")
+                return existing
+            if (original.status != ActionExecution.Status.SUCCEEDED or
+                    original.executor_type != ActionExecution.ExecutorType.CONTROLLED_OPPORTUNITY or
+                    original.action_plan.action_type != "opportunity.defer_evaluation" or
+                    original.receipt.outcome != ActionExecutionReceipt.Outcome.OPPORTUNITY_DEFERRED):
+                raise ExecutionRejected("not_reversible")
+
+            # Validate the independently authorized compensation *before* it
+            # can touch its target.  Without this check, a valid authorization
+            # for another organization could perform that other organization's
+            # resume and only then be rejected while recording the lineage.
+            compensation_authorization = ExecutionAuthorization.objects.using(self.using).select_related(
+                "action_plan"
+            ).filter(id=compensation_authorization_id).first()
+            if (compensation_authorization is None or
+                    compensation_authorization.tenant_id != original.tenant_id or
+                    compensation_authorization.organization_id != original.organization_id or
+                    compensation_authorization.outcome != ExecutionAuthorization.Outcome.AUTHORIZED or
+                    compensation_authorization.action_plan.action_type != "opportunity.resume_evaluation"):
+                raise ExecutionRejected("rollback_compensation_not_authorized_for_source")
+
+        # The established service serializes the target row and validates the
+        # independently authorized compensation plan.  Its idempotency record
+        # therefore prevents duplicate compensations for a replayed request.
+        compensation = ControlledOpportunityActionService(using=self.using).resume_evaluation(
+            identity=principal.identity,
+            authorization_id=compensation_authorization_id,
+            idempotency_key=idempotency_key,
+        )
+        with trusted_tenant_context(principal.identity, actor_id=principal.actor_id,
+                                    trace_id=UUID(str(principal.identity.tenant_id)), using=self.using):
+            compensating = ActionExecution.objects.using(self.using).select_related(
+                "receipt", "action_plan"
+            ).get(id=compensation.execution_id)
+            if (compensating.tenant_id != original.tenant_id or
+                    compensating.organization_id != original.organization_id or
+                    compensating.status != ActionExecution.Status.SUCCEEDED or
+                    compensating.action_plan.action_type != "opportunity.resume_evaluation" or
+                    compensating.receipt.outcome != ActionExecutionReceipt.Outcome.OPPORTUNITY_EVALUATION_RESUMED or
+                    compensating.id == original.id):
+                raise ExecutionRejected("rollback_compensation_invalid")
+            try:
+                with transaction.atomic(using=self.using):
+                    rollback = ActionExecutionRollback.objects.using(self.using).create(
+                        id=uuid4(), tenant_id=original.tenant_id,
+                        organization_id=original.organization_id,
+                        original_execution_id=original.id,
+                        compensating_execution_id=compensating.id,
+                        reason=reason, idempotency_key=idempotency_key,
+                        trace_id=compensating.trace_id,
+                    )
+                    rollback_state = {
+                        "original_execution_id": str(original.id),
+                        "compensating_execution_id": str(compensating.id),
+                        "reason": reason,
+                        "status": "compensated",
+                    }
+                    AuditWriterService(using=self.using).append(AuditAppend(
+                        tenant_id=original.tenant_id, stream_type="action_execution",
+                        stream_id=original.id, actor_type=principal.principal_type,
+                        actor_id=principal.actor_id, action="action_execution.rolled_back",
+                        entity_type="action_execution_rollback", entity_id=rollback.id,
+                        trace_id=compensating.trace_id, occurred_at=timezone.now(),
+                        after_hash=canonical_hash(rollback_state), metadata=rollback_state,
+                    ))
+                    return rollback
+            except IntegrityError:
+                existing = ActionExecutionRollback.objects.using(self.using).get(
+                    original_execution_id=original.id
+                )
+                if existing.idempotency_key != idempotency_key:
+                    raise ExecutionRejected("rollback_already_recorded")
+                return existing

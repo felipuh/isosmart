@@ -35,12 +35,14 @@ REPRESENTATIVES = (
 
 
 class Retry5ManifestTests(unittest.TestCase):
-    def test_authoritative_manifest_and_external_hash(self):
+    def test_historical_manifest_is_held_until_current_successor_is_adopted(self):
         expected = sha256(MANIFEST.read_bytes()).hexdigest()
-        document = verify_operational_manifest(expected)
+        document = json.loads(MANIFEST.read_text(encoding="utf-8"))
         self.assertEqual(document["counts"]["migrations"], 23)
         self.assertEqual(document["counts"]["phases"], 33)
         self.assertEqual(document["counts"]["named_operations"], 29)
+        with self.assertRaisesRegex(ManifestVerificationError, "unapproved successor"):
+            verify_operational_manifest(expected)
 
     def test_representative_17_member_tamper_matrix_fails_closed(self):
         original = json.loads(MANIFEST.read_text(encoding="utf-8"))

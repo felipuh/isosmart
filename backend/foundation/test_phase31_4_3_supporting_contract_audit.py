@@ -12,7 +12,15 @@ from pathlib import Path
 import re
 import unittest
 
-from .phase31_4_integrity_generations import verify_v24_historical_integrity, verify_v25_current_integrity
+from .phase31_4_integrity_generations import (
+    CURRENT_V12_MANIFEST,
+    CURRENT_V12_SHA256,
+    IntegrityGenerationError,
+    file_sha256,
+    verify_v24_historical_integrity,
+    verify_v25_current_integrity,
+    verify_v25_v12_current_integrity,
+)
 from uuid import UUID, uuid5
 
 
@@ -106,7 +114,7 @@ class SupportingContractAuditTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             verify_evidence_witnesses(changed)
 
-    def test_protected_sources_match(self):
+    def test_v12_history_is_preserved_and_unadopted_drift_fails_closed(self):
         self.assertEqual(
             hashlib.sha256(EVIDENCE.read_bytes()).hexdigest(),
             "12416f725917e11ca4c843ebc74d97d70e338b30fdf6ecbbd2e8afd2834f21ed",
@@ -116,9 +124,16 @@ class SupportingContractAuditTests(unittest.TestCase):
             "1da64d5f1c8248a2c2e2e9cc586424bde185c85efd467923be28d5c1f2d170ba",
         )
         historical = verify_v24_historical_integrity(ROOT)
-        current = verify_v25_current_integrity(ROOT)
+        self.assertEqual(file_sha256(CURRENT_V12_MANIFEST), CURRENT_V12_SHA256)
+        current = verify_v25_v12_current_integrity(
+            ROOT,
+            json.loads(CURRENT_V12_MANIFEST.read_text(encoding="utf-8")),
+            validate_sources=False,
+        )
         self.assertEqual(len(historical["migration_paths"]), 23)
         self.assertEqual(len(current["migration_file_sha256"]), 24)
+        with self.assertRaisesRegex(IntegrityGenerationError, "V12 protected source drift"):
+            verify_v25_current_integrity(ROOT)
 
     def test_native_identity_formula_matches_frozen_sql(self):
         sql = sql_source(22)

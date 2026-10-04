@@ -15,6 +15,7 @@ from foundation.models import (
     ActionPlanDryRun,
     ActionExecution,
     ActionExecutionReceipt,
+    ActionExecutionRollback,
     AgentDefinition,
     AgentDecision,
     AgentRun,
@@ -298,9 +299,11 @@ class Phase4QmsContextContractTests(SimpleTestCase):
 
     def test_event_catalog_is_typed_and_schema_versioned(self):
         self.assertEqual(set(EVENT_CONTRACTS), {
-            "stakeholder.created", "stakeholder.updated",
+            "site.created", "stakeholder.created", "stakeholder.updated",
             "stakeholder_requirement.created", "stakeholder_requirement.superseded",
+            "stakeholder.requirement.changed",
             "process.created", "process.updated", "context_item.created",
+            "context.signal.detected",
             "context_item.superseded", "qms_scope.created", "qms_scope.revised",
         })
         self.assertEqual(set(EVENT_CONTRACTS.values()), {1})
@@ -390,7 +393,7 @@ class Phase6ChangePerformanceContractTests(SimpleTestCase):
 
     def test_phase6_commands_and_events_are_explicit(self):
         self.assertEqual(set(PHASE6_EVENT_CONTRACTS), {
-            "change.created", "change.revised", "change.status_changed",
+            "change.created", "change.requested", "change.revised", "change.status_changed",
             "measurement_definition.created", "measurement_definition.revised",
         })
         self.assertEqual(set(PHASE6_EVENT_CONTRACTS.values()), {1})
@@ -441,6 +444,7 @@ class Phase7DocumentEvidenceContractTests(SimpleTestCase):
     def test_phase7_commands_and_events_are_explicit(self):
         self.assertEqual(set(PHASE7_EVENT_CONTRACTS), {
             "document.created", "document.metadata_revised", "document.version_created",
+            "document.updated",
             "evidence.created", "evidence.superseded",
         })
         self.assertEqual(set(PHASE7_EVENT_CONTRACTS.values()), {1})
@@ -829,6 +833,11 @@ class Phase14SyntheticActionExecutionContractTests(SimpleTestCase):
             set(ActionExecution.ExecutorType.values),
             {"synthetic_noop", "controlled_opportunity"},
         )
+        rollback = {field.name for field in ActionExecutionRollback._meta.get_fields()}
+        self.assertTrue({
+            "tenant", "organization", "original_execution", "compensating_execution",
+            "reason", "idempotency_key", "trace_id",
+        } <= rollback)
 
     def test_executor_registry_is_closed_and_noop_result_is_deterministic(self):
         self.assertEqual(set(EXECUTOR_ALLOWLIST), {"synthetic_noop"})
@@ -855,6 +864,10 @@ class Phase14SyntheticActionExecutionContractTests(SimpleTestCase):
         self.assertTrue({"principal", "authorization_id", "idempotency_key", "trace_id"} <= parameters)
         self.assertTrue({"tenant_id", "executor", "autonomy", "approved", "role",
                          "action_payload"}.isdisjoint(parameters))
+        rollback_parameters = set(inspect.signature(
+            ActionExecutionService.rollback_controlled_opportunity).parameters)
+        self.assertTrue({"principal", "original_execution_id", "compensation_authorization_id",
+                         "idempotency_key", "reason"} <= rollback_parameters)
         identity = TrustedTenantIdentity("fixture", UUID("aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"))
         evaluator = SyntheticPreconditionEvaluator({})
         with self.assertRaises(ValueError):

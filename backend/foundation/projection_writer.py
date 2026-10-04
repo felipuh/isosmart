@@ -122,6 +122,17 @@ class ProjectionWriterService:
         return None
 
     def _apply_tenant(self, cursor, event):
+        profile_columns = ("plan", "locale", "industry_profile_id")
+        cursor.execute(
+            "SELECT count(*)=%s FROM information_schema.columns "
+            "WHERE table_schema='qms' AND table_name='tenant_projection' AND column_name=ANY(%s)",
+            [len(profile_columns), list(profile_columns)],
+        )
+        has_profile_columns = cursor.fetchone()[0]
+        if not has_profile_columns and any(name in event.payload for name in profile_columns):
+            raise ProjectionAuthorityUnavailable(
+                "tenant profile projection migration is required before applying profile fields"
+            )
         cursor.execute(
             "SELECT id,adminapps_tenant_id,source_version FROM qms.tenant_projection WHERE source_event_id=%s",
             [str(event.event_id)],
@@ -135,8 +146,9 @@ class ProjectionWriterService:
                 )
             raise ProjectionVersionConflict("event identity is already materialized by another tenant/version")
         cursor.execute(
-            "SELECT id,source_version,source_event_id,lifecycle_status "
-            "FROM qms.tenant_projection WHERE adminapps_tenant_id=%s FOR UPDATE",
+            "SELECT id,source_version,source_event_id,lifecycle_status"
+            + (",plan,locale,industry_profile_id" if has_profile_columns else "")
+            + " FROM qms.tenant_projection WHERE adminapps_tenant_id=%s FOR UPDATE",
             [str(event.adminapps_tenant_id)],
         )
         row = cursor.fetchone()
@@ -158,26 +170,56 @@ class ProjectionWriterService:
                     [str(row[0])],
                 )
                 display_name = cursor.fetchone()[0]
-            cursor.execute(
-                "UPDATE qms.tenant_projection SET source_version=%s,source_event_id=%s,"
-                "display_name_snapshot=%s,lifecycle_status=%s,last_synced_at=%s,updated_at=statement_timestamp() "
-                "WHERE id=%s",
-                [event.source_version, str(event.event_id), display_name, requested_status, event.occurred_at, str(row[0])],
-            )
+            if has_profile_columns:
+                plan = event.payload["plan"] if "plan" in event.payload else row[4]
+                locale = event.payload["locale"] if "locale" in event.payload else row[5]
+                industry_profile_id = (
+                    event.payload["industry_profile_id"]
+                    if "industry_profile_id" in event.payload else row[6]
+                )
+                cursor.execute(
+                    "UPDATE qms.tenant_projection SET source_version=%s,source_event_id=%s,"
+                    "display_name_snapshot=%s,plan=%s,locale=%s,industry_profile_id=%s,"
+                    "lifecycle_status=%s,last_synced_at=%s,updated_at=statement_timestamp() "
+                    "WHERE id=%s",
+                    [event.source_version, str(event.event_id), display_name, plan, locale,
+                     industry_profile_id, requested_status, event.occurred_at, str(row[0])],
+                )
+            else:
+                cursor.execute(
+                    "UPDATE qms.tenant_projection SET source_version=%s,source_event_id=%s,"
+                    "display_name_snapshot=%s,lifecycle_status=%s,last_synced_at=%s,"
+                    "updated_at=statement_timestamp() WHERE id=%s",
+                    [event.source_version, str(event.event_id), display_name, requested_status,
+                     event.occurred_at, str(row[0])],
+                )
             projection_id = uuid.UUID(str(row[0]))
         else:
             if event.event_type is not ProjectionEventType.TENANT_PROVISIONED:
                 raise ProjectionAuthorityUnavailable("tenant projection does not exist for non-provisioning event")
             projection_id = uuid.uuid4()
-            cursor.execute(
-                "INSERT INTO qms.tenant_projection "
-                "(id,adminapps_tenant_id,source_version,source_event_id,display_name_snapshot,"
-                "lifecycle_status,provisioning_status,reconciliation_status,last_synced_at) "
-                "VALUES (%s,%s,%s,%s,%s,%s,'pending','in_sync',%s)",
-                [str(projection_id), str(event.adminapps_tenant_id), event.source_version,
-                 str(event.event_id), str(event.payload["display_name"]).strip(), requested_status,
-                 event.occurred_at],
-            )
+            if has_profile_columns:
+                cursor.execute(
+                    "INSERT INTO qms.tenant_projection "
+                    "(id,adminapps_tenant_id,source_version,source_event_id,display_name_snapshot,"
+                    "plan,locale,industry_profile_id,lifecycle_status,provisioning_status,"
+                    "reconciliation_status,last_synced_at) "
+                    "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,'pending','in_sync',%s)",
+                    [str(projection_id), str(event.adminapps_tenant_id), event.source_version,
+                     str(event.event_id), str(event.payload["display_name"]).strip(),
+                     event.payload.get("plan"), event.payload.get("locale"),
+                     event.payload.get("industry_profile_id"), requested_status, event.occurred_at],
+                )
+            else:
+                cursor.execute(
+                    "INSERT INTO qms.tenant_projection "
+                    "(id,adminapps_tenant_id,source_version,source_event_id,display_name_snapshot,"
+                    "lifecycle_status,provisioning_status,reconciliation_status,last_synced_at) "
+                    "VALUES (%s,%s,%s,%s,%s,%s,'pending','in_sync',%s)",
+                    [str(projection_id), str(event.adminapps_tenant_id), event.source_version,
+                     str(event.event_id), str(event.payload["display_name"]).strip(),
+                     requested_status, event.occurred_at],
+                )
         return ProjectionResult(ProjectionResultKind.APPLIED, projection_id, event.source_version, event.event_id)
 
     def _apply_user(self, cursor, event):
@@ -189,6 +231,17 @@ class ProjectionWriterService:
         if tenant is None:
             raise ProjectionAuthorityUnavailable("user event references an unknown tenant projection")
         tenant_id = tenant[0]
+        user_profile_columns = ("email", "role", "mfa_status")
+        cursor.execute(
+            "SELECT count(*)=%s FROM information_schema.columns "
+            "WHERE table_schema='qms' AND table_name='user_projection' AND column_name=ANY(%s)",
+            [len(user_profile_columns), list(user_profile_columns)],
+        )
+        has_user_profile_columns = cursor.fetchone()[0]
+        if not has_user_profile_columns and any(name in event.payload for name in user_profile_columns):
+            raise ProjectionAuthorityUnavailable(
+                "user profile projection migration is required before applying profile fields"
+            )
         cursor.execute(
             "SELECT id,adminapps_user_id,source_version FROM qms.user_projection WHERE source_event_id=%s",
             [str(event.event_id)],
@@ -202,8 +255,9 @@ class ProjectionWriterService:
                 )
             raise ProjectionVersionConflict("event identity is already materialized by another user/version")
         cursor.execute(
-            "SELECT id,source_version,source_event_id,lifecycle_status,tenant_id "
-            "FROM qms.user_projection WHERE adminapps_user_id=%s FOR UPDATE",
+            "SELECT id,source_version,source_event_id,lifecycle_status,tenant_id"
+            + (",email,role,mfa_status" if has_user_profile_columns else "")
+            + " FROM qms.user_projection WHERE adminapps_user_id=%s FOR UPDATE",
             [str(event.aggregate_id)],
         )
         row = cursor.fetchone()
@@ -221,21 +275,44 @@ class ProjectionWriterService:
                 return outcome
             if requested_status not in _USER_TRANSITIONS.get(row[3], set()):
                 raise InvalidLifecycleTransition(f"user lifecycle {row[3]} -> {requested_status} is not allowed")
-            cursor.execute(
-                "UPDATE qms.user_projection SET source_version=%s,source_event_id=%s,"
-                "lifecycle_status=%s,last_synced_at=%s,updated_at=statement_timestamp() WHERE id=%s",
-                [event.source_version, str(event.event_id), requested_status, event.occurred_at, str(row[0])],
-            )
+            if has_user_profile_columns:
+                profile_values = [
+                    event.payload[field] if field in event.payload else row[index]
+                    for field, index in (("email", 5), ("role", 6), ("mfa_status", 7))
+                ]
+                cursor.execute(
+                    "UPDATE qms.user_projection SET source_version=%s,source_event_id=%s,"
+                    "lifecycle_status=%s,email=%s,role=%s,mfa_status=%s,last_synced_at=%s,"
+                    "updated_at=statement_timestamp() WHERE id=%s",
+                    [event.source_version, str(event.event_id), requested_status,
+                     *profile_values, event.occurred_at, str(row[0])],
+                )
+            else:
+                cursor.execute(
+                    "UPDATE qms.user_projection SET source_version=%s,source_event_id=%s,"
+                    "lifecycle_status=%s,last_synced_at=%s,updated_at=statement_timestamp() WHERE id=%s",
+                    [event.source_version, str(event.event_id), requested_status, event.occurred_at, str(row[0])],
+                )
             projection_id = uuid.UUID(str(row[0]))
         else:
             if event.event_type is ProjectionEventType.USER_REVOKED:
                 raise ProjectionAuthorityUnavailable("cannot revoke an unknown user projection")
             projection_id = uuid.uuid4()
-            cursor.execute(
-                "INSERT INTO qms.user_projection "
-                "(id,adminapps_user_id,tenant_id,source_version,source_event_id,lifecycle_status,last_synced_at) "
-                "VALUES (%s,%s,%s,%s,%s,%s,%s)",
-                [str(projection_id), str(event.aggregate_id), str(tenant_id), event.source_version,
-                 str(event.event_id), requested_status, event.occurred_at],
-            )
+            if has_user_profile_columns:
+                cursor.execute(
+                    "INSERT INTO qms.user_projection "
+                    "(id,adminapps_user_id,tenant_id,email,role,mfa_status,source_version,source_event_id,"
+                    "lifecycle_status,last_synced_at) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                    [str(projection_id), str(event.aggregate_id), str(tenant_id),
+                     event.payload.get("email"), event.payload.get("role"), event.payload.get("mfa_status"),
+                     event.source_version, str(event.event_id), requested_status, event.occurred_at],
+                )
+            else:
+                cursor.execute(
+                    "INSERT INTO qms.user_projection "
+                    "(id,adminapps_user_id,tenant_id,source_version,source_event_id,lifecycle_status,last_synced_at) "
+                    "VALUES (%s,%s,%s,%s,%s,%s,%s)",
+                    [str(projection_id), str(event.aggregate_id), str(tenant_id), event.source_version,
+                     str(event.event_id), requested_status, event.occurred_at],
+                )
         return ProjectionResult(ProjectionResultKind.APPLIED, projection_id, event.source_version, event.event_id)

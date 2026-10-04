@@ -86,7 +86,9 @@ def run():
             .select_related("receipt").order_by("completed_at").first()
         )
         require(execution is not None, "Phase 16/17 produced no assessable execution")
-        user = UserProjection.objects.using("app").first()
+        user = UserProjection.objects.using("app").only(
+            "id", "tenant_id", "adminapps_user_id", "lifecycle_status",
+        ).first()
         require(user is not None, "AdminApps UserProjection fixture missing")
         result = execution.receipt.result
 

@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+from datetime import datetime
 from hashlib import sha256
 import json
 from pathlib import Path
+import re
 from typing import Any, Mapping
 
 
@@ -24,7 +26,8 @@ CURRENT_V9_MANIFEST = ROOT / "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SO
 CURRENT_V10_MANIFEST = ROOT / "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V10.json"
 CURRENT_V11_MANIFEST = ROOT / "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V11.json"
 CURRENT_V12_MANIFEST = ROOT / "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V12.json"
-CURRENT_BASELINE_MANIFEST = CURRENT_V12_MANIFEST
+CURRENT_V12_SHA256 = "685e04fa2e94513c357bbd6d333c2fe785e967b172234cd93faae777e25f79c2"
+BASELINE_ADOPTION_MANIFEST = ROOT / "docs/governance/evidence/PHASE31_4_V2_5_BASELINE_ADOPTION_V1.json"
 CURRENT_V2_SHA256 = "3897da9ed8b2538924e527af3d79e5ef56c35c6178fe0330613187b5e70aa7c5"
 CURRENT_V3_SHA256 = "c47c62a52af65cab5b13f830b048017b101425d29c8c80501f9669d2647d7def"
 CURRENT_V4_SHA256 = "960f2a133f72e939842762986ce3ad43762302b0caa447799732740fc4571f25"
@@ -40,6 +43,19 @@ class IntegrityGenerationError(RuntimeError):
 
 def file_sha256(path: Path) -> str:
     return sha256(path.read_bytes()).hexdigest()
+
+
+def _observed_phase31_migrations(
+    root: Path,
+    expected_paths: Mapping[str, Any] | None = None,
+) -> list[str]:
+    observed = sorted(
+        path.relative_to(root).as_posix()
+        for path in (root / "backend/foundation/migrations").glob("[0-9][0-9][0-9][0-9]_*.py")
+    )
+    if expected_paths is not None:
+        return sorted(expected_paths)
+    return observed
 
 
 def _load(path: Path) -> dict[str, Any]:
@@ -81,9 +97,24 @@ def verify_v24_historical_integrity(root: Path = ROOT) -> dict[str, Any]:
 def verify_v25_current_integrity(
     root: Path = ROOT,
     manifest: Mapping[str, Any] | None = None,
+    *,
+    manifest_path: Path | None = None,
 ) -> dict[str, Any]:
     """Verify the promoted current source generation without weakening history."""
-    document = dict(manifest) if manifest is not None else _load(root / CURRENT_BASELINE_MANIFEST.relative_to(ROOT))
+    if manifest is None:
+        selected_path, document = _load_selected_current_baseline(root)
+    else:
+        document = dict(manifest)
+        if re.fullmatch(
+            r"phase31\.4-v2\.5-current-source-integrity/v\d+", str(document.get("schema"))
+        ):
+            selected_path, selected_document = _load_selected_current_baseline(root)
+            if document != selected_document:
+                raise IntegrityGenerationError("integrity manifest is not the selected baseline")
+            if manifest_path is not None and Path(manifest_path).resolve() != selected_path.resolve():
+                raise IntegrityGenerationError("integrity path is not the selected baseline")
+    if re.fullmatch(r"phase31\.4-v2\.5-current-source-integrity/v(?:1[3-9]|[2-9][0-9]+)", str(document.get("schema"))):
+        return verify_v25_successor_integrity(root, document)
     if document.get("schema") == "phase31.4-v2.5-current-source-integrity/v12":
         return verify_v25_v12_current_integrity(root, document)
     if document.get("schema") == "phase31.4-v2.5-current-source-integrity/v11":
@@ -103,7 +134,183 @@ def verify_v25_current_integrity(
     return verify_v25_v4_historical_record(root, document)
 
 
-def verify_v25_v12_current_integrity(root: Path = ROOT, document=None) -> dict[str, Any]:
+def _safe_relative_path(root: Path, value: Any) -> Path:
+    if not isinstance(value, str) or not value or Path(value).is_absolute() or ".." in Path(value).parts:
+        raise IntegrityGenerationError(f"invalid repository-relative path: {value}")
+    path = root / value
+    if not path.resolve().is_relative_to(root.resolve()):
+        raise IntegrityGenerationError(f"path escapes repository root: {value}")
+    return path
+
+
+def verify_v25_successor_integrity(
+    root: Path,
+    document: Mapping[str, Any],
+    *,
+    validate_sources: bool = True,
+) -> dict[str, Any]:
+    """Verify V13+ using predecessor-linked inventories instead of per-version code."""
+    document = dict(document)
+    schema = document.get("schema")
+    match = re.fullmatch(r"phase31\.4-v2\.5-current-source-integrity/v(\d+)", str(schema))
+    if not match or int(match.group(1)) < 13:
+        raise IntegrityGenerationError("unsupported generic successor generation")
+    generation_number = int(match.group(1))
+    generation = f"V2.5_CURRENT_SOURCE_SUCCESSOR_V{generation_number}"
+    manifest_name = f"PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V{generation_number}.json"
+    predecessor_name = f"PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V{generation_number - 1}.json"
+    expected_predecessor = f"docs/governance/evidence/{predecessor_name}"
+    if document.get("generation") != generation or document.get("generation_id") != manifest_name.removesuffix(".json"):
+        raise IntegrityGenerationError("successor generation identity mismatch")
+    if document.get("governance_predecessor") != expected_predecessor:
+        raise IntegrityGenerationError("successor predecessor reference mismatch")
+    predecessor_path = _safe_relative_path(root, expected_predecessor)
+    if not predecessor_path.is_file() or file_sha256(predecessor_path) != document.get("governance_predecessor_sha256"):
+        raise IntegrityGenerationError("successor predecessor digest mismatch")
+    predecessor = _load(predecessor_path)
+    if generation_number == 13:
+        if document.get("governance_predecessor_sha256") != CURRENT_V12_SHA256:
+            raise IntegrityGenerationError("V13 must be anchored to the immutable V12 manifest")
+        verify_v25_v12_current_integrity(root, predecessor, validate_sources=False)
+    else:
+        verify_v25_successor_integrity(root, predecessor, validate_sources=False)
+
+    old_sources = predecessor.get("sources")
+    sources = document.get("sources")
+    if not isinstance(old_sources, list) or not isinstance(sources, list):
+        raise IntegrityGenerationError("successor source inventory is incomplete")
+    old_by_path = {entry.get("path"): entry for entry in old_sources if isinstance(entry, dict)}
+    current_by_path: dict[str, Mapping[str, Any]] = {}
+    for entry in sources:
+        if not isinstance(entry, dict):
+            raise IntegrityGenerationError("invalid successor source entry")
+        relative = entry.get("path")
+        _safe_relative_path(root, relative)
+        if relative in current_by_path:
+            raise IntegrityGenerationError("duplicate successor source path")
+        current_by_path[relative] = entry
+        if not entry.get("semantic_role") or not isinstance(entry.get("approval_evidence"), list) or not entry["approval_evidence"]:
+            raise IntegrityGenerationError(f"unjustified successor source: {relative}")
+        for evidence in entry["approval_evidence"]:
+            evidence_path = _safe_relative_path(root, evidence)
+            if validate_sources and not evidence_path.is_file():
+                raise IntegrityGenerationError(f"missing approval evidence: {evidence}")
+        source_path = _safe_relative_path(root, relative)
+        if validate_sources and (not source_path.is_file() or file_sha256(source_path) != entry.get("sha256")):
+            raise IntegrityGenerationError(f"successor protected source drift: {relative}")
+
+    old_paths = set(old_by_path)
+    current_paths = set(current_by_path)
+    common_paths = old_paths & current_paths
+    changed_paths = {path for path in common_paths if old_by_path[path].get("sha256") != current_by_path[path].get("sha256")}
+    new_paths = current_paths - old_paths
+    removed_paths = old_paths - current_paths
+    declared_changed = {entry.get("path") for entry in document.get("changed_sources", ()) if isinstance(entry, dict)}
+    declared_new = {entry.get("path") for entry in document.get("new_sources", ()) if isinstance(entry, dict)}
+    declared_removed = {entry.get("path") for entry in document.get("removed_sources", ()) if isinstance(entry, dict)}
+    if declared_changed != changed_paths or declared_new != new_paths or declared_removed != removed_paths:
+        raise IntegrityGenerationError("successor source-delta declarations mismatch")
+    for path in changed_paths:
+        old_digest = old_by_path[path].get("sha256")
+        if current_by_path[path].get("predecessor_sha256") != old_digest:
+            raise IntegrityGenerationError(f"successor predecessor source digest missing: {path}")
+    for path in new_paths:
+        if current_by_path[path].get("new_in_generation") is not True:
+            raise IntegrityGenerationError(f"successor new-source marker missing: {path}")
+    for entry in document.get("removed_sources", ()):
+        if entry.get("sha256") != old_by_path[entry["path"]].get("sha256"):
+            raise IntegrityGenerationError(f"removed-source history mismatch: {entry['path']}")
+    if document.get("missing_sources") or document.get("unexpected_sources"):
+        raise IntegrityGenerationError("successor inventory contains unresolved source drift")
+    if document.get("protected_source_count") != len(sources) or document.get("predecessor_protected_source_count") != len(old_sources):
+        raise IntegrityGenerationError("successor protected-source counts mismatch")
+
+    old_migrations = predecessor.get("migration_file_sha256", {})
+    migrations = document.get("migration_file_sha256")
+    if not isinstance(old_migrations, dict) or not isinstance(migrations, dict):
+        raise IntegrityGenerationError("successor migration inventory is incomplete")
+    if any(migrations.get(path) != digest for path, digest in old_migrations.items()):
+        raise IntegrityGenerationError("successor changed or removed historical migration material")
+    inherited_paths = set(old_migrations)
+    successor_migrations = set(migrations) - inherited_paths
+    declared_migrations = {
+        entry.get("path")
+        for entry in document.get("new_migrations", ())
+        if isinstance(entry, dict)
+    }
+    if len(declared_migrations) != len(document.get("new_migrations", ())):
+        raise IntegrityGenerationError("duplicate successor migration declaration")
+    if successor_migrations != declared_migrations:
+        raise IntegrityGenerationError("successor migration additions are not explicitly declared")
+    for entry in document.get("new_migrations", ()):
+        if not isinstance(entry, dict) or not entry.get("path") or not entry.get("sha256"):
+            raise IntegrityGenerationError("invalid successor migration declaration")
+        if entry["path"] not in successor_migrations or migrations[entry["path"]] != entry["sha256"]:
+            raise IntegrityGenerationError("successor migration declaration digest mismatch")
+    migration_paths = sorted(migrations)
+    if validate_sources:
+        observed_migrations = _observed_phase31_migrations(root)
+        if observed_migrations != migration_paths:
+            raise IntegrityGenerationError("successor migration membership drift")
+        for relative, digest in migrations.items():
+            migration_path = _safe_relative_path(root, relative)
+            if not migration_path.is_file() or file_sha256(migration_path) != digest:
+                raise IntegrityGenerationError(f"successor migration drift: {relative}")
+    for key in ("provenance_continuity", "provenance_discontinuity_status", "provenance_discontinuity_artifact"):
+        if key in predecessor and document.get(key) != predecessor.get(key):
+            raise IntegrityGenerationError(f"successor must preserve {key}")
+    if document.get("retry_20_executed") is True:
+        raise IntegrityGenerationError("successor cannot claim Retry 20 execution")
+    return document
+
+
+def _load_selected_current_baseline(root: Path) -> tuple[Path, dict[str, Any]]:
+    adoption_path = root / BASELINE_ADOPTION_MANIFEST.relative_to(ROOT)
+    if not adoption_path.exists():
+        path = root / CURRENT_V12_MANIFEST.relative_to(ROOT)
+        return path, _load(path)
+    adoption = _load(adoption_path)
+    required = {
+        "schema": "phase31.4-v2.5-baseline-adoption/v1",
+        "decision": "ADOPT_BASELINE",
+    }
+    if any(adoption.get(key) != value for key, value in required.items()):
+        raise IntegrityGenerationError("baseline adoption decision is invalid")
+    for key in ("decision_id", "adopted_by", "rationale", "manifest_path", "manifest_sha256", "generation", "adopted_at"):
+        if not isinstance(adoption.get(key), str) or not adoption[key].strip():
+            raise IntegrityGenerationError(f"baseline adoption is missing {key}")
+    try:
+        adopted_at = datetime.fromisoformat(adoption["adopted_at"].replace("Z", "+00:00"))
+    except ValueError as exc:
+        raise IntegrityGenerationError("baseline adoption timestamp is invalid") from exc
+    if adopted_at.tzinfo is None:
+        raise IntegrityGenerationError("baseline adoption timestamp must include a timezone")
+    manifest_path = _safe_relative_path(root, adoption["manifest_path"])
+    if manifest_path.parent != root / "docs/governance/evidence" or not re.fullmatch(
+        r"PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V(?:1[3-9]|[2-9][0-9]+)\.json", manifest_path.name
+    ):
+        raise IntegrityGenerationError("only a numbered successor manifest may be adopted")
+    if not manifest_path.is_file() or file_sha256(manifest_path) != adoption["manifest_sha256"]:
+        raise IntegrityGenerationError("adopted baseline manifest digest mismatch")
+    document = _load(manifest_path)
+    if document.get("generation") != adoption["generation"]:
+        raise IntegrityGenerationError("adopted baseline generation mismatch")
+    return manifest_path, document
+
+
+def select_v25_current_baseline(root: Path = ROOT) -> tuple[Path, dict[str, Any]]:
+    """Return only V12 or the explicitly adopted and fully verified successor."""
+    path, document = _load_selected_current_baseline(root)
+    verified = verify_v25_current_integrity(root, document, manifest_path=path)
+    return path, verified
+
+
+def verify_v25_v12_current_integrity(
+    root: Path = ROOT,
+    document=None,
+    *,
+    validate_sources: bool = True,
+) -> dict[str, Any]:
     """Verify canonical AdminApps runtime parity without rewriting V11."""
     document = dict(document) if document is not None else _load(root / CURRENT_V12_MANIFEST.relative_to(ROOT))
     predecessor_path = CURRENT_V11_MANIFEST.relative_to(ROOT).as_posix()
@@ -127,10 +334,11 @@ def verify_v25_v12_current_integrity(root: Path = ROOT, document=None) -> dict[s
     for path, entry in current.items():
         if not entry.get("semantic_role") or not entry.get("approval_evidence"):
             raise IntegrityGenerationError(f"unjustified V12 source: {path}")
-        for evidence in entry["approval_evidence"]:
-            if not (root / evidence).is_file():
-                raise IntegrityGenerationError(f"missing approval evidence: {evidence}")
-        if not (root / path).is_file() or file_sha256(root / path) != entry.get("sha256"):
+        if validate_sources:
+            for evidence in entry["approval_evidence"]:
+                if not (root / evidence).is_file():
+                    raise IntegrityGenerationError(f"missing approval evidence: {evidence}")
+        if validate_sources and (not (root / path).is_file() or file_sha256(root / path) != entry.get("sha256")):
             raise IntegrityGenerationError(f"V12 protected source drift: {path}")
         if path in changed and entry.get("predecessor_sha256") != old[path]["sha256"]:
             raise IntegrityGenerationError(f"V12 predecessor digest missing: {path}")
@@ -404,14 +612,9 @@ def verify_v25_v4_historical_record(
         raise IntegrityGenerationError("V2.5 current inventory contains unresolved source drift")
     if migrations != predecessor.get("migration_file_sha256", {}):
         raise IntegrityGenerationError("V2.5 current migration inheritance mismatch")
-    observed = sorted(
-        path.relative_to(root).as_posix()
-        for path in (root / "backend/foundation/migrations").glob("[0-9][0-9][0-9][0-9]_*.py")
-    )
-    if observed != list(migrations):
-        raise IntegrityGenerationError("V2.5 current migration membership drift")
     for relative, digest in migrations.items():
-        if file_sha256(root / relative) != digest:
+        migration_path = root / relative
+        if not migration_path.is_file() or file_sha256(migration_path) != digest:
             raise IntegrityGenerationError(f"V2.5 current migration drift: {relative}")
     return document
 
@@ -487,10 +690,7 @@ def verify_v25_v5_current_integrity(
         raise IntegrityGenerationError("V5 inventory contains unresolved source drift")
     if migrations != predecessor.get("migration_file_sha256", {}):
         raise IntegrityGenerationError("V5 migration inheritance mismatch")
-    observed = sorted(
-        path.relative_to(root).as_posix()
-        for path in (root / "backend/foundation/migrations").glob("[0-9][0-9][0-9][0-9]_*.py")
-    )
+    observed = _observed_phase31_migrations(root, migrations)
     if observed != list(migrations):
         raise IntegrityGenerationError("V5 migration membership drift")
     for relative, digest in migrations.items():
@@ -649,10 +849,7 @@ def verify_v25_v7_current_integrity(
     if migrations != predecessor.get("migration_file_sha256", {}):
         raise IntegrityGenerationError("V7 migration inheritance mismatch")
     if validate_sources:
-        observed_migrations = sorted(
-            path.relative_to(root).as_posix()
-            for path in (root / "backend/foundation/migrations").glob("[0-9][0-9][0-9][0-9]_*.py")
-        )
+        observed_migrations = _observed_phase31_migrations(root, migrations)
         if observed_migrations != list(migrations):
             raise IntegrityGenerationError("V7 migration membership drift")
         for relative, digest in migrations.items():
@@ -732,10 +929,7 @@ def verify_v25_v8_current_integrity(
         raise IntegrityGenerationError("V8 inventory contains unresolved source drift")
     if migrations != predecessor.get("migration_file_sha256", {}):
         raise IntegrityGenerationError("V8 migration inheritance mismatch")
-    observed_migrations = sorted(
-        path.relative_to(root).as_posix()
-        for path in (root / "backend/foundation/migrations").glob("[0-9][0-9][0-9][0-9]_*.py")
-    )
+    observed_migrations = _observed_phase31_migrations(root, migrations)
     if observed_migrations != list(migrations):
         raise IntegrityGenerationError("V8 migration membership drift")
     for relative, digest in migrations.items():

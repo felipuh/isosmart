@@ -21,18 +21,16 @@ class OrganizationMiddleware(MiddlewareMixin):
         request.user_role = None
         request.user_profile = None
         
-        # Obtener token del header
-        auth_header = request.META.get('HTTP_AUTHORIZATION', '')
-        
-        if not auth_header.startswith('Bearer '):
+        # Browser credentials are HttpOnly cookies. Header bearer tokens are no
+        # longer accepted by the browser authentication contract.
+        raw_token = request.COOKIES.get('isosmart_access')
+        if not raw_token:
             return None
         
         try:
             # Autenticar con JWT
             jwt_auth = JWTAuthentication()
-            validated_token = jwt_auth.get_validated_token(
-                auth_header.split(' ')[1]
-            )
+            validated_token = jwt_auth.get_validated_token(raw_token)
             
             # Extraer claims personalizados
             request.organization_id = validated_token.get('organization_id')

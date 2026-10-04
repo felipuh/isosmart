@@ -15,7 +15,9 @@ from pathlib import Path
 import tempfile
 import unittest
 from typing import Any, Mapping, Sequence
+from unittest.mock import patch
 
+from .phase31_4_integrity_generations import IntegrityGenerationError
 from .phase31_4_v2_5_disposable_runner import (
     AUTH_LABEL,
     CONSUMPTION_NAME,
@@ -342,6 +344,33 @@ class DisposableEvidenceRunnerTests(unittest.TestCase):
         )
         self.assertTrue(registry_record.is_file())
         self.assertEqual(self._persisted(artifacts)["current_state"], "AUTHORIZED")
+
+    def test_v13_authorization_requires_selected_baseline_verification(self) -> None:
+        artifacts = self._artifacts()
+        integrity = json.loads(artifacts.integrity_path.read_text(encoding="utf-8"))
+        integrity["schema"] = "phase31.4-v2.5-current-source-integrity/v13"
+        self._write_json(artifacts.integrity_path, integrity)
+        integrity_sha = _digest(artifacts.integrity_path)
+
+        authorization = json.loads(artifacts.authorization_path.read_text(encoding="utf-8"))
+        authorization["integrity"]["sha256"] = integrity_sha
+        self._write_json(artifacts.authorization_path, authorization)
+        inputs = replace(
+            artifacts.inputs,
+            expected_authorization_sha256=_digest(artifacts.authorization_path),
+            expected_integrity_sha256=integrity_sha,
+        )
+
+        with patch(
+            "foundation.phase31_4_v2_5_disposable_runner.verify_v25_current_integrity",
+            side_effect=IntegrityGenerationError("successor baseline was not adopted"),
+        ) as verify_current:
+            with self.assertRaises(RunnerError) as raised:
+                verify_authorization(inputs)
+
+        self.assertEqual(raised.exception.code, "CURRENT_INTEGRITY_MISMATCH")
+        verify_current.assert_called_once()
+        self.assertFalse(artifacts.consumption_registry.exists())
 
     def test_consumed_authorization_fails_closed_before_any_resource_command(self) -> None:
         artifacts = self._artifacts()

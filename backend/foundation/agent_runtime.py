@@ -210,6 +210,14 @@ class AgentRunCompletionResult:
     audit_id: UUID
 
 
+@dataclass(frozen=True)
+class AgentRunResultCompletionResult:
+    agent_run_id: UUID
+    event_id: UUID
+    outbox_id: UUID
+    audit_id: UUID
+
+
 class AgentRunCommandService:
     """Governed recordkeeping only: no provider call, tool call or business execution."""
 
@@ -389,7 +397,33 @@ class AgentRunCommandService:
             return AgentRunCompletionResult(run.id, recommendation_result.recommendation_id,
                                             link.id, event_id, outbox_id, audit_id)
 
-    def fail_agent_run(self, *, identity, agent_run_id, actor_id):
+    def complete_agent_run_with_result(
+        self, *, identity, agent_run_id, result_payload, actor_id,
+    ):
+        result_payload = _json_object(result_payload, "result_payload")
+        with trusted_tenant_context(identity, actor_id=actor_id, trace_id=uuid4(), using=self.using):
+            run = AgentRun.objects.using(self.using).select_for_update().get(id=agent_run_id)
+            if run.status != AgentRun.Status.RUNNING:
+                raise ValueError("only a running AgentRun can complete")
+            run.status = AgentRun.Status.COMPLETED
+            run.completed_at = timezone.now()
+            snapshots = [
+                {"input_id": str(row.id), "standard_edition_id": str(row.standard_edition_id),
+                 "requirement_control_id": str(row.requirement_control_id),
+                 "knowledge_layer_rule_id": str(row.knowledge_layer_rule_id),
+                 "evidence_id": str(row.evidence_id)}
+                for row in AgentRunInput.objects.using(self.using).filter(agent_run_id=run.id)
+            ]
+            state = self._state(run, inputs=snapshots, recommendation_id=None)
+            state["execution_result"] = result_payload
+            event_id, outbox_id, audit_id = self._event_outbox_audit(
+                identity=identity, run=run, event_type="agent_run.completed",
+                actor_id=actor_id, occurred_at=run.completed_at, payload=state,
+            )
+            run.save(using=self.using, update_fields=("status", "completed_at"))
+            return AgentRunResultCompletionResult(run.id, event_id, outbox_id, audit_id)
+
+    def fail_agent_run(self, *, identity, agent_run_id, actor_id, failure_code=None):
         with trusted_tenant_context(identity, actor_id=actor_id, trace_id=uuid4(), using=self.using):
             run = AgentRun.objects.using(self.using).select_for_update().get(id=agent_run_id)
             if run.status != AgentRun.Status.RUNNING:
@@ -404,6 +438,8 @@ class AgentRunCommandService:
                 for row in AgentRunInput.objects.using(self.using).filter(agent_run_id=run.id)
             ]
             state = self._state(run, inputs=snapshots, recommendation_id=None)
+            if failure_code:
+                state["failure"] = {"code": _required(failure_code, "failure_code")}
             return self._event_outbox_audit(identity=identity, run=run, event_type="agent_run.failed",
                                             actor_id=actor_id, occurred_at=run.completed_at, payload=state)
 

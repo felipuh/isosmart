@@ -1,29 +1,9 @@
 /**
  * Configuración de API (Axios) para ISO Smart
- * Incluye interceptores para manejo automático de tokens JWT
+ * Uses HttpOnly authentication cookies; JavaScript never handles JWT values.
  */
 
 import axios from 'axios';
-
-const getTokenPayload = (token) => {
-  if (!token) return null;
-  const parts = token.split('.');
-  if (parts.length !== 3) return null;
-  try {
-    const payload = parts[1].replace(/-/g, '+').replace(/_/g, '/');
-    const decoded = atob(payload);
-    return JSON.parse(decoded);
-  } catch {
-    return null;
-  }
-};
-
-const isTokenExpired = (token) => {
-  const payload = getTokenPayload(token);
-  if (!payload || !payload.exp) return true;
-  const nowSeconds = Math.floor(Date.now() / 1000);
-  return payload.exp <= nowSeconds;
-};
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
 
@@ -33,33 +13,33 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true,
 });
 
 // Flag para evitar múltiples refreshes simultáneos
 let isRefreshing = false;
 let failedQueue = [];
 
-const processQueue = (error, token = null) => {
+const processQueue = (error) => {
   failedQueue.forEach(prom => {
     if (error) {
       prom.reject(error);
     } else {
-      prom.resolve(token);
+      prom.resolve();
     }
   });
   failedQueue = [];
 };
 
-// Interceptor de request - agregar token
 api.interceptors.request.use(
   (config) => {
     const requestUrl = config?.url || '';
-    const isAuthEndpoint = requestUrl.includes('/auth/login/') || requestUrl.includes('/auth/refresh/');
-    const token = localStorage.getItem('access_token');
-    if (token && !isAuthEndpoint) {
-      config.headers.Authorization = `Bearer ${token}`;
-    } else if (isAuthEndpoint && config.headers?.Authorization) {
-      delete config.headers.Authorization;
+    const unsafeMethod = !['get', 'head', 'options'].includes((config.method || 'get').toLowerCase());
+    if (unsafeMethod && !requestUrl.includes('/auth/login/') && !requestUrl.includes('/auth/csrf/')) {
+      const csrf = document.cookie.split('; ').find((item) => item.startsWith('csrftoken='))?.split('=')[1];
+      if (csrf) {
+        config.headers['X-CSRFToken'] = decodeURIComponent(csrf);
+      }
     }
     return config;
   },
@@ -86,50 +66,20 @@ api.interceptors.response.use(
       return new Promise((resolve, reject) => {
         failedQueue.push({ resolve, reject });
       })
-        .then(token => {
-          originalRequest.headers.Authorization = `Bearer ${token}`;
-          return api(originalRequest);
-        })
+        .then(() => api(originalRequest))
         .catch(err => Promise.reject(err));
     }
 
     originalRequest._retry = true;
     isRefreshing = true;
 
-    const refreshToken = localStorage.getItem('refresh_token');
-
-    if (!refreshToken || isTokenExpired(refreshToken)) {
-      isRefreshing = false;
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('refresh_token');
-      delete api.defaults.headers.common['Authorization'];
-      redirectToLogin();
-      return Promise.reject(error);
-    }
-
     try {
-      const response = await api.post('/auth/refresh/', {
-        refresh: refreshToken,
-      });
-
-      const { access, refresh: newRefresh } = response.data;
-
-      localStorage.setItem('access_token', access);
-      if (newRefresh) {
-        localStorage.setItem('refresh_token', newRefresh);
-      }
-
-      api.defaults.headers.common['Authorization'] = `Bearer ${access}`;
-      processQueue(null, access);
-
-      originalRequest.headers.Authorization = `Bearer ${access}`;
+      await api.post('/auth/refresh/');
+      processQueue(null);
       return api(originalRequest);
 
     } catch (refreshError) {
       processQueue(refreshError, null);
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('refresh_token');
-      delete api.defaults.headers.common['Authorization'];
       redirectToLogin();
       return Promise.reject(refreshError);
     } finally {

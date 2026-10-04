@@ -16,24 +16,12 @@ const authService = {
 
   // Logout
   logout: async () => {
-    const refresh = localStorage.getItem('refresh_token');
-    if (refresh) {
-      try {
-        await api.post('/auth/logout/', { refresh });
-      } catch (error) {
-        console.error('Error en logout:', error);
-      }
-    }
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
+    await api.post('/auth/logout/');
   },
 
   // Refresh token
   refreshToken: async () => {
-    const refresh = localStorage.getItem('refresh_token');
-    if (!refresh) return null;
-    
-    const response = await api.post('/auth/refresh/', { refresh });
+    const response = await api.post('/auth/refresh/');
     return response.data;
   },
 
@@ -87,7 +75,7 @@ const authService = {
 
   // Verificar si está autenticado
   isAuthenticated: () => {
-    return !!localStorage.getItem('access_token');
+    return false; // Authentication state is intentionally owned by AuthContext.
   }
 };
 

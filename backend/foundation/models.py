@@ -34,6 +34,12 @@ class TenantProjection(models.Model):
     source_version = models.BigIntegerField()
     source_event_id = models.UUIDField(null=True, unique=True)
     display_name_snapshot = models.CharField(max_length=255)
+    plan = models.TextField(null=True, blank=True)
+    locale = models.TextField(null=True, blank=True)
+    industry_profile = models.ForeignKey(
+        "IndustryProfile", on_delete=models.PROTECT,
+        db_column="industry_profile_id", null=True, blank=True,
+    )
     lifecycle_status = models.CharField(
         max_length=32, choices=LifecycleStatus.choices, default=LifecycleStatus.PENDING
     )
@@ -96,12 +102,31 @@ class Organization(models.Model):
     )
     display_name = models.CharField(max_length=255)
     legal_name = models.CharField(max_length=255, null=True, blank=True)
+    sector = models.TextField(null=True, blank=True)
+    size = models.TextField(null=True, blank=True)
+    maturity = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         managed = False
         db_table = 'qms"."organization'
+
+
+class Site(models.Model):
+    """Tenant-scoped physical or operational site owned by one QMS Organization."""
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_column="site_id")
+    tenant = models.ForeignKey(TenantProjection, on_delete=models.PROTECT, db_column="tenant_id")
+    organization = models.ForeignKey(Organization, on_delete=models.PROTECT, db_column="organization_id")
+    country = models.TextField()
+    timezone = models.TextField()
+    criticality = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        managed = False
+        db_table = 'qms"."site'
 
 
 class Stakeholder(models.Model):
@@ -394,6 +419,37 @@ class StandardEdition(models.Model):
     class Meta:
         managed = False
         db_table = 'normative"."standard_edition'
+
+
+class IndustryProfile(models.Model):
+    """Global industry-profile identity/metadata; it carries no sector rules."""
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False,
+                          db_column="industry_profile_id")
+    code = models.TextField(unique=True)
+    name = models.TextField()
+    manufacturing_service_route = models.TextField()
+    terminology_pack = models.TextField()
+
+    class Meta:
+        managed = False
+        db_table = 'normative"."industry_profile'
+
+
+class StandardPack(models.Model):
+    """Tenant binding that makes one exact StandardEdition available as a pack."""
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_column="pack_id")
+    tenant = models.ForeignKey(TenantProjection, on_delete=models.PROTECT, db_column="tenant_id")
+    standard_edition = models.ForeignKey(
+        StandardEdition, on_delete=models.PROTECT, db_column="standard_edition_id",
+    )
+    status = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        managed = False
+        db_table = 'qms"."standard_pack'
 
 
 class Clause(models.Model):
@@ -1114,6 +1170,104 @@ class ActionExecutionReceipt(models.Model):
         db_table = 'qms"."action_execution_receipt'
 
 
+class ActionExecutionRollback(models.Model):
+    """Immutable lineage from a controlled forward execution to its compensation.
+
+    This is deliberately a relation rather than a free-form rollback token: the
+    source ``rollback_ref`` can only resolve to a persisted ActionExecution in
+    the same tenant and organization.
+    """
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    tenant = models.ForeignKey(TenantProjection, on_delete=models.PROTECT, db_column="tenant_id")
+    organization = models.ForeignKey(Organization, on_delete=models.PROTECT, db_column="organization_id")
+    original_execution = models.OneToOneField(
+        ActionExecution, on_delete=models.PROTECT, db_column="original_execution_id",
+        related_name="rollback_ref",
+    )
+    compensating_execution = models.OneToOneField(
+        ActionExecution, on_delete=models.PROTECT, db_column="compensating_execution_id",
+        related_name="compensates_execution",
+    )
+    reason = models.TextField()
+    idempotency_key = models.CharField(max_length=200)
+    trace_id = models.UUIDField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        managed = False
+        db_table = 'qms"."action_execution_rollback'
+
+
+class QmsAudit(models.Model):
+    """Source-backed audit record; workflow transitions are intentionally not inferred."""
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_column="audit_id")
+    tenant = models.ForeignKey(TenantProjection, on_delete=models.PROTECT, db_column="tenant_id")
+    organization = models.ForeignKey(Organization, on_delete=models.PROTECT, db_column="organization_id")
+    scope = models.TextField()
+    criteria = models.TextField()
+    status = models.CharField(max_length=80)
+    lead_auditor = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        managed = False
+        db_table = 'qms"."audit'
+
+
+class Finding(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_column="finding_id")
+    tenant = models.ForeignKey(TenantProjection, on_delete=models.PROTECT, db_column="tenant_id")
+    organization = models.ForeignKey(Organization, on_delete=models.PROTECT, db_column="organization_id")
+    audit = models.ForeignKey(QmsAudit, on_delete=models.PROTECT, db_column="audit_id")
+    requirement = models.ForeignKey(RequirementControl, on_delete=models.PROTECT, db_column="requirement_id")
+    finding_type = models.CharField(max_length=80, db_column="type")
+    statement = models.TextField()
+    evidence = models.ForeignKey("Evidence", on_delete=models.PROTECT, db_column="evidence_id")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        managed = False
+        db_table = 'qms"."finding'
+
+
+class QmsNonconformity(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_column="nc_id")
+    tenant = models.ForeignKey(TenantProjection, on_delete=models.PROTECT, db_column="tenant_id")
+    organization = models.ForeignKey(Organization, on_delete=models.PROTECT, db_column="organization_id")
+    source_type = models.CharField(max_length=80)
+    source_id = models.UUIDField()
+    description = models.TextField()
+    severity = models.CharField(max_length=80)
+    status = models.CharField(max_length=80)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        managed = False
+        db_table = 'qms"."nonconformity'
+
+
+class QmsCorrectiveAction(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_column="capa_id")
+    tenant = models.ForeignKey(TenantProjection, on_delete=models.PROTECT, db_column="tenant_id")
+    organization = models.ForeignKey(Organization, on_delete=models.PROTECT, db_column="organization_id")
+    nonconformity = models.ForeignKey(QmsNonconformity, on_delete=models.PROTECT, db_column="nc_id")
+    cause_id = models.UUIDField()
+    action = models.TextField()
+    owner_id = models.UUIDField()
+    due_date = models.DateField()
+    effectiveness_check = models.ForeignKey(
+        "EffectivenessCheck", on_delete=models.PROTECT, db_column="effectiveness_check_id",
+        null=True, blank=True,
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        managed = False
+        db_table = 'qms"."corrective_action'
+
+
 class EffectivenessCheck(models.Model):
     """Immutable, human-attested assessment of one exact controlled execution."""
 
@@ -1549,6 +1703,9 @@ class UserProjection(models.Model):
         related_name="user_projections",
         db_column="tenant_id",
     )
+    email = models.TextField(null=True, blank=True)
+    role = models.TextField(null=True, blank=True)
+    mfa_status = models.TextField(null=True, blank=True)
     source_version = models.BigIntegerField()
     source_event_id = models.UUIDField(unique=True)
     lifecycle_status = models.CharField(
@@ -1589,6 +1746,168 @@ class DomainEvent(models.Model):
     class Meta:
         managed = False
         db_table = 'eventing"."domain_event'
+
+
+class LearningPath(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    standard_edition = models.ForeignKey(
+        StandardEdition, on_delete=models.PROTECT, db_column="edition_id",
+    )
+    role_code = models.CharField(max_length=80, null=True, blank=True)
+    industry_code = models.CharField(max_length=80, null=True, blank=True)
+    required_score = models.DecimalField(max_digits=5, decimal_places=2, default=80)
+    active = models.BooleanField(default=True)
+    critical_concepts = models.JSONField(default=list)
+
+    class Meta:
+        managed = False
+        db_table = 'qms"."learning_path'
+
+
+class QuestionBank(models.Model):
+    class PublicationState(models.TextChoices):
+        DRAFT = "draft", "Draft"
+        PUBLISHED = "published", "Published"
+        RETIRED = "retired", "Retired"
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    question_key = models.UUIDField(default=uuid.uuid4, editable=False)
+    version = models.PositiveIntegerField(default=1)
+    learning_path = models.ForeignKey(
+        LearningPath, on_delete=models.PROTECT, db_column="learning_path_id",
+    )
+    concept_key = models.CharField(max_length=160)
+    industry_code = models.CharField(max_length=80, null=True, blank=True)
+    difficulty = models.PositiveSmallIntegerField(null=True, blank=True)
+    scenario = models.TextField()
+    options_json = models.JSONField()
+    answer_key = models.JSONField()
+    explanation = models.TextField(null=True, blank=True)
+    critical = models.BooleanField(default=False)
+    publication_state = models.CharField(
+        max_length=16, choices=PublicationState.choices, default=PublicationState.DRAFT,
+    )
+    effective_from = models.DateTimeField(null=True, blank=True)
+    effective_to = models.DateTimeField(null=True, blank=True)
+    provenance_hash = models.CharField(max_length=64, null=True, blank=True)
+    published_at = models.DateTimeField(null=True, blank=True)
+    retired_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        managed = False
+        db_table = 'qms"."question_bank'
+
+
+class QuizAttempt(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    tenant = models.ForeignKey(TenantProjection, on_delete=models.PROTECT, db_column="tenant_id")
+    user = models.ForeignKey(UserProjection, on_delete=models.PROTECT, db_column="user_id")
+    learning_path = models.ForeignKey(
+        LearningPath, on_delete=models.PROTECT, db_column="learning_path_id",
+    )
+    question_bank_version = models.PositiveIntegerField(default=1)
+    answers = models.JSONField(default=list)
+    weak_concepts = models.JSONField(default=list)
+    score = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    passed = models.BooleanField(null=True, blank=True)
+    provenance_hash = models.CharField(max_length=64)
+    started_at = models.DateTimeField()
+    completed_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        managed = False
+        db_table = 'qms"."quiz_attempt'
+
+
+class ConceptMastery(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    tenant = models.ForeignKey(TenantProjection, on_delete=models.PROTECT, db_column="tenant_id")
+    user = models.ForeignKey(UserProjection, on_delete=models.PROTECT, db_column="user_id")
+    concept_key = models.CharField(max_length=160)
+    score = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    last_assessed_at = models.DateTimeField(null=True, blank=True)
+    retraining_due_at = models.DateTimeField(null=True, blank=True)
+    latest_attempt = models.ForeignKey(
+        QuizAttempt, on_delete=models.PROTECT, db_column="latest_attempt_id",
+    )
+
+    class Meta:
+        managed = False
+        db_table = 'qms"."concept_mastery'
+
+
+class OnboardingWorkflow(models.Model):
+    """Durable onboarding state for one tenant/user journey."""
+
+    class Status(models.TextChoices):
+        IN_PROGRESS = "in_progress", "In progress"
+        COMPLETE = "complete", "Complete"
+        BLOCKED = "blocked", "Blocked"
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    tenant = models.ForeignKey(TenantProjection, on_delete=models.PROTECT, db_column="tenant_id")
+    user = models.ForeignKey(UserProjection, on_delete=models.PROTECT, db_column="user_id")
+    current_step = models.CharField(max_length=80)
+    status = models.CharField(max_length=24, choices=Status.choices, default=Status.IN_PROGRESS)
+    completed_steps = models.JSONField(default=list)
+    state = models.JSONField(default=dict)
+    version = models.PositiveIntegerField(default=1)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        managed = False
+        db_table = 'onboarding"."workflow_instance'
+        constraints = [
+            models.UniqueConstraint(fields=("tenant", "user"), name="onboarding_workflow_tenant_user_unique"),
+        ]
+
+
+class OnboardingTransition(models.Model):
+    """Append-only state transition with event and provenance identity."""
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    tenant = models.ForeignKey(TenantProjection, on_delete=models.PROTECT, db_column="tenant_id")
+    workflow = models.ForeignKey(OnboardingWorkflow, on_delete=models.PROTECT, db_column="workflow_id")
+    step_key = models.CharField(max_length=80)
+    from_status = models.CharField(max_length=24, null=True, blank=True)
+    to_status = models.CharField(max_length=24)
+    event_id = models.UUIDField(unique=True)
+    event_type = models.CharField(max_length=160)
+    source_reference = models.TextField()
+    provenance_hash = models.CharField(max_length=64)
+    actor_id = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        managed = False
+        db_table = 'onboarding"."workflow_transition'
+
+
+class CapabilityActivation(models.Model):
+    """Tenant-scoped activation of a published global capability."""
+
+    class Status(models.TextChoices):
+        ACTIVE = "active", "Active"
+        REVOKED = "revoked", "Revoked"
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    tenant = models.ForeignKey(TenantProjection, on_delete=models.PROTECT, db_column="tenant_id")
+    agent_definition = models.ForeignKey(
+        "AgentDefinition", on_delete=models.PROTECT, db_column="agent_definition_id",
+    )
+    status = models.CharField(max_length=16, choices=Status.choices, default=Status.ACTIVE)
+    activated_by = models.CharField(max_length=255)
+    provenance_hash = models.CharField(max_length=64)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        managed = False
+        db_table = 'qms"."capability_activation'
+        constraints = [
+            models.UniqueConstraint(fields=("tenant", "agent_definition"), name="qms_capability_activation_unique"),
+        ]
 
 
 class TransactionalOutbox(models.Model):

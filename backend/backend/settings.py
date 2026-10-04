@@ -106,7 +106,7 @@ INSTALLED_APPS = [
 # Configuración de integración
 ADMIN_APPS_INTEGRATION = {
     'BASE_URL': os.getenv('ADMIN_APPS_BASE_URL', '').strip(),
-    'API_KEY': os.getenv('ADMIN_APPS_API_KEY', 'isosmart-integration-key-2025' if IS_DEVELOPMENT else ''),
+    'API_KEY': os.getenv('ADMIN_APPS_API_KEY', '').strip(),
     'TIMEOUT': int(os.getenv('ADMIN_APPS_TIMEOUT', '10')),
     'CACHE_TTL': int(os.getenv('ADMIN_APPS_CACHE_TTL', '300')),
     'SYNC_USERS': _env_bool('ADMIN_APPS_SYNC_USERS', default=True),
@@ -160,7 +160,7 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'integration.sso_auth.Smart3AISSOAuthentication',  # Centralized SSO JWT
-        'rest_framework_simplejwt.authentication.JWTAuthentication',  # JWT authentication
+        'authentication.cookie_auth.CookieJWTAuthentication',
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 20,
@@ -219,7 +219,16 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-if _env_bool('USE_SQLITE_DATABASE', default=False):
+DJANGO_SETTINGS_MODULE = os.getenv('DJANGO_SETTINGS_MODULE', '')
+USE_SQLITE_DATABASE = _env_bool('USE_SQLITE_DATABASE', default=False)
+IS_EXPLICIT_TEST_SETTINGS = DJANGO_SETTINGS_MODULE == 'backend.settings_test'
+
+if IS_EXPLICIT_TEST_SETTINGS and IS_PRODUCTION:
+    raise RuntimeError('Test settings cannot be used with a production environment')
+if USE_SQLITE_DATABASE and not IS_EXPLICIT_TEST_SETTINGS:
+    raise RuntimeError('SQLite is only permitted with backend.settings_test')
+
+if USE_SQLITE_DATABASE:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -238,9 +247,9 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.getenv('DB_NAME', 'isosmart_main'),
-            'USER': os.getenv('DB_USER', 'isosmart'),
-            'PASSWORD': os.getenv('DB_PASSWORD', ''),
+            'NAME': os.getenv('DB_NAME') or os.getenv('POSTGRES_DB', 'isosmart_main'),
+            'USER': os.getenv('DB_USER') or os.getenv('POSTGRES_USER', 'isosmart'),
+            'PASSWORD': os.getenv('DB_PASSWORD') or os.getenv('POSTGRES_PASSWORD', ''),
             'HOST': os.getenv('DB_HOST', '127.0.0.1'),
             'PORT': os.getenv('DB_PORT', '5432'),
             'CONN_MAX_AGE': int(os.getenv('DB_CONN_MAX_AGE', '60')),
@@ -276,7 +285,7 @@ ADMINAPPS_TENANT_EVENT_KEY_SHA256 = os.getenv('ADMINAPPS_TENANT_EVENT_KEY_SHA256
 
 # Foundation SQL uses distinct least-privilege PostgreSQL principals. Missing
 # credentials leave the production ingress/commands unavailable by design.
-if not _env_bool('USE_SQLITE_DATABASE', default=False):
+if not USE_SQLITE_DATABASE:
     foundation_aliases = (
         ('app', 'FOUNDATION_APP'), ('projector', 'FOUNDATION_PROJECTOR'),
         ('worker', 'FOUNDATION_WORKER'), ('agent_catalog_curator', 'FOUNDATION_AGENT_CATALOG_CURATOR'),
@@ -370,10 +379,16 @@ SECURE_HSTS_INCLUDE_SUBDOMAINS = _env_bool('SECURE_HSTS_INCLUDE_SUBDOMAINS', def
 SECURE_HSTS_PRELOAD = _env_bool('SECURE_HSTS_PRELOAD', default=False)
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = 'Lax'
-CSRF_COOKIE_HTTPONLY = True
+# This cookie holds only a CSRF nonce (not authentication), so JavaScript may
+# read it to echo the required X-CSRFToken header.
+CSRF_COOKIE_HTTPONLY = False
 CSRF_COOKIE_SAMESITE = 'Lax'
 SESSION_COOKIE_SECURE = _env_bool('SESSION_COOKIE_SECURE', default=not DEBUG)
 CSRF_COOKIE_SECURE = _env_bool('CSRF_COOKIE_SECURE', default=not DEBUG)
+AUTH_COOKIE_SECURE = _env_bool('AUTH_COOKIE_SECURE', default=not DEBUG)
+AUTH_COOKIE_SAMESITE = os.getenv('AUTH_COOKIE_SAMESITE', 'Lax')
+AUTH_ACCESS_COOKIE_AGE = 60 * 60
+AUTH_REFRESH_COOKIE_AGE = 7 * 24 * 60 * 60
 
 # Configuración de Celery
 CELERY_BROKER_URL = 'redis://localhost:6379/1'

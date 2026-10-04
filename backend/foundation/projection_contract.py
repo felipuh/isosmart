@@ -119,6 +119,16 @@ def validate_projection_event(raw: Mapping[str, Any]) -> ProjectionEvent:
     } and not str(payload.get("display_name") or "").strip():
         raise ContractValidationError("tenant payload requires display_name")
     if aggregate_type is AggregateType.TENANT:
+        for optional_text in ("plan", "locale"):
+            value = payload.get(optional_text)
+            if value is not None and (not isinstance(value, str) or not value.strip()):
+                raise ContractValidationError(f"tenant {optional_text} must be a nonblank string when supplied")
+        industry_profile_id = payload.get("industry_profile_id")
+        if industry_profile_id is not None:
+            try:
+                UUID(str(industry_profile_id))
+            except (TypeError, ValueError) as exc:
+                raise ContractValidationError("industry_profile_id must be a UUID when supplied") from exc
         lifecycle = payload.get('lifecycle_status')
         if lifecycle is not None and lifecycle not in {'active', 'suspended'}:
             raise ContractValidationError('unsupported tenant lifecycle_status')
@@ -130,6 +140,11 @@ def validate_projection_event(raw: Mapping[str, Any]) -> ProjectionEvent:
             raise ContractValidationError('AdminApps status does not match tenant lifecycle')
     if event_type is ProjectionEventType.USER_UPDATED and not str(payload.get("lifecycle_status") or "").strip():
         raise ContractValidationError("user payload requires lifecycle_status")
+    if aggregate_type is AggregateType.USER:
+        for profile_field in ("email", "role", "mfa_status"):
+            value = payload.get(profile_field)
+            if value is not None and (not isinstance(value, str) or not value.strip()):
+                raise ContractValidationError(f"user {profile_field} must be a nonblank string when supplied")
     correlation = raw.get("correlation_id")
     try:
         correlation_id = UUID(str(correlation)) if correlation not in (None, "") else None

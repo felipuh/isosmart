@@ -27,6 +27,40 @@ HARNESS = Path(os.environ.get(
     str(Path(__file__).with_name("postgres_foundation_harness.py")),
 )).resolve()
 
+# This is the single, source-owned PostgreSQL identity contract.  The role
+# settings are consumed by the active Foundation migrations (0001--0037), not
+# invented at migration-failure time.  All of them must therefore exist before
+# Django starts applying migrations.  Owner roles are deliberately NOLOGIN and
+# can only be SET ROLE by the dedicated migrator through the memberships below.
+ROLE_SPECS = (
+    ("migrator", True, "BOOTSTRAP_REQUIRED", "database/schema migration owner"),
+    ("app", True, "BOOTSTRAP_REQUIRED", "web/API runtime"),
+    ("worker", True, "BOOTSTRAP_REQUIRED", "outbox worker runtime"),
+    ("projector", True, "BOOTSTRAP_REQUIRED", "AdminApps projection ingress"),
+    ("audit_writer", True, "BOOTSTRAP_REQUIRED", "immutable audit append runtime"),
+    ("normative_curator", True, "BOOTSTRAP_REQUIRED", "normative curation runtime"),
+    ("agent_catalog_curator", True, "BOOTSTRAP_REQUIRED", "agent catalog curation runtime"),
+    ("human_approver", True, "BOOTSTRAP_REQUIRED", "human decision approval runtime"),
+    ("execution_authorizer", True, "BOOTSTRAP_REQUIRED", "controlled execution authorization runtime"),
+    ("executor", True, "BOOTSTRAP_REQUIRED", "controlled execution runtime"),
+    ("learning_governance", True, "BOOTSTRAP_REQUIRED", "learning governance runtime"),
+    ("learning_reviewer", True, "BOOTSTRAP_REQUIRED", "learning review runtime"),
+    ("learning_approver", True, "BOOTSTRAP_REQUIRED", "learning approval runtime"),
+    ("learning_authorizer", True, "BOOTSTRAP_REQUIRED", "learning authorization runtime"),
+    ("learning_application_executor", True, "BOOTSTRAP_REQUIRED", "learning application runtime"),
+    ("rule_publisher", True, "BOOTSTRAP_REQUIRED", "rule publication runtime"),
+    ("rule_activator", True, "BOOTSTRAP_REQUIRED", "rule activation runtime"),
+    ("rule_adopter", True, "BOOTSTRAP_REQUIRED", "rule adoption runtime"),
+    ("rule_resolver", True, "BOOTSTRAP_REQUIRED", "rule resolution runtime"),
+    ("release_repair", True, "BOOTSTRAP_REQUIRED", "release repair runtime"),
+    ("release_controller", True, "BOOTSTRAP_REQUIRED", "release control runtime"),
+    ("qms_action_owner", False, "BOOTSTRAP_REQUIRED", "restricted QMS function owner"),
+    ("knowledge_rule_application_owner", False, "BOOTSTRAP_REQUIRED", "restricted application function owner"),
+    ("rule_governance_owner", False, "BOOTSTRAP_REQUIRED", "restricted governance function owner"),
+)
+LOGIN_ROLES = tuple(key for key, login, _, _ in ROLE_SPECS if login)
+OWNER_ROLES = tuple(key for key, login, _, _ in ROLE_SPECS if not login)
+
 
 def run(command, *, env=None, capture=False, check=True):
     return subprocess.run(
@@ -88,63 +122,28 @@ def bootstrap(port, super_password, names, passwords):
     )
     connection.autocommit = True
     with connection.cursor() as cursor:
-        for role in ("migrator", "app", "worker", "projector", "audit_writer", "normative_curator", "agent_catalog_curator", "human_approver", "execution_authorizer", "executor", "learning_governance", "learning_reviewer", "learning_approver", "learning_authorizer", "learning_application_executor", "rule_publisher", "rule_activator", "rule_adopter", "rule_resolver", "release_repair", "release_controller"):
+        for role in LOGIN_ROLES:
             cursor.execute(
                 sql.SQL("CREATE ROLE {} LOGIN PASSWORD %s NOSUPERUSER NOCREATEDB NOCREATEROLE NOINHERIT NOBYPASSRLS").format(sql.Identifier(names[role])),
                 [passwords[role]],
             )
-        cursor.execute(
-            sql.SQL("CREATE ROLE {} NOLOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOINHERIT NOBYPASSRLS").format(
-                sql.Identifier(names["qms_action_owner"])
+        for role in OWNER_ROLES:
+            cursor.execute(
+                sql.SQL("CREATE ROLE {} NOLOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOINHERIT NOBYPASSRLS").format(
+                    sql.Identifier(names[role])
+                )
             )
-        )
-        cursor.execute(
-            sql.SQL("CREATE ROLE {} NOLOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOINHERIT NOBYPASSRLS").format(
-                sql.Identifier(names["knowledge_rule_application_owner"])
+            cursor.execute(
+                sql.SQL("GRANT {} TO {} WITH SET TRUE").format(
+                    sql.Identifier(names[role]), sql.Identifier(names["migrator"])
+                )
             )
-        )
-        cursor.execute(
-            sql.SQL("CREATE ROLE {} NOLOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOINHERIT NOBYPASSRLS").format(
-                sql.Identifier(names["rule_governance_owner"])
-            )
-        )
-        cursor.execute(
-            sql.SQL("GRANT {} TO {} WITH SET TRUE").format(
-                sql.Identifier(names["qms_action_owner"]),
-                sql.Identifier(names["migrator"]),
-            )
-        )
-        cursor.execute(
-            sql.SQL("GRANT {} TO {} WITH SET TRUE").format(
-                sql.Identifier(names["knowledge_rule_application_owner"]),
-                sql.Identifier(names["migrator"]),
-            )
-        )
-        cursor.execute(
-            sql.SQL("GRANT {} TO {} WITH SET TRUE").format(
-                sql.Identifier(names["rule_governance_owner"]),
-                sql.Identifier(names["migrator"]),
-            )
-        )
         cursor.execute(
             sql.SQL("CREATE DATABASE {} OWNER {}").format(
                 sql.Identifier(names["database"]), sql.Identifier(names["migrator"])
             )
         )
     connection.close()
-
-
-LOGIN_ROLES = (
-    "migrator", "app", "worker", "projector", "audit_writer",
-    "normative_curator", "agent_catalog_curator", "human_approver",
-    "execution_authorizer", "executor", "learning_governance",
-    "learning_reviewer", "learning_approver", "learning_authorizer",
-    "learning_application_executor", "rule_publisher", "rule_activator",
-    "rule_adopter", "rule_resolver", "release_repair", "release_controller",
-)
-OWNER_ROLES = (
-    "qms_action_owner", "knowledge_rule_application_owner", "rule_governance_owner",
-)
 
 
 def bootstrap_idempotent(port, super_password, names, passwords):
@@ -219,9 +218,9 @@ def drop_database_and_roles(port, super_password, names):
             [names["database"]],
         )
         cursor.execute(sql.SQL("DROP DATABASE {}").format(sql.Identifier(names["database"])))
-        for role in ("release_controller", "release_repair", "rule_resolver", "rule_adopter", "rule_activator", "rule_publisher", "learning_application_executor", "learning_authorizer", "learning_approver", "learning_reviewer", "learning_governance", "executor", "execution_authorizer", "human_approver", "agent_catalog_curator", "normative_curator", "audit_writer", "projector", "worker", "app", "migrator", "rule_governance_owner", "knowledge_rule_application_owner", "qms_action_owner"):
+        for role in reversed((*LOGIN_ROLES, *OWNER_ROLES)):
             cursor.execute(sql.SQL("DROP ROLE {}").format(sql.Identifier(names[role])))
-        cursor.execute("SELECT count(*) FROM pg_roles WHERE rolname=ANY(%s)", [[names[key] for key in ("migrator", "app", "worker", "projector", "audit_writer", "normative_curator", "agent_catalog_curator", "human_approver", "execution_authorizer", "executor", "learning_governance", "learning_reviewer", "learning_approver", "learning_authorizer", "learning_application_executor", "rule_publisher", "rule_activator", "rule_adopter", "rule_resolver", "release_repair", "release_controller", "rule_governance_owner", "knowledge_rule_application_owner", "qms_action_owner")]])
+        cursor.execute("SELECT count(*) FROM pg_roles WHERE rolname=ANY(%s)", [[names[key] for key in (*LOGIN_ROLES, *OWNER_ROLES)]])
         if cursor.fetchone()[0] != 0:
             raise RuntimeError("ephemeral LOGIN roles remain after scoped teardown")
     connection.close()
@@ -308,8 +307,11 @@ def main():
             logs = run([engine, "logs", names["container"]], capture=True, check=False)
             print((logs.stdout + logs.stderr).replace(passwords["super"], "<redacted>"), file=sys.stderr)
             raise
-        bootstrap(port, passwords["super"], names, passwords)
+        bootstrap_first = bootstrap_idempotent(port, passwords["super"], names, passwords)
         roles_created = True
+        bootstrap_second = bootstrap_idempotent(port, passwords["super"], names, passwords)
+        if bootstrap_first != bootstrap_second:
+            raise RuntimeError("bootstrap repeat changed the approved role contract")
 
         env = os.environ.copy()
         env.update({
@@ -349,7 +351,8 @@ def main():
         print(json.dumps({
             "lifecycle": "PASS", "run_id": run_id, "engine": engine_name,
             "endpoint": f"127.0.0.1:{port}", "database": names["database"],
-            "roles": [names[key] for key in ("migrator", "app", "worker", "projector", "audit_writer", "normative_curator", "agent_catalog_curator", "human_approver", "execution_authorizer", "executor", "learning_governance", "learning_reviewer", "learning_approver", "learning_authorizer", "learning_application_executor", "rule_publisher", "rule_activator", "rule_adopter", "rule_resolver", "release_repair", "release_controller", "rule_governance_owner", "knowledge_rule_application_owner", "qms_action_owner")],
+            "roles": [names[key] for key in (*LOGIN_ROLES, *OWNER_ROLES)],
+            "bootstrap_first_run": "PASS", "bootstrap_second_run": "PASS_IDEMPOTENT",
             "supply_chain": supply_chain, "started_at": started.isoformat(),
         }, indent=2))
     finally:

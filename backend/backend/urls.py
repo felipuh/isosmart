@@ -10,6 +10,7 @@ from django.conf.urls.static import static
 from foundation.adminapps_ingress import receive_tenant_event
 
 urlpatterns = [
+    path('', include('foundation.api_urls')),
     path('api/integration/adminapps/tenant-events/', receive_tenant_event, name='adminapps-tenant-events'),
     path('admin/', admin.site.urls),
     path('health', views.health_check, name='health'),

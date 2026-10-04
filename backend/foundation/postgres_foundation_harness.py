@@ -365,7 +365,7 @@ def run():
         source_version=3,
         payload={"display_name": "must rollback", "lifecycle_status": "deleted_tombstone"},
     )
-    expect_error(lambda: writer.apply(validate_projection_event(invalid_transition)), "is not allowed")
+    expect_error(lambda: writer.apply(validate_projection_event(invalid_transition)), "unsupported tenant lifecycle_status")
     with connections["default"].cursor() as cursor:
         cursor.execute(
             "SELECT source_version,display_name_snapshot FROM qms.tenant_projection WHERE adminapps_tenant_id=%s",

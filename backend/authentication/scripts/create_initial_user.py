@@ -6,13 +6,23 @@ Uso:
     cd /home/aplicacion/projects/isosmart/backend
     source venv_ai/bin/activate
     python manage.py shell < authentication/scripts/create_initial_user.py
+
+Antes de ejecutar, inyectar INITIAL_ADMIN_EMAIL y INITIAL_ADMIN_PASSWORD desde
+el gestor seguro. Los valores no se imprimen.
 """
+
+import os
 
 from authentication.models import User, UserProfile
 from core.models import Organization
 
-INITIAL_ADMIN_EMAIL = 'admin@isosmart.local'
-INITIAL_ADMIN_PASSWORD = 'Admin@123456'
+INITIAL_ADMIN_EMAIL = os.environ.get('INITIAL_ADMIN_EMAIL', '').strip()
+INITIAL_ADMIN_PASSWORD = os.environ.get('INITIAL_ADMIN_PASSWORD')
+
+if not INITIAL_ADMIN_EMAIL or not INITIAL_ADMIN_PASSWORD:
+    raise RuntimeError(
+        'Set INITIAL_ADMIN_EMAIL and INITIAL_ADMIN_PASSWORD before bootstrap.'
+    )
 
 
 org = Organization.objects.filter(slug='smart3ai', is_active=True).first()
@@ -60,9 +70,9 @@ user.set_password(INITIAL_ADMIN_PASSWORD)
 user.save()
 
 if user_created:
-    print(f"Usuario creado: {user.email}")
+    print("Usuario administrador creado.")
 else:
-    print(f"Usuario actualizado: {user.email}")
+    print("Usuario administrador actualizado.")
 
 profile, profile_created = UserProfile.objects.update_or_create(
     user=user,
@@ -79,11 +89,4 @@ if profile_created:
 else:
     print(f"Perfil actualizado: {profile.role} en {org.name}")
 
-print("\n" + "=" * 50)
-print("CREDENCIALES DE ACCESO INICIAL")
-print("=" * 50)
-print(f"Email: {INITIAL_ADMIN_EMAIL}")
-print(f"Password: {INITIAL_ADMIN_PASSWORD}")
-print("=" * 50)
-print("Cambia la contrasena despues del primer login.")
-print("=" * 50)
+print("Bootstrap de administrador completado; no se imprimieron credenciales.")
