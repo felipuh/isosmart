@@ -62,7 +62,10 @@ class OrganizationEventingService:
             identity, actor_id=actor_id, trace_id=trace_id, using=self.using
         ):
             organization = (
-                Organization.objects.using(self.using).select_for_update().get(pk=organization_id)
+                Organization.objects.using(self.using)
+                .select_for_update()
+                .defer("sector", "size", "maturity")
+                .get(pk=organization_id)
             )
             before = {"display_name": organization.display_name, "legal_name": organization.legal_name}
             organization.display_name = display_name

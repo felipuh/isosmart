@@ -37,12 +37,15 @@ class OrganizationMiddleware(MiddlewareMixin):
             request.user_role = validated_token.get('role')
             profile_id = validated_token.get('profile_id')
             
-            # Cargar perfil si es necesario
-            if profile_id:
+            user_id = validated_token.get('user_id')
+            if profile_id and user_id is not None:
                 try:
+                    profile_filters = {'id': profile_id, 'user_id': user_id}
+                    if request.organization_id is not None:
+                        profile_filters['organization_id'] = request.organization_id
                     request.user_profile = UserProfile.objects.select_related(
                         'organization'
-                    ).get(id=profile_id)
+                    ).get(**profile_filters)
                 except UserProfile.DoesNotExist:
                     pass
                     

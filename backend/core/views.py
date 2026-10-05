@@ -9,6 +9,7 @@ from django.http import FileResponse, Http404
 from django.http import HttpResponse
 from django.utils.decorators import method_decorator
 from django.utils import timezone
+from django.views.decorators.http import require_GET
 from django.db.models import Count, Avg, Q
 from datetime import datetime, timedelta
 import calendar
@@ -270,6 +271,12 @@ def context_analysis_latest(request):
         'total_documents_processed': analysis.total_documents_processed,
         'execution_time_seconds': analysis.execution_time_seconds
     })
+
+
+@require_GET
+def liveness_check(request):
+    """Expose only process liveness for credential-free local probes."""
+    return HttpResponse(status=204)
 
 
 @api_view(['GET'])

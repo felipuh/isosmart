@@ -1,5 +1,12 @@
 import json
+import os
+import select
+import signal
+import subprocess
+import sys
+import time
 from datetime import date
+from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
 from uuid import uuid4
@@ -258,6 +265,106 @@ class SourceArtifactPostgreSQLIntegrationTests(TransactionTestCase):
         }
         self.user = SimpleNamespace(is_authenticated=True, pk=self.actor_id)
         self.factory = APIRequestFactory()
+
+    def _worker_process_env(self, configured_tenant_id):
+        from postgres_foundation_gate import ROLE_SPECS
+
+        role_options = " ".join(
+            f"-c foundation.{key}_role={os.environ[f'FOUNDATION_{key.upper()}_ROLE']}"
+            for key, *_ in ROLE_SPECS
+        )
+        env = os.environ.copy()
+        env.update({
+            "DJANGO_SETTINGS_MODULE": "backend.settings",
+            "DJANGO_ENV": "production",
+            "DEBUG": "False",
+            "PYTHONUNBUFFERED": "1",
+            "USE_SQLITE_DATABASE": "False",
+            "SECRET_KEY": "disposable-postgresql-worker-test-only",
+            "ALLOWED_HOSTS": "localhost,127.0.0.1",
+            "DB_NAME": os.environ["FOUNDATION_DB_NAME"],
+            "DB_HOST": os.environ.get("FOUNDATION_DB_HOST", "127.0.0.1"),
+            "DB_PORT": os.environ["FOUNDATION_DB_PORT"],
+            "DB_USER": os.environ["FOUNDATION_APP_ROLE"],
+            "DB_PASSWORD": os.environ["FOUNDATION_APP_PASSWORD"],
+            "DB_CONN_MAX_AGE": "0",
+            "DB_SESSION_OPTIONS": role_options,
+            "WORKER_TENANT_ID": str(configured_tenant_id),
+            "INTERNAL_OUTBOX_WORKER_ENABLED": "True",
+        })
+        return env
+
+    def _worker_command(self, tenant_id, *, once, worker_id, configured_tenant_id=None):
+        backend_root = Path(__file__).resolve().parents[1]
+        command = [
+            sys.executable,
+            "manage.py",
+            "run_outbox_worker",
+            "--tenant-id",
+            str(tenant_id),
+            "--worker-id",
+            worker_id,
+        ]
+        if once:
+            command.append("--once")
+        return command, backend_root, self._worker_process_env(
+            configured_tenant_id if configured_tenant_id is not None else tenant_id,
+        )
+
+    def _run_worker(self, tenant_id, *, once=True, worker_id=None, configured_tenant_id=None):
+        command, backend_root, env = self._worker_command(
+            tenant_id,
+            once=once,
+            worker_id=worker_id or f"e08-worker-{uuid4()}",
+            configured_tenant_id=configured_tenant_id,
+        )
+        return subprocess.run(
+            command,
+            cwd=backend_root,
+            env=env,
+            capture_output=True,
+            text=True,
+            timeout=30,
+            check=False,
+        )
+
+    def _stop_polling_worker(self, shutdown_signal):
+        command, backend_root, env = self._worker_command(
+            self.tenant_id, once=False, worker_id=f"e08-signal-{uuid4()}",
+        )
+        process = subprocess.Popen(
+            command,
+            cwd=backend_root,
+            env=env,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            bufsize=1,
+        )
+        try:
+            deadline = time.monotonic() + 30
+            started = False
+            while time.monotonic() < deadline and process.poll() is None:
+                ready, _, _ = select.select([process.stdout], [], [], 0.25)
+                if ready and "outbox worker started" in process.stdout.readline():
+                    started = True
+                    break
+            if not started:
+                if process.poll() is None:
+                    process.kill()
+                stdout, stderr = process.communicate(timeout=10)
+                self.fail(
+                    "polling worker did not reach its started state: "
+                    f"returncode={process.returncode}, stdout={stdout!r}, stderr={stderr!r}"
+                )
+            os.kill(process.pid, shutdown_signal)
+            stdout, stderr = process.communicate(timeout=15)
+            self.assertEqual(process.returncode, 0, stdout + stderr)
+            self.assertIsNotNone(process.poll(), "worker process remained alive after shutdown")
+        finally:
+            if process.poll() is None:
+                process.kill()
+                process.communicate(timeout=10)
 
     def invoke(self, view, method, path, data=None, *, auth_claims=None, **kwargs):
         if method == "get":
@@ -633,7 +740,26 @@ class SourceArtifactPostgreSQLIntegrationTests(TransactionTestCase):
             self.assertFalse(Approval.objects.using("human_approver").filter(id=approval_row.id).exists())
 
     def test_foundation_completion_consumer_is_idempotent_and_tenant_scoped(self):
-        from foundation.eventing import FoundationCompletionDelivery, PayloadIntegrityConflict
+        from django.db import connections
+        from foundation.canonical import canonical_hash
+        from foundation.eventing import (
+            ConsumerReceiptService,
+            FoundationCompletionConsumer,
+            FoundationCompletionDelivery,
+            PayloadIntegrityConflict,
+        )
+
+        empty_queue = self._run_worker(self.tenant_id, worker_id="e08-worker-empty-queue")
+        self.assertEqual(empty_queue.returncode, 0, empty_queue.stdout + empty_queue.stderr)
+        self.assertIn("outbox worker stopped cleanly", empty_queue.stdout)
+        wrong_tenant = self._run_worker(
+            self.other_tenant_id,
+            worker_id="e08-worker-reject-tenant",
+            configured_tenant_id=self.tenant_id,
+        )
+        self.assertNotEqual(wrong_tenant.returncode, 0)
+        self.assertIn("--tenant-id must match", wrong_tenant.stderr)
+
         result = FoundationGateCommandService(using="app").submit_attempt(
             identity=self.identity,
             user_projection_id=self.user_projection_id,
@@ -650,8 +776,8 @@ class SourceArtifactPostgreSQLIntegrationTests(TransactionTestCase):
         self.assertIsNotNone(result.event_id)
         delivery = FoundationCompletionDelivery()
         self.assertIsNone(delivery.deliver_next(identity=self.other_identity, worker_id="wp2-worker", trace_id=uuid4()))
-        with self.assertRaises(OnboardingWorkflowError):
-            delivery.deliver_next(identity=self.identity, worker_id="wp2-worker", trace_id=uuid4())
+        failed_run = self._run_worker(self.tenant_id, worker_id="e08-worker-failure")
+        self.assertNotEqual(failed_run.returncode, 0, failed_run.stdout)
         with trusted_tenant_context(self.identity, actor_id=self.actor_id, trace_id=uuid4(), using="worker"):
             failed = TransactionalOutbox.objects.using("worker").get(domain_event_id=result.event_id)
             self.assertEqual(failed.status, "failed")
@@ -674,8 +800,13 @@ class SourceArtifactPostgreSQLIntegrationTests(TransactionTestCase):
                 trace_id=self.trace_id,
             )
         consumer = FoundationCompletionConsumer(using="worker")
-        first = delivery.deliver_next(identity=self.identity, worker_id="wp2-worker", trace_id=uuid4())
-        self.assertIsNone(delivery.deliver_next(identity=self.identity, worker_id="wp2-worker", trace_id=uuid4()))
+        retried_run = self._run_worker(self.tenant_id, worker_id="e08-worker-retry")
+        self.assertEqual(retried_run.returncode, 0, retried_run.stdout + retried_run.stderr)
+        with trusted_tenant_context(self.identity, actor_id=self.actor_id, trace_id=uuid4(), using="worker"):
+            delivered = TransactionalOutbox.objects.using("worker").get(domain_event_id=result.event_id)
+            self.assertEqual(delivered.status, "published")
+            self.assertEqual(delivered.publish_attempts, 2)
+            self.assertIsNone(delivered.last_error_code)
         with self.assertRaises(PayloadIntegrityConflict):
             consumer.consume(identity=self.identity, event_id=event.event_id,
                              payload={**event.payload, "attempt_id": str(uuid4())},
@@ -687,7 +818,6 @@ class SourceArtifactPostgreSQLIntegrationTests(TransactionTestCase):
             actor_id=self.actor_id,
             trace_id=self.trace_id,
         )
-        self.assertEqual(first.kind.value, "processed")
         self.assertEqual(duplicate.kind.value, "idempotent_duplicate")
         with trusted_tenant_context(
             self.identity, actor_id=self.actor_id, trace_id=self.trace_id, using="worker",
@@ -700,6 +830,162 @@ class SourceArtifactPostgreSQLIntegrationTests(TransactionTestCase):
                 ).count(),
                 1,
             )
+
+        def seed_idempotent_event(version):
+            event_id = uuid4()
+            trace_id = uuid4()
+            payload = {"attempt_id": str(uuid4())}
+            with trusted_tenant_context(
+                self.identity, actor_id=self.actor_id, trace_id=trace_id, using="app",
+            ):
+                DomainEvent.objects.using("app").create(
+                    event_id=event_id,
+                    tenant_id=self.tenant_id,
+                    event_type="iso9000.foundation.completed",
+                    schema_version=1,
+                    aggregate_type="e08_worker_concurrency",
+                    aggregate_id=self.organization_id,
+                    aggregate_version=version,
+                    occurred_at=timezone.now(),
+                    trace_id=trace_id,
+                    source="e08-postgresql-process-test",
+                    payload=payload,
+                    payload_hash=canonical_hash(payload),
+                )
+                TransactionalOutbox.objects.using("app").create(
+                    tenant_id=self.tenant_id,
+                    domain_event_id=event_id,
+                    status=TransactionalOutbox.Status.PENDING,
+                    publish_attempts=0,
+                    available_at=timezone.now(),
+                )
+            ConsumerReceiptService(using="worker").receive(
+                identity=self.identity,
+                consumer_name=FoundationCompletionConsumer.consumer_name,
+                event_id=event_id,
+                payload=payload,
+                trace_id=trace_id,
+                handler=lambda _: None,
+            )
+            return event_id
+
+        concurrent_events = [seed_idempotent_event(1), seed_idempotent_event(2)]
+        with connections["default"].cursor() as cursor:
+            cursor.execute(
+                "CREATE TABLE eventing.e08_worker_claim_window ("
+                "id bigint GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY, "
+                "started_at timestamptz NOT NULL, finished_at timestamptz)"
+            )
+            cursor.execute(
+                """
+                CREATE FUNCTION eventing.e08_delay_worker_claim()
+                RETURNS trigger
+                LANGUAGE plpgsql
+                SECURITY DEFINER
+                SET search_path = pg_catalog,eventing
+                AS $function$
+                DECLARE marker_id bigint;
+                BEGIN
+                    IF NEW.status = 'processing' AND OLD.status IS DISTINCT FROM NEW.status THEN
+                        INSERT INTO eventing.e08_worker_claim_window(started_at)
+                        VALUES (clock_timestamp()) RETURNING id INTO marker_id;
+                        PERFORM pg_sleep(3);
+                        UPDATE eventing.e08_worker_claim_window
+                        SET finished_at = clock_timestamp()
+                        WHERE id = marker_id;
+                    END IF;
+                    RETURN NEW;
+                END;
+                $function$
+                """
+            )
+            cursor.execute(
+                "CREATE TRIGGER e08_delay_worker_claim "
+                "BEFORE UPDATE OF status ON eventing.transactional_outbox "
+                "FOR EACH ROW WHEN (NEW.status = 'processing') "
+                "EXECUTE FUNCTION eventing.e08_delay_worker_claim()"
+            )
+
+        concurrent_processes = []
+        try:
+            for worker_id in ("e08-concurrent-worker-a", "e08-concurrent-worker-b"):
+                command, backend_root, env = self._worker_command(
+                    self.tenant_id, once=True, worker_id=worker_id,
+                )
+                if concurrent_processes:
+                    time.sleep(0.1)
+                concurrent_processes.append(subprocess.Popen(
+                    command,
+                    cwd=backend_root,
+                    env=env,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    text=True,
+                    bufsize=1,
+                ))
+            self.assertTrue(all(process.poll() is None for process in concurrent_processes))
+            concurrency_output = [
+                process.communicate(timeout=30) for process in concurrent_processes
+            ]
+            self.assertTrue(
+                all(process.returncode == 0 for process in concurrent_processes),
+                repr(concurrency_output),
+            )
+            with connections["default"].cursor() as cursor:
+                cursor.execute(
+                    """
+                    SELECT count(*)
+                    FROM eventing.e08_worker_claim_window first
+                    JOIN eventing.e08_worker_claim_window second
+                      ON first.id < second.id
+                     AND first.started_at < second.finished_at
+                     AND second.started_at < first.finished_at
+                    """
+                )
+                self.assertEqual(cursor.fetchone()[0], 1)
+            with trusted_tenant_context(
+                self.identity, actor_id=self.actor_id, trace_id=uuid4(), using="worker",
+            ):
+                rows = list(
+                    TransactionalOutbox.objects.using("worker")
+                    .filter(domain_event_id__in=concurrent_events)
+                    .order_by("domain_event_id")
+                    .values_list("status", "publish_attempts")
+                )
+                receipts = ConsumerReceipt.objects.using("worker").filter(
+                    event_id__in=concurrent_events,
+                    consumer_name=FoundationCompletionConsumer.consumer_name,
+                    status=ConsumerReceipt.Status.PROCESSED,
+                    attempts=1,
+                ).count()
+                worker_role = os.environ["FOUNDATION_WORKER_ROLE"]
+            self.assertEqual(rows, [
+                (TransactionalOutbox.Status.PUBLISHED, 1),
+                (TransactionalOutbox.Status.PUBLISHED, 1),
+            ])
+            self.assertEqual(receipts, 2)
+            with connections["default"].cursor() as cursor:
+                cursor.execute(
+                    "SELECT rolsuper,rolbypassrls FROM pg_roles WHERE rolname=%s",
+                    [worker_role],
+                )
+                self.assertEqual(cursor.fetchone(), (False, False))
+        finally:
+            for process in concurrent_processes:
+                if process.poll() is None:
+                    process.kill()
+                    process.communicate(timeout=10)
+            with connections["default"].cursor() as cursor:
+                cursor.execute(
+                    "DROP TRIGGER IF EXISTS e08_delay_worker_claim "
+                    "ON eventing.transactional_outbox"
+                )
+                cursor.execute("DROP FUNCTION IF EXISTS eventing.e08_delay_worker_claim()")
+                cursor.execute("DROP TABLE IF EXISTS eventing.e08_worker_claim_window")
+
+        self._stop_polling_worker(signal.SIGTERM)
+        self._stop_polling_worker(signal.SIGINT)
+
         with trusted_tenant_context(
             self.identity, actor_id=self.actor_id, trace_id=self.trace_id, using="app",
         ):

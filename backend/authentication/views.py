@@ -39,6 +39,7 @@ from .serializers import (
 )
 from .permissions import IsOrgAdmin
 from .cookies import REFRESH_COOKIE, clear_auth_cookies, set_auth_cookies
+from .cookie_auth import CookieJWTAuthentication
 
 logger = logging.getLogger(__name__)
 
@@ -252,6 +253,7 @@ class RefreshTokenView(APIView):
             refresh_token_str = request.COOKIES.get(REFRESH_COOKIE)
             if not refresh_token_str:
                 raise TokenError('missing refresh cookie')
+            CookieJWTAuthentication.enforce_csrf(request)
             refresh = RefreshToken(refresh_token_str)
             
             # Verificar que no esté en lista negra

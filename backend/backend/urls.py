@@ -13,6 +13,7 @@ urlpatterns = [
     path('', include('foundation.api_urls')),
     path('api/integration/adminapps/tenant-events/', receive_tenant_event, name='adminapps-tenant-events'),
     path('admin/', admin.site.urls),
+    path('livez', views.liveness_check, name='liveness-check'),
     path('health', views.health_check, name='health'),
     
     # Explicit routes for stats and latest endpoints (before includes to take priority)
