@@ -1,0 +1,164 @@
+{
+  "evidence_id": "27",
+  "date": "2026-10-05",
+  "date_basis": "UTC",
+  "phase31_5_state": "EXECUTION_HELD",
+  "starting_commit": "be3dbebee6f91cc0f36d32a0a701ca37f92c77ef",
+  "branch": "hardening/p0-p1-enterprise-readiness",
+  "e07": "FAIL_AUTHENTIC_ROTATION_EVIDENCE_REQUIRED",
+  "e08": "CLOSED_LOCAL_TECHNICAL_EVIDENCE",
+  "credential_inventory": [
+    {
+      "logical_name": "ADMIN_APPS_API_KEY",
+      "purpose": "Authenticate ISO Smart integration requests to AdminApps",
+      "credential_type": "Long-lived service API key sent in X-API-Key",
+      "authority_provider": "AdminApps IntegrationAPIKey credential authority",
+      "consuming_component": "ISO Smart backend/integration/client.py",
+      "persistence": "Persistent service credential supplied through ADMIN_APPS_API_KEY; not ephemeral",
+      "historically_committed_or_exposed": true,
+      "historical_evidence_source": "docs/governance/evidence/phase31_5/01_environment.json records a hard-coded development AdminApps integration credential fallback in backend/backend/settings.py",
+      "authentic_rotation_required": true,
+      "rotation_mechanism": "Revoke the old key and issue a replacement in the AdminApps credential authority; install it only through an approved secret-injection mechanism",
+      "evidence_status": "BLOCKED_BY_EXTERNAL_ROTATION_AUTHORITY"
+    },
+    {
+      "logical_name": "INITIAL_ADMINISTRATOR_PASSWORD",
+      "purpose": "Bootstrap an initial ISO Smart administrator",
+      "credential_type": "Administrator account password",
+      "authority_provider": "ISO Smart administrator-controlled account authority",
+      "consuming_component": "backend/authentication/scripts/create_initial_user.py",
+      "persistence": "A password credential could persist in the target account store if the historical bootstrap path was used; current use is unverified",
+      "historically_committed_or_exposed": true,
+      "historical_evidence_source": "docs/governance/evidence/phase31_5/01_environment.json records a hard-coded initial administrator password and credential-print path",
+      "authentic_rotation_required": true,
+      "rotation_mechanism": "Verify whether the affected account exists and, if it may have used the committed value, reset/revoke it through the authorized ISO Smart account authority",
+      "evidence_status": "BLOCKED_BY_EXTERNAL_ROTATION_AUTHORITY"
+    },
+    {
+      "logical_name": "PHASE31_OPERATIONAL_READINESS_BEARER",
+      "purpose": "Authenticate one readiness request using an eligible run-scoped identity",
+      "credential_type": "Short-lived access bearer",
+      "authority_provider": "AdminApps programmatic SimpleJWT issuance using the existing shared SSO signing subsystem",
+      "consuming_component": "Phase31 operational readiness adapter",
+      "persistence": "Ephemeral; 900-second lifetime, anonymous pipe handoff, mutable in-memory buffer, no persisted refresh credential, fingerprint-only evidence",
+      "historically_committed_or_exposed": false,
+      "historical_evidence_source": "docs/transformation/PHASE31_4_V2_5_OPERATIONAL_BEARER_IDENTITY_CONTRACT_REPORT.md and backend/foundation/operational_bearer_identity.py",
+      "authentic_rotation_required": false,
+      "rotation_mechanism": "Not applicable to this short-lived access token; the underlying AdminApps API key is adjudicated separately",
+      "evidence_status": "ROTATION_NOT_REQUIRED",
+      "qualification": "Expiry of an ephemeral bearer is not authority-backed rotation of the underlying long-lived credential."
+    }
+  ],
+  "repository_scan": {
+    "result": "PASS_BOUNDED_FIRST_PARTY_TARGETS",
+    "method": "Targeted rg high-confidence scan; gitleaks and trufflehog are unavailable locally",
+    "targeted_files": [
+      "backend/authentication/scripts/create_initial_user.py",
+      "backend/backend/settings.py",
+      "backend/integration/client.py"
+    ],
+    "patterns": [
+      "private-key markers",
+      "JWT-shaped values",
+      "quoted literal assignments to password, API-key, secret, or token identifiers"
+    ],
+    "high_confidence_current_candidates": [],
+    "tracked_source_interpretation": "No high-confidence literal credential candidate was found in the bounded E-07 source files. This does not erase documented historical exposure or establish rotation.",
+    "ignored_local_environment": {
+      "path": "backend/.env",
+      "tracked": false,
+      "contents_inspected": false,
+      "included_in_scan_result": false,
+      "reason": "Ignored local environment file was not opened or copied into evidence."
+    }
+  },
+  "history_scan": {
+    "result": "HISTORICAL_EXPOSURE_CONFIRMED_ROTATION_UNPROVEN",
+    "primary_governance_source": "docs/governance/evidence/phase31_5/01_environment.json",
+    "prior_scan_evidence": {
+      "source": "docs/governance/evidence/phase31_5/21_enterprise_remediation_2026-10-04.json",
+      "scanner": "git grep high-confidence patterns; gitleaks unavailable locally",
+      "first_party_current_hits": 0,
+      "vendored_dependency_pattern_hits": 2,
+      "history_matching_commits": 1,
+      "raw_secrets_recorded": false
+    },
+    "relevant_tracked_path_history": [
+      {
+        "credential": "INITIAL_ADMINISTRATOR_PASSWORD",
+        "path": "backend/authentication/scripts/create_initial_user.py",
+        "earliest_relevant_path_commit": "7ccf9358235f7d53965f086c99602f49e111d703",
+        "commit_date": "2026-01-29"
+      },
+      {
+        "credential": "ADMIN_APPS_API_KEY",
+        "path": "backend/backend/settings.py",
+        "earliest_relevant_path_commit": "c5a789ae36b7685c63078a6557d7480f0348e267",
+        "commit_date": "2026-03-25"
+      }
+    ],
+    "history_method": "Git log inspected path/commit metadata only; no historical credential values were emitted or copied",
+    "rotation_events_or_authority_proofs_found": 0,
+    "qualification": "The cited path commits bound relevant source history, not proof that a credential was rotated or that a particular commit was the first exposure."
+  },
+  "rotation_evidence": [
+    {
+      "credential": "ADMIN_APPS_API_KEY",
+      "status": "BLOCKED_BY_EXTERNAL_ROTATION_AUTHORITY",
+      "authority_event": null,
+      "rotation_timestamp": null,
+      "old_credential_fingerprint": null,
+      "replacement_credential_fingerprint": null,
+      "old_credential_rejection_proof": null,
+      "replacement_acceptance_proof": null,
+      "required_follow_up": "AdminApps authority must revoke the old key, issue and safely install a replacement, then provide redacted authority event metadata, safe fingerprints/timestamps, old-key rejection proof, and a narrow authorized identity/readiness acceptance proof."
+    },
+    {
+      "credential": "INITIAL_ADMINISTRATOR_PASSWORD",
+      "status": "BLOCKED_BY_EXTERNAL_ROTATION_AUTHORITY",
+      "authority_event": null,
+      "rotation_timestamp": null,
+      "old_credential_fingerprint": null,
+      "replacement_credential_fingerprint": null,
+      "old_credential_rejection_proof": null,
+      "replacement_acceptance_proof": null,
+      "required_follow_up": "An authorized ISO Smart account administrator must determine whether the affected account/value was used and, if so, reset or revoke it; provide redacted event metadata and old-credential rejection proof without disclosing either password."
+    },
+    {
+      "credential": "PHASE31_OPERATIONAL_READINESS_BEARER",
+      "status": "ROTATION_NOT_REQUIRED",
+      "evidence": "Source contract documents 900-second issuance, pipe/in-memory handling, teardown overwrite, token_persisted=false, and fingerprint-only evidence.",
+      "qualification": "This short-lived token does not satisfy or replace rotation proof for ADMIN_APPS_API_KEY."
+    }
+  ],
+  "raw_credential_evidence_leaks": 0,
+  "external_effects": {
+    "adminapps_authority_calls": 0,
+    "credential_rotation_attempts": 0,
+    "production_access": 0,
+    "staging_access": 0,
+    "customer_data_access_or_processing": 0,
+    "external_event_delivery": 0,
+    "deployments": 0
+  },
+  "blockers": [
+    {
+      "credential": "ADMIN_APPS_API_KEY",
+      "classification": "BLOCKED_BY_EXTERNAL_ROTATION_AUTHORITY",
+      "blocked_authority": "AdminApps credential authority",
+      "required_evidence": "Authority-side revocation and replacement records, safe old/new fingerprints and timestamps, old-key rejection, and replacement acceptance through a narrow approved check"
+    },
+    {
+      "credential": "INITIAL_ADMINISTRATOR_PASSWORD",
+      "classification": "BLOCKED_BY_EXTERNAL_ROTATION_AUTHORITY",
+      "blocked_authority": "Authorized ISO Smart account administrator/target account store",
+      "required_evidence": "Account-use determination, reset/revocation record if applicable, and old-password rejection evidence; no password values"
+    }
+  ],
+  "publication": {
+    "method": "Normal non-force commit and push, subject to staged-diff secret review",
+    "force_push": false,
+    "unrelated_worktree_changes_staged": false,
+    "commit_and_upstream_synchronization": "To be verified from Git metadata after publication; no self-referential commit hash stored in this artifact."
+  }
+}
