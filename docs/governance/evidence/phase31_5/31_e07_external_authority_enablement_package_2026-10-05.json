@@ -1,0 +1,81 @@
+{
+  "evidence_id": "31",
+  "artifact_schema": "phase31.5-e07-external-authority-enablement-package/v1",
+  "date": "2026-10-05",
+  "scope": "Repository-local governance package only. It defines future external evidence and approval requirements; no authentic system, credential, deployment, database, or receiver was accessed or changed.",
+  "governance_boundary": {
+    "phase31_5": "EXECUTION_HELD",
+    "authentic_rotation_authorized": false,
+    "authentic_rotation_performed": false,
+    "external_system_contacted": false,
+    "secret_material_accessed_or_persisted": false,
+    "deployment_or_receiver_changed": false,
+    "service_restart_performed": false,
+    "push_performed": false
+  },
+  "baseline": {
+    "predecessor_evidence": "30_e07_external_authority_preflight_2026-10-05.json",
+    "e07": "BLOCKED_BY_EXTERNAL_AUTHORITY",
+    "e08": "CLOSED_LOCAL_TECHNICAL_EVIDENCE",
+    "e08_baseline_preserved": "YES",
+    "publication": "GOVERNANCE_BASELINE_LOCAL_ONLY",
+    "publication_requirement_for_rotation": "NOT_DEFINED_BY_INSPECTED_GOVERNANCE_ARTIFACTS"
+  },
+  "frozen_source_contract": {
+    "credential_lifecycle_owner": "apps.integration.models.IntegrationAPIKey",
+    "rotation_mechanism": "rotate_integration_api_key",
+    "required_adminapps_migration": "integration.0006_integration_api_key_lifecycle",
+    "consumer_requiring_reload": "web",
+    "consumer_credential_name": "ADMIN_APPS_API_KEY",
+    "outbox_worker_direct_dependency": "NOT_PROVEN",
+    "management_commands": "FRESH_PROCESSES",
+    "initial_admin_password": "ADMIN_PASSWORD_NOT_REQUIRED_FOR_ROTATION",
+    "dual_key_grace_period": "NO_DUAL_KEY_GRACE_PERIOD",
+    "cross_system_atomicity": "NOT_ATOMIC",
+    "former_credential_after_commit": "MUST_NOT_BE_ASSUMED_VALID"
+  },
+  "current_gate_state": {
+    "authentic_target": "TARGET_IDENTITY_UNAVAILABLE",
+    "runtime": "ADMINAPPS_RUNTIME_PROOF_UNAVAILABLE",
+    "operator": "AUTHORIZED_OPERATOR_NOT_IDENTIFIED",
+    "secret_receiver": "SECRET_RECEIVER_UNRESOLVED",
+    "web_cutover": "WEB_RECEIVER_TARGET_UNRESOLVED",
+    "non_recording_transfer": "NON_RECORDING_TRANSFER_UNRESOLVED",
+    "interruption": "NOT_APPROVED",
+    "forward_recovery": "FORWARD_RECOVERY_UNRESOLVED",
+    "secret_leakage_paths": "UNASSESSED_FOR_AUTHENTIC_EXECUTION"
+  },
+  "package_contract": {
+    "artifact": "docs/transformation/PHASE31_5_E07_EXTERNAL_AUTHORITY_ENABLEMENT_PACKAGE_2026-10-05.md",
+    "purpose": "Collect minimum non-secret external metadata, approvals, safe evidence, stop conditions, and recovery decisions before a separate bounded preflight adjudicates authentic-rotation readiness.",
+    "not_an_execution_authorization": true,
+    "does_not_mark_external_gates_pass": true,
+    "requires_secret_free_evidence": true,
+    "prohibits_conversation_transfer": "Credential material must not be copied through ChatGPT, Codex, Copilot, chat, ticket, or governance context."
+  },
+  "required_future_gates": [
+    "TARGET_IDENTITY_PASS",
+    "ADMINAPPS_RUNTIME_READY",
+    "AUTHORIZED_OPERATOR_PASS",
+    "SECRET_TRANSFER_PATH_PASS",
+    "WEB_CUTOVER_PATH_PASS",
+    "INTERRUPTION_APPROVED",
+    "FORWARD_RECOVERY_DEFINED",
+    "SECRET_LEAKAGE_PATHS_CLOSED"
+  ],
+  "recovery_adjudication": {
+    "principle": "FORWARD_RECOVERY_ONLY_AFTER_ROTATION_COMMIT",
+    "source_compatibility": "COMPATIBLE_WITH_FROZEN_LIFECYCLE",
+    "basis": "The lifecycle revokes/rotates the former credential after commit, so rollback by reuse or reactivation is not an authorized assumption.",
+    "specific_authentic_recovery_action": "EXTERNAL_OPERATOR_DECISION_REQUIRED"
+  },
+  "validation": {
+    "json_syntax": "PASS",
+    "git_diff_check": "PASS",
+    "secret_scan": "PASS_NO_HIGH_CONFIDENCE_SECRET_PATTERN_DETECTED",
+    "e08_retested_or_reopened": false,
+    "unrelated_worktree_changes": "PRESERVED"
+  },
+  "verdict": "EXTERNAL_AUTHORITY_PACKAGE_COMPLETE",
+  "phase31_5": "EXECUTION_HELD"
+}
