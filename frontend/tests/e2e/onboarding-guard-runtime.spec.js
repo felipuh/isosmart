@@ -170,3 +170,96 @@ test('Foundation Gate submits only the server-published questions and reflects t
   await expect(page.getByText('Aprobada')).toBeVisible();
   await expect(page.getByText('Resultado: 100.00%')).toBeVisible();
 });
+
+test('controlled integration saves the source-defined organizational profile through the canonical tenant API', async ({ page }) => {
+  await mockAuthenticatedSession(page);
+  let legacyOnboardingComplete = false;
+  let profileComplete = false;
+  const canonicalOrganizationId = '33333333-3333-4333-8333-333333333333';
+
+  await page.route('**/api/settings/onboarding_status/**', async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        organization_id: 1,
+        onboarding_completed: legacyOnboardingComplete,
+        commercially_available_standards: ['ISO9001_2015'],
+      }),
+    });
+  });
+  await page.route('**/api/v1/onboarding/organizations', async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({ organizations: [{ id: canonicalOrganizationId, display_name: 'Canonical QMS Org' }] }),
+    });
+  });
+  await page.route('**/api/v1/onboarding/status', async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        foundation_gate: { status: 'passed', paths: [] },
+        steps: [{
+          number: 10,
+          key: 'organizational_profile',
+          title: 'Organizational Profile',
+          status: profileComplete ? 'COMPLETE' : 'AVAILABLE',
+          prerequisites: ['foundation_gate'],
+        }],
+        step_count: 17,
+      }),
+    });
+  });
+  await page.route('**/api/v1/onboarding/organizational-profile', async (route) => {
+    const payload = route.request().postDataJSON();
+    expect(payload.organization_id).toBe(canonicalOrganizationId);
+    expect(payload.event_id).toMatch(/^[0-9a-f-]{36}$/);
+    expect(payload).toMatchObject({
+      role: 'quality_manager',
+      expertise_level: 'intermediate',
+      size_range: '10-50',
+      employees_count: 45,
+      sites_count: 2,
+      countries: ['Costa Rica', 'Panamá'],
+      sector: 'Manufactura',
+      certification_status: 'first_time',
+    });
+    profileComplete = true;
+    await route.fulfill({
+      status: 201,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        workflow_id: '44444444-4444-4444-8444-444444444444',
+        step: 'organizational_profile',
+        status: 'complete',
+        replay: false,
+      }),
+    });
+  });
+  await page.route('**/api/iso-clauses/initialize_standards/**', async (route) => {
+    await route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
+  });
+  await page.route('**/api/settings/complete_onboarding/**', async (route) => {
+    legacyOnboardingComplete = true;
+    await route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
+  });
+  await page.route('**/api/settings/run_onboarding_orchestration/**', async (route) => {
+    await route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
+  });
+
+  await page.goto('/onboarding');
+  await page.getByRole('button', { name: 'Continuar' }).click();
+  await expect(page.getByLabel('Organización canónica')).toHaveValue(canonicalOrganizationId);
+  await page.getByLabel('Sector principal').fill('Manufactura');
+  await page.getByRole('button', { name: 'Continuar' }).click();
+  await page.getByLabel('Número aproximado de colaboradores').fill('45');
+  await page.getByLabel('Número de sedes / plantas').fill('2');
+  await page.getByLabel('Países (separados por coma)').fill('Costa Rica, Panamá');
+  await page.getByRole('button', { name: 'Continuar' }).click();
+  await page.getByRole('button', { name: 'Crear mi sistema' }).click();
+
+  await expect.poll(() => profileComplete).toBe(true);
+  await expect(page).toHaveURL(/\/$/);
+});

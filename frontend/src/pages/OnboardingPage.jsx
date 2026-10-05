@@ -40,6 +40,17 @@ const inputClassName = 'mt-2 w-full rounded-2xl border border-slate-200 bg-white
 
 const sleep = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
 
+const createEventId = () => {
+  if (typeof crypto?.randomUUID === 'function') return crypto.randomUUID();
+  // Browsers supported by the application provide crypto.randomUUID. This
+  // fallback keeps the idempotency-key contract valid in older test runners.
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (character) => {
+    const random = Math.floor(Math.random() * 16);
+    const value = character === 'x' ? random : (random & 0x3) | 0x8;
+    return value.toString(16);
+  });
+};
+
 const splitStandardLabel = (label) => {
   const [titlePart, ...descriptionParts] = String(label || '').split(' - ');
   return {
@@ -96,6 +107,11 @@ const OnboardingPage = () => {
   const [foundationAnswers, setFoundationAnswers] = useState({});
   const [foundationSubmitting, setFoundationSubmitting] = useState(false);
   const [foundationResult, setFoundationResult] = useState(null);
+  const [canonicalOrganizations, setCanonicalOrganizations] = useState([]);
+  const [canonicalOrganizationId, setCanonicalOrganizationId] = useState('');
+  const [canonicalOrganizationsState, setCanonicalOrganizationsState] = useState('loading');
+  const [profileSaveResult, setProfileSaveResult] = useState(null);
+  const [profileEventId] = useState(createEventId);
 
   const organizationId = currentOrganization?.id;
 
@@ -118,6 +134,29 @@ const OnboardingPage = () => {
   useEffect(() => {
     loadFoundationStatus();
   }, [loadFoundationStatus]);
+
+  const loadCanonicalOrganizations = useCallback(async () => {
+    setCanonicalOrganizationsState('loading');
+    try {
+      const response = await foundationService.getOnboardingOrganizations();
+      const organizations = Array.isArray(response?.organizations) ? response.organizations : [];
+      setCanonicalOrganizations(organizations);
+      setCanonicalOrganizationId((current) => (
+        organizations.some((organization) => organization.id === current)
+          ? current
+          : (organizations[0]?.id || '')
+      ));
+      setCanonicalOrganizationsState('ready');
+    } catch {
+      setCanonicalOrganizations([]);
+      setCanonicalOrganizationId('');
+      setCanonicalOrganizationsState('error');
+    }
+  }, []);
+
+  useEffect(() => {
+    loadCanonicalOrganizations();
+  }, [loadCanonicalOrganizations]);
 
   const standardOptions = useMemo(
     () => STANDARD_OPTIONS.filter((option) => availableStandards.includes(option.code)),
@@ -200,9 +239,9 @@ const OnboardingPage = () => {
   ];
 
   const creationSteps = [
+    t('onboarding.canonicalProfile.saving'),
     t('onboarding.wizard.creatingStandards'),
     t('onboarding.wizard.creatingPreferences'),
-    t('onboarding.wizard.creatingWorkspace'),
     t('onboarding.wizard.creatingReady'),
   ];
 
@@ -218,6 +257,9 @@ const OnboardingPage = () => {
 
   const selectedExpertiseRoute = t(`onboarding.expertiseRoutes.${onboardingProfile.iso_expertise}`);
   const foundationGatePassed = foundationStatus?.foundation_gate?.status === 'passed';
+  const onboardingSteps = foundationStatus?.steps || [];
+  const profileStep = onboardingSteps.find((step) => step.key === 'organizational_profile');
+  const profileStepIsReady = ['AVAILABLE', 'IN_PROGRESS', 'COMPLETE'].includes(profileStep?.status);
   const learningPaths = foundationStatus?.foundation_gate?.paths || [];
   const selectedLearningPath = learningPaths.find((path) => path.id === selectedLearningPathId) || null;
   const allFoundationQuestionsAnswered = Boolean(selectedLearningPath?.questions?.length)
@@ -294,13 +336,45 @@ const OnboardingPage = () => {
       setError(t('onboarding.foundationGate.completeFoundationFirst'));
       return;
     }
+    if (!profileStepIsReady) {
+      setError(t('onboarding.canonicalProfile.serverBlocked'));
+      return;
+    }
+    if (!canonicalOrganizationId) {
+      setError(t('onboarding.canonicalProfile.noOrganization'));
+      return;
+    }
+    const canonicalProfile = {
+      role: onboardingProfile.primary_role,
+      expertise_level: onboardingProfile.iso_expertise,
+      size_range: onboardingProfile.company_size_range,
+      sites_count: parseOptionalInt(onboardingProfile.sites_count),
+      countries: onboardingProfile.countries.split(',').map((item) => item.trim()).filter(Boolean),
+      sector: onboardingProfile.industry_sector.trim(),
+      certification_status: onboardingProfile.certification_status,
+      employees_count: parseOptionalInt(onboardingProfile.employees_count),
+    };
+    if (!canonicalProfile.sector || !canonicalProfile.countries.length
+      || canonicalProfile.sites_count === null) {
+      setError(t('onboarding.canonicalProfile.missingFields'));
+      return;
+    }
     setSaving(true);
     setCreationStage(0);
     setError('');
 
     try {
-      await settingsService.initializeStandards(organizationId, selectedStandards);
+      const profileResult = await foundationService.saveOrganizationalProfile({
+        organizationId: canonicalOrganizationId,
+        eventId: profileEventId,
+        profile: canonicalProfile,
+      });
+      setProfileSaveResult(profileResult);
+      await loadFoundationStatus();
       setCreationStage(1);
+
+      await settingsService.initializeStandards(organizationId, selectedStandards);
+      setCreationStage(2);
 
       await settingsService.completeOnboarding(organizationId, {
         enabled_standards: selectedStandards,
@@ -316,8 +390,6 @@ const OnboardingPage = () => {
             .filter(Boolean),
         },
       });
-
-      setCreationStage(2);
 
       try {
         await settingsService.runOnboardingOrchestration(organizationId);
@@ -548,7 +620,49 @@ const OnboardingPage = () => {
   );
 
   const renderProfileStep = () => (
-    <div className="grid gap-4 md:grid-cols-2">
+    <div className="space-y-5">
+      <section className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900/60">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <h3 className="font-semibold text-slate-900 dark:text-white">{t('onboarding.canonicalProfile.title')}</h3>
+            <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">{t('onboarding.canonicalProfile.description')}</p>
+          </div>
+          <span className={`rounded-full px-3 py-1 text-xs font-semibold ${profileStepIsReady
+            ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-500/15 dark:text-emerald-200'
+            : 'bg-amber-100 text-amber-800 dark:bg-amber-500/15 dark:text-amber-200'}`}
+          >
+            {profileStep?.status || 'LOADING'}
+          </span>
+        </div>
+        {canonicalOrganizationsState === 'loading' && <p className="mt-3 text-sm text-slate-500" role="status">{t('onboarding.canonicalProfile.loading')}</p>}
+        {canonicalOrganizationsState === 'error' && (
+          <div className="mt-3 text-sm text-red-700 dark:text-red-200" role="alert">
+            {t('onboarding.canonicalProfile.loadError')}
+            <button type="button" onClick={loadCanonicalOrganizations} className="ml-2 underline">{t('onboarding.foundationGate.retry')}</button>
+          </div>
+        )}
+        {canonicalOrganizationsState === 'ready' && (
+          <label className="mt-3 block text-sm font-medium text-slate-700 dark:text-slate-200">
+            {t('onboarding.canonicalProfile.organization')}
+            <select
+              aria-label={t('onboarding.canonicalProfile.title')}
+              value={canonicalOrganizationId}
+              onChange={(event) => setCanonicalOrganizationId(event.target.value)}
+              disabled={!canonicalOrganizations.length}
+              className={inputClassName}
+            >
+              {!canonicalOrganizations.length && <option value="">{t('onboarding.canonicalProfile.noOrganizations')}</option>}
+              {canonicalOrganizations.map((organization) => (
+                <option key={organization.id} value={organization.id}>{organization.display_name}</option>
+              ))}
+            </select>
+          </label>
+        )}
+        {!profileStepIsReady && foundationLoadState === 'ready' && (
+          <p className="mt-3 text-sm text-amber-800 dark:text-amber-200">{t('onboarding.canonicalProfile.serverBlocked')}</p>
+        )}
+      </section>
+      <div className="grid gap-4 md:grid-cols-2">
       <label className="block text-sm text-slate-700 dark:text-slate-200">
         {t('onboarding.primaryRole')}
         <select
@@ -598,6 +712,7 @@ const OnboardingPage = () => {
           className={inputClassName}
         />
       </label>
+      </div>
     </div>
   );
 
@@ -607,7 +722,7 @@ const OnboardingPage = () => {
         {t('onboarding.employeesCount')}
         <input
           type="number"
-          min="1"
+          min="0"
           value={onboardingProfile.employees_count}
           onChange={(event) => updateProfileField('employees_count', event.target.value)}
           className={inputClassName}
@@ -618,7 +733,7 @@ const OnboardingPage = () => {
         {t('onboarding.sitesCount')}
         <input
           type="number"
-          min="1"
+          min="0"
           value={onboardingProfile.sites_count}
           onChange={(event) => updateProfileField('sites_count', event.target.value)}
           className={inputClassName}
@@ -897,6 +1012,12 @@ const OnboardingPage = () => {
               {error && (
                 <div className="mt-5 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-300" role="alert" aria-live="assertive">
                   {error}
+                </div>
+              )}
+
+              {profileSaveResult && (
+                <div className="mt-5 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800 dark:border-emerald-800 dark:bg-emerald-900/20 dark:text-emerald-200" role="status">
+                  {t('onboarding.canonicalProfile.saved')}
                 </div>
               )}
 
