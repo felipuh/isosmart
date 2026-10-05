@@ -1,0 +1,132 @@
+{
+  "artifact_schema": "ISO_SMART_AI_PHASE31_5_E07_DEVELOPMENT_DATABASE_REINSPECTION_V1",
+  "evidence_id": "39",
+  "date": "2026-10-05",
+  "predecessor": "docs/governance/evidence/phase31_5/38_e07_development_metadata_reinspection_2026-10-05.json",
+  "purpose": "Bounded restoration assessment for the existing AdminApps local development PostgreSQL target and read-only D2-D4 reinspection if safely reachable.",
+  "starting_state": {
+    "adminapps_repository": "/home/felipe/proyectos/adminapps",
+    "adminapps_branch": "hardening/p0-p1-enterprise-readiness",
+    "isosmart_repository": "/home/felipe/proyectos/isosmart",
+    "isosmart_branch": "hardening/p0-p1-enterprise-readiness",
+    "evidence_38_present": true,
+    "evidence_38_commit": "27a08ece",
+    "evidence_38_rotation_eligibility": "DEVELOPMENT_ROTATION_AUTHORIZATION_ELIGIBLE = NO",
+    "evidence_38_d2": "DEV_DATABASE_UNAVAILABLE",
+    "evidence_38_d3": "DEV_DATABASE_UNAVAILABLE",
+    "evidence_38_d4": "DEV_DATABASE_UNAVAILABLE",
+    "adminapps_effective_profile": "development",
+    "adminapps_is_development": true,
+    "adminapps_is_production": false,
+    "evidence_37_profile_correction_preserved": true,
+    "e08": "CLOSED_LOCAL_TECHNICAL_EVIDENCE",
+    "e08_baseline_preserved": "YES",
+    "phase31_5": "EXECUTION_HELD"
+  },
+  "development_database_contract": {
+    "dev_db_engine": "django.db.backends.postgresql",
+    "dev_db_host_class": "local-service",
+    "dev_db_host": "127.0.0.1",
+    "dev_db_port": 5432,
+    "dev_db_name_reference": "adminapps_db",
+    "dev_db_connection_source": "AdminApps backend/.env loaded by config/settings.py; values were not persisted beyond non-secret host, port, and database-name reference.",
+    "dev_db_runtime_expectation": "An already existing local PostgreSQL service must be reachable; settings do not define database provisioning or startup."
+  },
+  "runtime_mechanism": {
+    "classification": "DEV_DB_RUNTIME_MECHANISM_NOT_DEFINED",
+    "project_local_compose_or_service_definition_found": false,
+    "project_local_start_documentation_found": false,
+    "postgresql_listener_127_0_0_1_5432": false,
+    "rootless_podman_client_present": true,
+    "project_labelled_adminapps_container_found": false,
+    "conclusion": "No existing project-compatible local runtime was identified that could be started without provisioning or privileged authority."
+  },
+  "database_availability_action": {
+    "action": "NO_ACTION_TAKEN",
+    "authorized_start_class": "NOT_REACHED",
+    "reason": "No existing local PostgreSQL service/container definition or stopped project-scoped runtime was demonstrated.",
+    "prohibited_actions_not_performed": [
+      "CREATE_DATABASE",
+      "INITDB",
+      "RESET_DATABASE",
+      "RECREATE_VOLUME",
+      "DOCKER_COMPOSE_DOWN_V",
+      "DROP_DATABASE",
+      "migration execution",
+      "privilege escalation"
+    ]
+  },
+  "connectivity": {
+    "classification": "DEV_DB_CONNECTION_REFUSED",
+    "method": "pg_isready against the non-secret configured local host, port, and database-name reference",
+    "result": "No PostgreSQL response at 127.0.0.1:5432.",
+    "django_read_only_command": "NOT_EXECUTED: the repository-local Python environment has no Django installation, so showmigrations could not be used; no dependency installation was authorized.",
+    "credential_output": "NONE"
+  },
+  "gates": {
+    "D1": {
+      "classification": "DEV_TARGET_IDENTITY_PASS",
+      "preserved": true
+    },
+    "D2": {
+      "classification": "DEV_DATABASE_UNAVAILABLE",
+      "migration_0006_applied": "UNAVAILABLE: no database connection",
+      "migration_reference": "integration.0006_integration_api_key_lifecycle exists in checked-out AdminApps source.",
+      "integration_api_key_lifecycle_available": "IMPLEMENTATION_PRESENT_RUNTIME_UNVERIFIED",
+      "rotate_integration_api_key_available": "IMPLEMENTATION_PRESENT_RUNTIME_UNVERIFIED",
+      "schema_compatibility_state": "NOT_ADJUDICATED",
+      "development_revision_compatibility": "NOT_ADJUDICATED",
+      "read_only_ledger_query": "NOT_ATTEMPTED_AFTER_CONNECTION_REFUSED"
+    },
+    "D3": {
+      "classification": "DEV_DATABASE_UNAVAILABLE",
+      "integration_logical_name": "UNAVAILABLE: no database connection",
+      "integration_api_key_record_id": "UNAVAILABLE: no database connection",
+      "integration_api_key_active": "UNAVAILABLE: no database connection",
+      "isosmart_attribution_reference": "UNAVAILABLE: no database connection",
+      "duplicate_candidate_count": "UNAVAILABLE: no database connection",
+      "duplicate_disposition": "UNAVAILABLE: no database connection",
+      "lifecycle_eligibility": "UNAVAILABLE: no database connection",
+      "query_discipline": "No integration query was executed."
+    },
+    "D4": {
+      "classification": "DEV_DATABASE_UNAVAILABLE",
+      "dev_operator_identity_reference": "UNAVAILABLE: no database connection",
+      "dev_operator_active_status": "UNAVAILABLE: no database connection",
+      "dev_operator_staff_status": "UNAVAILABLE: no database connection",
+      "dev_operator_role_reference": "UNAVAILABLE: no database connection",
+      "query_discipline": "No user/operator query was executed."
+    },
+    "D5": "DEV_SECRET_RECEIVER_UNRESOLVED",
+    "D6": "DEV_WEB_WORKLOAD_NOT_RUNNING_OR_UNIDENTIFIED",
+    "D7": "DEV_INTERRUPTION_MODEL_DEFINED",
+    "D8": "DEV_FORWARD_RECOVERY_UNRESOLVED",
+    "D9": "DEV_SECRET_LEAKAGE_PATHS_UNRESOLVED"
+  },
+  "development_rotation_eligibility": "DEVELOPMENT_ROTATION_AUTHORIZATION_ELIGIBLE = NO",
+  "mutation_audit": {
+    "database_mutation": "NONE",
+    "migration_execution": "NONE",
+    "integration_or_operator_mutation": "NONE",
+    "runtime_or_service_start": "NONE",
+    "privilege_escalation": "NONE",
+    "adminapps_source_artifacts_changed": false,
+    "evidence_28_to_38_modified": false,
+    "unrelated_worktree_changes_preserved": true
+  },
+  "secret_assurance": {
+    "credential_plaintext_accessed_or_persisted": false,
+    "credential_verifier_or_hash_accessed_or_persisted": false,
+    "password_mfa_token_or_session_accessed_or_persisted": false,
+    "full_dotenv_persisted": false,
+    "secret_bearing_database_output_persisted": false,
+    "secret_material_exposure_avoided": "YES"
+  },
+  "governance_integrity": {
+    "e07": "BLOCKED_BY_EXTERNAL_AUTHORITY",
+    "e08": "CLOSED_LOCAL_TECHNICAL_EVIDENCE",
+    "e08_baseline_preserved": "YES",
+    "phase31_5": "EXECUTION_HELD",
+    "push_performed": false
+  }
+}
