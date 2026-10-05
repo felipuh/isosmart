@@ -14,6 +14,7 @@ import subprocess
 import sys
 import tempfile
 import time
+import argparse
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -112,13 +113,13 @@ CMD ["sh", "-c", "if [ ! -s '$PGDATA/PG_VERSION' ]; then printf '%s\\n' \"$POSTG
     run([engine, "build", "--pull=never", "--tag", image, str(context)])
 
 
-def bootstrap(port, super_password, names, passwords):
+def bootstrap(port, super_password, names, passwords, *, host="127.0.0.1", super_user="postgres"):
     import psycopg2
     from psycopg2 import sql
 
     connection = psycopg2.connect(
-        dbname="postgres", user="postgres", password=super_password,
-        host="127.0.0.1", port=port,
+        dbname="postgres", user=super_user, password=super_password,
+        host=host, port=port,
     )
     connection.autocommit = True
     with connection.cursor() as cursor:
@@ -146,7 +147,9 @@ def bootstrap(port, super_password, names, passwords):
     connection.close()
 
 
-def bootstrap_idempotent(port, super_password, names, passwords):
+def bootstrap_idempotent(
+    port, super_password, names, passwords, *, host="127.0.0.1", super_user="postgres"
+):
     """Reuse the foundation gate bootstrap, refusing preexisting security drift.
 
     A partially initialized cluster requires DBA review instead of automatic
@@ -158,8 +161,8 @@ def bootstrap_idempotent(port, super_password, names, passwords):
     if len(set(role_names)) != len(role_names) or names["database"] == "postgres":
         raise ValueError("foundation role/database names are invalid or duplicated")
     connection = psycopg2.connect(
-        dbname="postgres", user="postgres", password=super_password,
-        host="127.0.0.1", port=port,
+        dbname="postgres", user=super_user, password=super_password,
+        host=host, port=port,
     )
     try:
         with connection.cursor() as cursor:
@@ -176,8 +179,12 @@ def bootstrap_idempotent(port, super_password, names, passwords):
             database = cursor.fetchone()
             if not found and database is None:
                 connection.close()
-                bootstrap(port, super_password, names, passwords)
-                return bootstrap_idempotent(port, super_password, names, passwords)
+                bootstrap(
+                    port, super_password, names, passwords, host=host, super_user=super_user
+                )
+                return bootstrap_idempotent(
+                    port, super_password, names, passwords, host=host, super_user=super_user
+                )
             if database != (names["migrator"],) or len(found) != len(role_names):
                 raise RuntimeError("partial or incorrectly owned foundation bootstrap")
             for key in (*LOGIN_ROLES, *OWNER_ROLES):
@@ -226,7 +233,58 @@ def drop_database_and_roles(port, super_password, names):
     connection.close()
 
 
-def main():
+def bootstrap_deployment_from_environment():
+    """Apply the authoritative role contract to a deployment cluster.
+
+    This intentionally does not call the disposable harness or any teardown
+    code.  A complete matching installation is verified idempotently; a
+    partial installation or any privilege/membership drift fails closed.
+    """
+    def required(name):
+        value = os.getenv(name)
+        if not value:
+            raise RuntimeError(f"missing required deployment bootstrap variable: {name}")
+        return value
+
+    names = {key: required(f"FOUNDATION_{key.upper()}_ROLE") for key, *_ in ROLE_SPECS}
+    names["database"] = required("FOUNDATION_DB_NAME")
+    passwords = {
+        key: required(f"FOUNDATION_{key.upper()}_PASSWORD")
+        for key in LOGIN_ROLES
+    }
+    host = required("FOUNDATION_BOOTSTRAP_HOST")
+    port = int(os.getenv("FOUNDATION_BOOTSTRAP_PORT", "5432"))
+    result = bootstrap_idempotent(
+        port,
+        required("FOUNDATION_BOOTSTRAP_PASSWORD"),
+        names,
+        passwords,
+        host=host,
+        super_user=required("FOUNDATION_BOOTSTRAP_USER"),
+    )
+    # Deliberately report contract facts only: no passwords, DSN, or role names.
+    print(json.dumps({
+        "foundation_bootstrap": "PASS",
+        "role_count": len(result["roles"]),
+        "login_role_count": len(LOGIN_ROLES),
+        "nologin_role_count": len(OWNER_ROLES),
+        "database_owner_verified": True,
+        "membership_contract_verified": True,
+    }, sort_keys=True))
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--deployment-bootstrap",
+        action="store_true",
+        help="apply/verify the Foundation role contract without lifecycle harness teardown",
+    )
+    args = parser.parse_args(argv)
+    if args.deployment_bootstrap:
+        bootstrap_deployment_from_environment()
+        return
+
     engine = shutil.which("podman") or shutil.which("docker")
     if not engine:
         raise RuntimeError("Podman or Docker is required")

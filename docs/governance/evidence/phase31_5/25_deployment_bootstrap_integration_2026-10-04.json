@@ -1,0 +1,41 @@
+{
+  "evidence_id": "25",
+  "date": "2026-10-04",
+  "phase31_5_state": "EXECUTION_HELD",
+  "starting_commit": "2a898bf3",
+  "compose": {
+    "previous_graph": ["database", "migrate", "web", "outbox-worker"],
+    "verified_graph": ["database:healthy", "foundation-bootstrap:completed", "migrate:completed", "web", "outbox-worker"],
+    "static_dependency_assertions": "PASS"
+  },
+  "bootstrap": {
+    "interface": "postgres_foundation_gate.py --deployment-bootstrap",
+    "role_source": "ROLE_SPECS",
+    "first_run": "PASS",
+    "second_run": "PASS_IDEMPOTENT",
+    "roles": 24,
+    "login_roles": 21,
+    "nologin_roles": 3,
+    "database_owner": "PASS",
+    "memberships": "PASS",
+    "destructive_cleanup": false
+  },
+  "clean_migration": {
+    "result": "PASS",
+    "foundation_leaf": "0037_qms_audit_capa_foundation",
+    "root_cause_corrected": "migration connection omitted Foundation role session settings",
+    "correction": "migrate_with_foundation_roles.py derives settings from ROLE_SPECS"
+  },
+  "web": {
+    "image_build": "PASS",
+    "runtime_user": "isosmart",
+    "process_start": "PASS",
+    "health_unauthenticated": "401_EXPECTED_BY_AUTHENTICATED_READINESS_CONTRACT",
+    "health_authenticated": "NOT_CLAIMED"
+  },
+  "credential_separation": "PASS_SERVICE_SCOPED_ENVIRONMENT_TEMPLATES",
+  "compose_provider": "UNAVAILABLE_LOCAL_PODMAN_NATIVE_SEQUENCE_USED",
+  "e07": "FAIL_AUTHENTIC_ROTATION_EVIDENCE_REQUIRED",
+  "e08": "FAIL_AUTH_AND_WORKER_RUNTIME_SUITES_OPEN",
+  "external_effects": {"production": 0, "staging": 0, "adminapps": 0, "external_application_apis": 0, "customer_data": 0}
+}

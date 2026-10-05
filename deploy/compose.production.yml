@@ -1,23 +1,30 @@
 services:
   database:
     image: postgres:16.4-bookworm
-    env_file: ../backend/.env.production
+    env_file: ../backend/.env.production.database
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 10s
       timeout: 5s
       retries: 6
     restart: unless-stopped
-  migrate:
+  foundation-bootstrap:
     build: { context: .., dockerfile: deploy/Dockerfile }
-    env_file: ../backend/.env.production
-    command: ["python", "manage.py", "migrate", "--noinput"]
+    env_file: ../backend/.env.production.bootstrap
+    command: ["python", "foundation/postgres_foundation_gate.py", "--deployment-bootstrap"]
     depends_on:
       database: { condition: service_healthy }
     restart: "no"
+  migrate:
+    build: { context: .., dockerfile: deploy/Dockerfile }
+    env_file: ../backend/.env.production.migrate
+    command: ["python", "foundation/migrate_with_foundation_roles.py"]
+    depends_on:
+      foundation-bootstrap: { condition: service_completed_successfully }
+    restart: "no"
   web:
     build: { context: .., dockerfile: deploy/Dockerfile }
-    env_file: ../backend/.env.production
+    env_file: ../backend/.env.production.web
     depends_on:
       migrate: { condition: service_completed_successfully }
     ports: ["127.0.0.1:8000:8000"]
@@ -29,7 +36,7 @@ services:
     restart: unless-stopped
   outbox-worker:
     build: { context: .., dockerfile: deploy/Dockerfile }
-    env_file: ../backend/.env.production
+    env_file: ../backend/.env.production.worker
     command: ["sh", "-c", "python manage.py run_outbox_worker --tenant-id $$WORKER_TENANT_ID"]
     depends_on:
       migrate: { condition: service_completed_successfully }
