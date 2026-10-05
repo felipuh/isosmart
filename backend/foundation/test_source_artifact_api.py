@@ -49,6 +49,15 @@ PRINCIPAL = SourceArtifactPrincipal(
 
 
 class SourceArtifactRouteTests(SimpleTestCase):
+    def test_source_routes_are_available_through_the_browser_api_gateway(self):
+        routes = (
+            "/api/v1/onboarding/status",
+            "/api/v1/learning/iso9000/attempts",
+        )
+        for route in routes:
+            with self.subTest(route=route):
+                self.assertIsNotNone(resolve(route).func.view_class)
+
     def test_all_seven_expected_routes_resolve_with_the_contract_method(self):
         routes = (
             ("/v1/onboarding/status", "get"),

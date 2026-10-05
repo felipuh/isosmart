@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ArrowLeft,
@@ -14,6 +14,7 @@ import {
 import { useAuth } from '../context/AuthContext';
 import { useI18n } from '../context/I18nContext';
 import settingsService from '../services/settingsService';
+import foundationService from '../services/foundationService';
 
 const STANDARD_OPTIONS = [
   { code: 'ISO9001_2015', required: true },
@@ -89,8 +90,34 @@ const OnboardingPage = () => {
   const [saving, setSaving] = useState(false);
   const [creationStage, setCreationStage] = useState(-1);
   const [error, setError] = useState('');
+  const [foundationStatus, setFoundationStatus] = useState(null);
+  const [foundationLoadState, setFoundationLoadState] = useState('loading');
+  const [selectedLearningPathId, setSelectedLearningPathId] = useState('');
+  const [foundationAnswers, setFoundationAnswers] = useState({});
+  const [foundationSubmitting, setFoundationSubmitting] = useState(false);
+  const [foundationResult, setFoundationResult] = useState(null);
 
   const organizationId = currentOrganization?.id;
+
+  const loadFoundationStatus = useCallback(async () => {
+    setFoundationLoadState('loading');
+    try {
+      const status = await foundationService.getOnboardingStatus();
+      setFoundationStatus(status);
+      setSelectedLearningPathId((current) => {
+        const paths = status?.foundation_gate?.paths || [];
+        return paths.some((path) => path.id === current) ? current : (paths[0]?.id || '');
+      });
+      setFoundationAnswers({});
+      setFoundationLoadState('ready');
+    } catch {
+      setFoundationLoadState('error');
+    }
+  }, []);
+
+  useEffect(() => {
+    loadFoundationStatus();
+  }, [loadFoundationStatus]);
 
   const standardOptions = useMemo(
     () => STANDARD_OPTIONS.filter((option) => availableStandards.includes(option.code)),
@@ -190,6 +217,11 @@ const OnboardingPage = () => {
     .replace('{total}', String(stepDefinitions.length));
 
   const selectedExpertiseRoute = t(`onboarding.expertiseRoutes.${onboardingProfile.iso_expertise}`);
+  const foundationGatePassed = foundationStatus?.foundation_gate?.status === 'passed';
+  const learningPaths = foundationStatus?.foundation_gate?.paths || [];
+  const selectedLearningPath = learningPaths.find((path) => path.id === selectedLearningPathId) || null;
+  const allFoundationQuestionsAnswered = Boolean(selectedLearningPath?.questions?.length)
+    && selectedLearningPath.questions.every((question) => foundationAnswers[question.id]?.length);
 
   const toggleStandard = (code, required) => {
     if (required) return;
@@ -203,6 +235,38 @@ const OnboardingPage = () => {
 
   const updateProfileField = (key, value) => {
     setOnboardingProfile((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const toggleFoundationAnswer = (questionId, optionId) => {
+    setFoundationAnswers((previous) => {
+      const selected = previous[questionId] || [];
+      const next = selected.includes(optionId)
+        ? selected.filter((item) => item !== optionId)
+        : [...selected, optionId];
+      return { ...previous, [questionId]: next };
+    });
+  };
+
+  const submitFoundationAttempt = async () => {
+    if (!selectedLearningPath || !allFoundationQuestionsAnswered) return;
+    setFoundationSubmitting(true);
+    setFoundationResult(null);
+    setError('');
+    try {
+      const result = await foundationService.submitFoundationAttempt({
+        learningPathId: selectedLearningPath.id,
+        answers: selectedLearningPath.questions.map((question) => ({
+          question_id: question.id,
+          selected_option_ids: foundationAnswers[question.id],
+        })),
+      });
+      setFoundationResult(result);
+      await loadFoundationStatus();
+    } catch (err) {
+      setError(err?.response?.data?.detail || t('onboarding.foundationGate.submitError'));
+    } finally {
+      setFoundationSubmitting(false);
+    }
   };
 
   const parseOptionalInt = (value) => {
@@ -224,6 +288,10 @@ const OnboardingPage = () => {
   const handleFinish = async () => {
     if (!organizationId) {
       setError(t('onboarding.errorNoOrganization'));
+      return;
+    }
+    if (!foundationGatePassed) {
+      setError(t('onboarding.foundationGate.completeFoundationFirst'));
       return;
     }
     setSaving(true);
@@ -366,6 +434,115 @@ const OnboardingPage = () => {
             <p className="mt-4 text-xs text-slate-500 dark:text-slate-400">{t('onboarding.requiredStandard')}</p>
           </div>
         </div>
+      </section>
+
+      <section className="rounded-3xl border border-slate-200 bg-slate-50/90 p-5 dark:border-slate-700 dark:bg-slate-900/70 xl:col-span-3">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <h3 className="font-semibold text-slate-900 dark:text-white">{t('onboarding.foundationGate.title')}</h3>
+            <p className="mt-1 max-w-3xl text-sm text-slate-600 dark:text-slate-300">{t('onboarding.foundationGate.description')}</p>
+          </div>
+          <span className={`rounded-full px-3 py-1 text-xs font-semibold ${foundationGatePassed
+            ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-500/15 dark:text-emerald-200'
+            : 'bg-amber-100 text-amber-800 dark:bg-amber-500/15 dark:text-amber-200'}`}
+          >
+            {foundationGatePassed ? t('onboarding.foundationGate.passed') : t('onboarding.foundationGate.required')}
+          </span>
+        </div>
+
+        {foundationLoadState === 'loading' && (
+          <p className="mt-5 text-sm text-slate-500 dark:text-slate-400" role="status">{t('onboarding.foundationGate.loading')}</p>
+        )}
+
+        {foundationLoadState === 'error' && (
+          <div className="mt-5 rounded-2xl border border-red-200 bg-red-50 p-4 dark:border-red-800 dark:bg-red-900/20" role="alert">
+            <p className="text-sm text-red-700 dark:text-red-200">{t('onboarding.foundationGate.unavailable')}</p>
+            <button type="button" onClick={loadFoundationStatus} className="mt-3 rounded-xl border border-red-300 px-3 py-2 text-sm font-medium text-red-800 dark:border-red-700 dark:text-red-100">
+              {t('onboarding.foundationGate.retry')}
+            </button>
+          </div>
+        )}
+
+        {foundationLoadState === 'ready' && !learningPaths.length && (
+          <p className="mt-5 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900 dark:border-amber-800 dark:bg-amber-900/20 dark:text-amber-100">
+            {t('onboarding.foundationGate.noContent')}
+          </p>
+        )}
+
+        {foundationLoadState === 'ready' && learningPaths.length > 0 && (
+          <div className="mt-5 space-y-5">
+            {learningPaths.length > 1 && (
+              <label className="block max-w-xl text-sm font-medium text-slate-700 dark:text-slate-200">
+                {t('onboarding.foundationGate.learningPath')}
+                <select
+                  value={selectedLearningPathId}
+                  onChange={(event) => {
+                    setSelectedLearningPathId(event.target.value);
+                    setFoundationAnswers({});
+                    setFoundationResult(null);
+                  }}
+                  className={inputClassName}
+                >
+                  {learningPaths.map((path) => (
+                    <option key={path.id} value={path.id}>{path.standard_code} · {path.edition}</option>
+                  ))}
+                </select>
+              </label>
+            )}
+
+            {selectedLearningPath && (
+              <>
+                <p className="text-sm text-slate-600 dark:text-slate-300">
+                  {t('onboarding.foundationGate.requiredScore').replace('{score}', selectedLearningPath.required_score)}
+                </p>
+                <div className="space-y-4">
+                  {selectedLearningPath.questions.map((question, index) => (
+                    <fieldset key={question.id} className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-950/80">
+                      <legend className="px-1 text-sm font-semibold text-slate-900 dark:text-white">{index + 1}. {question.scenario}</legend>
+                      <div className="mt-3 space-y-2">
+                        {question.options.map((option) => (
+                          <label key={option.id} className="flex cursor-pointer items-center gap-3 rounded-xl px-2 py-2 text-sm text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800">
+                            <input
+                              type="checkbox"
+                              checked={foundationAnswers[question.id]?.includes(option.id) || false}
+                              onChange={() => toggleFoundationAnswer(question.id, option.id)}
+                              className="h-4 w-4 accent-cyan-500"
+                            />
+                            {option.label}
+                          </label>
+                        ))}
+                      </div>
+                    </fieldset>
+                  ))}
+                </div>
+                <button
+                  type="button"
+                  onClick={submitFoundationAttempt}
+                  disabled={!allFoundationQuestionsAnswered || foundationSubmitting || foundationGatePassed}
+                  className="inline-flex items-center justify-center gap-2 rounded-2xl bg-slate-950 px-5 py-3 text-sm font-medium text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-cyan-500 dark:text-slate-950 dark:hover:bg-cyan-400"
+                >
+                  {foundationSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+                  {foundationSubmitting ? t('onboarding.foundationGate.submitting') : t('onboarding.foundationGate.submit')}
+                </button>
+              </>
+            )}
+          </div>
+        )}
+
+        {foundationResult && (
+          <div className="mt-5 rounded-2xl border border-slate-200 bg-white p-4 text-sm dark:border-slate-700 dark:bg-slate-950/80">
+            <p className="font-semibold text-slate-900 dark:text-white">
+              {t('onboarding.foundationGate.result').replace('{score}', foundationResult.score)}
+            </p>
+            {Array.isArray(foundationResult.feedback) && foundationResult.feedback.length > 0 && (
+              <ul className="mt-3 space-y-2 text-slate-600 dark:text-slate-300">
+                {foundationResult.feedback.map((item) => (
+                  <li key={item.question_id}>{item.explanation || item.concept_key}</li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
       </section>
     </div>
   );

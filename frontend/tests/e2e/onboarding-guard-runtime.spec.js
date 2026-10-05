@@ -111,3 +111,62 @@ test('loading and invalid status never render protected content', async ({ page 
   await expect(page.getByRole('alert')).toContainText('No se pudo validar el acceso');
   await expect(page.locator('button.fixed.bottom-6.right-6')).toHaveCount(0);
 });
+
+test('Foundation Gate submits only the server-published questions and reflects the server result', async ({ page }) => {
+  await mockAuthenticatedSession(page);
+  await page.route('**/api/settings/onboarding_status/**', async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({ organization_id: 1, onboarding_completed: false }),
+    });
+  });
+
+  const pathId = '11111111-1111-4111-8111-111111111111';
+  const questionId = '22222222-2222-4222-8222-222222222222';
+  let gatePassed = false;
+  await page.route('**/api/v1/onboarding/status', async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        foundation_gate: {
+          status: gatePassed ? 'passed' : 'not_started',
+          paths: [{
+            id: pathId,
+            standard_code: 'ISO 9000',
+            edition: '2026',
+            required_score: '80.00',
+            questions: gatePassed ? [] : [{
+              id: questionId,
+              scenario: 'Which published option applies?',
+              options: [{ id: 'yes', label: 'Yes' }, { id: 'no', label: 'No' }],
+            }],
+          }],
+        },
+        steps: [],
+        step_count: 17,
+      }),
+    });
+  });
+  await page.route('**/api/v1/learning/iso9000/attempts', async (route) => {
+    const payload = route.request().postDataJSON();
+    expect(payload).toEqual({
+      learning_path_id: pathId,
+      answers: [{ question_id: questionId, selected_option_ids: ['yes'] }],
+    });
+    gatePassed = true;
+    await route.fulfill({
+      status: 201,
+      contentType: 'application/json',
+      body: JSON.stringify({ score: '100.00', passed: true, feedback: [] }),
+    });
+  });
+
+  await page.goto('/onboarding');
+  await expect(page.getByText('Puerta de Foundation ISO 9000:2026')).toBeVisible();
+  await page.getByLabel('Yes').check();
+  await page.getByRole('button', { name: 'Enviar evaluación' }).click();
+  await expect(page.getByText('Aprobada')).toBeVisible();
+  await expect(page.getByText('Resultado: 100.00%')).toBeVisible();
+});

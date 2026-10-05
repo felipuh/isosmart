@@ -11,6 +11,9 @@ from foundation.adminapps_ingress import receive_tenant_event
 
 urlpatterns = [
     path('', include('foundation.api_urls')),
+    # Keep the source-artifact contract at /v1 while also exposing it through
+    # the application API gateway used by the browser client.
+    path('api/', include('foundation.api_urls')),
     path('api/integration/adminapps/tenant-events/', receive_tenant_event, name='adminapps-tenant-events'),
     path('admin/', admin.site.urls),
     path('livez', views.liveness_check, name='liveness-check'),
