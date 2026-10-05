@@ -1,0 +1,33 @@
+{
+  "evidence_id": "24",
+  "date": "2026-10-04",
+  "phase31_5_state": "EXECUTION_HELD",
+  "checkpoint": {
+    "commit": "00f35614b324848a4934e81de7c8018c70e4a2fb",
+    "published_commits": 8,
+    "push": "PASS_NORMAL_NON_FORCE",
+    "branch": "hardening/p0-p1-enterprise-readiness"
+  },
+  "postgresql_foundation_gate": "PASS_DISPOSABLE_32_TEST_SUITE_AND_TEARDOWN",
+  "image": {
+    "result": "PASS",
+    "reference": "localhost/isosmart-e08:phase315",
+    "id": "1fa97f8154a5124eeb2ac3722a9556a841fc8035eaa189c413a38a267e054d7c",
+    "runtime_user": "isosmart"
+  },
+  "frontend": {
+    "build": "PASS",
+    "lint": "PASS",
+    "persistent_auth_token_hits": 0,
+    "persistent_bearer_header_hits": 0
+  },
+  "backend": {"django_system_check_test_settings": "PASS"},
+  "blocker": {
+    "kind": "deployment_topology",
+    "detail": "compose.production.yml omits the mandatory Foundation PostgreSQL role-bootstrap step before migrations",
+    "effects": ["deployment health unproven", "PostgreSQL auth lifecycle unproven", "independent worker lifecycle unproven"]
+  },
+  "e07": "FAIL_AUTHENTIC_ROTATION_EVIDENCE_REQUIRED",
+  "e08": "PARTIALLY_CLOSED_SPECIFIC_TECHNICAL_BLOCKERS_REMAIN",
+  "external_effects": {"production": 0, "staging": 0, "adminapps": 0, "external_application_apis": 0, "customer_data": 0}
+}
