@@ -1,5 +1,6 @@
 from django.urls import path
 
+from . import qms_api_views as qms
 from .api_views import (
     ApprovalDecisionView,
     DomainEventPublishView,
@@ -25,4 +26,16 @@ urlpatterns = [
     path("v1/events", DomainEventPublishView.as_view(), name="source-domain-events"),
     path("v1/evidence", EvidenceCreateView.as_view(), name="source-evidence"),
     path("v1/learning/iso9000/attempts", FoundationAttemptCreateView.as_view(), name="source-foundation-attempt"),
+]
+
+urlpatterns += [
+    path("v1/qms/organizations", qms.QmsOrganizationsView.as_view(), name="qms-organizations"),
+    path("v1/qms/requirements", qms.QmsRequirementsView.as_view(), name="qms-requirements"),
+    path("v1/qms/evidence", qms.QmsEvidenceView.as_view(), name="qms-evidence-list"),
+    path("v1/qms/audits", qms.AuditsView.as_view(), name="qms-audits"),
+    path("v1/qms/findings", qms.FindingsView.as_view(), name="qms-findings"),
+    path("v1/qms/findings/<uuid:finding_id>/nonconformity", qms.FindingNonconformityView.as_view(), name="qms-finding-nonconformity"),
+    path("v1/qms/nonconformities", qms.NonconformitiesView.as_view(), name="qms-nonconformities"),
+    path("v1/qms/nonconformities/<uuid:nc_id>/corrective-actions", qms.NonconformityCorrectiveActionView.as_view(), name="qms-nc-corrective-actions"),
+    path("v1/qms/corrective-actions", qms.CorrectiveActionsView.as_view(), name="qms-corrective-actions"),
 ]

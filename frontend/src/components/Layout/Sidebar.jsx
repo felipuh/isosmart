@@ -30,6 +30,7 @@ const Sidebar = ({ isOpen = true, onClose }) => {
     { name: t('navigation.planning'), path: '/planning', icon: ClipboardList, group: 'system' },
     { name: t('navigation.resources'), path: '/resources', icon: Package, group: 'system' },
     { name: t('navigation.operations'), path: '/operations', icon: Activity, group: 'system' },
+    { name: t('navigation.qmsCapa', 'Audit & CAPA'), path: '/qms/capa', icon: ShieldCheck, group: 'assurance' },
     { name: t('navigation.improvement'), path: '/improvement', icon: Zap, group: 'assurance' },
     { name: t('navigation.performance'), path: '/performance', icon: LineChart, group: 'assurance' },
     { name: t('navigation.leadership'), path: '/leadership', icon: Users, group: 'assurance' },

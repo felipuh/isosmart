@@ -60,6 +60,7 @@ const AnalysesPage = lazy(() => import('./features/performance/pages/AnalysesPag
 const AuditsPage = lazy(() => import('./features/performance/pages/AuditsPage'));
 const FindingsPage = lazy(() => import('./features/performance/pages/FindingsPage'));
 const ReviewsPage = lazy(() => import('./features/performance/pages/ReviewsPage'));
+const QmsCapaPage = lazy(() => import('./features/qms/pages/QmsCapaPage'));
 const ImprovementDashboard = lazy(() => import('./features/improvement/pages/ImprovementDashboard'));
 const ImprovementNonconformitiesPage = lazy(() => import('./features/improvement/pages/ImprovementNonconformitiesPage'));
 const ImprovementCorrectiveActionsPage = lazy(() => import('./features/improvement/pages/ImprovementCorrectiveActionsPage'));
@@ -197,6 +198,7 @@ function App() {
         <Route path="performance/reviews" element={<ReviewsPage />} />
 
         {/* Improvement Module */}
+        <Route path="qms/capa" element={<QmsCapaPage />} />
         <Route path="improvement" element={<ImprovementDashboard />} />
         <Route path="improvement/nonconformities" element={<ImprovementNonconformitiesPage />} />
         <Route path="improvement/nonconformities/new" element={<ImprovementNonconformitiesPage />} />

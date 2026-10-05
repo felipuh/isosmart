@@ -224,9 +224,12 @@ def run():
             SourceArtifactPostgreSQLIntegrationTests,
         )
 
-        suite = unittest.defaultTestLoader.loadTestsFromTestCase(
-            SourceArtifactPostgreSQLIntegrationTests,
-        )
+        from foundation.test_qms_capa_api_postgres import QmsCapaApiPostgresTests
+
+        suite = unittest.TestSuite([
+            unittest.defaultTestLoader.loadTestsFromTestCase(SourceArtifactPostgreSQLIntegrationTests),
+            unittest.defaultTestLoader.loadTestsFromTestCase(QmsCapaApiPostgresTests),
+        ])
         result = unittest.TextTestRunner(stream=sys.stdout, verbosity=1).run(suite)
         if not result.wasSuccessful():
             raise SystemExit(1)
