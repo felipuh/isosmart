@@ -10,12 +10,17 @@ from .api_serializers import (
     DomainEventPublishRequestSerializer,
     EvidenceCreateRequestSerializer,
     FoundationAttemptRequestSerializer,
+    OnboardingEvidenceIngestionRequestSerializer,
+    OrganizationalProfileRequestSerializer,
 )
 from .source_artifact_api import (
     SourceArtifactAPIError,
     create_evidence,
     list_recommendations,
     onboarding_status,
+    onboarding_organizations,
+    save_organizational_profile,
+    ingest_onboarding_evidence_references,
     publish_domain_event,
     recommendation_basis,
     record_approval_decision,
@@ -55,6 +60,41 @@ class OnboardingStatusView(SourceArtifactAPIView):
     def get(self, request):
         principal = self.get_principal(request)
         return Response(onboarding_status(principal))
+
+
+class OnboardingOrganizationsView(SourceArtifactAPIView):
+    def get(self, request):
+        principal = self.get_principal(request)
+        return Response(onboarding_organizations(principal))
+
+
+class OrganizationalProfileCreateView(SourceArtifactAPIView):
+    def post(self, request):
+        serializer = OrganizationalProfileRequestSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        principal = self.get_principal(request)
+        payload = {
+            "organization_id": serializer.validated_data["organization_id"],
+            "event_id": serializer.validated_data["event_id"],
+            "profile": serializer.profile(),
+        }
+        return Response(
+            save_organizational_profile(principal, payload, trace_id=request_trace_id(request)),
+            status=201,
+        )
+
+
+class OnboardingEvidenceReferencesCreateView(SourceArtifactAPIView):
+    def post(self, request):
+        serializer = OnboardingEvidenceIngestionRequestSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        principal = self.get_principal(request)
+        return Response(
+            ingest_onboarding_evidence_references(
+                principal, serializer.validated_data, trace_id=request_trace_id(request),
+            ),
+            status=201,
+        )
 
 
 class RecommendationListView(SourceArtifactAPIView):

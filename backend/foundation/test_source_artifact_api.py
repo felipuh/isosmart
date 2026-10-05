@@ -17,7 +17,10 @@ from foundation.api_views import (
     DomainEventPublishView,
     EvidenceCreateView,
     FoundationAttemptCreateView,
+    OnboardingEvidenceReferencesCreateView,
+    OnboardingOrganizationsView,
     OnboardingStatusView,
+    OrganizationalProfileCreateView,
     RecommendationBasisView,
     RecommendationListView,
 )
@@ -52,15 +55,21 @@ class SourceArtifactRouteTests(SimpleTestCase):
     def test_source_routes_are_available_through_the_browser_api_gateway(self):
         routes = (
             "/api/v1/onboarding/status",
+            "/api/v1/onboarding/organizations",
+            "/api/v1/onboarding/organizational-profile",
+            "/api/v1/onboarding/document-references",
             "/api/v1/learning/iso9000/attempts",
         )
         for route in routes:
             with self.subTest(route=route):
                 self.assertIsNotNone(resolve(route).func.view_class)
 
-    def test_all_seven_expected_routes_resolve_with_the_contract_method(self):
+    def test_all_documented_routes_resolve_with_the_contract_method(self):
         routes = (
             ("/v1/onboarding/status", "get"),
+            ("/v1/onboarding/organizations", "get"),
+            ("/v1/onboarding/organizational-profile", "post"),
+            ("/v1/onboarding/document-references", "post"),
             ("/v1/recommendations", "get"),
             (f"/v1/recommendations/{uuid4()}/basis", "get"),
             (f"/v1/approvals/{uuid4()}/decision", "post"),
@@ -73,6 +82,9 @@ class SourceArtifactRouteTests(SimpleTestCase):
                 match = resolve(route)
                 self.assertEqual(match.func.view_class.__name__, {
                     "/v1/onboarding/status": "OnboardingStatusView",
+                    "/v1/onboarding/organizations": "OnboardingOrganizationsView",
+                    "/v1/onboarding/organizational-profile": "OrganizationalProfileCreateView",
+                    "/v1/onboarding/document-references": "OnboardingEvidenceReferencesCreateView",
                     "/v1/recommendations": "RecommendationListView",
                     "/v1/events": "DomainEventPublishView",
                     "/v1/evidence": "EvidenceCreateView",
@@ -146,6 +158,9 @@ class SourceArtifactRouteTests(SimpleTestCase):
         methods = {route: next(iter(operations)) for route, operations in spec["paths"].items()}
         self.assertEqual(methods, {
             "/v1/onboarding/status": "get",
+            "/v1/onboarding/organizations": "get",
+            "/v1/onboarding/organizational-profile": "post",
+            "/v1/onboarding/document-references": "post",
             "/v1/recommendations": "get",
             "/v1/recommendations/{id}/basis": "get",
             "/v1/approvals/{id}/decision": "post",
@@ -173,6 +188,58 @@ class SourceArtifactViewTests(SimpleTestCase):
             response = self.invoke(OnboardingStatusView.as_view(), "get", "/v1/onboarding/status")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, expected)
+
+    def test_get_onboarding_organizations_is_tenant_scoped_by_service(self):
+        expected = {"organizations": [{"id": str(uuid4()), "display_name": "QMS"}]}
+        with patch("foundation.api_views.resolve_source_artifact_principal", return_value=PRINCIPAL), \
+             patch("foundation.api_views.onboarding_organizations", return_value=expected) as service:
+            response = self.invoke(OnboardingOrganizationsView.as_view(), "get", "/v1/onboarding/organizations")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, expected)
+        service.assert_called_once_with(PRINCIPAL)
+
+    def test_post_organizational_profile_uses_tenant_scoped_command(self):
+        organization_id, event_id = uuid4(), uuid4()
+        expected = {"workflow_id": str(uuid4()), "step": "organizational_profile", "status": "complete"}
+        payload = {
+            "organization_id": str(organization_id), "event_id": str(event_id),
+            "role": "quality_manager", "expertise_level": "intermediate",
+            "size_range": "10-50", "sites_count": 1, "countries": ["CR"],
+            "sector": "manufacturing", "certification_status": "first_time",
+        }
+        with patch("foundation.api_views.resolve_source_artifact_principal", return_value=PRINCIPAL), \
+             patch("foundation.api_views.save_organizational_profile", return_value=expected) as service:
+            response = self.invoke(
+                OrganizationalProfileCreateView.as_view(), "post",
+                "/v1/onboarding/organizational-profile", payload,
+            )
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.data, expected)
+        self.assertEqual(service.call_args.args[0], PRINCIPAL)
+        self.assertEqual(service.call_args.args[1]["organization_id"], organization_id)
+        self.assertEqual(service.call_args.args[1]["event_id"], event_id)
+        self.assertEqual(service.call_args.args[1]["profile"]["role"], "quality_manager")
+
+    def test_post_document_references_stays_metadata_only(self):
+        organization_id, event_id, item_event_id = uuid4(), uuid4(), uuid4()
+        expected = {"workflow_id": str(uuid4()), "content_bytes_read": False}
+        payload = {
+            "organization_id": str(organization_id), "event_id": str(event_id),
+            "items": [{
+                "event_id": str(item_event_id), "source_type": "document",
+                "source_uri": "controlled://document/1", "content_hash": "a" * 64,
+                "captured_at": datetime.now(timezone.utc).isoformat(),
+            }],
+        }
+        with patch("foundation.api_views.resolve_source_artifact_principal", return_value=PRINCIPAL), \
+             patch("foundation.api_views.ingest_onboarding_evidence_references", return_value=expected) as service:
+            response = self.invoke(
+                OnboardingEvidenceReferencesCreateView.as_view(), "post",
+                "/v1/onboarding/document-references", payload,
+            )
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.data, expected)
+        self.assertFalse(service.call_args.args[1]["items"][0].get("content_bytes"))
 
     def test_get_recommendations_supports_clause_filter(self):
         result = [{"id": str(uuid4()), "title": "Improve control"}]

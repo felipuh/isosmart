@@ -24,6 +24,71 @@ paths:
         '401': {$ref: '#/components/responses/Unauthorized'}
         '403': {$ref: '#/components/responses/Forbidden'}
         '503': {$ref: '#/components/responses/Unavailable'}
+  /v1/onboarding/organizations:
+    get:
+      operationId: getOnboardingOrganizations
+      summary: List canonical QMS organizations in the authenticated tenant
+      description: This is an ISO Smart local projection. It does not infer equivalence with a legacy or AdminApps organization identifier.
+      responses:
+        '200':
+          description: Tenant-scoped canonical organizations available for onboarding commands.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [organizations]
+                properties:
+                  organizations:
+                    type: array
+                    items:
+                      type: object
+                      required: [id, display_name]
+                      properties:
+                        id: {type: string, format: uuid}
+                        display_name: {type: string}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '403': {$ref: '#/components/responses/Forbidden'}
+        '503': {$ref: '#/components/responses/Unavailable'}
+  /v1/onboarding/organizational-profile:
+    post:
+      operationId: postOrganizationalProfile
+      summary: Persist the step-10 organizational profile with tenant-scoped provenance
+      description: Implementation-defined transport for the source-defined profile fields. The canonical organization must be selected from the authenticated tenant; this operation neither calls AdminApps nor creates an organization.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/OrganizationalProfileRequest'}
+      responses:
+        '201':
+          description: The persisted workflow transition, or an idempotent replay of it.
+          content: {application/json: {schema: {$ref: '#/components/schemas/OnboardingTransitionResponse'}}}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '403': {$ref: '#/components/responses/Forbidden'}
+        '404': {$ref: '#/components/responses/NotFound'}
+        '409': {$ref: '#/components/responses/Conflict'}
+        '422': {$ref: '#/components/responses/Unprocessable'}
+        '503': {$ref: '#/components/responses/Unavailable'}
+  /v1/onboarding/document-references:
+    post:
+      operationId: postOnboardingDocumentReferences
+      summary: Ingest step-12 metadata and hashes without uploading content bytes
+      description: Implementation-defined transport for the existing metadata-only ingestion slice. It cannot assert full document content, parsing, licensing, or DocumentVersion creation.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/OnboardingEvidenceIngestionRequest'}
+      responses:
+        '201':
+          description: Evidence references and the onboarding transition were atomically persisted, or replayed.
+          content: {application/json: {schema: {$ref: '#/components/schemas/OnboardingTransitionResponse'}}}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '403': {$ref: '#/components/responses/Forbidden'}
+        '404': {$ref: '#/components/responses/NotFound'}
+        '409': {$ref: '#/components/responses/Conflict'}
+        '422': {$ref: '#/components/responses/Unprocessable'}
+        '503': {$ref: '#/components/responses/Unavailable'}
   /v1/recommendations:
     get:
       operationId: getRecommendations
@@ -189,6 +254,50 @@ components:
       description: Tenant authority or PostgreSQL runtime roles are unavailable.
       content: {application/json: {schema: {$ref: '#/components/schemas/Error'}}}
   schemas:
+    OrganizationalProfileRequest:
+      type: object
+      required: [organization_id, event_id, role, expertise_level, size_range, sites_count, countries, sector, certification_status]
+      properties:
+        organization_id: {type: string, format: uuid}
+        event_id: {type: string, format: uuid, description: Idempotency key for the transition.}
+        role: {type: string, maxLength: 120}
+        expertise_level: {type: string, maxLength: 120}
+        size_range: {type: string, maxLength: 120}
+        sites_count: {type: integer, minimum: 0}
+        countries: {type: array, minItems: 1, items: {type: string, maxLength: 120}}
+        sector: {type: string, maxLength: 255}
+        certification_status: {type: string, maxLength: 120}
+        employees_count: {type: integer, minimum: 0}
+    OnboardingEvidenceIngestionRequest:
+      type: object
+      required: [organization_id, event_id, items]
+      properties:
+        organization_id: {type: string, format: uuid}
+        event_id: {type: string, format: uuid}
+        items:
+          type: array
+          minItems: 1
+          items:
+            type: object
+            required: [event_id, source_type, source_uri, content_hash, captured_at]
+            properties:
+              event_id: {type: string, format: uuid}
+              source_type: {type: string, enum: [strategy, process, kpi, audit, complaint, supplier, document]}
+              source_uri: {type: string, maxLength: 2000}
+              content_hash: {type: string, pattern: '^[0-9a-f]{64}$'}
+              captured_at: {type: string, format: date-time}
+              document_version_id: {type: string, format: uuid, nullable: true}
+    OnboardingTransitionResponse:
+      type: object
+      required: [workflow_id, step, status, transition_id, event_id, replay]
+      properties:
+        workflow_id: {type: string, format: uuid}
+        step: {type: string}
+        status: {type: string, enum: [complete]}
+        transition_id: {type: string, format: uuid}
+        event_id: {type: string, format: uuid}
+        replay: {type: boolean}
+        content_bytes_read: {type: boolean, description: Always false for document references.}
     Error:
       type: object
       required: [code, detail]

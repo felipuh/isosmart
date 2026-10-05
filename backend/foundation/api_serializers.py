@@ -18,6 +18,48 @@ class FoundationAttemptRequestSerializer(serializers.Serializer):
     answers = FoundationAnswerSerializer(many=True, allow_empty=False, max_length=200)
 
 
+class OrganizationalProfileRequestSerializer(serializers.Serializer):
+    """Transport schema for the source-listed onboarding profile fields."""
+
+    organization_id = serializers.UUIDField()
+    event_id = serializers.UUIDField()
+    role = serializers.CharField(max_length=120)
+    expertise_level = serializers.CharField(max_length=120)
+    size_range = serializers.CharField(max_length=120)
+    sites_count = serializers.IntegerField(min_value=0)
+    countries = serializers.ListField(
+        child=serializers.CharField(max_length=120), allow_empty=False, max_length=100,
+    )
+    sector = serializers.CharField(max_length=255)
+    certification_status = serializers.CharField(max_length=120)
+    employees_count = serializers.IntegerField(min_value=0, required=False)
+
+    def profile(self):
+        return {
+            key: value for key, value in self.validated_data.items()
+            if key not in {"organization_id", "event_id"}
+        }
+
+
+class OnboardingEvidenceReferenceSerializer(serializers.Serializer):
+    event_id = serializers.UUIDField()
+    source_type = serializers.ChoiceField(
+        choices=("strategy", "process", "kpi", "audit", "complaint", "supplier", "document"),
+    )
+    source_uri = serializers.CharField(max_length=2000)
+    content_hash = serializers.RegexField(regex=r"^[0-9a-f]{64}$", max_length=64)
+    captured_at = serializers.DateTimeField()
+    document_version_id = serializers.UUIDField(required=False, allow_null=True)
+
+
+class OnboardingEvidenceIngestionRequestSerializer(serializers.Serializer):
+    organization_id = serializers.UUIDField()
+    event_id = serializers.UUIDField(
+        help_text="Idempotency key for the onboarding transition, not an uploaded file identifier.",
+    )
+    items = OnboardingEvidenceReferenceSerializer(many=True, allow_empty=False, max_length=100)
+
+
 class ApprovalDecisionRequestSerializer(serializers.Serializer):
     decision = serializers.ChoiceField(choices=("approve", "reject", "request_changes"))
     comments = serializers.CharField(required=False, allow_blank=True, max_length=4000)

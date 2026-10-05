@@ -23,6 +23,7 @@ from .models import (
     ConceptMastery,
     DomainEvent,
     LearningPath,
+    Organization,
     QuestionBank,
     QuizAttempt,
     Recommendation,
@@ -31,7 +32,12 @@ from .models import (
     TransactionalOutbox,
     UserProjection,
 )
-from .onboarding import onboarding_steps
+from .onboarding import (
+    OnboardingEvidenceIngestionService,
+    OnboardingWorkflowError,
+    OrganizationProfileCommandService,
+    onboarding_steps,
+)
 from .tenant_context import TrustedTenantIdentity, trusted_tenant_context
 
 
@@ -282,6 +288,89 @@ def onboarding_status(principal, *, using="app"):
             "steps": steps,
             "step_count": len(steps),
         }
+
+
+def onboarding_organizations(principal, *, using="app"):
+    """Return canonical QMS organizations visible to the signed tenant principal.
+
+    The legacy AdminApps-facing organization identifier is deliberately not
+    accepted here.  A caller must choose an ISO Smart canonical aggregate from
+    this tenant-scoped projection, so no unproven identifier equivalence is
+    introduced while exposing steps 10 and 12 to HTTP consumers.
+    """
+    using = foundation_database_alias(using)
+    with trusted_tenant_context(
+        principal.identity, actor_id=principal.actor_id, trace_id=uuid4(), using=using,
+    ):
+        rows = Organization.objects.using(using).filter(
+            tenant_id=principal.tenant_id,
+        ).order_by("display_name", "id")
+        return {
+            "organizations": [
+                {"id": str(row.id), "display_name": row.display_name}
+                for row in rows
+            ],
+        }
+
+
+def save_organizational_profile(principal, payload, *, trace_id, using="app"):
+    using = foundation_database_alias(using)
+    try:
+        workflow, transition, replay = OrganizationProfileCommandService(using=using).save_profile(
+            identity=principal.identity,
+            organization_id=payload["organization_id"],
+            user_id=principal.user_projection_id,
+            profile=payload["profile"],
+            event_id=payload["event_id"],
+            actor_id=principal.actor_id,
+            trace_id=trace_id,
+        )
+    except Organization.DoesNotExist as exc:
+        raise SourceArtifactAPIError(
+            "ORGANIZATION_NOT_FOUND", "organization is not available in the authenticated tenant", 404,
+        ) from exc
+    except OnboardingWorkflowError as exc:
+        status = 409 if exc.code in {"EVENT_CONFLICT", "PREREQUISITES_INCOMPLETE", "INVALID_TRANSITION"} else 422
+        raise SourceArtifactAPIError(exc.code, str(exc), status) from exc
+    return {
+        "workflow_id": str(workflow.id),
+        "step": "organizational_profile",
+        "status": "complete",
+        "transition_id": str(transition.id),
+        "event_id": str(transition.event_id),
+        "replay": replay,
+    }
+
+
+def ingest_onboarding_evidence_references(principal, payload, *, trace_id, using="app"):
+    """Persist metadata/hash references only; this endpoint never uploads bytes."""
+    using = foundation_database_alias(using)
+    try:
+        workflow, transition, replay = OnboardingEvidenceIngestionService(using=using).ingest_batch(
+            identity=principal.identity,
+            organization_id=payload["organization_id"],
+            user_id=principal.user_projection_id,
+            items=payload["items"],
+            transition_event_id=payload["event_id"],
+            actor_id=principal.actor_id,
+            trace_id=trace_id,
+        )
+    except Organization.DoesNotExist as exc:
+        raise SourceArtifactAPIError(
+            "ORGANIZATION_NOT_FOUND", "organization is not available in the authenticated tenant", 404,
+        ) from exc
+    except OnboardingWorkflowError as exc:
+        status = 409 if exc.code in {"EVENT_CONFLICT", "PREREQUISITES_INCOMPLETE", "INVALID_TRANSITION"} else 422
+        raise SourceArtifactAPIError(exc.code, str(exc), status) from exc
+    return {
+        "workflow_id": str(workflow.id),
+        "step": "document_data_ingestion",
+        "status": "complete",
+        "transition_id": str(transition.id),
+        "event_id": str(transition.event_id),
+        "replay": replay,
+        "content_bytes_read": False,
+    }
 
 
 def list_recommendations(principal, *, clause=None, using="app"):
