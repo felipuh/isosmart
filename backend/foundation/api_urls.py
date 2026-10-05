@@ -29,6 +29,8 @@ urlpatterns = [
 ]
 
 urlpatterns += [
+    path("v1/qms/capabilities", qms.QmsCapabilitiesView.as_view()),
+    path("v1/qms/owners", qms.QmsOwnersView.as_view()),
     path("v1/qms/organizations", qms.QmsOrganizationsView.as_view(), name="qms-organizations"),
     path("v1/qms/requirements", qms.QmsRequirementsView.as_view(), name="qms-requirements"),
     path("v1/qms/evidence", qms.QmsEvidenceView.as_view(), name="qms-evidence-list"),

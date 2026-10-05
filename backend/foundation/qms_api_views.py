@@ -54,7 +54,16 @@ def _uuid_param(request, name):
         raise serializers.ValidationError({name: "must be a UUID"})
 
 
-class _ListView(SourceArtifactAPIView):
+class _WriteView(SourceArtifactAPIView):
+    """Resolves the principal and enforces the QMS write policy before any parsing."""
+
+    def write_principal(self, request):
+        principal = self.get_principal(request)
+        api.authorize_write(principal)
+        return principal
+
+
+class _ListView(_WriteView):
     def get(self, request):
         return Response(self.fetch(self.get_principal(request), request))
 
@@ -64,9 +73,10 @@ class AuditsView(_ListView):
         return api.list_audits(p)
 
     def post(self, request):
+        principal = self.write_principal(request)
         s = AuditIn(data=request.data)
         s.is_valid(raise_exception=True)
-        return Response(api.create_audit(self.get_principal(request), s.validated_data,
+        return Response(api.create_audit(principal, s.validated_data,
                                          trace_id=request_trace_id(request)), status=201)
 
 
@@ -75,9 +85,10 @@ class FindingsView(_ListView):
         return api.list_findings(p, audit_id=_uuid_param(request, "audit_id"))
 
     def post(self, request):
+        principal = self.write_principal(request)
         s = FindingIn(data=request.data)
         s.is_valid(raise_exception=True)
-        return Response(api.create_finding(self.get_principal(request), s.validated_data,
+        return Response(api.create_finding(principal, s.validated_data,
                                            trace_id=request_trace_id(request)), status=201)
 
 
@@ -86,11 +97,12 @@ class NonconformitiesView(_ListView):
         return api.list_nonconformities(p)
 
 
-class FindingNonconformityView(SourceArtifactAPIView):
+class FindingNonconformityView(_WriteView):
     def post(self, request, finding_id):
+        principal = self.write_principal(request)
         s = NonconformityIn(data=request.data)
         s.is_valid(raise_exception=True)
-        return Response(api.create_nonconformity(self.get_principal(request), finding_id, s.validated_data,
+        return Response(api.create_nonconformity(principal, finding_id, s.validated_data,
                                                  trace_id=request_trace_id(request)), status=201)
 
 
@@ -99,11 +111,12 @@ class CorrectiveActionsView(_ListView):
         return api.list_corrective_actions(p, nc_id=_uuid_param(request, "nc_id"))
 
 
-class NonconformityCorrectiveActionView(SourceArtifactAPIView):
+class NonconformityCorrectiveActionView(_WriteView):
     def post(self, request, nc_id):
+        principal = self.write_principal(request)
         s = CorrectiveActionIn(data=request.data)
         s.is_valid(raise_exception=True)
-        return Response(api.create_corrective_action(self.get_principal(request), nc_id, s.validated_data,
+        return Response(api.create_corrective_action(principal, nc_id, s.validated_data,
                                                      trace_id=request_trace_id(request)), status=201)
 
 
@@ -120,3 +133,13 @@ class QmsRequirementsView(_ListView):
 class QmsOrganizationsView(_ListView):
     def fetch(self, p, request):
         return api.list_organizations(p)
+
+
+class QmsCapabilitiesView(SourceArtifactAPIView):
+    def get(self, request):
+        return Response(api.capabilities(self.get_principal(request)))
+
+
+class QmsOwnersView(_ListView):
+    def fetch(self, p, request):
+        return api.list_owners(p)

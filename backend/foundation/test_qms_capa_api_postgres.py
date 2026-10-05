@@ -3,6 +3,7 @@
 from datetime import date, timedelta
 from uuid import uuid4
 
+from django.test import override_settings
 from django.utils import timezone
 
 from foundation import qms_api_views as views
@@ -14,6 +15,7 @@ from foundation.models import (
 )
 
 
+@override_settings(QMS_WRITE_ROLES=("quality_manager",), QMS_CAPA_CREATE_ENABLED=True)
 class QmsCapaApiPostgresTests(base.SourceArtifactPostgreSQLIntegrationTests):
     def setUp(self):
         super().setUp()
@@ -135,6 +137,64 @@ class QmsCapaApiPostgresTests(base.SourceArtifactPostgreSQLIntegrationTests):
         response = self.call(views.FindingNonconformityView, "post", "/n", {
             "description": "again", "severity": "major", "status": "detected"}, finding_id=finding["id"])
         self.assertEqual((response.status_code, response.data["code"]), (409, "NONCONFORMITY_ALREADY_EXISTS"))
+
+    def test_write_authorization_is_enforced_by_backend(self):
+        evidence_id, audit, finding, nc, _ = self.make_chain()
+        body = {"organization_id": str(self.organization_id), "scope": "s", "criteria": "c",
+                "status": "planned", "lead_auditor": "l"}
+        # AUTHORIZED_ROLE_ALLOWED / SAME_TENANT_ALLOWED
+        self.post_ok(views.AuditsView, "/a", body)
+        before = {
+            "audit": len(self.call(views.AuditsView, "get", "/a").data["results"]),
+            "log": ImmutableAuditLog.objects.using("default").count(),
+        }
+        writes = (
+            (views.AuditsView, body, {}),
+            (views.FindingsView, {"audit_id": audit["id"], "requirement_id": str(self.requirement.id),
+                                  "type": "t", "statement": "s", "evidence_id": evidence_id}, {}),
+            (views.FindingNonconformityView, {"description": "d", "severity": "x", "status": "y"},
+             {"finding_id": finding["id"]}),
+            (views.NonconformityCorrectiveActionView, {
+                "cause_id": str(uuid4()), "action": "a", "owner_id": str(self.actor_id),
+                "due_date": date.today().isoformat()}, {"nc_id": nc["id"]}),
+        )
+        # UNAUTHORIZED_ROLE_DENIED: valid tenant principal, role outside the allow-list.
+        self.claims["role"] = "viewer"
+        for view, data, kwargs in writes:
+            response = self.call(view, "post", "/x", data, **kwargs)
+            self.assertEqual((response.status_code, response.data["code"]), (403, "QMS_WRITE_ROLE_REQUIRED"))
+        # Reads stay available, owners (a user directory) do not.
+        self.assertEqual(self.call(views.AuditsView, "get", "/a").status_code, 200)
+        self.assertEqual(self.call(views.QmsOwnersView, "get", "/o").status_code, 403)
+        caps = self.call(views.QmsCapabilitiesView, "get", "/c").data
+        self.assertEqual((caps["can_write"], caps["capa_create_enabled"]), (False, False))
+        # Fail closed when no policy is configured, even for the formerly allowed role.
+        self.claims["role"] = "quality_manager"
+        with override_settings(QMS_WRITE_ROLES=()):
+            for view, data, kwargs in writes:
+                response = self.call(view, "post", "/x", data, **kwargs)
+                self.assertEqual((response.status_code, response.data["code"]),
+                                 (403, "QMS_WRITE_POLICY_NOT_ESTABLISHED"))
+        self.assertEqual(len(self.call(views.AuditsView, "get", "/a").data["results"]), before["audit"])
+        self.assertEqual(ImmutableAuditLog.objects.using("default").count(), before["log"])
+
+    def test_capabilities_owners_and_capa_blocker(self):
+        caps = self.call(views.QmsCapabilitiesView, "get", "/c").data
+        self.assertEqual((caps["can_write"], caps["capa_create_enabled"]), (True, True))
+        owners = self.call(views.QmsOwnersView, "get", "/o").data["results"]
+        self.assertIn(str(self.actor_id), [o["id"] for o in owners])
+        self.assertNotIn(str(self.other_actor_id), [o["id"] for o in owners])
+        other = self.call(views.QmsOwnersView, "get", "/o", other=True).data["results"]
+        self.assertNotIn(str(self.actor_id), [o["id"] for o in other])
+        _, _, _, nc, _ = self.make_chain()
+        with override_settings(QMS_CAPA_CREATE_ENABLED=False):
+            caps = self.call(views.QmsCapabilitiesView, "get", "/c").data
+            self.assertEqual((caps["capa_create_enabled"], caps["capa_create_blocker"]),
+                             (False, "CAUSE_REFERENCE_SEMANTICS_INSUFFICIENT"))
+            response = self.call(views.NonconformityCorrectiveActionView, "post", "/c", {
+                "cause_id": str(uuid4()), "action": "a", "owner_id": str(self.actor_id),
+                "due_date": date.today().isoformat()}, nc_id=nc["id"])
+            self.assertEqual((response.status_code, response.data["code"]), (409, "CAPA_CAUSE_REFERENCE_UNDEFINED"))
 
     def test_validation_errors(self):
         response = self.call(views.AuditsView, "post", "/a", {"organization_id": "nope", "scope": " "})

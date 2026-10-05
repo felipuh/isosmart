@@ -539,3 +539,10 @@ CSRF_EXEMPT_URLS = [r'^api/'] if IS_DEVELOPMENT else []
 # Media files (uploads)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/uploads')
+
+# QMS mutation policy: no authoritative write-role policy exists in the source
+# artifacts, so writes stay disabled until an operator configures an explicit
+# allow-list of AdminApps role claims.
+QMS_WRITE_ROLES = tuple(_env_list('QMS_WRITE_ROLES'))
+# CorrectiveAction.cause_id has no source-defined Cause contract; creation stays blocked.
+QMS_CAPA_CREATE_ENABLED = _env_bool('QMS_CAPA_CREATE_ENABLED', default=False)

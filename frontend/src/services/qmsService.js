@@ -10,6 +10,8 @@ export const qmsErrorMessage = (error) => {
 };
 
 const qmsService = {
+  capabilities: async () => (await api.get('/v1/qms/capabilities')).data,
+  owners: () => get('/v1/qms/owners'),
   organizations: () => get('/v1/qms/organizations'),
   requirements: () => get('/v1/qms/requirements'),
   evidence: (organizationId) => get('/v1/qms/evidence', organizationId ? { organization_id: organizationId } : undefined),

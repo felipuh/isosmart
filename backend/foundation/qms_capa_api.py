@@ -9,6 +9,7 @@ always derived from the validated principal.
 
 from uuid import uuid4
 
+from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 
 from .models import (
@@ -18,6 +19,50 @@ from .models import (
 from .qms_audit import QmsAuditCommandService
 from .source_artifact_api import SourceArtifactAPIError, foundation_database_alias
 from .tenant_context import trusted_tenant_context
+
+
+def write_roles():
+    """Deployment-configured AdminApps role claims allowed to mutate QMS records.
+
+    The source artifacts define no QMS write-role policy (QMS_WRITE_POLICY_SEMANTICS_INSUFFICIENT),
+    so writes fail closed until an operator supplies an explicit allow-list.
+    """
+    return frozenset(r for r in (str(x).strip() for x in getattr(settings, "QMS_WRITE_ROLES", ())) if r)
+
+
+def capa_create_enabled():
+    return bool(getattr(settings, "QMS_CAPA_CREATE_ENABLED", False))
+
+
+def authorize_write(principal):
+    roles = write_roles()
+    if not roles:
+        raise SourceArtifactAPIError(
+            "QMS_WRITE_POLICY_NOT_ESTABLISHED",
+            "QMS mutations are disabled until an authoritative write-role policy is configured", 403)
+    if principal.role_code not in roles:
+        raise SourceArtifactAPIError(
+            "QMS_WRITE_ROLE_REQUIRED", "the authenticated role is not authorized to mutate QMS records", 403)
+
+
+def capabilities(principal):
+    can_write = bool(write_roles()) and principal.role_code in write_roles()
+    return {
+        "can_write": can_write,
+        "write_policy_configured": bool(write_roles()),
+        "capa_create_enabled": can_write and capa_create_enabled(),
+        "capa_create_blocker": None if capa_create_enabled() else "CAUSE_REFERENCE_SEMANTICS_INSUFFICIENT",
+    }
+
+
+def list_owners(principal, *, using="app"):
+    authorize_write(principal)
+    using = foundation_database_alias(using)
+    with _ctx(principal, using):
+        qs = UserProjection.objects.using(using).filter(
+            tenant_id=principal.tenant_id, lifecycle_status=UserProjection.LifecycleStatus.ACTIVE,
+        ).order_by("email", "id")[:200]
+        return {"results": [{"id": str(u.adminapps_user_id), "email": u.email or "", "role": u.role or ""} for u in qs]}
 
 
 def _ctx(principal, using):
@@ -101,6 +146,10 @@ def create_nonconformity(principal, finding_id, data, *, trace_id, using="app"):
 
 
 def create_corrective_action(principal, nc_id, data, *, trace_id, using="app"):
+    if not capa_create_enabled():
+        raise SourceArtifactAPIError(
+            "CAPA_CAUSE_REFERENCE_UNDEFINED",
+            "CorrectiveAction.cause_id has no source-defined Cause contract; creation is blocked", 409)
     def call(svc, u):
         with _ctx(principal, u):
             QmsNonconformity.objects.using(u).get(pk=nc_id)
