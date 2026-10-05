@@ -1,0 +1,113 @@
+{
+  "evidence_id": "28",
+  "date": "2026-10-05",
+  "date_basis": "authorized remediation request",
+  "phase31_5_state": "EXECUTION_HELD",
+  "e07": "FAIL_AUTHENTIC_ROTATION_EVIDENCE_REQUIRED",
+  "e08": "CLOSED_LOCAL_TECHNICAL_EVIDENCE",
+  "postgres_rotation_acceptance": "READY",
+  "scope": "Stage A authority and safety determination only; Stage B authentic remediation was not eligible and was not attempted.",
+  "repositories": {
+    "adminapps": {
+      "branch": "hardening/p0-p1-enterprise-readiness",
+      "starting_commit": "8b9c5684997baaa590b34af241a173e1a9c41143",
+      "required_rotation_mechanism_commit_ancestor": true,
+      "unrelated_worktree_changes_preserved": true
+    },
+    "isosmart": {
+      "branch": "hardening/p0-p1-enterprise-readiness",
+      "starting_commit": "7d928c0df71716244472670861e40039b4e258d3",
+      "required_postgres_acceptance_commit_ancestor": true,
+      "required_mechanism_report_commit_ancestor": true,
+      "required_prior_e07_commit_ancestor": true,
+      "unrelated_worktree_changes_preserved": true
+    }
+  },
+  "pre_rotation_gate": {
+    "adminapps_authority_located": "FAIL",
+    "actual_credential_target_unambiguous": "FAIL",
+    "migration_0006_applied_to_authentic_authority": "FAIL_NOT_OBSERVED",
+    "fallback_acceptance_resolved": "FAIL",
+    "secret_receiver_identified": "FAIL",
+    "one_time_non_recording_transfer_path": "FAIL",
+    "restart_reload_mechanism_known": "PARTIAL_REPOSITORY_TOPOLOGY_ONLY",
+    "safe_health_probe_contract": "PASS",
+    "operator_authority_available": "FAIL_NOT_EVIDENCED",
+    "administrator_password_adjudication_actionable": "FAIL",
+    "stage_b_eligible": false
+  },
+  "adminapps_api_key": {
+    "historical_state": "Historical exposure remains recorded by prior evidence; no raw credential or verifier was inspected in this cycle.",
+    "authoritative_deployment_or_database": "UNRESOLVED",
+    "credential_validation_paths": [
+      "Database-backed IntegrationAPIKey lifecycle verifier is implemented in source.",
+      "A configured hash fallback exists in source; its authentic runtime configuration and applicability were not inspected."
+    ],
+    "authentic_target": "UNRESOLVED",
+    "rotation_performed": false,
+    "old_fingerprint_available": false,
+    "replacement_fingerprint_available": false,
+    "old_key_rejection": "NOT_RUN",
+    "replacement_acceptance": "NOT_RUN",
+    "audit_validation": "NOT_RUN"
+  },
+  "initial_administrator_password": {
+    "materialization_verdict": "ADMIN_PASSWORD_USAGE_UNDETERMINED",
+    "reason": "The bootstrap source defines an environment-supplied account path, but no authoritative account store, bootstrap history, or safe account metadata was available to inspect.",
+    "remediation_performed": false,
+    "authority_evidence": "NOT_AVAILABLE"
+  },
+  "secret_injection": {
+    "repository_topology": "ISO Smart production Compose declares separate untracked environment-file inputs for web and outbox-worker services. The client reads ADMIN_APPS_API_KEY from its process environment and a module singleton is constructed at import time.",
+    "authoritative_receiver": "UNRESOLVED",
+    "authorized_operator": "UNRESOLVED",
+    "safe_update_mechanism": "UNRESOLVED",
+    "non_recording_one_time_transfer": "UNAVAILABLE_OR_UNPROVEN",
+    "stdout_direct_consumption": "UNPROVEN",
+    "required_consumer_scope": [
+      "web",
+      "outbox-worker"
+    ],
+    "restart_reload_command": "UNRESOLVED",
+    "classification": "SECRET_INJECTION_AUTHORITY_UNRESOLVED"
+  },
+  "authentic_rotation": {
+    "performed": false,
+    "reason": "STOP_BEFORE_AUTHENTIC_ROTATION: Stage A did not satisfy every required precondition."
+  },
+  "safe_acceptance_proof": {
+    "contract": "GET /api/integration/health/; old credential expected 401 and replacement expected 200.",
+    "executed_against_authentic_authority": false,
+    "customer_workflows_called": false
+  },
+  "audit_proof": {
+    "authentic_audit_event": "NOT_AVAILABLE",
+    "raw_credential_or_verifier_recorded": false
+  },
+  "raw_credential_evidence_leaks": 0,
+  "environment_file_raw_values_unnecessarily_inspected": false,
+  "external_effects": {
+    "adminapps_authority_calls": 0,
+    "credential_rotation_attempts": 0,
+    "credential_resets": 0,
+    "production_access": 0,
+    "staging_access": 0,
+    "deployments": 0,
+    "customer_data_access_or_processing": 0,
+    "external_event_delivery": 0
+  },
+  "remaining_blockers": [
+    "BLOCKED_BY_AUTHORITY_LOCATION",
+    "SECRET_INJECTION_AUTHORITY_UNRESOLVED",
+    "AUTHENTIC_AUTHORITY_MIGRATION_NOT_READY",
+    "AMBIGUOUS_AUTHENTIC_CREDENTIAL_TARGET",
+    "OLD_CREDENTIAL_REJECTION_NOT_PROVABLE",
+    "ADMIN_PASSWORD_USAGE_UNDETERMINED"
+  ],
+  "publication": {
+    "task_owned_files_only": true,
+    "force_push": false,
+    "normal_commit_and_push_required": true,
+    "commit_and_upstream_synchronization": "Recorded after publication verification."
+  }
+}
