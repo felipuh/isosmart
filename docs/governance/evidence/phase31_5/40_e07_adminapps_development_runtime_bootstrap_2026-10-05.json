@@ -1,0 +1,138 @@
+{
+  "artifact_schema": "ISO_SMART_AI_PHASE31_5_E07_ADMINAPPS_DEVELOPMENT_RUNTIME_BOOTSTRAP_V1",
+  "evidence_id": "40",
+  "date": "2026-10-05",
+  "predecessor": "docs/governance/evidence/phase31_5/39_e07_adminapps_development_database_d2_d4_reinspection_2026-10-05.json",
+  "purpose": "Reproducible-or-stop local-development runtime bootstrap assessment for later bounded AdminApps D2-D4 inspection.",
+  "scope": {
+    "development_runtime_scope": "LOCAL_DEVELOPMENT_ONLY",
+    "staging_runtime": "NOT_AUTHORIZED",
+    "production_runtime": "NOT_AUTHORIZED"
+  },
+  "starting_state": {
+    "adminapps_repository": "/home/felipe/proyectos/adminapps",
+    "adminapps_branch": "hardening/p0-p1-enterprise-readiness",
+    "adminapps_head": "8b9c5684997baaa590b34af241a173e1a9c41143",
+    "isosmart_repository": "/home/felipe/proyectos/isosmart",
+    "isosmart_branch": "hardening/p0-p1-enterprise-readiness",
+    "evidence_39_commit": "644258c9",
+    "evidence_39_present": true,
+    "adminapps_effective_profile": "development",
+    "adminapps_is_development": true,
+    "adminapps_is_production": false,
+    "d2": "DEV_DATABASE_UNAVAILABLE",
+    "d3": "DEV_DATABASE_UNAVAILABLE",
+    "d4": "DEV_DATABASE_UNAVAILABLE",
+    "phase31_5": "EXECUTION_HELD",
+    "unrelated_worktree_changes_preserved": true
+  },
+  "python_runtime_contract": {
+    "classification": "PYTHON_RUNTIME_CONTRACT_BOUND",
+    "contract_basis": [
+      "Active controlled-local documentation invokes backend/.venv312/bin/python.",
+      "The existing repository-local, Git-ignored backend/.venv312 reports CPython 3.12.13 and Django 4.2.22.",
+      "backend/requirements.txt declares Django==4.2.22."
+    ],
+    "python_venv_path": "/home/felipe/proyectos/adminapps/backend/.venv312",
+    "python_version": "3.12.13",
+    "django_version": "4.2.22",
+    "local_venv_expectation": "backend/.venv312",
+    "legacy_documentation_note": "The historical backend README names python3.9/venv_admin; it was not used for this active .venv312 reuse."
+  },
+  "dependency_reproducibility": {
+    "classification": "DEPENDENCIES_SUFFICIENTLY_PINNED",
+    "dependency_source": "adminapps/backend/requirements.txt",
+    "dependency_lock_state": "All declared direct dependencies are exact-version pinned; no separate resolver lock file or hash lock is present.",
+    "django_version_contract": "Django==4.2.22",
+    "bootstrap_action": "REUSED_EXISTING_VENV_NO_INSTALL",
+    "dependency_install_source": "NOT_APPLICABLE: no packages were installed during this slice.",
+    "verification_note": "The venv does not bundle pip, so pip check was unavailable. Django imported at the declared version and Django system check passed."
+  },
+  "django_development_verification": {
+    "command_scope": "DJANGO_ENV=development backend/.venv312/bin/python manage.py check",
+    "result": "DJANGO_SYSTEM_CHECK_PASS",
+    "system_check_output_classification": "System check identified no issues (0 silenced).",
+    "database_migration_ledger_query": "NOT_EXECUTED: PostgreSQL runtime contract was unresolved and no reachable database exists."
+  },
+  "postgres_runtime_contract": {
+    "classification": "POSTGRES_VERSION_CONTRACT_UNRESOLVED",
+    "repository_findings": [
+      "The active settings specify the PostgreSQL Django backend.",
+      "The dependency manifest specifies psycopg2-binary==2.9.10.",
+      "No repository source defines a required PostgreSQL major, compatibility interval, image tag, Compose service, or project-scoped local PostgreSQL start definition."
+    ],
+    "postgres_required_major": "UNRESOLVED",
+    "postgres_compatibility_range": "UNRESOLVED",
+    "provisioning_decision": "STOP: selecting a PostgreSQL version, image, or runtime would invent a material input."
+  },
+  "database_isolation_assessment": {
+    "dev_db_host": "127.0.0.1",
+    "dev_db_port": 5432,
+    "dev_db_name": "adminapps_db",
+    "endpoint_probe": "DEV_DB_CONNECTION_REFUSED",
+    "port_5432_unused": "NOT_CONFIRMED: direct listener inventory is unavailable in this sandbox; no PostgreSQL response was received at the declared endpoint.",
+    "existing_adminapps_database_reachable": false,
+    "existing_database_protection": "No create, overwrite, reset, drop, volume, or schema action was attempted.",
+    "project_scoped_runtime_identifier": "NOT_CREATED: ADMINAPPS-DEV-LOCAL-POSTGRES was not created because the PostgreSQL version contract is unresolved."
+  },
+  "postgres_bootstrap": {
+    "action": "NO_ACTION_TAKEN",
+    "rootless_podman_status": "Client was previously established as available, but runtime inventory could not be read in this sandbox and was not needed after the contract stop.",
+    "container_created_or_started": false,
+    "volume_created_or_reused": false,
+    "new_database_credential_generated": false,
+    "credential_handling": "No credential value, verifier, hash, connection URI, or full environment file was accessed, printed, or persisted."
+  },
+  "database_creation": {
+    "classification": "NOT_ATTEMPTED",
+    "new_empty_development_database_created": false,
+    "reason": "PostgreSQL version contract is unresolved; port isolation was also not affirmatively established."
+  },
+  "migration_bootstrap": {
+    "migration_plan": "NOT_EXECUTED",
+    "migration_execution": "NOT_EXECUTED",
+    "migration_0006": "UNVERIFIED: integration.0006_integration_api_key_lifecycle exists in source but no new isolated database was available for migration.",
+    "reason": "No authorized, contract-bound local PostgreSQL runtime/database exists."
+  },
+  "gates": {
+    "D1": "DEV_TARGET_IDENTITY_PASS",
+    "D2": "DEV_DATABASE_UNAVAILABLE",
+    "D3": "DEV_DATABASE_UNAVAILABLE",
+    "D4": "DEV_DATABASE_UNAVAILABLE",
+    "D5": "DEV_SECRET_RECEIVER_UNRESOLVED",
+    "D6": "DEV_WEB_WORKLOAD_NOT_RUNNING_OR_UNIDENTIFIED",
+    "D7": "DEV_INTERRUPTION_MODEL_DEFINED",
+    "D8": "DEV_FORWARD_RECOVERY_UNRESOLVED",
+    "D9": "DEV_SECRET_LEAKAGE_PATHS_UNRESOLVED"
+  },
+  "optional_d3_d4_inspection": {
+    "performed": false,
+    "reason": "No safely reachable AdminApps development database exists. No integration or user records were created or inspected."
+  },
+  "development_rotation_eligibility": "DEVELOPMENT_ROTATION_AUTHORIZATION_ELIGIBLE = NO",
+  "secret_assurance": {
+    "credential_plaintext_accessed_or_persisted": false,
+    "credential_verifier_or_hash_accessed_or_persisted": false,
+    "password_mfa_token_or_session_accessed_or_persisted": false,
+    "full_dotenv_persisted": false,
+    "secret_bearing_database_output_persisted": false,
+    "secret_material_exposure_avoided": "YES"
+  },
+  "mutation_audit": {
+    "python_venv_creation_or_package_install": "NONE: existing ignored venv was reused.",
+    "postgres_runtime_creation_or_start": "NONE",
+    "database_creation_or_mutation": "NONE",
+    "migration_execution": "NONE",
+    "adminapps_source_or_manifest_changes": false,
+    "isosmart_runtime_changes": false,
+    "e08_retested_or_reopened": false,
+    "push_performed": false
+  },
+  "governance_integrity": {
+    "e07": "BLOCKED_BY_EXTERNAL_AUTHORITY",
+    "e08_baseline_preserved": "YES",
+    "e08": "CLOSED_LOCAL_TECHNICAL_EVIDENCE",
+    "phase31_5": "EXECUTION_HELD"
+  },
+  "bootstrap_verdict": "POSTGRES_VERSION_CONTRACT_UNRESOLVED"
+}
