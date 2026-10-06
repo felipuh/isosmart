@@ -1,0 +1,41 @@
+{
+  "artifact_schema": "phase31.4-v2.5-v11-attempt-3-successor-integrity-blocker/v1",
+  "status": "BLOCKED",
+  "classification": "SUCCESSOR_INTEGRITY_UNAVAILABLE_WITHIN_AUTHORIZED_SCOPE",
+  "attempt_3": "NOT_EXECUTED",
+  "predecessor": {
+    "path": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V12.json",
+    "sha256": "685e04fa2e94513c357bbd6d333c2fe785e967b172234cd93faae777e25f79c2"
+  },
+  "changed_authorized_source": {
+    "path": "docs/governance/tools/phase31_4_v2_5_operational_actions.py",
+    "predecessor_sha256_in_v12": "bd196d8b9890706b7a02401fab7ae508058245eda69a1137e62c5278f76497e2",
+    "current_sha256": "2c864108a6867ee61a93c4e4f8831e09627c3bee1d6269cdc8983424fcd1b6d2"
+  },
+  "observed_validation": {
+    "command": "backend/.venv/bin/python manage.py test foundation.test_phase31_4_integrity_generations.V25CurrentOperationalIntegrityTests --settings=backend.settings_test --noinput --verbosity 1",
+    "result": "FAIL",
+    "tests": 10,
+    "errors": 2,
+    "error": "V12 protected source drift: docs/governance/tools/phase31_4_v2_5_operational_actions.py"
+  },
+  "why_blocked": [
+    "V12 is immutable and cannot be overwritten.",
+    "The current verifier dispatches only the V12 current-generation schema.",
+    "A valid successor generation would require changing phase31_4_integrity_generations.py and adding a new generation verifier path.",
+    "The remediation authorization allows exactly one source path: the disposable authority producer.",
+    "Changing integrity verifier/generation code would violate the bounded remediation and make the successor non-independent."
+  ],
+  "preserved_requirements": {
+    "migrations": "unchanged",
+    "dependency_parity": "unchanged",
+    "bearer": "unchanged",
+    "readiness": "unchanged",
+    "projection_consumer": "unchanged",
+    "attempt_2_authorization_reused": false,
+    "attempt_3_executed": false,
+    "retry_20": "NONE / NO",
+    "phase_31_5": "EXECUTION_HELD"
+  },
+  "required_external_decision": "Authorize a separate governance successor-generation remediation, or withdraw the producer remediation and restore the pre-remediation source before any Attempt 3 authorization."
+}

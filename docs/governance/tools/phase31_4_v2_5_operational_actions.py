@@ -13,6 +13,7 @@ from uuid import UUID, uuid4
 
 import psycopg2
 from psycopg2 import sql
+from django.db import transaction
 
 ROOT = Path(__file__).resolve().parents[3]
 ADMIN = ROOT.parent / "adminapps/backend"
@@ -104,12 +105,21 @@ def django_setup(system: str):
     os.environ.update(env); sys.path.insert(0,str(ADMIN if system=="admin" else ROOT/"backend"))
     import django; django.setup()
 
+def create_authority_tenant(*, actor, name: str, email: str):
+    from apps.organizations.models import Organization
+    from apps.organizations.tenant_events import record_tenant_event
+
+    with transaction.atomic():
+        organization = Organization.objects.create(name=name, email=email)
+        record_tenant_event(organization, actor_id=actor.id)
+    return organization
+
 
 def authority():
     django_setup("admin")
+    from apps.organizations.models import Organization
     from django.conf import settings
     from apps.integration.models import IntegrationAPIKey
-    from apps.organizations.models import Organization
     from apps.products.models import OrganizationProductEntitlement, ProductSystem
     from apps.users.models import User, UserOrganization
     from foundation.operational_bearer_identity import acquire_runtime_bearer
@@ -117,7 +127,8 @@ def authority():
     suffix=hashlib.sha256(os.environ["PHASE31_RUN_ID"].encode()).hexdigest()[:12]
     actor=User.objects.create_user(email=f"live-{suffix}@example.test",password=None,first_name="Operational",last_name="Readiness",
                                    role="viewer",is_active=True,is_staff=False,is_superuser=False)
-    organization=Organization.objects.create(name=f"Live Evidence {suffix}",email=f"tenant-{suffix}@example.test")
+    organization=create_authority_tenant(actor=actor, name=f"Live Evidence {suffix}",
+                                         email=f"tenant-{suffix}@example.test")
     membership=UserOrganization.objects.create(user=actor,organization=organization,role="viewer",is_primary=True)
     key=os.environ["PHASE31_INTEGRATION_KEY"]
     IntegrationAPIKey.objects.create(name=f"isosmart-{suffix}",key=key,is_active=True)
