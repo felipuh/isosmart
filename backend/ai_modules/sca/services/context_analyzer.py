@@ -11,6 +11,11 @@ import logging
 from ai_modules.common.base import AIModuleBase
 from ai_modules.sie.services.stakeholder_intelligence import StakeholderIntelligenceEngine
 from ai_modules.sca.services.external_context_pipeline import ExternalContextPipeline
+from ai_modules.sca.services.internal_context_metadata import (
+    analyze_internal_factors,
+    extract_keywords,
+    iter_document_blobs,
+)
 from core.models import (
     StakeholderProfile, 
     StakeholderChangeLog, 
@@ -518,80 +523,14 @@ class ContextAnalyzer(AIModuleBase):
         return self._analyze_internal_factors(documents_payload)
 
     def _extract_keywords(self, text: str, keywords: List[str]) -> List[str]:
-        text_lower = (text or '').lower()
-        return [keyword for keyword in keywords if keyword in text_lower]
+        return extract_keywords(text, keywords)
 
     def _iter_document_blobs(self, documents) -> List[str]:
-        blobs = []
-        for doc in documents:
-            if isinstance(doc, dict):
-                pieces = [
-                    str(doc.get('title', '')),
-                    str(doc.get('source', '')),
-                    str(doc.get('type', '')),
-                    str(doc.get('content', '')),
-                ]
-            else:
-                pieces = [
-                    str(getattr(doc, 'title', '')),
-                    str(getattr(doc, 'source', '')),
-                    str(getattr(doc, 'document_type', '')),
-                    str(getattr(doc, 'content', '')),
-                ]
-            blobs.append(' '.join(pieces).lower())
-        return blobs
+        return iter_document_blobs(documents)
     
     def _analyze_internal_factors(self, documents) -> Dict:
-        """Análisis de factores internos incluyendo señales ESG/digitales."""
-        blobs = self._iter_document_blobs(documents)
-        joined = ' '.join(blobs)
-        digital_keywords = [
-            'transformacion digital', 'cloud', 'iot', 'industria 4.0', 'inteligencia artificial',
-            'ciberseguridad', 'blockchain', 'telemetria', 'trabajo remoto', 'hibrido'
-        ]
-        esg_keywords = [
-            'emisiones', 'co2', 'energia', 'residuos', 'diversidad', 'inclusion',
-            'etica', 'transparencia', 'anticorrupcion', 'derechos humanos'
-        ]
-
-        return {
-            'fortalezas': [
-                'Procesos documentados según ISO 9001',
-                'Equipo capacitado en gestión de calidad',
-                'Infraestructura tecnológica moderna',
-            ],
-            'debilidades': [
-                'Necesidad de mayor integración entre áreas',
-                'Procesos de comunicación por mejorar',
-            ],
-            'riesgos_identificados': [
-                {
-                    'texto': 'Dependencia de sistemas heredados',
-                    'severidad': 'medio',
-                    'categoria': 'Tecnología',
-                    'mitigacion': 'Plan de modernización gradual'
-                },
-                {
-                    'texto': 'Cambio climático puede alterar continuidad operativa y cadena de suministro',
-                    'severidad': 'alto',
-                    'categoria': 'Climático',
-                    'mitigacion': 'Definir escenarios y planes de contingencia por criticidad'
-                }
-            ],
-            'tendencias_digitales': self._extract_keywords(joined, digital_keywords),
-            'factores_esg_detectados': self._extract_keywords(joined, esg_keywords),
-            'recomendaciones': [
-                {
-                    'texto': 'Implementar sistema de gestión documental integrado',
-                    'prioridad': 'alta',
-                    'acciones': [
-                        'Evaluar plataformas disponibles',
-                        'Definir requisitos específicos',
-                        'Piloto en área seleccionada'
-                    ]
-                }
-            ]
-        }
+        """Análisis legacy de metadata en factores internos."""
+        return analyze_internal_factors(documents)
     
     def _analyze_external_factors(self, documents) -> Dict:
         """Análisis de factores externos con foco 2026 (clima, ESG y digital)."""
