@@ -174,10 +174,12 @@ test('Foundation Gate submits only the server-published questions and reflects t
 test('controlled integration saves the source-defined organizational profile through the canonical tenant API', async ({ page }) => {
   await mockAuthenticatedSession(page);
   let legacyOnboardingComplete = false;
+  let legacyStatusCalls = 0;
   let profileComplete = false;
   const canonicalOrganizationId = '33333333-3333-4333-8333-333333333333';
 
   await page.route('**/api/settings/onboarding_status/**', async (route) => {
+    legacyStatusCalls += 1;
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
@@ -258,8 +260,86 @@ test('controlled integration saves the source-defined organizational profile thr
   await page.getByLabel('Número de sedes / plantas').fill('2');
   await page.getByLabel('Países (separados por coma)').fill('Costa Rica, Panamá');
   await page.getByRole('button', { name: 'Continuar' }).click();
+  const statusCallsBeforeFinish = legacyStatusCalls;
   await page.getByRole('button', { name: 'Crear mi sistema' }).click();
 
   await expect.poll(() => profileComplete).toBe(true);
+  await expect.poll(() => legacyStatusCalls).toBeGreaterThan(statusCallsBeforeFinish);
   await expect(page).toHaveURL(/\/$/);
+});
+
+test('controlled integration submits a metadata-only document reference through the canonical tenant API', async ({ page }) => {
+  await mockAuthenticatedSession(page);
+  const canonicalOrganizationId = '55555555-5555-4555-8555-555555555555';
+  let documentIngestionComplete = false;
+  const contentHash = 'a'.repeat(64);
+
+  await page.route('**/api/settings/onboarding_status/**', async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({ organization_id: 1, onboarding_completed: false }),
+    });
+  });
+  await page.route('**/api/v1/onboarding/organizations', async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({ organizations: [{ id: canonicalOrganizationId, display_name: 'Canonical QMS Org' }] }),
+    });
+  });
+  await page.route('**/api/v1/onboarding/status', async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        foundation_gate: { status: 'passed', paths: [] },
+        steps: [{
+          number: 12,
+          key: 'document_data_ingestion',
+          title: 'Document/Data Ingestion',
+          status: documentIngestionComplete ? 'COMPLETE' : 'AVAILABLE',
+          prerequisites: ['value_discovery'],
+        }],
+        step_count: 17,
+      }),
+    });
+  });
+  await page.route('**/api/v1/onboarding/document-references', async (route) => {
+    const payload = route.request().postDataJSON();
+    expect(payload.organization_id).toBe(canonicalOrganizationId);
+    expect(payload.event_id).toMatch(/^[0-9a-f-]{36}$/);
+    expect(payload.items).toHaveLength(1);
+    expect(payload.items[0]).toMatchObject({
+      source_type: 'strategy',
+      source_uri: 'https://evidence.example/strategy',
+      content_hash: contentHash,
+    });
+    expect(payload.items[0].event_id).toMatch(/^[0-9a-f-]{36}$/);
+    expect(new Date(payload.items[0].captured_at).toISOString()).not.toBe('Invalid Date');
+    documentIngestionComplete = true;
+    await route.fulfill({
+      status: 201,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        workflow_id: '66666666-6666-4666-8666-666666666666',
+        step: 'document_data_ingestion',
+        status: 'complete',
+        transition_id: '77777777-7777-4777-8777-777777777777',
+        event_id: payload.event_id,
+        replay: false,
+        content_bytes_read: false,
+      }),
+    });
+  });
+
+  await page.goto('/onboarding');
+  await expect(page.getByText('Referencias de documentos y datos')).toBeVisible();
+  await page.getByLabel('Fecha y hora de captura').fill('2026-10-05T12:30');
+  await page.getByLabel('URI de origen').fill('https://evidence.example/strategy');
+  await page.getByLabel('Hash SHA-256').fill(contentHash);
+  await page.getByRole('button', { name: 'Guardar referencia' }).click();
+
+  await expect.poll(() => documentIngestionComplete).toBe(true);
+  await expect(page.getByText('La ingestión de referencias se completó y fue confirmada por el servidor.')).toBeVisible();
 });

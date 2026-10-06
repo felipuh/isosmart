@@ -5,6 +5,7 @@ import { AuthProvider } from './context/AuthContext'
 import { ThemeProvider } from './context/ThemeContext'
 import { I18nProvider } from './context/I18nContext'
 import { FontSizeProvider } from './context/FontSizeContext'
+import { OnboardingStatusProvider } from './context/OnboardingStatusContext'
 import App from './App.jsx'
 import './index.css'
 
@@ -16,7 +17,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <ThemeProvider>
           <FontSizeProvider>
             <AuthProvider>
-              <App />
+              <OnboardingStatusProvider>
+                <App />
+              </OnboardingStatusProvider>
             </AuthProvider>
           </FontSizeProvider>
         </ThemeProvider>

@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useI18n } from '../context/I18nContext';
+import { useOnboardingStatus } from '../context/OnboardingStatusContext';
 import settingsService from '../services/settingsService';
 import foundationService from '../services/foundationService';
 
@@ -35,6 +36,8 @@ const COMPANY_SIZE_OPTIONS = [
 ];
 const CERTIFICATION_OPTIONS = ['first_time', 'already_certified', 'in_transition'];
 const TONE_OPTIONS = ['manager', 'technical'];
+const DOCUMENT_SOURCE_TYPES = ['strategy', 'process', 'kpi', 'audit', 'complaint', 'supplier', 'document'];
+const SHA256_PATTERN = /^[0-9a-f]{64}$/;
 
 const inputClassName = 'mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-cyan-500 dark:focus:ring-cyan-500/20';
 
@@ -82,6 +85,7 @@ const normalizeAvailableStandards = (standards) => {
 const OnboardingPage = () => {
   const navigate = useNavigate();
   const { currentOrganization } = useAuth();
+  const { refreshOnboardingStatus } = useOnboardingStatus();
   const { language, setLanguage, t } = useI18n();
 
   const [enabledStandards, setEnabledStandards] = useState(['ISO9001_2015']);
@@ -112,6 +116,16 @@ const OnboardingPage = () => {
   const [canonicalOrganizationsState, setCanonicalOrganizationsState] = useState('loading');
   const [profileSaveResult, setProfileSaveResult] = useState(null);
   const [profileEventId] = useState(createEventId);
+  const [documentReference, setDocumentReference] = useState({
+    source_type: 'strategy',
+    source_uri: '',
+    content_hash: '',
+    captured_at: '',
+  });
+  const [documentReferenceSaving, setDocumentReferenceSaving] = useState(false);
+  const [documentReferenceResult, setDocumentReferenceResult] = useState(null);
+  const [documentReferenceEventId] = useState(createEventId);
+  const [documentReferenceItemEventId] = useState(createEventId);
 
   const organizationId = currentOrganization?.id;
 
@@ -260,6 +274,9 @@ const OnboardingPage = () => {
   const onboardingSteps = foundationStatus?.steps || [];
   const profileStep = onboardingSteps.find((step) => step.key === 'organizational_profile');
   const profileStepIsReady = ['AVAILABLE', 'IN_PROGRESS', 'COMPLETE'].includes(profileStep?.status);
+  const documentIngestionStep = onboardingSteps.find((step) => step.key === 'document_data_ingestion');
+  const documentIngestionIsReady = ['AVAILABLE', 'IN_PROGRESS'].includes(documentIngestionStep?.status);
+  const documentIngestionIsComplete = documentIngestionStep?.status === 'COMPLETE';
   const learningPaths = foundationStatus?.foundation_gate?.paths || [];
   const selectedLearningPath = learningPaths.find((path) => path.id === selectedLearningPathId) || null;
   const allFoundationQuestionsAnswered = Boolean(selectedLearningPath?.questions?.length)
@@ -390,6 +407,10 @@ const OnboardingPage = () => {
             .filter(Boolean),
         },
       });
+      const completionConfirmed = await refreshOnboardingStatus();
+      if (!completionConfirmed) {
+        throw new Error('onboarding_completion_not_confirmed');
+      }
 
       try {
         await settingsService.runOnboardingOrchestration(organizationId);
@@ -404,6 +425,43 @@ const OnboardingPage = () => {
       setError(err?.response?.data?.detail || t('onboarding.errorComplete'));
       setSaving(false);
       setCreationStage(-1);
+    }
+  };
+
+  const updateDocumentReference = (key, value) => {
+    setDocumentReference((previous) => ({ ...previous, [key]: value }));
+  };
+
+  const submitDocumentReference = async () => {
+    if (!canonicalOrganizationId || !documentIngestionIsReady) return;
+    const sourceUri = documentReference.source_uri.trim();
+    const contentHash = documentReference.content_hash.trim();
+    const capturedAt = new Date(documentReference.captured_at);
+    if (!sourceUri || !SHA256_PATTERN.test(contentHash) || Number.isNaN(capturedAt.getTime())) {
+      setError(t('onboarding.documentReferences.invalid'));
+      return;
+    }
+
+    setDocumentReferenceSaving(true);
+    setError('');
+    try {
+      const result = await foundationService.ingestDocumentReferences({
+        organizationId: canonicalOrganizationId,
+        eventId: documentReferenceEventId,
+        items: [{
+          event_id: documentReferenceItemEventId,
+          source_type: documentReference.source_type,
+          source_uri: sourceUri,
+          content_hash: contentHash,
+          captured_at: capturedAt.toISOString(),
+        }],
+      });
+      setDocumentReferenceResult(result);
+      await loadFoundationStatus();
+    } catch (err) {
+      setError(err?.response?.data?.detail || t('onboarding.documentReferences.error'));
+    } finally {
+      setDocumentReferenceSaving(false);
     }
   };
 
@@ -854,6 +912,92 @@ const OnboardingPage = () => {
     </div>
   );
 
+  const renderDocumentReferenceStep = () => {
+    if (!documentIngestionStep) return null;
+
+    return (
+      <section className="mt-8 rounded-[28px] border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-950/60 sm:p-6">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <h3 className="text-lg font-semibold text-slate-900 dark:text-white">{t('onboarding.documentReferences.title')}</h3>
+            <p className="mt-1 max-w-2xl text-sm text-slate-600 dark:text-slate-300">{t('onboarding.documentReferences.description')}</p>
+          </div>
+          <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700 dark:bg-slate-800 dark:text-slate-200">
+            {documentIngestionStep.status}
+          </span>
+        </div>
+
+        {documentIngestionIsComplete ? (
+          <p className="mt-4 text-sm text-emerald-700 dark:text-emerald-200" role="status">{t('onboarding.documentReferences.completed')}</p>
+        ) : documentIngestionIsReady ? (
+          <div className="mt-5 grid gap-4 md:grid-cols-2">
+            <label className="block text-sm text-slate-700 dark:text-slate-200">
+              {t('onboarding.documentReferences.category')}
+              <select
+                value={documentReference.source_type}
+                onChange={(event) => updateDocumentReference('source_type', event.target.value)}
+                className={inputClassName}
+              >
+                {DOCUMENT_SOURCE_TYPES.map((sourceType) => (
+                  <option key={sourceType} value={sourceType}>{t(`onboarding.documentReferences.types.${sourceType}`)}</option>
+                ))}
+              </select>
+            </label>
+            <label className="block text-sm text-slate-700 dark:text-slate-200">
+              {t('onboarding.documentReferences.capturedAt')}
+              <input
+                type="datetime-local"
+                value={documentReference.captured_at}
+                onChange={(event) => updateDocumentReference('captured_at', event.target.value)}
+                className={inputClassName}
+              />
+            </label>
+            <label className="block text-sm text-slate-700 dark:text-slate-200 md:col-span-2">
+              {t('onboarding.documentReferences.sourceUri')}
+              <input
+                type="url"
+                value={documentReference.source_uri}
+                onChange={(event) => updateDocumentReference('source_uri', event.target.value)}
+                className={inputClassName}
+                placeholder="https://…"
+              />
+            </label>
+            <label className="block text-sm text-slate-700 dark:text-slate-200 md:col-span-2">
+              {t('onboarding.documentReferences.hash')}
+              <input
+                type="text"
+                value={documentReference.content_hash}
+                onChange={(event) => updateDocumentReference('content_hash', event.target.value)}
+                className={inputClassName}
+                inputMode="text"
+                spellCheck="false"
+                placeholder={t('onboarding.documentReferences.hashHint')}
+              />
+            </label>
+            <div className="md:col-span-2">
+              <p className="text-xs text-slate-500 dark:text-slate-400">{t('onboarding.documentReferences.metadataOnly')}</p>
+              <button
+                type="button"
+                onClick={submitDocumentReference}
+                disabled={documentReferenceSaving || !canonicalOrganizationId}
+                className="mt-4 inline-flex items-center gap-2 rounded-2xl bg-slate-950 px-5 py-3 text-sm font-medium text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-cyan-500 dark:text-slate-950 dark:hover:bg-cyan-400"
+              >
+                {documentReferenceSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle2 className="h-4 w-4" />}
+                {documentReferenceSaving ? t('onboarding.documentReferences.submitting') : t('onboarding.documentReferences.submit')}
+              </button>
+            </div>
+          </div>
+        ) : (
+          <p className="mt-4 text-sm text-amber-800 dark:text-amber-200">{t('onboarding.documentReferences.locked')}</p>
+        )}
+
+        {documentReferenceResult && (
+          <p className="mt-4 text-sm text-emerald-700 dark:text-emerald-200" role="status">{t('onboarding.documentReferences.saved')}</p>
+        )}
+      </section>
+    );
+  };
+
   const renderStepContent = () => {
     if (activeStep.key === 'foundation') return renderFoundationStep();
     if (activeStep.key === 'profile') return renderProfileStep();
@@ -1054,6 +1198,7 @@ const OnboardingPage = () => {
                   </button>
                 )}
               </div>
+              {renderDocumentReferenceStep()}
             </section>
           </div>
         </div>

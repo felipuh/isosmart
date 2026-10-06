@@ -1,71 +1,16 @@
-import { useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { AlertTriangle, Loader2, RefreshCw } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useI18n } from '../../context/I18nContext';
-import settingsService from '../../services/settingsService';
-
-const ONBOARDING_STATUS_TIMEOUT_MS = 10000;
+import { useOnboardingStatus } from '../../context/OnboardingStatusContext';
 
 const OnboardingGuard = ({ children }) => {
   const { t } = useI18n();
-  const { currentOrganization, isAuthenticated } = useAuth();
+  const { currentOrganization } = useAuth();
   const location = useLocation();
-  const [status, setStatus] = useState('loading');
-  const [validatedOrganizationId, setValidatedOrganizationId] = useState(null);
-  const [retryCount, setRetryCount] = useState(0);
+  const { status, organizationId: validatedOrganizationId, refreshOnboardingStatus } = useOnboardingStatus();
 
   const isOnboardingRoute = location.pathname === '/onboarding';
-
-  useEffect(() => {
-    let mounted = true;
-    let timeoutId;
-
-    const checkStatus = async () => {
-      if (!isAuthenticated || !currentOrganization?.id) {
-        if (mounted) {
-          setValidatedOrganizationId(null);
-          setStatus('degraded');
-        }
-        return;
-      }
-
-      try {
-        setValidatedOrganizationId(null);
-        setStatus('loading');
-        const timeout = new Promise((_, reject) => {
-          timeoutId = window.setTimeout(
-            () => reject(new Error('onboarding_status_timeout')),
-            ONBOARDING_STATUS_TIMEOUT_MS
-          );
-        });
-        const data = await Promise.race([
-          settingsService.getOnboardingStatus(currentOrganization.id),
-          timeout,
-        ]);
-        if (typeof data?.onboarding_completed !== 'boolean') {
-          throw new Error('invalid_onboarding_status');
-        }
-        if (mounted) {
-          setValidatedOrganizationId(currentOrganization.id);
-          setStatus(data.onboarding_completed ? 'completed' : 'incomplete');
-        }
-      } catch {
-        if (mounted) {
-          setValidatedOrganizationId(null);
-          setStatus('degraded');
-        }
-      } finally {
-        window.clearTimeout(timeoutId);
-      }
-    };
-
-    checkStatus();
-    return () => {
-      mounted = false;
-      window.clearTimeout(timeoutId);
-    };
-  }, [currentOrganization?.id, isAuthenticated, retryCount]);
 
   if (status === 'degraded') {
     return (
@@ -77,7 +22,7 @@ const OnboardingGuard = ({ children }) => {
           <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">{t('onboardingGuard.support')}</p>
           <button
             type="button"
-            onClick={() => setRetryCount((value) => value + 1)}
+            onClick={() => void refreshOnboardingStatus()}
             className="mt-5 inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700"
           >
             <RefreshCw className="w-4 h-4" />
