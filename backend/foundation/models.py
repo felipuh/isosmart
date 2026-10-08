@@ -1908,6 +1908,70 @@ class ValueDiscoveryExecution(models.Model):
         db_table = 'onboarding"."value_discovery_execution'
 
 
+class AIModelPricingVersion(models.Model):
+    """Verified, effective-dated provider tariff.  This is never a customer price."""
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    provider = models.CharField(max_length=120)
+    model_identifier = models.CharField(max_length=200)
+    effective_from = models.DateTimeField()
+    effective_to = models.DateTimeField(null=True, blank=True)
+    currency = models.CharField(max_length=3, default="USD")
+    rate_unit = models.PositiveIntegerField(default=1_000_000)
+    input_token_rate = models.DecimalField(max_digits=20, decimal_places=10, null=True, blank=True)
+    output_token_rate = models.DecimalField(max_digits=20, decimal_places=10, null=True, blank=True)
+    cached_input_token_rate = models.DecimalField(max_digits=20, decimal_places=10, null=True, blank=True)
+    source_reference = models.TextField()
+    verification_status = models.CharField(max_length=24)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        managed = False
+        db_table = 'ai_usage"."model_pricing_version'
+
+
+class AIUsageRecord(models.Model):
+    """One external inference attempt; no prompts, responses, or credentials are retained."""
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    tenant = models.ForeignKey(TenantProjection, on_delete=models.PROTECT, db_column="tenant_id")
+    adminapps_tenant_id = models.UUIDField(null=True, blank=True)
+    product_identifier = models.CharField(max_length=80)
+    agent_name = models.CharField(max_length=120)
+    capability_name = models.CharField(max_length=120)
+    execution_id = models.UUIDField()
+    correlation_id = models.UUIDField()
+    invocation_id = models.CharField(max_length=200)
+    provider_request_id = models.CharField(max_length=255, null=True, blank=True)
+    provider = models.CharField(max_length=120)
+    model_identifier = models.CharField(max_length=200)
+    api_operation = models.CharField(max_length=80)
+    provider_response_status = models.CharField(max_length=48, null=True, blank=True)
+    duration_ms = models.PositiveIntegerField(null=True, blank=True)
+    input_tokens = models.BigIntegerField(null=True, blank=True)
+    output_tokens = models.BigIntegerField(null=True, blank=True)
+    total_tokens = models.BigIntegerField(null=True, blank=True)
+    cached_input_tokens = models.BigIntegerField(null=True, blank=True)
+    usage_status = models.CharField(max_length=24)
+    currency = models.CharField(max_length=3, null=True, blank=True)
+    pricing_version = models.ForeignKey(AIModelPricingVersion, null=True, blank=True, on_delete=models.PROTECT, db_column="pricing_version_id")
+    input_token_rate = models.DecimalField(max_digits=20, decimal_places=10, null=True, blank=True)
+    output_token_rate = models.DecimalField(max_digits=20, decimal_places=10, null=True, blank=True)
+    cached_input_token_rate = models.DecimalField(max_digits=20, decimal_places=10, null=True, blank=True)
+    estimated_provider_cost = models.DecimalField(max_digits=20, decimal_places=10, null=True, blank=True)
+    cost_status = models.CharField(max_length=24)
+    attempt_status = models.CharField(max_length=24)
+    provider_outcome = models.CharField(max_length=48, null=True, blank=True)
+    error_category = models.CharField(max_length=80, null=True, blank=True)
+    finalized_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        managed = False
+        db_table = 'ai_usage"."usage_record'
+
+
 class CapabilityActivation(models.Model):
     """Tenant-scoped activation of a published global capability."""
 
