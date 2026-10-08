@@ -258,6 +258,15 @@ class ChatCompletionsValueDiscoveryProvider:
 
 def provider_from_settings():
     configured = getattr(settings, "VALUE_DISCOVERY_PROVIDER", "real").strip().lower()
+    if configured == "e2e-controlled":
+        if not (
+            getattr(settings, "IS_DEVELOPMENT", False)
+            and getattr(settings, "VALUE_DISCOVERY_ALLOW_CONTROLLED_PROVIDER", False)
+            and getattr(settings, "VALUE_DISCOVERY_E2E_CONTROLLED_INTEGRATION", False)
+        ):
+            raise ProviderUnavailable("controlled browser inference is not permitted in this runtime")
+        from .value_discovery_e2e_provider import ValueDiscoveryE2EProvider
+        return ValueDiscoveryE2EProvider()
     if configured == "controlled":
         if not (getattr(settings, "IS_DEVELOPMENT", False) or getattr(settings, "VALUE_DISCOVERY_ALLOW_CONTROLLED_PROVIDER", False)):
             raise ProviderUnavailable("controlled inference is not permitted in this runtime")
