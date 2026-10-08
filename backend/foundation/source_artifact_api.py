@@ -38,6 +38,7 @@ from .onboarding import (
     OrganizationProfileCommandService,
     onboarding_steps,
 )
+from .value_discovery import ValueDiscoveryError, ValueDiscoveryService, serialize_execution
 from .tenant_context import TrustedTenantIdentity, trusted_tenant_context
 
 
@@ -371,6 +372,54 @@ def ingest_onboarding_evidence_references(principal, payload, *, trace_id, using
         "replay": replay,
         "content_bytes_read": False,
     }
+
+
+def execute_value_discovery(principal, payload, *, trace_id, using="app"):
+    """Run owner-approved Step 11; provider errors leave onboarding incomplete."""
+    using = foundation_database_alias(using)
+    try:
+        execution, replay = ValueDiscoveryService(using=using).execute(
+            identity=principal.identity, organization_id=payload["organization_id"],
+            user_id=principal.user_projection_id,
+            declared_purpose=payload["organization_declared_purpose"], event_id=payload["event_id"],
+            actor_id=principal.actor_id, trace_id=trace_id,
+        )
+    except Organization.DoesNotExist as exc:
+        raise SourceArtifactAPIError("ORGANIZATION_NOT_FOUND", "organization is not available in the authenticated tenant", 404) from exc
+    except ValueDiscoveryError as exc:
+        status = 503 if exc.code in {"AI_PROVIDER_UNAVAILABLE", "AI_PROVIDER_TIMEOUT"} else 409 if exc.code in {
+            "EVENT_CONFLICT", "PREREQUISITES_INCOMPLETE", "ALREADY_COMPLETE", "STALE_PROFILE",
+        } else 422
+        raise SourceArtifactAPIError(exc.code, str(exc), status) from exc
+    data = serialize_execution(execution)
+    data["replay"] = replay
+    return data
+
+
+def value_discovery_result(principal, execution_id, *, using="app"):
+    using = foundation_database_alias(using)
+    from .models import ValueDiscoveryExecution
+    with trusted_tenant_context(principal.identity, actor_id=principal.actor_id, trace_id=uuid4(), using=using):
+        try:
+            execution = ValueDiscoveryExecution.objects.using(using).get(
+                id=execution_id, tenant_id=principal.tenant_id, user_id=principal.user_projection_id,
+            )
+        except ValueDiscoveryExecution.DoesNotExist as exc:
+            raise SourceArtifactAPIError("NOT_FOUND", "Value Discovery result was not found", 404) from exc
+        return serialize_execution(execution)
+
+
+def latest_value_discovery_result(principal, *, using="app"):
+    """Read the authoritative Step 11 result for the authenticated journey."""
+    using = foundation_database_alias(using)
+    from .models import ValueDiscoveryExecution
+    with trusted_tenant_context(principal.identity, actor_id=principal.actor_id, trace_id=uuid4(), using=using):
+        execution = ValueDiscoveryExecution.objects.using(using).filter(
+            tenant_id=principal.tenant_id, user_id=principal.user_projection_id,
+        ).order_by("-created_at").first()
+        if execution is None:
+            raise SourceArtifactAPIError("NOT_FOUND", "Value Discovery result was not found", 404)
+        return serialize_execution(execution)
 
 
 def list_recommendations(principal, *, clause=None, using="app"):

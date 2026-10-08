@@ -60,6 +60,14 @@ class OnboardingEvidenceIngestionRequestSerializer(serializers.Serializer):
     items = OnboardingEvidenceReferenceSerializer(many=True, allow_empty=False, max_length=100)
 
 
+class ValueDiscoveryRequestSerializer(serializers.Serializer):
+    """IMPLEMENTATION_DEFINED_WITHIN_OWNER_APPROVED_CONTRACT."""
+
+    organization_id = serializers.UUIDField()
+    event_id = serializers.UUIDField(help_text="Idempotency key for Step 11 completion.")
+    organization_declared_purpose = serializers.CharField(max_length=2000, trim_whitespace=True)
+
+
 class ApprovalDecisionRequestSerializer(serializers.Serializer):
     decision = serializers.ChoiceField(choices=("approve", "reject", "request_changes"))
     comments = serializers.CharField(required=False, allow_blank=True, max_length=4000)

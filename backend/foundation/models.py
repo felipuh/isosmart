@@ -1884,6 +1884,30 @@ class OnboardingTransition(models.Model):
         db_table = 'onboarding"."workflow_transition'
 
 
+class ValueDiscoveryExecution(models.Model):
+    """Immutable Step 11 orchestration record (owner-approved extension)."""
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    tenant = models.ForeignKey(TenantProjection, on_delete=models.PROTECT, db_column="tenant_id")
+    organization = models.ForeignKey(Organization, on_delete=models.PROTECT, db_column="organization_id")
+    user = models.ForeignKey(UserProjection, on_delete=models.PROTECT, db_column="user_id")
+    transition_event_id = models.UUIDField(unique=True)
+    profile_hash = models.CharField(max_length=64)
+    declared_purpose_hash = models.CharField(max_length=64)
+    execution_mode = models.CharField(max_length=32)
+    provider = models.CharField(max_length=120)
+    model_identifier = models.CharField(max_length=200)
+    result = models.JSONField()
+    result_hash = models.CharField(max_length=64)
+    evidence = models.ForeignKey(Evidence, on_delete=models.PROTECT, db_column="evidence_id")
+    transition = models.ForeignKey(OnboardingTransition, on_delete=models.PROTECT, db_column="transition_id")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        managed = False
+        db_table = 'onboarding"."value_discovery_execution'
+
+
 class CapabilityActivation(models.Model):
     """Tenant-scoped activation of a published global capability."""
 

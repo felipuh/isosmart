@@ -21,6 +21,7 @@ from foundation.api_views import (
     OnboardingOrganizationsView,
     OnboardingStatusView,
     OrganizationalProfileCreateView,
+    ValueDiscoveryExecuteView,
     RecommendationBasisView,
     RecommendationListView,
 )
@@ -240,6 +241,22 @@ class SourceArtifactViewTests(SimpleTestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.data, expected)
         self.assertFalse(service.call_args.args[1]["items"][0].get("content_bytes"))
+
+    def test_post_value_discovery_uses_owner_approved_boundary(self):
+        organization_id, event_id = uuid4(), uuid4()
+        expected = {"execution_id": str(uuid4()), "step": "value_discovery", "status": "complete"}
+        payload = {
+            "organization_id": str(organization_id), "event_id": str(event_id),
+            "organization_declared_purpose": "Provide dependable services.",
+        }
+        with patch("foundation.api_views.resolve_source_artifact_principal", return_value=PRINCIPAL), \
+             patch("foundation.api_views.execute_value_discovery", return_value=expected) as service:
+            response = self.invoke(ValueDiscoveryExecuteView.as_view(), "post", "/v1/onboarding/value-discovery", payload)
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.data, expected)
+        self.assertEqual(service.call_args.args[0], PRINCIPAL)
+        self.assertEqual(service.call_args.args[1]["organization_id"], organization_id)
+        self.assertEqual(service.call_args.args[1]["event_id"], event_id)
 
     def test_get_recommendations_supports_clause_filter(self):
         result = [{"id": str(uuid4()), "title": "Improve control"}]

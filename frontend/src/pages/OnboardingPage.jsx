@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import {
   ArrowLeft,
   ArrowRight,
@@ -13,7 +12,6 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useI18n } from '../context/I18nContext';
-import { useOnboardingStatus } from '../context/OnboardingStatusContext';
 import settingsService from '../services/settingsService';
 import foundationService from '../services/foundationService';
 
@@ -38,6 +36,27 @@ const CERTIFICATION_OPTIONS = ['first_time', 'already_certified', 'in_transition
 const TONE_OPTIONS = ['manager', 'technical'];
 const DOCUMENT_SOURCE_TYPES = ['strategy', 'process', 'kpi', 'audit', 'complaint', 'supplier', 'document'];
 const SHA256_PATTERN = /^[0-9a-f]{64}$/;
+
+const VALUE_DISCOVERY_COPY = {
+  'es-LATAM': {
+    title: 'Descubrimiento de valor', purpose: 'Propósito declarado de la organización', run: 'Iniciar descubrimiento de valor', running: 'Analizando contexto…',
+    unavailable: 'La evaluación financiera aún no está disponible: no existe una línea base financiera autorizada.',
+    context: 'Contexto organizacional', opportunities: 'Oportunidades preliminares de mejora', value: 'Áreas potenciales de valor', alignment: 'Observaciones de propósito y alineación',
+    limitations: 'Información adicional necesaria', required: 'Indica el propósito declarado antes de iniciar el análisis.',
+  },
+  en: {
+    title: 'Value Discovery', purpose: 'Declared organizational purpose', run: 'Start Value Discovery', running: 'Analyzing context…',
+    unavailable: 'Financial assessment is not yet available because there is no authorized financial baseline.',
+    context: 'Organizational Context', opportunities: 'Preliminary Improvement Opportunities', value: 'Potential Value Areas', alignment: 'Purpose and Alignment Observations',
+    limitations: 'Additional Information Needed', required: 'Enter the declared purpose before starting the analysis.',
+  },
+  pt: {
+    title: 'Descoberta de valor', purpose: 'Propósito declarado da organização', run: 'Iniciar descoberta de valor', running: 'Analisando contexto…',
+    unavailable: 'A avaliação financeira ainda não está disponível porque não há uma linha de base financeira autorizada.',
+    context: 'Contexto organizacional', opportunities: 'Oportunidades preliminares de melhoria', value: 'Áreas potenciais de valor', alignment: 'Observações de propósito e alinhamento',
+    limitations: 'Informações adicionais necessárias', required: 'Informe o propósito declarado antes de iniciar a análise.',
+  },
+};
 
 const inputClassName = 'mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-cyan-500 dark:focus:ring-cyan-500/20';
 
@@ -83,9 +102,7 @@ const normalizeAvailableStandards = (standards) => {
 };
 
 const OnboardingPage = () => {
-  const navigate = useNavigate();
   const { currentOrganization } = useAuth();
-  const { refreshOnboardingStatus } = useOnboardingStatus();
   const { language, setLanguage, t } = useI18n();
 
   const [enabledStandards, setEnabledStandards] = useState(['ISO9001_2015']);
@@ -126,6 +143,10 @@ const OnboardingPage = () => {
   const [documentReferenceResult, setDocumentReferenceResult] = useState(null);
   const [documentReferenceEventId] = useState(createEventId);
   const [documentReferenceItemEventId] = useState(createEventId);
+  const [declaredPurpose, setDeclaredPurpose] = useState('');
+  const [valueDiscoverySaving, setValueDiscoverySaving] = useState(false);
+  const [valueDiscoveryResult, setValueDiscoveryResult] = useState(null);
+  const [valueDiscoveryEventId] = useState(createEventId);
 
   const organizationId = currentOrganization?.id;
 
@@ -277,6 +298,19 @@ const OnboardingPage = () => {
   const documentIngestionStep = onboardingSteps.find((step) => step.key === 'document_data_ingestion');
   const documentIngestionIsReady = ['AVAILABLE', 'IN_PROGRESS'].includes(documentIngestionStep?.status);
   const documentIngestionIsComplete = documentIngestionStep?.status === 'COMPLETE';
+  const valueDiscoveryStep = onboardingSteps.find((step) => step.key === 'value_discovery');
+  const valueDiscoveryIsReady = ['AVAILABLE', 'IN_PROGRESS'].includes(valueDiscoveryStep?.status);
+  const valueDiscoveryIsComplete = valueDiscoveryStep?.status === 'COMPLETE';
+  const valueCopy = VALUE_DISCOVERY_COPY[language] || VALUE_DISCOVERY_COPY['es-LATAM'];
+
+  useEffect(() => {
+    if (!valueDiscoveryIsComplete || valueDiscoveryResult) return undefined;
+    let mounted = true;
+    foundationService.getValueDiscoveryResult()
+      .then((response) => { if (mounted) setValueDiscoveryResult(response.result); })
+      .catch(() => {});
+    return () => { mounted = false; };
+  }, [valueDiscoveryIsComplete, valueDiscoveryResult]);
   const learningPaths = foundationStatus?.foundation_gate?.paths || [];
   const selectedLearningPath = learningPaths.find((path) => path.id === selectedLearningPathId) || null;
   const allFoundationQuestionsAnswered = Boolean(selectedLearningPath?.questions?.length)
@@ -393,38 +427,36 @@ const OnboardingPage = () => {
       await settingsService.initializeStandards(organizationId, selectedStandards);
       setCreationStage(2);
 
-      await settingsService.completeOnboarding(organizationId, {
-        enabled_standards: selectedStandards,
-        preferred_language: language,
-        preferred_response_tone: preferredTone,
-        onboarding_profile: {
-          ...onboardingProfile,
-          employees_count: parseOptionalInt(onboardingProfile.employees_count),
-          sites_count: parseOptionalInt(onboardingProfile.sites_count),
-          countries: onboardingProfile.countries
-            .split(',')
-            .map((item) => item.trim())
-            .filter(Boolean),
-        },
-      });
-      const completionConfirmed = await refreshOnboardingStatus();
-      if (!completionConfirmed) {
-        throw new Error('onboarding_completion_not_confirmed');
-      }
-
-      try {
-        await settingsService.runOnboardingOrchestration(organizationId);
-      } catch {
-        // No bloquear el acceso al sistema si la orquestación falla
-      }
-
       setCreationStage(3);
       await sleep(350);
-      navigate('/', { replace: true });
+      setSaving(false);
     } catch (err) {
       setError(err?.response?.data?.detail || t('onboarding.errorComplete'));
       setSaving(false);
       setCreationStage(-1);
+    }
+  };
+
+  const executeValueDiscovery = async () => {
+    if (!canonicalOrganizationId || !valueDiscoveryIsReady) return;
+    if (!declaredPurpose.trim()) {
+      setError(valueCopy.required);
+      return;
+    }
+    setValueDiscoverySaving(true);
+    setError('');
+    try {
+      const response = await foundationService.executeValueDiscovery({
+        organizationId: canonicalOrganizationId,
+        eventId: valueDiscoveryEventId,
+        declaredPurpose: declaredPurpose.trim(),
+      });
+      setValueDiscoveryResult(response.result);
+      await loadFoundationStatus();
+    } catch (err) {
+      setError(err?.response?.data?.detail || t('onboarding.errorComplete'));
+    } finally {
+      setValueDiscoverySaving(false);
     }
   };
 
@@ -998,6 +1030,33 @@ const OnboardingPage = () => {
     );
   };
 
+  const renderValueDiscoveryStep = () => {
+    if (!valueDiscoveryStep) return null;
+    const result = valueDiscoveryResult;
+    const impact = result?.impact_savings_result;
+    const purpose = result?.purpose_alignment_result;
+    const profile = result?.organizational_profile_result;
+    return (
+      <section className="mt-8 rounded-[28px] border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-950/60 sm:p-6">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div><h3 className="text-lg font-semibold text-slate-900 dark:text-white">{valueCopy.title}</h3><p className="mt-1 text-sm text-slate-600 dark:text-slate-300">{valueDiscoveryStep.status}</p></div>
+          <span className="rounded-full bg-cyan-50 px-3 py-1 text-xs font-semibold text-cyan-800 dark:bg-cyan-900/30 dark:text-cyan-100">AI-assisted</span>
+        </div>
+        {!valueDiscoveryIsComplete && valueDiscoveryIsReady && (
+          <div className="mt-5"><label className="block text-sm text-slate-700 dark:text-slate-200">{valueCopy.purpose}<textarea value={declaredPurpose} onChange={(event) => setDeclaredPurpose(event.target.value)} maxLength={2000} className={inputClassName} rows="3" /></label><button type="button" onClick={executeValueDiscovery} disabled={valueDiscoverySaving || !canonicalOrganizationId} className="mt-4 inline-flex items-center gap-2 rounded-2xl bg-slate-950 px-5 py-3 text-sm font-medium text-white disabled:opacity-50 dark:bg-cyan-500 dark:text-slate-950">{valueDiscoverySaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}{valueDiscoverySaving ? valueCopy.running : valueCopy.run}</button></div>
+        )}
+        {result && <div className="mt-6 grid gap-4">
+          <article><h4 className="font-semibold text-slate-900 dark:text-white">{valueCopy.context}</h4><ul className="mt-2 list-disc pl-5 text-sm text-slate-600 dark:text-slate-300">{profile?.confirmed_context?.map((item) => <li key={item}>{item}</li>)}</ul></article>
+          <article><h4 className="font-semibold text-slate-900 dark:text-white">{valueCopy.opportunities}</h4>{impact?.preliminary_improvement_opportunities?.length ? <ul className="mt-2 space-y-2 text-sm text-slate-600 dark:text-slate-300">{impact.preliminary_improvement_opportunities.map((item) => <li key={item.opportunity_id}><span className="font-medium">{item.title}:</span> {item.description}</li>)}</ul> : <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">NO_GROUNDED_OPPORTUNITIES_IDENTIFIED</p>}</article>
+          <article><h4 className="font-semibold text-slate-900 dark:text-white">{valueCopy.value}</h4><p className="mt-2 text-sm text-slate-600 dark:text-slate-300">{impact?.non_monetary_savings?.potential_dimensions?.join(', ') || impact?.non_monetary_savings?.assessment_status}</p></article>
+          <p className="rounded-2xl bg-amber-50 p-3 text-sm text-amber-900 dark:bg-amber-900/20 dark:text-amber-100">{valueCopy.unavailable}</p>
+          <article><h4 className="font-semibold text-slate-900 dark:text-white">{valueCopy.alignment}</h4><ul className="mt-2 list-disc pl-5 text-sm text-slate-600 dark:text-slate-300">{purpose?.grounded_observations?.map((item) => <li key={item}>{item}</li>)}</ul></article>
+          <article><h4 className="font-semibold text-slate-900 dark:text-white">{valueCopy.limitations}</h4><ul className="mt-2 list-disc pl-5 text-sm text-slate-600 dark:text-slate-300">{result.limitations?.map((item) => <li key={item}>{item}</li>)}</ul></article>
+        </div>}
+      </section>
+    );
+  };
+
   const renderStepContent = () => {
     if (activeStep.key === 'foundation') return renderFoundationStep();
     if (activeStep.key === 'profile') return renderProfileStep();
@@ -1198,6 +1257,7 @@ const OnboardingPage = () => {
                   </button>
                 )}
               </div>
+              {renderValueDiscoveryStep()}
               {renderDocumentReferenceStep()}
             </section>
           </div>

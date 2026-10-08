@@ -28,6 +28,20 @@ const foundationService = {
     return response.data;
   },
 
+  executeValueDiscovery: async ({ organizationId, eventId, declaredPurpose }) => {
+    const response = await api.post('/v1/onboarding/value-discovery', {
+      organization_id: organizationId,
+      event_id: eventId,
+      organization_declared_purpose: declaredPurpose,
+    });
+    return response.data;
+  },
+
+  getValueDiscoveryResult: async () => {
+    const response = await api.get('/v1/onboarding/value-discovery');
+    return response.data;
+  },
+
   ingestDocumentReferences: async ({ organizationId, eventId, items }) => {
     const response = await api.post('/v1/onboarding/document-references', {
       organization_id: organizationId,

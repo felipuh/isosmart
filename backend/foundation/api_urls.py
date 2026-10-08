@@ -10,6 +10,8 @@ from .api_views import (
     OnboardingOrganizationsView,
     OnboardingStatusView,
     OrganizationalProfileCreateView,
+    ValueDiscoveryExecuteView,
+    ValueDiscoveryResultView,
     RecommendationBasisView,
     RecommendationListView,
 )
@@ -20,6 +22,8 @@ urlpatterns = [
     path("v1/onboarding/organizations", OnboardingOrganizationsView.as_view(), name="onboarding-organizations"),
     path("v1/onboarding/organizational-profile", OrganizationalProfileCreateView.as_view(), name="onboarding-organizational-profile"),
     path("v1/onboarding/document-references", OnboardingEvidenceReferencesCreateView.as_view(), name="onboarding-document-references"),
+    path("v1/onboarding/value-discovery", ValueDiscoveryExecuteView.as_view(), name="onboarding-value-discovery"),
+    path("v1/onboarding/value-discovery/<uuid:execution_id>", ValueDiscoveryResultView.as_view(), name="onboarding-value-discovery-result"),
     path("v1/recommendations", RecommendationListView.as_view(), name="source-recommendations"),
     path("v1/recommendations/<uuid:recommendation_id>/basis", RecommendationBasisView.as_view(), name="source-recommendation-basis"),
     path("v1/approvals/<uuid:decision_id>/decision", ApprovalDecisionView.as_view(), name="source-approval-decision"),

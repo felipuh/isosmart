@@ -12,6 +12,7 @@ from .api_serializers import (
     FoundationAttemptRequestSerializer,
     OnboardingEvidenceIngestionRequestSerializer,
     OrganizationalProfileRequestSerializer,
+    ValueDiscoveryRequestSerializer,
 )
 from .source_artifact_api import (
     SourceArtifactAPIError,
@@ -21,6 +22,9 @@ from .source_artifact_api import (
     onboarding_organizations,
     save_organizational_profile,
     ingest_onboarding_evidence_references,
+    execute_value_discovery,
+    value_discovery_result,
+    latest_value_discovery_result,
     publish_domain_event,
     recommendation_basis,
     record_approval_decision,
@@ -95,6 +99,28 @@ class OnboardingEvidenceReferencesCreateView(SourceArtifactAPIView):
             ),
             status=201,
         )
+
+
+class ValueDiscoveryExecuteView(SourceArtifactAPIView):
+    """IMPLEMENTATION_DEFINED_WITHIN_OWNER_APPROVED_CONTRACT."""
+    def post(self, request):
+        serializer = ValueDiscoveryRequestSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        principal = self.get_principal(request)
+        return Response(execute_value_discovery(
+            principal, serializer.validated_data, trace_id=request_trace_id(request),
+        ), status=201)
+
+    def get(self, request):
+        principal = self.get_principal(request)
+        return Response(latest_value_discovery_result(principal))
+
+
+class ValueDiscoveryResultView(SourceArtifactAPIView):
+    """IMPLEMENTATION_DEFINED_WITHIN_OWNER_APPROVED_CONTRACT."""
+    def get(self, request, execution_id):
+        principal = self.get_principal(request)
+        return Response(value_discovery_result(principal, execution_id))
 
 
 class RecommendationListView(SourceArtifactAPIView):
