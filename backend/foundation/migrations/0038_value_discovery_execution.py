@@ -40,7 +40,13 @@ BEGIN
   CREATE INDEX onboarding_value_discovery_tenant_org_idx ON onboarding.value_discovery_execution(tenant_id,organization_id,created_at DESC);
   ALTER TABLE onboarding.value_discovery_execution ENABLE ROW LEVEL SECURITY;
   ALTER TABLE onboarding.value_discovery_execution FORCE ROW LEVEL SECURITY;
-  EXECUTE format('CREATE POLICY onboarding_value_discovery_tenant ON onboarding.value_discovery_execution FOR ALL TO %I,%I USING (tenant_id=NULLIF(current_setting(''app.tenant_id'',true),'''')::uuid) WITH CHECK (tenant_id=NULLIF(current_setting(''app.tenant_id'',true),'''')::uuid)', app_role, worker_role);
+  EXECUTE format($policy$
+    CREATE POLICY onboarding_value_discovery_tenant
+    ON onboarding.value_discovery_execution
+    FOR ALL TO %I,%I
+    USING (tenant_id = NULLIF(current_setting('app.tenant_id', true), '')::uuid)
+    WITH CHECK (tenant_id = NULLIF(current_setting('app.tenant_id', true), '')::uuid)
+  $policy$, app_role, worker_role);
   EXECUTE format('GRANT SELECT,INSERT ON onboarding.value_discovery_execution TO %I,%I', app_role, worker_role);
 END
 $migration$;

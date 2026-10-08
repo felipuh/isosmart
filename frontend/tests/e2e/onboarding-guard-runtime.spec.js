@@ -343,3 +343,79 @@ test('controlled integration submits a metadata-only document reference through 
   await expect.poll(() => documentIngestionComplete).toBe(true);
   await expect(page.getByText('La ingestión de referencias se completó y fue confirmada por el servidor.')).toBeVisible();
 });
+
+test('Step 11 renders a persisted controlled Value Discovery result and unlocks Step 12', async ({ page }) => {
+  await mockAuthenticatedSession(page);
+  const canonicalOrganizationId = '88888888-8888-4888-8888-888888888888';
+  const executionId = '99999999-9999-4999-8999-999999999999';
+  let completed = false;
+  let persistedResult = null;
+
+  const status = () => ({
+    foundation_gate: { status: 'passed', paths: [] },
+    steps: [
+      { number: 10, key: 'organizational_profile', title: 'Organizational Profile', status: 'COMPLETE', prerequisites: ['foundation_gate'] },
+      { number: 11, key: 'value_discovery', title: 'Value Discovery', status: completed ? 'COMPLETE' : 'AVAILABLE', prerequisites: ['organizational_profile'] },
+      { number: 12, key: 'document_data_ingestion', title: 'Document/Data Ingestion', status: completed ? 'AVAILABLE' : 'LOCKED', prerequisites: ['value_discovery'] },
+    ],
+    step_count: 17,
+  });
+
+  await page.route('**/api/settings/onboarding_status/**', async (route) => {
+    await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ organization_id: 1, onboarding_completed: false }) });
+  });
+  await page.route('**/api/v1/onboarding/organizations', async (route) => {
+    await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ organizations: [{ id: canonicalOrganizationId, display_name: 'Canonical QMS Org' }] }) });
+  });
+  await page.route('**/api/v1/onboarding/status', async (route) => {
+    await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(status()) });
+  });
+  await page.route('**/api/v1/onboarding/value-discovery', async (route) => {
+    if (route.request().method() === 'GET') {
+      await route.fulfill({ status: persistedResult ? 200 : 404, contentType: 'application/json', body: JSON.stringify(persistedResult || { code: 'NOT_FOUND' }) });
+      return;
+    }
+    const payload = route.request().postDataJSON();
+    expect(payload.organization_id).toBe(canonicalOrganizationId);
+    expect(payload.event_id).toMatch(/^[0-9a-f-]{36}$/);
+    expect(payload.organization_declared_purpose).toBe('Servicios confiables para clientes locales.');
+    completed = true;
+    persistedResult = {
+      execution_id: executionId,
+      agent_run_id: executionId,
+      step: 'value_discovery',
+      status: 'complete',
+      execution_mode: 'CONTROLLED_TEST',
+      provider: 'value-discovery-controlled',
+      model_identifier: 'value-discovery-controlled-v1',
+      result_hash: 'a'.repeat(64),
+      result: {
+        organizational_profile_result: { confirmed_context: ['Sector: manufacturing'] },
+        impact_savings_result: {
+          preliminary_improvement_opportunities: [],
+          non_monetary_savings: { potential_dimensions: ['consistency'] },
+          financial_assessment: { status: 'NOT_ASSESSED', amount: null, currency: null, reason: 'NO_AUTHORIZED_FINANCIAL_BASELINE' },
+        },
+        purpose_alignment_result: { grounded_observations: ['Purpose is available for validation.'] },
+        limitations: ['Validate with organization stakeholders.'],
+      },
+    };
+    await route.fulfill({ status: 201, contentType: 'application/json', body: JSON.stringify(persistedResult) });
+  });
+
+  await page.goto('/onboarding');
+  await expect(page.getByRole('heading', { name: 'Descubrimiento de valor' })).toBeVisible();
+  await expect(page.getByText('LOCKED', { exact: true })).toBeVisible();
+  await page.getByLabel('Propósito declarado de la organización').fill('Servicios confiables para clientes locales.');
+  await page.getByRole('button', { name: 'Iniciar descubrimiento de valor' }).click();
+
+  await expect(page.getByText('Sector: manufacturing')).toBeVisible();
+  await expect(page.getByText('NO_GROUNDED_OPPORTUNITIES_IDENTIFIED')).toBeVisible();
+  await expect(page.getByText('La evaluación financiera aún no está disponible: no existe una línea base financiera autorizada.')).toBeVisible();
+  await expect(page.getByText('Purpose is available for validation.')).toBeVisible();
+  await expect(page.getByText('AVAILABLE', { exact: true })).toBeVisible();
+
+  await page.reload();
+  await expect(page.getByText('Sector: manufacturing')).toBeVisible();
+  await expect(page.getByText('Referencias de documentos y datos')).toBeVisible();
+});

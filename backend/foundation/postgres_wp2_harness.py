@@ -225,10 +225,12 @@ def run():
         )
 
         from foundation.test_qms_capa_api_postgres import QmsCapaApiPostgresTests
+        from foundation.test_value_discovery_postgres import ValueDiscoveryPostgreSQLTests
 
         suite = unittest.TestSuite([
             unittest.defaultTestLoader.loadTestsFromTestCase(SourceArtifactPostgreSQLIntegrationTests),
             unittest.defaultTestLoader.loadTestsFromTestCase(QmsCapaApiPostgresTests),
+            unittest.defaultTestLoader.loadTestsFromTestCase(ValueDiscoveryPostgreSQLTests),
         ])
         result = unittest.TextTestRunner(stream=sys.stdout, verbosity=1).run(suite)
         if not result.wasSuccessful():

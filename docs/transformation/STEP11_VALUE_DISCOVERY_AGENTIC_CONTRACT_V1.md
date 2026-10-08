@@ -95,9 +95,22 @@ longer marks legacy onboarding complete immediately after Step 10.
 
 ## Validation evidence and limitations
 
-Focused schema tests cover all three controlled capability shapes, financial
-hard-gate rejection, and quantified opportunity rejection. Real provider
-smoke testing requires an already configured, approved provider and is not
-implied by controlled tests. PostgreSQL/RLS integration and controlled browser
-E2E must run through the repository-managed PostgreSQL harness before this is
-adjudicated as fully validated.
+Migration `0038_value_discovery_execution` was corrected to render a valid
+PostgreSQL RLS policy for the restricted application and worker roles. The
+repository-managed disposable PostgreSQL 18.6 harness now includes five Step
+11 integration checks for migration/RLS metadata, atomic completion and
+provenance, idempotent/conflicting replay, tenant isolation, and provider or
+financial-validation rollback. Together with the existing 32 Foundation and 6
+QMS PostgreSQL integration cases, the focused suite contains 43 cases.
+
+The controlled browser test exercises the React Step 11 screen through the
+published HTTP contract: purpose submission, structured persisted result
+rendering, empty preliminary opportunities, explicit financial
+non-assessment, reload/readback, and server-derived Step 12 availability.
+
+Real provider smoke testing requires an already configured, approved provider
+and is not implied by controlled tests. No provider credentials were supplied,
+so authentic inference remains `NOT_EXECUTED_PROVIDER_NOT_AUTHORIZED_OR_CONFIGURED`.
+The repository full PostgreSQL regression still requires an execution with
+retained complete output before aggregate regression counts or attribution can
+be asserted.
