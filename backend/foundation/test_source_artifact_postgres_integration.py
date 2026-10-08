@@ -2122,7 +2122,7 @@ class SourceArtifactPostgreSQLIntegrationTests(TransactionTestCase):
         executor = MigrationExecutor(connections["default"])
         self.assertEqual(
             executor.loader.graph.leaf_nodes("foundation")[-1],
-            ("foundation", "0037_qms_audit_capa_foundation"),
+            ("foundation", "0038_value_discovery_execution"),
         )
         executor.migrate([("foundation", "0028_capability_activation")])
         try:
@@ -2145,9 +2145,11 @@ class SourceArtifactPostgreSQLIntegrationTests(TransactionTestCase):
                              reversed_executor.loader.applied_migrations)
             self.assertNotIn(("foundation", "0037_qms_audit_capa_foundation"),
                              reversed_executor.loader.applied_migrations)
+            self.assertNotIn(("foundation", "0038_value_discovery_execution"),
+                             reversed_executor.loader.applied_migrations)
         finally:
             forward_executor = MigrationExecutor(connections["default"])
-            forward_executor.migrate([("foundation", "0037_qms_audit_capa_foundation")])
+            forward_executor.migrate([("foundation", "0038_value_discovery_execution")])
         restored = MigrationExecutor(connections["default"])
         self.assertIn(("foundation", "0029_context_twin_result_completion"),
                       restored.loader.applied_migrations)
@@ -2159,6 +2161,7 @@ class SourceArtifactPostgreSQLIntegrationTests(TransactionTestCase):
         self.assertIn(("foundation", "0035_user_projection_profile_fields"), restored.loader.applied_migrations)
         self.assertIn(("foundation", "0036_action_execution_rollback_lineage"), restored.loader.applied_migrations)
         self.assertIn(("foundation", "0037_qms_audit_capa_foundation"), restored.loader.applied_migrations)
+        self.assertIn(("foundation", "0038_value_discovery_execution"), restored.loader.applied_migrations)
 
     def test_adminapps_tenant_projection_persists_optional_source_fields(self):
         from foundation.models import IndustryProfile, TenantProjection

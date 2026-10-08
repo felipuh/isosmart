@@ -5,6 +5,7 @@ role, RLS context, and persistence services.  The provider is controlled only
 at the inference edge; no domain persistence or onboarding API is replaced.
 """
 
+import json
 from unittest.mock import Mock
 from uuid import uuid4
 
@@ -136,10 +137,13 @@ class ValueDiscoveryPostgreSQLTests(SourceArtifactPostgreSQLIntegrationTests):
             )
             self.assertTrue(TransactionalOutbox.objects.using("app").filter(domain_event_id=event.event_id).exists())
             audit = ImmutableAuditLog.objects.using("app").get(entity_id=execution.id)
-        self.assertEqual(persisted.evidence_id, state["evidence_id"])
+        self.assertEqual(str(persisted.evidence_id), state["evidence_id"])
         self.assertEqual(str(persisted.id), state["agent_run_id"])
         self.assertEqual(event.payload["result_hash"], execution.result_hash)
-        self.assertEqual(str(audit.metadata["evidence_id"]), str(execution.evidence_id))
+        self.assertEqual(
+            json.loads(audit.metadata_canonical)["value"]["evidence_id"],
+            str(execution.evidence_id),
+        )
         self.assertEqual(state["status"], "complete")
         self.assertEqual("document_data_ingestion", OnboardingWorkflowService(using="app").ensure(
             identity=self.identity, user_id=self.user_projection_id,
@@ -153,7 +157,8 @@ class ValueDiscoveryPostgreSQLTests(SourceArtifactPostgreSQLIntegrationTests):
         replayed, was_replayed = self.execute(event_id=event_id)
         self.assertTrue(was_replayed)
         self.assertEqual(replayed.id, execution.id)
-        self.assertEqual(ValueDiscoveryExecution.objects.using("default").count(), 1)
+        with trusted_tenant_context(self.identity, actor_id=self.actor_id, trace_id=uuid4(), using="app"):
+            self.assertEqual(ValueDiscoveryExecution.objects.using("app").count(), 1)
         with self.assertRaisesRegex(ValueDiscoveryError, "different"):
             self.execute(event_id=event_id, purpose="A changed declared purpose.")
         with self.assertRaisesRegex(ValueDiscoveryError, "already complete"):
@@ -182,6 +187,11 @@ class ValueDiscoveryPostgreSQLTests(SourceArtifactPostgreSQLIntegrationTests):
 
     def test_provider_or_financial_validation_failure_leaves_no_authoritative_effects(self):
         self.complete_step_ten()
+        with trusted_tenant_context(self.identity, actor_id=self.actor_id, trace_id=uuid4(), using="app"):
+            executions_before = ValueDiscoveryExecution.objects.using("app").count()
+            events_before = DomainEvent.objects.using("app").filter(
+                event_type="onboarding.value_discovery.completed",
+            ).count()
         failing_provider = Mock()
         failing_provider.analyze.side_effect = ProviderFailed("AI_PROVIDER_UNAVAILABLE", "controlled outage")
         failing_provider.provider_name = "controlled-failure"
@@ -189,13 +199,14 @@ class ValueDiscoveryPostgreSQLTests(SourceArtifactPostgreSQLIntegrationTests):
         failing_provider.execution_mode = "CONTROLLED_TEST"
         with self.assertRaisesRegex(ValueDiscoveryError, "controlled outage"):
             self.execute(provider=failing_provider)
-        self.assertEqual(ValueDiscoveryExecution.objects.using("default").count(), 0)
-        self.assertEqual(DomainEvent.objects.using("default").filter(
-            event_type="onboarding.value_discovery.completed",
-        ).count(), 0)
-        self.assertNotIn("value_discovery", OnboardingWorkflow.objects.using("default").get(
-            tenant_id=self.tenant_id, user_id=self.user_projection_id,
-        ).completed_steps)
+        with trusted_tenant_context(self.identity, actor_id=self.actor_id, trace_id=uuid4(), using="app"):
+            self.assertEqual(ValueDiscoveryExecution.objects.using("app").count(), executions_before)
+            self.assertEqual(DomainEvent.objects.using("app").filter(
+                event_type="onboarding.value_discovery.completed",
+            ).count(), events_before)
+            self.assertNotIn("value_discovery", OnboardingWorkflow.objects.using("app").get(
+                tenant_id=self.tenant_id, user_id=self.user_projection_id,
+            ).completed_steps)
 
         invalid_provider = ControlledValueDiscoveryProvider()
         original = invalid_provider.analyze
@@ -209,4 +220,12 @@ class ValueDiscoveryPostgreSQLTests(SourceArtifactPostgreSQLIntegrationTests):
         invalid_provider.analyze = monetary_output
         with self.assertRaisesRegex(ValueDiscoveryError, "financial assessment"):
             self.execute(provider=invalid_provider)
-        self.assertEqual(ValueDiscoveryExecution.objects.using("default").count(), 0)
+        with trusted_tenant_context(self.identity, actor_id=self.actor_id, trace_id=uuid4(), using="app"):
+            self.assertEqual(ValueDiscoveryExecution.objects.using("app").count(), executions_before)
+
+
+# The fixture base supplies the disposable tenant setup.  It also contains the
+# Foundation matrix, which must not be silently re-executed as Step 11 tests.
+for _name in dir(SourceArtifactPostgreSQLIntegrationTests):
+    if _name.startswith("test") and _name not in ValueDiscoveryPostgreSQLTests.__dict__:
+        setattr(ValueDiscoveryPostgreSQLTests, _name, None)

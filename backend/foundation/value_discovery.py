@@ -265,19 +265,19 @@ def provider_from_settings():
     return ChatCompletionsValueDiscoveryProvider()
 
 
-def _event_outbox_audit(*, identity, workflow, execution_id, result_hash, evidence_id, transition_id, actor_id, trace_id):
+def _event_outbox_audit(*, identity, workflow, execution_id, result_hash, evidence_id, transition_id, actor_id, trace_id, using):
     occurred_at = timezone.now()
     payload = {"contract_version": CONTRACT_VERSION, "tenant_id": str(identity.tenant_id),
                "organization_id": str(workflow.state["organizational_profile"]["organization_id"]),
                "workflow_id": str(workflow.id), "agent_run_id": str(execution_id), "result_hash": result_hash,
                "evidence_id": str(evidence_id), "onboarding_transition_id": str(transition_id)}
-    version = (DomainEvent.objects.filter(aggregate_type="onboarding_workflow", aggregate_id=workflow.id).aggregate(value=Max("aggregate_version"))["value"] or 0) + 1
-    event = DomainEvent.objects.create(event_id=uuid4(), tenant_id=identity.tenant_id, event_type="onboarding.value_discovery.completed",
+    version = (DomainEvent.objects.using(using).filter(aggregate_type="onboarding_workflow", aggregate_id=workflow.id).aggregate(value=Max("aggregate_version"))["value"] or 0) + 1
+    event = DomainEvent.objects.using(using).create(event_id=uuid4(), tenant_id=identity.tenant_id, event_type="onboarding.value_discovery.completed",
         schema_version=1, aggregate_type="onboarding_workflow", aggregate_id=workflow.id, aggregate_version=version,
         occurred_at=occurred_at, trace_id=trace_id, source="iso-smart-value-discovery", payload=json.loads(canonical_json(payload))["value"], payload_hash=canonical_hash(payload))
-    outbox = TransactionalOutbox.objects.create(tenant_id=identity.tenant_id, domain_event_id=event.event_id,
+    outbox = TransactionalOutbox.objects.using(using).create(tenant_id=identity.tenant_id, domain_event_id=event.event_id,
         status=TransactionalOutbox.Status.PENDING, publish_attempts=0, available_at=occurred_at)
-    audit_id = AuditWriterService().append(AuditAppend(tenant_id=identity.tenant_id, stream_type="onboarding_workflow", stream_id=workflow.id,
+    audit_id = AuditWriterService(using=using).append(AuditAppend(tenant_id=identity.tenant_id, stream_type="onboarding_workflow", stream_id=workflow.id,
         actor_type="user", actor_id=str(actor_id), action="onboarding.value_discovery.completed", entity_type="value_discovery_execution",
         entity_id=execution_id, trace_id=trace_id, occurred_at=occurred_at, after_hash=result_hash,
         metadata={"event_id": str(event.event_id), "outbox_id": str(outbox.id), "evidence_id": str(evidence_id), "transition_id": str(transition_id)}))
@@ -352,7 +352,8 @@ class ValueDiscoveryService:
                     declared_purpose_hash=canonical_hash(declared_purpose), execution_mode=provider.execution_mode, provider=provider.provider_name,
                     model_identifier=provider.model_identifier, result=result, result_hash=result_hash, evidence_id=evidence.entity_id, transition_id=transition.id)
                 _event_outbox_audit(identity=identity, workflow=workflow, execution_id=execution.id, result_hash=result_hash,
-                                   evidence_id=evidence.entity_id, transition_id=transition.id, actor_id=actor_id, trace_id=trace_id)
+                                   evidence_id=evidence.entity_id, transition_id=transition.id, actor_id=actor_id, trace_id=trace_id,
+                                   using=self.using)
                 return execution, False
 
 

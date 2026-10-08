@@ -15,6 +15,7 @@ import sys
 import tempfile
 import time
 import argparse
+import platform
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -73,6 +74,22 @@ def run(command, *, env=None, capture=False, check=True):
         stdout=subprocess.PIPE if capture else None,
         stderr=subprocess.PIPE if capture else None,
     )
+
+
+def write_checkpoint(path, stage, **facts):
+    """Append a flushed, non-secret lifecycle checkpoint for a harness run."""
+    record = {"timestamp": datetime.now(timezone.utc).isoformat(), "stage": stage, **facts}
+    with path.open("a", encoding="utf-8") as stream:
+        stream.write(json.dumps(record, sort_keys=True) + "\n")
+        stream.flush()
+        os.fsync(stream.fileno())
+
+
+def run_harness_with_retained_output(command, *, env, stdout_path, stderr_path):
+    """Retain both child streams even if a parent command session terminates."""
+    with stdout_path.open("w", encoding="utf-8") as stdout, stderr_path.open("w", encoding="utf-8") as stderr:
+        process = subprocess.Popen(command, cwd=ROOT, env=env, text=True, stdout=stdout, stderr=stderr)
+        return process.wait()
 
 
 def wait_for_postgres(port, password):
@@ -291,6 +308,14 @@ def main(argv=None):
     engine_name = Path(engine).name
     run_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ") + "_" + secrets.token_hex(3)
     safe_id = run_id.lower().replace("_", "")
+    transcript_dir = Path(tempfile.gettempdir())
+    checkpoint_path = transcript_dir / f"isosmart-postgres-harness-{safe_id}.jsonl"
+    stdout_path = transcript_dir / f"isosmart-postgres-harness-{safe_id}.stdout.log"
+    stderr_path = transcript_dir / f"isosmart-postgres-harness-{safe_id}.stderr.log"
+    write_checkpoint(
+        checkpoint_path, "execution_started", engine_candidate=engine_name,
+        python=sys.executable, platform=platform.platform(),
+    )
     names = {
         "container": f"isosmart-foundation-pg186-{safe_id}",
         "volume": f"isosmart-foundation-pgdata-{safe_id}",
@@ -332,6 +357,7 @@ def main(argv=None):
     official_preexisting = False
     started = datetime.now(timezone.utc)
     try:
+        write_checkpoint(checkpoint_path, "environment_discovered", tmpdir=str(transcript_dir))
         official = f"docker.io/library/postgres:{POSTGRES_VERSION}"
         official_preexisting = run([engine, "image", "exists", official], check=False).returncode == 0
         pull = run([engine, "pull", official], capture=True, check=False)
@@ -357,6 +383,7 @@ def main(argv=None):
             "--env", f"POSTGRES_PASSWORD={passwords['super']}", image,
         ], capture=True)
         container_created = True
+        write_checkpoint(checkpoint_path, "postgres_started", container_created=True)
         inspected = run([engine, "port", names["container"], "5432/tcp"], capture=True).stdout.strip()
         port = int(inspected.rsplit(":", 1)[1])
         try:
@@ -370,6 +397,7 @@ def main(argv=None):
         bootstrap_second = bootstrap_idempotent(port, passwords["super"], names, passwords)
         if bootstrap_first != bootstrap_second:
             raise RuntimeError("bootstrap repeat changed the approved role contract")
+        write_checkpoint(checkpoint_path, "migration_and_roles_ready", bootstrap="PASS")
 
         env = os.environ.copy()
         env.update({
@@ -400,12 +428,19 @@ def main(argv=None):
             "FOUNDATION_RELEASE_CONTROLLER_ROLE": names["release_controller"], "FOUNDATION_RELEASE_CONTROLLER_PASSWORD": passwords["release_controller"],
             "FOUNDATION_QMS_ACTION_OWNER_ROLE": names["qms_action_owner"],
         })
-        harness_result = run([sys.executable, str(HARNESS)], env=env, capture=True, check=False)
-        if harness_result.returncode != 0:
-            print(harness_result.stdout, end="")
-            print(harness_result.stderr, file=sys.stderr)
+        write_checkpoint(checkpoint_path, "test_execution_started", harness=str(HARNESS))
+        harness_exit_code = run_harness_with_retained_output(
+            [sys.executable, str(HARNESS)], env=env, stdout_path=stdout_path, stderr_path=stderr_path,
+        )
+        write_checkpoint(
+            checkpoint_path, "test_execution_finished", exit_code=harness_exit_code,
+            signal=(-harness_exit_code if harness_exit_code < 0 else None),
+        )
+        if harness_exit_code != 0:
+            print(stdout_path.read_text(encoding="utf-8"), end="")
+            print(stderr_path.read_text(encoding="utf-8"), end="", file=sys.stderr)
             raise RuntimeError("foundation security matrix failed")
-        print(harness_result.stdout, end="")
+        print(stdout_path.read_text(encoding="utf-8"), end="")
         print(json.dumps({
             "lifecycle": "PASS", "run_id": run_id, "engine": engine_name,
             "endpoint": f"127.0.0.1:{port}", "database": names["database"],
@@ -413,6 +448,12 @@ def main(argv=None):
             "bootstrap_first_run": "PASS", "bootstrap_second_run": "PASS_IDEMPOTENT",
             "supply_chain": supply_chain, "started_at": started.isoformat(),
         }, indent=2))
+    except BaseException as exc:
+        write_checkpoint(
+            checkpoint_path, "execution_failed", error_type=type(exc).__name__,
+            process_exit_code=getattr(exc, "returncode", None),
+        )
+        raise
     finally:
         if roles_created and port is not None:
             drop_database_and_roles(port, passwords["super"], names)
@@ -429,7 +470,14 @@ def main(argv=None):
             "temp_absent": not context.exists(),
         }
         if not all(checks.values()):
+            write_checkpoint(checkpoint_path, "cleanup_finished", result="FAIL", checks=checks)
             raise RuntimeError(f"scoped teardown verification failed: {checks}")
+        write_checkpoint(checkpoint_path, "cleanup_finished", result="PASS", checks=checks)
+        print(json.dumps({
+            "harness_checkpoint_log": str(checkpoint_path),
+            "harness_stdout_log": str(stdout_path),
+            "harness_stderr_log": str(stderr_path),
+        }, indent=2))
         print(json.dumps({"teardown": "PASS", **checks}, indent=2))
 
 
