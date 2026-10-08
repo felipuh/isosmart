@@ -173,19 +173,17 @@ test('Foundation Gate submits only the server-published questions and reflects t
 
 test('controlled integration saves the source-defined organizational profile through the canonical tenant API', async ({ page }) => {
   await mockAuthenticatedSession(page);
-  let legacyOnboardingComplete = false;
-  let legacyStatusCalls = 0;
+  let canonicalStatusCalls = 0;
   let profileComplete = false;
   const canonicalOrganizationId = '33333333-3333-4333-8333-333333333333';
 
   await page.route('**/api/settings/onboarding_status/**', async (route) => {
-    legacyStatusCalls += 1;
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
       body: JSON.stringify({
         organization_id: 1,
-        onboarding_completed: legacyOnboardingComplete,
+        onboarding_completed: false,
         commercially_available_standards: ['ISO9001_2015'],
       }),
     });
@@ -198,6 +196,7 @@ test('controlled integration saves the source-defined organizational profile thr
     });
   });
   await page.route('**/api/v1/onboarding/status', async (route) => {
+    canonicalStatusCalls += 1;
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
@@ -243,10 +242,6 @@ test('controlled integration saves the source-defined organizational profile thr
   await page.route('**/api/iso-clauses/initialize_standards/**', async (route) => {
     await route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
   });
-  await page.route('**/api/settings/complete_onboarding/**', async (route) => {
-    legacyOnboardingComplete = true;
-    await route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
-  });
   await page.route('**/api/settings/run_onboarding_orchestration/**', async (route) => {
     await route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
   });
@@ -260,12 +255,12 @@ test('controlled integration saves the source-defined organizational profile thr
   await page.getByLabel('Número de sedes / plantas').fill('2');
   await page.getByLabel('Países (separados por coma)').fill('Costa Rica, Panamá');
   await page.getByRole('button', { name: 'Continuar' }).click();
-  const statusCallsBeforeFinish = legacyStatusCalls;
+  const statusCallsBeforeFinish = canonicalStatusCalls;
   await page.getByRole('button', { name: 'Crear mi sistema' }).click();
 
   await expect.poll(() => profileComplete).toBe(true);
-  await expect.poll(() => legacyStatusCalls).toBeGreaterThan(statusCallsBeforeFinish);
-  await expect(page).toHaveURL(/\/$/);
+  await expect.poll(() => canonicalStatusCalls).toBeGreaterThan(statusCallsBeforeFinish);
+  await expect(page).toHaveURL(/\/onboarding$/);
 });
 
 test('controlled integration submits a metadata-only document reference through the canonical tenant API', async ({ page }) => {

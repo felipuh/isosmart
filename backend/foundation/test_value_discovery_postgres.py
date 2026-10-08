@@ -24,9 +24,7 @@ from foundation.onboarding import (
     OrganizationProfileCommandService,
 )
 from foundation.tenant_context import trusted_tenant_context
-from foundation.test_source_artifact_postgres_integration import (
-    SourceArtifactPostgreSQLIntegrationTests,
-)
+from foundation import test_source_artifact_postgres_integration as source_artifact
 from foundation.value_discovery import (
     ControlledValueDiscoveryProvider,
     ProviderFailed,
@@ -35,7 +33,7 @@ from foundation.value_discovery import (
 )
 
 
-class ValueDiscoveryPostgreSQLTests(SourceArtifactPostgreSQLIntegrationTests):
+class ValueDiscoveryPostgreSQLTests(source_artifact.SourceArtifactPostgreSQLIntegrationTests):
     """Step 11 remains an atomic, tenant-scoped extension—not an AgentRun."""
 
     def complete_step_ten(self):
@@ -226,6 +224,6 @@ class ValueDiscoveryPostgreSQLTests(SourceArtifactPostgreSQLIntegrationTests):
 
 # The fixture base supplies the disposable tenant setup.  It also contains the
 # Foundation matrix, which must not be silently re-executed as Step 11 tests.
-for _name in dir(SourceArtifactPostgreSQLIntegrationTests):
+for _name in dir(source_artifact.SourceArtifactPostgreSQLIntegrationTests):
     if _name.startswith("test") and _name not in ValueDiscoveryPostgreSQLTests.__dict__:
         setattr(ValueDiscoveryPostgreSQLTests, _name, None)
