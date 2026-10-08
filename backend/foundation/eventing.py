@@ -137,7 +137,7 @@ class OutboxDeliveryService:
         self.using = using
         self.lease_duration = lease_duration or timedelta(minutes=5)
 
-    def claim_next(self, *, identity, worker_id, trace_id, event_type=None):
+    def claim_next(self, *, identity, worker_id, trace_id, event_type=None, excluded_error_codes=()):
         with trusted_tenant_context(
             identity, actor_id=worker_id, trace_id=trace_id, using=self.using
         ):
@@ -148,6 +148,8 @@ class OutboxDeliveryService:
                 candidates = candidates.filter(domain_event_id__in=DomainEvent.objects.using(self.using).filter(
                     event_type=event_type,
                 ).values("event_id"))
+            if excluded_error_codes:
+                candidates = candidates.exclude(last_error_code__in=tuple(excluded_error_codes))
             row = (
                 candidates
                 .select_for_update(skip_locked=True)
@@ -195,7 +197,7 @@ class OutboxDeliveryService:
                 ),
             )
 
-    def mark_failed(self, *, identity, outbox_id, worker_id, trace_id, error_code):
+    def mark_failed(self, *, identity, outbox_id, worker_id, trace_id, error_code, available_at=None):
         with trusted_tenant_context(
             identity, actor_id=worker_id, trace_id=trace_id, using=self.using
         ):
@@ -204,11 +206,13 @@ class OutboxDeliveryService:
             row.lease_owner = None
             row.lease_expires_at = None
             row.last_error_code = error_code
+            update_fields = ["status", "lease_owner", "lease_expires_at", "last_error_code", "updated_at"]
+            if available_at is not None:
+                row.available_at = available_at
+                update_fields.append("available_at")
             row.save(
                 using=self.using,
-                update_fields=(
-                    "status", "lease_owner", "lease_expires_at", "last_error_code", "updated_at",
-                ),
+                update_fields=update_fields,
             )
 
 
