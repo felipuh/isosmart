@@ -4,7 +4,8 @@ from uuid import uuid4
 
 from django.utils import timezone
 
-from foundation.ai_usage import normalize_usage, serialize_for_adminapps
+from foundation.ai_usage import normalize_usage, serialize_for_adminapps, usage_event_id_for
+from foundation.ai_usage_delivery import delivery_failure_kind
 
 
 class AIUsageNormalizationTests(TestCase):
@@ -26,3 +27,12 @@ class AIUsageNormalizationTests(TestCase):
         self.assertNotIn('response', payload)
         self.assertNotIn('api_key', payload)
         self.assertEqual(payload['total_tokens'], 14)
+
+    def test_usage_event_identity_is_stable_and_delivery_classifies_errors_safely(self):
+        record_id = uuid4()
+        self.assertEqual(usage_event_id_for(record_id), usage_event_id_for(record_id))
+        self.assertNotEqual(usage_event_id_for(record_id), usage_event_id_for(uuid4()))
+        self.assertEqual(delivery_failure_kind(401), 'permanent')
+        self.assertEqual(delivery_failure_kind(422), 'permanent')
+        self.assertEqual(delivery_failure_kind(503), 'retryable')
+        self.assertEqual(delivery_failure_kind(None), 'retryable')

@@ -137,6 +137,12 @@ class ValueDiscoveryPostgreSQLTests(source_artifact.SourceArtifactPostgreSQLInte
             self.assertTrue(TransactionalOutbox.objects.using("app").filter(domain_event_id=event.event_id).exists())
             audit = ImmutableAuditLog.objects.using("app").get(entity_id=execution.id)
             usage = list(AIUsageRecord.objects.using("app").filter(execution_id=execution.id).order_by("capability_name"))
+            usage_events = list(DomainEvent.objects.using("app").filter(
+                event_type="ai_usage.recorded", aggregate_id__in=[row.id for row in usage],
+            ).order_by("aggregate_id"))
+            usage_outbox_count = TransactionalOutbox.objects.using("app").filter(
+                domain_event_id__in=[event.event_id for event in usage_events],
+            ).count()
         self.assertEqual(str(persisted.evidence_id), state["evidence_id"])
         self.assertEqual(str(persisted.id), state["agent_run_id"])
         self.assertEqual(event.payload["result_hash"], execution.result_hash)
@@ -151,6 +157,10 @@ class ValueDiscoveryPostgreSQLTests(source_artifact.SourceArtifactPostgreSQLInte
         })
         self.assertTrue(all(row.usage_status == "reported" and row.attempt_status == "completed" for row in usage))
         self.assertEqual(sum(row.total_tokens for row in usage), 412)
+        self.assertEqual(len(usage_events), 3)
+        self.assertEqual({event.payload["usage_record_id"] for event in usage_events}, {str(row.id) for row in usage})
+        self.assertEqual({event.payload["adminapps_tenant_id"] for event in usage_events}, {str(self.external_tenant_id)})
+        self.assertEqual(usage_outbox_count, 3)
         self.assertEqual("document_data_ingestion", OnboardingWorkflowService(using="app").ensure(
             identity=self.identity, user_id=self.user_projection_id,
             actor_id=self.actor_id, trace_id=uuid4(),

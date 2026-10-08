@@ -2122,7 +2122,7 @@ class SourceArtifactPostgreSQLIntegrationTests(TransactionTestCase):
         executor = MigrationExecutor(connections["default"])
         self.assertEqual(
             executor.loader.graph.leaf_nodes("foundation")[-1],
-            ("foundation", "0039_ai_usage_metering"),
+            ("foundation", "0040_ai_usage_delivery_outbox_retry"),
         )
         executor.migrate([("foundation", "0028_capability_activation")])
         try:
@@ -2149,9 +2149,11 @@ class SourceArtifactPostgreSQLIntegrationTests(TransactionTestCase):
                              reversed_executor.loader.applied_migrations)
             self.assertNotIn(("foundation", "0039_ai_usage_metering"),
                              reversed_executor.loader.applied_migrations)
+            self.assertNotIn(("foundation", "0040_ai_usage_delivery_outbox_retry"),
+                             reversed_executor.loader.applied_migrations)
         finally:
             forward_executor = MigrationExecutor(connections["default"])
-            forward_executor.migrate([("foundation", "0039_ai_usage_metering")])
+            forward_executor.migrate([("foundation", "0040_ai_usage_delivery_outbox_retry")])
         restored = MigrationExecutor(connections["default"])
         self.assertIn(("foundation", "0029_context_twin_result_completion"),
                       restored.loader.applied_migrations)
@@ -2165,6 +2167,7 @@ class SourceArtifactPostgreSQLIntegrationTests(TransactionTestCase):
         self.assertIn(("foundation", "0037_qms_audit_capa_foundation"), restored.loader.applied_migrations)
         self.assertIn(("foundation", "0038_value_discovery_execution"), restored.loader.applied_migrations)
         self.assertIn(("foundation", "0039_ai_usage_metering"), restored.loader.applied_migrations)
+        self.assertIn(("foundation", "0040_ai_usage_delivery_outbox_retry"), restored.loader.applied_migrations)
 
     def test_adminapps_tenant_projection_persists_optional_source_fields(self):
         from foundation.models import IndustryProfile, TenantProjection
