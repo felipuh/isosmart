@@ -103,10 +103,11 @@ provenance, idempotent/conflicting replay, tenant isolation, and provider or
 financial-validation rollback. Together with the existing 32 Foundation and 6
 QMS PostgreSQL integration cases, the focused suite contains 43 cases.
 
-The controlled browser test exercises the React Step 11 screen through the
-published HTTP contract: purpose submission, structured persisted result
-rendering, empty preliminary opportunities, explicit financial
-non-assessment, reload/readback, and server-derived Step 12 availability.
+The frontend HTTP-contract browser test exercises the React Step 11 screen:
+purpose submission, structured result rendering, empty preliminary
+opportunities, explicit financial non-assessment, reload/readback, and
+server-derived Step 12 availability. It is not a substitute for the pending
+real-backend, disposable-PostgreSQL controlled browser E2E.
 
 Real provider smoke testing requires an already configured, approved provider
 and is not implied by controlled tests. No provider credentials were supplied,
