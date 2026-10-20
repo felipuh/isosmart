@@ -14,6 +14,7 @@ from django.db import connections
 from foundation.audit import ImmutableAuditLog
 from foundation.models import (
     DomainEvent,
+    AIUsageRecord,
     OnboardingWorkflow,
     TransactionalOutbox,
     ValueDiscoveryExecution,
@@ -135,6 +136,7 @@ class ValueDiscoveryPostgreSQLTests(source_artifact.SourceArtifactPostgreSQLInte
             )
             self.assertTrue(TransactionalOutbox.objects.using("app").filter(domain_event_id=event.event_id).exists())
             audit = ImmutableAuditLog.objects.using("app").get(entity_id=execution.id)
+            usage = list(AIUsageRecord.objects.using("app").filter(execution_id=execution.id).order_by("capability_name"))
         self.assertEqual(str(persisted.evidence_id), state["evidence_id"])
         self.assertEqual(str(persisted.id), state["agent_run_id"])
         self.assertEqual(event.payload["result_hash"], execution.result_hash)
@@ -143,6 +145,12 @@ class ValueDiscoveryPostgreSQLTests(source_artifact.SourceArtifactPostgreSQLInte
             str(execution.evidence_id),
         )
         self.assertEqual(state["status"], "complete")
+        self.assertEqual(len(usage), 3)
+        self.assertEqual({row.capability_name for row in usage}, {
+            "organizational_profile", "impact_savings", "purpose_alignment",
+        })
+        self.assertTrue(all(row.usage_status == "reported" and row.attempt_status == "completed" for row in usage))
+        self.assertEqual(sum(row.total_tokens for row in usage), 412)
         self.assertEqual("document_data_ingestion", OnboardingWorkflowService(using="app").ensure(
             identity=self.identity, user_id=self.user_projection_id,
             actor_id=self.actor_id, trace_id=uuid4(),
@@ -205,6 +213,10 @@ class ValueDiscoveryPostgreSQLTests(source_artifact.SourceArtifactPostgreSQLInte
             self.assertNotIn("value_discovery", OnboardingWorkflow.objects.using("app").get(
                 tenant_id=self.tenant_id, user_id=self.user_projection_id,
             ).completed_steps)
+            failed_usage = AIUsageRecord.objects.using("app").filter(
+                provider="controlled-failure", attempt_status="failed",
+            ).get()
+        self.assertEqual(failed_usage.usage_status, "unknown")
 
         invalid_provider = ControlledValueDiscoveryProvider()
         original = invalid_provider.analyze
