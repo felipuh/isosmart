@@ -4,7 +4,8 @@ Extrae información de organización del token JWT y la agrega al request
 """
 
 from django.utils.deprecation import MiddlewareMixin
-from rest_framework_simplejwt.authentication import JWTAuthentication
+from integration.sso_auth import Smart3AISSOAuthentication
+from rest_framework.exceptions import APIException
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from .models import UserProfile
 
@@ -29,8 +30,9 @@ class OrganizationMiddleware(MiddlewareMixin):
         
         try:
             # Autenticar con JWT
-            jwt_auth = JWTAuthentication()
+            jwt_auth = Smart3AISSOAuthentication()
             validated_token = jwt_auth.get_validated_token(raw_token)
+            jwt_auth.get_user(validated_token)
             
             # Extraer claims personalizados
             request.organization_id = validated_token.get('organization_id')
@@ -49,7 +51,7 @@ class OrganizationMiddleware(MiddlewareMixin):
                 except UserProfile.DoesNotExist:
                     pass
                     
-        except (InvalidToken, TokenError):
+        except (APIException, InvalidToken, TokenError):
             # Token inválido, dejar valores en None
             pass
         
