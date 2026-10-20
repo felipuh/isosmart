@@ -1972,6 +1972,61 @@ class AIUsageRecord(models.Model):
         db_table = 'ai_usage"."usage_record'
 
 
+class AIFinancialGuardrailPolicy(models.Model):
+    """ISO Smart's deliberately product-scoped, non-billing pilot limit.
+
+    This is not a platform budget or an AdminApps entitlement projection.  It
+    exists solely to make a controlled ISO Smart cap reservable while the
+    cross-product reservation authority is intentionally not defined.
+    """
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    tenant = models.ForeignKey(TenantProjection, on_delete=models.PROTECT, db_column="tenant_id")
+    product_identifier = models.CharField(max_length=80)
+    provider = models.CharField(max_length=120)
+    model_identifier = models.CharField(max_length=200)
+    period_start = models.DateTimeField()
+    period_end = models.DateTimeField()
+    currency = models.CharField(max_length=3)
+    max_request_count = models.PositiveIntegerField()
+    max_input_tokens = models.BigIntegerField()
+    max_output_tokens = models.BigIntegerField()
+    max_reserved_cost = models.DecimalField(max_digits=20, decimal_places=10)
+    policy_scope = models.CharField(max_length=40)
+    authority_reference = models.TextField()
+    status = models.CharField(max_length=24)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        managed = False
+        db_table = 'ai_usage"."financial_guardrail_policy'
+
+
+class AIFinancialReservation(models.Model):
+    """Auditable pre-provider exposure; unknown consumption is never released."""
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    policy = models.ForeignKey(AIFinancialGuardrailPolicy, on_delete=models.PROTECT, db_column="policy_id")
+    tenant = models.ForeignKey(TenantProjection, on_delete=models.PROTECT, db_column="tenant_id")
+    invocation_id = models.CharField(max_length=200)
+    usage_record = models.OneToOneField(AIUsageRecord, null=True, blank=True, on_delete=models.PROTECT, db_column="usage_record_id")
+    reserved_input_tokens = models.BigIntegerField()
+    reserved_output_tokens = models.BigIntegerField()
+    reserved_cost = models.DecimalField(max_digits=20, decimal_places=10)
+    settled_cost = models.DecimalField(max_digits=20, decimal_places=10, null=True, blank=True)
+    currency = models.CharField(max_length=3)
+    status = models.CharField(max_length=24)
+    resolution_reason = models.CharField(max_length=80, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    settled_at = models.DateTimeField(null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        managed = False
+        db_table = 'ai_usage"."financial_reservation'
+
+
 class CapabilityActivation(models.Model):
     """Tenant-scoped activation of a published global capability."""
 

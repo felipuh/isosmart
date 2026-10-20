@@ -55,6 +55,8 @@ def bind_trusted_tenant_context_in_transaction(
 def trusted_tenant_context(identity, *, actor_id, trace_id, using="default"):
     """Set and verify transaction-local context from a trusted identity object."""
 
+    if not isinstance(identity, TrustedTenantIdentity):
+        raise TypeError("identity must be a TrustedTenantIdentity")
     connection = transaction.get_connection(using)
     if connection.in_atomic_block:
         raise RuntimeError(

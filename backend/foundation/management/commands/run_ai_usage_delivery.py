@@ -15,6 +15,8 @@ class Command(BaseCommand):
         parser.add_argument("--tenant-id", required=True)
         parser.add_argument("--worker-id", default="ai-usage-delivery-worker")
         parser.add_argument("--once", action="store_true")
+        parser.add_argument("--recover-exhausted-outbox-id")
+        parser.add_argument("--reason")
 
     def handle(self, *args, **options):
         try:
@@ -25,10 +27,23 @@ class Command(BaseCommand):
             raise CommandError("--tenant-id must be a UUID") from exc
         dispatcher = AIUsageDelivery()
         try:
+            recovery_id = options["recover_exhausted_outbox_id"]
+            if recovery_id:
+                if not options["reason"]:
+                    raise CommandError("--reason is required with --recover-exhausted-outbox-id")
+                recovered = dispatcher.recover_exhausted(
+                    identity=identity,
+                    outbox_id=UUID(recovery_id),
+                    actor_id=options["worker_id"],
+                    trace_id=uuid4(),
+                    reason=options["reason"],
+                )
+                self.stdout.write(f"AI usage delivery recovery scheduled outbox={recovered}")
+                return
             result = dispatcher.deliver_next(
                 identity=identity, worker_id=options["worker_id"], trace_id=uuid4()
             )
-        except RuntimeError as exc:
+        except (RuntimeError, ValueError) as exc:
             raise CommandError(str(exc)) from exc
         if result is None:
             self.stdout.write("no eligible AI usage delivery")

@@ -19,7 +19,10 @@ from django.db import transaction
 from django.db.models import Max
 from django.utils import timezone
 
-from .ai_usage import AIUsageLedger, AIUsageReplay, ProviderInferenceResult, run_metered_capability
+from .ai_usage import (
+    AIFinancialGuardrailBlocked, AIUsageLedger, AIUsageReplay,
+    ProviderInferenceResult, run_metered_capability,
+)
 from .audit import AuditAppend, AuditWriterService
 from .canonical import canonical_hash, canonical_json
 from .document_evidence import DocumentEvidenceCommandService
@@ -424,6 +427,8 @@ class ValueDiscoveryService:
                 invocation_id=f"{event_id}:purpose_alignment")
         except AIUsageReplay as exc:
             raise ValueDiscoveryError("AI_USAGE_REPLAY", str(exc)) from exc
+        except AIFinancialGuardrailBlocked as exc:
+            raise ValueDiscoveryError(exc.code, str(exc)) from exc
         result = {"contract_version": CONTRACT_VERSION, "organization_id": str(organization_id), "profile_input_hash": profile_hash,
                   "organization_declared_purpose_reference": "organization_declared_purpose", "agent_run_id": str(execution_id),
                   "execution_mode": provider.execution_mode, "organizational_profile_result": profile_result,

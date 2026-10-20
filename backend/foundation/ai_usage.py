@@ -8,6 +8,7 @@ from uuid import NAMESPACE_URL, uuid5
 
 from django.db import IntegrityError, transaction
 from django.db.models import Q
+from django.conf import settings
 from django.utils import timezone
 
 from .canonical import canonical_hash
@@ -53,6 +54,34 @@ def normalize_usage(usage):
 
 class AIUsageReplay(Exception):
     pass
+
+
+class AIFinancialGuardrailBlocked(Exception):
+    """Raised before any paid-provider network operation is possible."""
+
+    def __init__(self, code, detail):
+        super().__init__(detail)
+        self.code = code
+
+
+def assert_paid_provider_admission(provider):
+    """Keep real inference disabled until AdminApps exposes an authority contract.
+
+    This executes at the common metered edge, immediately before the provider
+    can be called.  A local ISO Smart policy must never be mistaken for the
+    AdminApps-owned entitlement or a cross-product spending cap.
+    """
+    if getattr(provider, "execution_mode", None) != "REAL_AI":
+        return
+    if not getattr(settings, "AI_REAL_INFERENCE_AUTHORIZED", False):
+        raise AIFinancialGuardrailBlocked(
+            "AI_REAL_INFERENCE_NOT_AUTHORIZED",
+            "real provider execution remains operationally disabled",
+        )
+    raise AIFinancialGuardrailBlocked(
+        "AI_FINANCIAL_AUTHORITY_CONTRACT_MISSING",
+        "AdminApps has no authenticated entitlement and central reservation contract",
+    )
 
 
 class AIUsageLedger:
@@ -122,6 +151,10 @@ class AIUsageLedger:
 
 
 def run_metered_capability(*, ledger, capability, provider, context, validate, invocation_id):
+    # This is the sole Value Discovery provider execution path.  The check is
+    # deliberately before both the usage record and provider I/O so an
+    # unauthorized request cannot consume tokens or masquerade as a call.
+    assert_paid_provider_admission(provider)
     record = ledger.reserve(invocation_id=invocation_id, capability=capability, provider=provider)
     started = monotonic()
     response = None

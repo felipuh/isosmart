@@ -26,6 +26,10 @@ class PayloadIntegrityConflict(RuntimeError):
     status_equivalent = 409
 
 
+class OutboxLeaseConflict(RuntimeError):
+    """A worker may only settle the lease it still owns."""
+
+
 class ReceiptResultKind(Enum):
     PROCESSED = "processed"
     IDEMPOTENT_DUPLICATE = "idempotent_duplicate"
@@ -184,6 +188,13 @@ class OutboxDeliveryService:
             identity, actor_id=worker_id, trace_id=trace_id, using=self.using
         ):
             row = TransactionalOutbox.objects.using(self.using).select_for_update().get(pk=outbox_id)
+            if (
+                row.status != TransactionalOutbox.Status.PROCESSING
+                or row.lease_owner != str(worker_id)
+                or row.lease_expires_at is None
+                or row.lease_expires_at <= timezone.now()
+            ):
+                raise OutboxLeaseConflict("outbox delivery lease is no longer owned by this worker")
             row.status = TransactionalOutbox.Status.PUBLISHED
             row.published_at = timezone.now()
             row.lease_owner = None
@@ -202,6 +213,13 @@ class OutboxDeliveryService:
             identity, actor_id=worker_id, trace_id=trace_id, using=self.using
         ):
             row = TransactionalOutbox.objects.using(self.using).select_for_update().get(pk=outbox_id)
+            if (
+                row.status != TransactionalOutbox.Status.PROCESSING
+                or row.lease_owner != str(worker_id)
+                or row.lease_expires_at is None
+                or row.lease_expires_at <= timezone.now()
+            ):
+                raise OutboxLeaseConflict("outbox delivery lease is no longer owned by this worker")
             row.status = TransactionalOutbox.Status.FAILED
             row.lease_owner = None
             row.lease_expires_at = None

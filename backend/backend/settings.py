@@ -111,6 +111,20 @@ ADMIN_APPS_INTEGRATION = {
     'CACHE_TTL': int(os.getenv('ADMIN_APPS_CACHE_TTL', '300')),
     'SYNC_USERS': _env_bool('ADMIN_APPS_SYNC_USERS', default=True),
 }
+
+# AI-usage export stays explicitly disabled until a deployment supplies both
+# the authenticated AdminApps destination and its bounded delivery settings.
+# Keeping this separate from the general AdminApps client prevents inference
+# from acquiring an implicit outbound dependency.
+AI_USAGE_ADMINAPPS_ENDPOINT = os.getenv('AI_USAGE_ADMINAPPS_ENDPOINT', '').strip()
+AI_USAGE_ADMINAPPS_API_KEY = os.getenv('AI_USAGE_ADMINAPPS_API_KEY', '').strip()
+AI_USAGE_ADMINAPPS_DELIVERY_ENABLED = _env_bool('AI_USAGE_ADMINAPPS_DELIVERY_ENABLED', default=False)
+AI_USAGE_ADMINAPPS_TIMEOUT_SECONDS = int(os.getenv('AI_USAGE_ADMINAPPS_TIMEOUT_SECONDS', '5'))
+AI_USAGE_ADMINAPPS_MAX_ATTEMPTS = int(os.getenv('AI_USAGE_ADMINAPPS_MAX_ATTEMPTS', '3'))
+# This is deliberately distinct from the provider URL/key.  Supplying a key
+# never authorizes paid execution: an approved AdminApps entitlement and
+# central budget-reservation contract are also required.
+AI_REAL_INFERENCE_AUTHORIZED = _env_bool('AI_REAL_INFERENCE_AUTHORIZED', default=False)
 ISO_SMART_PRODUCT_CODE = os.getenv('ISO_SMART_PRODUCT_CODE', 'ISO_SMART').strip().upper()
 ALLOW_LOCAL_AUTH_FALLBACK = (
     IS_DEVELOPMENT
