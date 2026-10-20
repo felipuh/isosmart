@@ -1,11 +1,11 @@
 """Cookie-only transport for the existing SimpleJWT authentication contract."""
 
-from rest_framework_simplejwt.authentication import JWTAuthentication
+from integration.sso_auth import Smart3AISSOAuthentication
 from rest_framework.authentication import CSRFCheck
 from rest_framework import exceptions
 
 
-class CookieJWTAuthentication(JWTAuthentication):
+class CookieJWTAuthentication(Smart3AISSOAuthentication):
     """Authenticate a short-lived JWT from an HttpOnly cookie, never a header."""
 
     def authenticate(self, request):

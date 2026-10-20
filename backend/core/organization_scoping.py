@@ -8,6 +8,21 @@ class OrganizationScopedViewSetMixin:
     organization_write_field = 'organization_id'
     require_organization = True
 
+    def check_permissions(self, request):
+        super().check_permissions(request)
+        from integration.authorization import authorize_request
+        authorize_request(request, self)
+
+    def check_object_permissions(self, request, obj):
+        super().check_object_permissions(request, obj)
+        from integration.authorization import authorize_object
+        authorize_object(request, self, obj)
+
+    def get_serializer_class(self):
+        from integration.authorization import AuthorizedSerializerMixin
+        serializer = super().get_serializer_class()
+        return type('Authorized' + serializer.__name__, (AuthorizedSerializerMixin, serializer), {})
+
     def _parse_org_id(self, value):
         if value in (None, ''):
             return None
@@ -26,7 +41,9 @@ class OrganizationScopedViewSetMixin:
         if query_org_id and token_org_id and query_org_id != token_org_id:
             raise PermissionDenied('organization_id no coincide con el token activo')
 
-        organization_id = query_org_id or token_org_id
+        if not token_org_id:
+            raise PermissionDenied('Se requiere organización autenticada')
+        organization_id = token_org_id
         if self.require_organization and not organization_id:
             raise ValidationError({'organization_id': 'organization_id requerido'})
 

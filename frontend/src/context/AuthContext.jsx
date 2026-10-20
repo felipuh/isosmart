@@ -77,16 +77,24 @@ export const AuthProvider = ({ children }) => {
   };
 
   // Login
-  const login = async (email, password, organizationId = null) => {
+  const login = async (email, password, organizationId = null, secondFactor = null) => {
     try {
       const normalizedEmail = String(email || '').trim().toLowerCase();
-      const payload = { email: normalizedEmail, password };
+      const payload = secondFactor || { email: normalizedEmail, password };
       if (organizationId) {
         payload.organization_id = organizationId;
       }
 
+      clearAuth();
       await api.get('/auth/csrf/');
       const response = await api.post('/auth/login/', payload);
+      if (response.data.requires_2fa === true) {
+        clearAuth();
+        return { success: false, requires_2fa: true, challenge_token: response.data.challenge_token };
+      }
+      if (response.data.requires_2fa !== false || !response.data.user || !response.data.profile) {
+        throw new Error('Respuesta de autenticación incompleta.');
+      }
       const { user: userData, profile: profileData, organizations: orgs } = response.data;
 
       // Actualizar estado
@@ -106,6 +114,7 @@ export const AuthProvider = ({ children }) => {
         securityAlert: response.data.security_alert || null,
       };
     } catch (error) {
+      clearAuth();
       const statusCode = error?.response?.status;
       if (statusCode && (statusCode === 400 || statusCode === 401)) {
         console.warn('Login rechazado por credenciales o autorización.');
@@ -136,8 +145,8 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       await api.post('/auth/logout/');
-    } catch (error) {
-      console.error('Error en logout:', error);
+    } catch {
+      console.error('No fue posible confirmar la revocación central.');
     } finally {
       clearAuth();
     }
@@ -163,8 +172,9 @@ export const AuthProvider = ({ children }) => {
         await loadCurrentUser();
       }
       return true;
-    } catch (error) {
-      console.error('Error refrescando token:', error);
+    } catch {
+      console.error('La sesión requiere autenticación central nueva.');
+      clearAuth();
       return false;
     }
   };

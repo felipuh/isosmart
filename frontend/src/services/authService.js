@@ -5,8 +5,8 @@ import api from './api';
 
 const authService = {
   // Login
-  login: async (email, password, organizationId = null) => {
-    const payload = { email, password };
+  login: async (email, password, organizationId = null, secondFactor = null) => {
+    const payload = secondFactor || { email, password };
     if (organizationId) {
       payload.organization_id = organizationId;
     }
