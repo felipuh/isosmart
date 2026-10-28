@@ -256,20 +256,17 @@ class MeView(APIView):
     def get(self, request):
         user = request.user
         
-        # Obtener perfil activo (del token o primario)
-        organization_id = getattr(request, 'organization_id', None)
-        
-        if organization_id:
-            profile = UserProfile.objects.filter(
-                user=user,
-                organization_id=organization_id,
-                is_active=True
-            ).select_related('organization').first()
-        else:
-            profile = UserProfile.objects.filter(
-                user=user,
-                is_active=True
-            ).order_by('-is_primary').select_related('organization').first()
+        # Cookie authentication already validated this exact central-bound profile.
+        # UserProfile has no is_primary field; never select an arbitrary membership.
+        from rest_framework.exceptions import AuthenticationFailed
+        if not request.auth:
+            raise AuthenticationFailed('Se requiere sesión central.')
+        profile = UserProfile.objects.filter(
+            pk=request.auth.get('profile_id'), user=user,
+            organization_id=request.auth.get('organization_id'), is_active=True,
+        ).select_related('organization').first()
+        if profile is None:
+            raise AuthenticationFailed('Perfil de sesión no vigente.')
         
         # Obtener todas las organizaciones
         all_profiles = UserProfile.objects.filter(
