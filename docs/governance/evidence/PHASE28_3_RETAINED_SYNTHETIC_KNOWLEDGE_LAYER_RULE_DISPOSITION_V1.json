@@ -1,0 +1,34 @@
+{
+  "candidate_id": "01a0682b-dfc8-7b49-a601-f9bda29a70a5",
+  "canonicalization_version": "iso-smart-retained-evidence-canonical-json-v1",
+  "created_manifest_hash": "9ab80f4b0208e7dac971a0759df0bdb5c28392aa423ae11cbc0d483abb739a75",
+  "disposed_at": "2026-09-03T16:48:30.391864+00:00",
+  "disposition_material_hash": "964b632537323764de35f9132bf7e63966df29dc89d70c1166e432d4e6436b5c",
+  "disposition_schema": "governed-target-application-evidence-disposition/v1",
+  "evidence_state": "DISPOSED_WITH_RETAINED_EVIDENCE",
+  "post_teardown_verification": {
+    "curator_and_sod_verified": true,
+    "current_leaf_proof_verified": true,
+    "database_reconstructed": false,
+    "governance_cross_links_verified": true,
+    "manifest_verified": true,
+    "preflight_audit_material_hash": "92da03843ae147bee659f1592dbfd681e0fbc84c80939c4721a5c656eff985f9",
+    "preflight_operation_material_hash": "c4cf050ffaa2405d48d679df08f93cb153618c8e2647f2107b3d0b5d15135b4a",
+    "preflight_outcome": "ELIGIBLE_FOR_LATER_PUBLICATION_GATE",
+    "root_candidate_hashes_verified": true,
+    "source_manifest_verified": true,
+    "tampered_manifest_rejected": true,
+    "verified_at": "2026-09-03T16:48:30.391864+00:00"
+  },
+  "post_teardown_verification_hash": "99c04ee9ec62a32083594538c766fbdc8f8a745ec9966fefa745b766248941d6",
+  "run_id": "6fb6fdd0-9b03-5f54-9041-9e80bc90d0d5",
+  "teardown_evidence": {
+    "container_absent": true,
+    "database_absent": true,
+    "roles_absent": true,
+    "temp_absent": true,
+    "verification_basis": "postgres_foundation_gate scoped drop and absence checks completed before this offline process",
+    "volume_absent": true
+  },
+  "teardown_evidence_hash": "4cdeb8277c261505f5648b18bb4e200b6ac6c51e65dd56986de8868b93241ebe"
+}

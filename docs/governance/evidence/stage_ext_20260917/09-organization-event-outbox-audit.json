@@ -1,0 +1,18 @@
+{
+  "audit_counts": {
+    "opportunity.created": 1,
+    "organization.created": 2,
+    "process.created": 1
+  },
+  "event_counts": {
+    "opportunity.created": 1,
+    "organization.created": 2,
+    "process.created": 1
+  },
+  "organization_audit_id": "01a0b29e-4a3e-7532-b5a3-bef2d5fa9157",
+  "organization_event_id": "9f8a9ee1-7c5f-4718-8942-b9a31e5bf6fd",
+  "organization_outbox_id": "4be4f9ae-5d11-4ba0-84bd-57919ce431f9",
+  "outbox_count": 4,
+  "rollback_left_no_extra_rows": true,
+  "verdict": "PASS"
+}

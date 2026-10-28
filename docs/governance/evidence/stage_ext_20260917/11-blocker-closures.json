@@ -1,0 +1,14 @@
+{
+  "basis": [
+    "native AdminApps producer and outbox delivered to authenticated ingress with persistent receipts",
+    "authorized QMS command created multiple organizations and passed real PostgreSQL event/outbox/audit and rollback checks"
+  ],
+  "closed": [
+    "P1-EXTERNAL-ADMINAPPS-AUTHORITY-BOUNDARY",
+    "P1-ORGANIZATION-NATIVE-PRODUCER-MISSING"
+  ],
+  "p0": 0,
+  "p1": 0,
+  "scope": "Stage EXT only; historical Phase 31.4 retry findings preserved",
+  "verdict": "PASS"
+}

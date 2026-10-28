@@ -1,0 +1,258 @@
+{
+  "adminapps": {
+    "delivery_stdout": "Delivered event 98a82759-5f06-49a2-b8d9-238bbfe6783c\nDelivered event 813f55b8-40cf-49df-bf69-ae28985c5a73",
+    "entitlement": {
+      "enabled": true,
+      "id": "17c0f862-908e-41f2-9e41-1d83749d077e",
+      "product": "ISO_SMART",
+      "readback": "17c0f862-908e-41f2-9e41-1d83749d077e",
+      "scopes": [
+        "qms"
+      ],
+      "status": "active"
+    },
+    "membership": {
+      "id": "87270948-a73e-41c2-a120-e0b4ff1ee8ab",
+      "role": "superadmin",
+      "source": "AdminApps UserOrganization",
+      "synthetic_test_authority": true
+    },
+    "outbox_after_delivery": [
+      {
+        "attempts": 1,
+        "created_at": "2026-09-23T19:55:17.107983+00:00",
+        "delivered_at": "2026-09-23T19:55:18.393978+00:00",
+        "envelope": {
+          "actor_id": "597130f2-9e2a-45af-9a17-a83298de0206",
+          "adminapps_tenant_id": "ac312d29-2f3e-4a12-9094-5838b9484780",
+          "aggregate_id": "ac312d29-2f3e-4a12-9094-5838b9484780",
+          "aggregate_type": "tenant",
+          "correlation_id": null,
+          "event_id": "98a82759-5f06-49a2-b8d9-238bbfe6783c",
+          "event_type": "tenant.provisioned",
+          "occurred_at": "2026-09-23T19:55:17.107130+00:00",
+          "payload": {
+            "adminapps_status": "trial",
+            "display_name": "Retry 17 Evidence Tenant",
+            "lifecycle_status": "active"
+          },
+          "schema_version": 1,
+          "source": "adminapps",
+          "source_version": 1,
+          "trace_id": "45b13cbe-9be8-418d-943b-8d4463d9eb1f"
+        },
+        "id": "98a82759-5f06-49a2-b8d9-238bbfe6783c",
+        "last_error": "",
+        "source_version": 1,
+        "status": "delivered"
+      },
+      {
+        "attempts": 1,
+        "created_at": "2026-09-23T19:55:17.180348+00:00",
+        "delivered_at": "2026-09-23T19:55:18.444640+00:00",
+        "envelope": {
+          "actor_id": "597130f2-9e2a-45af-9a17-a83298de0206",
+          "adminapps_tenant_id": "ac312d29-2f3e-4a12-9094-5838b9484780",
+          "aggregate_id": "ac312d29-2f3e-4a12-9094-5838b9484780",
+          "aggregate_type": "tenant",
+          "correlation_id": null,
+          "event_id": "813f55b8-40cf-49df-bf69-ae28985c5a73",
+          "event_type": "tenant.updated",
+          "occurred_at": "2026-09-23T19:55:17.179811+00:00",
+          "payload": {
+            "adminapps_status": "active",
+            "display_name": "Retry 17 Evidence Tenant",
+            "lifecycle_status": "active"
+          },
+          "schema_version": 1,
+          "source": "adminapps",
+          "source_version": 2,
+          "trace_id": "55003698-c71a-4de5-811c-403d890193ba"
+        },
+        "id": "813f55b8-40cf-49df-bf69-ae28985c5a73",
+        "last_error": "",
+        "source_version": 2,
+        "status": "delivered"
+      }
+    ],
+    "outbox_before_delivery": [
+      {
+        "attempts": 0,
+        "created_at": "2026-09-23T19:55:17.107983+00:00",
+        "delivered_at": null,
+        "envelope": {
+          "actor_id": "597130f2-9e2a-45af-9a17-a83298de0206",
+          "adminapps_tenant_id": "ac312d29-2f3e-4a12-9094-5838b9484780",
+          "aggregate_id": "ac312d29-2f3e-4a12-9094-5838b9484780",
+          "aggregate_type": "tenant",
+          "correlation_id": null,
+          "event_id": "98a82759-5f06-49a2-b8d9-238bbfe6783c",
+          "event_type": "tenant.provisioned",
+          "occurred_at": "2026-09-23T19:55:17.107130+00:00",
+          "payload": {
+            "adminapps_status": "trial",
+            "display_name": "Retry 17 Evidence Tenant",
+            "lifecycle_status": "active"
+          },
+          "schema_version": 1,
+          "source": "adminapps",
+          "source_version": 1,
+          "trace_id": "45b13cbe-9be8-418d-943b-8d4463d9eb1f"
+        },
+        "id": "98a82759-5f06-49a2-b8d9-238bbfe6783c",
+        "source_version": 1,
+        "status": "pending"
+      },
+      {
+        "attempts": 0,
+        "created_at": "2026-09-23T19:55:17.180348+00:00",
+        "delivered_at": null,
+        "envelope": {
+          "actor_id": "597130f2-9e2a-45af-9a17-a83298de0206",
+          "adminapps_tenant_id": "ac312d29-2f3e-4a12-9094-5838b9484780",
+          "aggregate_id": "ac312d29-2f3e-4a12-9094-5838b9484780",
+          "aggregate_type": "tenant",
+          "correlation_id": null,
+          "event_id": "813f55b8-40cf-49df-bf69-ae28985c5a73",
+          "event_type": "tenant.updated",
+          "occurred_at": "2026-09-23T19:55:17.179811+00:00",
+          "payload": {
+            "adminapps_status": "active",
+            "display_name": "Retry 17 Evidence Tenant",
+            "lifecycle_status": "active"
+          },
+          "schema_version": 1,
+          "source": "adminapps",
+          "source_version": 2,
+          "trace_id": "55003698-c71a-4de5-811c-403d890193ba"
+        },
+        "id": "813f55b8-40cf-49df-bf69-ae28985c5a73",
+        "source_version": 2,
+        "status": "pending"
+      }
+    ],
+    "tenant_creation": {
+      "id": "ac312d29-2f3e-4a12-9094-5838b9484780",
+      "name": "Retry 17 Evidence Tenant",
+      "readback": "ac312d29-2f3e-4a12-9094-5838b9484780",
+      "status": "trial"
+    },
+    "user_creation": {
+      "active": true,
+      "email": "retry17-owner@example.test",
+      "id": "597130f2-9e2a-45af-9a17-a83298de0206",
+      "readback": "597130f2-9e2a-45af-9a17-a83298de0206"
+    }
+  },
+  "artifact_schema": "phase31.4-v2.5-disposable-evidence-stage-ext/v1",
+  "completed_at": "2026-09-23T19:55:20.327317+00:00",
+  "identities": [
+    {
+      "equality": true,
+      "identity": "external_adminapps_tenant_id",
+      "provenance": "ADMINAPPS_EXTERNAL_TENANT",
+      "readback": "ac312d29-2f3e-4a12-9094-5838b9484780",
+      "run_id": "Phase 31.4 V2.5 Clean Retry 17",
+      "source": "AdminApps Organization",
+      "source_service": "AdminApps",
+      "timestamp": "2026-09-23T19:55:20.327263+00:00",
+      "type": "uuid",
+      "value": "ac312d29-2f3e-4a12-9094-5838b9484780"
+    },
+    {
+      "equality": true,
+      "identity": "external_adminapps_actor_user_id",
+      "provenance": "ADMINAPPS_EXTERNAL_ACTOR",
+      "readback": "597130f2-9e2a-45af-9a17-a83298de0206",
+      "run_id": "Phase 31.4 V2.5 Clean Retry 17",
+      "source": "AdminApps User",
+      "source_service": "AdminApps",
+      "timestamp": "2026-09-23T19:55:20.327284+00:00",
+      "type": "uuid",
+      "value": "597130f2-9e2a-45af-9a17-a83298de0206"
+    },
+    {
+      "equality": true,
+      "identity": "iso_smart_tenant_projection_id",
+      "provenance": "TENANT_PROJECTION_READBACK",
+      "readback": "c6b0937f-05c1-492a-9546-65c469fa4ea4",
+      "run_id": "Phase 31.4 V2.5 Clean Retry 17",
+      "source": "ISO Smart TenantProjection",
+      "source_service": "ProjectionWriterService",
+      "timestamp": "2026-09-23T19:55:20.327288+00:00",
+      "type": "uuid",
+      "value": "c6b0937f-05c1-492a-9546-65c469fa4ea4"
+    },
+    {
+      "equality": true,
+      "identity": "iso_smart_user_projection_id",
+      "projection_event_authority": "SYNTHETIC_HARNESS_USER_PROJECTION_EVENT",
+      "provenance": "USER_PROJECTION_READBACK",
+      "readback": "205aa6c9-6b46-45ef-9dc4-c7ea308dcb55",
+      "run_id": "Phase 31.4 V2.5 Clean Retry 17",
+      "source": "ISO Smart UserProjection",
+      "source_service": "ProjectionWriterService",
+      "timestamp": "2026-09-23T19:55:20.327292+00:00",
+      "type": "uuid",
+      "value": "205aa6c9-6b46-45ef-9dc4-c7ea308dcb55"
+    },
+    {
+      "equality": true,
+      "identity": "qms_organization_id",
+      "provenance": "QMS_NATIVE_ORGANIZATION",
+      "readback": "c6cf6b88-9a2d-4920-ae90-d971ee4585fb",
+      "run_id": "Phase 31.4 V2.5 Clean Retry 17",
+      "source": "ISO Smart QMS Organization",
+      "source_service": "QmsOrganizationCommandService",
+      "timestamp": "2026-09-23T19:55:20.327296+00:00",
+      "type": "uuid",
+      "value": "c6cf6b88-9a2d-4920-ae90-d971ee4585fb"
+    },
+    {
+      "equality": true,
+      "identity": "process_id",
+      "provenance": "QMS_NATIVE_PROCESS",
+      "readback": "7018612e-58dc-4a91-b163-9005dc413bba",
+      "run_id": "Phase 31.4 V2.5 Clean Retry 17",
+      "source": "ISO Smart QMS Process",
+      "source_service": "QmsContextCommandService",
+      "timestamp": "2026-09-23T19:55:20.327309+00:00",
+      "type": "uuid",
+      "value": "7018612e-58dc-4a91-b163-9005dc413bba"
+    }
+  ],
+  "iso_smart_ingress_receipts": [
+    {
+      "adminapps_tenant_id": "ac312d29-2f3e-4a12-9094-5838b9484780",
+      "authenticated": true,
+      "event_id": "98a82759-5f06-49a2-b8d9-238bbfe6783c",
+      "payload_hash": "d46524313e4a95da2cf6d72b14cf82145128d7ada41f2d24d4f3c053dc540856",
+      "processed_at": "2026-09-23 19:55:18.387054+00",
+      "projection_id": "c6b0937f-05c1-492a-9546-65c469fa4ea4",
+      "received_at": "2026-09-23 19:55:18.373283+00",
+      "source_version": 1,
+      "status": "processed",
+      "trace_id": "45b13cbe-9be8-418d-943b-8d4463d9eb1f"
+    },
+    {
+      "adminapps_tenant_id": "ac312d29-2f3e-4a12-9094-5838b9484780",
+      "authenticated": true,
+      "event_id": "813f55b8-40cf-49df-bf69-ae28985c5a73",
+      "payload_hash": "c3b5f48cbcfd166adc79cbb45b2cfad7a54a797d7a639f24bf7d794d7558f4a3",
+      "processed_at": "2026-09-23 19:55:18.440821+00",
+      "projection_id": "c6b0937f-05c1-492a-9546-65c469fa4ea4",
+      "received_at": "2026-09-23 19:55:18.43331+00",
+      "source_version": 2,
+      "status": "processed",
+      "trace_id": "55003698-c71a-4de5-811c-403d890193ba"
+    }
+  ],
+  "run_id": "Phase 31.4 V2.5 Clean Retry 17",
+  "started_at": "2026-09-23T19:55:12.526449+00:00",
+  "status": "PASS",
+  "user_projection_event": {
+    "classification": "SYNTHETIC_HARNESS",
+    "event_id": "0f411f0e-cffe-4a2e-b07e-4544ef1dc56d",
+    "upstream_outbox_delivery": false
+  }
+}

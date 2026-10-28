@@ -1,0 +1,24 @@
+{
+  "aggregate_type": "tenant",
+  "contract_test": "AdminApps native envelope accepted without translation by ISO Smart validate_projection_event",
+  "display_name": "mutable snapshot",
+  "event_types": [
+    "tenant.provisioned",
+    "tenant.updated",
+    "tenant.suspended"
+  ],
+  "schema_version": 1,
+  "source": "adminapps",
+  "source_versions": [
+    1,
+    2,
+    3
+  ],
+  "status_mapping": {
+    "active": "active",
+    "inactive": "suspended",
+    "suspended": "suspended",
+    "trial": "active"
+  },
+  "verdict": "PASS"
+}

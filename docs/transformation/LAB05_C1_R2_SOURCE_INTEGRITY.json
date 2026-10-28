@@ -1,0 +1,390 @@
+[
+  {
+    "path": "backend/authentication/migrations/0001_initial.py",
+    "sha256": "b81abff899bbe141711e7bea59f66436dc30dff7bd1c5b01ba905c38b43da80d"
+  },
+  {
+    "path": "backend/authentication/migrations/0002_userprofile.py",
+    "sha256": "bd161564e5cf46aa3b8ea9e8d6c804a246a7e2328370d4bf2ab61c2f18e1a10f"
+  },
+  {
+    "path": "backend/authentication/migrations/0003_alter_user_first_name_alter_user_is_active_and_more.py",
+    "sha256": "b267c13dd50089745976f8ac91d9d1edd82bff45b2292d550894f6e8823c69e4"
+  },
+  {
+    "path": "backend/authentication/migrations/0004_refresh_token_hash.py",
+    "sha256": "d91849bf5b97e05f73b887eba2f978a84e3f28370f0300fe291eb092eae8848e"
+  },
+  {
+    "path": "backend/authentication/migrations/0005_password_reset_token.py",
+    "sha256": "6243d3f739ebb89debd32f9520d439985552f42583745a7ff4da2de49c1daaeb"
+  },
+  {
+    "path": "backend/authentication/migrations/0006_user_login_lockout.py",
+    "sha256": "05e4cf9697742436fee8d6d13c8f5544f16bb806da8ec6c4c53b81cddd12bf45"
+  },
+  {
+    "path": "backend/authentication/migrations/0007_user_must_change_password.py",
+    "sha256": "6cd10da5a1a88b84fd76839d7812f30343a07b64f14cc75d05975735b06dd117"
+  },
+  {
+    "path": "backend/authentication/migrations/0008_user_password_history.py",
+    "sha256": "60bcd608a7597b2d417f192d67df157d2ea0db4e71c267833b3b523050762d04"
+  },
+  {
+    "path": "backend/authentication/migrations/0009_user_temporary_password_set_at.py",
+    "sha256": "40fe6c85bb847597d50bba7310697bb43ba8dd8f91012a1feb5f9186f8cbb9e9"
+  },
+  {
+    "path": "backend/authentication/migrations/0010_alter_refreshtokenblacklist_token_hash.py",
+    "sha256": "cf40a77d8959fddfac401136bb5d74c6cd48296c084ba2759e32d99f8fa039ae"
+  },
+  {
+    "path": "backend/authentication/migrations/0011_application_auth_runtime_privileges.py",
+    "sha256": "dc1b25f98d0041def97c96400a54f31e4ec33824b819df920029d011db481c8f"
+  },
+  {
+    "path": "backend/authentication/migrations/__init__.py",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "backend/authentication/models.py",
+    "sha256": "8636ac5d754085b93fc8063c7d36ab1f8d7752219dfff21f28608ba170e195c2"
+  },
+  {
+    "path": "backend/backend/settings.py",
+    "sha256": "14255f0ac7051c535443dac1c255d1042a6de8772e8934089dee0d5cfd9b67bf"
+  },
+  {
+    "path": "backend/core/migrations/0001_initial.py",
+    "sha256": "a87ecf352ea50bc669fbb65cfcbc414d55ba6e536a9d3a359e0a861807a48e0b"
+  },
+  {
+    "path": "backend/core/migrations/0002_alter_document_file_path.py",
+    "sha256": "dae3d22877cc65e6b96992934dbd2930e4f009186d2c589fa7532015914b77c3"
+  },
+  {
+    "path": "backend/core/migrations/0003_organization_userprofile_organizationsettings_and_more.py",
+    "sha256": "ae670457b32210ed7c53bba4f4083de7f33f4a6ca4b3f3d15ec95eba4313a551"
+  },
+  {
+    "path": "backend/core/migrations/0004_delete_userprofile.py",
+    "sha256": "764a840ec8f1e15bbda2a85b33eb0225c1366b5664ec36ba92de6c4bf7f03504"
+  },
+  {
+    "path": "backend/core/migrations/0005_organization_external_id.py",
+    "sha256": "72f5662afb4a2378854942b2760cbf4cac067c42b03bfd13263f22e1e5364d9b"
+  },
+  {
+    "path": "backend/core/migrations/0006_onboarding_and_multi_standard.py",
+    "sha256": "f91921a1d7809e9bad29b5bbe3781f81e88cbd8e8ddfb6a60dc1e4091289009b"
+  },
+  {
+    "path": "backend/core/migrations/0007_add_preferred_language_to_settings.py",
+    "sha256": "2bd0201b67f503b943518fe26951ca39e7065adaa2cf8db9220078dab798bf3d"
+  },
+  {
+    "path": "backend/core/migrations/0008_organizationsettings_preferred_language.py",
+    "sha256": "452602ab47ad38a4c6bbfd853cffe5f739f804f84a51c631d5e2a6d65bbc73bd"
+  },
+  {
+    "path": "backend/core/migrations/0009_organizationsettings_onboarding_profile_and_tone.py",
+    "sha256": "c39b50bf53c2a53a813112d5bc9d388b96262a6c5c66f6719d10ccd78c75decb"
+  },
+  {
+    "path": "backend/core/migrations/0010_onboardinginsightsnapshot.py",
+    "sha256": "a16041500b403e33753e62af94485ba37ab46045845b57edb1c603059394f87f"
+  },
+  {
+    "path": "backend/core/migrations/0011_billing_models.py",
+    "sha256": "9ac251d2225eaf6c9bdd433fbfe108b24cfd74218f1ff6528ec92c87e3ce12c6"
+  },
+  {
+    "path": "backend/core/migrations/0012_billingpayment_evidence_fields.py",
+    "sha256": "577838bafa8cb700760f916ded48420c2eecb78d37a07f86471d5e3cce56592f"
+  },
+  {
+    "path": "backend/core/migrations/0013_contextanalysis_organization_document_organization_and_more.py",
+    "sha256": "172bda4b3d82675955b271546d5c90f106512551b44629965a6cba59f5b67c40"
+  },
+  {
+    "path": "backend/core/migrations/0014_backfill_and_enforce_organization_not_null.py",
+    "sha256": "b2e53af18089c54a77ce33a04efcb2b2bdb5e43762d3c0fb08355c1af4d0ad55"
+  },
+  {
+    "path": "backend/core/migrations/0015_notificationdelivery.py",
+    "sha256": "422069208bc9e419516a1d778118f2311ffb336cdeba9afb28a4937e19136c61"
+  },
+  {
+    "path": "backend/core/migrations/0016_contextanalysis_climate_fields.py",
+    "sha256": "121e9e89beb0aab4ad288d0e174486326a8112751ed998ca6754abc43413b3ad"
+  },
+  {
+    "path": "backend/core/migrations/0017_rename_notificatio_organiz_6e1f3f_idx_notificatio_organiz_a85fc0_idx_and_more.py",
+    "sha256": "2160c6ca3ab839092ce7a5360b9132db1b851752352acfa5c1c1e1c816bf0b23"
+  },
+  {
+    "path": "backend/core/migrations/0018_externalcontextsignal_environmentalriskalert_and_more.py",
+    "sha256": "1ed01320c67b921a38d97b93dd866115caf2d871fabd6818d19476a798eb1748"
+  },
+  {
+    "path": "backend/core/migrations/0019_featureflag.py",
+    "sha256": "5148da55fba6c6a1ac8365cb95c62068acdcf9394ae93b994eb400e9aee70066"
+  },
+  {
+    "path": "backend/core/migrations/__init__.py",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "backend/core/models.py",
+    "sha256": "95e4fbfa931861c27e2722523a096e96a7eb19a4a8641635fa9c888fc3fb418d"
+  },
+  {
+    "path": "backend/foundation/migrations/0001_foundation_tenant_projection.py",
+    "sha256": "0d72f26245c3637b579e5289b1ee99b87667a1061a245e950992724cb7d2dc51"
+  },
+  {
+    "path": "backend/foundation/migrations/0002_projection_organization_user_foundation.py",
+    "sha256": "1f538ca4c72309fa670af773f91fd8a62be2732a3222ce3067dbd79fd5e9b537"
+  },
+  {
+    "path": "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py",
+    "sha256": "dadfad2c14468352f9f8fc37463f5d689029b98c40e026270223dac5e79613fc"
+  },
+  {
+    "path": "backend/foundation/migrations/0004_qms_harmonized_context_foundation.py",
+    "sha256": "045043275245e5d8068a8e03d122f5fe34b8f9f60b020336e61881550ecea125"
+  },
+  {
+    "path": "backend/foundation/migrations/0005_risk_opportunity_objective_foundation.py",
+    "sha256": "96ab33a18252dc0c2e6142f7afdc02a165349d15d50b290b4092c844a1996e86"
+  },
+  {
+    "path": "backend/foundation/migrations/0006_change_performance_measurement_foundation.py",
+    "sha256": "033242bd6fe801da0b090a332b9f6d1b07dba77027a0334d1830e845cd51aa95"
+  },
+  {
+    "path": "backend/foundation/migrations/0007_document_evidence_foundation.py",
+    "sha256": "c7f6a2030c9155714093a21fadb571a1cdeb8a121be5598540d4807af62283ec"
+  },
+  {
+    "path": "backend/foundation/migrations/0008_evidence_coverage_normative_core_foundation.py",
+    "sha256": "285aecb34d5f7e8c1a1273c9622cde7933809949ac7bdbfca04e577e9e762032"
+  },
+  {
+    "path": "backend/foundation/migrations/0009_knowledge_layer_foundation.py",
+    "sha256": "412c645974635959c74a446f64dc0a9b6dfd2a1a50a6a2e346698850e998effc"
+  },
+  {
+    "path": "backend/foundation/migrations/0010_governed_recommendation_foundation.py",
+    "sha256": "c4f37a9a3a8d0d20a049e4e1cc9c0e04feb947cbeec9cea18fa89b7964f57b79"
+  },
+  {
+    "path": "backend/foundation/migrations/0011_agent_definition_run_provenance_foundation.py",
+    "sha256": "cdb23edcad75e8a8781815dac847359a368b64d8ea4b607a40d01d5296c863a2"
+  },
+  {
+    "path": "backend/foundation/migrations/0012_agent_decision_human_decision_gate_foundation.py",
+    "sha256": "7f280e24a8e95858b8144aa6a85fc645245aa2c2d3c2ad5700dfbe19ac0f0fdc"
+  },
+  {
+    "path": "backend/foundation/migrations/0013_action_execution_preparation_authorization_foundation.py",
+    "sha256": "06177fde1c25d884602a41d03df6d2625e8d15df18d7c66bffdb047348abf34b"
+  },
+  {
+    "path": "backend/foundation/migrations/0014_action_execution_synthetic_foundation.py",
+    "sha256": "ee0e42a7d45803f633ca40d9b0ca20987a20acfdaf3452ee81d721cec29ada33"
+  },
+  {
+    "path": "backend/foundation/migrations/0015_first_controlled_qms_mutation_poc.py",
+    "sha256": "5e297591c8096938c90b6748d0d3ed22a8099cf8f4537e7f65f8bc6fa5beaba3"
+  },
+  {
+    "path": "backend/foundation/migrations/0016_controlled_execution_recovery_hardening.py",
+    "sha256": "e922ff20285751193382a17d9fe7e71726511bff659f4e66b97748e6ad43cdd5"
+  },
+  {
+    "path": "backend/foundation/migrations/0017_effectiveness_check_foundation.py",
+    "sha256": "580f16d1cdb10c30bae8f3e3c1667c3c4d2552b895fc9dea053d2c9b6adfaa38"
+  },
+  {
+    "path": "backend/foundation/migrations/0018_governed_learning_foundation.py",
+    "sha256": "703a85885a67df953f38ef35302205caeddea249104683f4f751ab20ece0696b"
+  },
+  {
+    "path": "backend/foundation/migrations/0019_learning_proposal_review_application_authorization_foundation.py",
+    "sha256": "c188b638124404bba10cae4c94a678053d49d7a1d07c6e455a48e46524064b50"
+  },
+  {
+    "path": "backend/foundation/migrations/0020_exact_learning_delta_target_operation_contract.py",
+    "sha256": "491f21d3422c9c9a5866520f6623d3b9c9bea2139083f0128495dd7207d19894"
+  },
+  {
+    "path": "backend/foundation/migrations/0021_first_governed_knowledge_rule_application_poc.py",
+    "sha256": "e796910c1660f701c3457b020792a158c06d3e58135a7ebba1728bd8b33c7a97"
+  },
+  {
+    "path": "backend/foundation/migrations/0022_inert_rule_publication_activation_runtime_adoption.py",
+    "sha256": "afefd7100a18e5c7324efaeb1af656225b309fd86f08673a8742f7f9f6c2e618"
+  },
+  {
+    "path": "backend/foundation/migrations/0023_retained_synthetic_source_reference_application.py",
+    "sha256": "bb9889af836ae1e92ccf75b868c4c6a8c1ab9ba1e7d63464a2cbd749a872e642"
+  },
+  {
+    "path": "backend/foundation/migrations/0024_adminapps_ingress_receipt.py",
+    "sha256": "3a3e4da38c4119f1d53cb96b4cb1ffc5d93a2df25f76eaa64aaef1cbf66b9ce1"
+  },
+  {
+    "path": "backend/foundation/migrations/0025_iso9000_foundation_gate.py",
+    "sha256": "6fef4ba2dff7590b20d76ea4cb3d4d57574fceaf7b2f31728ac3f9c5a9b3adee"
+  },
+  {
+    "path": "backend/foundation/migrations/0026_question_bank_versioning.py",
+    "sha256": "737771c2662d3858b912ea28ba98bd119b8e8bc63a92179030b4568cc02d668e"
+  },
+  {
+    "path": "backend/foundation/migrations/0027_onboarding_workflow.py",
+    "sha256": "661fa2856faf6cba29df9f794e5f5a553466a28e23408a33ba13534f788bb23c"
+  },
+  {
+    "path": "backend/foundation/migrations/0028_capability_activation.py",
+    "sha256": "91d56a6b89d15654875cc4c20a8cb88d6407a2892674e0f15bb44adebdc1b496"
+  },
+  {
+    "path": "backend/foundation/migrations/0029_context_twin_result_completion.py",
+    "sha256": "3e9b355d2cef303ccd31c1d5f6d8f8b51124659fe8b4103bde62b2f5a8b1e236"
+  },
+  {
+    "path": "backend/foundation/migrations/0030_qms_site.py",
+    "sha256": "ede5b3182d1b077f82976cb21146a2fad91e7d6b1a58915c99d00b63886820bb"
+  },
+  {
+    "path": "backend/foundation/migrations/0031_tenant_standard_pack.py",
+    "sha256": "d6a2101d498f1c8a853335d8dd5393b5f9b0f8b629171b7c182d2692712cbcca"
+  },
+  {
+    "path": "backend/foundation/migrations/0032_global_industry_profile.py",
+    "sha256": "8e25537a38bc06320a57c945355247ccb4ccaa7f0f15aa9b5d73d62810038127"
+  },
+  {
+    "path": "backend/foundation/migrations/0033_tenant_projection_profile_fields.py",
+    "sha256": "ccd8bd00b07b6dbfab8dbf8cdc9117fbfdf2da8b4332706c7d234c6f7724ef9f"
+  },
+  {
+    "path": "backend/foundation/migrations/0034_organization_source_profile_fields.py",
+    "sha256": "325636665c09d43db088a24a6f0c27d9dd96f25bf47f3cd7ac894628f118f633"
+  },
+  {
+    "path": "backend/foundation/migrations/0035_user_projection_profile_fields.py",
+    "sha256": "3041af5459fadb1ca5a8b88188677bc4f62acf9b04403b9528d6cd56c86d779d"
+  },
+  {
+    "path": "backend/foundation/migrations/0036_action_execution_rollback_lineage.py",
+    "sha256": "35f41fb8479aa11d4d694cab5baa70bab57b5e1a3895e7f0de86254dc61188dc"
+  },
+  {
+    "path": "backend/foundation/migrations/0037_qms_audit_capa_foundation.py",
+    "sha256": "cfbd7b41677d98fa46228d9f3f1b19e381fb19070084acb83091a87b9d5bb3d4"
+  },
+  {
+    "path": "backend/foundation/migrations/0038_value_discovery_execution.py",
+    "sha256": "7271626aa0afcd965932d99fbc232e9a04c2aff5734aacd505499777ba025690"
+  },
+  {
+    "path": "backend/foundation/migrations/0039_ai_usage_metering.py",
+    "sha256": "4d21e21c84e31e4f36a309a7a1d55c19df70ad4923d27ffca3e21a6c49726fc3"
+  },
+  {
+    "path": "backend/foundation/migrations/0040_ai_usage_delivery_outbox_retry.py",
+    "sha256": "055e97f8082a1e836b3789ad95471508d8ec6d6ea80c4948bdec59f88468e529"
+  },
+  {
+    "path": "backend/foundation/migrations/0041_ai_usage_retry_exhausted_recovery.py",
+    "sha256": "6d0daea38b26cc0c84bff40fc54d3ccc9c113fe6181608485e51d09df1c819d2"
+  },
+  {
+    "path": "backend/foundation/migrations/0042_ai_financial_guardrails.py",
+    "sha256": "a7646798d8f619b23566fc95025b511655864118db23b2ca1118ba53fdee5258"
+  },
+  {
+    "path": "backend/foundation/migrations/__init__.py",
+    "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+  },
+  {
+    "path": "backend/improvement/migrations/0001_initial.py",
+    "sha256": "8d0bf24a024eb759adfb934995734658ae3c8f8126fc9d49729c0522bf4b114c"
+  },
+  {
+    "path": "backend/improvement/migrations/__init__.py",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "backend/integration/central_auth.py",
+    "sha256": "062d298258b1cbde77e303a14df2a24775e59fc52d5de7ac977e48764e9f42e4"
+  },
+  {
+    "path": "backend/integration/migrations/0001_initial.py",
+    "sha256": "3e9bbe86e4a34426cd4c3890fcf5ace95d44027b4bdbf3bf5eacc5d6f73b426f"
+  },
+  {
+    "path": "backend/integration/migrations/0002_add_document_chunks.py",
+    "sha256": "e2f86b78524dd3939c9a5b57aea3cd27f8d9f34e3c75885e24d8bd5de50d998d"
+  },
+  {
+    "path": "backend/integration/migrations/__init__.py",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "backend/leadership/migrations/0001_initial.py",
+    "sha256": "08f3216f7710fb4d8d842e2fcc9cb7dfeb834b9a9df87af8faf9e1db78a5110b"
+  },
+  {
+    "path": "backend/leadership/migrations/0002_evidence_graph_management_review_approval_culture_aigovernance.py",
+    "sha256": "c54077a5c5e00988e025200bb886a5a6d5eab957a6f70e20f71dff8dd9b0ec5f"
+  },
+  {
+    "path": "backend/leadership/migrations/__init__.py",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "backend/operations/migrations/0001_initial.py",
+    "sha256": "d8a2edcdc579cc13bbd580f06f9aef03e51107e9da128818b18d2497f53e7047"
+  },
+  {
+    "path": "backend/operations/migrations/__init__.py",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "backend/performance/migrations/0001_initial.py",
+    "sha256": "3566635b8a514d2ba1052298bc14c037c747861360e0afd9263ae3d7c484e965"
+  },
+  {
+    "path": "backend/performance/migrations/__init__.py",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "backend/planning/migrations/0001_initial.py",
+    "sha256": "733835ed063b8d7b17a0c236c267b762718daaa21e65235b2257aa45241aa578"
+  },
+  {
+    "path": "backend/planning/migrations/0002_planning_governance_and_ai.py",
+    "sha256": "d5726f0c545e3ed1fc2a4313bf70aaa0eb483659c0a37f6a3e34bce0b099f3e0"
+  },
+  {
+    "path": "backend/planning/migrations/0003_rename_planning_pl_organiz_95d70d_idx_planning_pl_organiz_a1197e_idx_and_more.py",
+    "sha256": "41c69b2b779ce1cc1fffb2dd5a1803253e569aaa112fe1d909acb1778766bf7c"
+  },
+  {
+    "path": "backend/planning/migrations/__init__.py",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "backend/resources/migrations/0001_initial.py",
+    "sha256": "34832dfe350e11a0677e25d3afa0dc1904bad694c65b9e99bb44ef920e9def17"
+  },
+  {
+    "path": "backend/resources/migrations/__init__.py",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

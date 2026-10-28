@@ -1,0 +1,63 @@
+openapi: 3.0.3
+info:
+  title: ISO Smart AI Core API
+  version: 1.0.0
+paths:
+  /v1/onboarding/status:
+    get:
+      summary: Estado del onboarding del tenant
+      responses:
+        '200': {description: OK}
+  /v1/recommendations:
+    get:
+      summary: Lista recomendaciones accionables
+      parameters:
+        - in: query
+          name: clause
+          schema: {type: string}
+      responses:
+        '200': {description: OK}
+  /v1/recommendations/{id}/basis:
+    get:
+      summary: Normative Intelligence Drawer - fundamento normativo y evidencia
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: {type: string, format: uuid}
+      responses:
+        '200': {description: OK}
+  /v1/approvals/{id}/decision:
+    post:
+      summary: Human Decision Gate
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: {type: string, format: uuid}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                decision: {type: string, enum: [approve,reject,request_changes]}
+                comments: {type: string}
+      responses:
+        '200': {description: Decision recorded}
+  /v1/events:
+    post:
+      summary: Publicar evento de dominio autorizado
+      responses:
+        '202': {description: Accepted}
+  /v1/evidence:
+    post:
+      summary: Registrar evidencia con hash y metadatos
+      responses:
+        '201': {description: Created}
+  /v1/learning/iso9000/attempts:
+    post:
+      summary: Registrar intento del Foundation Gate ISO 9000:2026
+      responses:
+        '201': {description: Created}

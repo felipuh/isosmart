@@ -1,0 +1,12 @@
+{
+  "artifact_schema": "phase31.4-clean-retry-7-v2.5-postgresql-environment/v1",
+  "execution_scope": "LIVE_NATIVE_EXECUTION",
+  "postgres_version": "PostgreSQL 18.6 (Debian 18.6-1.pgdg13+2)",
+  "image": "docker.io/library/postgres@sha256:7341002d2b8c7c5bdd7542a671a95b36196c0b5b888daf454ae4fc33ba5346d7",
+  "container_id": "601471580d4842d8bf35827a148df2b06db2204a192eaae86463665c209886ab",
+  "container_name": "phase31_4_clean_retry7_20260917",
+  "database_identifier": "phase31_4_retry7",
+  "creation_timestamp": "2026-09-17T19:24:50.008171187-06:00",
+  "network_scope": "loopback_only",
+  "secrets_persisted": false
+}

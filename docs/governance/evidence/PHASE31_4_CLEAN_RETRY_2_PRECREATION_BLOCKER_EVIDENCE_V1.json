@@ -1,0 +1,73 @@
+{
+  "artifact_schema": "phase31.4-clean-retry-2-precreation-blocker-evidence/v1",
+  "experiment_id": "a3f8fd64-af24-5b31-977a-bcaf8146c563",
+  "status": "NOT_PROMOTED_PRE_DATABASE_CREATION",
+  "verdict": "PHASE 31.4 — CLEAN RETRY 2 — NOT PROMOTED",
+  "entry_verdict": "PHASE 31.4.4 — PROMOTED — ROW-LEVEL EXECUTION-READY V2 CONTRACT COMPLETE; FUTURE CLEAN PHASE 31.4 RETRY ELIGIBLE",
+  "attempts": {
+    "database_creation_attempts": 0,
+    "postgresql_container_attempts": 0,
+    "lifecycle_write_attempts": 0,
+    "runtime_adoption_attempts": 0,
+    "resolver_invocations": 0,
+    "external_api_attempts": 0
+  },
+  "integrity": {
+    "migration_0024_absent": true,
+    "migration_files_0001_0023_checked": 23,
+    "migration_file_hash_mismatches": 0,
+    "protected_files_checked": 223,
+    "protected_file_hash_mismatches": 0,
+    "published_expected_hash_matches": {
+      "backend/foundation/migrations/0022_inert_rule_publication_activation_runtime_adoption.py": "afefd7100a18e5c7324efaeb1af656225b309fd86f08673a8742f7f9f6c2e618",
+      "docs/adr/0017-ephemeral-exact-id-governed-application-adapter.md": "82501ef34edc6d7e76e0971d3d2607c58f229a1dd4dd26696dd227fb7e994edb",
+      "docs/governance/fixtures/PHASE31_4_4_EXPECTED_RETENTION_CLOSURE_V2.json": "80eb1e7f8e857712aa49bcca98f3d27da2b525ba98df16fa34651cf8254cc425",
+      "docs/governance/fixtures/PHASE31_4_4_ROW_LEVEL_EXECUTION_CONTRACT_V2.json": "962ec0b393b49c3c0a2894e32bb9a3246cbf7793cfd600391248634bee56f70b",
+      "docs/governance/fixtures/PHASE31_4_4_TRANSITIVE_RETENTION_SEMANTIC_REGISTRY_V2.json": "58b8278cbe05b0b5056e058bb3db1eecfc4d576cbef3dc5383c5e894900730fb"
+    },
+    "mandatory_inputs_with_observed_but_no_published_expected_hash": {
+      "docs/adr/0018-row-level-execution-ready-v2-contract.md": "f9f6272c72e433241f66e44884b53dc804a667b32950c8ab098df6473ecf6089",
+      "docs/governance/COMPLETE_RETAINED_SYNTHETIC_KNOWLEDGE_LAYER_RULE_LIFECYCLE_POC_POLICY_V2.md": "bf92aa4aafdaa99e27f90fc3c2766cd3a8fa85214f26a4fe7ffbbd1a7397cad2",
+      "docs/governance/PHASE31_4_4_SUPPORTING_FIXTURE_PRODUCER_CONTRACT_V1.md": "9ca5530bf24e0dc90b004b0b88fa86c344646e5991a5c65659eaae3dae2e795e",
+      "docs/governance/evidence/PHASE31_4_4_MANDATORY_READING_LEDGER_V1.json": "90ef2be1190fc86067c274053428904341cf41748ff4734fa4a6cdd4c9c65ae2",
+      "docs/governance/evidence/PHASE31_4_4_OFFLINE_VALIDATION_V1.json": "1517a4c4fe9112802d46da6073c852d5ad3cfb10bc25e5819dfc5615358b2b05",
+      "docs/transformation/PHASE31_4_4_ROW_LEVEL_EXECUTION_CONTRACT_CLOSURE_GATE_REPORT.md": "29ed29048545d3d1cffa02c80edfb9faa5f2c3e58a62d2efe3189f43461dd1b7"
+    },
+    "V2_input_integrity": false,
+    "V2_input_integrity_reason": "The authoritative package does not publish expected SHA-256 values for every mandatory operational V2 input, so their observed bytes cannot be compared with a frozen expected inventory without inventing a baseline."
+  },
+  "producer_discovery": {
+    "required_identifier": "phase31.4.4-exact-support-producer/v1",
+    "required_owner_role": "phase31_4_4_support_owner",
+    "executable_implementation_found": false,
+    "references_found_in_executable_candidate_scope": [
+      "docs/governance/tools/generate_phase31_4_4_contract.py"
+    ],
+    "reference_classification": "contract generator only; no installable SQL/Python producer, role/bootstrap implementation, or Phase 31.4 execution harness",
+    "supporting_fixture_producer_available": false
+  },
+  "blockers": [
+    {
+      "id": "P1-CR2-INPUT-HASH-INVENTORY",
+      "priority": "P1",
+      "predicate": "V2_input_integrity=true",
+      "result": false,
+      "disposition": "STOP_BEFORE_DATABASE_CREATION"
+    },
+    {
+      "id": "P1-CR2-SUPPORT-PRODUCER-ABSENT",
+      "priority": "P1",
+      "predicate": "supporting_fixture_producer_available=true",
+      "result": false,
+      "disposition": "STOP_BEFORE_DATABASE_CREATION"
+    }
+  ],
+  "P0": 0,
+  "P1": 2,
+  "database_created": false,
+  "RuntimeAdoption": false,
+  "RuntimeEffective": false,
+  "phase29_reconstruction_effects": 0,
+  "teardown_required": false,
+  "teardown_reason": "No database, container, volume, roles, policies, functions, credentials, or lifecycle material were created."
+}

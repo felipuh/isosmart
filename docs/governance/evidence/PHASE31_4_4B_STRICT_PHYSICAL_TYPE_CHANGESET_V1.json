@@ -1,0 +1,1416 @@
+{
+  "architecture_changed": false,
+  "artifact_schema": "phase31.4.4b-strict-physical-type-changeset/v1",
+  "business_semantics_changed": false,
+  "correction_count": 34,
+  "corrections": [
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "correction_class": "BIGINT_DESCRIPTIVE_LITERAL_TO_EXECUTION_DERIVED_PERSISTED",
+      "field": "aggregate_version",
+      "member": "eventing.domain_event::90e2d38f-9600-5701-a34c-c9827eafc88c",
+      "note": "The V2.1 descriptive test string was non-executable metadata, not persisted business state.",
+      "physical_type": "bigint NOT NULL",
+      "source_evidence": [
+        "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:54,64",
+        "backend/foundation/eventing.py:65-79",
+        "backend/foundation/agent_runtime.py:219-231",
+        "backend/foundation/action_execution.py:177-188",
+        "backend/foundation/migrations/0015_first_controlled_qms_mutation_poc.py:109-116,337-344"
+      ],
+      "v2_1_binding_kind": "EXACT_LITERAL",
+      "v2_1_schema_type": "PositiveBigIntegerField",
+      "v2_1_typed_value": "PHASE31.4.4A TEST ONLY \u2014 DomainEvent:agent-run-start \u2014 aggregate_version",
+      "v2_2_binding_kind": "EXECUTION_DERIVED_PERSISTED",
+      "v2_2_schema_type": "PositiveBigIntegerField",
+      "v2_2_typed_value_or_derivation": {
+        "binding_kind": "EXECUTION_DERIVED_PERSISTED",
+        "binding_rationale": "aggregate stream version allocated by the existing event producer",
+        "canonicalization": "PostgreSQL bigint represented as a JSON integer; bool and strings prohibited",
+        "database_type_or_schema_type": "bigint",
+        "downstream_consumers": "only declared V2 registry successors and retained evidence",
+        "earliest_availability": "inside fixture-exact-atomic/v1 at Freeze1.5 after persisted predecessor inspection",
+        "expected_literal_if_static": null,
+        "freeze": "Freeze1.5",
+        "freeze_point": "Freeze1.5",
+        "kind": "EXECUTION_DERIVED_PERSISTED",
+        "preimage": {
+          "aggregate_id": "eventing.domain_event::90e2d38f-9600-5701-a34c-c9827eafc88c.aggregate_id",
+          "aggregate_type": "eventing.domain_event::90e2d38f-9600-5701-a34c-c9827eafc88c.aggregate_type",
+          "persisted_history": "eventing.domain_event(aggregate_type,aggregate_id,aggregate_version)"
+        },
+        "producer": "phase31.4.4-agent-provenance-producer/v1",
+        "producer_version": "v1",
+        "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL",
+        "source_evidence": [
+          "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:54,64",
+          "backend/foundation/eventing.py:65-79",
+          "backend/foundation/agent_runtime.py:219-231",
+          "backend/foundation/action_execution.py:177-188",
+          "backend/foundation/migrations/0015_first_controlled_qms_mutation_poc.py:109-116,337-344"
+        ],
+        "source_state": "committed eventing.domain_event rows for the bound aggregate_type and aggregate_id; producer computes COALESCE(MAX(aggregate_version),0)+1 inside the existing member transaction immediately before INSERT",
+        "transaction_boundary": "fixture-exact-atomic/v1",
+        "verification_rule": "within the existing producer transaction, query the persisted maximum for the exact bound aggregate key, insert max+1 (or 1 when no predecessor exists), then reread and require a JSON integer >= 0 equal to the persisted aggregate_version"
+      }
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "correction_class": "BIGINT_DESCRIPTIVE_LITERAL_TO_EXECUTION_DERIVED_PERSISTED",
+      "field": "sequence_number",
+      "member": "audit.immutable_audit_log::OUTPUT:agent-run-start:audit_id",
+      "note": "The V2.1 descriptive test string was non-executable metadata, not persisted business state.",
+      "physical_type": "bigint NOT NULL",
+      "source_evidence": [
+        "backend/foundation/audit.py:48-66",
+        "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:274-349"
+      ],
+      "v2_1_binding_kind": "EXACT_LITERAL",
+      "v2_1_schema_type": "PositiveBigIntegerField",
+      "v2_1_typed_value": "PHASE31.4.4A TEST ONLY \u2014 ImmutableAuditLog:agent-run-start \u2014 sequence_number",
+      "v2_2_binding_kind": "EXECUTION_DERIVED_PERSISTED",
+      "v2_2_schema_type": "PositiveBigIntegerField",
+      "v2_2_typed_value_or_derivation": {
+        "binding_kind": "EXECUTION_DERIVED_PERSISTED",
+        "binding_rationale": "immutable audit stream sequence assigned by the existing database append function",
+        "canonicalization": "PostgreSQL bigint represented as a JSON integer; bool and strings prohibited",
+        "database_type_or_schema_type": "bigint",
+        "downstream_consumers": "only declared V2 registry successors and retained evidence",
+        "earliest_availability": "inside agent-run-start-atomic/v1 at Freeze1.5 after persisted predecessor inspection",
+        "expected_literal_if_static": null,
+        "freeze": "Freeze1.5",
+        "freeze_point": "Freeze1.5",
+        "kind": "EXECUTION_DERIVED_PERSISTED",
+        "preimage": {
+          "persisted_predecessor": "latest sequence_number and entry_hash in the exact audit stream",
+          "stream_id": "audit.immutable_audit_log::OUTPUT:agent-run-start:audit_id.stream_id",
+          "stream_type": "audit.immutable_audit_log::OUTPUT:agent-run-start:audit_id.stream_type",
+          "tenant_id": "audit.immutable_audit_log::OUTPUT:agent-run-start:audit_id.tenant_id"
+        },
+        "producer": "phase31.4.4-agent-provenance-producer/v1",
+        "producer_version": "v1",
+        "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL",
+        "source_evidence": [
+          "backend/foundation/audit.py:48-66",
+          "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:274-349"
+        ],
+        "source_state": "committed audit.immutable_audit_log rows for the exact tenant_id, stream_type, and stream_id, read by audit.append_immutable_audit while holding its per-stream pg_advisory_xact_lock",
+        "transaction_boundary": "agent-run-start-atomic/v1",
+        "verification_rule": "call the existing audit.append_immutable_audit function; under its per-stream advisory transaction lock it assigns predecessor.sequence_number+1 or 1 for an empty stream; reread the returned row and require a JSON integer > 0 linked to that exact stream"
+      }
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "correction_class": "BIGINT_DESCRIPTIVE_LITERAL_TO_EXECUTION_DERIVED_PERSISTED",
+      "field": "aggregate_version",
+      "member": "eventing.domain_event::47be0b7e-10d0-5e96-94fd-fcaa8ad14cfd",
+      "note": "The V2.1 descriptive test string was non-executable metadata, not persisted business state.",
+      "physical_type": "bigint NOT NULL",
+      "source_evidence": [
+        "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:54,64",
+        "backend/foundation/eventing.py:65-79",
+        "backend/foundation/agent_runtime.py:219-231",
+        "backend/foundation/action_execution.py:177-188",
+        "backend/foundation/migrations/0015_first_controlled_qms_mutation_poc.py:109-116,337-344"
+      ],
+      "v2_1_binding_kind": "EXACT_LITERAL",
+      "v2_1_schema_type": "PositiveBigIntegerField",
+      "v2_1_typed_value": "PHASE31.4.4A TEST ONLY \u2014 DomainEvent:agent-run-complete \u2014 aggregate_version",
+      "v2_2_binding_kind": "EXECUTION_DERIVED_PERSISTED",
+      "v2_2_schema_type": "PositiveBigIntegerField",
+      "v2_2_typed_value_or_derivation": {
+        "binding_kind": "EXECUTION_DERIVED_PERSISTED",
+        "binding_rationale": "aggregate stream version allocated by the existing event producer",
+        "canonicalization": "PostgreSQL bigint represented as a JSON integer; bool and strings prohibited",
+        "database_type_or_schema_type": "bigint",
+        "downstream_consumers": "only declared V2 registry successors and retained evidence",
+        "earliest_availability": "inside fixture-exact-atomic/v1 at Freeze1.5 after persisted predecessor inspection",
+        "expected_literal_if_static": null,
+        "freeze": "Freeze1.5",
+        "freeze_point": "Freeze1.5",
+        "kind": "EXECUTION_DERIVED_PERSISTED",
+        "preimage": {
+          "aggregate_id": "eventing.domain_event::47be0b7e-10d0-5e96-94fd-fcaa8ad14cfd.aggregate_id",
+          "aggregate_type": "eventing.domain_event::47be0b7e-10d0-5e96-94fd-fcaa8ad14cfd.aggregate_type",
+          "persisted_history": "eventing.domain_event(aggregate_type,aggregate_id,aggregate_version)"
+        },
+        "producer": "phase31.4.4-agent-provenance-producer/v1",
+        "producer_version": "v1",
+        "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL",
+        "source_evidence": [
+          "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:54,64",
+          "backend/foundation/eventing.py:65-79",
+          "backend/foundation/agent_runtime.py:219-231",
+          "backend/foundation/action_execution.py:177-188",
+          "backend/foundation/migrations/0015_first_controlled_qms_mutation_poc.py:109-116,337-344"
+        ],
+        "source_state": "committed eventing.domain_event rows for the bound aggregate_type and aggregate_id; producer computes COALESCE(MAX(aggregate_version),0)+1 inside the existing member transaction immediately before INSERT",
+        "transaction_boundary": "fixture-exact-atomic/v1",
+        "verification_rule": "within the existing producer transaction, query the persisted maximum for the exact bound aggregate key, insert max+1 (or 1 when no predecessor exists), then reread and require a JSON integer >= 0 equal to the persisted aggregate_version"
+      }
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "correction_class": "BIGINT_DESCRIPTIVE_LITERAL_TO_EXECUTION_DERIVED_PERSISTED",
+      "field": "sequence_number",
+      "member": "audit.immutable_audit_log::OUTPUT:agent-run-complete:audit_id",
+      "note": "The V2.1 descriptive test string was non-executable metadata, not persisted business state.",
+      "physical_type": "bigint NOT NULL",
+      "source_evidence": [
+        "backend/foundation/audit.py:48-66",
+        "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:274-349"
+      ],
+      "v2_1_binding_kind": "EXACT_LITERAL",
+      "v2_1_schema_type": "PositiveBigIntegerField",
+      "v2_1_typed_value": "PHASE31.4.4A TEST ONLY \u2014 ImmutableAuditLog:agent-run-complete \u2014 sequence_number",
+      "v2_2_binding_kind": "EXECUTION_DERIVED_PERSISTED",
+      "v2_2_schema_type": "PositiveBigIntegerField",
+      "v2_2_typed_value_or_derivation": {
+        "binding_kind": "EXECUTION_DERIVED_PERSISTED",
+        "binding_rationale": "immutable audit stream sequence assigned by the existing database append function",
+        "canonicalization": "PostgreSQL bigint represented as a JSON integer; bool and strings prohibited",
+        "database_type_or_schema_type": "bigint",
+        "downstream_consumers": "only declared V2 registry successors and retained evidence",
+        "earliest_availability": "inside agent-run-complete-atomic/v1 at Freeze1.5 after persisted predecessor inspection",
+        "expected_literal_if_static": null,
+        "freeze": "Freeze1.5",
+        "freeze_point": "Freeze1.5",
+        "kind": "EXECUTION_DERIVED_PERSISTED",
+        "preimage": {
+          "persisted_predecessor": "latest sequence_number and entry_hash in the exact audit stream",
+          "stream_id": "audit.immutable_audit_log::OUTPUT:agent-run-complete:audit_id.stream_id",
+          "stream_type": "audit.immutable_audit_log::OUTPUT:agent-run-complete:audit_id.stream_type",
+          "tenant_id": "audit.immutable_audit_log::OUTPUT:agent-run-complete:audit_id.tenant_id"
+        },
+        "producer": "phase31.4.4-agent-provenance-producer/v1",
+        "producer_version": "v1",
+        "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL",
+        "source_evidence": [
+          "backend/foundation/audit.py:48-66",
+          "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:274-349"
+        ],
+        "source_state": "committed audit.immutable_audit_log rows for the exact tenant_id, stream_type, and stream_id, read by audit.append_immutable_audit while holding its per-stream pg_advisory_xact_lock",
+        "transaction_boundary": "agent-run-complete-atomic/v1",
+        "verification_rule": "call the existing audit.append_immutable_audit function; under its per-stream advisory transaction lock it assigns predecessor.sequence_number+1 or 1 for an empty stream; reread the returned row and require a JSON integer > 0 linked to that exact stream"
+      }
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "correction_class": "BIGINT_DESCRIPTIVE_LITERAL_TO_EXECUTION_DERIVED_PERSISTED",
+      "field": "aggregate_version",
+      "member": "eventing.domain_event::b043e2e7-7210-5c11-a718-c22aa97574db",
+      "note": "The V2.1 descriptive test string was non-executable metadata, not persisted business state.",
+      "physical_type": "bigint NOT NULL",
+      "source_evidence": [
+        "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:54,64",
+        "backend/foundation/eventing.py:65-79",
+        "backend/foundation/agent_runtime.py:219-231",
+        "backend/foundation/action_execution.py:177-188",
+        "backend/foundation/migrations/0015_first_controlled_qms_mutation_poc.py:109-116,337-344"
+      ],
+      "v2_1_binding_kind": "EXACT_LITERAL",
+      "v2_1_schema_type": "PositiveBigIntegerField",
+      "v2_1_typed_value": "PHASE31.4.4A TEST ONLY \u2014 DomainEvent:agent-decision \u2014 aggregate_version",
+      "v2_2_binding_kind": "EXECUTION_DERIVED_PERSISTED",
+      "v2_2_schema_type": "PositiveBigIntegerField",
+      "v2_2_typed_value_or_derivation": {
+        "binding_kind": "EXECUTION_DERIVED_PERSISTED",
+        "binding_rationale": "aggregate stream version allocated by the existing event producer",
+        "canonicalization": "PostgreSQL bigint represented as a JSON integer; bool and strings prohibited",
+        "database_type_or_schema_type": "bigint",
+        "downstream_consumers": "only declared V2 registry successors and retained evidence",
+        "earliest_availability": "inside fixture-exact-atomic/v1 at Freeze1.5 after persisted predecessor inspection",
+        "expected_literal_if_static": null,
+        "freeze": "Freeze1.5",
+        "freeze_point": "Freeze1.5",
+        "kind": "EXECUTION_DERIVED_PERSISTED",
+        "preimage": {
+          "aggregate_id": "eventing.domain_event::b043e2e7-7210-5c11-a718-c22aa97574db.aggregate_id",
+          "aggregate_type": "eventing.domain_event::b043e2e7-7210-5c11-a718-c22aa97574db.aggregate_type",
+          "persisted_history": "eventing.domain_event(aggregate_type,aggregate_id,aggregate_version)"
+        },
+        "producer": "phase31.4.4-controlled-opportunity-producer/v1",
+        "producer_version": "v1",
+        "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL",
+        "source_evidence": [
+          "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:54,64",
+          "backend/foundation/eventing.py:65-79",
+          "backend/foundation/agent_runtime.py:219-231",
+          "backend/foundation/action_execution.py:177-188",
+          "backend/foundation/migrations/0015_first_controlled_qms_mutation_poc.py:109-116,337-344"
+        ],
+        "source_state": "committed eventing.domain_event rows for the bound aggregate_type and aggregate_id; producer computes COALESCE(MAX(aggregate_version),0)+1 inside the existing member transaction immediately before INSERT",
+        "transaction_boundary": "fixture-exact-atomic/v1",
+        "verification_rule": "within the existing producer transaction, query the persisted maximum for the exact bound aggregate key, insert max+1 (or 1 when no predecessor exists), then reread and require a JSON integer >= 0 equal to the persisted aggregate_version"
+      }
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "correction_class": "BIGINT_DESCRIPTIVE_LITERAL_TO_EXECUTION_DERIVED_PERSISTED",
+      "field": "sequence_number",
+      "member": "audit.immutable_audit_log::OUTPUT:agent-decision:audit_id",
+      "note": "The V2.1 descriptive test string was non-executable metadata, not persisted business state.",
+      "physical_type": "bigint NOT NULL",
+      "source_evidence": [
+        "backend/foundation/audit.py:48-66",
+        "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:274-349"
+      ],
+      "v2_1_binding_kind": "EXACT_LITERAL",
+      "v2_1_schema_type": "PositiveBigIntegerField",
+      "v2_1_typed_value": "PHASE31.4.4A TEST ONLY \u2014 ImmutableAuditLog:agent-decision \u2014 sequence_number",
+      "v2_2_binding_kind": "EXECUTION_DERIVED_PERSISTED",
+      "v2_2_schema_type": "PositiveBigIntegerField",
+      "v2_2_typed_value_or_derivation": {
+        "binding_kind": "EXECUTION_DERIVED_PERSISTED",
+        "binding_rationale": "immutable audit stream sequence assigned by the existing database append function",
+        "canonicalization": "PostgreSQL bigint represented as a JSON integer; bool and strings prohibited",
+        "database_type_or_schema_type": "bigint",
+        "downstream_consumers": "only declared V2 registry successors and retained evidence",
+        "earliest_availability": "inside agent-decision-atomic/v1 at Freeze1.5 after persisted predecessor inspection",
+        "expected_literal_if_static": null,
+        "freeze": "Freeze1.5",
+        "freeze_point": "Freeze1.5",
+        "kind": "EXECUTION_DERIVED_PERSISTED",
+        "preimage": {
+          "persisted_predecessor": "latest sequence_number and entry_hash in the exact audit stream",
+          "stream_id": "audit.immutable_audit_log::OUTPUT:agent-decision:audit_id.stream_id",
+          "stream_type": "audit.immutable_audit_log::OUTPUT:agent-decision:audit_id.stream_type",
+          "tenant_id": "audit.immutable_audit_log::OUTPUT:agent-decision:audit_id.tenant_id"
+        },
+        "producer": "phase31.4.4-controlled-opportunity-producer/v1",
+        "producer_version": "v1",
+        "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL",
+        "source_evidence": [
+          "backend/foundation/audit.py:48-66",
+          "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:274-349"
+        ],
+        "source_state": "committed audit.immutable_audit_log rows for the exact tenant_id, stream_type, and stream_id, read by audit.append_immutable_audit while holding its per-stream pg_advisory_xact_lock",
+        "transaction_boundary": "agent-decision-atomic/v1",
+        "verification_rule": "call the existing audit.append_immutable_audit function; under its per-stream advisory transaction lock it assigns predecessor.sequence_number+1 or 1 for an empty stream; reread the returned row and require a JSON integer > 0 linked to that exact stream"
+      }
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "correction_class": "BIGINT_DESCRIPTIVE_LITERAL_TO_EXECUTION_DERIVED_PERSISTED",
+      "field": "aggregate_version",
+      "member": "eventing.domain_event::d087529c-6a0e-5386-ad10-39992d4f5405",
+      "note": "The V2.1 descriptive test string was non-executable metadata, not persisted business state.",
+      "physical_type": "bigint NOT NULL",
+      "source_evidence": [
+        "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:54,64",
+        "backend/foundation/eventing.py:65-79",
+        "backend/foundation/agent_runtime.py:219-231",
+        "backend/foundation/action_execution.py:177-188",
+        "backend/foundation/migrations/0015_first_controlled_qms_mutation_poc.py:109-116,337-344"
+      ],
+      "v2_1_binding_kind": "EXACT_LITERAL",
+      "v2_1_schema_type": "PositiveBigIntegerField",
+      "v2_1_typed_value": "PHASE31.4.4A TEST ONLY \u2014 DomainEvent:action-plan-prepared \u2014 aggregate_version",
+      "v2_2_binding_kind": "EXECUTION_DERIVED_PERSISTED",
+      "v2_2_schema_type": "PositiveBigIntegerField",
+      "v2_2_typed_value_or_derivation": {
+        "binding_kind": "EXECUTION_DERIVED_PERSISTED",
+        "binding_rationale": "aggregate stream version allocated by the existing event producer",
+        "canonicalization": "PostgreSQL bigint represented as a JSON integer; bool and strings prohibited",
+        "database_type_or_schema_type": "bigint",
+        "downstream_consumers": "only declared V2 registry successors and retained evidence",
+        "earliest_availability": "inside fixture-exact-atomic/v1 at Freeze1.5 after persisted predecessor inspection",
+        "expected_literal_if_static": null,
+        "freeze": "Freeze1.5",
+        "freeze_point": "Freeze1.5",
+        "kind": "EXECUTION_DERIVED_PERSISTED",
+        "preimage": {
+          "aggregate_id": "eventing.domain_event::d087529c-6a0e-5386-ad10-39992d4f5405.aggregate_id",
+          "aggregate_type": "eventing.domain_event::d087529c-6a0e-5386-ad10-39992d4f5405.aggregate_type",
+          "persisted_history": "eventing.domain_event(aggregate_type,aggregate_id,aggregate_version)"
+        },
+        "producer": "phase31.4.4-controlled-opportunity-producer/v1",
+        "producer_version": "v1",
+        "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL",
+        "source_evidence": [
+          "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:54,64",
+          "backend/foundation/eventing.py:65-79",
+          "backend/foundation/agent_runtime.py:219-231",
+          "backend/foundation/action_execution.py:177-188",
+          "backend/foundation/migrations/0015_first_controlled_qms_mutation_poc.py:109-116,337-344"
+        ],
+        "source_state": "committed eventing.domain_event rows for the bound aggregate_type and aggregate_id; producer computes COALESCE(MAX(aggregate_version),0)+1 inside the existing member transaction immediately before INSERT",
+        "transaction_boundary": "fixture-exact-atomic/v1",
+        "verification_rule": "within the existing producer transaction, query the persisted maximum for the exact bound aggregate key, insert max+1 (or 1 when no predecessor exists), then reread and require a JSON integer >= 0 equal to the persisted aggregate_version"
+      }
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "correction_class": "BIGINT_DESCRIPTIVE_LITERAL_TO_EXECUTION_DERIVED_PERSISTED",
+      "field": "sequence_number",
+      "member": "audit.immutable_audit_log::OUTPUT:action-plan-prepared:audit_id",
+      "note": "The V2.1 descriptive test string was non-executable metadata, not persisted business state.",
+      "physical_type": "bigint NOT NULL",
+      "source_evidence": [
+        "backend/foundation/audit.py:48-66",
+        "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:274-349"
+      ],
+      "v2_1_binding_kind": "EXACT_LITERAL",
+      "v2_1_schema_type": "PositiveBigIntegerField",
+      "v2_1_typed_value": "PHASE31.4.4A TEST ONLY \u2014 ImmutableAuditLog:action-plan-prepared \u2014 sequence_number",
+      "v2_2_binding_kind": "EXECUTION_DERIVED_PERSISTED",
+      "v2_2_schema_type": "PositiveBigIntegerField",
+      "v2_2_typed_value_or_derivation": {
+        "binding_kind": "EXECUTION_DERIVED_PERSISTED",
+        "binding_rationale": "immutable audit stream sequence assigned by the existing database append function",
+        "canonicalization": "PostgreSQL bigint represented as a JSON integer; bool and strings prohibited",
+        "database_type_or_schema_type": "bigint",
+        "downstream_consumers": "only declared V2 registry successors and retained evidence",
+        "earliest_availability": "inside action-plan-prepared-atomic/v1 at Freeze1.5 after persisted predecessor inspection",
+        "expected_literal_if_static": null,
+        "freeze": "Freeze1.5",
+        "freeze_point": "Freeze1.5",
+        "kind": "EXECUTION_DERIVED_PERSISTED",
+        "preimage": {
+          "persisted_predecessor": "latest sequence_number and entry_hash in the exact audit stream",
+          "stream_id": "audit.immutable_audit_log::OUTPUT:action-plan-prepared:audit_id.stream_id",
+          "stream_type": "audit.immutable_audit_log::OUTPUT:action-plan-prepared:audit_id.stream_type",
+          "tenant_id": "audit.immutable_audit_log::OUTPUT:action-plan-prepared:audit_id.tenant_id"
+        },
+        "producer": "phase31.4.4-controlled-opportunity-producer/v1",
+        "producer_version": "v1",
+        "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL",
+        "source_evidence": [
+          "backend/foundation/audit.py:48-66",
+          "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:274-349"
+        ],
+        "source_state": "committed audit.immutable_audit_log rows for the exact tenant_id, stream_type, and stream_id, read by audit.append_immutable_audit while holding its per-stream pg_advisory_xact_lock",
+        "transaction_boundary": "action-plan-prepared-atomic/v1",
+        "verification_rule": "call the existing audit.append_immutable_audit function; under its per-stream advisory transaction lock it assigns predecessor.sequence_number+1 or 1 for an empty stream; reread the returned row and require a JSON integer > 0 linked to that exact stream"
+      }
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "correction_class": "BIGINT_DESCRIPTIVE_LITERAL_TO_EXECUTION_DERIVED_PERSISTED",
+      "field": "aggregate_version",
+      "member": "eventing.domain_event::bc7bdbed-f01c-50f1-9ad9-8dea8106f586",
+      "note": "The V2.1 descriptive test string was non-executable metadata, not persisted business state.",
+      "physical_type": "bigint NOT NULL",
+      "source_evidence": [
+        "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:54,64",
+        "backend/foundation/eventing.py:65-79",
+        "backend/foundation/agent_runtime.py:219-231",
+        "backend/foundation/action_execution.py:177-188",
+        "backend/foundation/migrations/0015_first_controlled_qms_mutation_poc.py:109-116,337-344"
+      ],
+      "v2_1_binding_kind": "EXACT_LITERAL",
+      "v2_1_schema_type": "PositiveBigIntegerField",
+      "v2_1_typed_value": "PHASE31.4.4A TEST ONLY \u2014 DomainEvent:human-approval \u2014 aggregate_version",
+      "v2_2_binding_kind": "EXECUTION_DERIVED_PERSISTED",
+      "v2_2_schema_type": "PositiveBigIntegerField",
+      "v2_2_typed_value_or_derivation": {
+        "binding_kind": "EXECUTION_DERIVED_PERSISTED",
+        "binding_rationale": "aggregate stream version allocated by the existing event producer",
+        "canonicalization": "PostgreSQL bigint represented as a JSON integer; bool and strings prohibited",
+        "database_type_or_schema_type": "bigint",
+        "downstream_consumers": "only declared V2 registry successors and retained evidence",
+        "earliest_availability": "inside fixture-exact-atomic/v1 at Freeze1.5 after persisted predecessor inspection",
+        "expected_literal_if_static": null,
+        "freeze": "Freeze1.5",
+        "freeze_point": "Freeze1.5",
+        "kind": "EXECUTION_DERIVED_PERSISTED",
+        "preimage": {
+          "aggregate_id": "eventing.domain_event::bc7bdbed-f01c-50f1-9ad9-8dea8106f586.aggregate_id",
+          "aggregate_type": "eventing.domain_event::bc7bdbed-f01c-50f1-9ad9-8dea8106f586.aggregate_type",
+          "persisted_history": "eventing.domain_event(aggregate_type,aggregate_id,aggregate_version)"
+        },
+        "producer": "phase31.4.4-controlled-opportunity-producer/v1",
+        "producer_version": "v1",
+        "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL",
+        "source_evidence": [
+          "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:54,64",
+          "backend/foundation/eventing.py:65-79",
+          "backend/foundation/agent_runtime.py:219-231",
+          "backend/foundation/action_execution.py:177-188",
+          "backend/foundation/migrations/0015_first_controlled_qms_mutation_poc.py:109-116,337-344"
+        ],
+        "source_state": "committed eventing.domain_event rows for the bound aggregate_type and aggregate_id; producer computes COALESCE(MAX(aggregate_version),0)+1 inside the existing member transaction immediately before INSERT",
+        "transaction_boundary": "fixture-exact-atomic/v1",
+        "verification_rule": "within the existing producer transaction, query the persisted maximum for the exact bound aggregate key, insert max+1 (or 1 when no predecessor exists), then reread and require a JSON integer >= 0 equal to the persisted aggregate_version"
+      }
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "correction_class": "BIGINT_DESCRIPTIVE_LITERAL_TO_EXECUTION_DERIVED_PERSISTED",
+      "field": "sequence_number",
+      "member": "audit.immutable_audit_log::OUTPUT:human-approval:audit_id",
+      "note": "The V2.1 descriptive test string was non-executable metadata, not persisted business state.",
+      "physical_type": "bigint NOT NULL",
+      "source_evidence": [
+        "backend/foundation/audit.py:48-66",
+        "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:274-349"
+      ],
+      "v2_1_binding_kind": "EXACT_LITERAL",
+      "v2_1_schema_type": "PositiveBigIntegerField",
+      "v2_1_typed_value": "PHASE31.4.4A TEST ONLY \u2014 ImmutableAuditLog:human-approval \u2014 sequence_number",
+      "v2_2_binding_kind": "EXECUTION_DERIVED_PERSISTED",
+      "v2_2_schema_type": "PositiveBigIntegerField",
+      "v2_2_typed_value_or_derivation": {
+        "binding_kind": "EXECUTION_DERIVED_PERSISTED",
+        "binding_rationale": "immutable audit stream sequence assigned by the existing database append function",
+        "canonicalization": "PostgreSQL bigint represented as a JSON integer; bool and strings prohibited",
+        "database_type_or_schema_type": "bigint",
+        "downstream_consumers": "only declared V2 registry successors and retained evidence",
+        "earliest_availability": "inside human-approval-atomic/v1 at Freeze1.5 after persisted predecessor inspection",
+        "expected_literal_if_static": null,
+        "freeze": "Freeze1.5",
+        "freeze_point": "Freeze1.5",
+        "kind": "EXECUTION_DERIVED_PERSISTED",
+        "preimage": {
+          "persisted_predecessor": "latest sequence_number and entry_hash in the exact audit stream",
+          "stream_id": "audit.immutable_audit_log::OUTPUT:human-approval:audit_id.stream_id",
+          "stream_type": "audit.immutable_audit_log::OUTPUT:human-approval:audit_id.stream_type",
+          "tenant_id": "audit.immutable_audit_log::OUTPUT:human-approval:audit_id.tenant_id"
+        },
+        "producer": "phase31.4.4-controlled-opportunity-producer/v1",
+        "producer_version": "v1",
+        "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL",
+        "source_evidence": [
+          "backend/foundation/audit.py:48-66",
+          "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:274-349"
+        ],
+        "source_state": "committed audit.immutable_audit_log rows for the exact tenant_id, stream_type, and stream_id, read by audit.append_immutable_audit while holding its per-stream pg_advisory_xact_lock",
+        "transaction_boundary": "human-approval-atomic/v1",
+        "verification_rule": "call the existing audit.append_immutable_audit function; under its per-stream advisory transaction lock it assigns predecessor.sequence_number+1 or 1 for an empty stream; reread the returned row and require a JSON integer > 0 linked to that exact stream"
+      }
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "correction_class": "BIGINT_DESCRIPTIVE_LITERAL_TO_EXECUTION_DERIVED_PERSISTED",
+      "field": "aggregate_version",
+      "member": "eventing.domain_event::87e477b2-b854-55e2-95a5-2ed0785d6f39",
+      "note": "The V2.1 descriptive test string was non-executable metadata, not persisted business state.",
+      "physical_type": "bigint NOT NULL",
+      "source_evidence": [
+        "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:54,64",
+        "backend/foundation/eventing.py:65-79",
+        "backend/foundation/agent_runtime.py:219-231",
+        "backend/foundation/action_execution.py:177-188",
+        "backend/foundation/migrations/0015_first_controlled_qms_mutation_poc.py:109-116,337-344"
+      ],
+      "v2_1_binding_kind": "EXACT_LITERAL",
+      "v2_1_schema_type": "PositiveBigIntegerField",
+      "v2_1_typed_value": "PHASE31.4.4A TEST ONLY \u2014 DomainEvent:execution-authorization \u2014 aggregate_version",
+      "v2_2_binding_kind": "EXECUTION_DERIVED_PERSISTED",
+      "v2_2_schema_type": "PositiveBigIntegerField",
+      "v2_2_typed_value_or_derivation": {
+        "binding_kind": "EXECUTION_DERIVED_PERSISTED",
+        "binding_rationale": "aggregate stream version allocated by the existing event producer",
+        "canonicalization": "PostgreSQL bigint represented as a JSON integer; bool and strings prohibited",
+        "database_type_or_schema_type": "bigint",
+        "downstream_consumers": "only declared V2 registry successors and retained evidence",
+        "earliest_availability": "inside fixture-exact-atomic/v1 at Freeze1.5 after persisted predecessor inspection",
+        "expected_literal_if_static": null,
+        "freeze": "Freeze1.5",
+        "freeze_point": "Freeze1.5",
+        "kind": "EXECUTION_DERIVED_PERSISTED",
+        "preimage": {
+          "aggregate_id": "eventing.domain_event::87e477b2-b854-55e2-95a5-2ed0785d6f39.aggregate_id",
+          "aggregate_type": "eventing.domain_event::87e477b2-b854-55e2-95a5-2ed0785d6f39.aggregate_type",
+          "persisted_history": "eventing.domain_event(aggregate_type,aggregate_id,aggregate_version)"
+        },
+        "producer": "phase31.4.4-controlled-opportunity-producer/v1",
+        "producer_version": "v1",
+        "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL",
+        "source_evidence": [
+          "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:54,64",
+          "backend/foundation/eventing.py:65-79",
+          "backend/foundation/agent_runtime.py:219-231",
+          "backend/foundation/action_execution.py:177-188",
+          "backend/foundation/migrations/0015_first_controlled_qms_mutation_poc.py:109-116,337-344"
+        ],
+        "source_state": "committed eventing.domain_event rows for the bound aggregate_type and aggregate_id; producer computes COALESCE(MAX(aggregate_version),0)+1 inside the existing member transaction immediately before INSERT",
+        "transaction_boundary": "fixture-exact-atomic/v1",
+        "verification_rule": "within the existing producer transaction, query the persisted maximum for the exact bound aggregate key, insert max+1 (or 1 when no predecessor exists), then reread and require a JSON integer >= 0 equal to the persisted aggregate_version"
+      }
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "correction_class": "BIGINT_DESCRIPTIVE_LITERAL_TO_EXECUTION_DERIVED_PERSISTED",
+      "field": "sequence_number",
+      "member": "audit.immutable_audit_log::OUTPUT:execution-authorization:audit_id",
+      "note": "The V2.1 descriptive test string was non-executable metadata, not persisted business state.",
+      "physical_type": "bigint NOT NULL",
+      "source_evidence": [
+        "backend/foundation/audit.py:48-66",
+        "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:274-349"
+      ],
+      "v2_1_binding_kind": "EXACT_LITERAL",
+      "v2_1_schema_type": "PositiveBigIntegerField",
+      "v2_1_typed_value": "PHASE31.4.4A TEST ONLY \u2014 ImmutableAuditLog:execution-authorization \u2014 sequence_number",
+      "v2_2_binding_kind": "EXECUTION_DERIVED_PERSISTED",
+      "v2_2_schema_type": "PositiveBigIntegerField",
+      "v2_2_typed_value_or_derivation": {
+        "binding_kind": "EXECUTION_DERIVED_PERSISTED",
+        "binding_rationale": "immutable audit stream sequence assigned by the existing database append function",
+        "canonicalization": "PostgreSQL bigint represented as a JSON integer; bool and strings prohibited",
+        "database_type_or_schema_type": "bigint",
+        "downstream_consumers": "only declared V2 registry successors and retained evidence",
+        "earliest_availability": "inside execution-authorization-atomic/v1 at Freeze1.5 after persisted predecessor inspection",
+        "expected_literal_if_static": null,
+        "freeze": "Freeze1.5",
+        "freeze_point": "Freeze1.5",
+        "kind": "EXECUTION_DERIVED_PERSISTED",
+        "preimage": {
+          "persisted_predecessor": "latest sequence_number and entry_hash in the exact audit stream",
+          "stream_id": "audit.immutable_audit_log::OUTPUT:execution-authorization:audit_id.stream_id",
+          "stream_type": "audit.immutable_audit_log::OUTPUT:execution-authorization:audit_id.stream_type",
+          "tenant_id": "audit.immutable_audit_log::OUTPUT:execution-authorization:audit_id.tenant_id"
+        },
+        "producer": "phase31.4.4-controlled-opportunity-producer/v1",
+        "producer_version": "v1",
+        "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL",
+        "source_evidence": [
+          "backend/foundation/audit.py:48-66",
+          "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:274-349"
+        ],
+        "source_state": "committed audit.immutable_audit_log rows for the exact tenant_id, stream_type, and stream_id, read by audit.append_immutable_audit while holding its per-stream pg_advisory_xact_lock",
+        "transaction_boundary": "execution-authorization-atomic/v1",
+        "verification_rule": "call the existing audit.append_immutable_audit function; under its per-stream advisory transaction lock it assigns predecessor.sequence_number+1 or 1 for an empty stream; reread the returned row and require a JSON integer > 0 linked to that exact stream"
+      }
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "correction_class": "BIGINT_DESCRIPTIVE_LITERAL_TO_EXECUTION_DERIVED_PERSISTED",
+      "field": "aggregate_version",
+      "member": "eventing.domain_event::77465ad0-559f-5317-9c26-c029e0cb16f6",
+      "note": "The V2.1 descriptive test string was non-executable metadata, not persisted business state.",
+      "physical_type": "bigint NOT NULL",
+      "source_evidence": [
+        "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:54,64",
+        "backend/foundation/eventing.py:65-79",
+        "backend/foundation/agent_runtime.py:219-231",
+        "backend/foundation/action_execution.py:177-188",
+        "backend/foundation/migrations/0015_first_controlled_qms_mutation_poc.py:109-116,337-344"
+      ],
+      "v2_1_binding_kind": "EXACT_LITERAL",
+      "v2_1_schema_type": "PositiveBigIntegerField",
+      "v2_1_typed_value": "PHASE31.4.4A TEST ONLY \u2014 DomainEvent:controlled-opportunity-execution \u2014 aggregate_version",
+      "v2_2_binding_kind": "EXECUTION_DERIVED_PERSISTED",
+      "v2_2_schema_type": "PositiveBigIntegerField",
+      "v2_2_typed_value_or_derivation": {
+        "binding_kind": "EXECUTION_DERIVED_PERSISTED",
+        "binding_rationale": "aggregate stream version allocated by the existing event producer",
+        "canonicalization": "PostgreSQL bigint represented as a JSON integer; bool and strings prohibited",
+        "database_type_or_schema_type": "bigint",
+        "downstream_consumers": "only declared V2 registry successors and retained evidence",
+        "earliest_availability": "inside fixture-exact-atomic/v1 at Freeze1.5 after persisted predecessor inspection",
+        "expected_literal_if_static": null,
+        "freeze": "Freeze1.5",
+        "freeze_point": "Freeze1.5",
+        "kind": "EXECUTION_DERIVED_PERSISTED",
+        "preimage": {
+          "aggregate_id": "eventing.domain_event::77465ad0-559f-5317-9c26-c029e0cb16f6.aggregate_id",
+          "aggregate_type": "eventing.domain_event::77465ad0-559f-5317-9c26-c029e0cb16f6.aggregate_type",
+          "persisted_history": "eventing.domain_event(aggregate_type,aggregate_id,aggregate_version)"
+        },
+        "producer": "phase31.4.4-controlled-opportunity-producer/v1",
+        "producer_version": "v1",
+        "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL",
+        "source_evidence": [
+          "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:54,64",
+          "backend/foundation/eventing.py:65-79",
+          "backend/foundation/agent_runtime.py:219-231",
+          "backend/foundation/action_execution.py:177-188",
+          "backend/foundation/migrations/0015_first_controlled_qms_mutation_poc.py:109-116,337-344"
+        ],
+        "source_state": "committed eventing.domain_event rows for the bound aggregate_type and aggregate_id; producer computes COALESCE(MAX(aggregate_version),0)+1 inside the existing member transaction immediately before INSERT",
+        "transaction_boundary": "fixture-exact-atomic/v1",
+        "verification_rule": "within the existing producer transaction, query the persisted maximum for the exact bound aggregate key, insert max+1 (or 1 when no predecessor exists), then reread and require a JSON integer >= 0 equal to the persisted aggregate_version"
+      }
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "correction_class": "BIGINT_DESCRIPTIVE_LITERAL_TO_EXECUTION_DERIVED_PERSISTED",
+      "field": "sequence_number",
+      "member": "audit.immutable_audit_log::OUTPUT:controlled-opportunity-execution:audit_id",
+      "note": "The V2.1 descriptive test string was non-executable metadata, not persisted business state.",
+      "physical_type": "bigint NOT NULL",
+      "source_evidence": [
+        "backend/foundation/audit.py:48-66",
+        "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:274-349"
+      ],
+      "v2_1_binding_kind": "EXACT_LITERAL",
+      "v2_1_schema_type": "PositiveBigIntegerField",
+      "v2_1_typed_value": "PHASE31.4.4A TEST ONLY \u2014 ImmutableAuditLog:controlled-opportunity-execution \u2014 sequence_number",
+      "v2_2_binding_kind": "EXECUTION_DERIVED_PERSISTED",
+      "v2_2_schema_type": "PositiveBigIntegerField",
+      "v2_2_typed_value_or_derivation": {
+        "binding_kind": "EXECUTION_DERIVED_PERSISTED",
+        "binding_rationale": "immutable audit stream sequence assigned by the existing database append function",
+        "canonicalization": "PostgreSQL bigint represented as a JSON integer; bool and strings prohibited",
+        "database_type_or_schema_type": "bigint",
+        "downstream_consumers": "only declared V2 registry successors and retained evidence",
+        "earliest_availability": "inside controlled-opportunity-execution-atomic/v1 at Freeze1.5 after persisted predecessor inspection",
+        "expected_literal_if_static": null,
+        "freeze": "Freeze1.5",
+        "freeze_point": "Freeze1.5",
+        "kind": "EXECUTION_DERIVED_PERSISTED",
+        "preimage": {
+          "persisted_predecessor": "latest sequence_number and entry_hash in the exact audit stream",
+          "stream_id": "audit.immutable_audit_log::OUTPUT:controlled-opportunity-execution:audit_id.stream_id",
+          "stream_type": "audit.immutable_audit_log::OUTPUT:controlled-opportunity-execution:audit_id.stream_type",
+          "tenant_id": "audit.immutable_audit_log::OUTPUT:controlled-opportunity-execution:audit_id.tenant_id"
+        },
+        "producer": "phase31.4.4-controlled-opportunity-producer/v1",
+        "producer_version": "v1",
+        "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL",
+        "source_evidence": [
+          "backend/foundation/audit.py:48-66",
+          "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:274-349"
+        ],
+        "source_state": "committed audit.immutable_audit_log rows for the exact tenant_id, stream_type, and stream_id, read by audit.append_immutable_audit while holding its per-stream pg_advisory_xact_lock",
+        "transaction_boundary": "controlled-opportunity-execution-atomic/v1",
+        "verification_rule": "call the existing audit.append_immutable_audit function; under its per-stream advisory transaction lock it assigns predecessor.sequence_number+1 or 1 for an empty stream; reread the returned row and require a JSON integer > 0 linked to that exact stream"
+      }
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "correction_class": "BIGINT_DESCRIPTIVE_LITERAL_TO_EXECUTION_DERIVED_PERSISTED",
+      "field": "aggregate_version",
+      "member": "eventing.domain_event::39b7cc2f-00ff-589d-b0c4-812cb35595e8",
+      "note": "The V2.1 descriptive test string was non-executable metadata, not persisted business state.",
+      "physical_type": "bigint NOT NULL",
+      "source_evidence": [
+        "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:54,64",
+        "backend/foundation/eventing.py:65-79",
+        "backend/foundation/agent_runtime.py:219-231",
+        "backend/foundation/action_execution.py:177-188",
+        "backend/foundation/migrations/0015_first_controlled_qms_mutation_poc.py:109-116,337-344"
+      ],
+      "v2_1_binding_kind": "EXACT_LITERAL",
+      "v2_1_schema_type": "PositiveBigIntegerField",
+      "v2_1_typed_value": "PHASE31.4.4A TEST ONLY \u2014 DomainEvent:effectiveness-check \u2014 aggregate_version",
+      "v2_2_binding_kind": "EXECUTION_DERIVED_PERSISTED",
+      "v2_2_schema_type": "PositiveBigIntegerField",
+      "v2_2_typed_value_or_derivation": {
+        "binding_kind": "EXECUTION_DERIVED_PERSISTED",
+        "binding_rationale": "aggregate stream version allocated by the existing event producer",
+        "canonicalization": "PostgreSQL bigint represented as a JSON integer; bool and strings prohibited",
+        "database_type_or_schema_type": "bigint",
+        "downstream_consumers": "only declared V2 registry successors and retained evidence",
+        "earliest_availability": "inside fixture-exact-atomic/v1 at Freeze1.5 after persisted predecessor inspection",
+        "expected_literal_if_static": null,
+        "freeze": "Freeze1.5",
+        "freeze_point": "Freeze1.5",
+        "kind": "EXECUTION_DERIVED_PERSISTED",
+        "preimage": {
+          "aggregate_id": "eventing.domain_event::39b7cc2f-00ff-589d-b0c4-812cb35595e8.aggregate_id",
+          "aggregate_type": "eventing.domain_event::39b7cc2f-00ff-589d-b0c4-812cb35595e8.aggregate_type",
+          "persisted_history": "eventing.domain_event(aggregate_type,aggregate_id,aggregate_version)"
+        },
+        "producer": "phase31.4.4-effectiveness-producer/v1",
+        "producer_version": "v1",
+        "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL",
+        "source_evidence": [
+          "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:54,64",
+          "backend/foundation/eventing.py:65-79",
+          "backend/foundation/agent_runtime.py:219-231",
+          "backend/foundation/action_execution.py:177-188",
+          "backend/foundation/migrations/0015_first_controlled_qms_mutation_poc.py:109-116,337-344"
+        ],
+        "source_state": "committed eventing.domain_event rows for the bound aggregate_type and aggregate_id; producer computes COALESCE(MAX(aggregate_version),0)+1 inside the existing member transaction immediately before INSERT",
+        "transaction_boundary": "fixture-exact-atomic/v1",
+        "verification_rule": "within the existing producer transaction, query the persisted maximum for the exact bound aggregate key, insert max+1 (or 1 when no predecessor exists), then reread and require a JSON integer >= 0 equal to the persisted aggregate_version"
+      }
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "correction_class": "BIGINT_DESCRIPTIVE_LITERAL_TO_EXECUTION_DERIVED_PERSISTED",
+      "field": "sequence_number",
+      "member": "audit.immutable_audit_log::OUTPUT:effectiveness-check:audit_id",
+      "note": "The V2.1 descriptive test string was non-executable metadata, not persisted business state.",
+      "physical_type": "bigint NOT NULL",
+      "source_evidence": [
+        "backend/foundation/audit.py:48-66",
+        "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:274-349"
+      ],
+      "v2_1_binding_kind": "EXACT_LITERAL",
+      "v2_1_schema_type": "PositiveBigIntegerField",
+      "v2_1_typed_value": "PHASE31.4.4A TEST ONLY \u2014 ImmutableAuditLog:effectiveness-check \u2014 sequence_number",
+      "v2_2_binding_kind": "EXECUTION_DERIVED_PERSISTED",
+      "v2_2_schema_type": "PositiveBigIntegerField",
+      "v2_2_typed_value_or_derivation": {
+        "binding_kind": "EXECUTION_DERIVED_PERSISTED",
+        "binding_rationale": "immutable audit stream sequence assigned by the existing database append function",
+        "canonicalization": "PostgreSQL bigint represented as a JSON integer; bool and strings prohibited",
+        "database_type_or_schema_type": "bigint",
+        "downstream_consumers": "only declared V2 registry successors and retained evidence",
+        "earliest_availability": "inside effectiveness-check-atomic/v1 at Freeze1.5 after persisted predecessor inspection",
+        "expected_literal_if_static": null,
+        "freeze": "Freeze1.5",
+        "freeze_point": "Freeze1.5",
+        "kind": "EXECUTION_DERIVED_PERSISTED",
+        "preimage": {
+          "persisted_predecessor": "latest sequence_number and entry_hash in the exact audit stream",
+          "stream_id": "audit.immutable_audit_log::OUTPUT:effectiveness-check:audit_id.stream_id",
+          "stream_type": "audit.immutable_audit_log::OUTPUT:effectiveness-check:audit_id.stream_type",
+          "tenant_id": "audit.immutable_audit_log::OUTPUT:effectiveness-check:audit_id.tenant_id"
+        },
+        "producer": "phase31.4.4-effectiveness-producer/v1",
+        "producer_version": "v1",
+        "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL",
+        "source_evidence": [
+          "backend/foundation/audit.py:48-66",
+          "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:274-349"
+        ],
+        "source_state": "committed audit.immutable_audit_log rows for the exact tenant_id, stream_type, and stream_id, read by audit.append_immutable_audit while holding its per-stream pg_advisory_xact_lock",
+        "transaction_boundary": "effectiveness-check-atomic/v1",
+        "verification_rule": "call the existing audit.append_immutable_audit function; under its per-stream advisory transaction lock it assigns predecessor.sequence_number+1 or 1 for an empty stream; reread the returned row and require a JSON integer > 0 linked to that exact stream"
+      }
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "correction_class": "BIGINT_DESCRIPTIVE_LITERAL_TO_EXECUTION_DERIVED_PERSISTED",
+      "field": "aggregate_version",
+      "member": "eventing.domain_event::8f2146ff-48c5-5095-b034-73bb2f0b5894",
+      "note": "The V2.1 descriptive test string was non-executable metadata, not persisted business state.",
+      "physical_type": "bigint NOT NULL",
+      "source_evidence": [
+        "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:54,64",
+        "backend/foundation/eventing.py:65-79",
+        "backend/foundation/agent_runtime.py:219-231",
+        "backend/foundation/action_execution.py:177-188",
+        "backend/foundation/migrations/0015_first_controlled_qms_mutation_poc.py:109-116,337-344"
+      ],
+      "v2_1_binding_kind": "EXACT_LITERAL",
+      "v2_1_schema_type": "PositiveBigIntegerField",
+      "v2_1_typed_value": "PHASE31.4.4A TEST ONLY \u2014 DomainEvent:learning-signal \u2014 aggregate_version",
+      "v2_2_binding_kind": "EXECUTION_DERIVED_PERSISTED",
+      "v2_2_schema_type": "PositiveBigIntegerField",
+      "v2_2_typed_value_or_derivation": {
+        "binding_kind": "EXECUTION_DERIVED_PERSISTED",
+        "binding_rationale": "aggregate stream version allocated by the existing event producer",
+        "canonicalization": "PostgreSQL bigint represented as a JSON integer; bool and strings prohibited",
+        "database_type_or_schema_type": "bigint",
+        "downstream_consumers": "only declared V2 registry successors and retained evidence",
+        "earliest_availability": "inside fixture-exact-atomic/v1 at Freeze1.5 after persisted predecessor inspection",
+        "expected_literal_if_static": null,
+        "freeze": "Freeze1.5",
+        "freeze_point": "Freeze1.5",
+        "kind": "EXECUTION_DERIVED_PERSISTED",
+        "preimage": {
+          "aggregate_id": "eventing.domain_event::8f2146ff-48c5-5095-b034-73bb2f0b5894.aggregate_id",
+          "aggregate_type": "eventing.domain_event::8f2146ff-48c5-5095-b034-73bb2f0b5894.aggregate_type",
+          "persisted_history": "eventing.domain_event(aggregate_type,aggregate_id,aggregate_version)"
+        },
+        "producer": "phase31.4.4-learning-signal-producer/v1",
+        "producer_version": "v1",
+        "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL",
+        "source_evidence": [
+          "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:54,64",
+          "backend/foundation/eventing.py:65-79",
+          "backend/foundation/agent_runtime.py:219-231",
+          "backend/foundation/action_execution.py:177-188",
+          "backend/foundation/migrations/0015_first_controlled_qms_mutation_poc.py:109-116,337-344"
+        ],
+        "source_state": "committed eventing.domain_event rows for the bound aggregate_type and aggregate_id; producer computes COALESCE(MAX(aggregate_version),0)+1 inside the existing member transaction immediately before INSERT",
+        "transaction_boundary": "fixture-exact-atomic/v1",
+        "verification_rule": "within the existing producer transaction, query the persisted maximum for the exact bound aggregate key, insert max+1 (or 1 when no predecessor exists), then reread and require a JSON integer >= 0 equal to the persisted aggregate_version"
+      }
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "correction_class": "BIGINT_DESCRIPTIVE_LITERAL_TO_EXECUTION_DERIVED_PERSISTED",
+      "field": "sequence_number",
+      "member": "audit.immutable_audit_log::OUTPUT:learning-signal:audit_id",
+      "note": "The V2.1 descriptive test string was non-executable metadata, not persisted business state.",
+      "physical_type": "bigint NOT NULL",
+      "source_evidence": [
+        "backend/foundation/audit.py:48-66",
+        "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:274-349"
+      ],
+      "v2_1_binding_kind": "EXACT_LITERAL",
+      "v2_1_schema_type": "PositiveBigIntegerField",
+      "v2_1_typed_value": "PHASE31.4.4A TEST ONLY \u2014 ImmutableAuditLog:learning-signal \u2014 sequence_number",
+      "v2_2_binding_kind": "EXECUTION_DERIVED_PERSISTED",
+      "v2_2_schema_type": "PositiveBigIntegerField",
+      "v2_2_typed_value_or_derivation": {
+        "binding_kind": "EXECUTION_DERIVED_PERSISTED",
+        "binding_rationale": "immutable audit stream sequence assigned by the existing database append function",
+        "canonicalization": "PostgreSQL bigint represented as a JSON integer; bool and strings prohibited",
+        "database_type_or_schema_type": "bigint",
+        "downstream_consumers": "only declared V2 registry successors and retained evidence",
+        "earliest_availability": "inside learning-signal-atomic/v1 at Freeze1.5 after persisted predecessor inspection",
+        "expected_literal_if_static": null,
+        "freeze": "Freeze1.5",
+        "freeze_point": "Freeze1.5",
+        "kind": "EXECUTION_DERIVED_PERSISTED",
+        "preimage": {
+          "persisted_predecessor": "latest sequence_number and entry_hash in the exact audit stream",
+          "stream_id": "audit.immutable_audit_log::OUTPUT:learning-signal:audit_id.stream_id",
+          "stream_type": "audit.immutable_audit_log::OUTPUT:learning-signal:audit_id.stream_type",
+          "tenant_id": "audit.immutable_audit_log::OUTPUT:learning-signal:audit_id.tenant_id"
+        },
+        "producer": "phase31.4.4-learning-signal-producer/v1",
+        "producer_version": "v1",
+        "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL",
+        "source_evidence": [
+          "backend/foundation/audit.py:48-66",
+          "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:274-349"
+        ],
+        "source_state": "committed audit.immutable_audit_log rows for the exact tenant_id, stream_type, and stream_id, read by audit.append_immutable_audit while holding its per-stream pg_advisory_xact_lock",
+        "transaction_boundary": "learning-signal-atomic/v1",
+        "verification_rule": "call the existing audit.append_immutable_audit function; under its per-stream advisory transaction lock it assigns predecessor.sequence_number+1 or 1 for an empty stream; reread the returned row and require a JSON integer > 0 linked to that exact stream"
+      }
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "correction_class": "UUID_METADATA_TO_BUSINESS_IDENTIFIER_TEXT",
+      "field": "operation_id",
+      "member": "qms.learning_proposal_canonical_delta::82486439-2035-5153-9851-c4fc0e5d5184",
+      "note": "The exact UTF-8 business identifier value is byte-for-byte unchanged.",
+      "physical_type": "varchar(160) NOT NULL",
+      "source_evidence": [
+        "backend/foundation/migrations/0020_exact_learning_delta_target_operation_contract.py:28,151-154; exact operation text"
+      ],
+      "v2_1_binding_kind": "EXACT_LITERAL",
+      "v2_1_schema_type": "UUIDField",
+      "v2_1_typed_value": "learning.knowledge_layer_rule.source_reference.correct",
+      "v2_2_binding_kind": "EXACT_LITERAL",
+      "v2_2_schema_type": "CharField",
+      "v2_2_typed_value_or_derivation": "learning.knowledge_layer_rule.source_reference.correct"
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "correction_class": "UUID_METADATA_TO_BUSINESS_IDENTIFIER_TEXT",
+      "field": "operation_id",
+      "member": "qms.learning_proposal_review::6c267f9c-705f-5e7b-9aa2-149acc9f8fab",
+      "note": "The exact UTF-8 business identifier value is byte-for-byte unchanged.",
+      "physical_type": "varchar(160)",
+      "source_evidence": [
+        "backend/foundation/migrations/0020_exact_learning_delta_target_operation_contract.py:51-54; exact operation text"
+      ],
+      "v2_1_binding_kind": "EXACT_LITERAL",
+      "v2_1_schema_type": "UUIDField",
+      "v2_1_typed_value": "learning.knowledge_layer_rule.source_reference.correct",
+      "v2_2_binding_kind": "EXACT_LITERAL",
+      "v2_2_schema_type": "CharField",
+      "v2_2_typed_value_or_derivation": "learning.knowledge_layer_rule.source_reference.correct"
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "correction_class": "UUID_METADATA_TO_BUSINESS_IDENTIFIER_TEXT",
+      "field": "policy_id",
+      "member": "qms.learning_proposal_review::6c267f9c-705f-5e7b-9aa2-149acc9f8fab",
+      "note": "The exact UTF-8 business identifier value is byte-for-byte unchanged.",
+      "physical_type": "varchar(160) NOT NULL",
+      "source_evidence": [
+        "backend/foundation/migrations/0019_learning_proposal_review_application_authorization_foundation.py:43; equality CHECK"
+      ],
+      "v2_1_binding_kind": "EXACT_LITERAL",
+      "v2_1_schema_type": "UUIDField",
+      "v2_1_typed_value": "governed-learning-proposal-review-application-boundary/v1",
+      "v2_2_binding_kind": "EXACT_LITERAL",
+      "v2_2_schema_type": "CharField",
+      "v2_2_typed_value_or_derivation": "governed-learning-proposal-review-application-boundary/v1"
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "correction_class": "UUID_METADATA_TO_BUSINESS_IDENTIFIER_TEXT",
+      "field": "operation_id",
+      "member": "qms.learning_proposal_decision::6610b249-87f3-543e-b096-0aac01ffc404",
+      "note": "The exact UTF-8 business identifier value is byte-for-byte unchanged.",
+      "physical_type": "varchar(160)",
+      "source_evidence": [
+        "backend/foundation/migrations/0020_exact_learning_delta_target_operation_contract.py:55-58; exact operation text"
+      ],
+      "v2_1_binding_kind": "EXACT_LITERAL",
+      "v2_1_schema_type": "UUIDField",
+      "v2_1_typed_value": "learning.knowledge_layer_rule.source_reference.correct",
+      "v2_2_binding_kind": "EXACT_LITERAL",
+      "v2_2_schema_type": "CharField",
+      "v2_2_typed_value_or_derivation": "learning.knowledge_layer_rule.source_reference.correct"
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "correction_class": "UUID_METADATA_TO_BUSINESS_IDENTIFIER_TEXT",
+      "field": "policy_id",
+      "member": "qms.learning_proposal_decision::6610b249-87f3-543e-b096-0aac01ffc404",
+      "note": "The exact UTF-8 business identifier value is byte-for-byte unchanged.",
+      "physical_type": "varchar(160) NOT NULL",
+      "source_evidence": [
+        "backend/foundation/migrations/0019_learning_proposal_review_application_authorization_foundation.py:85; equality CHECK"
+      ],
+      "v2_1_binding_kind": "EXACT_LITERAL",
+      "v2_1_schema_type": "UUIDField",
+      "v2_1_typed_value": "governed-learning-proposal-review-application-boundary/v1",
+      "v2_2_binding_kind": "EXACT_LITERAL",
+      "v2_2_schema_type": "CharField",
+      "v2_2_typed_value_or_derivation": "governed-learning-proposal-review-application-boundary/v1"
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "correction_class": "UUID_METADATA_TO_BUSINESS_IDENTIFIER_TEXT",
+      "field": "capability_id",
+      "member": "qms.learning_application_authorization::d67a9e62-7f96-546c-b053-55ff4db91f72",
+      "note": "The exact UTF-8 business identifier value is byte-for-byte unchanged.",
+      "physical_type": "varchar(160) NOT NULL",
+      "source_evidence": [
+        "backend/foundation/migrations/0019_learning_proposal_review_application_authorization_foundation.py:116 and 0020:78-86; exact capability text"
+      ],
+      "v2_1_binding_kind": "EXACT_LITERAL",
+      "v2_1_schema_type": "UUIDField",
+      "v2_1_typed_value": "learning.knowledge_layer_rule.source_reference.correct",
+      "v2_2_binding_kind": "EXACT_LITERAL",
+      "v2_2_schema_type": "CharField",
+      "v2_2_typed_value_or_derivation": "learning.knowledge_layer_rule.source_reference.correct"
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "correction_class": "UUID_METADATA_TO_BUSINESS_IDENTIFIER_TEXT",
+      "field": "operation_id",
+      "member": "qms.learning_application_authorization::d67a9e62-7f96-546c-b053-55ff4db91f72",
+      "note": "The exact UTF-8 business identifier value is byte-for-byte unchanged.",
+      "physical_type": "varchar(160)",
+      "source_evidence": [
+        "backend/foundation/migrations/0020_exact_learning_delta_target_operation_contract.py:59-62; exact operation text"
+      ],
+      "v2_1_binding_kind": "EXACT_LITERAL",
+      "v2_1_schema_type": "UUIDField",
+      "v2_1_typed_value": "learning.knowledge_layer_rule.source_reference.correct",
+      "v2_2_binding_kind": "EXACT_LITERAL",
+      "v2_2_schema_type": "CharField",
+      "v2_2_typed_value_or_derivation": "learning.knowledge_layer_rule.source_reference.correct"
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "correction_class": "UUID_METADATA_TO_BUSINESS_IDENTIFIER_TEXT",
+      "field": "policy_id",
+      "member": "qms.learning_application_authorization::d67a9e62-7f96-546c-b053-55ff4db91f72",
+      "note": "The exact UTF-8 business identifier value is byte-for-byte unchanged.",
+      "physical_type": "varchar(160) NOT NULL",
+      "source_evidence": [
+        "backend/foundation/migrations/0019_learning_proposal_review_application_authorization_foundation.py:126; equality CHECK"
+      ],
+      "v2_1_binding_kind": "EXACT_LITERAL",
+      "v2_1_schema_type": "UUIDField",
+      "v2_1_typed_value": "governed-learning-proposal-review-application-boundary/v1",
+      "v2_2_binding_kind": "EXACT_LITERAL",
+      "v2_2_schema_type": "CharField",
+      "v2_2_typed_value_or_derivation": "governed-learning-proposal-review-application-boundary/v1"
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "correction_class": "BIGINT_DESCRIPTIVE_LITERAL_TO_EXECUTION_DERIVED_PERSISTED",
+      "field": "aggregate_version",
+      "member": "eventing.domain_event::005da83c-7a57-5fc5-8162-fa657a75304b",
+      "note": "The V2.1 descriptive test string was non-executable metadata, not persisted business state.",
+      "physical_type": "bigint NOT NULL",
+      "source_evidence": [
+        "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:54,64",
+        "backend/foundation/eventing.py:65-79",
+        "backend/foundation/agent_runtime.py:219-231",
+        "backend/foundation/action_execution.py:177-188",
+        "backend/foundation/migrations/0015_first_controlled_qms_mutation_poc.py:109-116,337-344"
+      ],
+      "v2_1_binding_kind": "EXACT_LITERAL",
+      "v2_1_schema_type": "PositiveBigIntegerField",
+      "v2_1_typed_value": "PHASE31.4.4A TEST ONLY \u2014 DomainEvent:learning-proposal \u2014 aggregate_version",
+      "v2_2_binding_kind": "EXECUTION_DERIVED_PERSISTED",
+      "v2_2_schema_type": "PositiveBigIntegerField",
+      "v2_2_typed_value_or_derivation": {
+        "binding_kind": "EXECUTION_DERIVED_PERSISTED",
+        "binding_rationale": "aggregate stream version allocated by the existing event producer",
+        "canonicalization": "PostgreSQL bigint represented as a JSON integer; bool and strings prohibited",
+        "database_type_or_schema_type": "bigint",
+        "downstream_consumers": "only declared V2 registry successors and retained evidence",
+        "earliest_availability": "inside fixture-exact-atomic/v1 at Freeze2 after persisted predecessor inspection",
+        "expected_literal_if_static": null,
+        "freeze": "Freeze2",
+        "freeze_point": "Freeze2",
+        "kind": "EXECUTION_DERIVED_PERSISTED",
+        "preimage": {
+          "aggregate_id": "eventing.domain_event::005da83c-7a57-5fc5-8162-fa657a75304b.aggregate_id",
+          "aggregate_type": "eventing.domain_event::005da83c-7a57-5fc5-8162-fa657a75304b.aggregate_type",
+          "persisted_history": "eventing.domain_event(aggregate_type,aggregate_id,aggregate_version)"
+        },
+        "producer": "phase31.4.4-governed-learning-producer/v2",
+        "producer_version": "v2",
+        "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL",
+        "source_evidence": [
+          "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:54,64",
+          "backend/foundation/eventing.py:65-79",
+          "backend/foundation/agent_runtime.py:219-231",
+          "backend/foundation/action_execution.py:177-188",
+          "backend/foundation/migrations/0015_first_controlled_qms_mutation_poc.py:109-116,337-344"
+        ],
+        "source_state": "committed eventing.domain_event rows for the bound aggregate_type and aggregate_id; producer computes COALESCE(MAX(aggregate_version),0)+1 inside the existing member transaction immediately before INSERT",
+        "transaction_boundary": "fixture-exact-atomic/v1",
+        "verification_rule": "within the existing producer transaction, query the persisted maximum for the exact bound aggregate key, insert max+1 (or 1 when no predecessor exists), then reread and require a JSON integer >= 0 equal to the persisted aggregate_version"
+      }
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "correction_class": "BIGINT_DESCRIPTIVE_LITERAL_TO_EXECUTION_DERIVED_PERSISTED",
+      "field": "sequence_number",
+      "member": "audit.immutable_audit_log::OUTPUT:learning-proposal:audit_id",
+      "note": "The V2.1 descriptive test string was non-executable metadata, not persisted business state.",
+      "physical_type": "bigint NOT NULL",
+      "source_evidence": [
+        "backend/foundation/audit.py:48-66",
+        "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:274-349"
+      ],
+      "v2_1_binding_kind": "EXACT_LITERAL",
+      "v2_1_schema_type": "PositiveBigIntegerField",
+      "v2_1_typed_value": "PHASE31.4.4A TEST ONLY \u2014 ImmutableAuditLog:learning-proposal \u2014 sequence_number",
+      "v2_2_binding_kind": "EXECUTION_DERIVED_PERSISTED",
+      "v2_2_schema_type": "PositiveBigIntegerField",
+      "v2_2_typed_value_or_derivation": {
+        "binding_kind": "EXECUTION_DERIVED_PERSISTED",
+        "binding_rationale": "immutable audit stream sequence assigned by the existing database append function",
+        "canonicalization": "PostgreSQL bigint represented as a JSON integer; bool and strings prohibited",
+        "database_type_or_schema_type": "bigint",
+        "downstream_consumers": "only declared V2 registry successors and retained evidence",
+        "earliest_availability": "inside learning-proposal-atomic/v1 at Freeze2 after persisted predecessor inspection",
+        "expected_literal_if_static": null,
+        "freeze": "Freeze2",
+        "freeze_point": "Freeze2",
+        "kind": "EXECUTION_DERIVED_PERSISTED",
+        "preimage": {
+          "persisted_predecessor": "latest sequence_number and entry_hash in the exact audit stream",
+          "stream_id": "audit.immutable_audit_log::OUTPUT:learning-proposal:audit_id.stream_id",
+          "stream_type": "audit.immutable_audit_log::OUTPUT:learning-proposal:audit_id.stream_type",
+          "tenant_id": "audit.immutable_audit_log::OUTPUT:learning-proposal:audit_id.tenant_id"
+        },
+        "producer": "phase31.4.4-governed-learning-producer/v2",
+        "producer_version": "v2",
+        "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL",
+        "source_evidence": [
+          "backend/foundation/audit.py:48-66",
+          "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:274-349"
+        ],
+        "source_state": "committed audit.immutable_audit_log rows for the exact tenant_id, stream_type, and stream_id, read by audit.append_immutable_audit while holding its per-stream pg_advisory_xact_lock",
+        "transaction_boundary": "learning-proposal-atomic/v1",
+        "verification_rule": "call the existing audit.append_immutable_audit function; under its per-stream advisory transaction lock it assigns predecessor.sequence_number+1 or 1 for an empty stream; reread the returned row and require a JSON integer > 0 linked to that exact stream"
+      }
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "correction_class": "BIGINT_DESCRIPTIVE_LITERAL_TO_EXECUTION_DERIVED_PERSISTED",
+      "field": "aggregate_version",
+      "member": "eventing.domain_event::7fc5b06e-b3ca-5a98-a250-d96ee3307b4c",
+      "note": "The V2.1 descriptive test string was non-executable metadata, not persisted business state.",
+      "physical_type": "bigint NOT NULL",
+      "source_evidence": [
+        "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:54,64",
+        "backend/foundation/eventing.py:65-79",
+        "backend/foundation/agent_runtime.py:219-231",
+        "backend/foundation/action_execution.py:177-188",
+        "backend/foundation/migrations/0015_first_controlled_qms_mutation_poc.py:109-116,337-344"
+      ],
+      "v2_1_binding_kind": "EXACT_LITERAL",
+      "v2_1_schema_type": "PositiveBigIntegerField",
+      "v2_1_typed_value": "PHASE31.4.4A TEST ONLY \u2014 DomainEvent:learning-review \u2014 aggregate_version",
+      "v2_2_binding_kind": "EXECUTION_DERIVED_PERSISTED",
+      "v2_2_schema_type": "PositiveBigIntegerField",
+      "v2_2_typed_value_or_derivation": {
+        "binding_kind": "EXECUTION_DERIVED_PERSISTED",
+        "binding_rationale": "aggregate stream version allocated by the existing event producer",
+        "canonicalization": "PostgreSQL bigint represented as a JSON integer; bool and strings prohibited",
+        "database_type_or_schema_type": "bigint",
+        "downstream_consumers": "only declared V2 registry successors and retained evidence",
+        "earliest_availability": "inside fixture-exact-atomic/v1 at Freeze3 after persisted predecessor inspection",
+        "expected_literal_if_static": null,
+        "freeze": "Freeze3",
+        "freeze_point": "Freeze3",
+        "kind": "EXECUTION_DERIVED_PERSISTED",
+        "preimage": {
+          "aggregate_id": "eventing.domain_event::7fc5b06e-b3ca-5a98-a250-d96ee3307b4c.aggregate_id",
+          "aggregate_type": "eventing.domain_event::7fc5b06e-b3ca-5a98-a250-d96ee3307b4c.aggregate_type",
+          "persisted_history": "eventing.domain_event(aggregate_type,aggregate_id,aggregate_version)"
+        },
+        "producer": "phase31.4.4-governed-learning-producer/v2",
+        "producer_version": "v2",
+        "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL",
+        "source_evidence": [
+          "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:54,64",
+          "backend/foundation/eventing.py:65-79",
+          "backend/foundation/agent_runtime.py:219-231",
+          "backend/foundation/action_execution.py:177-188",
+          "backend/foundation/migrations/0015_first_controlled_qms_mutation_poc.py:109-116,337-344"
+        ],
+        "source_state": "committed eventing.domain_event rows for the bound aggregate_type and aggregate_id; producer computes COALESCE(MAX(aggregate_version),0)+1 inside the existing member transaction immediately before INSERT",
+        "transaction_boundary": "fixture-exact-atomic/v1",
+        "verification_rule": "within the existing producer transaction, query the persisted maximum for the exact bound aggregate key, insert max+1 (or 1 when no predecessor exists), then reread and require a JSON integer >= 0 equal to the persisted aggregate_version"
+      }
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "correction_class": "BIGINT_DESCRIPTIVE_LITERAL_TO_EXECUTION_DERIVED_PERSISTED",
+      "field": "sequence_number",
+      "member": "audit.immutable_audit_log::OUTPUT:learning-review:audit_id",
+      "note": "The V2.1 descriptive test string was non-executable metadata, not persisted business state.",
+      "physical_type": "bigint NOT NULL",
+      "source_evidence": [
+        "backend/foundation/audit.py:48-66",
+        "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:274-349"
+      ],
+      "v2_1_binding_kind": "EXACT_LITERAL",
+      "v2_1_schema_type": "PositiveBigIntegerField",
+      "v2_1_typed_value": "PHASE31.4.4A TEST ONLY \u2014 ImmutableAuditLog:learning-review \u2014 sequence_number",
+      "v2_2_binding_kind": "EXECUTION_DERIVED_PERSISTED",
+      "v2_2_schema_type": "PositiveBigIntegerField",
+      "v2_2_typed_value_or_derivation": {
+        "binding_kind": "EXECUTION_DERIVED_PERSISTED",
+        "binding_rationale": "immutable audit stream sequence assigned by the existing database append function",
+        "canonicalization": "PostgreSQL bigint represented as a JSON integer; bool and strings prohibited",
+        "database_type_or_schema_type": "bigint",
+        "downstream_consumers": "only declared V2 registry successors and retained evidence",
+        "earliest_availability": "inside learning-review-atomic/v1 at Freeze3 after persisted predecessor inspection",
+        "expected_literal_if_static": null,
+        "freeze": "Freeze3",
+        "freeze_point": "Freeze3",
+        "kind": "EXECUTION_DERIVED_PERSISTED",
+        "preimage": {
+          "persisted_predecessor": "latest sequence_number and entry_hash in the exact audit stream",
+          "stream_id": "audit.immutable_audit_log::OUTPUT:learning-review:audit_id.stream_id",
+          "stream_type": "audit.immutable_audit_log::OUTPUT:learning-review:audit_id.stream_type",
+          "tenant_id": "audit.immutable_audit_log::OUTPUT:learning-review:audit_id.tenant_id"
+        },
+        "producer": "phase31.4.4-governed-learning-producer/v2",
+        "producer_version": "v2",
+        "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL",
+        "source_evidence": [
+          "backend/foundation/audit.py:48-66",
+          "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:274-349"
+        ],
+        "source_state": "committed audit.immutable_audit_log rows for the exact tenant_id, stream_type, and stream_id, read by audit.append_immutable_audit while holding its per-stream pg_advisory_xact_lock",
+        "transaction_boundary": "learning-review-atomic/v1",
+        "verification_rule": "call the existing audit.append_immutable_audit function; under its per-stream advisory transaction lock it assigns predecessor.sequence_number+1 or 1 for an empty stream; reread the returned row and require a JSON integer > 0 linked to that exact stream"
+      }
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "correction_class": "BIGINT_DESCRIPTIVE_LITERAL_TO_EXECUTION_DERIVED_PERSISTED",
+      "field": "aggregate_version",
+      "member": "eventing.domain_event::82dd0d51-fc95-50c4-8047-d31b0acc1ea4",
+      "note": "The V2.1 descriptive test string was non-executable metadata, not persisted business state.",
+      "physical_type": "bigint NOT NULL",
+      "source_evidence": [
+        "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:54,64",
+        "backend/foundation/eventing.py:65-79",
+        "backend/foundation/agent_runtime.py:219-231",
+        "backend/foundation/action_execution.py:177-188",
+        "backend/foundation/migrations/0015_first_controlled_qms_mutation_poc.py:109-116,337-344"
+      ],
+      "v2_1_binding_kind": "EXACT_LITERAL",
+      "v2_1_schema_type": "PositiveBigIntegerField",
+      "v2_1_typed_value": "PHASE31.4.4A TEST ONLY \u2014 DomainEvent:learning-decision \u2014 aggregate_version",
+      "v2_2_binding_kind": "EXECUTION_DERIVED_PERSISTED",
+      "v2_2_schema_type": "PositiveBigIntegerField",
+      "v2_2_typed_value_or_derivation": {
+        "binding_kind": "EXECUTION_DERIVED_PERSISTED",
+        "binding_rationale": "aggregate stream version allocated by the existing event producer",
+        "canonicalization": "PostgreSQL bigint represented as a JSON integer; bool and strings prohibited",
+        "database_type_or_schema_type": "bigint",
+        "downstream_consumers": "only declared V2 registry successors and retained evidence",
+        "earliest_availability": "inside fixture-exact-atomic/v1 at Freeze4 after persisted predecessor inspection",
+        "expected_literal_if_static": null,
+        "freeze": "Freeze4",
+        "freeze_point": "Freeze4",
+        "kind": "EXECUTION_DERIVED_PERSISTED",
+        "preimage": {
+          "aggregate_id": "eventing.domain_event::82dd0d51-fc95-50c4-8047-d31b0acc1ea4.aggregate_id",
+          "aggregate_type": "eventing.domain_event::82dd0d51-fc95-50c4-8047-d31b0acc1ea4.aggregate_type",
+          "persisted_history": "eventing.domain_event(aggregate_type,aggregate_id,aggregate_version)"
+        },
+        "producer": "phase31.4.4-governed-learning-producer/v2",
+        "producer_version": "v2",
+        "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL",
+        "source_evidence": [
+          "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:54,64",
+          "backend/foundation/eventing.py:65-79",
+          "backend/foundation/agent_runtime.py:219-231",
+          "backend/foundation/action_execution.py:177-188",
+          "backend/foundation/migrations/0015_first_controlled_qms_mutation_poc.py:109-116,337-344"
+        ],
+        "source_state": "committed eventing.domain_event rows for the bound aggregate_type and aggregate_id; producer computes COALESCE(MAX(aggregate_version),0)+1 inside the existing member transaction immediately before INSERT",
+        "transaction_boundary": "fixture-exact-atomic/v1",
+        "verification_rule": "within the existing producer transaction, query the persisted maximum for the exact bound aggregate key, insert max+1 (or 1 when no predecessor exists), then reread and require a JSON integer >= 0 equal to the persisted aggregate_version"
+      }
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "correction_class": "BIGINT_DESCRIPTIVE_LITERAL_TO_EXECUTION_DERIVED_PERSISTED",
+      "field": "sequence_number",
+      "member": "audit.immutable_audit_log::OUTPUT:learning-decision:audit_id",
+      "note": "The V2.1 descriptive test string was non-executable metadata, not persisted business state.",
+      "physical_type": "bigint NOT NULL",
+      "source_evidence": [
+        "backend/foundation/audit.py:48-66",
+        "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:274-349"
+      ],
+      "v2_1_binding_kind": "EXACT_LITERAL",
+      "v2_1_schema_type": "PositiveBigIntegerField",
+      "v2_1_typed_value": "PHASE31.4.4A TEST ONLY \u2014 ImmutableAuditLog:learning-decision \u2014 sequence_number",
+      "v2_2_binding_kind": "EXECUTION_DERIVED_PERSISTED",
+      "v2_2_schema_type": "PositiveBigIntegerField",
+      "v2_2_typed_value_or_derivation": {
+        "binding_kind": "EXECUTION_DERIVED_PERSISTED",
+        "binding_rationale": "immutable audit stream sequence assigned by the existing database append function",
+        "canonicalization": "PostgreSQL bigint represented as a JSON integer; bool and strings prohibited",
+        "database_type_or_schema_type": "bigint",
+        "downstream_consumers": "only declared V2 registry successors and retained evidence",
+        "earliest_availability": "inside learning-decision-atomic/v1 at Freeze4 after persisted predecessor inspection",
+        "expected_literal_if_static": null,
+        "freeze": "Freeze4",
+        "freeze_point": "Freeze4",
+        "kind": "EXECUTION_DERIVED_PERSISTED",
+        "preimage": {
+          "persisted_predecessor": "latest sequence_number and entry_hash in the exact audit stream",
+          "stream_id": "audit.immutable_audit_log::OUTPUT:learning-decision:audit_id.stream_id",
+          "stream_type": "audit.immutable_audit_log::OUTPUT:learning-decision:audit_id.stream_type",
+          "tenant_id": "audit.immutable_audit_log::OUTPUT:learning-decision:audit_id.tenant_id"
+        },
+        "producer": "phase31.4.4-governed-learning-producer/v2",
+        "producer_version": "v2",
+        "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL",
+        "source_evidence": [
+          "backend/foundation/audit.py:48-66",
+          "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:274-349"
+        ],
+        "source_state": "committed audit.immutable_audit_log rows for the exact tenant_id, stream_type, and stream_id, read by audit.append_immutable_audit while holding its per-stream pg_advisory_xact_lock",
+        "transaction_boundary": "learning-decision-atomic/v1",
+        "verification_rule": "call the existing audit.append_immutable_audit function; under its per-stream advisory transaction lock it assigns predecessor.sequence_number+1 or 1 for an empty stream; reread the returned row and require a JSON integer > 0 linked to that exact stream"
+      }
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "correction_class": "BIGINT_DESCRIPTIVE_LITERAL_TO_EXECUTION_DERIVED_PERSISTED",
+      "field": "aggregate_version",
+      "member": "eventing.domain_event::8bf2bb5b-4cea-5aa0-9a05-18fec0cf049c",
+      "note": "The V2.1 descriptive test string was non-executable metadata, not persisted business state.",
+      "physical_type": "bigint NOT NULL",
+      "source_evidence": [
+        "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:54,64",
+        "backend/foundation/eventing.py:65-79",
+        "backend/foundation/agent_runtime.py:219-231",
+        "backend/foundation/action_execution.py:177-188",
+        "backend/foundation/migrations/0015_first_controlled_qms_mutation_poc.py:109-116,337-344"
+      ],
+      "v2_1_binding_kind": "EXACT_LITERAL",
+      "v2_1_schema_type": "PositiveBigIntegerField",
+      "v2_1_typed_value": "PHASE31.4.4A TEST ONLY \u2014 DomainEvent:learning-authorization \u2014 aggregate_version",
+      "v2_2_binding_kind": "EXECUTION_DERIVED_PERSISTED",
+      "v2_2_schema_type": "PositiveBigIntegerField",
+      "v2_2_typed_value_or_derivation": {
+        "binding_kind": "EXECUTION_DERIVED_PERSISTED",
+        "binding_rationale": "aggregate stream version allocated by the existing event producer",
+        "canonicalization": "PostgreSQL bigint represented as a JSON integer; bool and strings prohibited",
+        "database_type_or_schema_type": "bigint",
+        "downstream_consumers": "only declared V2 registry successors and retained evidence",
+        "earliest_availability": "inside fixture-exact-atomic/v1 at Freeze5 after persisted predecessor inspection",
+        "expected_literal_if_static": null,
+        "freeze": "Freeze5",
+        "freeze_point": "Freeze5",
+        "kind": "EXECUTION_DERIVED_PERSISTED",
+        "preimage": {
+          "aggregate_id": "eventing.domain_event::8bf2bb5b-4cea-5aa0-9a05-18fec0cf049c.aggregate_id",
+          "aggregate_type": "eventing.domain_event::8bf2bb5b-4cea-5aa0-9a05-18fec0cf049c.aggregate_type",
+          "persisted_history": "eventing.domain_event(aggregate_type,aggregate_id,aggregate_version)"
+        },
+        "producer": "phase31.4.4-governed-learning-producer/v2",
+        "producer_version": "v2",
+        "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL",
+        "source_evidence": [
+          "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:54,64",
+          "backend/foundation/eventing.py:65-79",
+          "backend/foundation/agent_runtime.py:219-231",
+          "backend/foundation/action_execution.py:177-188",
+          "backend/foundation/migrations/0015_first_controlled_qms_mutation_poc.py:109-116,337-344"
+        ],
+        "source_state": "committed eventing.domain_event rows for the bound aggregate_type and aggregate_id; producer computes COALESCE(MAX(aggregate_version),0)+1 inside the existing member transaction immediately before INSERT",
+        "transaction_boundary": "fixture-exact-atomic/v1",
+        "verification_rule": "within the existing producer transaction, query the persisted maximum for the exact bound aggregate key, insert max+1 (or 1 when no predecessor exists), then reread and require a JSON integer >= 0 equal to the persisted aggregate_version"
+      }
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "correction_class": "BIGINT_DESCRIPTIVE_LITERAL_TO_EXECUTION_DERIVED_PERSISTED",
+      "field": "sequence_number",
+      "member": "audit.immutable_audit_log::OUTPUT:learning-authorization:audit_id",
+      "note": "The V2.1 descriptive test string was non-executable metadata, not persisted business state.",
+      "physical_type": "bigint NOT NULL",
+      "source_evidence": [
+        "backend/foundation/audit.py:48-66",
+        "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:274-349"
+      ],
+      "v2_1_binding_kind": "EXACT_LITERAL",
+      "v2_1_schema_type": "PositiveBigIntegerField",
+      "v2_1_typed_value": "PHASE31.4.4A TEST ONLY \u2014 ImmutableAuditLog:learning-authorization \u2014 sequence_number",
+      "v2_2_binding_kind": "EXECUTION_DERIVED_PERSISTED",
+      "v2_2_schema_type": "PositiveBigIntegerField",
+      "v2_2_typed_value_or_derivation": {
+        "binding_kind": "EXECUTION_DERIVED_PERSISTED",
+        "binding_rationale": "immutable audit stream sequence assigned by the existing database append function",
+        "canonicalization": "PostgreSQL bigint represented as a JSON integer; bool and strings prohibited",
+        "database_type_or_schema_type": "bigint",
+        "downstream_consumers": "only declared V2 registry successors and retained evidence",
+        "earliest_availability": "inside learning-authorization-atomic/v1 at Freeze5 after persisted predecessor inspection",
+        "expected_literal_if_static": null,
+        "freeze": "Freeze5",
+        "freeze_point": "Freeze5",
+        "kind": "EXECUTION_DERIVED_PERSISTED",
+        "preimage": {
+          "persisted_predecessor": "latest sequence_number and entry_hash in the exact audit stream",
+          "stream_id": "audit.immutable_audit_log::OUTPUT:learning-authorization:audit_id.stream_id",
+          "stream_type": "audit.immutable_audit_log::OUTPUT:learning-authorization:audit_id.stream_type",
+          "tenant_id": "audit.immutable_audit_log::OUTPUT:learning-authorization:audit_id.tenant_id"
+        },
+        "producer": "phase31.4.4-governed-learning-producer/v2",
+        "producer_version": "v2",
+        "retention_rule": "RETAIN_FULL_CANONICAL_MATERIAL",
+        "source_evidence": [
+          "backend/foundation/audit.py:48-66",
+          "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py:274-349"
+        ],
+        "source_state": "committed audit.immutable_audit_log rows for the exact tenant_id, stream_type, and stream_id, read by audit.append_immutable_audit while holding its per-stream pg_advisory_xact_lock",
+        "transaction_boundary": "learning-authorization-atomic/v1",
+        "verification_rule": "call the existing audit.append_immutable_audit function; under its per-stream advisory transaction lock it assigns predecessor.sequence_number+1 or 1 for an empty stream; reread the returned row and require a JSON integer > 0 linked to that exact stream"
+      }
+    }
+  ],
+  "entry_conflict_count": 34,
+  "predecessor_contract_sha256": "acd9e5551a04fc60356fedc2abdc4170932274913795fb6a5a4952ebf9477d85",
+  "row_universe_changed": false
+}

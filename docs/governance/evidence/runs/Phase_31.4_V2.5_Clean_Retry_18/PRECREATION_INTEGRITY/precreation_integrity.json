@@ -1,0 +1,156 @@
+{
+  "artifact_schema": "phase31.4-v2.5-precreation-integrity-evidence/v1",
+  "assertions": [
+    {
+      "detail": {
+        "evidence_directory": "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_18/PRECREATION_INTEGRITY",
+        "historical_evidence_overwrite": false,
+        "run_id": "Phase 31.4 V2.5 Clean Retry 18"
+      },
+      "name": "run_identity_uniqueness",
+      "passed": true
+    },
+    {
+      "detail": {
+        "path": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V3.json",
+        "sha256": "c47c62a52af65cab5b13f830b048017b101425d29c8c80501f9669d2647d7def"
+      },
+      "name": "current_source_integrity",
+      "passed": true
+    },
+    {
+      "detail": {
+        "status": "PASS",
+        "v2_4_sha256": "a102d278bf2e5ca6e9b8bf282f5402a54f52d4690beed2ecbed5145c56539387"
+      },
+      "name": "historical_v2_4_integrity",
+      "passed": true
+    },
+    {
+      "detail": {
+        "count": 22,
+        "mismatches": [],
+        "unexplained_drift": false
+      },
+      "name": "protected_source_set",
+      "passed": true
+    },
+    {
+      "detail": {
+        "executed": false,
+        "protected_migration_count": 24,
+        "status": "PASS"
+      },
+      "name": "migration_material_integrity",
+      "passed": true
+    },
+    {
+      "detail": {
+        "path": "docs/governance/fixtures/PHASE31_4_5C_ROW_LEVEL_EXECUTION_CONTRACT_V2_5.json",
+        "sha256": "51f57160131a831c1fa180b7c5de5fdcb15a8fd895a53a077149c9a5955eca9c",
+        "status": "PASS"
+      },
+      "name": "contract_integrity",
+      "passed": true
+    },
+    {
+      "detail": {
+        "capture_readback_schema_version": "phase31.4-v2.5-capture-readback/v1",
+        "checks": {
+          "capture_readback_schema_version": true,
+          "evidence_schema_version": true,
+          "no_default_pass": true,
+          "phase_result_status_propagation": true
+        },
+        "evidence_schema_version": "phase31.4-v2.5-phase-evidence/v1",
+        "status": "PASS"
+      },
+      "name": "verifier_integrity",
+      "passed": true
+    },
+    {
+      "detail": {
+        "checks": {
+          "actor_source_contract": true,
+          "adminapps_isolated_endpoint_reference": true,
+          "entitlement_requirement": true,
+          "required_credential_reference": true
+        },
+        "live_approver_authority_claimed": false,
+        "live_authentication_claimed": false,
+        "live_entitlement_claimed": false,
+        "status": "PASS"
+      },
+      "name": "authority_configuration",
+      "passed": true
+    },
+    {
+      "detail": [
+        "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_18/PRECREATION_INTEGRITY/precreation_integrity.json"
+      ],
+      "name": "evidence_serialized",
+      "passed": true
+    }
+  ],
+  "authority_configuration_result": {
+    "checks": {
+      "actor_source_contract": true,
+      "adminapps_isolated_endpoint_reference": true,
+      "entitlement_requirement": true,
+      "required_credential_reference": true
+    },
+    "live_approver_authority_claimed": false,
+    "live_authentication_claimed": false,
+    "live_entitlement_claimed": false,
+    "status": "PASS"
+  },
+  "claimed_guarantee": "Pre-creation source, contract, authority and protected-material integrity are verified before any runtime domain effect is allowed.",
+  "completed_at": "2026-09-23T21:20:44.607772+00:00",
+  "contract_integrity_result": {
+    "path": "docs/governance/fixtures/PHASE31_4_5C_ROW_LEVEL_EXECUTION_CONTRACT_V2_5.json",
+    "sha256": "51f57160131a831c1fa180b7c5de5fdcb15a8fd895a53a077149c9a5955eca9c",
+    "status": "PASS"
+  },
+  "current_integrity_artifact": {
+    "path": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V3.json",
+    "sha256": "c47c62a52af65cab5b13f830b048017b101425d29c8c80501f9669d2647d7def"
+  },
+  "error": null,
+  "evidence_hashes": {
+    "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V3.json": "c47c62a52af65cab5b13f830b048017b101425d29c8c80501f9669d2647d7def",
+    "docs/governance/fixtures/PHASE31_4_5C_ROW_LEVEL_EXECUTION_CONTRACT_V2_5.json": "51f57160131a831c1fa180b7c5de5fdcb15a8fd895a53a077149c9a5955eca9c"
+  },
+  "evidence_paths": [
+    "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_18/PRECREATION_INTEGRITY/precreation_integrity.json"
+  ],
+  "executor": "PrecreationIntegrityExecutor",
+  "historical_integrity_result": {
+    "status": "PASS",
+    "v2_4_sha256": "a102d278bf2e5ca6e9b8bf282f5402a54f52d4690beed2ecbed5145c56539387"
+  },
+  "migration_integrity_result": {
+    "executed": false,
+    "protected_migration_count": 24,
+    "status": "PASS"
+  },
+  "operation": "verify_precreation_integrity",
+  "phase_id": "PRECREATION_INTEGRITY",
+  "protected_source_count": 22,
+  "protected_source_mismatches": [],
+  "read_only_domain_operation": true,
+  "run_id": "Phase 31.4 V2.5 Clean Retry 18",
+  "started_at": "2026-09-23T21:20:44.539505+00:00",
+  "status": "PASS",
+  "timestamp": "2026-09-23T21:20:44.607772+00:00",
+  "verifier_integrity_result": {
+    "capture_readback_schema_version": "phase31.4-v2.5-capture-readback/v1",
+    "checks": {
+      "capture_readback_schema_version": true,
+      "evidence_schema_version": true,
+      "no_default_pass": true,
+      "phase_result_status_propagation": true
+    },
+    "evidence_schema_version": "phase31.4-v2.5-phase-evidence/v1",
+    "status": "PASS"
+  }
+}

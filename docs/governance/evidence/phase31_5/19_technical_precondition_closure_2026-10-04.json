@@ -1,0 +1,18 @@
+{
+  "artifact_schema": "phase31.5-e07-e08-technical-precondition-closure/v1",
+  "generated_at": "2026-10-04",
+  "phase_state": "EXECUTION_HELD",
+  "frozen_input_verification": {"manifest": "docs/governance/evidence/phase31_5/18_sha256.json", "payload_hashes": "8/8 PASS", "frozen_inputs_modified": false},
+  "external_effects": {"adminapps_network_calls": 0, "external_api_calls": 0, "webhooks_or_external_event_delivery": 0, "deployments": 0, "database_instances_created": 0},
+  "focused_checks": {"count": 4, "passed": 4, "failed": 0, "skipped": 0},
+  "prerequisites": [
+    {"id": "P0-31_5-ENTRY-COMMITTED-CREDENTIALS", "classification": "EXTERNAL_DEPENDENCY_REQUIRED", "decision": "EXTERNAL_BLOCKED", "reconciliation": "BLOCKED_EXTERNAL", "closure": "STILL_OPEN"},
+    {"id": "P1-31_5-ENTRY-DEPLOYMENT-REPRODUCIBILITY", "classification": "GOVERNANCE_ONLY", "decision": "SOURCE_INSUFFICIENT", "reconciliation": "BLOCKED_GOVERNANCE", "closure": "STILL_OPEN"},
+    {"id": "P1-31_5-ENTRY-SQLITE-OPERATIONAL-ESCAPE", "classification": "EPHEMERAL_POSTGRES_PROOF_REQUIRED", "decision": "ELIGIBLE_FOR_LOCAL_CLOSURE", "reconciliation": "STILL_OPEN", "closure": "STILL_OPEN"},
+    {"id": "P1-31_5-ENTRY-JWT-LOCALSTORAGE", "classification": "SOURCE_SEMANTICS_MISSING", "decision": "SOURCE_INSUFFICIENT", "reconciliation": "BLOCKED_SOURCE", "closure": "STILL_OPEN"},
+    {"id": "P1-31_5-ENTRY-BACKUP-NOT-IMPLEMENTED", "classification": "SOURCE_SEMANTICS_MISSING", "decision": "SOURCE_INSUFFICIENT", "reconciliation": "BLOCKED_SOURCE", "closure": "STILL_OPEN"},
+    {"id": "P1-31_5-ENTRY-WORKER-OUTBOX-OPERABILITY", "classification": "SOURCE_SEMANTICS_MISSING", "decision": "SOURCE_INSUFFICIENT", "reconciliation": "BLOCKED_SOURCE", "closure": "STILL_OPEN"}
+  ],
+  "gate_reevaluation": {"e_07": "FAIL", "e_08": "FAIL", "prerequisites_closed": 0, "prerequisites_remaining": 6},
+  "final_verdict": "PHASE31.5 E-07/E-08 PARTIALLY CLOSED — TECHNICAL PRECONDITIONS REMAIN"
+}

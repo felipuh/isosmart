@@ -1,0 +1,59 @@
+{
+  "artifact_schema": "phase31.4-retry13-code-remediation/v1",
+  "retry_id": "Phase 31.4 V2.5 Clean Retry 13",
+  "retry12_blocker": {
+    "id": "P1-RETRY12-V25-ACTIONPLAN-AGENT-DECISION-LIVE-BINDING-MISSING",
+    "status": "CODE_REMEDIATED_LIVE_CLOSURE_PENDING"
+  },
+  "identity_audit": {
+    "historical_qms_fields_before": 28,
+    "historical_qms_fields_after": 0,
+    "invalid_live_literals": 0,
+    "agent_definition": "CAPTURE_NATIVE_OUTPUT",
+    "agent_run": "CAPTURE_NATIVE_OUTPUT",
+    "decision": "CAPTURE_NATIVE_OUTPUT",
+    "action_plan": "CAPTURE_NATIVE_OUTPUT",
+    "authorization": "CAPTURE_NATIVE_OUTPUT"
+  },
+  "contract": {
+    "members": 118,
+    "fields": 1664,
+    "capture_native_output": 565,
+    "live_upstream_native_capture": 5,
+    "capture_count_change_reason": "56 previously literal runtime identities are now explicit native captures; 5 upstream fields are separately classified"
+  },
+  "structural_gate": {
+    "native_sources": "16/16",
+    "native_phases": "33/33",
+    "capture_producers": "565/565",
+    "ambiguous_identity_producers": 0,
+    "dependency_graph": "PASS",
+    "p0": 0,
+    "p1": 0
+  },
+  "targeted_tests": {
+    "passed": 23,
+    "failed": 0,
+    "whole_graph_native_identity_independence": "PASS",
+    "historical_uuid_poison": "PASS"
+  },
+  "full_offline_regression": {
+    "executed": 244,
+    "passed": 221,
+    "failed": 23,
+    "status": "FAIL",
+    "failure_classes": [
+      "legacy V2.4 validators reject tracked migration 0024_adminapps_ingress_receipt.py",
+      "legacy protected-source manifest expects the pre-bootstrap backend/settings.py hash"
+    ],
+    "changes_to_v2_4_made": false
+  },
+  "new_blocker": {
+    "id": "P1-RETRY13-OFFLINE-REGRESSION-GATE",
+    "severity": "P1",
+    "status": "OPEN",
+    "policy": "Do not create live Retry 13 resources until full offline P0=0/P1=0 is satisfied without modifying V2.4"
+  },
+  "live_retry": "NOT_STARTED",
+  "promotion": "NOT_PROMOTED"
+}

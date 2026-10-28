@@ -1,0 +1,41 @@
+{
+  "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 1",
+  "started_at": "2026-09-29T01:04:11.807619+00:00",
+  "boundaries": [
+    "LAUNCHER_STARTED",
+    "DJANGO_SETUP_COMPLETE",
+    "RUNNER_INITIALIZED"
+  ],
+  "execution_result": "FAIL",
+  "exception_type": "LiveExecutorError",
+  "exception": "ADMINAPPS_START_FAILURE: service exited 2; log=/home/felipe/proyectos/isosmart/docs/governance/evidence/runs/Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1/adminapps_service.log",
+  "traceback": "Traceback (most recent call last):\n  File \"/home/felipe/proyectos/isosmart/docs/governance/evidence/PHASE31_4_V2_5_V8_OPERATIONAL_DIAGNOSTIC_ATTEMPT_1_CONTROL_V1/attempt_driver.py\", line 143, in launch\n    runner.run_evidence(precreation=lambda manifest: live().precreation(manifest), stage_ext=stage)\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_disposable_runner.py\", line 1424, in run_evidence\n    stage_result = dict(stage_ext(self.manifest))\n                        ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/docs/governance/evidence/PHASE31_4_V2_5_V8_OPERATIONAL_DIAGNOSTIC_ATTEMPT_1_CONTROL_V1/attempt_driver.py\", line 133, in stage\n    result = dict(live().stage_ext(manifest))\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_live_executor.py\", line 200, in stage_ext\n    self.bootstrap_runtime(); self.start_services(); return self.resolve_stage_ext_identities()\n                              ^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_live_executor.py\", line 146, in start_services\n    result = self._pass(method(self.context), code, f\"{key} startup\")\n                        ^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_operational_adapters.py\", line 121, in start_adminapps\n    def start_adminapps(self, context: LiveExecutionContext) -> Mapping[str, Any]: return self._start(\"adminapps\", context)\n                                                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_operational_adapters.py\", line 109, in _start\n    if process.poll() is not None: raise LiveExecutorError(f\"{name.upper()}_START_FAILURE\", f\"service exited {process.returncode}; log={log_path}\")\n                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nfoundation.phase31_4_v2_5_live_executor.LiveExecutorError: ADMINAPPS_START_FAILURE: service exited 2; log=/home/felipe/proyectos/isosmart/docs/governance/evidence/runs/Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1/adminapps_service.log\n",
+  "service_endpoints": {},
+  "service_pids": {},
+  "service_cleanup": {
+    "status": "PASS",
+    "services": {}
+  },
+  "manifest_path": "/home/felipe/proyectos/isosmart/docs/governance/evidence/runs/Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1/RESOURCE_MANIFEST.json",
+  "manifest_sha256": "681265c5fa844245a249b74287b703a03b58c8730a54775ca21abaac1b49c38a",
+  "failure": {
+    "domain": "DISPOSABLE_EXECUTION_TOOLING_BLOCKER",
+    "code": "UNCLASSIFIED_RUNNER_FAILURE",
+    "runner_step": "verify_isosmart_postgres_version",
+    "exception_type": "LiveExecutorError",
+    "exception": "ADMINAPPS_START_FAILURE: service exited 2; log=/home/felipe/proyectos/isosmart/docs/governance/evidence/runs/Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1/adminapps_service.log",
+    "traceback": "Traceback (most recent call last):\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_disposable_runner.py\", line 1424, in run_evidence\n    stage_result = dict(stage_ext(self.manifest))\n                        ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/docs/governance/evidence/PHASE31_4_V2_5_V8_OPERATIONAL_DIAGNOSTIC_ATTEMPT_1_CONTROL_V1/attempt_driver.py\", line 133, in stage\n    result = dict(live().stage_ext(manifest))\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_live_executor.py\", line 200, in stage_ext\n    self.bootstrap_runtime(); self.start_services(); return self.resolve_stage_ext_identities()\n                              ^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_live_executor.py\", line 146, in start_services\n    result = self._pass(method(self.context), code, f\"{key} startup\")\n                        ^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_operational_adapters.py\", line 121, in start_adminapps\n    def start_adminapps(self, context: LiveExecutionContext) -> Mapping[str, Any]: return self._start(\"adminapps\", context)\n                                                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_operational_adapters.py\", line 109, in _start\n    if process.poll() is not None: raise LiveExecutorError(f\"{name.upper()}_START_FAILURE\", f\"service exited {process.returncode}; log={log_path}\")\n                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nfoundation.phase31_4_v2_5_live_executor.LiveExecutorError: ADMINAPPS_START_FAILURE: service exited 2; log=/home/felipe/proyectos/isosmart/docs/governance/evidence/runs/Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1/adminapps_service.log\n",
+    "command": null,
+    "state_at_failure": "STAGE_EXT_RUNNING",
+    "at": "2026-09-29T01:05:18.449002+00:00"
+  },
+  "cleanup": {
+    "status": "PASS",
+    "remaining_resources": [],
+    "errors": [],
+    "started_at": "2026-09-29T01:05:18.473663+00:00",
+    "completed_at": "2026-09-29T01:05:30.301133+00:00",
+    "post_teardown_absence_verified": true
+  },
+  "completed_at": "2026-09-29T01:05:30.332783+00:00"
+}

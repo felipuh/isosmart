@@ -1,0 +1,77 @@
+{
+  "artifact_schema": "phase31.4-v2.5-v11-attempt-3-outbox-producer-remediation-authorization/v1",
+  "authorization_status": "SINGLE_REMEDIATION_AUTHORIZED",
+  "one_shot": true,
+  "attempt": 3,
+  "cycle": "Phase 31.4 V2.5 V11 Operational Diagnostic Cycle 1",
+  "execution_authorized": false,
+  "execution_gate": "focused producer and delivery evidence, regression, successor integrity, teardown, and independent Attempt 3 authorization are still required",
+  "blocker_identity": "OPERATIONAL_EVENT_DELIVERY_PROJECTION_BLOCKER",
+  "attempt_2_verdict": "V11_ATTEMPT_2_FAIL",
+  "attempt_2_authorization": {
+    "path": "docs/governance/evidence/PHASE31_4_V2_5_V11_OPERATIONAL_DIAGNOSTIC_CYCLE_1_ATTEMPT_2_AUTHORIZATION_V1.json",
+    "sha256": "7d085832f05bef5498f029eaa59f7bc3fbddf62c9f0cd515c10ad0198ad40c23",
+    "consumption": "historical_reference_only",
+    "reuse": "prohibited"
+  },
+  "attempt_2_integrity": {
+    "path": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V12.json",
+    "sha256": "685e04fa2e94513c357bbd6d333c2fe785e967b172234cd93faae777e25f79c2",
+    "reconciliation_sha256": "8e1a0c0febdf9c06ec34d3abc062dcf595574ef89decc0f938771cbcd1e8318c"
+  },
+  "root_cause_review": {
+    "static_verdict": "OMITTED_OUTBOX_EVENT_CONFIRMED",
+    "canonical_path": "adminapps/backend/apps/organizations/serializers.py:OrganizationCreateSerializer.create",
+    "canonical_contract": "adminapps/backend/apps/organizations/tenant_events.py:record_tenant_event",
+    "disposable_path": "isosmart/docs/governance/tools/phase31_4_v2_5_operational_actions.py:authority",
+    "proof": "canonical creation records tenant.provisioned in the same transaction; disposable authority previously persisted Organization directly and created no TenantIntegrationOutbox row; delivery exits successfully when no pending row exists",
+    "consumer_path": "adminapps/backend/apps/organizations/management/commands/deliver_tenant_events.py -> ISO Smart authenticated tenant event ingress -> foundation.projection_writer.ProjectionWriterService._apply_tenant",
+    "projection_rule": "tenant.provisioned creates TenantProjection; non-provisioning events cannot create a missing tenant projection"
+  },
+  "allowed_source_paths": [
+    "isosmart/docs/governance/tools/phase31_4_v2_5_operational_actions.py"
+  ],
+  "changed_source_sha256": {
+    "isosmart/docs/governance/tools/phase31_4_v2_5_operational_actions.py": "2c864108a6867ee61a93c4e4f8831e09627c3bee1d6269cdc8983424fcd1b6d2"
+  },
+  "remediation_count": 1,
+  "exact_remediation": "Reuse apps.organizations.tenant_events.record_tenant_event from a transaction.atomic boundary around disposable authority tenant creation; preserve actor_id and canonical envelope generation.",
+  "focused_test_source": {
+    "path": "adminapps/backend/apps/organizations/tests_tenant_events.py",
+    "sha256": "2f85c99fdff81230440b5e9f2a4c2eaed410addd8741bd0fb981967a841c3147"
+  },
+  "required_tests": [
+    "disposable authority creates tenant",
+    "exactly one pending tenant event exists",
+    "event identity and actor point to authority records",
+    "canonical payload and event type are preserved",
+    "outer rollback removes tenant and event together",
+    "delivery evidence captures outbox before and after and independent TenantProjection readback",
+    "regression suites and dependency/Bearer/readiness boundary checks"
+  ],
+  "prohibitions": [
+    "modify delivery consumer",
+    "modify TenantProjection or projection consumer",
+    "modify migrations",
+    "modify authentication, Bearer, readiness, or dependency contracts",
+    "reuse Attempt 2 authorization",
+    "execute Attempt 3",
+    "authorize or execute Retry 20",
+    "advance Phase 31.5",
+    "create projection directly from runner",
+    "fabricate an outbox row outside canonical helper"
+  ],
+  "successor_requirements": {
+    "required": true,
+    "predecessor": "PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V12.json",
+    "must_be_created_only_after": [
+      "focused producer tests PASS",
+      "focused delivery/projection test PASS",
+      "regression PASS",
+      "boundary preservation PASS"
+    ]
+  },
+  "attempt_3_eligibility": "NOT_YET_ELIGIBLE",
+  "retry_20": "NONE / NO",
+  "phase_31_5": "EXECUTION_HELD"
+}

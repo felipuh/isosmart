@@ -1,0 +1,154 @@
+﻿id,label,type,layer
+L1,ISO Smart Harmonized Core,ArchitectureLayer,Core
+L2,ISO Smart Quality Intelligence,ArchitectureLayer,Quality
+L3,ISO Smart AI Governance Core,ArchitectureLayer,AI Governance
+L4,Standard & Industry Packs,ArchitectureLayer,Packs
+STD_ISO_9000_2026,ISO 9000:2026,KnowledgeLayer,Quality Intelligence
+STD_ISO_9001_2026_FDIS,ISO 9001:2026/FDIS,KnowledgeLayer,Quality Intelligence
+STD_ISO_DIS_9002,ISO/DIS 9002,KnowledgeLayer,Quality Intelligence
+STD_ISO_9004_2018,ISO 9004:2018,KnowledgeLayer,Quality Intelligence
+STD_ISO_10001_2018,ISO 10001:2018,KnowledgeLayer,Quality Intelligence
+STD_ISO_10002_2018,ISO 10002:2018,KnowledgeLayer,Quality Intelligence
+STD_ISO_10003_2018,ISO 10003:2018,KnowledgeLayer,Quality Intelligence
+STD_ISO_10004_2018,ISO 10004:2018,KnowledgeLayer,Quality Intelligence
+STD_ISO_10005_2018,ISO 10005:2018,KnowledgeLayer,Quality Intelligence
+STD_ISO_10006_2017,ISO 10006:2017,KnowledgeLayer,Quality Intelligence
+STD_ISO_10007_2017,ISO 10007:2017,KnowledgeLayer,Quality Intelligence
+STD_ISO_10008_2022,ISO 10008:2022,KnowledgeLayer,Quality Intelligence
+STD_ISO_10009_2024,ISO 10009:2024,KnowledgeLayer,Quality Intelligence
+STD_ISO_10010_2022,ISO 10010:2022,KnowledgeLayer,Quality Intelligence
+STD_ISO_10012_2026,ISO 10012:2026,KnowledgeLayer,Quality Intelligence
+STD_ISO_10013_2021,ISO 10013:2021,KnowledgeLayer,Quality Intelligence
+STD_ISO_10014_2021,ISO 10014:2021,KnowledgeLayer,Quality Intelligence
+STD_ISO_10015_2019,ISO 10015:2019,KnowledgeLayer,Quality Intelligence
+STD_ISO_10017_2021,ISO 10017:2021,KnowledgeLayer,Quality Intelligence
+STD_ISO_10018_2020,ISO 10018:2020,KnowledgeLayer,Quality Intelligence
+STD_ISO_10019_2005,ISO 10019:2005,KnowledgeLayer,Quality Intelligence
+STD_ISO_19011_2026,ISO 19011:2026,KnowledgeLayer,Quality Intelligence
+STD_ISO_31000_2018,ISO 31000:2018,KnowledgeLayer,Quality Intelligence
+STD_ISO_IEC_42001_2023,ISO/IEC 42001:2023,KnowledgeLayer,AI Governance Core
+STD_ISO_IEC_42005_2025,ISO/IEC 42005:2025,KnowledgeLayer,AI Governance Core
+STD_ISO_IEC_23894_2023,ISO/IEC 23894:2023,KnowledgeLayer,AI Governance Core
+STD_ISO_IEC_22989_2022,ISO/IEC 22989:2022,KnowledgeLayer,AI Governance Core
+STD_ISO_IEC_5259_series,ISO/IEC 5259 series,KnowledgeLayer,AI Governance Core
+STD_ISO_IEC_38507_2022,ISO/IEC 38507:2022,KnowledgeLayer,AI Governance Core
+STD_ISO_IEC_27001_2022,ISO/IEC 27001:2022,KnowledgeLayer,AI Governance Core
+STD_ISO_IEC_27701_2025,ISO/IEC 27701:2025,KnowledgeLayer,AI Governance Core
+REQ_4_1,4.1 Comprensión de la organización y de su contexto,Requirement,Harmonized Core
+MOD_Context_Analyzer,Context Analyzer,Module,Harmonized Core
+AG_Context_Twin_Orchestrator,Context Twin Orchestrator,Agent,Agent Runtime
+REQ_4_2,4.2 Necesidades y expectativas de las partes interesadas,Requirement,Harmonized Core
+MOD_Stakeholder_Engine,Stakeholder Engine,Module,Harmonized Core
+AG_Stakeholder_Intelligence_Agent,Stakeholder Intelligence Agent,Agent,Agent Runtime
+REQ_4_3,4.3 Alcance del SGC,Requirement,Harmonized Core
+MOD_Scope_Builder,Scope Builder,Module,Harmonized Core
+AG_Scope_Assurance_Agent,Scope Assurance Agent,Agent,Agent Runtime
+REQ_4_4_1,4.4.1 Sistema de gestión de la calidad y procesos,Requirement,Harmonized Core
+MOD_Process_Mapper,Process Mapper,Module,Harmonized Core
+AG_Process_Graph_Agent,Process Graph Agent,Agent,Agent Runtime
+REQ_4_4_2,4.4.2 Información documentada de procesos,Requirement,Harmonized Core
+REQ_5_1_1,5.1.1 Liderazgo y compromiso - generalidades,Requirement,Harmonized Core
+MOD_Quality_Navigator,Quality Navigator,Module,Harmonized Core
+AG_Leadership_Orchestrator,Leadership Orchestrator,Agent,Agent Runtime
+REQ_5_1_2,5.1.2 Enfoque al cliente,Requirement,Harmonized Core
+AG_Customer_Focus_Agent,Customer Focus Agent,Agent,Agent Runtime
+REQ_5_2_1,5.2.1 Establecimiento de la política de calidad,Requirement,Harmonized Core
+MOD_Policy_Synthesizer,Policy Synthesizer,Module,Harmonized Core
+AG_Policy_Coherence_Agent,Policy Coherence Agent,Agent,Agent Runtime
+REQ_5_2_2,5.2.2 Comunicación e implementación de la política,Requirement,Harmonized Core
+REQ_5_3,"5.3 Roles, responsabilidades y autoridades",Requirement,Harmonized Core
+MOD_Ethics_Monitor,Ethics Monitor,Module,Harmonized Core
+AG_Accountability_Ethics_Agent,Accountability & Ethics Agent,Agent,Agent Runtime
+REQ_6_1_1,6.1.1 Determinación de riesgos y oportunidades,Requirement,Harmonized Core
+MOD_Risk_Engine,Risk Engine,Module,Harmonized Core
+AG_Predictive_Risk_Orchestrator,Predictive Risk Orchestrator,Agent,Agent Runtime
+REQ_6_1_2,6.1.2 Acciones para abordar los riesgos,Requirement,Harmonized Core
+REQ_6_1_3,6.1.3 Acciones para abordar las oportunidades,Requirement,Harmonized Core
+REQ_6_2_1,6.2.1 Objetivos de la calidad,Requirement,Harmonized Core
+MOD_Objective_Planner,Objective Planner,Module,Harmonized Core
+AG_Objective_Optimization_Agent,Objective Optimization Agent,Agent,Agent Runtime
+REQ_6_2_2,6.2.2 Planificación para lograr objetivos,Requirement,Harmonized Core
+REQ_6_3,6.3 Planificación de los cambios,Requirement,Harmonized Core
+MOD_Change_Orchestrator,Change Orchestrator,Module,Harmonized Core
+AG_Change_Simulation_Agent,Change Simulation Agent,Agent,Agent Runtime
+REQ_7_1_1,7.1.1 Recursos - generalidades,Requirement,Harmonized Core
+MOD_Resource_Manager,Resource Manager,Module,Harmonized Core
+AG_Resource_Orchestrator,Resource Orchestrator,Agent,Agent Runtime
+REQ_7_1_2,7.1.2 Personas,Requirement,Harmonized Core
+REQ_7_1_3,7.1.3 Infraestructura,Requirement,Harmonized Core
+REQ_7_1_4,7.1.4 Ambiente para la operación,Requirement,Harmonized Core
+REQ_7_1_5_1,7.1.5.1 Recursos de seguimiento y medición - generalidades,Requirement,Harmonized Core
+REQ_7_1_5_2,7.1.5.2 Trazabilidad de las mediciones,Requirement,Harmonized Core
+REQ_7_1_6,7.1.6 Conocimientos de la organización,Requirement,Harmonized Core
+REQ_7_2,7.2 Competencia,Requirement,Harmonized Core
+MOD_Competence_Evaluator,Competence Evaluator,Module,Harmonized Core
+AG_Competence_Intelligence_Agent,Competence Intelligence Agent,Agent,Agent Runtime
+REQ_7_3,7.3 Toma de conciencia,Requirement,Harmonized Core
+MOD_Awareness_Tracker,Awareness Tracker,Module,Harmonized Core
+AG_Awareness_Culture_Agent,Awareness & Culture Agent,Agent,Agent Runtime
+REQ_7_4,7.4 Comunicación,Requirement,Harmonized Core
+MOD_Communication_Hub,Communication Hub,Module,Harmonized Core
+AG_Communication_Intelligence_Agent,Communication Intelligence Agent,Agent,Agent Runtime
+REQ_7_5_1,7.5.1 Información documentada - generalidades,Requirement,Harmonized Core
+MOD_Document_Controller,Document Controller,Module,Harmonized Core
+AG_Document_Intelligence_Agent,Document Intelligence Agent,Agent,Agent Runtime
+REQ_7_5_2,7.5.2 Creación y actualización,Requirement,Harmonized Core
+REQ_7_5_3,7.5.3 Control de información documentada,Requirement,Harmonized Core
+REQ_8_1,8.1 Planificación y control operacional,Requirement,Harmonized Core
+MOD_Operational_Planner,Operational Planner,Module,Harmonized Core
+AG_Operations_Orchestrator,Operations Orchestrator,Agent,Agent Runtime
+REQ_8_2_1,8.2.1 Comunicación con el cliente,Requirement,Harmonized Core
+MOD_Requirement_Mapper,Requirement Mapper,Module,Harmonized Core
+AG_Requirement_Intelligence_Agent,Requirement Intelligence Agent,Agent,Agent Runtime
+REQ_8_2_2,8.2.2 Determinación de requisitos de productos y servicios,Requirement,Harmonized Core
+REQ_8_2_3,8.2.3 Revisión de requisitos,Requirement,Harmonized Core
+REQ_8_2_4,8.2.4 Cambios en los requisitos,Requirement,Harmonized Core
+REQ_8_3_1,8.3.1 Diseño y desarrollo - generalidades,Requirement,Harmonized Core
+MOD_Design_Lab,Design Lab,Module,Harmonized Core
+AG_Design_Assurance_Agent,Design Assurance Agent,Agent,Agent Runtime
+REQ_8_3_2,8.3.2 Planificación del diseño y desarrollo,Requirement,Harmonized Core
+REQ_8_3_3,8.3.3 Entradas de diseño y desarrollo,Requirement,Harmonized Core
+REQ_8_3_4,8.3.4 Controles de diseño y desarrollo,Requirement,Harmonized Core
+REQ_8_3_5,8.3.5 Salidas de diseño y desarrollo,Requirement,Harmonized Core
+REQ_8_3_6,8.3.6 Cambios de diseño y desarrollo,Requirement,Harmonized Core
+REQ_8_4_1,8.4.1 Proveedores externos - generalidades,Requirement,Harmonized Core
+MOD_Process_Sentinel,Process Sentinel,Module,Harmonized Core
+AG_Supplier_External_Process_Agent,Supplier & External Process Agent,Agent,Agent Runtime
+REQ_8_4_2,8.4.2 Tipo y alcance del control externo,Requirement,Harmonized Core
+REQ_8_4_3,8.4.3 Información a proveedores externos,Requirement,Harmonized Core
+REQ_8_5_1,8.5.1 Control de producción y provisión del servicio,Requirement,Harmonized Core
+MOD_Production_Flow,Production Flow,Module,Harmonized Core
+AG_Execution_Traceability_Agent,Execution & Traceability Agent,Agent,Agent Runtime
+REQ_8_5_2,8.5.2 Identificación y trazabilidad,Requirement,Harmonized Core
+REQ_8_5_3,8.5.3 Propiedad de clientes/proveedores,Requirement,Harmonized Core
+REQ_8_5_4,8.5.4 Preservación,Requirement,Harmonized Core
+REQ_8_5_5,8.5.5 Actividades posteriores a la entrega,Requirement,Harmonized Core
+REQ_8_5_6,8.5.6 Control de cambios,Requirement,Harmonized Core
+REQ_8_6,8.6 Liberación de productos y servicios,Requirement,Harmonized Core
+MOD_Release_Validator,Release Validator,Module,Harmonized Core
+AG_Release_Assurance_Agent,Release Assurance Agent,Agent,Agent Runtime
+REQ_8_7_1,8.7.1 Control de salidas no conformes,Requirement,Harmonized Core
+MOD_NC_Anticipator,NC Anticipator,Module,Harmonized Core
+AG_Nonconformity_Containment_Agent,Nonconformity Containment Agent,Agent,Agent Runtime
+REQ_8_7_2,8.7.2 Evidencia de salidas no conformes,Requirement,Harmonized Core
+REQ_9_1_1,"9.1.1 Seguimiento, medición, análisis y evaluación",Requirement,Harmonized Core
+MOD_Performance_Tracker,Performance Tracker,Module,Harmonized Core
+AG_Performance_Intelligence_Agent,Performance Intelligence Agent,Agent,Agent Runtime
+REQ_9_1_2,9.1.2 Satisfacción del cliente,Requirement,Harmonized Core
+REQ_9_1_3,9.1.3 Análisis y evaluación,Requirement,Harmonized Core
+REQ_9_2_1,9.2.1 Auditoría interna - generalidades,Requirement,Harmonized Core
+MOD_Audit_Engine,Audit Engine,Module,Harmonized Core
+AG_Autonomous_Audit_Orchestrator,Autonomous Audit Orchestrator,Agent,Agent Runtime
+REQ_9_2_2,9.2.2 Programa de auditoría interna,Requirement,Harmonized Core
+REQ_9_3_1,9.3.1 Revisión por la dirección - generalidades,Requirement,Harmonized Core
+MOD_Executive_Review,Executive Review,Module,Harmonized Core
+AG_Executive_Insight_Agent,Executive Insight Agent,Agent,Agent Runtime
+REQ_9_3_2,9.3.2 Entradas de revisión por la dirección,Requirement,Harmonized Core
+REQ_9_3_3,9.3.3 Resultados de revisión por la dirección,Requirement,Harmonized Core
+REQ_10_1,10.1 Mejora continua,Requirement,Harmonized Core
+MOD_Opportunity_Engine,Opportunity Engine,Module,Harmonized Core
+AG_Continuous_Improvement_Agent,Continuous Improvement Agent,Agent,Agent Runtime
+REQ_10_2_1,10.2.1 No conformidad y acción correctiva,Requirement,Harmonized Core
+MOD_Corrective_Tracker,Corrective Tracker,Module,Harmonized Core
+AG_Corrective_Action_Orchestrator,Corrective Action Orchestrator,Agent,Agent Runtime
+REQ_10_2_2,10.2.2 Evidencia de acción correctiva,Requirement,Harmonized Core

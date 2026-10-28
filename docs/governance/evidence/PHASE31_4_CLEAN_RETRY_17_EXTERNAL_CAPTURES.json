@@ -1,0 +1,54 @@
+{
+  "artifact_schema": "phase31.4-v2.5-disposable-evidence-external-captures/v1",
+  "categories": {
+    "adminapps_entitlement": {
+      "capture": {
+        "enabled": true,
+        "id": "17c0f862-908e-41f2-9e41-1d83749d077e",
+        "product": "ISO_SMART",
+        "readback": "17c0f862-908e-41f2-9e41-1d83749d077e",
+        "scopes": [
+          "qms"
+        ],
+        "status": "active"
+      },
+      "expected": 1,
+      "resolved": 1
+    },
+    "adminapps_external_actor": {
+      "capture": {
+        "equality": true,
+        "identity": "external_adminapps_actor_user_id",
+        "provenance": "ADMINAPPS_EXTERNAL_ACTOR",
+        "readback": "597130f2-9e2a-45af-9a17-a83298de0206",
+        "run_id": "Phase 31.4 V2.5 Clean Retry 17",
+        "source": "AdminApps User",
+        "source_service": "AdminApps",
+        "timestamp": "2026-09-23T19:55:20.327284+00:00",
+        "type": "uuid",
+        "value": "597130f2-9e2a-45af-9a17-a83298de0206"
+      },
+      "expected": 1,
+      "resolved": 1
+    },
+    "adminapps_external_tenant": {
+      "capture": {
+        "equality": true,
+        "identity": "external_adminapps_tenant_id",
+        "provenance": "ADMINAPPS_EXTERNAL_TENANT",
+        "readback": "ac312d29-2f3e-4a12-9094-5838b9484780",
+        "run_id": "Phase 31.4 V2.5 Clean Retry 17",
+        "source": "AdminApps Organization",
+        "source_service": "AdminApps",
+        "timestamp": "2026-09-23T19:55:20.327263+00:00",
+        "type": "uuid",
+        "value": "ac312d29-2f3e-4a12-9094-5838b9484780"
+      },
+      "expected": 1,
+      "resolved": 1
+    }
+  },
+  "local_projections_and_qms_ids_excluded_from_upstream_count": true,
+  "run_id": "Phase 31.4 V2.5 Clean Retry 17",
+  "status": "PASS"
+}

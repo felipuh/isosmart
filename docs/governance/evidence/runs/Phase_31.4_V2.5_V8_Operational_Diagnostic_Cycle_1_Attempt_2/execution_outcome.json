@@ -1,0 +1,137 @@
+{
+  "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 2",
+  "started_at": "2026-09-29T01:36:58.137424+00:00",
+  "verdict": "ATTEMPT_2_FAIL",
+  "exception_type": "LiveExecutorError",
+  "exception": "ADMINAPPS_START_FAILURE: readiness timeout: HTTP Error 401: Unauthorized; log=/home/felipe/proyectos/isosmart/docs/governance/evidence/runs/Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_2/adminapps_service.log",
+  "traceback": "Traceback (most recent call last):\n  File \"/home/felipe/proyectos/isosmart/docs/governance/tools/phase31_4_v2_5_v8_attempt_2_driver.py\", line 102, in run\n    runner.run_evidence(precreation=lambda manifest: live().precreation(manifest), stage_ext=stage)\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_disposable_runner.py\", line 1424, in run_evidence\n    stage_result = dict(stage_ext(self.manifest))\n                        ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/docs/governance/tools/phase31_4_v2_5_v8_attempt_2_driver.py\", line 95, in stage\n    result = dict(live().stage_ext(manifest))\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_live_executor.py\", line 200, in stage_ext\n    self.bootstrap_runtime(); self.start_services(); return self.resolve_stage_ext_identities()\n                              ^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_live_executor.py\", line 146, in start_services\n    result = self._pass(method(self.context), code, f\"{key} startup\")\n                        ^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_operational_adapters.py\", line 121, in start_adminapps\n    def start_adminapps(self, context: LiveExecutionContext) -> Mapping[str, Any]: return self._start(\"adminapps\", context)\n                                                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_operational_adapters.py\", line 119, in _start\n    raise LiveExecutorError(f\"{name.upper()}_START_FAILURE\", f\"readiness timeout: {last_error}; log={log_path}\")\nfoundation.phase31_4_v2_5_live_executor.LiveExecutorError: ADMINAPPS_START_FAILURE: readiness timeout: HTTP Error 401: Unauthorized; log=/home/felipe/proyectos/isosmart/docs/governance/evidence/runs/Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_2/adminapps_service.log\n",
+  "service_endpoints": {},
+  "service_pids": {},
+  "service_cleanup": {
+    "status": "PASS",
+    "services": {}
+  },
+  "manifest_path": "/home/felipe/proyectos/isosmart/docs/governance/evidence/runs/Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_2/RESOURCE_MANIFEST.json",
+  "manifest_sha256": "5d51da7aa8bba68c1fde7f3db39b3456daa793d64321367b6d3c46a3984cfacc",
+  "state_machine_trace": [
+    {
+      "sequence": 1,
+      "from": null,
+      "to": "AUTHORIZED",
+      "reason": "authorization verified and atomically consumed",
+      "at": "2026-09-29T01:36:58.177039+00:00",
+      "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 2",
+      "run_slug": "Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_2",
+      "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+      "validation_attempt": 2
+    },
+    {
+      "sequence": 2,
+      "from": "AUTHORIZED",
+      "to": "ALLOCATING",
+      "reason": "resource allocation started",
+      "at": "2026-09-29T01:36:58.217509+00:00",
+      "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 2",
+      "run_slug": "Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_2",
+      "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+      "validation_attempt": 2
+    },
+    {
+      "sequence": 3,
+      "from": "ALLOCATING",
+      "to": "RESOURCES_ALLOCATED",
+      "reason": "containers, networks, volumes, and host ports persisted",
+      "at": "2026-09-29T01:37:00.855593+00:00",
+      "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 2",
+      "run_slug": "Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_2",
+      "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+      "validation_attempt": 2
+    },
+    {
+      "sequence": 4,
+      "from": "RESOURCES_ALLOCATED",
+      "to": "BOOTSTRAPPING",
+      "reason": "PostgreSQL startup/readiness started",
+      "at": "2026-09-29T01:37:00.876476+00:00",
+      "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 2",
+      "run_slug": "Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_2",
+      "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+      "validation_attempt": 2
+    },
+    {
+      "sequence": 5,
+      "from": "BOOTSTRAPPING",
+      "to": "READY",
+      "reason": "all PostgreSQL resources accept SELECT 1",
+      "at": "2026-09-29T01:37:14.967815+00:00",
+      "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 2",
+      "run_slug": "Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_2",
+      "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+      "validation_attempt": 2
+    },
+    {
+      "sequence": 6,
+      "from": "READY",
+      "to": "PRECREATION_RUNNING",
+      "reason": "PRECREATION callback started",
+      "at": "2026-09-29T01:37:14.988638+00:00",
+      "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 2",
+      "run_slug": "Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_2",
+      "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+      "validation_attempt": 2
+    },
+    {
+      "sequence": 7,
+      "from": "PRECREATION_RUNNING",
+      "to": "PRECREATION_PASS",
+      "reason": "PRECREATION evidence persisted",
+      "at": "2026-09-29T01:37:15.166009+00:00",
+      "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 2",
+      "run_slug": "Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_2",
+      "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+      "validation_attempt": 2
+    },
+    {
+      "sequence": 8,
+      "from": "PRECREATION_PASS",
+      "to": "STAGE_EXT_RUNNING",
+      "reason": "Stage EXT callback started",
+      "at": "2026-09-29T01:37:15.184495+00:00",
+      "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 2",
+      "run_slug": "Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_2",
+      "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+      "validation_attempt": 2
+    },
+    {
+      "sequence": 9,
+      "from": "STAGE_EXT_RUNNING",
+      "to": "FAILED",
+      "reason": "UNCLASSIFIED_RUNNER_FAILURE",
+      "at": "2026-09-29T01:39:31.597053+00:00",
+      "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 2",
+      "run_slug": "Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_2",
+      "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+      "validation_attempt": 2
+    },
+    {
+      "sequence": 10,
+      "from": "FAILED",
+      "to": "TEARDOWN_COMPLETE",
+      "reason": "run-scoped resource absence verified",
+      "at": "2026-09-29T01:39:44.957086+00:00",
+      "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 2",
+      "run_slug": "Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_2",
+      "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+      "validation_attempt": 2
+    }
+  ],
+  "cleanup": {
+    "status": "PASS",
+    "remaining_resources": [],
+    "errors": [],
+    "started_at": "2026-09-29T01:39:31.615935+00:00",
+    "completed_at": "2026-09-29T01:39:44.939373+00:00",
+    "post_teardown_absence_verified": true
+  },
+  "completed_at": "2026-09-29T01:39:44.977094+00:00"
+}

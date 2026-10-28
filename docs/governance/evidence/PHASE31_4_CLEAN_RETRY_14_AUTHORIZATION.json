@@ -1,0 +1,66 @@
+{
+  "artifact_schema": "phase31.4-clean-retry-authorization/v1",
+  "authorization_status": "RETRY14_AUTHORIZED",
+  "authorization_scope": "CREATE_ISOLATED_RESOURCES_AND_EXECUTE_CONTROLLED_LIVE_RETRY",
+  "retry_candidate": "Phase 31.4 V2.5 Clean Retry 14",
+  "validator_result": "PASS",
+  "stage_a": {
+    "P0": 0,
+    "P1": 0
+  },
+  "python_version": "3.12.13",
+  "django_version": "4.2.22",
+  "targeted_runtime_tests": {
+    "executed": 23,
+    "passed": 23,
+    "failures": 0,
+    "errors": 0
+  },
+  "full_regression": {
+    "executed": 487,
+    "passed": 487,
+    "failures": 0,
+    "errors": 0
+  },
+  "native_source_coverage": {
+    "expected": 16,
+    "covered": 16,
+    "unresolved": 0
+  },
+  "phase_coverage": {
+    "expected": 33,
+    "covered": 33,
+    "missing": 0
+  },
+  "native_capture_producer_coverage": {
+    "expected": 565,
+    "covered": 565,
+    "uncovered": 0,
+    "ambiguous": 0
+  },
+  "upstream_mapping_coverage": {
+    "expected": 5,
+    "covered": 5,
+    "unresolved": 0
+  },
+  "user_projection_producer_result": "USERPROJECTION_PRODUCER_PASS",
+  "dependency_graph_result": "PASS",
+  "v2_4_sha_result": {
+    "status": "PASS",
+    "sha256": "a102d278bf2e5ca6e9b8bf282f5402a54f52d4690beed2ecbed5145c56539387"
+  },
+  "historical_integrity_result": "PASS",
+  "current_integrity_result": "PASS",
+  "supporting_artifact_hashes": {
+    "docs/governance/evidence/PHASE31_4_V25_RUNTIME_ENVIRONMENT_RECOVERY_V1.json": "2a645ad207bbb7bbda6ecc8fe5d2ab075af1227ca0cd254d5eca36f642b556e2",
+    "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_13_CODE_REMEDIATION.json": "c076f1991ca9e81d0e4af8be99705a8b6d72fadd33e29aed87e72367872433c0",
+    "docs/governance/evidence/PHASE31_4_RETRY13_LEGACY_FAILURE_INVENTORY_V1.json": "6feed7a6f7f97ba145eae32cbf8a0ad00dc26beb795130b096e186a995fe0e03",
+    "docs/governance/evidence/PHASE31_4_V2_4_HISTORICAL_MIGRATION_MANIFEST_V1.json": "8f055dee53d7ef34a3b47ccb9fed9885c39c0b616cc0c582c75e49edf2e0cda3",
+    "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V1.json": "24384fc9cae2e65bddc2f6757e4df40277b314942eba49329cad6a1424441f2d",
+    "docs/governance/fixtures/PHASE31_4_5B_ROW_LEVEL_EXECUTION_CONTRACT_V2_4.json": "a102d278bf2e5ca6e9b8bf282f5402a54f52d4690beed2ecbed5145c56539387",
+    "docs/governance/fixtures/PHASE31_4_5C_ROW_LEVEL_EXECUTION_CONTRACT_V2_5.json": "51f57160131a831c1fa180b7c5de5fdcb15a8fd895a53a077149c9a5955eca9c"
+  },
+  "authorization_timestamp": "2026-09-21T20:28:21-06:00",
+  "promotion_granted": false,
+  "promotion_reason": "Live Retry 14 execution and mandatory teardown have not yet occurred."
+}

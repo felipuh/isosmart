@@ -1,0 +1,16 @@
+{
+  "allocated_at": "2026-09-18T14:10:43.341498+00:00",
+  "artifact_schema": "phase31.4-retry9-allocation/v1",
+  "execution_mode": "LIVE_NATIVE_EXECUTION",
+  "repository_wide_scan": {
+    "executed_retry_9_artifacts_found": 0,
+    "result": "UNUSED",
+    "scope": [
+      "adminapps",
+      "isosmart"
+    ]
+  },
+  "resource_creation_state": "NOT_STARTED",
+  "retry_id": "Phase 31.4 V2.5 Clean Retry 9",
+  "retry_tag": "CLEAN_RETRY_9"
+}

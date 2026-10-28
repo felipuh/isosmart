@@ -1,0 +1,14 @@
+{
+  "artifact_schema": "phase31.4-v2.5-disposable-evidence-transactions/v1",
+  "executed": [],
+  "reason": "mandatory PRECREATION_INTEGRITY phase has no registered operation/assertions/evidence contract",
+  "required_proofs": [
+    "atomic_operations",
+    "rollback_on_controlled_failure",
+    "no_partial_write",
+    "event_outbox_consistency",
+    "retry_idempotency"
+  ],
+  "run_id": "Phase 31.4 V2.5 Clean Retry 17",
+  "status": "FAIL"
+}

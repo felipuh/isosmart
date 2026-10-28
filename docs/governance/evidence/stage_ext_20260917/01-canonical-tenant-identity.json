@@ -1,0 +1,14 @@
+{
+  "adminapps_tenant_id": "e7400a3b-a1c2-4b7c-b6c5-4474fb46f505",
+  "cardinality": "one tenant to many QMS organizations",
+  "decision": "AdminApps active apps.organizations.Organization.id is the immutable canonical tenant UUID",
+  "mapping_equal": true,
+  "qms_organization_ids": [
+    "ca6ac209-2116-4c23-a032-9b0ebc0e7e93",
+    "a01e841d-ae93-4a20-b9cd-6d66cce32ec9"
+  ],
+  "source_version_after_activation": 2,
+  "source_version_initial": 1,
+  "tenant_projection_id": "1792f5b0-3a5d-4b31-89d8-a44572293011",
+  "verdict": "PASS"
+}

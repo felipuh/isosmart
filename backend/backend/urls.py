@@ -1,0 +1,87 @@
+from django.contrib import admin
+from django.urls import path, include
+from core import views
+from ai_modules.spm import views as spm_views
+from ai_modules.sie import views as sie_views
+from resources import views as resources_views
+from operations import views as operations_views
+from django.conf import settings
+from django.conf.urls.static import static
+from foundation.adminapps_ingress import receive_tenant_event
+
+urlpatterns = [
+    path('', include('foundation.api_urls')),
+    # Keep the source-artifact contract at /v1 while also exposing it through
+    # the application API gateway used by the browser client.
+    path('api/', include('foundation.api_urls')),
+    path('api/integration/adminapps/tenant-events/', receive_tenant_event, name='adminapps-tenant-events'),
+    path('admin/', admin.site.urls),
+    path('livez', views.liveness_check, name='liveness-check'),
+    path('health', views.health_check, name='health'),
+    
+    # Explicit routes for stats and latest endpoints (before includes to take priority)
+    path('api/maps/stats/', spm_views.ProcessMapViewSet.as_view({'get': 'stats'}), name='maps-stats'),
+    path('api/maps/latest/', spm_views.get_latest_map, name='latest-map-detailed'),
+    path('api/processes/maps/latest/', spm_views.get_latest_map, name='latest-map-processes-detailed'),
+    path('api/latest/', spm_views.get_latest_map, name='latest-map-alias'),
+    
+    # Module includes
+    path('api/sca/', include('ai_modules.sca.urls')),
+    path('api/', include('core.urls')),
+    path('api/sie/', include(('ai_modules.sie.urls', 'sie'), namespace='sie')),
+    path('api/stakeholders/', include(('ai_modules.sie.urls', 'sie'), namespace='stakeholders_alias')),  # Alias for frontend compatibility
+    path('api/change-logs/', include(('ai_modules.sie.urls', 'sie'), namespace='change_logs_alias')),  # Alias for change-logs endpoints
+    path('api/context/', include('ai_modules.sca.urls')),
+    path('api/scope/', include(('ai_modules.asb.urls', 'asb'), namespace='asb')),
+    path('api/scopes/', include(('ai_modules.asb.urls', 'asb'), namespace='scopes_alias')),  # Alias for frontend compatibility
+    path('api/processes/', include(('ai_modules.spm.urls', 'spm'), namespace='spm')),
+    path('api/maps/', include(('ai_modules.spm.urls', 'spm'), namespace='maps_alias')),  # Alias for frontend compatibility
+    path('api/resources/', include('resources.urls')),
+    path('api/planning/', include('planning.urls')),
+    path('api/operations/', include('operations.urls')),
+    path('api/performance/', include('performance.urls')),
+    path('api/improvement/', include('improvement.urls')),
+    path('api/integration/', include('integration.urls')),
+
+    # Aliases for expected legacy endpoints
+    path(
+        'api/resources/human-resources/',
+        resources_views.ResourceViewSet.as_view({'get': 'list', 'post': 'create'}),
+        name='resources-human-resources'
+    ),
+    path(
+        'api/resources/human-resources/<int:pk>/',
+        resources_views.ResourceViewSet.as_view({
+            'get': 'retrieve',
+            'put': 'update',
+            'patch': 'partial_update',
+            'delete': 'destroy'
+        }),
+        name='resources-human-resources-detail'
+    ),
+    path(
+        'api/operations/operational-controls/',
+        operations_views.OperationalControlViewSet.as_view({'get': 'list', 'post': 'create'}),
+        name='operations-operational-controls'
+    ),
+    path(
+        'api/operations/operational-controls/<int:pk>/',
+        operations_views.OperationalControlViewSet.as_view({
+            'get': 'retrieve',
+            'put': 'update',
+            'patch': 'partial_update',
+            'delete': 'destroy'
+        }),
+        name='operations-operational-controls-detail'
+    ),
+    
+    # Explicit aliases for frontend endpoints without duplicated prefixes
+    path('api/stakeholders/critical/', sie_views.StakeholderProfileViewSet.as_view({'get': 'critical'}), name='stakeholders-critical'),
+    path('api/stakeholders/matrix/', sie_views.StakeholderProfileViewSet.as_view({'get': 'matrix'}), name='stakeholders-matrix'),
+    path('api/change-logs/recent/', sie_views.StakeholderChangeLogViewSet.as_view({'get': 'recent'}), name='change-logs-recent'),
+    path('api/leadership/', include('leadership.urls')),
+    path('api/auth/', include('authentication.urls')),
+]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

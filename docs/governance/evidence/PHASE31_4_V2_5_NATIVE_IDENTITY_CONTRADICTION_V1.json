@@ -1,0 +1,128 @@
+{
+  "complete_offline_regression_executed": false,
+  "conflicts": [
+    {
+      "contract_member": "qms.opportunity::6497b073-b3cb-5159-b64f-90700f2f5f85",
+      "frozen_id_binding": {
+        "canonical_representation": "canonical-json-rfc8785-compatible/v1",
+        "database_type_or_schema_type": "uuid",
+        "kind": "EXACT_LITERAL",
+        "provenance": "Phase31.4.4A exact synthetic fixture design",
+        "reason": "Authoritative qualified member identity fixed by V2",
+        "typed_value": "6497b073-b3cb-5159-b64f-90700f2f5f85"
+      },
+      "frozen_lineage_binding": {
+        "algorithm_id": "RFC4122-UUIDv5-SHA1",
+        "algorithm_version": "RFC4122/v5",
+        "all_preimage_inputs": {
+          "namespace_uuid": "05611a8a-f662-5b7f-ad24-c4df48d573ec",
+          "utf8_name": "phase31.4.4a/qms.opportunity/6497b073-b3cb-5159-b64f-90700f2f5f85/lineage_id/v1"
+        },
+        "canonical_input_encoding": "16 namespace UUID octets followed by exact UTF-8 name octets",
+        "expected_output": "14b7cb99-1d0a-593e-af56-54a0d4864a98",
+        "input_types": {
+          "namespace_uuid": "uuid",
+          "utf8_name": "UTF-8 string"
+        },
+        "kind": "DETERMINISTIC_DERIVATION",
+        "output_type": "uuid",
+        "verification_rule": "uuid.uuid5(UUID(namespace_uuid), utf8_name) string equality"
+      },
+      "id": "P1-NATIVE-OPPORTUNITY-IDENTITY",
+      "native_fact": "create_opportunity calls _create, which generates entity_id=uuid4(), persists id=entity_id and lineage_id=entity_id, and has no identity input. Frozen id and lineage differ.",
+      "native_source": "backend/foundation/risk_objective.py:102-123,209-217",
+      "required_resolution": "Either permit a changed live identity graph with native output capture, or authorize a product/native identity input change; both are outside this run's frozen 118-row/exact-identity and no-new-identity-exception constraints."
+    },
+    {
+      "contract_member": "qms.action_plan::ae682a8f-d782-5b27-a148-aa10a940e03a",
+      "frozen_id_binding": {
+        "canonical_representation": "canonical-json-rfc8785-compatible/v1",
+        "database_type_or_schema_type": "uuid",
+        "kind": "EXACT_LITERAL",
+        "provenance": "Phase31.4.4A exact synthetic fixture design",
+        "reason": "Authoritative qualified member identity fixed by V2",
+        "typed_value": "ae682a8f-d782-5b27-a148-aa10a940e03a"
+      },
+      "id": "P1-NATIVE-ACTIONPLAN-IDENTITY",
+      "native_fact": "prepare_action_plan validates and persists id=uuid4() with no caller-supplied ActionPlan ID; its event and outbox use that generated ID. The exact frozen ActionPlan member cannot be guaranteed.",
+      "native_source": "backend/foundation/action_authorization.py:199-203,211-260",
+      "required_resolution": "Capture the native generated ID and revise the exact live member identity graph, or change the native service contract. Direct row insertion and argument rewriting are forbidden."
+    },
+    {
+      "contract_member": "qms.opportunity::a5dcbca8-872e-5826-9d3c-c05108db002d",
+      "frozen_bindings": {
+        "id": {
+          "canonical_representation": "canonical-json-rfc8785-compatible/v1",
+          "database_type_or_schema_type": "uuid",
+          "kind": "EXACT_LITERAL",
+          "provenance": "Phase31.4.4A exact synthetic fixture design",
+          "reason": "Authoritative qualified member identity fixed by V2",
+          "typed_value": "a5dcbca8-872e-5826-9d3c-c05108db002d"
+        },
+        "lineage_id": {
+          "algorithm_id": "RFC4122-UUIDv5-SHA1",
+          "algorithm_version": "RFC4122/v5",
+          "all_preimage_inputs": {
+            "namespace_uuid": "05611a8a-f662-5b7f-ad24-c4df48d573ec",
+            "utf8_name": "phase31.4.4a/qms.opportunity/a5dcbca8-872e-5826-9d3c-c05108db002d/lineage_id/v1"
+          },
+          "canonical_input_encoding": "16 namespace UUID octets followed by exact UTF-8 name octets",
+          "expected_output": "10718464-4ed1-51b2-805c-e89b0ecc62c1",
+          "input_types": {
+            "namespace_uuid": "uuid",
+            "utf8_name": "UTF-8 string"
+          },
+          "kind": "DETERMINISTIC_DERIVATION",
+          "output_type": "uuid",
+          "verification_rule": "uuid.uuid5(UUID(namespace_uuid), utf8_name) string equality"
+        },
+        "previous_revision_id": {
+          "canonical_representation": "canonical-json-rfc8785-compatible/v1",
+          "database_type_or_schema_type": "uuid",
+          "kind": "EXACT_LITERAL",
+          "provenance": "Phase31.4.4A exact synthetic fixture design",
+          "reason": "Intentionally NULL for this exact fixture; no conditional branch selects this field",
+          "typed_value": null
+        },
+        "revision": {
+          "canonical_representation": "canonical-json-rfc8785-compatible/v1",
+          "database_type_or_schema_type": "integer",
+          "kind": "EXACT_LITERAL",
+          "provenance": "Phase31.4.4A exact synthetic fixture design",
+          "reason": "Exact bounded synthetic integer",
+          "typed_value": 1
+        }
+      },
+      "id": "P1-CONTROLLED-OPPORTUNITY-REVISION-SHAPE",
+      "native_fact": "The controlled operation passes uuidv7() as the new revision ID; the transition inserts revision=prior.revision+1, previous_revision_id=prior.id and lineage_id=prior.lineage_id. The frozen controlled output binds a different exact UUID, revision 1, NULL predecessor and an independent lineage.",
+      "native_source": "backend/foundation/migrations/0015_first_controlled_qms_mutation_poc.py:68-100,290-314",
+      "required_resolution": "Revise controlled output identity and revision bindings to native outputs, with downstream graph and closure recomputation. This violates the requested exact frozen 118-member identities as presently defined."
+    }
+  ],
+  "counts": {
+    "fields": 1664,
+    "members": 118
+  },
+  "historical_V2_4_sha256": "a102d278bf2e5ca6e9b8bf282f5402a54f52d4690beed2ecbed5145c56539387",
+  "implementation_freeze": false,
+  "known_offline_P1_minimum": 3,
+  "live_poc_started": false,
+  "other_frozen_semantic_defects_confirmed": {
+    "preconditions": [
+      "synthetic-test-only"
+    ],
+    "required_autonomy": 0,
+    "target_id": "PHASE31.4.4A TEST ONLY — ActionPlan — target_id",
+    "target_type": "opportunity"
+  },
+  "reason_no_V2_5_operational_contract": "Correcting the four business literals and A3 ceilings does not resolve native-generated identity versus exact frozen member identity. A V2.5 operational authorization or manifest would falsely claim a realizable 118/1664 live comparison.",
+  "schema": "phase31.4-v2.5-native-identity-contradiction/v1",
+  "source_sha256": {
+    "backend/foundation/action_authorization.py": "04fffd84058da2166a4843e92f04b5bc5d6c3c84035e379a60722b56ffcc38d3",
+    "backend/foundation/migrations/0015_first_controlled_qms_mutation_poc.py": "5e297591c8096938c90b6748d0d3ed22a8099cf8f4537e7f65f8bc6fa5beaba3",
+    "backend/foundation/risk_objective.py": "5add81332fc89b2b9f6cf6389ef3fdb3c391f82c256da005183c656e9f583fcd",
+    "docs/adr/0018-row-level-execution-ready-v2-contract.md": "f9f6272c72e433241f66e44884b53dc804a667b32950c8ab098df6473ecf6089"
+  },
+  "status": "STAGE_A_STOP_SOURCE_CONTRADICTION",
+  "teardown_performed": false
+}

@@ -1,0 +1,24 @@
+ISO SMART AI - PAQUETE DE DESARROLLO v1.0 (reconstruido en workspace activo)
+
+ARCHIVOS PRINCIPALES
+1) ISO_SMART_AI_Especificacion_Inicial_Integrada_v1_2026.docx
+2) ISO_SMART_AI_Arquitectura_Completa_Lucidchart.drawio
+3) ISO_SMART_AI_Arquitectura_Completa.mmd
+4) ISO_SMART_AI_Mapa_Maestro_Arquitectura.xlsx
+5) ISO_SMART_AI_Nodos_Red.csv
+6) ISO_SMART_AI_Aristas_Red.csv
+7) ISO_SMART_AI_DDL_PostgreSQL.sql
+8) ISO_SMART_AI_OpenAPI.yaml
+9) ISO_SMART_AI_Mapa_Maestro_Datos.json
+
+LUCIDCHART
+- Opción recomendada: importar ISO_SMART_AI_Arquitectura_Completa_Lucidchart.drawio.
+- Alternativa: usar los CSV de nodos/aristas para reconstruir el grafo con importación de datos.
+- Mermaid: ISO_SMART_AI_Arquitectura_Completa.mmd sirve como especificación visual y puede importarse en herramientas compatibles.
+
+PRINCIPIO ARQUITECTÓNICO
+Un objeto empresarial único + múltiples relaciones normativas a través del Compliance Evidence Graph.
+Knowledge Layers son invisibles por defecto y explicables en el Normative Intelligence Drawer.
+
+NOTA
+El baseline ISO 9001 se basa en el FDIS adjunto. Mantener versionado y ejecutar re-baseline cuando se publique la edición definitiva.

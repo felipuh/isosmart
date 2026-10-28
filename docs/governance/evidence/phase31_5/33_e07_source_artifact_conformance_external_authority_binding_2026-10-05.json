@@ -1,0 +1,312 @@
+{
+  "evidence_id": "33",
+  "artifact_schema": "phase31.5-e07-source-artifact-conformance-external-authority-binding/v1",
+  "date": "2026-10-05",
+  "purpose": "Determine repository-locally whether a future, separately authorized, minimum-necessary non-secret metadata collection stage is conformant with the authoritative transformation source artifacts and Phase31.5 governance lineage.",
+  "scope": "Document and source inspection only. This artifact neither collects authentic metadata nor authorizes credential rotation, deployment change, restart, migration, or Phase31.5 execution.",
+  "governance_integrity": {
+    "repository": "/home/felipe/proyectos/isosmart",
+    "branch": "hardening/p0-p1-enterprise-readiness",
+    "source_authority_precedence": [
+      "SOURCE_ARTIFACTS",
+      "APPROVED_TRANSFORMATION_OR_GOVERNANCE_PLAN",
+      "FROZEN_IMPLEMENTATION_EVIDENCE",
+      "OPERATIONAL_OR_EXTERNAL_AUTHORITY_DECISIONS"
+    ],
+    "lower_layer_expansion_prohibited": true,
+    "preexisting_unrelated_worktree_changes": "PRESERVED"
+  },
+  "starting_state": {
+    "evidence_28_to_32_present": true,
+    "evidence_31_verdict": "EXTERNAL_AUTHORITY_PACKAGE_COMPLETE",
+    "evidence_32_intake_result": "NO_SUPPLIED_EXTERNAL_EVIDENCE",
+    "evidence_32_readiness_verdict": "BLOCKED_BY_EXTERNAL_AUTHORITY",
+    "e07": "BLOCKED_BY_EXTERNAL_AUTHORITY",
+    "e08": "CLOSED_LOCAL_TECHNICAL_EVIDENCE",
+    "e08_baseline_preserved": "YES",
+    "phase31_5": "EXECUTION_HELD"
+  },
+  "baseline_integrity": {
+    "source_artifact_manifest": "docs/transformation/source-artifacts/SOURCE_ARTIFACT_MANIFEST.md",
+    "source_intake": "10/10 VALID",
+    "reconciliation": "docs/transformation/ISO_SMART_AI_SOURCE_RECONCILIATION.md",
+    "phase31_5_plan": "docs/transformation/PHASE31_5_PRODUCTION_READINESS_OPERATIONAL_HARDENING_PLAN.md",
+    "binding_lineage": "The reconciliation establishes the source-artifact authority hierarchy and documents the Smart3AI AdminApps system-of-record specialization; the Phase31.5 plan constrains secrets/configuration and AdminApps integration resilience without authorizing product-code change or authentic execution.",
+    "relevant_source_inventory": [
+      {
+        "path": "docs/transformation/source-artifacts/ISO_SMART_AI_Especificacion_Inicial_Integrada_v1_2026.docx",
+        "title": "ISO Smart AI Especificacion Inicial Integrada v1 2026",
+        "authority_relevance": "Primary functional and product authority.",
+        "relevant_requirement_or_concept": "Section 10 preserves evidence provenance; Section 11 requires tenant RLS, RBAC/ABAC, administrator MFA, token rotation, immutable audit, and security/privacy governance; Section 14 requires authorized integration ingestion, tenant-safe reads, mutable-action audit, and cryptographically verified webhooks.",
+        "exact_section_or_reference": "Sections 10, 11, and 14.",
+        "interpretation_required": "YES"
+      },
+      {
+        "path": "docs/transformation/source-artifacts/ISO_SMART_AI_Mapa_Maestro_Arquitectura.xlsx",
+        "title": "ISO Smart AI Mapa Maestro Arquitectura",
+        "authority_relevance": "Structured architecture authority, co-equal with the master data map for entities, onboarding, events, and relationships.",
+        "relevant_requirement_or_concept": "Tenant, User, MFA/RBAC, evidence, audit, event, and onboarding structures that must remain tenant-safe and traceable.",
+        "exact_section_or_reference": "Workbook sheets DB_Entities, Event_Catalog, and Onboarding; authority role recorded in ISO_SMART_AI_SOURCE_RECONCILIATION.md.",
+        "interpretation_required": "YES"
+      },
+      {
+        "path": "docs/transformation/source-artifacts/ISO_SMART_AI_Mapa_Maestro_Datos.json",
+        "title": "ISO Smart AI Mapa Maestro Datos",
+        "authority_relevance": "Structured data-model authority co-equal with the architecture map.",
+        "relevant_requirement_or_concept": "Tenant-scoped entity, evidence, audit, approval, and event concepts; it contains no AdminApps credential lifecycle contract.",
+        "exact_section_or_reference": "Top-level entity, event, and onboarding catalogs; reconciliation quantitative crosswalk.",
+        "interpretation_required": "YES"
+      },
+      {
+        "path": "docs/transformation/source-artifacts/ISO_SMART_AI_Arquitectura_Completa.mmd",
+        "title": "ISO Smart AI Arquitectura Completa",
+        "authority_relevance": "Architectural representation; it cannot override the DOCX or structured maps.",
+        "relevant_requirement_or_concept": "Onboarding includes secure verification, tenant provisioning, and MFA/RBAC; high-impact actions flow through a Human Decision Gate.",
+        "exact_section_or_reference": "Lines 33-43.",
+        "interpretation_required": "NO"
+      },
+      {
+        "path": "docs/transformation/source-artifacts/ISO_SMART_AI_DDL_PostgreSQL.sql",
+        "title": "ISO Smart AI DDL PostgreSQL",
+        "authority_relevance": "Initial implementation reference only; it is expressly non-authoritative for final ownership, tenancy, RLS, or completeness.",
+        "relevant_requirement_or_concept": "Tenant, evidence, event, approval, and action-execution reference structures; no AdminApps or integration-key lifecycle definition.",
+        "exact_section_or_reference": "Lines 1-28; authority limitation in ISO_SMART_AI_SOURCE_RECONCILIATION.md.",
+        "interpretation_required": "NO"
+      },
+      {
+        "path": "docs/transformation/source-artifacts/ISO_SMART_AI_OpenAPI.yaml",
+        "title": "ISO Smart AI OpenAPI",
+        "authority_relevance": "Illustrative initial contract only, not a complete public-API or authentication authority.",
+        "relevant_requirement_or_concept": "Evidence registration endpoint seed; it cannot define an AdminApps rotation API or credential behavior.",
+        "exact_section_or_reference": "/v1/evidence; authority limitation in ISO_SMART_AI_SOURCE_RECONCILIATION.md.",
+        "interpretation_required": "NO"
+      },
+      {
+        "path": "docs/transformation/source-artifacts/ISO_SMART_AI_Nodos_Red.csv and ISO_SMART_AI_Aristas_Red.csv",
+        "title": "ISO Smart AI network catalogs",
+        "authority_relevance": "Normative/architectural graph catalogs, not a transactional or credential authority.",
+        "relevant_requirement_or_concept": "Evidence and security governance concepts only; neither file names AdminApps or the E-07 mechanism.",
+        "exact_section_or_reference": "Graph catalogs; reconciliation Evidence Graph decision.",
+        "interpretation_required": "NO"
+      },
+      {
+        "path": "docs/transformation/source-artifacts/LEEME_Importacion_ISO_SMART_AI.txt and SOURCE_ARTIFACT_MANIFEST.md",
+        "title": "Source-package instructions and integrity manifest",
+        "authority_relevance": "Package metadata and integrity authority, not product behavior authority.",
+        "relevant_requirement_or_concept": "10/10 valid immutable source baseline and instruction not to infer absent content.",
+        "exact_section_or_reference": "Manifest current recovery gate and integrity interpretation.",
+        "interpretation_required": "NO"
+      }
+    ]
+  },
+  "provenance_matrix": [
+    {
+      "concept": "AdminApps identity and tenant authority",
+      "classification": "GOVERNANCE_DEFINED",
+      "provenance": "The source requires tenant, identity, MFA/RBAC, and tenant isolation, but never names AdminApps. ISO_SMART_AI_SOURCE_RECONCILIATION.md records the Smart3AI integration decision that makes AdminApps the physical system of record for global identity, tenant, entitlement, billing, and provisioning while ISO Smart retains local projections.",
+      "conformance": "A compatible binding, not a source-defined vendor or product requirement."
+    },
+    {
+      "concept": "apps.integration.models.IntegrationAPIKey lifecycle owner",
+      "classification": "IMPLEMENTATION_DEFINED",
+      "provenance": "Frozen Evidence 29 local source inspection identifies the AdminApps model; no source artifact names this model or an equivalent credential entity.",
+      "conformance": "Valid mechanism for source security intent; not elevated into product semantics."
+    },
+    {
+      "concept": "rotate_integration_api_key",
+      "classification": "IMPLEMENTATION_DEFINED",
+      "provenance": "Frozen Evidence 29 identifies the transaction and audit mechanism. Source Section 11 requires secure access and token rotation at a higher level, but not this function.",
+      "conformance": "Compatible technical mechanism."
+    },
+    {
+      "concept": "integration.0006_integration_api_key_lifecycle",
+      "classification": "IMPLEMENTATION_DEFINED",
+      "provenance": "Frozen Evidence 29 identifies the migration needed by the AdminApps implementation.",
+      "conformance": "Authentic applied state is a real-world deployment fact."
+    },
+    {
+      "concept": "ADMIN_APPS_API_KEY and X-API-Key transport",
+      "classification": "IMPLEMENTATION_DEFINED",
+      "provenance": "ISO Smart settings and AdminAppsClient source establish the variable and header; no source artifact specifies either symbol or an API-key protocol.",
+      "conformance": "Compatible with source security only if the value is protected."
+    },
+    {
+      "concept": "web as credential consumer and process-lifetime loading",
+      "classification": "IMPLEMENTATION_DEFINED",
+      "provenance": "Frozen Evidence 29 traces compose, settings, client construction, and the module singleton.",
+      "conformance": "Does not become a source product requirement."
+    },
+    {
+      "concept": "restart or recreation after receiver replacement",
+      "classification": "IMPLEMENTATION_DEFINED",
+      "provenance": "A process reads the setting at initialization and retains it in a singleton; Evidence 29 derives reload necessity from that implementation.",
+      "conformance": "An implementation consequence, not a source-mandated operational procedure."
+    },
+    {
+      "concept": "active staff operator requirement",
+      "classification": "IMPLEMENTATION_DEFINED",
+      "provenance": "The local rotation implementation requires that role class; exact real-world identity and authority are not in source or repository.",
+      "conformance": "Actual identity is EXTERNAL_AUTHORITY_REQUIRED."
+    },
+    {
+      "concept": "authentic AdminApps target and IntegrationAPIKey record identity",
+      "classification": "EXTERNAL_AUTHORITY_REQUIRED",
+      "provenance": "A source artifact cannot identify a deployed environment or live record; Evidence 30 correctly refuses to infer one from repository code.",
+      "conformance": "Required only as non-secret metadata for a future authorized operational action."
+    },
+    {
+      "concept": "secret receiver and injector",
+      "classification": "EXTERNAL_AUTHORITY_REQUIRED",
+      "provenance": "Source describes product security, while the repository only names an environment-file input. The authentic receiver is deployment-owned.",
+      "conformance": "Receiver selection is not a new product requirement."
+    },
+    {
+      "concept": "non-recording direct handoff",
+      "classification": "GOVERNANCE_DEFINED",
+      "provenance": "Evidence 31 constrains use of a one-time secret-emitting implementation command to avoid persistence in prohibited channels.",
+      "conformance": "Safety control that implements, but does not enlarge, source security intent."
+    },
+    {
+      "concept": "bounded interruption approval",
+      "classification": "GOVERNANCE_DEFINED",
+      "provenance": "Evidence 29 establishes non-atomic cross-system cutover and no dual-key grace period; Evidence 31 requires explicit approval before accepting resulting interruption.",
+      "conformance": "Operational risk acceptance, not product behavior."
+    },
+    {
+      "concept": "NO_DUAL_KEY_GRACE_PERIOD and NOT_ATOMIC cutover",
+      "classification": "IMPLEMENTATION_DEFINED",
+      "provenance": "Frozen Evidence 29 derives both limitations from the implemented lifecycle and consumer topology.",
+      "conformance": "A constraint on execution, not an assertion that the source promises zero downtime."
+    },
+    {
+      "concept": "FORWARD_RECOVERY_ONLY_AFTER_ROTATION_COMMIT",
+      "classification": "GOVERNANCE_DEFINED",
+      "provenance": "Evidence 31 turns the implemented revocation consequence into a no-old-key-reuse safety rule after commit.",
+      "conformance": "Compatible operational guardrail; target-specific recovery remains external."
+    },
+    {
+      "concept": "leakage-control requirements",
+      "classification": "GOVERNANCE_DEFINED",
+      "provenance": "Source security and evidence integrity support the control; Evidence 31 supplies the concrete no-chat/no-ticket/no-log execution constraint.",
+      "conformance": "Does not add user-facing product capability."
+    }
+  ],
+  "governance_non_expansion_test": {
+    "mandatory_secret_receiver_design": "LEGITIMATE_GOVERNANCE_OR_OPERATIONAL_CONSTRAINT; authentic receiver selection remains external, and no source feature is added.",
+    "specific_operator_roles": "IMPLEMENTATION_DERIVED_NECESSITY; the active-staff class is local mechanism behavior, while actual identity/approval is external.",
+    "direct_non_recording_handoff": "GOVERNANCE_DEFINED; protects a one-time credential output and does not alter product semantics.",
+    "mandatory_restart_procedure": "IMPLEMENTATION_DERIVED_NECESSITY; the exact procedure is external and is not source-defined.",
+    "interruption_window_approval": "GOVERNANCE_DEFINED; risk acceptance for an implementation limitation.",
+    "R1_R2_R3_recovery_states": "GOVERNANCE_DEFINED; a decision framework, not a source-mandated product workflow.",
+    "leakage_channel_restrictions": "GOVERNANCE_DEFINED; a handling constraint consistent with source security/evidence intent.",
+    "external_metadata_requirements": "EXTERNAL_AUTHORITY_REQUIRED only to select and safely constrain a future implementation action; no metadata field is a source-defined product data requirement.",
+    "governance_expansion_detected": "NO"
+  },
+  "authority_binding": {
+    "adminapps_identity_tenant_authority": {
+      "source_required": "Tenant isolation, identity/security controls, MFA/RBAC, and auditable onboarding/integration boundaries.",
+      "source_defined_as_adminapps": false,
+      "binding": "GOVERNANCE_DEFINED Smart3AI system-of-record specialization, compatible with the higher-level source model."
+    },
+    "integration_credential_authority": {
+      "source_required": "Security-protecting integration behavior; source does not assign credential lifecycle ownership.",
+      "binding": "IMPLEMENTATION_DEFINED AdminApps IntegrationAPIKey lifecycle."
+    },
+    "rotation_responsibility": {
+      "source_required": "Source calls for secure, rotating authentication/session controls but not an AdminApps key-rotation operation.",
+      "binding": "IMPLEMENTATION_DEFINED mechanism plus GOVERNANCE_DEFINED safety gate."
+    },
+    "authentic_target": "EXTERNAL_AUTHORITY_REQUIRED; repository-local artifacts cannot identify a deployed environment or live credential record."
+  },
+  "iso_smart_boundary_binding": {
+    "source_required": [
+      "Tenant-safe identity, authorization, audit, provenance, and integration behavior.",
+      "No cross-tenant data revelation and auditable mutable actions."
+    ],
+    "implementation_or_operational_consequences": {
+      "ADMIN_APPS_API_KEY": "IMPLEMENTATION_DEFINED",
+      "web_consumer": "IMPLEMENTATION_DEFINED",
+      "process_lifetime_loading": "IMPLEMENTATION_DEFINED",
+      "restart_or_recreation_after_replacement": "IMPLEMENTATION_DEFINED",
+      "health_and_authentication_validation": "GOVERNANCE_DEFINED narrow validation of the implementation boundary, not a customer workflow."
+    },
+    "conclusion": "ISO Smart is not assigned AdminApps credential lifecycle ownership by source. Its verified role is a local consumer of the configured integration mechanism."
+  },
+  "external_dependency_adjudication": [
+    {"blocker": "authentic AdminApps target", "classification": "VALID_EXTERNAL_AUTHORITY_DEPENDENCY", "reason": "A deployed target cannot be derived from source or local code."},
+    {"blocker": "runtime and migration proof", "classification": "VALID_EXTERNAL_AUTHORITY_DEPENDENCY", "reason": "Applied revision/migration state is deployment metadata, not a source-artifact fact."},
+    {"blocker": "active staff operator", "classification": "VALID_EXTERNAL_AUTHORITY_DEPENDENCY", "reason": "The local lifecycle requires an operator class, but authentic identity and approval are operational facts."},
+    {"blocker": "secret receiver or injector", "classification": "VALID_EXTERNAL_AUTHORITY_DEPENDENCY", "reason": "Source does not prescribe deployment secret storage; receiver ownership is real-world operations."},
+    {"blocker": "web deployment or restart authority", "classification": "VALID_EXTERNAL_AUTHORITY_DEPENDENCY", "reason": "The reload consequence is implementation-derived, while the authentic workload and authority are external."},
+    {"blocker": "interruption approval", "classification": "VALID_EXTERNAL_AUTHORITY_DEPENDENCY", "reason": "This is an explicit operational risk-acceptance decision caused by non-atomic cutover."},
+    {"blocker": "forward-recovery decision", "classification": "VALID_EXTERNAL_AUTHORITY_DEPENDENCY", "reason": "The no-old-key safety boundary is governance-defined; target-specific recovery is operator-owned."},
+    {"blocker": "leakage-prevention controls", "classification": "VALID_EXTERNAL_AUTHORITY_DEPENDENCY", "reason": "The governance constraint is justified by source security, while actual channel-control attestations belong to the responsible operators."}
+  ],
+  "authorized_future_metadata_scope": {
+    "principle": "MINIMUM_NECESSARY_NON_SECRET_METADATA",
+    "separate_explicit_authorization_required": true,
+    "fields": [
+      {"field": "authentic AdminApps environment identifier and environment class", "justification": "Evidence 30 target gate and source-compatible tenant/security boundary", "why_required": "Bind all later checks to one non-shared target", "authority_required": "AdminApps environment owner", "secret": false, "collection_allowed": true},
+      {"field": "logical ISO Smart integration identifier and attribution reference", "justification": "Evidence 32 target identity and reconciliation AdminApps/ISO Smart boundary", "why_required": "Avoid selecting an unrelated integration", "authority_required": "AdminApps integration owner", "secret": false, "collection_allowed": true},
+      {"field": "IntegrationAPIKey record identifier, active state, and duplicate-candidate count/disposition", "justification": "Evidence 30 gate 1 and local lifecycle selection rule", "why_required": "Establish singular, active target without value access", "authority_required": "Authorized AdminApps operator", "secret": false, "collection_allowed": true},
+      {"field": "applied migration state for integration.0006_integration_api_key_lifecycle and deployed revision/build identifier", "justification": "Evidence 30 gate 2", "why_required": "Confirm the locally analyzed lifecycle can exist on the target", "authority_required": "AdminApps deployment/database authority", "secret": false, "collection_allowed": true},
+      {"field": "lifecycle and rotation-operation availability state", "justification": "Evidence 29 frozen implementation contract", "why_required": "Confirm the metadata target supports the approved mechanism before any execution decision", "authority_required": "AdminApps operator or deployment authority", "secret": false, "collection_allowed": true},
+      {"field": "approved operator reference, role/status attestation, approval reference, and validity window", "justification": "Evidence 29 operator contract and Evidence 32 gate 3", "why_required": "Verify authority without collecting credentials or broad personnel data", "authority_required": "AdminApps authorization owner", "secret": false, "collection_allowed": true},
+      {"field": "secret receiver category/target reference, injector authority reference, and non-recording transfer-control attestation", "justification": "Evidence 31 package contract", "why_required": "Prove a receiver path exists without collecting a secret, path contents, or operational command", "authority_required": "ISO Smart secret-management owner", "secret": false, "collection_allowed": true},
+      {"field": "web workload/deployment identifier, receiver-to-workload mapping reference, and restart/recreation authority reference", "justification": "Evidence 29 consumer matrix and Evidence 30 gate 5", "why_required": "Bind implementation-derived reload scope without discovering unrelated infrastructure", "authority_required": "ISO Smart deployment owner", "secret": false, "collection_allowed": true},
+      {"field": "interruption approval reference, timezone-bound window, and pre-commit abort/post-commit escalation reference", "justification": "Evidence 31 non-atomic cutover safeguard", "why_required": "Establish operational risk acceptance as metadata only", "authority_required": "Authorized service owner", "secret": false, "collection_allowed": true},
+      {"field": "forward-recovery decision reference, authority, consumer safety posture, and close criterion", "justification": "Evidence 31 forward-recovery constraint", "why_required": "Confirm a target-specific decision exists without collecting secret-bearing runbook contents", "authority_required": "Incident or service-recovery authority", "secret": false, "collection_allowed": true},
+      {"field": "leakage-control attestation and stop/escalation reference", "justification": "Evidence 31 secret-free evidence requirement", "why_required": "Verify accountable prevention controls without inspecting logs, shells, tickets, or secret stores", "authority_required": "Secret-management and execution owners", "secret": false, "collection_allowed": true}
+    ]
+  },
+  "explicitly_prohibited_collection": [
+    "current or future API-key value",
+    "password, MFA value, session token, private key, or secret-bearing hash/verifier",
+    "full environment-file contents or any secret-store value",
+    "database dump or unbounded database query output",
+    "unrelated customer, tenant, integration, user, or infrastructure records",
+    "broad user or secret-store enumeration",
+    "replayable credential-bearing command, shell, CI, application-log, capture, or transcript output",
+    "secret transfer material, receiver contents, or recovery instructions that disclose a secret or privileged operational path"
+  ],
+  "contradiction_assessment": {
+    "result": "NO_MATERIAL_CONTRADICTION",
+    "basis": "The source does not name AdminApps or the E-07 mechanism, so those lower-layer concepts are explicitly classified as governance or implementation facts rather than retroactively made source requirements. The proposed metadata scope is limited to external deployment/authority facts and does not compensate for a missing source-required capability."
+  },
+  "next_stage_eligibility": {
+    "source_artifact_baseline_identified": true,
+    "source_artifact_conformance": "PASS",
+    "governance_expansion_detected": "NO",
+    "contradiction": "NO_MATERIAL_CONTRADICTION",
+    "all_proposed_fields_traceably_justified": true,
+    "bounded_non_secret_collection_possible": true,
+    "source_gap_disguised_as_external_authority": false,
+    "verdict": "AUTHORIZED_NON_SECRET_METADATA_COLLECTION_ELIGIBLE",
+    "limitation": "Eligibility defines a future stage only. A separate explicit authorization must name its target, fields, authorities, redaction controls, and stop conditions."
+  },
+  "e08_preservation": {
+    "e08_baseline_preserved": "YES",
+    "e08": "CLOSED_LOCAL_TECHNICAL_EVIDENCE",
+    "e08_retested_or_reopened": false,
+    "source_contradiction_invalidating_e08": false
+  },
+  "authentic_access_audit": {
+    "authentic_systems_inspected": "NONE",
+    "external_services_contacted": 0,
+    "authentic_metadata_collected": false,
+    "credentials_or_secret_values_accessed": false,
+    "deployment_database_identity_or_account_inspected": false
+  },
+  "repository_mutation_audit": {
+    "allowed_artifacts_created": [
+      "docs/governance/evidence/phase31_5/33_e07_source_artifact_conformance_external_authority_binding_2026-10-05.json",
+      "docs/transformation/PHASE31_5_E07_SOURCE_ARTIFACT_CONFORMANCE_EXTERNAL_AUTHORITY_BINDING_2026-10-05.md"
+    ],
+    "source_artifacts_modified": false,
+    "evidence_28_to_32_modified": false,
+    "runtime_or_product_code_changed": false,
+    "deployment_authentication_migration_or_environment_changed": false,
+    "unrelated_worktree_changes_preserved": true
+  },
+  "phase31_5": "EXECUTION_HELD"
+}

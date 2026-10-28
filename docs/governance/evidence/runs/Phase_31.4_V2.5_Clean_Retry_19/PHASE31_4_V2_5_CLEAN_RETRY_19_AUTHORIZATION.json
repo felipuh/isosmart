@@ -1,0 +1,123 @@
+{
+  "schema": "phase31.4-v2.5-clean-retry19-authorization/v1",
+  "authorization_status": "DISPOSABLE_EVIDENCE_RUN_AUTHORIZED",
+  "review_scope": "governance authorization review only; no live execution performed",
+  "run_id": "Phase 31.4 V2.5 Clean Retry 19",
+  "v4_reference": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V4.json",
+  "v4_sha256": "960f2a133f72e939842762986ce3ad43762302b0caa447799732740fc4571f25",
+  "protected_source_count": 23,
+  "protected_sources": [
+    {"path": "backend/backend/settings.py", "sha256": "eeede9b7588f2d5c88ec717dcec1a5f3ed46e97cf183125dcaadfdfe1d6be613"},
+    {"path": "backend/backend/urls.py", "sha256": "197b5e354e6982905dfed1affc5fef14dd996ac7715e1705a71a16a3995737d5"},
+    {"path": "backend/foundation/projection_contract.py", "sha256": "a58f227440dca739b7371631d81ee20ba0158de979868c948aed2c2523301e7f"},
+    {"path": "backend/foundation/adminapps_ingress.py", "sha256": "6985bb68d7a2d1327c507ea7d668e95dd722bf8fc172be2b81b0b1e8d6b9d5c4"},
+    {"path": "backend/foundation/qms_organization.py", "sha256": "e157193b1e7b4e736fdb7d34a399f459e6954dd31d4fcb0fbb776371387d390f"},
+    {"path": "backend/foundation/migrations/0024_adminapps_ingress_receipt.py", "sha256": "3a3e4da38c4119f1d53cb96b4cb1ffc5d93a2df25f76eaa64aaef1cbf66b9ce1"},
+    {"path": "backend/foundation/postgres_foundation_gate.py", "sha256": "081ae073ffe7f66721974c0ea88dbc954b473016b9ea888dae92e3509de10fe2"},
+    {"path": "backend/foundation/phase31_4_v2_5_runtime.py", "sha256": "70997fb33eb22c9576cb7def0cd5ccdff9d61deebad4621072920b5acf5efb19"},
+    {"path": "backend/foundation/phase31_4_v2_5_structural_gate.py", "sha256": "80f5608360647270233408c8c039afd460f026217973027050e26ee1b4da4234"},
+    {"path": "backend/foundation/phase31_4_v2_5_executable_graph.py", "sha256": "2b9dcd98c7fc749c5ebefc1b5edd30d8b3dcea21c84535dc397b240956f8d7c0"},
+    {"path": "backend/foundation/adminapps_adapter.py", "sha256": "3d1c3f8f8e2c3f4d6e73d6f8733d642aa3c407358e1794dbff0dc7ebbc27b102"},
+    {"path": "backend/foundation/projection_writer.py", "sha256": "1881740fe0c3bcc182c63d4466ac6aba003450c62364158a6ef70a71c7216bae"},
+    {"path": "docs/governance/fixtures/PHASE31_4_5C_ROW_LEVEL_EXECUTION_CONTRACT_V2_5.json", "sha256": "51f57160131a831c1fa180b7c5de5fdcb15a8fd895a53a077149c9a5955eca9c"},
+    {"path": "backend/foundation/phase31_4_4a_field_binding_validator.py", "sha256": "971eaac142159b251ca5741b6c45356c25ccc11c575578bc5aeb609834cd7378"},
+    {"path": "backend/foundation/phase31_4_4b_strict_type_validator.py", "sha256": "a9d01519ef196a987609b2f980ef2ca68b2f3bff5317d49b44286aca25a6d1db"},
+    {"path": "backend/foundation/phase31_4_5a_retry1_source_reachability_validator.py", "sha256": "cb894354cdb6a8709d81f3a1832a3eadb193c66c63d0c10da981ccc13f85e14a"},
+    {"path": "backend/foundation/phase31_4_5b_source_reachability_validator.py", "sha256": "6beede5a72f8fc552811eec9d76f35047254630be2a6838958e5ea539968c67a"},
+    {"path": "backend/foundation/phase31_4_operational_manifest.py", "sha256": "5f7956c6159e48750b0da1811ae6df0d4bcc51666757ff354d78ae20aa3d7902"},
+    {"path": "backend/foundation/phase31_4_integrity_generations.py", "sha256": "d236123c3385ed9ce3f808e9d88f930a7eb1c4471116f77948fc0bc135e8d33b"},
+    {"path": "backend/foundation/phase31_4_postgres18_environment.py", "sha256": "5f58ec95a377ffb07b13930d8a1be7101bb2375bb55f81afd0bd8f3a4387339e"},
+    {"path": "backend/foundation/phase31_4_v2_5_verifier_remediation.py", "sha256": "61a6fa21f01c27bd6713154512045926c4d3d65d410d0d572922ea1ef21dc639"},
+    {"path": "backend/foundation/phase31_4_v2_5_precreation_integrity.py", "sha256": "9fc0efcc14fee9587a041b8c81dffde2d447f82e16d4df495571b7358cb854eb"},
+    {"path": "backend/integration/client.py", "sha256": "9edceb9510fd70e1c2c5e7c1c7040a8c16d74a26f8c143abce62b976f4e6639a"}
+  ],
+  "integrity_gate": {
+    "artifact_exists": true,
+    "sha_matches_authoritative": true,
+    "missing_sources": 0,
+    "unexpected_sources": 0,
+    "unregistered_new_material_source": false,
+    "unexpected_drift": false,
+    "v1_v2_v3_preserved": true,
+    "provenance_discontinuity_preserved": true,
+    "provenance_continuity": false,
+    "provenance_discontinuity_status": "PROVENANCE_DISCONTINUITY",
+    "governance_record": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V4.json"
+  },
+  "endpoint_configuration": {
+    "authoritative_variable": "ADMIN_APPS_BASE_URL",
+    "localhost_fallback_present": false,
+    "dynamic_ports_supported": true,
+    "missing_or_malformed_endpoint_fails_closed": true,
+    "shared_client_consumes_authoritative_endpoint": true,
+    "authoritative_code_evidence": [
+      "backend/backend/settings.py",
+      "backend/integration/client.py",
+      "backend/integration/test_adminapps_endpoint_remediation.py"
+    ]
+  },
+  "tests": {
+    "endpoint_remediation": "8/8 PASS",
+    "stage_ext_offline": "11/11 PASS",
+    "precreation": "10/10 PASS",
+    "focused": "56/56 PASS",
+    "backend_regression": "519/519 PASS",
+    "p0": 0,
+    "p1": 0
+  },
+  "migrations": {
+    "v2_4": "23/23 PASS",
+    "v2_5": "24/24 PASS",
+    "pending": 0,
+    "fake": 0,
+    "manual_patches": 0,
+    "makemigrations_dry_run": "PASS"
+  },
+  "retry_18_blocker": {
+    "severity": "P1",
+    "phase": "STAGE_EXT / QmsOrganizationCommandService.create_organization",
+    "root_cause": "wrong AdminApps endpoint fallback",
+    "remediation_status": "REMEDIATED / LIVE_REVALIDATION_PENDING",
+    "successor_remediation": "ADMINAPPS_ENDPOINT_SUCCESSOR_RECONCILIATION_PASS",
+    "live_closed": false
+  },
+  "retry_19_mission": {
+    "primary": "Stage EXT = 6/6 identities using dynamically allocated isolated AdminApps endpoint",
+    "required_identities": [
+      "external AdminApps tenant",
+      "external AdminApps actor/user",
+      "ISO Smart TenantProjection",
+      "ISO Smart UserProjection",
+      "QMS Organization",
+      "Process"
+    ],
+    "secondary": "If Stage EXT passes 6/6, continue the fail-closed evidence chain until the next genuine blocker or until all required contracts prove execution."
+  },
+  "resource_policy": {
+    "isolated_adminapps_postgres": "required",
+    "isolated_isosmart_postgres": "required",
+    "dedicated_containers": "required",
+    "dedicated_networks": "required",
+    "dedicated_volumes": "required",
+    "unique_dbs": "required",
+    "unique_ports": "required",
+    "run_specific_manifest": "required",
+    "no_retry_18_reuse": true
+  },
+  "evidence_policy": {
+    "root": "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_19/",
+    "append_only": true,
+    "no_collision": true,
+    "retry_18_untouched": true,
+    "live_execution": "NO"
+  },
+  "phase_31_5": "EXECUTION_HELD",
+  "run_executed": "NO",
+  "exclusions": [
+    "WS-A",
+    "pilot",
+    "production",
+    "any non-disposable environment"
+  ],
+  "next_step": "Execute exactly one disposable evidence run under Retry 19 authorization."
+}

@@ -1,0 +1,32 @@
+{
+  "artifact_schema": "phase31.4-retry14-native-runtime/v1",
+  "retry_id": "Phase 31.4 V2.5 Clean Retry 14",
+  "factory": "build_v25_runtime",
+  "production_factory_selected": true,
+  "pre_execution_producer_assertion": "FAIL",
+  "result": "NOT_STARTED_FAIL_CLOSED",
+  "expected_phases": 33,
+  "executed": 0,
+  "passed": 0,
+  "failed": 0,
+  "phase_1_started": false,
+  "native_captures": {
+    "expected": 565,
+    "resolved": 0,
+    "unresolved": 565,
+    "ambiguous": 0,
+    "type_failures": 0,
+    "persistence_mismatches": 0
+  },
+  "upstream_captures": {
+    "expected": 5,
+    "resolved": 5,
+    "unresolved": 0
+  },
+  "former_blocker": {
+    "id": "P1-RETRY12-V25-ACTIONPLAN-AGENT-DECISION-LIVE-BINDING-MISSING",
+    "status": "OPEN_NOT_REACHED_RETRY14",
+    "closed_live": false
+  },
+  "finished_at": "2026-09-21T20:41:12-06:00"
+}

@@ -1,0 +1,145 @@
+{
+  "schema": "phase31.4-v2.5-v7-operational-diagnostic-cycle/v1",
+  "classification": "LIVE_EXECUTOR_OPERATIONAL_DIAGNOSTIC_V7",
+  "verdict": "LIVE_EXECUTOR_OPERATIONAL_DIAGNOSTIC_FAIL",
+  "diagnostic_cycle": "V7 NEW CYCLE",
+  "attempts_used": 3,
+  "maximum_attempts": 3,
+  "v7_precheck": {
+    "status": "PASS",
+    "artifact": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V7.json",
+    "sha256": "44b161084700ae3892cb3e49d054de35ef1403409c69eeae9d370b46565d2ca8",
+    "protected_sources": "28/28 PASS",
+    "drift": false,
+    "operational_sources_protected": true,
+    "formal_current_usable_retry20_authorization": "NONE"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "run_id": "Phase 31.4 V2.5 V7 Operational Diagnostic Cycle 1 Attempt 1",
+      "authorization_scope": "DIAGNOSTIC_ONLY_AUTHORIZATION",
+      "authorization_sha256": "b0551fbc0815f4c96804fb254290abdc49a130c58246212f09ef67e351a86591",
+      "result": "FAIL",
+      "first_blocker": {
+        "code": "AUTHORIZATION_EXECUTION_KIND_MISMATCH",
+        "message": "Diagnostic authorization used LIVE_EXECUTOR_OPERATIONAL_DIAGNOSTIC in the structural execution_kind field; the protected runner requires RUNNER_ENVIRONMENT_DIAGNOSTIC."
+      },
+      "furthest_proven_boundary": "RUNNER_INITIALIZED",
+      "resources_allocated": false,
+      "files_changed_afterward": [
+        "docs/governance/evidence/runs/Phase_31.4_V2.5_V7_Operational_Diagnostic_Cycle_1_Attempt_2/authorization_diagnostic_only_v1.json"
+      ],
+      "protected_files_changed_afterward": [],
+      "cleanup": {
+        "status": "PASS",
+        "basis": "Authorization was not consumed and no resources were allocated."
+      }
+    },
+    {
+      "attempt": 2,
+      "run_id": "Phase 31.4 V2.5 V7 Operational Diagnostic Cycle 1 Attempt 2",
+      "authorization_scope": "DIAGNOSTIC_ONLY_AUTHORIZATION",
+      "authorization_sha256": "dec1e515a3bc4f0317e73bcc2fa1041fd7172f330a697ec1743587aa43e77ad1",
+      "result": "FAIL",
+      "first_blocker": {
+        "code": "POSTGRES_IMAGE_INSPECTION_FAILURE",
+        "message": "The restricted execution environment made /run/user/1000/libpod read-only while Podman initialized."
+      },
+      "furthest_proven_boundary": "RESOURCE_ALLOCATION_STARTED",
+      "manifest": "docs/governance/evidence/runs/Phase_31.4_V2.5_V7_Operational_Diagnostic_Cycle_1_Attempt_2/RESOURCE_MANIFEST.json",
+      "resources_allocated": false,
+      "files_changed_afterward": [
+        "docs/governance/evidence/runs/Phase_31.4_V2.5_V7_Operational_Diagnostic_Cycle_1_Attempt_3/authorization_diagnostic_only_v1.json"
+      ],
+      "protected_files_changed_afterward": [],
+      "cleanup": {
+        "status": "PASS",
+        "post_teardown_absence_verified": true,
+        "remaining_resources": []
+      }
+    },
+    {
+      "attempt": 3,
+      "run_id": "Phase 31.4 V2.5 V7 Operational Diagnostic Cycle 1 Attempt 3",
+      "authorization_scope": "DIAGNOSTIC_ONLY_AUTHORIZATION",
+      "authorization_sha256": "2ed5960ae716701bb8d805ea147478eed140d777a285ea57922764e183ca5825",
+      "result": "FAIL",
+      "first_blocker": {
+        "code": "INVALID_STATE_TRANSITION",
+        "message": "The diagnostic transition map forbids READY -> PRECREATION_RUNNING although run_evidence requires that transition."
+      },
+      "furthest_proven_boundary": "POSTGRES_READY",
+      "manifest": "docs/governance/evidence/runs/Phase_31.4_V2.5_V7_Operational_Diagnostic_Cycle_1_Attempt_3/RESOURCE_MANIFEST.json",
+      "files_changed_afterward": [
+        "docs/governance/evidence/PHASE31_4_V2_5_V7_OPERATIONAL_DIAGNOSTIC_CYCLE_V1.json",
+        "docs/transformation/PHASE31_4_V2_5_V7_OPERATIONAL_DIAGNOSTIC_CYCLE_V1_REPORT.md"
+      ],
+      "protected_files_changed_afterward": [],
+      "postgresql": {
+        "adminapps": {
+          "version": "PostgreSQL 18.6",
+          "published_port": 43623,
+          "database": "p314_phase_31_4_v2_5_v7_o_adminapps_cdbc5447ca",
+          "container_running": "PASS",
+          "readiness": "PASS",
+          "real_connection": "PASS",
+          "select_one": 1
+        },
+        "isosmart": {
+          "version": "PostgreSQL 18.6",
+          "published_port": 38331,
+          "database": "p314_phase_31_4_v2_5_v7_o_isosmart_e48764b1b6",
+          "container_running": "PASS",
+          "readiness": "PASS",
+          "real_connection": "PASS",
+          "select_one": 1
+        }
+      },
+      "cleanup": {
+        "status": "PASS",
+        "post_teardown_absence_verified": true,
+        "containers_absent": true,
+        "networks_absent": true,
+        "volumes_absent": true,
+        "ports_closed": [43623, 38331],
+        "remaining_resources": []
+      }
+    }
+  ],
+  "migrations": {
+    "adminapps": "NOT_REACHED",
+    "isosmart": "NOT_REACHED"
+  },
+  "postgresql_roles": "NOT_REACHED",
+  "adminapps_service": "NOT_REACHED",
+  "isosmart_service": "NOT_REACHED",
+  "admin_apps_base_url": "NOT_INJECTED",
+  "authority": "NOT_REACHED",
+  "event_delivery": "NOT_REACHED",
+  "tenant_projection": "NOT_REACHED",
+  "user_projection": "NOT_REACHED",
+  "qms_organization": "NOT_REACHED",
+  "process": "NOT_REACHED",
+  "stage_ext": "0/6",
+  "capture_bundle": "NOT_CREATED",
+  "tests_after_cycle": {
+    "focused": {
+      "status": "PASS",
+      "count": "89/89",
+      "failures": 0,
+      "errors": 0
+    },
+    "full_backend_regression": {
+      "post_cycle_execution": "NOT_REQUIRED_NO_SOURCE_CHANGE",
+      "authoritative_v7_result": "552/552 PASS"
+    }
+  },
+  "integrity_impact": "V7_UNCHANGED",
+  "protected_sources_after_cycle": "28/28 PASS",
+  "resources_remaining": "NONE",
+  "formal_retry_20_authorization_created": "NO",
+  "retry_20_executed": "NO",
+  "phase31_5": "EXECUTION_HELD",
+  "exact_next_step": "Remediate only the diagnostic runner state transition so RUNNER_ENVIRONMENT_DIAGNOSTIC run_evidence can transition READY -> PRECREATION_RUNNING; then create a successor integrity generation before a newly authorized diagnostic cycle."
+}

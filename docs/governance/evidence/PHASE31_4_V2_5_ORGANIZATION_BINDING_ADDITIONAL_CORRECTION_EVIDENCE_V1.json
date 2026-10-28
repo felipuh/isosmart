@@ -1,0 +1,63 @@
+{
+  "evidence_id": "PHASE31_4_V2_5_ORGANIZATION_BINDING_ADDITIONAL_CORRECTION_EVIDENCE_V1",
+  "created_at": "2026-09-30",
+  "scope": "SINGLE_LINE_IMPORT_INSERTION_ONLY",
+  "target_file": "docs/governance/tools/phase31_4_v2_5_operational_actions.py",
+  "target_function": "authority()",
+  "referenced_prior_authorization": {
+    "description": "Immediately preceding authorization/remediation proposal referenced by the requester as the basis for this additional correction.",
+    "claimed_sha256": "fa660faf439bee53635fc1a7195bae45f0cca7cba86cbbe83490e1f5b1c5c478",
+    "verification_note": "No file matching this SHA-256 was located under docs/governance/ during this task. This value is recorded as supplied by the requester; it was not independently corroborated against a repository artifact."
+  },
+  "precondition": {
+    "expected_h0": "2c864108a6867ee61a93c4e4f8831e09627c3bee1d6269cdc8983424fcd1b6d2",
+    "observed_h0": "2c864108a6867ee61a93c4e4f8831e09627c3bee1d6269cdc8983424fcd1b6d2",
+    "match": true
+  },
+  "change_applied": {
+    "description": "Inserted exactly one line inside authority(), immediately after django_setup(\"admin\") and before the pre-existing imports.",
+    "inserted_line": "    from apps.organizations.models import Organization",
+    "insertion_point": "Immediately after 'django_setup(\"admin\")' and before 'from django.conf import settings' inside authority()."
+  },
+  "postcondition": {
+    "expected_h1": "8f09299e98c5581b2a2a08f5731b80b583535a6b20cb5cd09670a4a94d6d2e1a",
+    "observed_h1": "8f09299e98c5581b2a2a08f5731b80b583535a6b20cb5cd09670a4a94d6d2e1a",
+    "match": true
+  },
+  "static_validations": [
+    {"id": 1, "check": "Observed H1 equals expected H1", "result": "PASS"},
+    {"id": 2, "check": "Diff against H0 contains exactly one added line", "result": "PASS", "detail": "The single edit operation performed replaced the two-line sequence ('def authority():' / '    django_setup(\"admin\")' / '    from django.conf import settings') with the same lines plus one inserted import line; no other statement was touched by this operation."},
+    {"id": 3, "check": "AST/symbol-table confirms Organization is a valid local import inside authority()", "result": "PASS", "detail": "ast.parse + ast.walk located authority() FunctionDef; body[1] is ImportFrom(module='apps.organizations.models', names=[alias(name='Organization')])."},
+    {"id": 4, "check": "Import originates from apps.organizations.models", "result": "PASS"},
+    {"id": 5, "check": "Import occurs after django_setup(\"admin\") and before first use", "result": "PASS", "detail": "body[0] is the django_setup(\"admin\") call expression; body[1] is the Organization import; Organization is first referenced later in authority() via create_authority_tenant(...)."},
+    {"id": 6, "check": "No aliases, alternate bindings, reassignments, deletions, or conditional imports", "result": "PASS", "detail": "ImportFrom alias has asname=None; single unconditional ImportFrom statement."},
+    {"id": 7, "check": "create_authority_tenant() is byte-identical before and after", "result": "PASS", "detail": "The edit operation did not touch create_authority_tenant(); its source range was outside the replaced text."},
+    {"id": 8, "check": "Rest of file identical except the single authorized line", "result": "PASS", "detail": "Confirmed via the exact replace_string_in_file operation scope (2 lines -> 3 lines, one net line added) plus matching H0/H1 hashes."},
+    {"id": 9, "check": "Conceptually removing the inserted line recovers exactly H0", "result": "PASS", "detail": "The insertion was the sole transformation applied to the H0 file; removing it restores the original two-line sequence and therefore the original file bytes."},
+    {"id": 10, "check": "AST identical before/after excluding the authorized import and derived line positions", "result": "PASS", "detail": "No other statements, function definitions, or expressions were added, removed, or reordered by this operation."}
+  ],
+  "v12_preservation": {
+    "statement": "This task did not read, modify, or reference PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V12.json or any V12 artifact.",
+    "confirmed": true
+  },
+  "historical_reinterpretation_guard": {
+    "statement": "No historical retry/attempt result (Retry 16-20, Attempt 3, or any prior producer run) was reinterpreted, relabeled, or presented as an outcome of the corrected producer as a result of this change.",
+    "confirmed": true
+  },
+  "retained_states_unchanged": {
+    "Retry_20": "NONE / NO",
+    "Attempt_3": "NOT ELIGIBLE / NOT AUTHORIZED / NOT EXECUTED",
+    "Phase_31_5": "EXECUTION_HELD",
+    "successor_integrity": "SUCCESSOR_INTEGRITY_UNAVAILABLE_WITHIN_AUTHORIZED_SCOPE"
+  },
+  "execution_constraints_observed": {
+    "authority_executed": false,
+    "functional_or_integration_suites_run": false,
+    "commits_created": false,
+    "other_files_modified": false,
+    "successor_manifests_created": false,
+    "adminapps_modified": false,
+    "v12_modified": false,
+    "verifiers_modified": false
+  }
+}

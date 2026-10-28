@@ -1,0 +1,351 @@
+{
+  "artifact_schema": "phase31.4-v2.5-evidence-reconciliation/v1",
+  "state": "PHASE31_4_V2_5_EVIDENCE_RECONCILIATION",
+  "audited_at": "2026-09-22T19:05:47-06:00",
+  "repository_commit_observed": "0d2ddfde",
+  "governance_decision": {
+    "outcome": "PROMOTION_PARTIALLY_RATIFIED",
+    "historical_retry16_verdict": "PROMOTED",
+    "historical_verdict_preserved": true,
+    "decision_basis": "Retry 16 proves a disposable PostgreSQL 18.6 run, migrations, some AdminApps/ISO Smart interaction and execution of a synthetic governed chain. It does not prove that the 118-member/1664-field graph was materialized from live retained captures, because the promoted exact-comparison hash is the offline regression fixture hash and the retained graph contains captured:* placeholders.",
+    "ratified_claims": [
+      "Disposable PostgreSQL 18.6 AdminApps and ISO Smart environments were allocated.",
+      "AdminApps and ISO Smart migration commands completed successfully according to retained logs and matching log hashes.",
+      "Two AdminApps tenant-event HTTP deliveries were accepted by ISO Smart with HTTP 201.",
+      "The runtime invoked nine material domain-operation phases without a reported exception.",
+      "Resource manifest records container, network and volume removal flags for both disposable environments.",
+      "V2.4 historical hashes and Retry 16 historical artifacts remain present and unmodified by this reconciliation."
+    ],
+    "not_ratified_claims": [
+      "118 live members and 1664 live fields exactly matched the V2.5 contract.",
+      "565 native captures and 5 upstream captures were retained with independently verifiable live provenance.",
+      "All 33 phase PASS results logically prove their named guarantees.",
+      "Event/outbox/audit row agreement was queried and proven.",
+      "Security/RLS/least-privilege controls were exercised by the SECURITY_EVIDENCE phase.",
+      "The human approver role came from AdminApps authority.",
+      "POST_TEARDOWN_VERIFY independently observed resource absence after teardown."
+    ]
+  },
+  "preservation": {
+    "v2_4_modified": false,
+    "retry16_artifacts_modified": false,
+    "promotion_closure_modified": false,
+    "historical_hashes_modified": false,
+    "historical_blockers_rewritten": false,
+    "successor_evidence_only": true
+  },
+  "source_authority": {
+    "primary_functional": {
+      "path": "docs/transformation/source-artifacts/ISO_SMART_AI_Especificacion_Inicial_Integrada_v1_2026.docx",
+      "sha256": "8308bde950c80a53dfe46976b46d135faac7b170ae84c53f748aa73146b6a82c"
+    },
+    "structured": [
+      {"path":"docs/transformation/source-artifacts/ISO_SMART_AI_Mapa_Maestro_Arquitectura.xlsx","sha256":"952d8ac9858734915c099c8149537ab1a01108d1a4248a5328675c8a758d22d5"},
+      {"path":"docs/transformation/source-artifacts/ISO_SMART_AI_Mapa_Maestro_Datos.json","sha256":"c41e847ecc34dbdf7a104f2849263851a29a6f129fac72cc559547077c3515eb"}
+    ],
+    "partial_representations": [
+      "docs/transformation/source-artifacts/ISO_SMART_AI_DDL_PostgreSQL.sql",
+      "docs/transformation/source-artifacts/ISO_SMART_AI_OpenAPI.yaml",
+      "docs/transformation/source-artifacts/ISO_SMART_AI_Arquitectura_Completa.mmd",
+      "docs/transformation/source-artifacts/ISO_SMART_AI_Arquitectura_Completa_Lucidchart.drawio"
+    ],
+    "later_adrs_may_replace_original_requirements": false
+  },
+  "retry16_provenance": {
+    "live_native": [
+      {
+        "source": "PHASE31_4_CLEAN_RETRY_16_ADMINAPPS_MIGRATIONS.log",
+        "classification": "LIVE_NATIVE",
+        "proves": "AdminApps migration command output with 61 applied migrations.",
+        "limitations": "No row snapshots; log hash is carried by BOOTSTRAP_MIGRATIONS."
+      },
+      {
+        "source": "PHASE31_4_CLEAN_RETRY_16_ISOSMART_MIGRATIONS.log",
+        "classification": "LIVE_NATIVE",
+        "proves": "ISO Smart migration command output with 92 applied migrations.",
+        "limitations": "No schema dump or independent database readback; log hash is carried by BOOTSTRAP_MIGRATIONS."
+      },
+      {
+        "source": "PHASE31_4_CLEAN_RETRY_16_ADMINAPPS_SERVER.log",
+        "classification": "LIVE_NATIVE",
+        "proves": "One entitlement validation HTTP 200 and one user endpoint HTTP 200.",
+        "limitations": "Request/response payloads and authenticated principal are not retained; file is not included in Retry 16 SHA256 manifest."
+      },
+      {
+        "source": "PHASE31_4_CLEAN_RETRY_16_ISOSMART_SERVER.log",
+        "classification": "LIVE_NATIVE",
+        "proves": "Two tenant-event POST requests were accepted with HTTP 201.",
+        "limitations": "Event envelopes, event IDs, signatures, source versions and ingress rows are not retained; file is not included in Retry 16 SHA256 manifest."
+      }
+    ],
+    "live_readback": [
+      {
+        "source": "PHASE31_4_CLEAN_RETRY_16_RESOURCE_MANIFEST.json",
+        "classification": "LIVE_READBACK",
+        "proves": "Observed PostgreSQL 18.6 image/version, container IDs, loopback ports and recorded removal flags.",
+        "limitations": "POST_TEARDOWN_VERIFY did not perform the teardown/readback; external orchestration populated the manifest."
+      },
+      {
+        "source": "PHASE31_4_CLEAN_RETRY_16_LIVE_BRIDGE.json.initial_opportunity_bridge",
+        "classification": "LIVE_READBACK",
+        "proves": "Retained actor_id, tenant_projection_id and process_id used to bind INITIAL_OPPORTUNITY.",
+        "limitations": "No row snapshots, query text, organization ID, user projection ID or external tenant ID are retained."
+      }
+    ],
+    "offline_fixture": [
+      {
+        "source": "PHASE31_4_5C_V2_5_NATIVE_IDENTITY_CAPTURE_V1.json",
+        "classification": "OFFLINE_FIXTURE",
+        "facts": {
+          "capture_mode": "offline_regression_fixture",
+          "native_execution_performed": false,
+          "capture_count": 565,
+          "captured_placeholder_values": 562,
+          "fixed_example_uuid_values": 3
+        }
+      },
+      {
+        "source": "PHASE31_4_5C_V2_5_RESOLVED_GRAPH_V1.json",
+        "classification": "OFFLINE_FIXTURE",
+        "facts": {
+          "resolution_mode": "offline_regression_fixture",
+          "captured_placeholder_occurrences": 670,
+          "distinct_captured_placeholder_strings": 562,
+          "canonical_graph_sha256": "d6723f0fa64fce046d47ad9a64a01c60c33ac6205b26949131b675a4744dddc0"
+        }
+      },
+      {
+        "source": "PHASE31_4_5C_V2_5_EXACT_COMPARISON_V1.json",
+        "classification": "OFFLINE_FIXTURE",
+        "proves": "The same offline capture map deterministically resolves to the same hash twice.",
+        "limitations": "It does not compare PostgreSQL readbacks to the contract."
+      }
+    ],
+    "synthetic": [
+      {
+        "source": "backend/foundation/phase31_4_v2_5_runtime.py:_execute_catalog_assertions and downstream agent chain",
+        "classification": "SYNTHETIC",
+        "facts": [
+          "Creates standard PHASE31.4-V25-LIVE titled Synthetic live execution standard.",
+          "Creates clause LIVE-1 titled Synthetic live clause.",
+          "Uses model synthetic-no-execution and capability synthetic-analysis.",
+          "Creates synthetic evidence and a synthetic governed recommendation/decision chain."
+        ]
+      },
+      {
+        "source": "retry16_live.py local projection events",
+        "classification": "SYNTHETIC",
+        "facts": [
+          "The user.updated event is always constructed locally and applied directly through ProjectionWriterService.",
+          "A tenant.provisioned event can be constructed locally as fallback when delivered upstream projection is absent."
+        ]
+      }
+    ],
+    "derived": [
+      {
+        "source": "PHASE31_4_CLEAN_RETRY_16_LIVE_BRIDGE.json phase list",
+        "classification": "DERIVED",
+        "proves": "The Python runner returned without exception for 33 registered phase callbacks.",
+        "limitations": "It retains no PhaseExecutionResult metadata, assertions, captures or output IDs."
+      },
+      {
+        "source": "PHASE31_4_CLEAN_RETRY_16_LIVE_EXACT_COMPARISON.json",
+        "classification": "DERIVED",
+        "proves": "The report consistently copies contract counts and an existing hash.",
+        "limitations": "The copied live_graph_sha256 is the offline resolved graph canonical hash; no live graph artifact exists."
+      },
+      {
+        "source": "PHASE31_4_CLEAN_RETRY_16_PROMOTION_CLOSURE.json",
+        "classification": "DERIVED",
+        "proves": "The historical promotion decision and its declared inputs.",
+        "limitations": "Its exact-comparison and capture-count claims inherit the provenance defect."
+      },
+      {
+        "source": "PHASE31_4_CLEAN_RETRY_16_BOOTSTRAP_MIGRATIONS.json",
+        "classification": "DERIVED",
+        "proves": "Summary of migration logs and environment guard, with migration log hashes.",
+        "limitations": "Generated summary rather than a database-native snapshot."
+      }
+    ],
+    "unknown_or_unretained": [
+      "AdminApps tenant and user creation output payloads beyond the three IDs in initial_opportunity_bridge.",
+      "The five CaptureBundle values as a complete retained set; the report retains only three values and aggregate count 5.",
+      "Opportunity, AgentDefinition, AgentRun, Recommendation, AgentDecision, ActionPlan, dry-run, Approval, Authorization, ActionExecution/receipt and controlled successor row snapshots.",
+      "DomainEvent, TransactionalOutbox and ImmutableAuditLog rows for the chain.",
+      "All 565 native runtime capture values and their persisted readbacks.",
+      "A live 118-member/1664-field resolved graph."
+    ]
+  },
+  "offline_fixture_contamination": {
+    "contaminated_claims": [
+      "LIVE_EXACT_COMPARISON.live_graph_sha256",
+      "LIVE_EXACT_COMPARISON native_captures_resolved=565",
+      "LIVE_EXACT_COMPARISON resolved_members=118/resolved_fields=1664",
+      "PROMOTION_CLOSURE exact_comparison_result",
+      "PROMOTION_CLOSURE graph_counts and capture_counts insofar as they claim retained live resolution",
+      "PHASE31_4_V2_5_PROMOTED_BASELINE live graph hash"
+    ],
+    "exact_scope": "The contract shape (118/1664) is a valid structural fact. The resolution values are not live: 562 of the 565 native capture entries are captured:* placeholders, three are fixed example UUIDs, and the resolved graph repeats placeholders 670 times through reference bindings. The canonical hash d6723f... therefore fingerprints offline fixture material, not PostgreSQL Retry 16 rows.",
+    "live_evidence_reconstructed": false
+  },
+  "hash_assurance": {
+    "retry16_sha256_manifest": {
+      "path": "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_16_SHA256.json",
+      "all_recorded_file_hashes_currently_match": true,
+      "proves": "Byte integrity of the ten listed files at reconciliation time.",
+      "does_not_prove": [
+        "That file contents originated in PostgreSQL.",
+        "That claimed capture values were queried from live rows.",
+        "That the offline resolved graph is a live graph.",
+        "That unlisted server logs or omitted row snapshots have provenance.",
+        "Authenticity against an external signature, trusted timestamp or append-only store."
+      ]
+    },
+    "migration_log_hashes": {
+      "adminapps_matches_bootstrap": true,
+      "isosmart_matches_bootstrap": true,
+      "proves": "The retained migration log bytes match the digests recorded by BOOTSTRAP_MIGRATIONS."
+    },
+    "live_graph_hash": {
+      "value": "d6723f0fa64fce046d47ad9a64a01c60c33ac6205b26949131b675a4744dddc0",
+      "integrity": "Valid canonical content hash for the offline resolved graph.",
+      "provenance": "Does not prove live provenance."
+    }
+  },
+  "live_graph_recoverability": {
+    "outcome": "LIVE_GRAPH_NOT_RECOVERABLE",
+    "members_claimed": 118,
+    "fields_claimed": 1664,
+    "native_captures_claimed": 565,
+    "upstream_captures_claimed": 5,
+    "reason": "The disposable databases and volumes were removed, only three bridge IDs remain, phase outputs/captures were held in memory and discarded, and the only full graph/capture artifacts are explicitly offline fixtures. Replacing placeholders with fixture values would be reconstruction by substitution, not recovery of retained live evidence.",
+    "rerun_performed": false
+  },
+  "adminapps_provenance": {
+    "events_really_emitted_by_adminapps": {
+      "status": "PARTIALLY_PROVEN",
+      "evidence": "ISO Smart server log shows two accepted HTTP tenant-event POSTs after AdminApps deliver_tenant_events.",
+      "limitation": "The envelopes, event IDs, event types, AdminApps outbox rows and delivery receipts were not retained."
+    },
+    "events_constructed_locally": [
+      "user.updated is constructed in retry16_live.py and applied directly with ProjectionWriterService.",
+      "tenant.provisioned has a local fallback branch; retained evidence does not serialize whether that branch ran, although two upstream posts were observed."
+    ],
+    "authenticated_ingress": {
+      "adminapps_api_use": "retry16_admin_create.py uses DRF APIClient.force_authenticate against an in-process AdminApps user; this is test harness authentication, not a real login/token exchange.",
+      "tenant_event_ingress": "A shared event key is configured and HTTP 201 is observed, but signature inputs and ingress receipts are not retained.",
+      "verdict": "No proof of a complete real authenticated user ingress journey."
+    },
+    "direct_projection_writer_use": true,
+    "tenant_projection": "Likely projected from AdminApps delivery, with a local fallback available; branch provenance was not retained.",
+    "user_projection": "Synthetic/local: constructed user.updated event and direct ProjectionWriterService.apply.",
+    "actor_authority": "actor_id originates from an AdminApps database user created/read by the harness, but no authoritative role assertion is carried into ISO Smart.",
+    "approver_authority": "Not source-backed: AuthorizedHumanContext receives the literal tuple (quality_approver,) from the harness.",
+    "adminapps_harness_roles": [
+      "AdminApps User: is_staff=true, is_superuser=true",
+      "AdminApps UserOrganization.role: superadmin",
+      "ISO Smart approval context: quality_approver literal"
+    ],
+    "upstream_label_correction": "CaptureBundle labels all five values LIVE_UPSTREAM_NATIVE_CAPTURE, but only the AdminApps tenant identity is unambiguously upstream-native. TenantProjection is a local projection/readback; UserProjection is locally synthesized; Organization and Process are ISO Smart native local outputs."
+  },
+  "phase_verifier_audit": {
+    "artifact": "docs/governance/evidence/PHASE31_4_V2_5_PHASE_VERIFIER_AUDIT_V1.json",
+    "counts": {
+      "FULLY_VERIFIED": 0,
+      "PARTIALLY_VERIFIED": 9,
+      "STRUCTURAL_ONLY": 0,
+      "NO_OP": 12,
+      "OVERCLAIMED": 12
+    }
+  },
+  "source_traceability": {
+    "artifact": "docs/governance/evidence/PHASE31_4_V2_5_SOURCE_REQUIREMENT_TRACEABILITY_V1.json",
+    "requirements": {"total":63,"IMPLEMENTED_AND_PROVEN":0,"IMPLEMENTED_NOT_LIVE_PROVEN":0,"PARTIAL":63,"PLANNED":0,"DEFERRED":0,"DISCARDED_BY_GOVERNANCE":0,"NOT_IMPLEMENTED":0},
+    "onboarding": {"total":17,"IMPLEMENTED_AND_PROVEN":0,"IMPLEMENTED_NOT_LIVE_PROVEN":0,"PARTIAL":16,"PLANNED":0,"DEFERRED":0,"DISCARDED_BY_GOVERNANCE":0,"NOT_IMPLEMENTED":1}
+  },
+  "product_priorities": [
+    {"objective":"Onboarding","status":"partial","evidence":"Legacy six-macro-step/orchestrator and individual capabilities exist; no backend-authoritative 17-stage flow or end-to-end proof."},
+    {"objective":"Foundation Gate","status":"unproven","evidence":"Required adaptive ISO 9000 learning gate entities/flow and acceptance proof were not located."},
+    {"objective":"Evidence Graph","status":"partial","evidence":"Legacy EvidenceNode/Edge UI and newer Evidence/EvidenceCoverage foundations exist; the source-defined visible compliance graph is not proven end to end."},
+    {"objective":"Recommendation Drawer","source_name":"Normative Intelligence Drawer","status":"unproven","evidence":"No source-conformant drawer component showing requirement, layers, evidence, model/rule, confidence, assumptions, decision and graph coverage was located."},
+    {"objective":"A0-A3 agents","status":"partial","evidence":"Governed agent/runtime/decision/approval foundations exist and Retry 16 ran an A3-shaped synthetic chain; production/product agents and real authority are not proven."},
+    {"objective":"Audit","status":"partial","evidence":"InternalAudit/AuditFinding domains exist; autonomous risk-based audit and source-card evidence chain are incomplete."},
+    {"objective":"CAPA","status":"partial","evidence":"Nonconformity/CorrectiveAction/Effectiveness foundations exist; duplicated legacy models and product-level closed loop remain."},
+    {"objective":"Risk","status":"partial","evidence":"Risk/Opportunity and controlled action foundations exist; source-specific agent/drawer acceptance remains unproven."},
+    {"objective":"Value Discovery","status":"unproven","evidence":"No proof of the three source-defined value engines or measurable value discovery outcome."},
+    {"objective":"Tangible first-day value","status":"unproven","evidence":"No retained experience showing three savings opportunities, top risks, 3/6/12-month roadmap and next best action."}
+  ],
+  "extension_classification": [
+    {"extension":"AdminApps authority specialization","classification":"LEGITIMATE_ARCHITECTURAL_SPECIALIZATION","rationale":"Preserves the source identity/tenant intent while assigning existing ecosystem system-of-record ownership."},
+    {"extension":"TenantProjection/UserProjection","classification":"LEGITIMATE_ARCHITECTURAL_SPECIALIZATION","rationale":"Local traceable projections are a valid integration specialization, provided provenance is not overstated."},
+    {"extension":"Transactional Outbox","classification":"GOVERNANCE_SUPPORTING_MECHANISM","rationale":"Supports reliable events and auditability; it is not itself user value or a substitute for source requirements."},
+    {"extension":"ActionPlan","classification":"GOVERNANCE_SUPPORTING_MECHANISM","rationale":"Separates recommendation from authorized execution, supporting the source human-decision boundary."},
+    {"extension":"Execution Authorization","classification":"GOVERNANCE_SUPPORTING_MECHANISM","rationale":"Makes A0-A4 ceilings and human authorization enforceable; authority must remain source-backed."},
+    {"extension":"Exact row-level contract","classification":"POC_ONLY","rationale":"Useful for the retained synthetic lifecycle POC but not a source product requirement or general product acceptance matrix."},
+    {"extension":"118/1664 machinery","classification":"POTENTIAL_SCOPE_DRIFT","rationale":"It consumed promotion attention without proving the 63 functional requirements, 17 onboarding stages or tangible customer value."},
+    {"extension":"Phase 31.5 hardening","classification":"GOVERNANCE_SUPPORTING_MECHANISM","rationale":"Conceptually aligned security/operability work, but held until evidence reconciliation and should not displace functional priorities."}
+  ],
+  "factual_documentation_errors": [
+    {
+      "document": "docs/transformation/ISO_SMART_AI_SOURCE_RECONCILIATION.md",
+      "object": "EffectivenessCheck.tenant_id",
+      "incorrect_statement": "The discrepancy row says the source DDL lacks tenant_id.",
+      "source_fact": "ISO_SMART_AI_DDL_PostgreSQL.sql defines effectiveness_check with tenant_id uuid NOT NULL REFERENCES tenant; XLSX/JSON list check_id, subject_type, subject_id, method, due_at, result and evidence_id without tenant_id.",
+      "corrected_interpretation": "DDL includes tenant_id; the structured entity maps omit it. A target design may retain tenant_id for isolation, but must label that as DDL-backed/architectural specialization rather than a structured-map field.",
+      "source_artifact_modified": false,
+      "historical_derived_document_modified": false
+    }
+  ],
+  "similar_error_search": {
+    "scope": "Rechecked reconciliation counts, onboarding discrepancy and the tenant-field statements for EffectivenessCheck, ActionExecution and RecommendationBasis against JSON and DDL.",
+    "additional_confirmed_field_level_errors": 0,
+    "notes": "ActionExecution and RecommendationBasis genuinely lack direct tenant_id in both the structured map and DDL; the reconciliation's specialization proposal for them is not a source fact. No additional correction was made without stronger evidence."
+  },
+  "required_verifier_corrections": [
+    "Make a phase without a valid executor operation and explicit assertions fail registration/execution; remove the default PASS branches.",
+    "Persist PhaseExecutionResult status/operation/native source/metadata and reject returned non-PASS status.",
+    "Serialize all native and upstream captures with returned value, persisted readback, type, phase, source service/operation, retry ID and provenance.",
+    "Implement RESOLVED_GRAPH over retained live captures and reject captured:* or fixture identities.",
+    "Implement EXACT_COMPARISON as an independent post-capture comparison of 118 members/1664 fields, with mismatch detail and graph artifact hash.",
+    "Implement EVENT_OUTBOX_ASSERTIONS with real SQL/readbacks for DomainEvent, TransactionalOutbox and ImmutableAuditLog.",
+    "Implement SECURITY_EVIDENCE with named positive/negative RLS, tenant isolation, least-privilege and authority probes.",
+    "Separate actual teardown from TEARDOWN_GATE and run POST_TEARDOWN_VERIFY only after removal, retaining absence checks.",
+    "Retain AdminApps event envelopes/outbox/delivery/ingress receipts and source-backed actor/approver roles."
+  ],
+  "missing_evidence": [
+    "Complete retained Stage EXT values for external tenant, actor, TenantProjection, UserProjection, QMS Organization and Process, including source/readback records.",
+    "All 565 native capture values and persisted readbacks with provenance; zero captured:* placeholders.",
+    "A live resolved graph containing exactly 118 members and 1664 typed fields.",
+    "Independent exact-comparison mismatch output over that live graph.",
+    "Persisted row snapshots/IDs for Opportunity before/successor, AgentDefinition, AgentRun, Recommendation, AgentDecision, ActionPlan, dry run, Approval, Authorization, ActionExecution/receipt and any controlled revision.",
+    "DomainEvent, TransactionalOutbox and ImmutableAuditLog readbacks for every material operation, linked by aggregate/trace/payload hashes.",
+    "AdminApps native event/outbox payloads, delivery receipts and ISO Smart ingress receipts.",
+    "A real authenticated identity/entitlement flow and source-backed approver roles; no force_authenticate or role literal as authority proof.",
+    "Named security/RLS/least-privilege negative and positive results.",
+    "Transaction rollback/atomicity evidence and independent post-teardown absence checks."
+  ],
+  "minimum_future_execution": {
+    "authorized_now": false,
+    "description": "After verifier code is separately corrected and reviewed, run one disposable PostgreSQL Retry 17-equivalent evidence-only execution using AdminApps test authority. Exercise the minimum synthetic chain once, serialize the six Stage EXT identities, all 565 native readback captures, 118/1664 resolved graph, event/outbox/audit rows, authority assertions, security probes and post-teardown checks. Do not run pilot, production or Phase 31.5 WS-A.",
+    "preconditions": [
+      "Separate authorization to modify verifier code.",
+      "Review proving no default-PASS branches remain.",
+      "Schema for immutable per-phase evidence and capture provenance approved.",
+      "Separate authorization for the disposable execution."
+    ]
+  },
+  "phase31_5": {
+    "disposition": "CONCEPTUALLY_ALIGNED / EXECUTION_HELD",
+    "ws_a_executed": false,
+    "corrected_gate_model": [
+      "documentary admission",
+      "disposable environment authorization",
+      "environment provisioning",
+      "environment acceptance",
+      "WS-A execution"
+    ],
+    "gate_rule": "A prior stage may not require evidence that can only be produced by a later stage."
+  },
+  "product_code_modified": false,
+  "next_authorized_action": "Authorize a separate verifier-remediation change only: remove default-PASS semantics and add retained per-phase/capture/readback evidence. Review that change before authorizing any disposable rerun."
+}

@@ -1,0 +1,637 @@
+{
+  "schema": "phase31.4-v2.5-v8-operational-diagnostic-attempt-evidence/v1",
+  "created_at": "2026-09-29T01:10:17.604998+00:00",
+  "verdict": "ATTEMPT_1_FAIL",
+  "attempt": 1,
+  "cycle_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1",
+  "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 1",
+  "canonical_run_slug": "Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1",
+  "workspace": "/home/felipe/proyectos/isosmart",
+  "git_commit": "0d2ddfdead408b7cc6cb9c6dbc08707281cb9fb7",
+  "authorization": {
+    "parent": {
+      "artifact_path": "docs/governance/evidence/PHASE31_4_V2_5_V8_OPERATIONAL_DIAGNOSTIC_CYCLE_AUTHORIZATION_V1.json",
+      "sha256": "c8633d150784c23170585627b1bf3bd738bcf62197998d5ea8e7bd3d9d08aac9"
+    },
+    "one_shot": {
+      "path": "docs/governance/evidence/PHASE31_4_V2_5_V8_OPERATIONAL_DIAGNOSTIC_ATTEMPT_1_AUTHORIZATION_V1.json",
+      "sha256": "488d98c0d74c3ea508841285c0a744b4723d859ce0b55b7bab6d2aed57b5f225"
+    },
+    "verification": "PASS",
+    "consumed": true,
+    "consumption": {
+      "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1/AUTHORIZATION_CONSUMPTION.json",
+      "sha256": "b36e4fc3645e5bc71e74df7424a3eb659ba98795b1782d4aed88fed66a7b962b"
+    },
+    "diagnostic_registry": {
+      "path": "docs/governance/evidence/diagnostic_authorization_consumptions/488d98c0d74c3ea508841285c0a744b4723d859ce0b55b7bab6d2aed57b5f225.json",
+      "sha256": "b36e4fc3645e5bc71e74df7424a3eb659ba98795b1782d4aed88fed66a7b962b"
+    },
+    "formal_retry_registry_used": false
+  },
+  "integrity": {
+    "protected_hashes_before.json": {
+      "count": 28,
+      "changed": [],
+      "status": "PASS"
+    },
+    "historical_hashes_before.json": {
+      "count": 293,
+      "changed": [],
+      "status": "PASS"
+    },
+    "v8_integrity": "PASS",
+    "v24_historical_integrity": "PASS",
+    "protected_source_changes": 0,
+    "verified_at": "2026-09-29T01:07:38.063975+00:00"
+  },
+  "preflight": {
+    "path": "docs/governance/evidence/PHASE31_4_V2_5_V8_OPERATIONAL_DIAGNOSTIC_ATTEMPT_1_CONTROL_V1/preflight.json",
+    "sha256": "ca21a907bb2a08c85c11382935e4242b0a72a7c49805ae7933880706a2010d9e"
+  },
+  "resource_allocation": {
+    "adminapps": {
+      "cleanup_required": false,
+      "connection_result": "PASS",
+      "container_id": "90ed3955b76622e6a6a0eefe2451284425f3917aaa4ec5580aa74b6ec3dd84c8",
+      "container_name": "p314_phase_31_4_v2_5_v8_operational_dia_e4c70a7b40_adminapps",
+      "container_port": 5432,
+      "container_status": "REMOVED_VERIFIED",
+      "created_at": "2026-09-29T01:04:14.392875+00:00",
+      "database_name": "p314_phase_31_4_v2_5_v8_o_adminapps_e1725e8ee0",
+      "host_ip": "127.0.0.1",
+      "host_port": 40753,
+      "labels": {
+        "io.isosmart.phase31-4.authorization-sha256": "488d98c0d74c3ea508841285c0a744b4723d859ce0b55b7bab6d2aed57b5f225",
+        "io.isosmart.phase31-4.resource-role": "adminapps",
+        "io.isosmart.phase31-4.run-slug": "Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1"
+      },
+      "network_id": "p314_phase_31_4_v2_5_v8_operational_dia_e4c70a7b40_adminapps_net",
+      "network_name": "p314_phase_31_4_v2_5_v8_operational_dia_e4c70a7b40_adminapps_net",
+      "network_status": "REMOVED_VERIFIED",
+      "observed_postgresql_version": "postgres (PostgreSQL) 18.6 (Debian 18.6-1.pgdg13+2)",
+      "postgresql_status": "READY",
+      "ready_at": "2026-09-29T01:04:24.763768+00:00",
+      "role": "adminapps",
+      "select_one_result": 1,
+      "volume_id": "p314_phase_31_4_v2_5_v8_operational_dia_e4c70a7b40_adminapps_data",
+      "volume_name": "p314_phase_31_4_v2_5_v8_operational_dia_e4c70a7b40_adminapps_data",
+      "volume_status": "REMOVED_VERIFIED"
+    },
+    "isosmart": {
+      "cleanup_required": false,
+      "connection_result": "PASS",
+      "container_id": "ed3435f648c7ad37eb3730fc742064036b44aa0660754de5f08e59c727eca9ef",
+      "container_name": "p314_phase_31_4_v2_5_v8_operational_dia_e4c70a7b40_isosmart",
+      "container_port": 5432,
+      "container_status": "REMOVED_VERIFIED",
+      "created_at": "2026-09-29T01:04:15.832230+00:00",
+      "database_name": "p314_phase_31_4_v2_5_v8_o_isosmart_f3b0ff0bc2",
+      "host_ip": "127.0.0.1",
+      "host_port": 39539,
+      "labels": {
+        "io.isosmart.phase31-4.authorization-sha256": "488d98c0d74c3ea508841285c0a744b4723d859ce0b55b7bab6d2aed57b5f225",
+        "io.isosmart.phase31-4.resource-role": "isosmart",
+        "io.isosmart.phase31-4.run-slug": "Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1"
+      },
+      "network_id": "p314_phase_31_4_v2_5_v8_operational_dia_e4c70a7b40_isosmart_net",
+      "network_name": "p314_phase_31_4_v2_5_v8_operational_dia_e4c70a7b40_isosmart_net",
+      "network_status": "REMOVED_VERIFIED",
+      "observed_postgresql_version": "postgres (PostgreSQL) 18.6 (Debian 18.6-1.pgdg13+2)",
+      "postgresql_status": "READY",
+      "ready_at": "2026-09-29T01:04:33.887327+00:00",
+      "role": "isosmart",
+      "select_one_result": 1,
+      "volume_id": "p314_phase_31_4_v2_5_v8_operational_dia_e4c70a7b40_isosmart_data",
+      "volume_name": "p314_phase_31_4_v2_5_v8_operational_dia_e4c70a7b40_isosmart_data",
+      "volume_status": "REMOVED_VERIFIED"
+    }
+  },
+  "host_ports": [
+    40753,
+    39539
+  ],
+  "database_role_identities": {
+    "adminapps": "postgres",
+    "isosmart": {
+      "agent_catalog_curator": "p314_e4c70a7b401f_agent_catalog_curator",
+      "app": "p314_e4c70a7b401f_app",
+      "audit_writer": "p314_e4c70a7b401f_audit_writer",
+      "execution_authorizer": "p314_e4c70a7b401f_execution_authorizer",
+      "executor": "p314_e4c70a7b401f_executor",
+      "human_approver": "p314_e4c70a7b401f_human_approver",
+      "knowledge_rule_application_owner": "p314_e4c70a7b401f_knowledge_rule_application_owner",
+      "learning_application_executor": "p314_e4c70a7b401f_learning_application_executor",
+      "learning_approver": "p314_e4c70a7b401f_learning_approver",
+      "learning_authorizer": "p314_e4c70a7b401f_learning_authorizer",
+      "learning_governance": "p314_e4c70a7b401f_learning_governance",
+      "learning_reviewer": "p314_e4c70a7b401f_learning_reviewer",
+      "migrator": "p314_e4c70a7b401f_migrator",
+      "normative_curator": "p314_e4c70a7b401f_normative_curator",
+      "projector": "p314_e4c70a7b401f_projector",
+      "qms_action_owner": "p314_e4c70a7b401f_qms_action_owner",
+      "release_controller": "p314_e4c70a7b401f_release_controller",
+      "release_repair": "p314_e4c70a7b401f_release_repair",
+      "rule_activator": "p314_e4c70a7b401f_rule_activator",
+      "rule_adopter": "p314_e4c70a7b401f_rule_adopter",
+      "rule_governance_owner": "p314_e4c70a7b401f_rule_governance_owner",
+      "rule_publisher": "p314_e4c70a7b401f_rule_publisher",
+      "rule_resolver": "p314_e4c70a7b401f_rule_resolver",
+      "worker": "p314_e4c70a7b401f_worker"
+    }
+  },
+  "service_processes": {
+    "adminapps": {
+      "exit_code": 2,
+      "readiness": "FAIL",
+      "pid": "NOT_RETAINED_BY_CURRENT_V8",
+      "allocated_port": "NOT_RETAINED_BY_CURRENT_V8",
+      "endpoint": "NOT_RETAINED_BY_CURRENT_V8"
+    },
+    "isosmart": {
+      "status": "NOT_STARTED"
+    }
+  },
+  "manifest": {
+    "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1/RESOURCE_MANIFEST.json",
+    "sha256": "681265c5fa844245a249b74287b703a03b58c8730a54775ca21abaac1b49c38a"
+  },
+  "state_machine_trace": [
+    {
+      "at": "2026-09-29T01:04:12.918535+00:00",
+      "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+      "from": null,
+      "reason": "authorization verified and atomically consumed",
+      "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 1",
+      "run_slug": "Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1",
+      "sequence": 1,
+      "to": "AUTHORIZED",
+      "validation_attempt": 1
+    },
+    {
+      "at": "2026-09-29T01:04:12.959684+00:00",
+      "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+      "from": "AUTHORIZED",
+      "reason": "resource allocation started",
+      "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 1",
+      "run_slug": "Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1",
+      "sequence": 2,
+      "to": "ALLOCATING",
+      "validation_attempt": 1
+    },
+    {
+      "at": "2026-09-29T01:04:16.181378+00:00",
+      "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+      "from": "ALLOCATING",
+      "reason": "containers, networks, volumes, and host ports persisted",
+      "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 1",
+      "run_slug": "Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1",
+      "sequence": 3,
+      "to": "RESOURCES_ALLOCATED",
+      "validation_attempt": 1
+    },
+    {
+      "at": "2026-09-29T01:04:16.198364+00:00",
+      "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+      "from": "RESOURCES_ALLOCATED",
+      "reason": "PostgreSQL startup/readiness started",
+      "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 1",
+      "run_slug": "Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1",
+      "sequence": 4,
+      "to": "BOOTSTRAPPING",
+      "validation_attempt": 1
+    },
+    {
+      "at": "2026-09-29T01:04:33.910525+00:00",
+      "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+      "from": "BOOTSTRAPPING",
+      "reason": "all PostgreSQL resources accept SELECT 1",
+      "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 1",
+      "run_slug": "Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1",
+      "sequence": 5,
+      "to": "READY",
+      "validation_attempt": 1
+    },
+    {
+      "at": "2026-09-29T01:04:33.930781+00:00",
+      "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+      "from": "READY",
+      "reason": "PRECREATION callback started",
+      "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 1",
+      "run_slug": "Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1",
+      "sequence": 6,
+      "to": "PRECREATION_RUNNING",
+      "validation_attempt": 1
+    },
+    {
+      "at": "2026-09-29T01:04:34.085532+00:00",
+      "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+      "from": "PRECREATION_RUNNING",
+      "reason": "PRECREATION evidence persisted",
+      "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 1",
+      "run_slug": "Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1",
+      "sequence": 7,
+      "to": "PRECREATION_PASS",
+      "validation_attempt": 1
+    },
+    {
+      "at": "2026-09-29T01:04:34.105996+00:00",
+      "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+      "from": "PRECREATION_PASS",
+      "reason": "Stage EXT callback started",
+      "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 1",
+      "run_slug": "Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1",
+      "sequence": 8,
+      "to": "STAGE_EXT_RUNNING",
+      "validation_attempt": 1
+    },
+    {
+      "at": "2026-09-29T01:05:18.449033+00:00",
+      "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+      "from": "STAGE_EXT_RUNNING",
+      "reason": "UNCLASSIFIED_RUNNER_FAILURE",
+      "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 1",
+      "run_slug": "Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1",
+      "sequence": 9,
+      "to": "FAILED",
+      "validation_attempt": 1
+    },
+    {
+      "at": "2026-09-29T01:05:30.316753+00:00",
+      "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+      "from": "FAILED",
+      "reason": "run-scoped resource absence verified",
+      "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 1",
+      "run_slug": "Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1",
+      "sequence": 10,
+      "to": "TEARDOWN_COMPLETE",
+      "validation_attempt": 1
+    }
+  ],
+  "precreation": {
+    "assertions": 9,
+    "evidence_path": "docs/governance/evidence/runs/Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1/PRECREATION_INTEGRITY/precreation_integrity.json",
+    "evidence_sha256": "803259b4895fa7510d44780fe931c741dc49540c59dd6ba6d7c08abfd588dd02",
+    "executor": "PrecreationIntegrityExecutor",
+    "status": "PASS"
+  },
+  "bootstrap_live": {
+    "adminapps": {
+      "database_identity": {
+        "database": "p314_phase_31_4_v2_5_v8_o_adminapps_e1725e8ee0",
+        "user": "postgres",
+        "version": "18.6 (Debian 18.6-1.pgdg13+2)"
+      },
+      "database_readiness": "PASS",
+      "migration": {
+        "argv": [
+          "/home/felipe/proyectos/adminapps/backend/.venv/bin/python",
+          "manage.py",
+          "migrate",
+          "--noinput"
+        ],
+        "returncode": 0,
+        "stdout_sha256": "642e4f1806409323b31941157e06e779a9736881ef7240fc9e47087992f308cf"
+      },
+      "migrations_pending": 0,
+      "status": "PASS"
+    },
+    "isosmart": {
+      "database_readiness": "PASS",
+      "migration": {
+        "argv": [
+          "/home/felipe/proyectos/isosmart/backend/.venv/bin/python",
+          "manage.py",
+          "migrate",
+          "--noinput"
+        ],
+        "returncode": 0,
+        "stdout_sha256": "f5f496625edfcd0c735398178748dab7d79e6ccd321ea7907a5e34d54250afb0"
+      },
+      "migrations_pending": 0,
+      "roles": {
+        "agent_catalog_curator": "p314_e4c70a7b401f_agent_catalog_curator",
+        "app": "p314_e4c70a7b401f_app",
+        "audit_writer": "p314_e4c70a7b401f_audit_writer",
+        "execution_authorizer": "p314_e4c70a7b401f_execution_authorizer",
+        "executor": "p314_e4c70a7b401f_executor",
+        "human_approver": "p314_e4c70a7b401f_human_approver",
+        "knowledge_rule_application_owner": "p314_e4c70a7b401f_knowledge_rule_application_owner",
+        "learning_application_executor": "p314_e4c70a7b401f_learning_application_executor",
+        "learning_approver": "p314_e4c70a7b401f_learning_approver",
+        "learning_authorizer": "p314_e4c70a7b401f_learning_authorizer",
+        "learning_governance": "p314_e4c70a7b401f_learning_governance",
+        "learning_reviewer": "p314_e4c70a7b401f_learning_reviewer",
+        "migrator": "p314_e4c70a7b401f_migrator",
+        "normative_curator": "p314_e4c70a7b401f_normative_curator",
+        "projector": "p314_e4c70a7b401f_projector",
+        "qms_action_owner": "p314_e4c70a7b401f_qms_action_owner",
+        "release_controller": "p314_e4c70a7b401f_release_controller",
+        "release_repair": "p314_e4c70a7b401f_release_repair",
+        "rule_activator": "p314_e4c70a7b401f_rule_activator",
+        "rule_adopter": "p314_e4c70a7b401f_rule_adopter",
+        "rule_governance_owner": "p314_e4c70a7b401f_rule_governance_owner",
+        "rule_publisher": "p314_e4c70a7b401f_rule_publisher",
+        "rule_resolver": "p314_e4c70a7b401f_rule_resolver",
+        "worker": "p314_e4c70a7b401f_worker"
+      },
+      "roles_verified": true,
+      "session_configuration_verified": true,
+      "status": "PASS"
+    }
+  },
+  "proven_operational_boundaries": [
+    {
+      "boundary": "RESOURCE_ALLOCATION_STARTED",
+      "at": "2026-09-29T01:04:12.959684+00:00",
+      "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 1",
+      "evidence": {
+        "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1/RESOURCE_MANIFEST.json",
+        "sha256": "681265c5fa844245a249b74287b703a03b58c8730a54775ca21abaac1b49c38a"
+      }
+    },
+    {
+      "boundary": "POSTGRES_ALLOCATED",
+      "at": "2026-09-29T01:04:16.181378+00:00",
+      "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 1",
+      "evidence": {
+        "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1/RESOURCE_MANIFEST.json",
+        "sha256": "681265c5fa844245a249b74287b703a03b58c8730a54775ca21abaac1b49c38a"
+      }
+    },
+    {
+      "boundary": "POSTGRES_READY",
+      "at": "2026-09-29T01:04:33.910525+00:00",
+      "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 1",
+      "evidence": {
+        "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1/RESOURCE_MANIFEST.json",
+        "sha256": "681265c5fa844245a249b74287b703a03b58c8730a54775ca21abaac1b49c38a"
+      }
+    },
+    {
+      "boundary": "MIGRATIONS_COMPLETE",
+      "at": "2026-09-29T01:05:18.197968+00:00",
+      "timestamp_basis": "retained operation-log file modification time",
+      "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 1",
+      "evidence": [
+        {
+          "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1/bootstrap_adminapps.log",
+          "sha256": "a3c18e91f1f4fb31b453cc8b62a51a340b5a2ca16a6aedcb61cf12672306299f"
+        },
+        {
+          "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1/bootstrap_isosmart.log",
+          "sha256": "e8800c65f1d6c47758f4a72f024d2bafc2a718fc08398cb9d6121b1d3188b415"
+        }
+      ]
+    },
+    {
+      "boundary": "ROLES_COMPLETE",
+      "at": "2026-09-29T01:05:18.197968+00:00",
+      "timestamp_basis": "retained operation-log file modification time",
+      "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 1",
+      "evidence": [
+        {
+          "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1/bootstrap_adminapps.log",
+          "sha256": "a3c18e91f1f4fb31b453cc8b62a51a340b5a2ca16a6aedcb61cf12672306299f"
+        },
+        {
+          "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1/bootstrap_isosmart.log",
+          "sha256": "e8800c65f1d6c47758f4a72f024d2bafc2a718fc08398cb9d6121b1d3188b415"
+        }
+      ]
+    }
+  ],
+  "furthest_proven_boundary": "ROLES_COMPLETE",
+  "stage_ext": {
+    "passed": 0,
+    "evaluated": 0,
+    "required": 6,
+    "status": "NOT_COMPLETED",
+    "controls": [
+      {
+        "ordinal": "1/6",
+        "control_id": "tenant",
+        "expected": "Live returned UUID equals independently persisted readback UUID with approved authority provenance",
+        "observed": "NOT_REACHED: AdminApps service exited before authority creation and delivery",
+        "result": "NOT_EXECUTED",
+        "pass": false,
+        "fail_evaluated": false,
+        "supporting_evidence": {
+          "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1/adminapps_service.log",
+          "sha256": "17717209c0d689c72f6abff337beb65f13e99fce054d86b8d137aafadb081883"
+        },
+        "timestamp": "2026-09-29T01:05:18.449002+00:00",
+        "timestamp_semantics": "Blocking failure timestamp, not control execution time",
+        "request_identity": null,
+        "response_identity": null,
+        "persisted_identity": null,
+        "authority_source_expected": "AdminApps",
+        "authority_source_observed": null,
+        "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 1",
+        "correlation_id": "Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1"
+      },
+      {
+        "ordinal": "2/6",
+        "control_id": "actor",
+        "expected": "Live returned UUID equals independently persisted readback UUID with approved authority provenance",
+        "observed": "NOT_REACHED: AdminApps service exited before authority creation and delivery",
+        "result": "NOT_EXECUTED",
+        "pass": false,
+        "fail_evaluated": false,
+        "supporting_evidence": {
+          "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1/adminapps_service.log",
+          "sha256": "17717209c0d689c72f6abff337beb65f13e99fce054d86b8d137aafadb081883"
+        },
+        "timestamp": "2026-09-29T01:05:18.449002+00:00",
+        "timestamp_semantics": "Blocking failure timestamp, not control execution time",
+        "request_identity": null,
+        "response_identity": null,
+        "persisted_identity": null,
+        "authority_source_expected": "AdminApps",
+        "authority_source_observed": null,
+        "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 1",
+        "correlation_id": "Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1"
+      },
+      {
+        "ordinal": "3/6",
+        "control_id": "tenant_projection",
+        "expected": "Live returned UUID equals independently persisted readback UUID with approved authority provenance",
+        "observed": "NOT_REACHED: AdminApps service exited before authority creation and delivery",
+        "result": "NOT_EXECUTED",
+        "pass": false,
+        "fail_evaluated": false,
+        "supporting_evidence": {
+          "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1/adminapps_service.log",
+          "sha256": "17717209c0d689c72f6abff337beb65f13e99fce054d86b8d137aafadb081883"
+        },
+        "timestamp": "2026-09-29T01:05:18.449002+00:00",
+        "timestamp_semantics": "Blocking failure timestamp, not control execution time",
+        "request_identity": null,
+        "response_identity": null,
+        "persisted_identity": null,
+        "authority_source_expected": "ISO Smart TenantProjection",
+        "authority_source_observed": null,
+        "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 1",
+        "correlation_id": "Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1"
+      },
+      {
+        "ordinal": "4/6",
+        "control_id": "user_projection",
+        "expected": "Live returned UUID equals independently persisted readback UUID with approved authority provenance",
+        "observed": "NOT_REACHED: AdminApps service exited before authority creation and delivery",
+        "result": "NOT_EXECUTED",
+        "pass": false,
+        "fail_evaluated": false,
+        "supporting_evidence": {
+          "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1/adminapps_service.log",
+          "sha256": "17717209c0d689c72f6abff337beb65f13e99fce054d86b8d137aafadb081883"
+        },
+        "timestamp": "2026-09-29T01:05:18.449002+00:00",
+        "timestamp_semantics": "Blocking failure timestamp, not control execution time",
+        "request_identity": null,
+        "response_identity": null,
+        "persisted_identity": null,
+        "authority_source_expected": "ISO Smart UserProjection",
+        "authority_source_observed": null,
+        "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 1",
+        "correlation_id": "Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1"
+      },
+      {
+        "ordinal": "5/6",
+        "control_id": "organization",
+        "expected": "Live returned UUID equals independently persisted readback UUID with approved authority provenance",
+        "observed": "NOT_REACHED: AdminApps service exited before authority creation and delivery",
+        "result": "NOT_EXECUTED",
+        "pass": false,
+        "fail_evaluated": false,
+        "supporting_evidence": {
+          "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1/adminapps_service.log",
+          "sha256": "17717209c0d689c72f6abff337beb65f13e99fce054d86b8d137aafadb081883"
+        },
+        "timestamp": "2026-09-29T01:05:18.449002+00:00",
+        "timestamp_semantics": "Blocking failure timestamp, not control execution time",
+        "request_identity": null,
+        "response_identity": null,
+        "persisted_identity": null,
+        "authority_source_expected": "ISO Smart QMS Organization",
+        "authority_source_observed": null,
+        "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 1",
+        "correlation_id": "Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1"
+      },
+      {
+        "ordinal": "6/6",
+        "control_id": "process",
+        "expected": "Live returned UUID equals independently persisted readback UUID with approved authority provenance",
+        "observed": "NOT_REACHED: AdminApps service exited before authority creation and delivery",
+        "result": "NOT_EXECUTED",
+        "pass": false,
+        "fail_evaluated": false,
+        "supporting_evidence": {
+          "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1/adminapps_service.log",
+          "sha256": "17717209c0d689c72f6abff337beb65f13e99fce054d86b8d137aafadb081883"
+        },
+        "timestamp": "2026-09-29T01:05:18.449002+00:00",
+        "timestamp_semantics": "Blocking failure timestamp, not control execution time",
+        "request_identity": null,
+        "response_identity": null,
+        "persisted_identity": null,
+        "authority_source_expected": "ISO Smart Process",
+        "authority_source_observed": null,
+        "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 1",
+        "correlation_id": "Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1"
+      }
+    ]
+  },
+  "capture_bundle": {
+    "status": "NOT_REACHED",
+    "created": false
+  },
+  "runtime_handoff": "NOT_REACHED",
+  "failure": {
+    "classification": "OPERATIONAL_SERVICE_STARTUP_BLOCKER",
+    "code": "ADMINAPPS_START_FAILURE",
+    "component": "docs/governance/tools/phase31_4_v2_5_operational_actions.py::service",
+    "phase": "STAGE_EXT_RUNNING / start_services / start_adminapps",
+    "expected_condition": "AdminApps runserver starts from its backend manage.py and reaches dynamic HTTP readiness",
+    "observed_condition": "/home/felipe/proyectos/adminapps/backend/.venv/bin/python: can't open file '/home/felipe/proyectos/isosmart/manage.py': [Errno 2] No such file or directory",
+    "exit_code": 2,
+    "root_symptom": "Python cannot open /home/felipe/proyectos/isosmart/manage.py (ENOENT)",
+    "probable_causal_boundary": "SubprocessOperationalAdapter._start launches actions with cwd=context.repository_root; service() os.execve preserves cwd and passes relative manage.py, although interpreter root is AdminApps backend.",
+    "reproducibility": "Deterministic relative path resolution with same cwd and argv; independently corroborated by retained live exit-2 log; no repeat execution performed",
+    "source_remediation_required": true,
+    "minimal_candidate_remediation": "In service(), replace the relative manage.py argv element with str(root / \"manage.py\") for the selected service. One common path-resolution correction only; do not change cwd elsewhere, timeouts, fixtures or validation.",
+    "candidate_status": "PROPOSED_ONLY_FOR_HUMAN_REVIEW; NOT_APPLIED",
+    "focused_tests_after_approval": [
+      "Verify service(adminapps) selects absolute /home/felipe/proyectos/adminapps/backend/manage.py regardless of inherited cwd.",
+      "Verify service(isosmart) selects absolute /home/felipe/proyectos/isosmart/backend/manage.py while retaining environment, endpoint and runserver options."
+    ],
+    "before_future_attempt": "Human review of one remediation, focused tests, successor integrity reconciliation for changed protected bytes, then a separate eligible Attempt 2 one-shot authorization. No Attempt 2 here.",
+    "runner_classification_limitation": {
+      "stored_code": "UNCLASSIFIED_RUNNER_FAILURE",
+      "stored_runner_step": "verify_isosmart_postgres_version",
+      "explanation": "Preserved unchanged; generic runner classification and stale last resource-command step are not the actual failing operation. Traceback and service log identify ADMINAPPS_START_FAILURE."
+    },
+    "evidence": [
+      {
+        "path": "docs/governance/evidence/runs/Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1/adminapps_service.log",
+        "sha256": "17717209c0d689c72f6abff337beb65f13e99fce054d86b8d137aafadb081883"
+      },
+      {
+        "path": "docs/governance/evidence/PHASE31_4_V2_5_V8_OPERATIONAL_DIAGNOSTIC_ATTEMPT_1_CONTROL_V1/execution_outcome.json",
+        "sha256": "1dd0042ff5ea0c2b69903b5d2d8573493b89d96d8669dc7ab7d6d73b0d1888bc"
+      },
+      {
+        "path": "docs/governance/evidence/PHASE31_4_V2_5_V8_OPERATIONAL_DIAGNOSTIC_ATTEMPT_1_CONTROL_V1/blocker_source_evidence.json",
+        "sha256": "cf6ba743409101c21c42b489454bc14c07d2f24c835b686b0f7c97a19a1a3c15"
+      }
+    ]
+  },
+  "teardown": {
+    "canonical": {
+      "completed_at": "2026-09-29T01:05:30.301133+00:00",
+      "errors": [],
+      "post_teardown_absence_verified": true,
+      "remaining_resources": [],
+      "started_at": "2026-09-29T01:05:18.473663+00:00",
+      "status": "PASS"
+    },
+    "independent": {
+      "path": "docs/governance/evidence/PHASE31_4_V2_5_V8_OPERATIONAL_DIAGNOSTIC_ATTEMPT_1_CONTROL_V1/independent_teardown.json",
+      "sha256": "fd4350d2e8dc164b63af31be58c51778c273e3d21bb033be0ac4f543a3403a71"
+    },
+    "result": "ZERO RESIDUAL RESOURCES",
+    "database_runtime_unavailable": true,
+    "new_tcp_listeners": []
+  },
+  "attempt_accounting": {
+    "technical_launches": 1,
+    "attempt_1_consumed": true,
+    "attempt_2_executed": false,
+    "remaining_parent_conditional_attempts": 2,
+    "automatic_retry": false
+  },
+  "evidence_limitations": [
+    "Current V8 adapter does not retain PID or numeric port for a service that exits before readiness. Exit code 2 is retained; independent process environment scan and comparison of TCP listeners demonstrate no residual service.",
+    "Independent database observation ran after canonical teardown and returned connection-refused for both ports; it is absence evidence, not a successful migration or identity readback.",
+    "Migration stdout is represented by hashes in canonical action logs; live action status, pending counts and ISO role verification are retained. No claim of independent business identity readbacks.",
+    "The observation driver process exited 0 after retaining the exception; operational outcome is FAIL in execution_outcome.json and FAILED in manifest."
+  ],
+  "repository_changes": {
+    "governance_evidence_only": true,
+    "new_governance_invocation_driver": {
+      "path": "docs/governance/evidence/PHASE31_4_V2_5_V8_OPERATIONAL_DIAGNOSTIC_ATTEMPT_1_CONTROL_V1/attempt_driver.py",
+      "classification": "GOVERNANCE_TOOL",
+      "purpose": "Attempt-specific inputs and callbacks invoking current V8 run_evidence; no implementation override"
+    },
+    "source_changes": 0,
+    "protected_source_changes": 0,
+    "historical_evidence_files_preserved": 293,
+    "preexisting_changes_preserved": true
+  },
+  "retry20_authorization": "NONE",
+  "retry20_executed": "NO",
+  "full_33_phase_execution": false,
+  "phase31_5": "EXECUTION_HELD",
+  "promotion": false,
+  "exact_next_step": "Human review of one remediation, focused tests, successor integrity reconciliation for changed protected bytes, then a separate eligible Attempt 2 one-shot authorization. No Attempt 2 here."
+}

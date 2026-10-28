@@ -1,0 +1,28 @@
+{
+  "observed_at": "2026-09-29T01:07:38.063975+00:00",
+  "method": "Read-only source/AST and path inspection; no second launch",
+  "findings": [
+    {
+      "path": "docs/governance/tools/phase31_4_v2_5_operational_actions.py",
+      "sha256": "fad970765a7e589d0a5f55df68d06618f912c7fdf241cccbd4296446a1959973",
+      "function": "service",
+      "line": 174,
+      "end_line": 179,
+      "source": "def service(system: str):\n    root=ADMIN if system==\"adminapps\" else ROOT/\"backend\"\n    env=env_for(\"PHASE31_ADMINAPPS_DB_ENDPOINT\" if system==\"adminapps\" else \"PHASE31_ISOSMART_DB_ENDPOINT\")\n    if system==\"adminapps\": env[\"RETRY16_INTEGRATION_KEY\"]=os.environ[\"PHASE31_INTEGRATION_KEY\"]\n    else: env.update(ADMIN_APPS_API_KEY=os.environ[\"PHASE31_INTEGRATION_KEY\"],ADMINAPPS_TENANT_EVENT_KEY_SHA256=hashlib.sha256(os.environ[\"PHASE31_EVENT_KEY\"].encode()).hexdigest(),ADMIN_APPS_BASE_URL=os.environ[\"ADMIN_APPS_BASE_URL\"].rstrip(\"/\")+\"/api/integration\")\n    os.execve(str(root/\".venv/bin/python\"),[str(root/\".venv/bin/python\"),\"manage.py\",\"runserver\",\"--noreload\",f\"127.0.0.1:{os.environ['PORT']}\"],env)"
+    },
+    {
+      "path": "backend/foundation/phase31_4_v2_5_operational_adapters.py",
+      "sha256": "442c74eb180e6e9788d42f82c5861c91433f396cc84ad660443afe5bdbe05453",
+      "function": "_start",
+      "line": 95,
+      "end_line": 119,
+      "source": "def _start(self, name: str, context: LiveExecutionContext) -> Mapping[str, Any]:\n        variable = f\"PHASE31_{name.upper()}_START_COMMAND\"\n        raw = self.environment.get(variable)\n        if not raw: raise LiveExecutorError(\"OPERATIONAL_ADAPTER_REQUIRED\", f\"required command is not configured: {variable}\")\n        port = self._free_port(); base_url = f\"http://127.0.0.1:{port}\"\n        env = self._env(context); env.update(PORT=str(port), PHASE31_SERVICE_PORT=str(port))\n        if name == \"adminapps\": env[\"ADMIN_APPS_BASE_URL\"] = base_url\n        else: env[\"ISO_SMART_BASE_URL\"] = base_url\n        log_path = context.evidence_root / f\"{name}_service.log\"; log_path.parent.mkdir(parents=True, exist_ok=True)\n        log = log_path.open(\"w\", encoding=\"utf-8\"); self.logs.append(log)\n        process = subprocess.Popen(shlex.split(raw), cwd=context.repository_root, env=env, stdout=log, stderr=subprocess.STDOUT, text=True)\n        health_path = self.environment.get(f\"PHASE31_{name.upper()}_READINESS_PATH\", \"/health/\")\n        deadline = time.monotonic() + self.timeout_seconds; last_error = \"\"\n        while time.monotonic() < deadline:\n            if process.poll() is not None: raise LiveExecutorError(f\"{name.upper()}_START_FAILURE\", f\"service exited {process.returncode}; log={log_path}\")\n            try:\n                with urlopen(base_url + health_path, timeout=1) as response:\n                    if 200 <= response.status < 400:\n                        self.processes[name] = process\n                        return {\"status\": \"PASS\", \"pid\": process.pid, \"readiness\": \"PASS\", \"base_url\": base_url,\n                                \"readiness_url\": base_url + health_path, \"log\": str(log_path), \"started_at\": datetime.now(timezone.utc).isoformat()}\n            except Exception as exc: last_error = str(exc)\n            time.sleep(.2)\n        process.terminate(); process.wait(timeout=10)\n        raise LiveExecutorError(f\"{name.upper()}_START_FAILURE\", f\"readiness timeout: {last_error}; log={log_path}\")"
+    }
+  ],
+  "path_checks": {
+    "manage.py": false,
+    "backend/manage.py": true
+  },
+  "adminapps_manage_exists": true,
+  "reproducibility": "Deterministic relative path resolution with same cwd and argv; independently corroborated by retained live exit-2 log; no repeat execution performed"
+}

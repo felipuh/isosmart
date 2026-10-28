@@ -1,0 +1,17 @@
+{
+  "actor_id": "a9145cca-b85a-4b72-870f-c155338a1254",
+  "allowed_roles": [
+    "superadmin",
+    "admin",
+    "org_admin",
+    "iso_manager"
+  ],
+  "authority": "live AdminApps product validation and user membership service API",
+  "cross_tenant_denied": true,
+  "inactive_tenant_denied_after_native_suspension": true,
+  "invalid_actor_denied": true,
+  "invalid_tenant_denied": true,
+  "local_fallback_allowed": false,
+  "other_tenant_id": "a26f09f5-9ac8-4157-bd1f-e2598f216b3d",
+  "verdict": "PASS"
+}

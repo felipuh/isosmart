@@ -1,0 +1,11 @@
+{
+  "authority": "SYNTHETIC_TEST_AUTHORITY",
+  "execution_authority": "NOT_RUN",
+  "external_adminapps_actor_id": "cd50b9b2-09c4-4137-8cc1-184d5f9189ba",
+  "human_approval_authority": "NOT_RUN",
+  "production_authority_claimed": false,
+  "reason": "Stopped at STAGE_EXT first blocker",
+  "recorded_at": "2026-09-23T21:23:25.466479+00:00",
+  "run_id": "Phase 31.4 V2.5 Clean Retry 18",
+  "status": "PARTIAL"
+}

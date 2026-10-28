@@ -1,0 +1,15 @@
+{
+  "actual": "Role settings were present only in libpq PGOPTIONS; Django settings_dict lacked OPTIONS.options",
+  "artifact_schema": "phase31.4-retry10-migration-configuration-blocker/v1",
+  "evidence": "PHASE31_4_CLEAN_RETRY_10_ISOSMART_MIGRATIONS_ATTEMPT1.log",
+  "evidence_sha256": "f57d03e280f140f7aa4f9136f0340d154519c86497522bec3fe87885fa96e35d",
+  "expected": "Django DATABASES.default.OPTIONS.options contains foundation.qms_action_owner_role and foundation.executor_role",
+  "id": "P1-RETRY10-ISOSMART-MIGRATION-CONNECTION-OPTIONS-MISSING",
+  "migration": "foundation.0016_controlled_execution_recovery_hardening",
+  "operation": "apply_phase17",
+  "remediation": "DB_SESSION_OPTIONS now populates Django connection OPTIONS; the disposable database was reset empty and all 92 migrations passed without migration edits.",
+  "service": "Django migration connection",
+  "source": "backend/foundation/migrations/0016_controlled_execution_recovery_hardening.py:274",
+  "stack": "KeyError: options",
+  "status": "CLOSED_BY_FRESH_RETRY_10_DATABASE_RESET_AND_FULL_MIGRATION"
+}

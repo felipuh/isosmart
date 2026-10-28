@@ -1,0 +1,55 @@
+{
+  "creation_path": "POST /api/organizations/ (superadmin)",
+  "delivered_count": 5,
+  "dispatcher": "deliver_tenant_events",
+  "outbox_events": [
+    {
+      "canonical_tenant_id": "e7400a3b-a1c2-4b7c-b6c5-4474fb46f505",
+      "delivery_status": "delivered",
+      "event_id": "609a479b-feab-4d93-a5a6-647c3214be3c",
+      "event_type": "tenant.provisioned",
+      "source_version": 1
+    },
+    {
+      "canonical_tenant_id": "e7400a3b-a1c2-4b7c-b6c5-4474fb46f505",
+      "delivery_status": "delivered",
+      "event_id": "8595c25d-6318-46fa-8cc1-d12137ae52b4",
+      "event_type": "tenant.updated",
+      "source_version": 2
+    },
+    {
+      "canonical_tenant_id": "a26f09f5-9ac8-4157-bd1f-e2598f216b3d",
+      "delivery_status": "delivered",
+      "event_id": "f30cd3c3-d54f-4198-b329-8116635f0d03",
+      "event_type": "tenant.provisioned",
+      "source_version": 1
+    },
+    {
+      "canonical_tenant_id": "a26f09f5-9ac8-4157-bd1f-e2598f216b3d",
+      "delivery_status": "delivered",
+      "event_id": "0d0df58e-9a03-422e-a55e-a70ec48e9aa4",
+      "event_type": "tenant.updated",
+      "source_version": 2
+    },
+    {
+      "canonical_tenant_id": "a26f09f5-9ac8-4157-bd1f-e2598f216b3d",
+      "delivery_status": "delivered",
+      "event_id": "cb224dfb-67af-42b8-bf4f-ff9139239da9",
+      "event_type": "tenant.suspended",
+      "source_version": 3
+    }
+  ],
+  "source_tenants": [
+    {
+      "id": "e7400a3b-a1c2-4b7c-b6c5-4474fb46f505",
+      "status": "active"
+    },
+    {
+      "id": "a26f09f5-9ac8-4157-bd1f-e2598f216b3d",
+      "status": "suspended"
+    }
+  ],
+  "status_path": "POST /api/organizations/{id}/activate/ and suspend/",
+  "transactional_outbox": "tenant_integration_outbox",
+  "verdict": "PASS"
+}

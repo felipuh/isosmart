@@ -1,0 +1,68 @@
+{
+  "allocated_at": "2026-09-23T23:26:52.634428+00:00",
+  "approved_image": "docker.io/library/postgres@sha256:7341002d2b8c7c5bdd7542a671a95b36196c0b5b888daf454ae4fc33ba5346d7",
+  "approved_image_id": "a6638641707cdf047e5d5c2781f437e2e809323cab22c70b280be8389fbb7878",
+  "artifact_schema": "phase31.4-v2.5-clean-retry19-runtime-resources/v1",
+  "environments": {
+    "adminapps": {
+      "container_name": "phase31_4_retry19_adminapps",
+      "container_removed": false,
+      "database_name": "phase31_4_retry19_adminapps",
+      "db_port": "47931",
+      "environment_id": "phase31_4_retry19_adminapps",
+      "host_http_port": "53255",
+      "image_digest": "sha256:7341002d2b8c7c5bdd7542a671a95b36196c0b5b888daf454ae4fc33ba5346d7",
+      "image_id": "a6638641707cdf047e5d5c2781f437e2e809323cab22c70b280be8389fbb7878",
+      "network_name": "phase31_4_retry19_adminapps_net",
+      "network_removed": false,
+      "port_mappings": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "47931"
+        }
+      ],
+      "postgresql_exact_version": "PostgreSQL 18.6",
+      "status": "ALLOCATING",
+      "volume_name": "phase31_4_retry19_adminapps_data",
+      "volume_removed": false
+    },
+    "isosmart": {
+      "container_name": "phase31_4_retry19_isosmart",
+      "container_removed": false,
+      "database_name": "phase31_4_retry19_isosmart",
+      "db_port": "59667",
+      "environment_id": "phase31_4_retry19_isosmart",
+      "host_http_port": "41219",
+      "image_digest": "sha256:7341002d2b8c7c5bdd7542a671a95b36196c0b5b888daf454ae4fc33ba5346d7",
+      "image_id": "a6638641707cdf047e5d5c2781f437e2e809323cab22c70b280be8389fbb7878",
+      "network_name": "phase31_4_retry19_isosmart_net",
+      "network_removed": false,
+      "port_mappings": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "59667"
+        }
+      ],
+      "postgresql_exact_version": "PostgreSQL 18.6",
+      "status": "ALLOCATING",
+      "volume_name": "phase31_4_retry19_isosmart_data",
+      "volume_removed": false
+    }
+  },
+  "execution_mode": "DISPOSABLE_EVIDENCE_RUN",
+  "isolation": {
+    "dedicated_containers": true,
+    "dedicated_networks": true,
+    "dedicated_volumes": true,
+    "no_retry_18_reuse": true,
+    "unique_databases": true
+  },
+  "retry_tag": "CLEAN_RETRY_19",
+  "run_id": "Phase 31.4 V2.5 Clean Retry 19",
+  "unique_ports": [
+    "47931",
+    "59667",
+    "53255",
+    "41219"
+  ]
+}

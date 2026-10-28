@@ -1,0 +1,63 @@
+{
+  "artifact_schema": "phase31.5-e07-e08-postgresql-proof/v1",
+  "generated_at": "2026-10-04",
+  "phase_state": "EXECUTION_HELD",
+  "governance_integrity": {
+    "preserved_adjudication_verdict": "PHASE31.5 AUTHORIZATION PATH DERIVED — PRECONDITION REMAINS",
+    "preserved_technical_closure_verdict": "PHASE31.5 E-07/E-08 PARTIALLY CLOSED — TECHNICAL PRECONDITIONS REMAIN"
+  },
+  "frozen_input_verification": {
+    "manifest": "docs/governance/evidence/phase31_5/18_sha256.json",
+    "payload_hashes": "8/8 PASS",
+    "frozen_inputs_modified": false
+  },
+  "baseline_checks": {"count": 4, "passed": 4, "failed": 0, "skipped": 0},
+  "prerequisites": [
+    {"id": "P0-31_5-ENTRY-COMMITTED-CREDENTIALS", "classification": "AUTHENTIC_EXTERNAL_EVIDENCE_REQUIRED", "authorized": false, "final_state": "OPEN_EXTERNAL"},
+    {"id": "P1-31_5-ENTRY-DEPLOYMENT-REPRODUCIBILITY", "classification": "GOVERNANCE_REQUIRED", "authorized": false, "final_state": "OPEN_GOVERNANCE"},
+    {"id": "P1-31_5-ENTRY-SQLITE-OPERATIONAL-ESCAPE", "classification": "POSTGRESQL_PROOF_ELIGIBLE", "authorized": true, "final_state": "CLOSED"},
+    {"id": "P1-31_5-ENTRY-JWT-LOCALSTORAGE", "classification": "SOURCE_SEMANTICS_MISSING", "authorized": false, "final_state": "OPEN_SOURCE_SEMANTICS"},
+    {"id": "P1-31_5-ENTRY-BACKUP-NOT-IMPLEMENTED", "classification": "SOURCE_SEMANTICS_MISSING", "authorized": false, "final_state": "OPEN_SOURCE_SEMANTICS"},
+    {"id": "P1-31_5-ENTRY-WORKER-OUTBOX-OPERABILITY", "classification": "SOURCE_SEMANTICS_MISSING", "authorized": false, "final_state": "OPEN_SOURCE_SEMANTICS"}
+  ],
+  "postgresql_proof": {
+    "eligible_prerequisite": "P1-31_5-ENTRY-SQLITE-OPERATIONAL-ESCAPE",
+    "image": "docker.io/library/postgres@sha256:7341002d2b8c7c5bdd7542a671a95b36196c0b5b888daf454ae4fc33ba5346d7",
+    "image_id": "a6638641707cdf047e5d5c2781f437e2e809323cab22c70b280be8389fbb7878",
+    "network": "none external; local rootless Podman loopback database only",
+    "migrations": "existing migrations applied by postgres_wp2_harness.py",
+    "tests_discovered": 32,
+    "tests_executed": 32,
+    "passed": 32,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "persistence": "synthetic transactional writes exercised; outbox rows, lineage and idempotency assertions passed; no delivery was attempted",
+    "rls": "same-tenant access, cross-tenant invisibility, missing-context rejection and non-bypass runtime roles were exercised by the existing PostgreSQL harness",
+    "cleanup": "PASS; test-owned container and volume absent after each attempt"
+  },
+  "attempts": [
+    {"kind": "harness-path correction", "migrations_applied": false, "test_writes": 0, "cleanup": "PASS"},
+    {"kind": "eligible PostgreSQL proof", "result": "PASS", "cleanup": "PASS"}
+  ],
+  "external_effects": {
+    "adminapps_calls": 0,
+    "external_api_calls": 0,
+    "webhook_calls": 0,
+    "external_event_delivery": 0,
+    "deployment_effects": 0,
+    "production_db_effects": 0,
+    "staging_db_effects": 0,
+    "registry_pulls": 0
+  },
+  "gate_reevaluation": {
+    "prerequisites_total": 6,
+    "newly_closed": 1,
+    "cumulative_closed": 1,
+    "remaining": 5,
+    "e_07": "FAIL",
+    "e_08": "FAIL",
+    "phase31_5": "EXECUTION_HELD"
+  },
+  "final_verdict": "PHASE31.5 POSTGRESQL PREREQUISITES CLOSED — NONLOCAL PRECONDITIONS REMAIN"
+}

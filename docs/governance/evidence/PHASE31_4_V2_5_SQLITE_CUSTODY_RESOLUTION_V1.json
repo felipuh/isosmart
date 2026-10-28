@@ -1,0 +1,56 @@
+{
+  "schema": "phase31.4-v2.5-sqlite-custody-resolution/v1",
+  "artifact_id": "PHASE31_4_V2_5_SQLITE_CUSTODY_RESOLUTION_V1",
+  "created_at": "2026-09-28T20:38:21-06:00",
+  "source": {
+    "path": "backend/test_default.sqlite3",
+    "git_state_at_review": "TRACKED_MODIFIED",
+    "size_bytes": 1949696,
+    "sha256": "615c233187795dd3ad992d54778f33063f1322936e366860f7ad53c4ecfb9269",
+    "pragma_integrity_check": "ok",
+    "row_values_inspected": false,
+    "first_git_commit": "3d1d27c9e44c41f69c58e39cfb34a946af103366",
+    "first_git_commit_at": "2026-03-08T14:01:27-06:00"
+  },
+  "head_blob": {
+    "git_revision": "0d2ddfdead408b7cc6cb9c6dbc08707281cb9fb7",
+    "size_bytes": 1900544,
+    "sha256": "6cb955e16e6fb31a1b0be4dbbfda4eb20d3e8b38239159562146075826652e5c"
+  },
+  "forensic_backup": {
+    "path": "/home/felipe/proyectos/isosmart-forensic-backups/sqlite-custody-20260928/test_default.sqlite3.sha256-615c233187795dd3.backup",
+    "outside_repository_root": true,
+    "size_bytes": 1949696,
+    "sha256": "615c233187795dd3ad992d54778f33063f1322936e366860f7ad53c4ecfb9269",
+    "source_sha_equals_backup_sha": true,
+    "pragma_integrity_check": "ok"
+  },
+  "purpose_evidence": {
+    "django_settings": [
+      "backend/backend/settings.py",
+      "backend/backend/settings_test.py"
+    ],
+    "configured_default_database": "SQLite local default when USE_SQLITE_DATABASE is enabled; test settings also point to this path",
+    "schema_kind": "Django application runtime schema",
+    "nonempty_state_categories": [
+      "users_and_profiles",
+      "authentication_tokens",
+      "audit_records",
+      "organization_state",
+      "application_configuration",
+      "migration_state"
+    ],
+    "canonical_fixture_evidence": "NOT_FOUND"
+  },
+  "classification": "LOCAL_SENSITIVE_RUNTIME_STATE",
+  "custody_decision": {
+    "new_or_modified_rows_may_enter_git": false,
+    "database_bytes_may_enter_new_baseline": false,
+    "working_copy_preserved_by_forensic_backup": true,
+    "git_action": "REMOVE_FROM_TRACKING_AND_IGNORE_EXACT_PATH",
+    "ignore_rule": "/backend/test_default.sqlite3",
+    "broad_sqlite_ignore_rule_added": false,
+    "schema_or_rows_modified_during_resolution": false
+  },
+  "status": "SQLITE_CUSTODY_RESOLVED"
+}

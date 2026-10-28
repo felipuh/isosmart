@@ -1,0 +1,20 @@
+{
+  "schema": "phase31.4-synthetic-authority-fixture-authorization/v1",
+  "fixture_path": "docs/governance/evidence/PHASE31_4_SYNTHETIC_CONTROL_PLANE_AUTHORITY_FIXTURE_V1.json",
+  "fixture_sha256": "d6d4391e7e6023d210296895f868fa9f9e1b4fd4a80476ae95e9f327d63665d5",
+  "operation_count": 29,
+  "v2_4_sha256": "a102d278bf2e5ca6e9b8bf282f5402a54f52d4690beed2ecbed5145c56539387",
+  "execution_graph_sha256": "b3b6a7810c52039b1bc39b401bc31a3e3e24c63a5d05438d4acd5b3abd5b153b",
+  "test_only": true,
+  "nonproduction": true,
+  "noncertifiable": true,
+  "real_adminapps_contact_prohibited": true,
+  "reader_scope": "this isolated Phase31.4 POC only",
+  "shared_final_adminapps_contract": false,
+  "architecture_changed": false,
+  "business_semantics_changed": false,
+  "production_authority_model_changed": false,
+  "new_identity_exception": false,
+  "new_lock": false,
+  "RuntimeAdoption": false
+}

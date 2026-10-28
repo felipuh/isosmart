@@ -1,0 +1,44 @@
+{
+  "schema": "phase31.4-v2.5-v8-operational-diagnostic-remediation-review/v1",
+  "verdict": "REMEDIATION_REVIEW_PASS",
+  "cycle_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1",
+  "attempt_1": {
+    "verdict": "ATTEMPT_1_FAIL",
+    "blocker": "ADMINAPPS_START_FAILURE",
+    "source_changes": 0,
+    "teardown": "PASS",
+    "zero_residual_resources": "PASS",
+    "authorization_consumed": true,
+    "attempt_2_started": false
+  },
+  "diagnosis": {
+    "file": "docs/governance/tools/phase31_4_v2_5_operational_actions.py",
+    "function": "service",
+    "adapter_cwd": "context.repository_root",
+    "adminapps_root": "/home/felipe/proyectos/adminapps/backend",
+    "isosmart_root": "/home/felipe/proyectos/isosmart/backend",
+    "observed_relative_argv": "manage.py",
+    "observed_failure": "/home/felipe/proyectos/adminapps/backend/.venv/bin/python: can't open file '/home/felipe/proyectos/isosmart/manage.py'",
+    "diagnosis_confirmed": true
+  },
+  "remediation": {
+    "status": "APPLIED",
+    "logical_diff": "service() now passes str(root / manage.py) as argv[1] for both services.",
+    "cwd_changed": false,
+    "interpreter_changed": false,
+    "environment_changed": false,
+    "ports_changed": false,
+    "readiness_changed": false,
+    "migration_or_stage_ext_changed": false
+  },
+  "eligibility": {
+    "status": "ATTEMPT_2_ELIGIBLE",
+    "focused_tests": "PASS",
+    "successor_integrity": "PASS",
+    "attempt_1_resources_absent": true,
+    "parent_authorization_sha256": "c8633d150784c23170585627b1bf3bd738bcf62197998d5ea8e7bd3d9d08aac9",
+    "attempt_2_previous_consumption": false,
+    "attempt_2_previous_run": false
+  },
+  "historical_integrity_preserved": "PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V8.json"
+}

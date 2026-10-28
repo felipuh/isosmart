@@ -1,0 +1,103 @@
+{
+  "artifact_schema": "phase31.4.v25-frozen-blocker-disposition/v1",
+  "decision_scope": "Pre-live authorization gate for Phase 31.4 V2.5 Clean Retry 15",
+  "governance_rule": "Historical V2.4 blockers remain preserved; current V2.5 execution is governed only by successor semantics applicable to the current runtime path.",
+  "records": [
+    {
+      "historical_blocker_id": "P1-FROZEN-ACTION-PLAN-PRECONDITIONS",
+      "historical_status": "OPEN",
+      "historical_scope": "V2.4 exact synthetic ActionPlan precondition representation erroneously required a frozen list item and a non-native target/precondition contract.",
+      "v25_applicability": "SUPERSEDED_BY_V2_5",
+      "v25_successor_disposition": "SUPERSEDED_BY_V2_5",
+      "historical_blocker_preserved": true,
+      "historical_blocker_closed": false,
+      "blocks_retry15": false,
+      "rationale": {
+        "original_v24_defect": "The frozen V2.4 ActionPlan contract encoded preconditions as synthetic-test-only text and required_autonomy as 0 with target_type 'opportunity'. The runtime service validated preconditions as a list of objects and required_autonomy as A3.",
+        "exact_invalid_frozen_precondition_semantics": [
+          "synthetic-test-only",
+          "preconditions[0] must be an object",
+          "ActionPlan.required_autonomy must be integer 0..4, and controlled execution requires A3",
+          "target_type must be 'Opportunity'"
+        ],
+        "affected_member_field": "qms.action_plan.preconditions, qms.action_plan.required_autonomy, qms.action_plan.target_type",
+        "expected_native_behavior": "Native ActionPlan creation and execution require object-typed preconditions with an identity/type/expected payload, A3 autonomy, and a native Opportunity target type.",
+        "v25_binding_semantics": "Current V2.5 contract binds ActionPlan.preconditions to an object list with identity qms.opportunity::6497b073-b3cb-5159-b64f-90700f2f5f85 and required=true/expected=active; required_autonomy is bound to 3; target_type is 'Opportunity'.",
+        "current_runtime_producer": "backend/foundation/action_authorization.py::ActionPreparationService.prepare_action_plan; backend/foundation/phase31_4_v2_5_runtime.py::NativeAuthorityReader.read",
+        "current_actionplan_inputs": "agent_decision_id, recommendation_id, target_type, target_id, parameters, impact, reversibility, preconditions, dry_run_supported, required_autonomy, idempotency_key, actor_id, trace_id",
+        "current_validation_invariant_coverage": [
+          "_preconditions() validates a list of dict objects and rejects synthetic text",
+          "validate(contract) enforces ActionPlan target_type == 'Opportunity' and required_autonomy == 3",
+          "NativeAuthorityReader.read asserts plan.required_autonomy == 3 and ceilings >= 3",
+          "backend/foundation/test_phase31_4_v2_5.py verifies required_autonomy_A3 and target_type binding"
+        ]
+      },
+      "source_anchors": [
+        "backend/foundation/action_authorization.py:20-95",
+        "backend/foundation/action_authorization.py:116-171",
+        "docs/governance/fixtures/PHASE31_4_5C_ROW_LEVEL_EXECUTION_CONTRACT_V2_5.json:6669-6758",
+        "backend/foundation/phase31_4_v2_5_runtime.py:31-58",
+        "backend/foundation/phase31_4_v2_5_runtime.py:203-246"
+      ],
+      "test_evidence_anchors": [
+        "backend/foundation/test_phase31_4_v2_5.py:1-42",
+        "backend/foundation/test_phase31_4_frozen_runtime_semantics.py:17-60",
+        "docs/governance/evidence/PHASE31_4_5C_V2_5_RESOLVED_GRAPH_V1.json:44200-44205"
+      ],
+      "operational_disposition": "Current V2.5 path uses the successor V2.5 ActionPlan semantics; the V2.4 synthetic literals remain historical and preserved, not active runtime blockers.",
+      "live_proof_required": true,
+      "live_proof_scope": "ActionPlan live native preconditions and AgentDecision→ActionPlan chain in PostgreSQL 18.6 Retry 15"
+    },
+    {
+      "historical_blocker_id": "P1-FROZEN-CONTROLLED-OPPORTUNITY-GOVERNANCE",
+      "historical_status": "OPEN",
+      "historical_scope": "V2.4 exact synthetic controlled-opportunity governance freeze imposed a non-native revision structure with a frozen single revision lineage, no predecessor relationship, and a mismatched authority contract.",
+      "v25_applicability": "SUPERSEDED_BY_V2_5",
+      "v25_successor_disposition": "SUPERSEDED_BY_V2_5",
+      "historical_blocker_preserved": true,
+      "historical_blocker_closed": false,
+      "blocks_retry15": false,
+      "rationale": {
+        "original_v24_defect": "The frozen V2.4 controlled opportunity semantics asserted a static exact member identity, a synthetic predecessor chain, and a revision model that violated the native controlled transition semantics used by the database functions.",
+        "exact_invalid_frozen_governance_semantics": [
+          "successor.id must equal predecessor.id in the frozen fixture",
+          "successor.lineage_id must not equal predecessor.lineage_id",
+          "successor.revision is not incremented",
+          "previous_revision_id is NULL where the native path requires the prior revision id"
+        ],
+        "affected_member_field": "qms.opportunity.id, qms.opportunity.lineage_id, qms.opportunity.revision, qms.opportunity.previous_revision_id",
+        "expected_native_behavior": "The native controlled mutation path creates a new revision row with a new id, the same lineage_id, revision = prior.revision + 1, and previous_revision_id = prior.id.",
+        "v25_binding_semantics": "Current V2.5 runtime invariant engine asserts initial opportunity identity semantics and a successor revision relation: lineage_id preserved, revision incremented by 1, previous_revision_id equal to the prior id, id distinct from prior id.",
+        "current_runtime_producer": "backend/foundation/risk_objective.py::_revise; backend/foundation/migrations/0015_first_controlled_qms_mutation_poc.py::qms.foundation_0015_apply_opportunity_status_transition; backend/foundation/phase31_4_v2_5_runtime.py::RuntimeInvariantEngine.assert_revision",
+        "current_governance_inputs": "identity, authorization_id, idempotency_key, action_plan, event stream, outbox, audit, lineage preservation, revision increment, predecessor linkage",
+        "current_validation_invariant_coverage": [
+          "RuntimeInvariantEngine.assert_revision checks lineage_id equality, revision increment, previous_revision_id, and non-reuse of prior id",
+          "backend/foundation/migrations/0015_first_controlled_qms_mutation_poc.py inserts created.id, prior.lineage_id, prior.revision + 1, prior.id",
+          "backend/foundation/test_phase31_4_v2_5.py asserts successor.lineage_id == initial.lineage_id and successor.previous_revision_id == initial.id"
+        ]
+      },
+      "source_anchors": [
+        "backend/foundation/risk_objective.py:93-171",
+        "backend/foundation/migrations/0015_first_controlled_qms_mutation_poc.py:68-152",
+        "backend/foundation/phase31_4_v2_5_runtime.py:195-231",
+        "backend/foundation/controlled_opportunity.py:1-97"
+      ],
+      "test_evidence_anchors": [
+        "backend/foundation/test_phase31_4_v2_5.py:21-42",
+        "backend/foundation/test_phase31_4_frozen_runtime_semantics.py:67-103",
+        "docs/governance/evidence/PHASE31_4_V2_5_NATIVE_IDENTITY_CONTRADICTION_V1.json:1-84"
+      ],
+      "operational_disposition": "The V2.5 governed controlled opportunity path preserves lineage and predecessor semantics. The V2.4 exact synthetic revision graph remains historical evidence, not an active blocker on the current runtime path.",
+      "live_proof_required": true,
+      "live_proof_scope": "Controlled Opportunity native revision, lineage, predecessor linkage, and governance/audit chain in PostgreSQL 18.6 Retry 15"
+    }
+  ],
+  "current_v25_status": {
+    "current_v25_P0": 0,
+    "current_v25_P1": 0,
+    "retry15_blocking_current_v25_blockers": 0,
+    "historical_frozen_blockers_preserved": 2,
+    "authorization_decision": "RETRY15_AUTHORIZED",
+    "authorization_condition": "Both frozen blockers are superseded by the V2.5 runtime path; no active current V2.5 blocker remains."
+  }
+}

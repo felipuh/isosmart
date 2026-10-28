@@ -1,0 +1,190 @@
+{
+  "evidence_id": "38",
+  "artifact_schema": "phase31.5-e07-development-metadata-reinspection/v1",
+  "date": "2026-10-05",
+  "purpose": "Perform the first post-correction, read-only, minimum-necessary metadata reinspection of the declared AdminApps / ISO Smart local development pair without accessing credential material or changing runtime, database, configuration, receiver, operator, or service state.",
+  "predecessor": "docs/governance/evidence/phase31_5/37_e07_adminapps_development_profile_correction_2026-10-05.json",
+  "governance_integrity": {
+    "evidence_37_checkpoint_commit": "897cdc729a09ac42d5d26d72ee6bc8a9530068df",
+    "evidence_37_checkpoint_message": "docs: record AdminApps development profile correction",
+    "evidence_37_json_valid": true,
+    "evidence_37_report_reviewed": true,
+    "evidence_37_secret_pattern_scan": "NO_POTENTIAL_SECRET_PATTERN",
+    "evidence_37_checkpoint_scope": "Evidence 37 and its associated report only",
+    "checkpoint_pushed": false,
+    "e07": "BLOCKED_BY_EXTERNAL_AUTHORITY",
+    "e08": "CLOSED_LOCAL_TECHNICAL_EVIDENCE",
+    "e08_baseline_preserved": "YES",
+    "phase31_5": "EXECUTION_HELD"
+  },
+  "starting_state": {
+    "adminapps_repository": "/home/felipe/proyectos/adminapps",
+    "adminapps_branch": "hardening/p0-p1-enterprise-readiness",
+    "adminapps_project_revision": "8b9c5684997baaa590b34af241a173e1a9c41143",
+    "isosmart_repository": "/home/felipe/proyectos/isosmart",
+    "isosmart_branch": "hardening/p0-p1-enterprise-readiness",
+    "isosmart_project_revision": "897cdc729a09ac42d5d26d72ee6bc8a9530068df",
+    "adminapps_effective_profile": "development",
+    "adminapps_is_development": true,
+    "adminapps_is_production": false,
+    "authorized_profile_markers_match_evidence_37": true,
+    "unauthorized_dotenv_drift_observed_within_authorized_marker_scope": false,
+    "dotenv_scope_limit": "Only DJANGO_ENV and ENVIRONMENT were read; the secret-bearing remainder of the file was not inspected.",
+    "declared_pairing": "ADMINAPPS_ISOSMART_PAIRING_CONFIRMED = YES",
+    "adminapps_environment_id": "ADMINAPPS-DEV-LOCAL",
+    "isosmart_environment_id": "ISOSMART-DEV-LOCAL",
+    "environment_scope": "development"
+  },
+  "authentic_development_access_ledger": [
+    {
+      "target": "AdminApps local repository and effective-profile markers",
+      "authority": "existing local development identity felipe@localhost.localdomain",
+      "method": "read-only repository and named-marker inspection",
+      "result": "Declared repository, branch, development profile, IS_DEVELOPMENT=true, and IS_PRODUCTION=false confirmed."
+    },
+    {
+      "target": "AdminApps PostgreSQL migration ledger",
+      "authority": "existing local development identity felipe@localhost.localdomain",
+      "method": "read-only Django showmigrations for the integration application",
+      "result": "Connection failed before any ledger row or application record was read; DEV_DATABASE_UNAVAILABLE. SQLite was not substituted."
+    },
+    {
+      "target": "ISO Smart receiver and workload topology",
+      "authority": "repository-local read-only inspection",
+      "method": "configuration-structure and project-specific process/listener inspection",
+      "result": "Receiver structure and static Gunicorn mapping were confirmed without reading a credential. No running project-specific workload or documented listener was observed."
+    }
+  ],
+  "gates": {
+    "D1": {
+      "classification": "DEV_TARGET_IDENTITY_PASS",
+      "adminapps_environment_id": "ADMINAPPS-DEV-LOCAL",
+      "isosmart_environment_id": "ISOSMART-DEV-LOCAL",
+      "adminapps_effective_profile": "development",
+      "isosmart_effective_profile": "development",
+      "pairing_reference": "Evidence 35 target declaration, preserved by Evidence 37 profile correction and this reinspection."
+    },
+    "D2": {
+      "classification": "DEV_DATABASE_UNAVAILABLE",
+      "migration_0006_applied": "UNAVAILABLE_WITH_CURRENT_DEVELOPMENT_AUTHORITY",
+      "migration_reference": "integration.0006_integration_api_key_lifecycle exists in the checked-out AdminApps source.",
+      "integration_api_key_lifecycle_available": "IMPLEMENTATION_PRESENT_RUNTIME_UNVERIFIED",
+      "rotate_integration_api_key_available": "IMPLEMENTATION_PRESENT_RUNTIME_UNVERIFIED",
+      "schema_compatibility_state": "NOT_ADJUDICATED",
+      "running_or_target_revision_compatibility": "NOT_ADJUDICATED",
+      "database_action": "No migration, repair, SQLite substitution, or write was performed."
+    },
+    "D3": {
+      "classification": "DEV_DATABASE_UNAVAILABLE",
+      "integration_logical_name": "UNAVAILABLE_WITH_CURRENT_DEVELOPMENT_AUTHORITY",
+      "integration_api_key_record_id": "UNAVAILABLE_WITH_CURRENT_DEVELOPMENT_AUTHORITY",
+      "integration_api_key_active": "UNAVAILABLE_WITH_CURRENT_DEVELOPMENT_AUTHORITY",
+      "isosmart_attribution_reference": "UNAVAILABLE_WITH_CURRENT_DEVELOPMENT_AUTHORITY",
+      "duplicate_candidate_count": "UNAVAILABLE_WITH_CURRENT_DEVELOPMENT_AUTHORITY",
+      "duplicate_disposition": "UNAVAILABLE_WITH_CURRENT_DEVELOPMENT_AUTHORITY",
+      "lifecycle_eligibility": "UNAVAILABLE_WITH_CURRENT_DEVELOPMENT_AUTHORITY",
+      "query_discipline": "No ORM or SQL record query was attempted after the migration-ledger connection failed; no candidate enumeration occurred."
+    },
+    "D4": {
+      "classification": "DEV_DATABASE_UNAVAILABLE",
+      "dev_operator_identity_reference": "UNAVAILABLE_WITH_CURRENT_DEVELOPMENT_AUTHORITY",
+      "dev_operator_active_status": "UNAVAILABLE_WITH_CURRENT_DEVELOPMENT_AUTHORITY",
+      "dev_operator_staff_status": "UNAVAILABLE_WITH_CURRENT_DEVELOPMENT_AUTHORITY",
+      "dev_operator_role_reference": "UNAVAILABLE_WITH_CURRENT_DEVELOPMENT_AUTHORITY",
+      "implementation_contract": "A future rotation requires an active staff operator; Felipe Ugalde's Technical Owner / CTO declaration was not treated as a staff-record attestation."
+    },
+    "D5": {
+      "classification": "DEV_SECRET_RECEIVER_UNRESOLVED",
+      "dev_secret_receiver": "ISO Smart backend/.env receiver; prior presence-only evidence is preserved.",
+      "dev_receiver_to_web_mapping": "dotenv receiver to Gunicorn environment mapping to Django ADMIN_APPS_INTEGRATION configuration.",
+      "dev_receiver_persistence_model": "local environment file consumed at process startup; actual running workload not observed.",
+      "dev_secret_receiver_owner": "UNRESOLVED",
+      "dev_authorized_injector": "UNRESOLVED",
+      "dev_secret_update_mechanism": "UNRESOLVED",
+      "dev_receiver_audit_model": "UNRESOLVED",
+      "secret_value_accessed": false
+    },
+    "D6": {
+      "classification": "DEV_WEB_WORKLOAD_NOT_RUNNING_OR_UNIDENTIFIED",
+      "dev_web_workload_id": "UNAVAILABLE",
+      "dev_web_workload_state": "NO_PROJECT_SPECIFIC_RUNNING_WORKLOAD_OBSERVED",
+      "dev_web_runtime_type": "static configuration indicates Django WSGI/Gunicorn; runtime not observed",
+      "dev_web_restart_or_recreate_mechanism": "UNRESOLVED",
+      "dev_web_restart_authority": "UNRESOLVED",
+      "dev_web_health_check": "static AdminApps integration health endpoint reference only; not invoked",
+      "dev_adminapps_auth_check": "UNRESOLVED; not invoked"
+    },
+    "D7": {
+      "classification": "DEV_INTERRUPTION_MODEL_DEFINED",
+      "dev_interruption_window_accepted": "YES_FOR_DEVELOPMENT_GOVERNANCE_MODEL_ONLY",
+      "dev_interruption_authority": "Felipe Ugalde / Technical Owner / CTO",
+      "dev_customer_impact": "NONE_EXPECTED_FOR_DECLARED_LOCAL_DEVELOPMENT_TARGET",
+      "dev_execution_window_status": "NOT_YET_AUTHORIZED",
+      "dev_pre_commit_abort_threshold": "Abort before credential mutation if the exact record, active staff operator, authorized receiver/injector, non-recording controls, or actual workload/restart path remains unresolved.",
+      "dev_post_commit_escalation_threshold": "Escalate under separately authorized development recovery governance if receiver update, web cutover, health validation, or AdminApps authentication validation fails.",
+      "scope_limit": "This is not a production, staging, customer, or execution-window authorization."
+    },
+    "D8": {
+      "classification": "DEV_FORWARD_RECOVERY_UNRESOLVED",
+      "R0": "ABORT_WITHOUT_CREDENTIAL_CHANGE",
+      "R1_decision_authority": "UNRESOLVED",
+      "R1_recovery_action_class": "UNRESOLVED_PENDING_AUTHENTIC_RECEIVER_OWNER_AND_INJECTOR",
+      "R2_decision_authority": "UNRESOLVED",
+      "R2_recovery_action_class": "UNRESOLVED_PENDING_AUTHENTIC_WORKLOAD_AND_RESTART_AUTHORITY",
+      "R3_decision_authority": "UNRESOLVED",
+      "R3_recovery_action_class": "UNRESOLVED_PENDING_AUTHENTIC_HEALTH_AND_AUTH_VALIDATION_PATH",
+      "frozen_rule": "FORMER_CREDENTIAL_MUST_NOT_BE_ASSUMED_VALID",
+      "recovery_executed": false
+    },
+    "D9": {
+      "classification": "DEV_SECRET_LEAKAGE_PATHS_UNRESOLVED",
+      "dev_stdout_capture_control": "UNRESOLVED",
+      "dev_terminal_session_recording_control": "UNRESOLVED",
+      "dev_shell_history_control": "UNRESOLVED",
+      "dev_clipboard_control": "UNRESOLVED",
+      "dev_application_logging_control": "UNRESOLVED",
+      "dev_governance_evidence_control": "DEFINED: no credential, verifier, hash, token, or secret-bearing output may enter governance evidence.",
+      "dev_chat_and_ai_context_prohibition": "DEFINED: a future secret must not enter ChatGPT, Codex, Copilot, or any AI conversation context.",
+      "dev_stop_on_exposure_control": "DEFINED: stop immediately on any secret exposure risk; do not retry the unsafe method.",
+      "feasibility": "NOT_ESTABLISHED_WITHOUT_ACCOUNTABLE_NON_RECORDING_CONTROL_ATTESTATIONS"
+    }
+  },
+  "development_gate_summary": {
+    "D1": "DEV_TARGET_IDENTITY_PASS",
+    "D2": "DEV_DATABASE_UNAVAILABLE",
+    "D3": "DEV_DATABASE_UNAVAILABLE",
+    "D4": "DEV_DATABASE_UNAVAILABLE",
+    "D5": "DEV_SECRET_RECEIVER_UNRESOLVED",
+    "D6": "DEV_WEB_WORKLOAD_NOT_RUNNING_OR_UNIDENTIFIED",
+    "D7": "DEV_INTERRUPTION_MODEL_DEFINED",
+    "D8": "DEV_FORWARD_RECOVERY_UNRESOLVED",
+    "D9": "DEV_SECRET_LEAKAGE_PATHS_UNRESOLVED"
+  },
+  "development_rotation_eligibility": "DEVELOPMENT_ROTATION_AUTHORIZATION_ELIGIBLE = NO",
+  "environment_scope_separation": {
+    "development_evidence_scope": "DEVELOPMENT_ONLY",
+    "staging_evidence": "NOT_ESTABLISHED",
+    "production_evidence": "NOT_ESTABLISHED"
+  },
+  "secret_assurance": {
+    "credential_plaintext_accessed": false,
+    "credential_verifier_or_hash_accessed": false,
+    "password_mfa_token_or_session_accessed": false,
+    "full_dotenv_accessed": false,
+    "secret_bearing_database_output_persisted": false,
+    "secret_material_exposure_avoided": "YES"
+  },
+  "mutation_audit": {
+    "database_mutation": "PROHIBITED_AND_NOT_PERFORMED",
+    "migration_execution": "PROHIBITED_AND_NOT_PERFORMED",
+    "credential_mutation": "PROHIBITED_AND_NOT_PERFORMED",
+    "service_restart": "PROHIBITED_AND_NOT_PERFORMED",
+    "receiver_mutation": "PROHIBITED_AND_NOT_PERFORMED",
+    "operator_mutation": "PROHIBITED_AND_NOT_PERFORMED",
+    "adminapps_source_artifacts_changed": false,
+    "isosmart_source_artifacts_changed": false,
+    "evidence_28_to_37_modified": false,
+    "unrelated_worktree_changes_preserved": true
+  },
+  "phase31_5_status": "EXECUTION_HELD"
+}

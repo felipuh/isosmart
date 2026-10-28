@@ -1,0 +1,68 @@
+{
+  "artifact_schema": "phase31.4-retry14-executable-producer-graph/v1",
+  "retry_id": "Phase 31.4 V2.5 Clean Retry 14",
+  "evaluated_at": "2026-09-21T20:41:12-06:00",
+  "result": "FAIL",
+  "required_result": "EXECUTABLE_PRODUCER_GRAPH = PASS",
+  "structural_dependency_graph": "PASS",
+  "live_execution_order": [
+    "INITIAL_OPPORTUNITY",
+    "ACTION_PLAN_PREPARATION",
+    "ACTION_PLAN_DRY_RUN",
+    "EXECUTION_AUTHORIZATION",
+    "NATIVE_IDENTITY_CAPTURE"
+  ],
+  "required_native_chain": [
+    "AgentDefinition",
+    "AgentRun",
+    "Recommendation",
+    "AgentDecision",
+    "ActionPlan",
+    "Authorization"
+  ],
+  "reachable_before_action_plan": {
+    "AgentDefinition": false,
+    "AgentRun": false,
+    "Recommendation": false,
+    "AgentDecision": false
+  },
+  "findings": [
+    {
+      "code": "UNBOUND_AGENT_DEFINITION_INVOCATION",
+      "phase": "CATALOG_ASSERTIONS",
+      "producer": "AgentCatalogCommandService.create_agent_definition",
+      "actual": "Executor invokes the required-argument method with empty metadata because input binding is only performed for INITIAL_OPPORTUNITY, ACTION_PLAN_PREPARATION, and EXECUTION_AUTHORIZATION."
+    },
+    {
+      "code": "AGENT_RUN_ORDERED_AFTER_ACTION_PLAN",
+      "phase": "NATIVE_IDENTITY_CAPTURE",
+      "producer": "AgentRunCommandService.start_agent_run",
+      "actual": "The AgentRun phase is ordered after ACTION_PLAN_PREPARATION and EXECUTION_AUTHORIZATION."
+    },
+    {
+      "code": "RECOMMENDATION_PRODUCER_NOT_SCHEDULED",
+      "producer": "AgentRunCommandService.complete_agent_run_with_recommendation",
+      "actual": "No authoritative phase invokes the product composition method that persists Recommendation."
+    },
+    {
+      "code": "AGENT_DECISION_PRODUCER_NOT_SCHEDULED",
+      "producer": "AgentDecisionCommandService.record_agent_decision",
+      "actual": "No authoritative phase invokes the native AgentDecision producer before ACTION_PLAN_PREPARATION."
+    }
+  ],
+  "source_anchors": [
+    "backend/foundation/phase31_4_v2_5_runtime.py:480",
+    "backend/foundation/phase31_4_v2_5_runtime.py:488",
+    "backend/foundation/phase31_4_v2_5_runtime.py:618",
+    "backend/foundation/phase31_4_v2_5_runtime.py:619",
+    "backend/foundation/phase31_4_v2_5_runtime.py:640",
+    "backend/foundation/phase31_4_v2_5_runtime.py:641",
+    "backend/foundation/phase31_4_v2_5_runtime.py:1017",
+    "backend/foundation/phase31_4_v2_5_runtime.py:1018",
+    "backend/foundation/agent_runtime.py:251",
+    "backend/foundation/agent_runtime.py:334",
+    "backend/foundation/human_decision.py:134"
+  ],
+  "phase_1_started": false,
+  "policy": "Fail closed before Phase 1; do not patch during the live retry."
+}

@@ -1,0 +1,270 @@
+{
+  "schema": "phase31.4-v2.5-v8-operational-diagnostic-cycle-authorization/v1",
+  "artifact_id": "PHASE31_4_V2_5_V8_OPERATIONAL_DIAGNOSTIC_CYCLE_AUTHORIZATION_V1",
+  "issued_at": "2026-09-29T00:43:06.302742+00:00",
+  "verdict": "V8_OPERATIONAL_DIAGNOSTIC_CYCLE_AUTHORIZED",
+  "authorization_scope": "DIAGNOSTIC_ONLY_AUTHORIZATION",
+  "cycle_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1",
+  "cycle_key": "PHASE31_4_V2_5_V8_OPERATIONAL_DIAGNOSTIC_CYCLE_1",
+  "classification": "V8_OPERATIONAL_DIAGNOSTIC",
+  "cycle_executed": false,
+  "attempts_used": 0,
+  "maximum_attempts": 3,
+  "fourth_attempt_authorized": false,
+  "attempts": [
+    {
+      "attempt": 1,
+      "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 1",
+      "canonical_run_slug": "Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1",
+      "evidence_root": "docs/governance/evidence/runs/Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_1",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "attempt": 2,
+      "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 2",
+      "canonical_run_slug": "Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_2",
+      "evidence_root": "docs/governance/evidence/runs/Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_2",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "attempt": 3,
+      "run_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1 Attempt 3",
+      "canonical_run_slug": "Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_3",
+      "evidence_root": "docs/governance/evidence/runs/Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_3",
+      "status": "NOT_EXECUTED"
+    }
+  ],
+  "baseline": {
+    "path": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V8.json",
+    "sha256": "ed7bed0108e790c93e0c40625b215dde02ae25566b2397533b11b6aae7040946",
+    "generation": "PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V8",
+    "protected_source_count": 28,
+    "source_hashes_verified": 28,
+    "missing": 0,
+    "unexpected": 0,
+    "unregistered_material_sources_identified": 0,
+    "current_drift": false
+  },
+  "gates": {
+    "v8_integrity": "PASS",
+    "protected_sources": "PASS",
+    "historical_preservation": "PASS",
+    "state_machine": "PASS",
+    "runner": "PASS",
+    "live_executor_static": "PASS",
+    "retained_test_evidence": "PASS",
+    "migration_evidence": "PASS"
+  },
+  "evidence": {
+    "path": "docs/governance/evidence/PHASE31_4_V2_5_V8_OPERATIONAL_DIAGNOSTIC_CYCLE_REVIEW_EVIDENCE_V1.json",
+    "sha256": "c7eccf9f2ee9f0dfeaae9b94cc6c7294e228b36d3892af080314a02ccfeab355"
+  },
+  "tests": {
+    "focused": {
+      "status": "PASS",
+      "total": 112,
+      "passed": 112,
+      "failures": 0,
+      "errors": 0
+    },
+    "integrity": {
+      "status": "PASS",
+      "total": 13,
+      "passed": 13,
+      "failures": 0,
+      "errors": 0
+    },
+    "backend_regression": {
+      "status": "PASS",
+      "total": 559,
+      "passed": 559,
+      "failures": 0,
+      "errors": 0
+    }
+  },
+  "tests_rerun_this_review": false,
+  "migrations": {
+    "v2_4": "23/23 PASS",
+    "v2_5": "24/24 PASS",
+    "pending": 0,
+    "new_migrations": 0,
+    "fake": 0,
+    "manual_patches": 0,
+    "makemigrations_check_dry_run": "PASS"
+  },
+  "migrations_applied_this_review": false,
+  "attempt_1_policy": "CURRENT V8 BYTES AS-IS",
+  "attempt_policy": {
+    "1": "Execute current V8 protected bytes unchanged before any remediation. No preemptive patches to launchers, adapters, services, migrations, Stage EXT or authorization handling. Fresh identity/paths and diagnostic authorization are governance inputs, not implementation fixes.",
+    "2": "Only after attempt 1 identifies a concrete first blocker; remediate that blocker only, retain evidence and run focused tests.",
+    "3": "Only after attempt 2 identifies a distinct concrete blocker; remediate that blocker only, retain evidence and run focused tests.",
+    "budget": "Every technical launch counts, including launcher/setup/authorization failures before allocation. No fourth attempt or reuse of prior budgets."
+  },
+  "future_attempt_authorization": {
+    "scope": "DIAGNOSTIC_ONLY_AUTHORIZATION",
+    "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+    "authorization_status": "RUNNER_ENVIRONMENT_DIAGNOSTIC_AUTHORIZED",
+    "one_shot": true,
+    "validation_attempt": "Exactly the selected attempt number, 1..3",
+    "binding": "Fresh run_id, canonical_run_slug, evidence_root, baseline path/SHA and parent cycle artifact/SHA. Separate diagnostic consumption registry under governance evidence; no formal Retry consumption.",
+    "creation": "Create only the eligible attempt authorization when executing that future attempt; no per-attempt authorization or resource manifest created in this review.",
+    "cycle_artifact_is_runner_input": false
+  },
+  "execution_contract": {
+    "runner_method": "DisposableEvidenceRunner.run_evidence",
+    "executor_mode": "diagnostic",
+    "allow_runtime_execution": false,
+    "required_state_path": [
+      "READY",
+      "PRECREATION_RUNNING",
+      "PRECREATION_PASS",
+      "STAGE_EXT_RUNNING"
+    ],
+    "minimal_run_diagnostic_is_insufficient": true,
+    "historical_v6_launcher_reuse": false,
+    "formal_evidence_cli_forbidden": true,
+    "stop_after": "CAPTURE_BUNDLE_READY; then mandatory teardown and absence verification",
+    "full_33_phase_clean_retry": false
+  },
+  "furthest_proven_boundary_vocabulary": [
+    "LAUNCHER_STARTED",
+    "DJANGO_SETUP_COMPLETE",
+    "RUNNER_INITIALIZED",
+    "RESOURCE_ALLOCATION_STARTED",
+    "POSTGRES_ALLOCATED",
+    "POSTGRES_READY",
+    "MIGRATIONS_COMPLETE",
+    "ROLES_COMPLETE",
+    "ADMINAPPS_READY",
+    "ISOSMART_READY",
+    "AUTHORITY_READY",
+    "EVENT_DELIVERED",
+    "PROJECTIONS_READY",
+    "QMS_ORGANIZATION_READY",
+    "PROCESS_READY",
+    "STAGE_EXT_6_OF_6",
+    "CAPTURE_BUNDLE_READY"
+  ],
+  "boundary_reporting": "Report only proven boundaries with timestamp, run ID and retained evidence reference; identify exact first blocker, exception and operation. No vague bootstrap failure.",
+  "primary_target": "STAGE EXT 6/6 + CAPTURE_BUNDLE_READY",
+  "live_identities": [
+    "AdminApps tenant",
+    "AdminApps actor/user",
+    "TenantProjection",
+    "UserProjection",
+    "QMS Organization",
+    "Process"
+  ],
+  "identity_evidence_fields": [
+    "live returned value",
+    "independent persisted readback",
+    "provenance",
+    "equality result",
+    "timestamp",
+    "diagnostic ID"
+  ],
+  "full_live_path": [
+    "resources",
+    "PostgreSQL readiness",
+    "migrations",
+    "roles",
+    "AdminApps service",
+    "ISO Smart service",
+    "authority setup",
+    "event delivery",
+    "projections",
+    "QMS Organization",
+    "Process",
+    "Stage EXT 6/6",
+    "CaptureBundle"
+  ],
+  "resource_isolation": {
+    "fresh_each_attempt": [
+      "AdminApps PostgreSQL 18.6",
+      "ISO Smart PostgreSQL 18.6",
+      "networks",
+      "volumes",
+      "dynamic database and service ports",
+      "databases",
+      "application service processes",
+      "atomic diagnostic manifest"
+    ],
+    "historical_resource_reuse": false,
+    "labels": "Canonical run slug + authorization SHA + resource role",
+    "dynamic_ADMIN_APPS_BASE_URL_required": true
+  },
+  "success_rule": {
+    "pass_verdict": "LIVE_EXECUTOR_OPERATIONAL_DIAGNOSTIC_PASS",
+    "all_required": [
+      "both PostgreSQL instances actually ready",
+      "migrations applied with no pending migrations",
+      "roles verified",
+      "both services actually ready",
+      "dynamic AdminApps endpoint used",
+      "authority persisted and independently read back",
+      "event delivery proven",
+      "projections independently read back",
+      "QMS Organization independently read back",
+      "Process independently read back",
+      "Stage EXT 6/6",
+      "valid CaptureBundle",
+      "cleanup PASS",
+      "post-teardown absence PASS"
+    ],
+    "anything_less": "LIVE_EXECUTOR_OPERATIONAL_DIAGNOSTIC_FAIL",
+    "evidence_rule": "Static/test PASS and output labels are not live proof. Retain actual event delivery/receipt evidence and database readbacks; summaries or hashes alone do not substitute for persisted delivery proof."
+  },
+  "cleanup": {
+    "required_after": "Every attempt, PASS or FAIL, including partial startup",
+    "stop_application_processes": true,
+    "remove_only_attempt_resources": true,
+    "global_prune": false,
+    "verify_absence": [
+      "containers",
+      "networks",
+      "volumes",
+      "application processes"
+    ],
+    "verify_ports_closed": "All allocated database and service ports",
+    "retain_cleanup_evidence": true,
+    "remaining_resources_required": 0,
+    "recovery": "CLEANUP_ONLY; never resume business execution"
+  },
+  "source_drift_policy": {
+    "modify_v8": false,
+    "protected_changes_after_attempt_1_or_2": "SUCCESSOR_INTEGRITY_RECONCILIATION_REQUIRED",
+    "record": [
+      "first blocker",
+      "minimal remediation",
+      "before/after source hashes",
+      "focused test results",
+      "attempt budget remaining"
+    ],
+    "cycle_continuation": "Allowed only within remaining conditional diagnostic budget. Never disable or weaken protected integrity checks; if existing checks reject drift, fail closed.",
+    "formal_retry20_review": "Forbidden until successor integrity generation exists"
+  },
+  "historical_preservation": [
+    "V2.4",
+    "V1-V7",
+    "V8",
+    "PROVENANCE_DISCONTINUITY",
+    "Retry 16-19",
+    "prior diagnostic cycles",
+    "superseded V5 Retry20 authorization"
+  ],
+  "operational_readiness": "NOT_READY",
+  "last_diagnostic": "LIVE_EXECUTOR_OPERATIONAL_DIAGNOSTIC_FAIL",
+  "last_stage_ext": "0/6",
+  "prior_cycle_attempts": "3/3 exhausted; remains closed",
+  "formal_retry20_authorization_created": false,
+  "formal_retry20_authorization": "NONE",
+  "retry20_executed": false,
+  "phase31_5": "EXECUTION_HELD",
+  "review_execution": {
+    "diagnostic_executed": false,
+    "resources_allocated": false,
+    "live_AdminApps_contacted": false,
+    "services_started": false
+  },
+  "exact_next_step": "Execute the V8 operational diagnostic cycle under this diagnostic-only authorization."
+}

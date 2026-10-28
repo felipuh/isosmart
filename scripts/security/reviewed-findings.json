@@ -1,0 +1,289 @@
+[
+  {
+    "path": "backend/foundation/phase31_4_v2_5_runtime.py",
+    "sha256": "70997fb33eb22c9576cb7def0cd5ccdff9d61deebad4621072920b5acf5efb19",
+    "rule": "generic-api-key",
+    "line": 699,
+    "reason": "Synthetic policy/idempotency/test identifier; not a credential"
+  },
+  {
+    "path": "backend/foundation/postgres_phase10_harness.py",
+    "sha256": "a8e6e0bae2029b593571def55155eb16993f90a6577fb8f7fc4638f8555e39e7",
+    "rule": "generic-api-key",
+    "line": 163,
+    "reason": "Synthetic policy/idempotency/test identifier; not a credential"
+  },
+  {
+    "path": "backend/foundation/postgres_phase11_harness.py",
+    "sha256": "9a7dc0d0dc4b986175e8e59a1cfc1c06c2697745cc663e34be860732f783dad3",
+    "rule": "generic-api-key",
+    "line": 132,
+    "reason": "Synthetic policy/idempotency/test identifier; not a credential"
+  },
+  {
+    "path": "backend/foundation/postgres_phase11_harness.py",
+    "sha256": "9a7dc0d0dc4b986175e8e59a1cfc1c06c2697745cc663e34be860732f783dad3",
+    "rule": "generic-api-key",
+    "line": 174,
+    "reason": "Synthetic policy/idempotency/test identifier; not a credential"
+  },
+  {
+    "path": "backend/foundation/postgres_phase12_harness.py",
+    "sha256": "f2414ad3c70566ecc6cd91595596b8c33dfa81cc93d1fa3180490766f6ba2dbd",
+    "rule": "generic-api-key",
+    "line": 135,
+    "reason": "Synthetic policy/idempotency/test identifier; not a credential"
+  },
+  {
+    "path": "backend/foundation/postgres_phase12_harness.py",
+    "sha256": "f2414ad3c70566ecc6cd91595596b8c33dfa81cc93d1fa3180490766f6ba2dbd",
+    "rule": "generic-api-key",
+    "line": 316,
+    "reason": "Synthetic policy/idempotency/test identifier; not a credential"
+  },
+  {
+    "path": "backend/foundation/postgres_phase16_harness.py",
+    "sha256": "8a20d412026440d307da31a29f99bbdb06e3b48b39406c7e1c1f98e29c903c1f",
+    "rule": "generic-api-key",
+    "line": 169,
+    "reason": "Synthetic policy/idempotency/test identifier; not a credential"
+  },
+  {
+    "path": "backend/foundation/postgres_phase16_harness.py",
+    "sha256": "8a20d412026440d307da31a29f99bbdb06e3b48b39406c7e1c1f98e29c903c1f",
+    "rule": "generic-api-key",
+    "line": 175,
+    "reason": "Synthetic policy/idempotency/test identifier; not a credential"
+  },
+  {
+    "path": "backend/foundation/postgres_phase16_harness.py",
+    "sha256": "8a20d412026440d307da31a29f99bbdb06e3b48b39406c7e1c1f98e29c903c1f",
+    "rule": "generic-api-key",
+    "line": 323,
+    "reason": "Synthetic policy/idempotency/test identifier; not a credential"
+  },
+  {
+    "path": "backend/foundation/postgres_phase16_harness.py",
+    "sha256": "8a20d412026440d307da31a29f99bbdb06e3b48b39406c7e1c1f98e29c903c1f",
+    "rule": "generic-api-key",
+    "line": 393,
+    "reason": "Synthetic policy/idempotency/test identifier; not a credential"
+  },
+  {
+    "path": "backend/foundation/postgres_phase17_harness.py",
+    "sha256": "bcbd7d95771bdcebbcb98fe1bfc1a646e74d048f6c3e275bcba094e676e6effc",
+    "rule": "generic-api-key",
+    "line": 254,
+    "reason": "Synthetic policy/idempotency/test identifier; not a credential"
+  },
+  {
+    "path": "backend/foundation/postgres_phase17_harness.py",
+    "sha256": "bcbd7d95771bdcebbcb98fe1bfc1a646e74d048f6c3e275bcba094e676e6effc",
+    "rule": "generic-api-key",
+    "line": 300,
+    "reason": "Synthetic policy/idempotency/test identifier; not a credential"
+  },
+  {
+    "path": "backend/foundation/postgres_phase17_harness.py",
+    "sha256": "bcbd7d95771bdcebbcb98fe1bfc1a646e74d048f6c3e275bcba094e676e6effc",
+    "rule": "generic-api-key",
+    "line": 392,
+    "reason": "Synthetic policy/idempotency/test identifier; not a credential"
+  },
+  {
+    "path": "backend/foundation/postgres_phase23_harness.py",
+    "sha256": "4b11cfe12ad46f3658e9bd29915c71ae5f79da00c19234c54be8b48e6cac4042",
+    "rule": "generic-api-key",
+    "line": 365,
+    "reason": "Synthetic policy/idempotency/test identifier; not a credential"
+  },
+  {
+    "path": "backend/foundation/postgres_phase23_harness.py",
+    "sha256": "4b11cfe12ad46f3658e9bd29915c71ae5f79da00c19234c54be8b48e6cac4042",
+    "rule": "generic-api-key",
+    "line": 385,
+    "reason": "Synthetic policy/idempotency/test identifier; not a credential"
+  },
+  {
+    "path": "backend/foundation/postgres_phase27_2_harness.py",
+    "sha256": "b089ddf3fc37456041677d120348cb01e036897fbc57357f94dcb05888aeb9c8",
+    "rule": "generic-api-key",
+    "line": 186,
+    "reason": "Synthetic policy/idempotency/test identifier; not a credential"
+  },
+  {
+    "path": "backend/foundation/postgres_wp2_harness.py",
+    "sha256": "e26e3f5d8371befe791b862e4aa5a618573fc3ed9132f1db2a974b82eccef772",
+    "rule": "generic-api-key",
+    "line": 121,
+    "reason": "Synthetic policy/idempotency/test identifier; not a credential"
+  },
+  {
+    "path": "backend/foundation/postgres_wp2_harness.py",
+    "sha256": "e26e3f5d8371befe791b862e4aa5a618573fc3ed9132f1db2a974b82eccef772",
+    "rule": "generic-api-key",
+    "line": 132,
+    "reason": "Synthetic policy/idempotency/test identifier; not a credential"
+  },
+  {
+    "path": "backend/foundation/test_source_artifact_postgres_integration.py",
+    "sha256": "2d77d7f310be24683069cbf46fd392180abe5bb9a3933e48d1b068b227af2706",
+    "rule": "generic-api-key",
+    "line": 213,
+    "reason": "Synthetic policy/idempotency/test identifier; not a credential"
+  },
+  {
+    "path": "docs/governance/evidence/PHASE28_3_RETAINED_SYNTHETIC_KNOWLEDGE_LAYER_RULE_CREATED_AND_RETAINED_V1.json",
+    "sha256": "9272458cf9dc54f4f722b02502e5e85e9869cebb5e488f0ff15da82e77c07edd",
+    "rule": "generic-api-key",
+    "line": 97,
+    "reason": "Retained evidence digest or synthetic identifier; not authentication material"
+  },
+  {
+    "path": "docs/governance/evidence/PHASE29_RETAINED_SYNTHETIC_KNOWLEDGE_LAYER_RULE_PUBLICATION_V1.json",
+    "sha256": "fade372ec41dbeff118ddbb41cd154f8e8adb34799492a56f5e8d14db7e54b72",
+    "rule": "generic-api-key",
+    "line": 28,
+    "reason": "Retained evidence digest or synthetic identifier; not authentication material"
+  },
+  {
+    "path": "docs/governance/evidence/PHASE29_RETAINED_SYNTHETIC_KNOWLEDGE_LAYER_RULE_PUBLICATION_V1.json",
+    "sha256": "fade372ec41dbeff118ddbb41cd154f8e8adb34799492a56f5e8d14db7e54b72",
+    "rule": "generic-api-key",
+    "line": 56,
+    "reason": "Retained evidence digest or synthetic identifier; not authentication material"
+  },
+  {
+    "path": "docs/governance/evidence/PHASE29_RETAINED_SYNTHETIC_KNOWLEDGE_LAYER_RULE_PUBLICATION_V1.json",
+    "sha256": "fade372ec41dbeff118ddbb41cd154f8e8adb34799492a56f5e8d14db7e54b72",
+    "rule": "generic-api-key",
+    "line": 99,
+    "reason": "Retained evidence digest or synthetic identifier; not authentication material"
+  },
+  {
+    "path": "docs/governance/evidence/PHASE31_4_1_ROOT_BINDING_DIAGNOSTIC_VECTORS_V1.json",
+    "sha256": "f68ef16adebb569239c284fcc8cc93dc5942f86bcfc49c2e09a4cbdc1e2f1108",
+    "rule": "generic-api-key",
+    "line": 597,
+    "reason": "Retained evidence digest or synthetic identifier; not authentication material"
+  },
+  {
+    "path": "docs/governance/evidence/PHASE31_4_1_ROOT_BINDING_DIAGNOSTIC_VECTORS_V1.json",
+    "sha256": "f68ef16adebb569239c284fcc8cc93dc5942f86bcfc49c2e09a4cbdc1e2f1108",
+    "rule": "generic-api-key",
+    "line": 705,
+    "reason": "Retained evidence digest or synthetic identifier; not authentication material"
+  },
+  {
+    "path": "backend/integration/tests_decision_a_offline.py",
+    "sha256": "1a027d9223bf217b5f3cc21f7dc053549fe7938a7598d7eee13a04de357eee26",
+    "rule": "generic-api-key",
+    "line": 188,
+    "reason": "Synthetic policy/idempotency/test identifier; not a credential"
+  },
+  {
+    "path": "docs/governance/evidence/PHASE31_4_2_NATIVE_BINDING_AUDIT_V1.json",
+    "sha256": "787f0eb4b6bdc045d560c376677d85cb4ab48e1224f0def2a3210b19850e9fd7",
+    "rule": "generic-api-key",
+    "line": 131,
+    "reason": "Retained evidence digest or synthetic identifier; not authentication material"
+  },
+  {
+    "path": "docs/governance/evidence/PHASE31_4_2_NATIVE_BINDING_AUDIT_V1.json",
+    "sha256": "787f0eb4b6bdc045d560c376677d85cb4ab48e1224f0def2a3210b19850e9fd7",
+    "rule": "generic-api-key",
+    "line": 150,
+    "reason": "Retained evidence digest or synthetic identifier; not authentication material"
+  },
+  {
+    "path": "docs/governance/evidence/PHASE31_4_3_SUPPORTING_CONTRACT_AUDIT_V1.json",
+    "sha256": "12416f725917e11ca4c843ebc74d97d70e338b30fdf6ecbbd2e8afd2834f21ed",
+    "rule": "generic-api-key",
+    "line": 1688,
+    "reason": "Retained evidence digest or synthetic identifier; not authentication material"
+  },
+  {
+    "path": "docs/governance/evidence/PHASE31_4_3_SUPPORTING_CONTRACT_AUDIT_V1.json",
+    "sha256": "12416f725917e11ca4c843ebc74d97d70e338b30fdf6ecbbd2e8afd2834f21ed",
+    "rule": "generic-api-key",
+    "line": 1805,
+    "reason": "Retained evidence digest or synthetic identifier; not authentication material"
+  },
+  {
+    "path": "docs/governance/evidence/PHASE31_4_V2_5_V8_OPERATIONAL_DIAGNOSTIC_CYCLE_AUTHORIZATION_V1.json",
+    "sha256": "c8633d150784c23170585627b1bf3bd738bcf62197998d5ea8e7bd3d9d08aac9",
+    "rule": "generic-api-key",
+    "line": 8,
+    "reason": "Retained evidence digest or synthetic identifier; not authentication material"
+  },
+  {
+    "path": "docs/governance/evidence/PHASE31_4_PRECREATION_BLOCKER_EVIDENCE_V1.json",
+    "sha256": "b8490b2bb2cd059b015be7a97731dad009b45018fa822278b61daabb886fbf70",
+    "rule": "generic-api-key",
+    "line": 262,
+    "reason": "Retained evidence digest or synthetic identifier; not authentication material"
+  },
+  {
+    "path": "docs/governance/evidence/PHASE31_4_PRECREATION_BLOCKER_EVIDENCE_V1.json",
+    "sha256": "b8490b2bb2cd059b015be7a97731dad009b45018fa822278b61daabb886fbf70",
+    "rule": "generic-api-key",
+    "line": 370,
+    "reason": "Retained evidence digest or synthetic identifier; not authentication material"
+  },
+  {
+    "path": "docs/governance/evidence/PHASE31_4_2_SUCCESSOR_DESIGN_DIAGNOSTIC_V1.json",
+    "sha256": "bec1b0b60d1e212670f1da70d001ece88a75fe8bd6cbee12d8298a92f3340c3c",
+    "rule": "generic-api-key",
+    "line": 2063,
+    "reason": "Retained evidence digest or synthetic identifier; not authentication material"
+  },
+  {
+    "path": "docs/governance/evidence/PHASE31_4_2_SUCCESSOR_DESIGN_DIAGNOSTIC_V1.json",
+    "sha256": "bec1b0b60d1e212670f1da70d001ece88a75fe8bd6cbee12d8298a92f3340c3c",
+    "rule": "generic-api-key",
+    "line": 2176,
+    "reason": "Retained evidence digest or synthetic identifier; not authentication material"
+  },
+  {
+    "path": "docs/governance/evidence/PHASE31_4_V2_5_OPERATIONAL_BEARER_IDENTITY_DISCOVERY_V1.json",
+    "sha256": "47fa5a1105d8d53da2fac582266a487d7ad03ee2eaf7b5034d1fbd3a58c06900",
+    "rule": "generic-api-key",
+    "line": 111,
+    "reason": "Retained evidence digest or synthetic identifier; not authentication material"
+  },
+  {
+    "path": "docs/governance/fixtures/PHASE31_3_COMPLETE_RETAINED_SYNTHETIC_LIFECYCLE_SPEC_V1.json",
+    "sha256": "683f7c83ff3e3e16733d63288d317f8b3a14fe9e5bfaf2e86b0cf2e86b6ab6ca",
+    "rule": "generic-api-key",
+    "line": 72,
+    "reason": "Retained evidence digest or synthetic identifier; not authentication material"
+  },
+  {
+    "path": "docs/governance/fixtures/PHASE31_3_COMPLETE_RETAINED_SYNTHETIC_LIFECYCLE_SPEC_V1.json",
+    "sha256": "683f7c83ff3e3e16733d63288d317f8b3a14fe9e5bfaf2e86b0cf2e86b6ab6ca",
+    "rule": "generic-api-key",
+    "line": 300,
+    "reason": "Retained evidence digest or synthetic identifier; not authentication material"
+  },
+  {
+    "path": "docs/governance/fixtures/PHASE31_3_COMPLETE_RETAINED_SYNTHETIC_LIFECYCLE_SPEC_V1.json",
+    "sha256": "683f7c83ff3e3e16733d63288d317f8b3a14fe9e5bfaf2e86b0cf2e86b6ab6ca",
+    "rule": "generic-api-key",
+    "line": 320,
+    "reason": "Retained evidence digest or synthetic identifier; not authentication material"
+  },
+  {
+    "path": "docs/governance/evidence/PHASE31_4_V2_5_V8_OPERATIONAL_DIAGNOSTIC_CYCLE_REVIEW_EVIDENCE_V1.json",
+    "sha256": "c7eccf9f2ee9f0dfeaae9b94cc6c7294e228b36d3892af080314a02ccfeab355",
+    "rule": "generic-api-key",
+    "line": 627,
+    "reason": "Retained evidence digest or synthetic identifier; not authentication material"
+  },
+  {
+    "path": "docs/governance/fixtures/PHASE31_4_5A_RETRY1_ROW_LEVEL_EXECUTION_CONTRACT_V2_3.json",
+    "sha256": "c982588956bb6009dc2489f1a724afcfe223dda0af2b7fcb884693f43f66c1d6",
+    "rule": "generic-api-key",
+    "line": 45111,
+    "reason": "Retained evidence digest or synthetic identifier; not authentication material"
+  }
+]

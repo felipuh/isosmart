@@ -1,0 +1,37 @@
+{
+  "artifact_schema": "phase31.4-v2.5-operational-live-executor-remediation/v1",
+  "generated_at": "2026-09-24T11:28:00-06:00",
+  "verdict": "OPERATIONAL_LIVE_EXECUTOR_FAIL",
+  "blockers": {
+    "B1": {"status": "CODE_REMEDIATED", "evidence": "runner CLI evidence -> run_evidence(precreation, stage_ext) -> live executor -> CaptureBundle -> build_v25_runtime -> run_clean_retry"},
+    "B2": {"status": "CODE_REMEDIATED", "evidence": "operational modes reject test_only adapters; no default PASS, pid 0, generated IDs, copied readbacks, or tautological comparisons"},
+    "B3": {"status": "CODE_REMEDIATED", "evidence": "exact artifact selection, additive authorization index, supersession rejection, historical authorization-only roots allowed, execution manifest classified separately"}
+  },
+  "operational_entrypoint": "python -m foundation.phase31_4_v2_5_disposable_runner evidence ...",
+  "adapters": "SubprocessOperationalAdapter plus repository operational actions",
+  "stage_ext": {"required": 6, "diagnostic_passed": 0, "result": "NOT_REACHED", "independent_readbacks_required": true},
+  "capture_bundle": "NOT_CREATED_IN_DIAGNOSTIC",
+  "diagnostic": {
+    "classification": "LIVE_EXECUTOR_OPERATIONAL_DIAGNOSTIC",
+    "attempts_used": 3,
+    "maximum": 3,
+    "result": "FAIL",
+    "attempt_1": "launcher import path defect; authorization unconsumed; no resources allocated",
+    "attempt_2": "Django initialization defect; authorization unconsumed; no resources allocated",
+    "attempt_3": "backend package-name collision; authorization unconsumed; no resources allocated",
+    "post_attempt_resource_absence": "PASS",
+    "retry_20_consumed": false
+  },
+  "tests": {
+    "focused": {"passed": 27, "failed": 0, "errors": 0},
+    "backend_regression": {"total": 548, "passed": 542, "failed": 2, "errors": 4,
+      "failure_boundary": "all six failures are expected V6 protected-source drift/integrity-dependent PRECREATION failures"}
+  },
+  "integrity": {"current_generation": "V6", "current_sha256": "6f1a4499d993de3813a12ed0f8b79d392251a82dbcfae1fdaa53c892ec3b6b23", "impact": "INTEGRITY_RECONCILIATION_REQUIRED"},
+  "historical_artifacts_modified": "NONE",
+  "v5_authorization": {"status": "SUPERSEDED / UNCONSUMED / DO_NOT_CONSUME", "sha256": "0ca3036204c9821e17663d41e31a5734f10cd6a4c8b9f8d4d7f6585db5c1135b"},
+  "formal_v6_v7_retry20_authorization_created": false,
+  "retry20_executed": false,
+  "phase31_5": "EXECUTION_HELD",
+  "exact_next_step": "Reconcile the material sources into a V7 successor integrity generation."
+}

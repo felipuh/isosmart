@@ -1,0 +1,43 @@
+{
+  "artifact_schema": "phase31.4-clean-retry-7-v2.5-live-blocker/v1",
+  "execution_label": "LIVE_NATIVE_EXECUTION",
+  "retry": "Phase 31.4 V2.5 Clean Retry 7",
+  "verdict": "NOT_PROMOTED",
+  "p0": 0,
+  "p1": 1,
+  "blocker": {
+    "id": "P1-V25-LIVE-PRECREATION-BOUND-INPUTS-20260917",
+    "phase": "PRECREATION_INTEGRITY",
+    "native_executor": "_NativePhaseExecutor",
+    "native_source": "knowledge-layer-rule-root-bootstrap-producer/v1",
+    "service_method": "KnowledgeLayerCommandService.publish_knowledge_layer_rule",
+    "contract_member_or_field": "509 CAPTURE_NATIVE_OUTPUT fields; root bootstrap phase inputs",
+    "expected_state": "Concrete phase executor supplies contract-bound inputs and invokes the native service, persists and rereads its output.",
+    "actual_state": "NativePhaseRegistry executor invoked the native method with no bound metadata; required keyword inputs identity.rule_id, actor_id and trace_id were absent.",
+    "error": "V25RuntimeError: native phase invocation requires bound inputs: PRECREATION_INTEGRITY -> KnowledgeLayerCommandService.publish_knowledge_layer_rule",
+    "remediation": "Bind the authoritative contract/runtime inputs into the native phase context and implement the phase-owned persistence/reread capture before another live retry. Do not add external business callbacks or synthetic values."
+  },
+  "execution": {
+    "postgresql_18_6": "PASS",
+    "migrations": "PASS",
+    "factory": "PASS",
+    "phases_executed": 0,
+    "phases_passed": 0,
+    "phases_failed": 1,
+    "captures_resolved": 0,
+    "captures_unresolved": 509,
+    "native_authority": "NOT_EXECUTED",
+    "a3": "NOT_EXECUTED",
+    "references": "NOT_EXECUTED",
+    "invariants": "NOT_EXECUTED",
+    "transactions": "NOT_EXECUTED",
+    "event_outbox": "NOT_EXECUTED",
+    "resolved_graph": "NOT_MATERIALIZED",
+    "exact_comparison": "NOT_EXECUTED"
+  },
+  "preservation": {
+    "v24_sha256": "a102d278bf2e5ca6e9b8bf282f5402a54f52d4690beed2ecbed5145c56539387",
+    "shared_systems_touched": false,
+    "previous_retries_overwritten": false
+  }
+}

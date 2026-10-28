@@ -1,0 +1,68 @@
+{
+  "artifact_schema": "phase31.4-v2.5-current-baseline-reestablishment/v1",
+  "verdict": "CURRENT_BASELINE_REESTABLISHED",
+  "generation": "V2.5_CURRENT_SOURCE_BASELINE",
+  "why_rebaseline_was_necessary": "The exact predecessor runtime bytes were not found, so the current runtime cannot be represented as a byte-verified continuation of V1. Current-source integrity was independently re-established without rewriting historical evidence.",
+  "provenance_continuity": "NOT_PROVEN",
+  "predecessor_recovery": "NOT_FOUND",
+  "historical_uncertainty": [
+    "The predecessor blob with SHA-256 5be7650ac78eae653f4e6cd0b656ab0ccd9556a75f9c41cb3edd512d6a012cfd remains unavailable.",
+    "An exact predecessor-to-current diff is unavailable.",
+    "The current runtime cannot be historically attributed only to verifier remediation."
+  ],
+  "historical_truth": {
+    "v1_preserved": true,
+    "v1_manifest": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V1.json",
+    "recovery_record": "PHASE31_4_V2_5_RUNTIME_PREDECESSOR_RECOVERY_V1.json",
+    "retry16_artifacts_modified": false,
+    "historical_promotion_closure_modified": false,
+    "historical_evidence_reconciliation_modified": false,
+    "v2_4_sha256": "a102d278bf2e5ca6e9b8bf282f5402a54f52d4690beed2ecbed5145c56539387",
+    "historical_integrity": "PASS"
+  },
+  "current_protected_source_integrity": {
+    "generation_path": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V2.json",
+    "protected_source_count": 21,
+    "present_source_count": 21,
+    "all_source_hashes_match": true,
+    "runtime_sha256": "7ed7430abe798d6fd31b2bc27344abde35a7ab7df9e2ef13b51f1ddb7b03fd00",
+    "verifier_helper": {
+      "path": "backend/foundation/phase31_4_v2_5_verifier_remediation.py",
+      "sha256": "a716e139f15d4b3f247ec4db56b339bad0e8a29ef06030a00aa9542e7195a35f",
+      "protected": true
+    },
+    "migrations": {"expected": 24,"present": 24,"hashes_match": true,"pending": false,"makemigrations_check": "PASS"}
+  },
+  "verifier_remediation_review": {
+    "references": [
+      "docs/governance/evidence/PHASE31_4_V2_5_VERIFIER_REMEDIATION_V1.json",
+      "docs/transformation/PHASE31_4_V2_5_VERIFIER_REMEDIATION_REPORT.md"
+    ],
+    "confirmed_by_static_and_focused_review": [
+      "real PhaseExecutionResult propagation and no default PASS",
+      "explicit executor/assertion/evidence contract",
+      "live capture/readback retention and placeholder rejection",
+      "resolved graph materialization and independent exact comparison",
+      "event/outbox/audit verification and security probes",
+      "teardown separation, append-only evidence, and SHA manifest support"
+    ],
+    "historical_attribution": "NOT_PROVABLE_WITHOUT_PREDECESSOR_BYTES",
+    "unrelated_drift_absence": "NOT_INFERRED"
+  },
+  "validation": {
+    "focused_verifier_tests": {"command":"./.venv/bin/python manage.py test foundation.test_phase31_4_v2_5_runtime foundation.test_phase31_4_v2_5_verifier_remediation -v 1","result":"PASS","tests":29,"failures":0,"errors":0},
+    "historical_integrity_tests": {"result":"PASS","tests":3,"failures":0,"errors":0},
+    "generation_integrity_tests": {"result":"PASS","tests":8,"failures":0,"errors":0},
+    "full_backend_regression": {"command":"./.venv/bin/python manage.py test -v 0","result":"PASS","tests":500,"failures":0,"errors":0}
+  },
+  "p0_p1": {
+    "p0": "P0_CLOSED_BY_EXPLICIT_PROVENANCE_DISCONTINUITY_AND_REBASELINE",
+    "p1": "NO_CURRENT_BASELINE_INTEGRITY_FINDING; separate disposable evidence review remains governed",
+    "forbidden_dispositions_not_used": ["PREDECESSOR_RECOVERED", "DRIFT_PROVEN_EXPECTED"]
+  },
+  "phase31_5": "EXECUTION_HELD",
+  "live_retry_executed": "NO",
+  "disposable_evidence_run": "READY_FOR_SEPARATE_DISPOSABLE_EVIDENCE_RUN_REVIEW",
+  "exact_next_step": "Obtain separate governance approval for one disposable evidence-only run review; do not execute it as part of this baseline re-establishment.",
+  "historical_artifacts_modified": "NONE"
+}

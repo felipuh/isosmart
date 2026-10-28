@@ -1,0 +1,66 @@
+{
+  "artifact_schema": "phase31.4-v2.5-v11-focused-outbox-delivery-projection/v1",
+  "status": "PASS",
+  "classification": "FOCUSED_TEST_ONLY_NOT_ATTEMPT_3",
+  "run_id": "Phase 31.4 V2.5 V11 focused outbox delivery projection 20260929",
+  "resources": {
+    "adminapps_database": "p314_v11_outbox_20260929_admin",
+    "isosmart_database": "p314_v11_outbox_20260929_iso",
+    "adminapps_port": 36417,
+    "isosmart_port": 46225,
+    "isosmart_http_port": 48421,
+    "postgresql_version": "18.6"
+  },
+  "bootstrap": {
+    "adminapps": "PASS",
+    "isosmart": "PASS",
+    "adminapps_migrations_pending": 0,
+    "isosmart_migrations_pending": 0,
+    "roles_verified": true,
+    "session_configuration_verified": true
+  },
+  "authority": {
+    "tenant_id": "71c8aea8-6c99-4b7a-ad41-d12b6b65afb4",
+    "actor_id": "5892274d-860b-42b3-abc6-14b040f48cb4"
+  },
+  "outbox_before_delivery": {
+    "pending_count": 1,
+    "event_id": "f3264172-22b6-4c0d-baae-34c88caf07ee",
+    "event_type": "tenant.provisioned",
+    "source_version": 1,
+    "aggregate_id": "71c8aea8-6c99-4b7a-ad41-d12b6b65afb4",
+    "adminapps_tenant_id": "71c8aea8-6c99-4b7a-ad41-d12b6b65afb4",
+    "payload_fields": ["adminapps_status", "display_name", "lifecycle_status"]
+  },
+  "delivery": {
+    "command": "manage.py deliver_tenant_events --limit 10",
+    "first_attempt": "HTTP 503 projector_not_configured due isolated runtime configuration",
+    "corrective_action": "configured FOUNDATION_PROJECTOR_ROLE and FOUNDATION_PROJECTOR_PASSWORD only in isolated runtime",
+    "final_delivery": "PASS",
+    "final_http_status": 201,
+    "event_attempts": 2
+  },
+  "outbox_after_delivery": {
+    "status": "delivered",
+    "pending_count": 0,
+    "event_id": "f3264172-22b6-4c0d-baae-34c88caf07ee"
+  },
+  "ingress_receipt": {
+    "event_id": "f3264172-22b6-4c0d-baae-34c88caf07ee",
+    "adminapps_tenant_id": "71c8aea8-6c99-4b7a-ad41-d12b6b65afb4",
+    "status": "processed",
+    "projection_id": "976bb425-ae9b-4d43-9f98-89ba389b544a",
+    "source_version": 1
+  },
+  "tenant_projection_after_delivery": {
+    "id": "976bb425-ae9b-4d43-9f98-89ba389b544a",
+    "adminapps_tenant_id": "71c8aea8-6c99-4b7a-ad41-d12b6b65afb4",
+    "source_version": 1,
+    "source_event_id": "f3264172-22b6-4c0d-baae-34c88caf07ee",
+    "lifecycle_status": "active",
+    "provisioning_status": "pending",
+    "identity_match": true
+  },
+  "attempt_3": "NOT_EXECUTED",
+  "raw_credentials_persisted": false
+}

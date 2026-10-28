@@ -1,0 +1,64 @@
+{
+  "artifact_schema": "phase31.4-clean-retry-4-v2.5-live-blocker/v1",
+  "execution_label": "LIVE_NATIVE_EXECUTION",
+  "verdict": "NOT_PROMOTED",
+  "p0": 0,
+  "p1": 2,
+  "pre_live_gate": {
+    "stage_a": "PASS",
+    "runtime_tests": "PASS",
+    "runtime_test_count": 5,
+    "contract_members": 118,
+    "contract_fields": 1664,
+    "v24_sha256": "a102d278bf2e5ca6e9b8bf282f5402a54f52d4690beed2ecbed5145c56539387"
+  },
+  "environment": {
+    "container_id": "2bbf00bd3537b0f0fd6cced689be56c4dd410f5e2b82a54dc7b4f37b6c42b994",
+    "container_name": "phase31_4_clean_retry4_20260917",
+    "database_name": "phase31_4_clean_retry4",
+    "postgresql_version": "18.6 (Debian 18.6-1.pgdg13+2)",
+    "image_digest": "sha256:7341002d2b8c7c5bdd7542a671a95b36196c0b5b888daf454ae4fc33ba5346d7",
+    "image_id": "a6638641707cdf047e5d5c2781f437e2e809323cab22c70b280be8389fbb7878",
+    "isolated": true,
+    "empty_before_migrations": {
+      "application_tables": 0,
+      "application_rows": 0
+    },
+    "teardown": "PASS",
+    "container_present_after_teardown": false
+  },
+  "blockers": [
+    {
+      "id": "P1-V25-NATIVE-OPERATION-REGISTRY-INCOMPLETE-20260917",
+      "classification": "runtime_adapter_defect",
+      "required_native_sources": 16,
+      "registered_native_bindings": 4,
+      "capture_fields": 509,
+      "message": "V2.5 CAPTURE_NATIVE_OUTPUT graph resolves to 16 distinct native sources, but NativeOperationRegistry.product_default registers only 4 bindings. Clean Retry 4 stopped before native execution."
+    },
+    {
+      "id": "P1-V25-MIGRATION-CHAIN-INCOMPLETE-20260917",
+      "classification": "environment_or_migration_gate_defect",
+      "migration_rows_observed": 49,
+      "unapplied_migrations_observed": 42,
+      "post_migration_application_tables": 38,
+      "post_migration_application_rows": 50,
+      "unexpected_nonempty_table": "public.organizations=1",
+      "message": "The migration command did not produce a fully applied clean graph; showmigrations --plan reported 42 unapplied migrations and a non-empty application seed row was observed."
+    }
+  ],
+  "execution": {
+    "clean_retry_4": "NOT_EXECUTED",
+    "native_operations": "NOT_EXECUTED",
+    "native_authority": "NOT_EXECUTED",
+    "native_captures": "NOT_EXECUTED",
+    "resolved_graph": "NOT_MATERIALIZED",
+    "exact_comparison": "NOT_EXECUTED",
+    "promotion": "NOT_ELIGIBLE"
+  },
+  "teardown": {
+    "postgresql_container_destroyed": true,
+    "temporary_password_persisted_in_evidence": false,
+    "shared_systems_touched": false
+  }
+}

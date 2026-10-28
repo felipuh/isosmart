@@ -1,0 +1,66 @@
+{
+  "artifact_schema": "phase31.4-retry9-sha256-manifest/v1",
+  "artifacts": [
+    {
+      "path": "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_9_ALLOCATION.json",
+      "sha256": "53de1edcfb1ba7dec45efa883fde8919e66cea63042f37c2ee74f0ad5507e21c"
+    },
+    {
+      "path": "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_9_PRELIVE_GATE.json",
+      "sha256": "b18ca8bb098c06a59bfb4dad86501009a1c4a27838c5b1cb75cdc242dd2106c7"
+    },
+    {
+      "path": "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_9_RESOURCE_MANIFEST.json",
+      "sha256": "21e21a013e4417303bf7f53bc4ee8418731c2999bfc6253b4036cbee69e10430"
+    },
+    {
+      "path": "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_9_ADMINAPPS_MIGRATIONS.log",
+      "sha256": "642e4f1806409323b31941157e06e779a9736881ef7240fc9e47087992f308cf"
+    },
+    {
+      "path": "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_9_ISOSMART_MIGRATIONS.log",
+      "sha256": "7d2d0f79551347bc69f1543eb8932a20a0e846d21cb5b9534e5840bebb73e3ce"
+    },
+    {
+      "path": "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_9_MIGRATIONS.json",
+      "sha256": "f12c9a502dc1a71dc066bce18a384e6157e86adda07b1453b779f02fdb22c798"
+    },
+    {
+      "path": "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_9_LIVE_BLOCKER.json",
+      "sha256": "316766ec8a9bafaf5f0c951d0eaa0e4e14d4b95a5281e386aa0c640795bd8c69"
+    },
+    {
+      "path": "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_9_CLOSURE.json",
+      "sha256": "a05ef7656077416d5bbbe5a02b4c5192d15aa6e9465a8e493146a77c91d3b102"
+    },
+    {
+      "path": "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_9_REPORT.md",
+      "sha256": "9069c00da43fd43c7e55de997bcbdd4de06a2ae4a6ae8f086aa3e9da563b74b3"
+    },
+    {
+      "path": "docs/governance/tools/retry9_resources.py",
+      "sha256": "a52d870d7b529836599084f454b8b24db33b6ed5c711e8cbf577f165cafb0a6e"
+    }
+  ],
+  "baseline_hashes": {
+    "v24": "a102d278bf2e5ca6e9b8bf282f5402a54f52d4690beed2ecbed5145c56539387",
+    "v25_contract": "12f048fcada1a36d02d26ff0e4efaa247d04687161c7d1dcb6cbc196ae69001b"
+  },
+  "execution_mode": "LIVE_NATIVE_EXECUTION",
+  "generated_at": "2026-09-18T14:17:42.540205+00:00",
+  "not_produced_due_to_migration_failure": [
+    "AdminApps tenant/event evidence",
+    "authenticated ingress evidence",
+    "TenantProjection evidence",
+    "QMS Organization evidence",
+    "upstream smoke evidence",
+    "native phase execution evidence",
+    "native captures evidence",
+    "authority/A3 evidence",
+    "transactions evidence",
+    "event/outbox/audit evidence",
+    "resolved live graph",
+    "exact comparison"
+  ],
+  "retry_tag": "CLEAN_RETRY_9"
+}

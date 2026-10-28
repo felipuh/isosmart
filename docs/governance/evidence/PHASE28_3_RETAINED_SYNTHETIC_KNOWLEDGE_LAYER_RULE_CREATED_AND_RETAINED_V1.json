@@ -1,0 +1,659 @@
+{
+  "candidate": {
+    "full_material_hash": "caa24592b509334af4cd60fd7d3f3c43989d864d3f1c6e6d0d3bf83a81871f81",
+    "id": "01a0682b-dfc8-7b49-a601-f9bda29a70a5",
+    "knowledge_layer_id": "43329c0b-5aaf-5bee-b944-41746fcededb",
+    "lifecycle_hash": "0adfd8075cc720140c6e1f0393d286799edac8f352efd9f1969816be83c51e52",
+    "lineage_id": "da72872a-3f3c-5fcd-86f7-0ed33e453522",
+    "predecessor_rule_id": "da72872a-3f3c-5fcd-86f7-0ed33e453522",
+    "semantic_fingerprint": "8465956c1daf27a9838bc1bfb468af3f518ae255b4662b2df40e7b8648516192",
+    "version": "sN+1"
+  },
+  "candidate_classification": "NEW_DETERMINISTIC_SYNTHETIC_PUBLICATION_POC_LINEAGE",
+  "canonical_root_material": {
+    "certifiability_classification": "non_certifiable_guidance",
+    "evidence_expectation": {
+      "normative": false,
+      "required": [
+        "synthetic_fixture_reference"
+      ]
+    },
+    "id": "da72872a-3f3c-5fcd-86f7-0ed33e453522",
+    "knowledge_layer_id": "43329c0b-5aaf-5bee-b944-41746fcededb",
+    "knowledge_layer_type": "SYNTHETIC_TEST_ONLY_SOURCE_REFERENCE_POC",
+    "lineage_id": "da72872a-3f3c-5fcd-86f7-0ed33e453522",
+    "logic_json": {
+      "fixture_only": true,
+      "operator": "source_locator_is_retained"
+    },
+    "previous_revision_id": null,
+    "rule_key": "publication-poc.synthetic-source-reference",
+    "source_reference": "iso-smart-synthetic-poc-source-ref-v1:6ec35e4a-bb8a-592b-bc6a-420691f4e8e3:efe61114215914ac486011e4efd9977b4fa2f1c34fa6fad67012a46ced85ab4f:fixture/element/A",
+    "source_reference_scheme": "iso-smart-synthetic-poc-source-ref-v1",
+    "standard_edition_id": "6ec35e4a-bb8a-592b-bc6a-420691f4e8e3",
+    "standard_edition_source_hash": "efe61114215914ac486011e4efd9977b4fa2f1c34fa6fad67012a46ced85ab4f",
+    "standard_id": "04e7e8ec-f6c8-5875-8a77-55c9720a27e5",
+    "version": "sN"
+  },
+  "canonical_rule_material": {
+    "certifiability_classification": "non_certifiable_guidance",
+    "evidence_expectation": {
+      "normative": false,
+      "required": [
+        "synthetic_fixture_reference"
+      ]
+    },
+    "id": "01a0682b-dfc8-7b49-a601-f9bda29a70a5",
+    "knowledge_layer_id": "43329c0b-5aaf-5bee-b944-41746fcededb",
+    "knowledge_layer_type": "SYNTHETIC_TEST_ONLY_SOURCE_REFERENCE_POC",
+    "lineage_id": "da72872a-3f3c-5fcd-86f7-0ed33e453522",
+    "logic_json": {
+      "fixture_only": true,
+      "operator": "source_locator_is_retained"
+    },
+    "previous_revision_id": "da72872a-3f3c-5fcd-86f7-0ed33e453522",
+    "rule_key": "publication-poc.synthetic-source-reference",
+    "source_reference": "iso-smart-synthetic-poc-source-ref-v1:6ec35e4a-bb8a-592b-bc6a-420691f4e8e3:efe61114215914ac486011e4efd9977b4fa2f1c34fa6fad67012a46ced85ab4f:fixture/element/B",
+    "source_reference_scheme": "iso-smart-synthetic-poc-source-ref-v1",
+    "standard_edition_id": "6ec35e4a-bb8a-592b-bc6a-420691f4e8e3",
+    "standard_edition_source_hash": "efe61114215914ac486011e4efd9977b4fa2f1c34fa6fad67012a46ced85ab4f",
+    "standard_id": "04e7e8ec-f6c8-5875-8a77-55c9720a27e5",
+    "version": "sN+1"
+  },
+  "canonicalization_version": "iso-smart-retained-evidence-canonical-json-v1",
+  "correlation_ids": [
+    "81acfa0f-8201-4305-bf03-d309566f9d7f",
+    "01a0682b-dfa3-779c-89cd-1814e9209527"
+  ],
+  "created_at": "2026-09-03T16:48:20.895565+00:00",
+  "curator_evidence": {
+    "id": "471971df-986f-5a99-ad15-1838f5772e34",
+    "material": {
+      "actor_external_id": "1dab9ba5-5c8a-504c-81b8-0ac70f15af14",
+      "authority_decision_hash": "a3ae3476b4ebf8ca121e5ca569fbff38880f34ebc188ef0c82be30db056a0f47",
+      "authority_decision_id": "355f6a0f-ef95-56de-9416-0a68bbf09d49",
+      "candidate_id": "01a0682b-dfc8-7b49-a601-f9bda29a70a5",
+      "candidate_material_hash": "caa24592b509334af4cd60fd7d3f3c43989d864d3f1c6e6d0d3bf83a81871f81",
+      "decision": "VALIDATED_FOR_LATER_PUBLICATION_GATE_ONLY",
+      "id": "471971df-986f-5a99-ad15-1838f5772e34",
+      "semantic_fingerprint": "8465956c1daf27a9838bc1bfb468af3f518ae255b4662b2df40e7b8648516192",
+      "server_resolved": true,
+      "source_manifest_hash": "cf92c267439f94f302e67888665dbf99392592341a808f5fc00f4c32ef23dc24",
+      "source_reference_hash": "0ad437944a111b3593ba29f52466416eed9b4f0b8e7e9247c082575df0d659b6",
+      "valid_at": "2026-09-03T16:48:21.033281+00:00"
+    },
+    "material_hash": "7f4defd4a2104c2801024a6e57a7749d0db288922d384af09662ee13f972ed5d"
+  },
+  "current_leaf_proof": {
+    "candidate_version": "sN+1",
+    "leaf_ids": [
+      "01a0682b-dfc8-7b49-a601-f9bda29a70a5"
+    ],
+    "lineage_id": "da72872a-3f3c-5fcd-86f7-0ed33e453522",
+    "selection_method": "EXACT_PREDECESSOR_GRAPH",
+    "unique": true
+  },
+  "evidence_state": "CREATED_AND_RETAINED",
+  "expected_state_token": "51881ce5681bf6579d8e96fcb77df82f27bc439b8860518afd5e80f973375c10",
+  "exported_at": "2026-09-03T16:48:21.033281+00:00",
+  "fingerprint_version": "iso-smart-knowledge-layer-rule-substantive-fingerprint-v1",
+  "future_publisher_authority": {
+    "id": "903da982-daa5-5e4c-b300-7f4508b1919b",
+    "material": {
+      "access_active": true,
+      "actor_external_id": "8069fbeb-0ef6-582c-8f3b-ff88e606c869",
+      "authority_context_version": "adminapps-phase28.3-future-publisher-eligibility/v1",
+      "authority_decision_hash": "419f09824808f8a5eeb2fef479d64a108550bd57fcb6e2171afbf0a1dfa7f90e",
+      "authority_decision_id": "b595649d-99e1-5c32-8d3b-e7842e3e0905",
+      "authority_type": "PUBLICATION_POC_ELIGIBILITY_AUTHORITY",
+      "expires_at": "2026-09-03T17:18:21.033281+00:00",
+      "global_governance": true,
+      "id": "903da982-daa5-5e4c-b300-7f4508b1919b",
+      "mfa_verified": true,
+      "permissions": [
+        "qms.knowledge_layer_rule.publish"
+      ],
+      "publication_invoked": false,
+      "resolved_at": "2026-09-03T16:48:21.033281+00:00",
+      "server_resolved": true
+    },
+    "material_hash": "3f34bf5171aeeaef8449e2c5d5ae46444200134d480fe4be5fb86ffe40aecab9"
+  },
+  "generator_contract_version": "governed-target-application-evidence-export/v1",
+  "governance_chain": {
+    "application_authorization": {
+      "decision_id": "a62ad393-4612-4e93-899f-9b9dbedb5c50",
+      "id": "e16cfb5a-0c73-4ca3-aa54-4e0103cf9fdb",
+      "material": {
+        "authority_context_version": "adminapps-phase28.3-authorization/v1",
+        "authority_decision_reference": "phase28.3-application-authorization",
+        "authorization_status": "authorized",
+        "authorizer_external_id_snapshot": "b71e6996-1e15-5aef-b73b-db331b01305f",
+        "authorizer_user_projection_id": "936ffd5c-3739-5fe6-b301-cbc29f7f3bf5",
+        "canonical_delta_id": "4ea69ace-5a14-4682-9837-da47c20e8135",
+        "canonicalization_version": "iso-smart-learning-delta-canonical-v1",
+        "capability_id": "learning.knowledge_layer_rule.source_reference.correct",
+        "capability_version": "v1",
+        "correlation_id": null,
+        "created_at": "2026-09-03T16:48:19.913254+00:00",
+        "delta_hash": "9ccf9b3a7ae835b774dd11133f1932847ec7d1762934065128594971cf7fdf86",
+        "delta_schema_version": "learning-knowledge-layer-rule-source-reference-correction-delta-v1",
+        "governance_scope": "global",
+        "id": "e16cfb5a-0c73-4ca3-aa54-4e0103cf9fdb",
+        "idempotency_hash": "c6fc7e62655eb0eaf24effb92f7a365047b736c725278e39b80016c7b4cdf6dd",
+        "idempotency_key": "phase28.3-retained-synthetic-candidate-v1",
+        "learning_proposal_decision_id": "a62ad393-4612-4e93-899f-9b9dbedb5c50",
+        "learning_proposal_id": "81acfa0f-8201-4305-bf03-d309566f9d7f",
+        "operation_id": "learning.knowledge_layer_rule.source_reference.correct",
+        "operation_version": "v1",
+        "organization_id": "aaaaaaaa-1000-4000-8000-000000000001",
+        "policy_id": "governed-learning-proposal-review-application-boundary/v1",
+        "proposal_material_hash": "ad19e832f3c1beeae08723fbdd3363e5883ee5a9a64c4ea6fe05f72a026d59fe",
+        "proposal_revision_snapshot": 1,
+        "target_hash": "92c19d4d8996f0345561eeb103b8a9704c20037b9667e22c80872a1c86c68966",
+        "target_id": "da72872a-3f3c-5fcd-86f7-0ed33e453522",
+        "target_lineage_id": "da72872a-3f3c-5fcd-86f7-0ed33e453522",
+        "target_type": "KnowledgeLayerRule",
+        "target_version": "sN",
+        "tenant_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+        "trace_id": "d11c8ea9-2f78-5393-852a-e15077b7f7cc"
+      },
+      "material_hash": "d429630779f1346c46294774e53b026cd6d81f215cc93394a55b8a5f94829e69",
+      "operation_id": "learning.knowledge_layer_rule.source_reference.correct",
+      "operation_version": "v1",
+      "status": "VALID",
+      "target_rule_id": "da72872a-3f3c-5fcd-86f7-0ed33e453522"
+    },
+    "application_receipt": {
+      "application_authorization_id": "e16cfb5a-0c73-4ca3-aa54-4e0103cf9fdb",
+      "canonical_delta_id": "4ea69ace-5a14-4682-9837-da47c20e8135",
+      "decision_id": "a62ad393-4612-4e93-899f-9b9dbedb5c50",
+      "external_effects": false,
+      "id": "01a0682b-dfa3-779c-89cd-1814e9209527",
+      "material": {
+        "after_hash": "f3d6bdb273e8cad109ce8fd8a21c58e3a03c452485e242601ab7bdeef81aa0f3",
+        "after_rule_id": "01a0682b-dfc8-7b49-a601-f9bda29a70a5",
+        "after_version": "sN+1",
+        "application_actor": "d91b730d-5d5b-5a64-a25c-a0318385a6eb",
+        "application_audit_id": "01a0682b-dfa3-78a4-94a4-509b92b02b36",
+        "application_identity": "eb26ea7b1d936fd56ea5df62c34fa1da90540b06fbf49f5f11352201cd3c377a",
+        "authorization_id": "e16cfb5a-0c73-4ca3-aa54-4e0103cf9fdb",
+        "before_hash": "92c19d4d8996f0345561eeb103b8a9704c20037b9667e22c80872a1c86c68966",
+        "before_rule_id": "da72872a-3f3c-5fcd-86f7-0ed33e453522",
+        "before_version": "sN",
+        "canonicalization_version": "iso-smart-learning-delta-canonical-v1",
+        "compensation_eligible": true,
+        "created_at": "2026-09-03T16:48:20.895565+00:00",
+        "decision_id": "a62ad393-4612-4e93-899f-9b9dbedb5c50",
+        "delta_hash": "9ccf9b3a7ae835b774dd11133f1932847ec7d1762934065128594971cf7fdf86",
+        "delta_schema_version": "learning-knowledge-layer-rule-source-reference-correction-delta-v1",
+        "external_effects": false,
+        "forward_receipt_id": null,
+        "id": "01a0682b-dfa3-779c-89cd-1814e9209527",
+        "operation_id": "learning.knowledge_layer_rule.source_reference.correct",
+        "operation_version": "v1",
+        "organization_id": "aaaaaaaa-1000-4000-8000-000000000001",
+        "predecessor_id": "da72872a-3f3c-5fcd-86f7-0ed33e453522",
+        "proposal_id": "81acfa0f-8201-4305-bf03-d309566f9d7f",
+        "result_published": false,
+        "result_status": "draft",
+        "review_ids": [
+          "4f27fd0b-c32c-430c-a835-63b6b619e42f"
+        ],
+        "runtime_effect_changed": false,
+        "semantic_fingerprint": "8465956c1daf27a9838bc1bfb468af3f518ae255b4662b2df40e7b8648516192",
+        "source_reference_after": "iso-smart-synthetic-poc-source-ref-v1:6ec35e4a-bb8a-592b-bc6a-420691f4e8e3:efe61114215914ac486011e4efd9977b4fa2f1c34fa6fad67012a46ced85ab4f:fixture/element/B",
+        "source_reference_before": "iso-smart-synthetic-poc-source-ref-v1:6ec35e4a-bb8a-592b-bc6a-420691f4e8e3:efe61114215914ac486011e4efd9977b4fa2f1c34fa6fad67012a46ced85ab4f:fixture/element/A",
+        "target_curation_audit_id": "01a0682b-dfa3-785f-94a4-4972005e1f38",
+        "target_event_id": "01a0682b-dfa3-77e3-b309-24aafebdfa86",
+        "target_lineage_id": "da72872a-3f3c-5fcd-86f7-0ed33e453522",
+        "target_outbox_id": "01a0682b-dfa3-782f-99ba-fe5784530e82",
+        "tenant_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+        "trace_id": "3c1f7150-52b2-575b-bdcd-3828490c8dc4"
+      },
+      "material_hash": "362a26b1f9be1cbfab9843b96875bcec6f6716e5792a4957cf8a9802e4fd98ed",
+      "operation_id": "learning.knowledge_layer_rule.source_reference.correct",
+      "operation_version": "v1",
+      "proposal_revision_id": "81acfa0f-8201-4305-bf03-d309566f9d7f",
+      "result_material_hash": "caa24592b509334af4cd60fd7d3f3c43989d864d3f1c6e6d0d3bf83a81871f81",
+      "result_published": false,
+      "result_rule_id": "01a0682b-dfc8-7b49-a601-f9bda29a70a5",
+      "result_semantic_fingerprint": "8465956c1daf27a9838bc1bfb468af3f518ae255b4662b2df40e7b8648516192",
+      "result_status": "draft",
+      "runtime_effect_changed": false,
+      "successful": true,
+      "target_rule_id": "da72872a-3f3c-5fcd-86f7-0ed33e453522"
+    },
+    "canonical_delta": {
+      "id": "4ea69ace-5a14-4682-9837-da47c20e8135",
+      "material": {
+        "canonical_bytes": "\\x7b2263616e6f6e6963616c697a6174696f6e5f76657273696f6e223a2269736f2d736d6172742d6c6561726e696e672d64656c74612d63616e6f6e6963616c2d7631222c2264656c74615f736368656d615f76657273696f6e223a226c6561726e696e672d6b6e6f776c656467652d6c617965722d72756c652d736f757263652d7265666572656e63652d636f7272656374696f6e2d64656c74612d7631222c226f7065726174696f6e5f6964223a226c6561726e696e672e6b6e6f776c656467655f6c617965725f72756c652e736f757263655f7265666572656e63652e636f7272656374222c226f7065726174696f6e5f76657273696f6e223a227631222c227061796c6f6164223a7b2263757272656e745f736f757263655f7265666572656e6365223a2269736f2d736d6172742d73796e7468657469632d706f632d736f757263652d7265662d76313a36656333356534612d626238612d353932622d626336612d3432303639316634653865333a656665363131313432313539313461633438363031316534656664393937376234666132663163333466613666616436373031326134366365643835616234663a666978747572652f656c656d656e742f41222c226e65775f736f757263655f7265666572656e6365223a2269736f2d736d6172742d73796e7468657469632d706f632d736f757263652d7265662d76313a36656333356534612d626238612d353932622d626336612d3432303639316634653865333a656665363131313432313539313461633438363031316534656664393937376234666132663163333466613666616436373031326134366365643835616234663a666978747572652f656c656d656e742f42222c227374616e646172645f65646974696f6e5f6964223a2236656333356534612d626238612d353932622d626336612d343230363931663465386533222c227374616e646172645f65646974696f6e5f736f757263655f68617368223a2265666536313131343231353931346163343836303131653465666439393737623466613266316333346661366661643637303132613436636564383561623466222c22737563636573736f725f76657273696f6e223a22734e2b31227d2c227461726765745f68617368223a2239326331396434643839393666303334353536316565623130336238613937303463323030333762393636376532326338303837326131633836633638393636222c227461726765745f6964223a2264613732383732612d336633632d356663642d383666372d306564333365343533353232222c227461726765745f6c696e656167655f6964223a2264613732383732612d336633632d356663642d383666372d306564333365343533353232222c227461726765745f74797065223a224b6e6f776c656467654c6179657252756c65222c227461726765745f76657273696f6e223a22734e227d",
+        "canonicalization_version": "iso-smart-learning-delta-canonical-v1",
+        "created_at": "2026-09-03T16:48:19.67825+00:00",
+        "delta_document": {
+          "canonicalization_version": "iso-smart-learning-delta-canonical-v1",
+          "delta_schema_version": "learning-knowledge-layer-rule-source-reference-correction-delta-v1",
+          "operation_id": "learning.knowledge_layer_rule.source_reference.correct",
+          "operation_version": "v1",
+          "payload": {
+            "current_source_reference": "iso-smart-synthetic-poc-source-ref-v1:6ec35e4a-bb8a-592b-bc6a-420691f4e8e3:efe61114215914ac486011e4efd9977b4fa2f1c34fa6fad67012a46ced85ab4f:fixture/element/A",
+            "new_source_reference": "iso-smart-synthetic-poc-source-ref-v1:6ec35e4a-bb8a-592b-bc6a-420691f4e8e3:efe61114215914ac486011e4efd9977b4fa2f1c34fa6fad67012a46ced85ab4f:fixture/element/B",
+            "standard_edition_id": "6ec35e4a-bb8a-592b-bc6a-420691f4e8e3",
+            "standard_edition_source_hash": "efe61114215914ac486011e4efd9977b4fa2f1c34fa6fad67012a46ced85ab4f",
+            "successor_version": "sN+1"
+          },
+          "target_hash": "92c19d4d8996f0345561eeb103b8a9704c20037b9667e22c80872a1c86c68966",
+          "target_id": "da72872a-3f3c-5fcd-86f7-0ed33e453522",
+          "target_lineage_id": "da72872a-3f3c-5fcd-86f7-0ed33e453522",
+          "target_type": "KnowledgeLayerRule",
+          "target_version": "sN"
+        },
+        "delta_hash": "9ccf9b3a7ae835b774dd11133f1932847ec7d1762934065128594971cf7fdf86",
+        "delta_schema_version": "learning-knowledge-layer-rule-source-reference-correction-delta-v1",
+        "id": "4ea69ace-5a14-4682-9837-da47c20e8135",
+        "learning_proposal_id": "81acfa0f-8201-4305-bf03-d309566f9d7f",
+        "operation_id": "learning.knowledge_layer_rule.source_reference.correct",
+        "operation_version": "v1",
+        "organization_id": "aaaaaaaa-1000-4000-8000-000000000001",
+        "target_hash": "92c19d4d8996f0345561eeb103b8a9704c20037b9667e22c80872a1c86c68966",
+        "target_id": "da72872a-3f3c-5fcd-86f7-0ed33e453522",
+        "target_lineage_id": "da72872a-3f3c-5fcd-86f7-0ed33e453522",
+        "target_type": "KnowledgeLayerRule",
+        "target_version": "sN",
+        "tenant_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
+      },
+      "material_hash": "cecec08774487abe50f22f230d08df13698f2458e24338c839e052e6bcad8209",
+      "operation_id": "learning.knowledge_layer_rule.source_reference.correct",
+      "operation_version": "v1",
+      "proposal_revision_id": "81acfa0f-8201-4305-bf03-d309566f9d7f",
+      "target_rule_id": "da72872a-3f3c-5fcd-86f7-0ed33e453522"
+    },
+    "decision": {
+      "canonical_delta_id": "4ea69ace-5a14-4682-9837-da47c20e8135",
+      "id": "a62ad393-4612-4e93-899f-9b9dbedb5c50",
+      "material": {
+        "approver_external_id_snapshot": "02d02d75-1d97-5dc3-b494-50e83335492e",
+        "approver_user_projection_id": "c59f04e4-1943-5026-bfac-5e1ee2071352",
+        "authority_context_version": "adminapps-phase28.3-decision/v1",
+        "authority_decision_reference": "phase28.3-decision-authority",
+        "canonical_delta_id": "4ea69ace-5a14-4682-9837-da47c20e8135",
+        "canonicalization_version": "iso-smart-learning-delta-canonical-v1",
+        "correlation_id": null,
+        "created_at": "2026-09-03T16:48:19.838131+00:00",
+        "decision_identity_hash": "8d0c7dad8ca9fee8e9b4e44a70f60fb860ca81f1105c2b77d1bdd28d9a4cf11a",
+        "delta_hash": "9ccf9b3a7ae835b774dd11133f1932847ec7d1762934065128594971cf7fdf86",
+        "delta_schema_version": "learning-knowledge-layer-rule-source-reference-correction-delta-v1",
+        "governance_scope": "global",
+        "id": "a62ad393-4612-4e93-899f-9b9dbedb5c50",
+        "learning_proposal_id": "81acfa0f-8201-4305-bf03-d309566f9d7f",
+        "operation_id": "learning.knowledge_layer_rule.source_reference.correct",
+        "operation_version": "v1",
+        "organization_id": "aaaaaaaa-1000-4000-8000-000000000001",
+        "outcome": "approved_for_application",
+        "policy_id": "governed-learning-proposal-review-application-boundary/v1",
+        "proposal_material_hash": "ad19e832f3c1beeae08723fbdd3363e5883ee5a9a64c4ea6fe05f72a026d59fe",
+        "proposal_predecessor_id_snapshot": null,
+        "proposal_revision_snapshot": 1,
+        "rationale": "Approve only one inert synthetic draft successor.",
+        "review_ids_snapshot": [
+          "4f27fd0b-c32c-430c-a835-63b6b619e42f"
+        ],
+        "review_set_hash": "d46b341e838917fcd05d9bc292d117c171afa14612ccbe99ba0c9d0643b7c6cf",
+        "target_hash": "92c19d4d8996f0345561eeb103b8a9704c20037b9667e22c80872a1c86c68966",
+        "target_id": "da72872a-3f3c-5fcd-86f7-0ed33e453522",
+        "target_lineage_id": "da72872a-3f3c-5fcd-86f7-0ed33e453522",
+        "target_type": "KnowledgeLayerRule",
+        "target_version": "sN",
+        "tenant_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+        "trace_id": "16313b4b-835b-583a-b0d8-6d5025df0ade"
+      },
+      "material_hash": "7e9a1d0cbd3dd00e3bdf62edbdb788d7b0d76c2672a2c828d7b6e886493d1474",
+      "outcome": "APPROVED",
+      "proposal_revision_id": "81acfa0f-8201-4305-bf03-d309566f9d7f"
+    },
+    "domain_events": [
+      {
+        "id": "01a0682b-dfa3-77e3-b309-24aafebdfa86",
+        "material": {
+          "aggregate_id": "01a0682b-dfc8-7b49-a601-f9bda29a70a5",
+          "aggregate_version": "sN+1",
+          "event_type": "knowledge_layer_rule.source_reference_corrected",
+          "id": "01a0682b-dfa3-77e3-b309-24aafebdfa86",
+          "occurred_at": "2026-09-03T16:48:20.895565+00:00",
+          "payload": {
+            "after_rule_id": "01a0682b-dfc8-7b49-a601-f9bda29a70a5",
+            "before_rule_id": "da72872a-3f3c-5fcd-86f7-0ed33e453522",
+            "delta_hash": "9ccf9b3a7ae835b774dd11133f1932847ec7d1762934065128594971cf7fdf86",
+            "external_effects": false,
+            "lineage_id": "da72872a-3f3c-5fcd-86f7-0ed33e453522",
+            "result_published": false,
+            "result_status": "draft",
+            "runtime_effect_changed": false,
+            "scope": "global",
+            "semantic_hash": "8465956c1daf27a9838bc1bfb468af3f518ae255b4662b2df40e7b8648516192"
+          },
+          "payload_hash": "a4df27fe4b225a06c5fc9bb20866252128b78c6f29d272a5b7110a009fac991c",
+          "schema_version": 1,
+          "trace_id": "3c1f7150-52b2-575b-bdcd-3828490c8dc4"
+        },
+        "material_hash": "7a703aa9f6a63fd6ea1c59ddce892ddc3af4cb1993367dc8b0e0aab86bcf34bb",
+        "receipt_id": "01a0682b-dfa3-779c-89cd-1814e9209527",
+        "result_rule_id": "01a0682b-dfc8-7b49-a601-f9bda29a70a5"
+      }
+    ],
+    "immutable_audits": [
+      {
+        "id": "01a0682b-dfa3-78a4-94a4-509b92b02b36",
+        "material": {
+          "actor_id": "d91b730d-5d5b-5a64-a25c-a0318385a6eb",
+          "authorization_id": "e16cfb5a-0c73-4ca3-aa54-4e0103cf9fdb",
+          "delta_hash": "9ccf9b3a7ae835b774dd11133f1932847ec7d1762934065128594971cf7fdf86",
+          "id": "01a0682b-dfa3-78a4-94a4-509b92b02b36",
+          "occurred_at": "2026-09-03T16:48:20.895565+00:00",
+          "organization_id": "aaaaaaaa-1000-4000-8000-000000000001",
+          "payload_hash": "e6410c45ab66b9bf1fcf3b2616a8f5ab89f892716952dbd21d0d3857de0484aa",
+          "receipt_id": "01a0682b-dfa3-779c-89cd-1814e9209527",
+          "semantic_hash": "8465956c1daf27a9838bc1bfb468af3f518ae255b4662b2df40e7b8648516192",
+          "target_after_id": "01a0682b-dfc8-7b49-a601-f9bda29a70a5",
+          "target_before_id": "da72872a-3f3c-5fcd-86f7-0ed33e453522",
+          "tenant_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+          "trace_id": "3c1f7150-52b2-575b-bdcd-3828490c8dc4"
+        },
+        "material_hash": "a27bf91345537beb6e727e05e15e3258abad8e9ee6b3718fe618a3d9cdc9a9ef",
+        "receipt_id": "01a0682b-dfa3-779c-89cd-1814e9209527"
+      }
+    ],
+    "learning_proposal_revision": {
+      "id": "81acfa0f-8201-4305-bf03-d309566f9d7f",
+      "learning_signal_id": "b11f6425-5ae5-4865-83da-d4811be8787f",
+      "material": {
+        "actor_external_id_snapshot": "24d89409-dbb2-5771-9296-166afd4039b6",
+        "actor_user_projection_id": "83afd441-1438-5189-800b-de9351f33fd5",
+        "authority_context_version": "adminapps-phase28.3-learning-governance/v1",
+        "authority_decision_reference": "phase28.3-proposer-authority",
+        "canonical_delta_id": "4ea69ace-5a14-4682-9837-da47c20e8135",
+        "canonicalization_version": "iso-smart-learning-delta-canonical-v1",
+        "correction_reason": null,
+        "correlation_id": null,
+        "created_at": "2026-09-03T16:48:19.684032+00:00",
+        "delta_hash": "9ccf9b3a7ae835b774dd11133f1932847ec7d1762934065128594971cf7fdf86",
+        "delta_schema_version": "learning-knowledge-layer-rule-source-reference-correction-delta-v1",
+        "expected_effect": "Create one inert draft successor; semantics, runtime, publication, activation and adoption remain unchanged.",
+        "id": "81acfa0f-8201-4305-bf03-d309566f9d7f",
+        "operation_id": "learning.knowledge_layer_rule.source_reference.correct",
+        "operation_version": "v1",
+        "organization_id": "aaaaaaaa-1000-4000-8000-000000000001",
+        "policy_id": "governed-learning-implementation-authorization/v1",
+        "predecessor_id": null,
+        "proposed_change_hash": "9ccf9b3a7ae835b774dd11133f1932847ec7d1762934065128594971cf7fdf86",
+        "rationale": "Correct only the locator in the retained non-authoritative synthetic fixture namespace.",
+        "required_governance_domains": [
+          "ai_governance",
+          "normative_curation",
+          "security"
+        ],
+        "revision": 1,
+        "risks": [
+          "stale predecessor",
+          "synthetic provenance confusion",
+          "publication remains separately prohibited"
+        ],
+        "status": "governance_pending",
+        "target_hash": "92c19d4d8996f0345561eeb103b8a9704c20037b9667e22c80872a1c86c68966",
+        "target_id": "da72872a-3f3c-5fcd-86f7-0ed33e453522",
+        "target_lineage_id": "da72872a-3f3c-5fcd-86f7-0ed33e453522",
+        "target_scope": "global",
+        "target_snapshot": {
+          "certifiability_classification": "non_certifiable_guidance",
+          "created_at": "2026-09-03T16:48:19.559618+00:00",
+          "evidence_expectation": {
+            "normative": false,
+            "required": [
+              "synthetic_fixture_reference"
+            ]
+          },
+          "id": "da72872a-3f3c-5fcd-86f7-0ed33e453522",
+          "knowledge_layer_id": "43329c0b-5aaf-5bee-b944-41746fcededb",
+          "lineage_id": "da72872a-3f3c-5fcd-86f7-0ed33e453522",
+          "logic_json": {
+            "fixture_only": true,
+            "operator": "source_locator_is_retained"
+          },
+          "previous_revision_id": null,
+          "published_at": "2026-09-03T16:48:19.565156+00:00",
+          "rule_key": "publication-poc.synthetic-source-reference",
+          "source_reference": "iso-smart-synthetic-poc-source-ref-v1:6ec35e4a-bb8a-592b-bc6a-420691f4e8e3:efe61114215914ac486011e4efd9977b4fa2f1c34fa6fad67012a46ced85ab4f:fixture/element/A",
+          "status": "published",
+          "version": "sN"
+        },
+        "target_type": "KnowledgeLayerRule",
+        "target_version": "sN",
+        "tenant_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+        "trace_id": "36d367bf-d2a0-5d95-a26b-015c7dce6810"
+      },
+      "material_hash": "ece67381b529a71ee6415b698664b87bee7885fee680abd76c0ce90180f20d5e",
+      "operation_id": "learning.knowledge_layer_rule.source_reference.correct",
+      "operation_version": "v1",
+      "target_rule_id": "da72872a-3f3c-5fcd-86f7-0ed33e453522"
+    },
+    "learning_signal": {
+      "id": "b11f6425-5ae5-4865-83da-d4811be8787f",
+      "material": {
+        "actor_external_id_snapshot": "24d89409-dbb2-5771-9296-166afd4039b6",
+        "actor_user_projection_id": "83afd441-1438-5189-800b-de9351f33fd5",
+        "authority_context_version": "adminapps-phase28.3-learning-governance/v1",
+        "authority_decision_reference": "phase28.3-proposer-authority",
+        "correlation_id": null,
+        "created_at": "2026-09-03T16:48:19.626843+00:00",
+        "derivation_policy_id": "governed-learning-signal-derivation/v1",
+        "derivation_policy_version": "v1",
+        "derivation_timestamp": "2026-09-03T16:48:19.582606+00:00",
+        "effectiveness_lineage_id": "01a0682b-b684-761c-a200-8b7d251db53d",
+        "id": "b11f6425-5ae5-4865-83da-d4811be8787f",
+        "organization_id": "aaaaaaaa-1000-4000-8000-000000000001",
+        "provenance_hash": "830ef47105b5ec86fb0d1ccee0fd13c98f49011c0c9b0899bea3a61ee38569d5",
+        "selected_effectiveness_check_id": "3611cf97-c938-4de7-976a-b93d9e45165b",
+        "selected_outcome_snapshot": "inconclusive",
+        "selected_predecessor_id_snapshot": "8e3f70bb-842d-406c-b744-41a20b05890f",
+        "selected_revision": 4,
+        "selected_was_current_leaf": true,
+        "tenant_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+        "trace_id": "7915af2b-5dfa-5658-b542-9a81a55d20a6"
+      },
+      "material_hash": "dd27854167385abe322428599043038aa045ce080ec73775b3928a47044b23e7",
+      "operation_id": "learning.knowledge_layer_rule.source_reference.correct",
+      "operation_version": "v1",
+      "target_rule_id": "da72872a-3f3c-5fcd-86f7-0ed33e453522"
+    },
+    "policies": [
+      {
+        "id": "0e87b6c7-d754-589f-8ba7-011693cc1310",
+        "material": {
+          "file": "docs/governance/GOVERNED_LEARNING_POLICY_V1.md",
+          "file_sha256": "7d9c2fe30548bd18d390d119889c87a93595ac281fa3326691fe486bee49c4ec",
+          "id": "0e87b6c7-d754-589f-8ba7-011693cc1310",
+          "policy_id": "governed-learning-policy/v1",
+          "version": "v1"
+        },
+        "material_hash": "e8a089c4b2336d414261db67dbad32c43e37eb4cf6f7e2e8665a2deadc00c644",
+        "policy_id": "governed-learning-policy/v1",
+        "version": "v1"
+      },
+      {
+        "id": "736d0b51-ef43-5375-aa97-646aadf2cf26",
+        "material": {
+          "file": "docs/governance/KNOWLEDGE_LAYER_RULE_GOVERNED_SOURCE_REFERENCE_APPLICATION_POLICY_V1.md",
+          "file_sha256": "1a5f7c7838c62ba76837c26fcfa4d29655294810f74afed33fdcf69dc373bb79",
+          "id": "736d0b51-ef43-5375-aa97-646aadf2cf26",
+          "policy_id": "knowledge-layer-rule-governed-source-reference-application-policy/v1",
+          "version": "v1"
+        },
+        "material_hash": "d7423c5f8d8415c29a6790d670b1ed872d6cf70737c2d8e224f6d4d26863671a",
+        "policy_id": "knowledge-layer-rule-governed-source-reference-application-policy/v1",
+        "version": "v1"
+      },
+      {
+        "id": "cf21a9fb-c2cd-58ad-807a-41f2b21b3cb3",
+        "material": {
+          "file": "docs/governance/KNOWLEDGE_LAYER_RULE_PUBLICATION_ACTIVATION_RUNTIME_ADOPTION_POLICY_V1.md",
+          "file_sha256": "efdd4d8a679c7f18762bfe79c3e876e970f81fedb2848ef5cbf21e7aeb858556",
+          "id": "cf21a9fb-c2cd-58ad-807a-41f2b21b3cb3",
+          "policy_id": "knowledge-layer-rule-publication-activation-runtime-adoption/v1",
+          "version": "v1"
+        },
+        "material_hash": "dbf21af34ec8bd765cc56aacc2c858495059084e13d56165908e6c054e4188ce",
+        "policy_id": "knowledge-layer-rule-publication-activation-runtime-adoption/v1",
+        "version": "v1"
+      },
+      {
+        "id": "704f2135-9ec7-505f-8444-bb131b1afc07",
+        "material": {
+          "activation_authorized": false,
+          "authorization": "FUTURE_EPHEMERAL_PUBLICATION_POC_ELIGIBILITY_ONLY",
+          "candidate_full_material_hash": "caa24592b509334af4cd60fd7d3f3c43989d864d3f1c6e6d0d3bf83a81871f81",
+          "candidate_id": "01a0682b-dfc8-7b49-a601-f9bda29a70a5",
+          "candidate_version": "sN+1",
+          "id": "704f2135-9ec7-505f-8444-bb131b1afc07",
+          "lifecycle_hash": "0adfd8075cc720140c6e1f0393d286799edac8f352efd9f1969816be83c51e52",
+          "lineage_id": "da72872a-3f3c-5fcd-86f7-0ed33e453522",
+          "policy_id": "first-retained-synthetic-klr-publication-candidate-policy/v1",
+          "predecessor_rule_id": "da72872a-3f3c-5fcd-86f7-0ed33e453522",
+          "production_authorized": false,
+          "publication_authorized": false,
+          "runtime_adoption_authorized": false,
+          "semantic_fingerprint": "8465956c1daf27a9838bc1bfb468af3f518ae255b4662b2df40e7b8648516192",
+          "version": "v1"
+        },
+        "material_hash": "29281e4db12bf54d1eccc523fbbf889720d2cd9178d18d55d9c19c87ba93acf2",
+        "policy_id": "first-retained-synthetic-klr-publication-candidate-policy/v1",
+        "version": "v1"
+      }
+    ],
+    "selected_reviews": [
+      {
+        "canonical_delta_id": "4ea69ace-5a14-4682-9837-da47c20e8135",
+        "id": "4f27fd0b-c32c-430c-a835-63b6b619e42f",
+        "material": {
+          "authority_context_version": "adminapps-phase28.3-review/v1",
+          "authority_decision_reference": "phase28.3-review-authority",
+          "canonical_delta_id": "4ea69ace-5a14-4682-9837-da47c20e8135",
+          "canonicalization_version": "iso-smart-learning-delta-canonical-v1",
+          "correlation_id": null,
+          "created_at": "2026-09-03T16:48:19.749037+00:00",
+          "delta_hash": "9ccf9b3a7ae835b774dd11133f1932847ec7d1762934065128594971cf7fdf86",
+          "delta_schema_version": "learning-knowledge-layer-rule-source-reference-correction-delta-v1",
+          "findings": {
+            "autonomy_change_detected": false,
+            "cross_tenant_effect_detected": false,
+            "governance_domains": [
+              "ai_governance",
+              "normative_curation",
+              "security"
+            ],
+            "normative_change_detected": false,
+            "policy_relaxation_detected": false,
+            "summary": "Exact synthetic locator-only correction reviewed; no normative or runtime meaning changes."
+          },
+          "governance_scope": "global",
+          "id": "4f27fd0b-c32c-430c-a835-63b6b619e42f",
+          "learning_proposal_id": "81acfa0f-8201-4305-bf03-d309566f9d7f",
+          "operation_id": "learning.knowledge_layer_rule.source_reference.correct",
+          "operation_version": "v1",
+          "organization_id": "aaaaaaaa-1000-4000-8000-000000000001",
+          "policy_id": "governed-learning-proposal-review-application-boundary/v1",
+          "proposal_material_hash": "ad19e832f3c1beeae08723fbdd3363e5883ee5a9a64c4ea6fe05f72a026d59fe",
+          "proposal_predecessor_id_snapshot": null,
+          "proposal_revision_snapshot": 1,
+          "review_outcome": "review_recorded",
+          "reviewed_governance_domains": [
+            "ai_governance",
+            "normative_curation",
+            "security"
+          ],
+          "reviewer_external_id_snapshot": "f8853b40-ef90-53b4-bd1b-17f85bcd5d79",
+          "reviewer_user_projection_id": "1900d481-3742-574c-9b2b-6698d0ba5270",
+          "target_hash": "92c19d4d8996f0345561eeb103b8a9704c20037b9667e22c80872a1c86c68966",
+          "target_id": "da72872a-3f3c-5fcd-86f7-0ed33e453522",
+          "target_lineage_id": "da72872a-3f3c-5fcd-86f7-0ed33e453522",
+          "target_status_snapshot": "valid",
+          "target_type": "KnowledgeLayerRule",
+          "target_version": "sN",
+          "tenant_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+          "trace_id": "5b8a32f6-7662-5153-83ee-a46fcc85d841"
+        },
+        "material_hash": "9817f6e8413f11ccf3c319e08cc63cbc0c9604ff4137d69dc8fa46f055eb8bd5",
+        "outcome": "APPROVE",
+        "proposal_revision_id": "81acfa0f-8201-4305-bf03-d309566f9d7f",
+        "selected": true
+      }
+    ],
+    "transactional_outbox": [
+      {
+        "event_id": "01a0682b-dfa3-77e3-b309-24aafebdfa86",
+        "id": "01a0682b-dfa3-782f-99ba-fe5784530e82",
+        "material": {
+          "available_at": "2026-09-03T16:48:20.895565+00:00",
+          "created_at": "2026-09-03T16:48:20.895565+00:00",
+          "destination": "platform.knowledge-layer-rule",
+          "event_id": "01a0682b-dfa3-77e3-b309-24aafebdfa86",
+          "id": "01a0682b-dfa3-782f-99ba-fe5784530e82",
+          "status": "pending"
+        },
+        "material_hash": "0244c62b6863984bc5ee1ebb804794dd897b2fbf6dee97c1fc7cc2addd9c0e6c"
+      }
+    ]
+  },
+  "integrity_verified": true,
+  "live_graph_verified": true,
+  "manifest_material_hash": "9ab80f4b0208e7dac971a0759df0bdb5c28392aa423ae11cbc0d483abb739a75",
+  "manifest_schema": "governed-target-application-evidence-manifest/v1",
+  "operation_id": "learning.knowledge_layer_rule.source_reference.correct",
+  "operation_version": "v1",
+  "phase26_continuity_claim": false,
+  "retained_at": "2026-09-03T16:48:21.033282+00:00",
+  "retention_integrity_verified": true,
+  "role_actor_ids": {
+    "activator": "49132b9d-93ae-510a-8de0-ad36ef508f8f",
+    "adopter": "0757c393-8c83-52be-ae2a-25385901f232",
+    "application_authorizer": "b71e6996-1e15-5aef-b73b-db331b01305f",
+    "application_executor": "d91b730d-5d5b-5a64-a25c-a0318385a6eb",
+    "curator": "1dab9ba5-5c8a-504c-81b8-0ac70f15af14",
+    "proposal_approver": "02d02d75-1d97-5dc3-b494-50e83335492e",
+    "proposer": "24d89409-dbb2-5771-9296-166afd4039b6",
+    "publisher": "8069fbeb-0ef6-582c-8f3b-ff88e606c869",
+    "reviewer": "f8853b40-ef90-53b4-bd1b-17f85bcd5d79"
+  },
+  "root": {
+    "fixture_only": true,
+    "full_material_hash": "bd9824852e26a1fc4858df2410f29952aad97e220912813591109f8e05fd77ec",
+    "id": "da72872a-3f3c-5fcd-86f7-0ed33e453522",
+    "knowledge_layer_id": "43329c0b-5aaf-5bee-b944-41746fcededb",
+    "lifecycle_hash": "0adfd8075cc720140c6e1f0393d286799edac8f352efd9f1969816be83c51e52",
+    "lineage_id": "da72872a-3f3c-5fcd-86f7-0ed33e453522",
+    "semantic_fingerprint": "8465956c1daf27a9838bc1bfb468af3f518ae255b4662b2df40e7b8648516192",
+    "version": "sN"
+  },
+  "run_id": "6fb6fdd0-9b03-5f54-9041-9e80bc90d0d5",
+  "source": {
+    "manifest_hash": "cf92c267439f94f302e67888665dbf99392592341a808f5fc00f4c32ef23dc24",
+    "manifest_id": "6ec35e4a-bb8a-592b-bc6a-420691f4e8e3",
+    "material_hash": "efe61114215914ac486011e4efd9977b4fa2f1c34fa6fad67012a46ced85ab4f",
+    "reference": "iso-smart-synthetic-poc-source-ref-v1:6ec35e4a-bb8a-592b-bc6a-420691f4e8e3:efe61114215914ac486011e4efd9977b4fa2f1c34fa6fad67012a46ced85ab4f:fixture/element/B",
+    "reference_after": "iso-smart-synthetic-poc-source-ref-v1:6ec35e4a-bb8a-592b-bc6a-420691f4e8e3:efe61114215914ac486011e4efd9977b4fa2f1c34fa6fad67012a46ced85ab4f:fixture/element/B",
+    "reference_before": "iso-smart-synthetic-poc-source-ref-v1:6ec35e4a-bb8a-592b-bc6a-420691f4e8e3:efe61114215914ac486011e4efd9977b4fa2f1c34fa6fad67012a46ced85ab4f:fixture/element/A",
+    "reference_before_hash": "ab6b1f89c726722a35b788f06de9bde75c5cf43132386ae3cc69fc8d272709d2",
+    "reference_hash": "0ad437944a111b3593ba29f52466416eed9b4f0b8e7e9247c082575df0d659b6"
+  },
+  "source_classification": "RETAINED_DETERMINISTIC_SYNTHETIC_FIXTURE",
+  "target_type": "KnowledgeLayerRule",
+  "teardown_intent": "DESTROY_COMPLETE_EPHEMERAL_POSTGRESQL_ENVIRONMENT",
+  "trace_id": "3c1f7150-52b2-575b-bdcd-3828490c8dc4",
+  "zero_effects": {
+    "activation_events": 0,
+    "activation_rows": 0,
+    "publication_events": 0,
+    "publication_rows": 0,
+    "runtime_adoption_events": 0,
+    "runtime_adoption_rows": 0
+  }
+}

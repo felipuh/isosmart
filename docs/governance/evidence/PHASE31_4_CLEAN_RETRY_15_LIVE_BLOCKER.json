@@ -1,0 +1,23 @@
+{
+  "artifact_schema": "phase31.4-retry15-live-blocker/v1",
+  "retry_id": "Phase 31.4 V2.5 Clean Retry 15",
+  "id": "P1-RETRY15-V25-LIVE-CAPTURE-BRIDGE-MISSING",
+  "severity": "P1",
+  "status": "OPEN",
+  "phase": "INITIAL_OPPORTUNITY",
+  "result": "NOT_PROMOTED",
+  "producer_graph": "PASS",
+  "structural_reachability": {
+    "phases": "33/33",
+    "captures": "565/565"
+  },
+  "failure": {
+    "exception": "MissingCaptureError",
+    "message": "missing live capture: qms.process::506d920c-fe62-53c0-aac8-9c1ca8ca78ed.id",
+    "required": "Import the fresh Stage EXT process capture into V25ExecutionSession before INITIAL_OPPORTUNITY.",
+    "observed": "Stage EXT persisted process_id=09eff70d-fc5b-4b0a-9454-34885c5b5dc5, but run_clean_retry() received an empty capture registry."
+  },
+  "policy": "Stop before authoritative phases and teardown all disposable Retry 15 resources.",
+  "historical_v24_blockers_preserved": true,
+  "retry16_allocated": false
+}

@@ -1,0 +1,52 @@
+{
+  "schema": "phase31.4-v2.5-v11-operational-diagnostic-cycle-authorization/v1",
+  "authorization_id": "PHASE31_4_V2_5_V11_OPERATIONAL_DIAGNOSTIC_CYCLE_1_AUTHORIZATION_V1",
+  "issued_at": "2026-09-29T20:00:00Z",
+  "authorization_status": "SUCCESSOR_OPERATIONAL_DIAGNOSTIC_CYCLE_AUTHORIZED",
+  "cycle_id": "Phase 31.4 V2.5 V11 Operational Diagnostic Cycle 1",
+  "predecessor_cycle": {
+    "id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1",
+    "status": "EXHAUSTED",
+    "attempt_4": "NOT_AUTHORIZED"
+  },
+  "baseline": {
+    "git_commit": "c43817edc61e46309f9216933257017ae0757e03",
+    "worktree_clean_at_authorization_boundary": true
+  },
+  "integrity": {
+    "artifact_path": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V11.json",
+    "generation": "PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V11",
+    "sha256": "69a0eec27e96e050411e1cabf8f61aa2ca8182a736e16c3b84f67089bb4e716b"
+  },
+  "bearer_contract": {
+    "authorization_path": "docs/governance/authorizations/PHASE31_4_V2_5_OPERATIONAL_BEARER_IDENTITY_CONTRACT_AUTHORIZATION_V1.json",
+    "authorization_sha256": "2c59226ee86328d695e23e28c08615d5b522a55e0b6a9bf32e8098ab44e4f4bf",
+    "implementation_commit": "c43817edc61e46309f9216933257017ae0757e03",
+    "implementation_evidence_path": "docs/governance/evidence/PHASE31_4_V2_5_OPERATIONAL_BEARER_IDENTITY_CONTRACT_IMPLEMENTATION_V1.json",
+    "implementation_evidence_sha256": "8d6fea5474b4e34e45119ec5aa80cfe927ca86a7fe7b0062993c16777fad85f9"
+  },
+  "maximum_attempts": 3,
+  "attempt_1": "SEPARATE_ONE_SHOT_AUTHORIZATION_REQUIRED",
+  "attempt_2": "NOT_AUTHORIZED",
+  "attempt_3": "NOT_AUTHORIZED",
+  "target": "STAGE_EXT_6_OF_6 + CAPTURE_BUNDLE_READY",
+  "stop_boundary": "CAPTURE_BUNDLE_READY",
+  "mandatory_readiness": {
+    "adminapps": "GET /api/integration/health/ with persisted X-API-Key",
+    "isosmart": "GET /health with approved runtime Bearer"
+  },
+  "failure_policy": "Capture evidence, teardown, declare SUCCESSOR_CYCLE_ATTEMPT_1_FAIL, do not remediate and do not start Attempt 2.",
+  "teardown": "ZERO RESIDUAL RESOURCES",
+  "prohibited": [
+    "V8 Attempt 4",
+    "Retry 20",
+    "Phase 31.5",
+    "full 33-phase runtime",
+    "Attempt 2 without independent authorization",
+    "raw credential evidence",
+    "authentication weakening"
+  ],
+  "retry_20_authorization": "NONE",
+  "retry_20_executed": "NO",
+  "phase_31_5": "EXECUTION_HELD"
+}

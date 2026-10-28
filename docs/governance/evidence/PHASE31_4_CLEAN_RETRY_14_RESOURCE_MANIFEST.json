@@ -1,0 +1,80 @@
+{
+  "allocated_at": "2026-09-21T20:28:21-06:00",
+  "approved_image": "docker.io/library/postgres@sha256:7341002d2b8c7c5bdd7542a671a95b36196c0b5b888daf454ae4fc33ba5346d7",
+  "approved_image_id": "a6638641707cdf047e5d5c2781f437e2e809323cab22c70b280be8389fbb7878",
+  "artifact_schema": "phase31.4-clean-retry-runtime-resources/v1",
+  "container_removed": true,
+  "created_at": "2026-09-21T20:28:21-06:00",
+  "environments": {
+    "adminapps": {
+      "container_id": "7bfdb5fad27a8015630901928b69f981a8c137a29d7a0c1f650ec239671c4881",
+      "container_name": "phase31_4_retry14_adminapps",
+      "container_removed": true,
+      "created_at": "2026-09-22T02:32:18.576338+00:00",
+      "creation_started_at": "2026-09-22T02:32:15.742537+00:00",
+      "database_name": "phase31_4_retry14_adminapps",
+      "environment_id": "phase31_4_retry14_adminapps",
+      "image_digest": "sha256:7341002d2b8c7c5bdd7542a671a95b36196c0b5b888daf454ae4fc33ba5346d7",
+      "image_id": "a6638641707cdf047e5d5c2781f437e2e809323cab22c70b280be8389fbb7878",
+      "network_id": "phase31_4_retry14_adminapps_net",
+      "network_name": "phase31_4_retry14_adminapps_net",
+      "network_removed": true,
+      "observed_postgresql_version": "postgres (PostgreSQL) 18.6 (Debian 18.6-1.pgdg13+2)",
+      "port_mappings": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "39787"
+        }
+      ],
+      "postgresql_exact_version": "PostgreSQL 18.6",
+      "status": "REMOVED_VERIFIED",
+      "volume_id": "phase31_4_retry14_adminapps_data",
+      "volume_name": "phase31_4_retry14_adminapps_data",
+      "volume_removed": true
+    },
+    "isosmart": {
+      "container_id": "ba4370ceca031061bc3dcf9383b9fcb80d69054378b226f3cd0553d9232c5cf8",
+      "container_name": "phase31_4_retry14_isosmart",
+      "container_removed": true,
+      "created_at": "2026-09-22T02:32:34.690075+00:00",
+      "creation_started_at": "2026-09-22T02:32:31.934690+00:00",
+      "database_name": "phase31_4_retry14_isosmart",
+      "environment_id": "phase31_4_retry14_isosmart",
+      "image_digest": "sha256:7341002d2b8c7c5bdd7542a671a95b36196c0b5b888daf454ae4fc33ba5346d7",
+      "image_id": "a6638641707cdf047e5d5c2781f437e2e809323cab22c70b280be8389fbb7878",
+      "network_id": "phase31_4_retry14_isosmart_net",
+      "network_name": "phase31_4_retry14_isosmart_net",
+      "network_removed": true,
+      "observed_postgresql_version": "postgres (PostgreSQL) 18.6 (Debian 18.6-1.pgdg13+2)",
+      "port_mappings": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "37523"
+        }
+      ],
+      "postgresql_exact_version": "PostgreSQL 18.6",
+      "status": "REMOVED_VERIFIED",
+      "volume_id": "phase31_4_retry14_isosmart_data",
+      "volume_name": "phase31_4_retry14_isosmart_data",
+      "volume_removed": true
+    }
+  },
+  "execution_mode": "LIVE_NATIVE_EXECUTION",
+  "network_removed": true,
+  "podman_context": "local rootless default",
+  "podman_run_root": "/run/user/1000/containers",
+  "podman_storage_root": "/home/felipe/.local/share/containers/storage",
+  "post_teardown_inventory_verified": true,
+  "postgresql_exact_version": "PostgreSQL 18.6",
+  "previous_retry_state_reuse": false,
+  "retry_id": "Phase 31.4 V2.5 Clean Retry 14",
+  "retry_tag": "CLEAN_RETRY_14",
+  "runtime_host": "127.0.0.1",
+  "teardown_attempted": true,
+  "teardown_completed_at": "2026-09-22T02:43:14.811768+00:00",
+  "teardown_errors": [],
+  "teardown_started_at": "2026-09-22T02:43:08.071057+00:00",
+  "teardown_status": "PASS",
+  "updated_at": "2026-09-22T02:43:14.811785+00:00",
+  "volume_removed": true
+}

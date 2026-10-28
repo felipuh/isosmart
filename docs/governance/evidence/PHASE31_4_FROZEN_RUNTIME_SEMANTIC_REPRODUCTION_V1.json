@@ -1,0 +1,235 @@
+{
+  "attempts": {
+    "database_attempts": 0,
+    "lifecycle_attempts": 0,
+    "network_attempts": 0,
+    "resolver_invocations": 0,
+    "subprocess_attempts": 0
+  },
+  "compiled_count": 381,
+  "container_start_attempts": 0,
+  "django_version": "4.2.22",
+  "errors": 1,
+  "failures": 0,
+  "labels": [
+    "foundation.tests.Phase3ContractTests",
+    "foundation.tests.Phase9KnowledgeLayerContractTests",
+    "foundation.tests.Phase21BlockingHardeningTests",
+    "foundation.tests.Phase23LearningProposalGovernanceTests",
+    "foundation.tests.Phase26KnowledgeRuleApplicationContractTests",
+    "foundation.test_learning_delta",
+    "foundation.test_knowledge_rule_release.InertKnowledgeRuleReleaseContractTests.test_resolver_has_only_exact_runtime_adoption_identifier",
+    "foundation.test_knowledge_rule_release.InertKnowledgeRuleReleaseContractTests.test_command_signatures_do_not_offer_generic_dispatch_or_runtime_fallback",
+    "foundation.test_phase31_4_1_root_binding",
+    "foundation.test_phase31_4_2_design_gate",
+    "foundation.test_phase31_4_2_native_binding_audit",
+    "foundation.test_phase31_4_3_supporting_contract_audit",
+    "foundation.test_phase31_4_4_execution_contract",
+    "foundation.test_phase31_4_4a_field_bindings",
+    "foundation.test_phase31_4_4b_strict_types",
+    "foundation.test_phase31_4_5a_agent_run_start_serialization",
+    "foundation.test_phase31_4_5a_retry1_source_reachability",
+    "foundation.test_phase31_4_5b_source_reachability",
+    "foundation.test_phase31_4_frozen_runtime_semantics",
+    "foundation.test_phase31_4_retry5_operational_manifest",
+    "foundation.test_phase31_4_synthetic_authority",
+    "foundation.test_phase31_4_v2_4_support_package",
+    "foundation.test_phase31_activation_preflight"
+  ],
+  "makemigrations_check_dry_run": "PASS",
+  "migration_0024_absent": true,
+  "offline_P0": 0,
+  "offline_P1_semantic_blockers": 2,
+  "parsed_governance_json_count": 39,
+  "postgresql_start_attempts": 0,
+  "production_composition_proved": false,
+  "protected_integrity": {
+    "backend/foundation/action_authorization.py": {
+      "expected": "04fffd84058da2166a4843e92f04b5bc5d6c3c84035e379a60722b56ffcc38d3",
+      "observed": "04fffd84058da2166a4843e92f04b5bc5d6c3c84035e379a60722b56ffcc38d3"
+    },
+    "backend/foundation/agent_runtime.py": {
+      "expected": "6767e2098365536b88d4d8e9afdaef0f8b796383c79d7f40e0e0ea91b964ec2d",
+      "observed": "6767e2098365536b88d4d8e9afdaef0f8b796383c79d7f40e0e0ea91b964ec2d"
+    },
+    "backend/foundation/audit.py": {
+      "expected": "461459401abb354b22c42eec05dcd9805e4fd7800554c67b96aee8885c6734ef",
+      "observed": "461459401abb354b22c42eec05dcd9805e4fd7800554c67b96aee8885c6734ef"
+    },
+    "backend/foundation/effectiveness.py": {
+      "expected": "8f88ec0618ac740c3d57adedd2cdde0f55e340e9efd17d8c12a64baa1e917234",
+      "observed": "8f88ec0618ac740c3d57adedd2cdde0f55e340e9efd17d8c12a64baa1e917234"
+    },
+    "backend/foundation/governed_learning.py": {
+      "expected": "3cc23839a372cfac94dd265154876b66915d43b8a5c0b391a804d3aabe6476cd",
+      "observed": "3cc23839a372cfac94dd265154876b66915d43b8a5c0b391a804d3aabe6476cd"
+    },
+    "backend/foundation/human_decision.py": {
+      "expected": "83777738712ba6db473590c367b14dd17ee90eda2549e04cb467db3e58b636ab",
+      "observed": "83777738712ba6db473590c367b14dd17ee90eda2549e04cb467db3e58b636ab"
+    },
+    "backend/foundation/learning_proposal_governance.py": {
+      "expected": "0a4a214edb63aaf7de579bba090010df728402bfc133c250bd05b20c73edb945",
+      "observed": "0a4a214edb63aaf7de579bba090010df728402bfc133c250bd05b20c73edb945"
+    },
+    "backend/foundation/migrations/0001_foundation_tenant_projection.py": {
+      "expected": "0d72f26245c3637b579e5289b1ee99b87667a1061a245e950992724cb7d2dc51",
+      "observed": "0d72f26245c3637b579e5289b1ee99b87667a1061a245e950992724cb7d2dc51"
+    },
+    "backend/foundation/migrations/0002_projection_organization_user_foundation.py": {
+      "expected": "1f538ca4c72309fa670af773f91fd8a62be2732a3222ce3067dbd79fd5e9b537",
+      "observed": "1f538ca4c72309fa670af773f91fd8a62be2732a3222ce3067dbd79fd5e9b537"
+    },
+    "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py": {
+      "expected": "dadfad2c14468352f9f8fc37463f5d689029b98c40e026270223dac5e79613fc",
+      "observed": "dadfad2c14468352f9f8fc37463f5d689029b98c40e026270223dac5e79613fc"
+    },
+    "backend/foundation/migrations/0004_qms_harmonized_context_foundation.py": {
+      "expected": "045043275245e5d8068a8e03d122f5fe34b8f9f60b020336e61881550ecea125",
+      "observed": "045043275245e5d8068a8e03d122f5fe34b8f9f60b020336e61881550ecea125"
+    },
+    "backend/foundation/migrations/0005_risk_opportunity_objective_foundation.py": {
+      "expected": "96ab33a18252dc0c2e6142f7afdc02a165349d15d50b290b4092c844a1996e86",
+      "observed": "96ab33a18252dc0c2e6142f7afdc02a165349d15d50b290b4092c844a1996e86"
+    },
+    "backend/foundation/migrations/0006_change_performance_measurement_foundation.py": {
+      "expected": "033242bd6fe801da0b090a332b9f6d1b07dba77027a0334d1830e845cd51aa95",
+      "observed": "033242bd6fe801da0b090a332b9f6d1b07dba77027a0334d1830e845cd51aa95"
+    },
+    "backend/foundation/migrations/0007_document_evidence_foundation.py": {
+      "expected": "c7f6a2030c9155714093a21fadb571a1cdeb8a121be5598540d4807af62283ec",
+      "observed": "c7f6a2030c9155714093a21fadb571a1cdeb8a121be5598540d4807af62283ec"
+    },
+    "backend/foundation/migrations/0008_evidence_coverage_normative_core_foundation.py": {
+      "expected": "285aecb34d5f7e8c1a1273c9622cde7933809949ac7bdbfca04e577e9e762032",
+      "observed": "285aecb34d5f7e8c1a1273c9622cde7933809949ac7bdbfca04e577e9e762032"
+    },
+    "backend/foundation/migrations/0009_knowledge_layer_foundation.py": {
+      "expected": "412c645974635959c74a446f64dc0a9b6dfd2a1a50a6a2e346698850e998effc",
+      "observed": "412c645974635959c74a446f64dc0a9b6dfd2a1a50a6a2e346698850e998effc"
+    },
+    "backend/foundation/migrations/0010_governed_recommendation_foundation.py": {
+      "expected": "c4f37a9a3a8d0d20a049e4e1cc9c0e04feb947cbeec9cea18fa89b7964f57b79",
+      "observed": "c4f37a9a3a8d0d20a049e4e1cc9c0e04feb947cbeec9cea18fa89b7964f57b79"
+    },
+    "backend/foundation/migrations/0011_agent_definition_run_provenance_foundation.py": {
+      "expected": "cdb23edcad75e8a8781815dac847359a368b64d8ea4b607a40d01d5296c863a2",
+      "observed": "cdb23edcad75e8a8781815dac847359a368b64d8ea4b607a40d01d5296c863a2"
+    },
+    "backend/foundation/migrations/0012_agent_decision_human_decision_gate_foundation.py": {
+      "expected": "7f280e24a8e95858b8144aa6a85fc645245aa2c2d3c2ad5700dfbe19ac0f0fdc",
+      "observed": "7f280e24a8e95858b8144aa6a85fc645245aa2c2d3c2ad5700dfbe19ac0f0fdc"
+    },
+    "backend/foundation/migrations/0013_action_execution_preparation_authorization_foundation.py": {
+      "expected": "06177fde1c25d884602a41d03df6d2625e8d15df18d7c66bffdb047348abf34b",
+      "observed": "06177fde1c25d884602a41d03df6d2625e8d15df18d7c66bffdb047348abf34b"
+    },
+    "backend/foundation/migrations/0014_action_execution_synthetic_foundation.py": {
+      "expected": "ee0e42a7d45803f633ca40d9b0ca20987a20acfdaf3452ee81d721cec29ada33",
+      "observed": "ee0e42a7d45803f633ca40d9b0ca20987a20acfdaf3452ee81d721cec29ada33"
+    },
+    "backend/foundation/migrations/0015_first_controlled_qms_mutation_poc.py": {
+      "expected": "5e297591c8096938c90b6748d0d3ed22a8099cf8f4537e7f65f8bc6fa5beaba3",
+      "observed": "5e297591c8096938c90b6748d0d3ed22a8099cf8f4537e7f65f8bc6fa5beaba3"
+    },
+    "backend/foundation/migrations/0016_controlled_execution_recovery_hardening.py": {
+      "expected": "e922ff20285751193382a17d9fe7e71726511bff659f4e66b97748e6ad43cdd5",
+      "observed": "e922ff20285751193382a17d9fe7e71726511bff659f4e66b97748e6ad43cdd5"
+    },
+    "backend/foundation/migrations/0017_effectiveness_check_foundation.py": {
+      "expected": "580f16d1cdb10c30bae8f3e3c1667c3c4d2552b895fc9dea053d2c9b6adfaa38",
+      "observed": "580f16d1cdb10c30bae8f3e3c1667c3c4d2552b895fc9dea053d2c9b6adfaa38"
+    },
+    "backend/foundation/migrations/0018_governed_learning_foundation.py": {
+      "expected": "703a85885a67df953f38ef35302205caeddea249104683f4f751ab20ece0696b",
+      "observed": "703a85885a67df953f38ef35302205caeddea249104683f4f751ab20ece0696b"
+    },
+    "backend/foundation/migrations/0019_learning_proposal_review_application_authorization_foundation.py": {
+      "expected": "c188b638124404bba10cae4c94a678053d49d7a1d07c6e455a48e46524064b50",
+      "observed": "c188b638124404bba10cae4c94a678053d49d7a1d07c6e455a48e46524064b50"
+    },
+    "backend/foundation/migrations/0020_exact_learning_delta_target_operation_contract.py": {
+      "expected": "491f21d3422c9c9a5866520f6623d3b9c9bea2139083f0128495dd7207d19894",
+      "observed": "491f21d3422c9c9a5866520f6623d3b9c9bea2139083f0128495dd7207d19894"
+    },
+    "backend/foundation/migrations/0021_first_governed_knowledge_rule_application_poc.py": {
+      "expected": "e796910c1660f701c3457b020792a158c06d3e58135a7ebba1728bd8b33c7a97",
+      "observed": "e796910c1660f701c3457b020792a158c06d3e58135a7ebba1728bd8b33c7a97"
+    },
+    "backend/foundation/migrations/0022_inert_rule_publication_activation_runtime_adoption.py": {
+      "expected": "afefd7100a18e5c7324efaeb1af656225b309fd86f08673a8742f7f9f6c2e618",
+      "observed": "afefd7100a18e5c7324efaeb1af656225b309fd86f08673a8742f7f9f6c2e618"
+    },
+    "backend/foundation/migrations/0023_retained_synthetic_source_reference_application.py": {
+      "expected": "bb9889af836ae1e92ccf75b868c4c6a8c1ab9ba1e7d63464a2cbd749a872e642",
+      "observed": "bb9889af836ae1e92ccf75b868c4c6a8c1ab9ba1e7d63464a2cbd749a872e642"
+    },
+    "docs/adr/0017-ephemeral-exact-id-governed-application-adapter.md": {
+      "expected": "82501ef34edc6d7e76e0971d3d2607c58f229a1dd4dd26696dd227fb7e994edb",
+      "observed": "82501ef34edc6d7e76e0971d3d2607c58f229a1dd4dd26696dd227fb7e994edb"
+    },
+    "docs/adr/0018-row-level-execution-ready-v2-contract.md": {
+      "expected": "f9f6272c72e433241f66e44884b53dc804a667b32950c8ab098df6473ecf6089",
+      "observed": "f9f6272c72e433241f66e44884b53dc804a667b32950c8ab098df6473ecf6089"
+    },
+    "docs/governance/COMPLETE_RETAINED_SYNTHETIC_KNOWLEDGE_LAYER_RULE_LIFECYCLE_POC_POLICY_V2.md": {
+      "expected": "bf92aa4aafdaa99e27f90fc3c2766cd3a8fa85214f26a4fe7ffbbd1a7397cad2",
+      "observed": "bf92aa4aafdaa99e27f90fc3c2766cd3a8fa85214f26a4fe7ffbbd1a7397cad2"
+    },
+    "docs/governance/PHASE31_4_4_SUPPORTING_FIXTURE_PRODUCER_CONTRACT_V1.md": {
+      "expected": "9ca5530bf24e0dc90b004b0b88fa86c344646e5991a5c65659eaae3dae2e795e",
+      "observed": "9ca5530bf24e0dc90b004b0b88fa86c344646e5991a5c65659eaae3dae2e795e"
+    },
+    "docs/governance/evidence/PHASE31_4_5B_V2_3_TO_V2_4_CHANGESET_V1.json": {
+      "expected": "4204d022492de843d7f6763dfb05f3ce7ec5e166fc4c14de4b8b2c4cb80f27de",
+      "observed": "4204d022492de843d7f6763dfb05f3ce7ec5e166fc4c14de4b8b2c4cb80f27de"
+    },
+    "docs/governance/evidence/PHASE31_4_5B_V2_4_OPERATIONAL_CORRECTION_AUTHORIZATION_V1.json": {
+      "expected": "4e83049a9928cd0a93c97228f33093e282c16e8e5e8969882ea21c8cd83e373b",
+      "observed": "4e83049a9928cd0a93c97228f33093e282c16e8e5e8969882ea21c8cd83e373b"
+    },
+    "docs/governance/evidence/PHASE31_4_5_IMPLEMENTATION_FEASIBILITY_BLOCKER_V1.json": {
+      "expected": "1c2b8b96b45b51b9b35aa095cb7735b5162db20febebb1f0eca32095c477e0d9",
+      "observed": "1c2b8b96b45b51b9b35aa095cb7735b5162db20febebb1f0eca32095c477e0d9"
+    },
+    "docs/governance/evidence/PHASE31_4_SYNTHETIC_AUTHORITY_FIXTURE_AUTHORIZATION_V1.json": {
+      "expected": "0d9dda57c1650aa4b2ba8fcd042b6981b2b89cdae844e009edc3c1252d4bc8db",
+      "observed": "0d9dda57c1650aa4b2ba8fcd042b6981b2b89cdae844e009edc3c1252d4bc8db"
+    },
+    "docs/governance/evidence/PHASE31_4_SYNTHETIC_CONTROL_PLANE_AUTHORITY_FIXTURE_V1.json": {
+      "expected": "d6d4391e7e6023d210296895f868fa9f9e1b4fd4a80476ae95e9f327d63665d5",
+      "observed": "d6d4391e7e6023d210296895f868fa9f9e1b4fd4a80476ae95e9f327d63665d5"
+    },
+    "docs/governance/fixtures/PHASE31_4_4_EXPECTED_RETENTION_CLOSURE_V2.json": {
+      "expected": "80eb1e7f8e857712aa49bcca98f3d27da2b525ba98df16fa34651cf8254cc425",
+      "observed": "80eb1e7f8e857712aa49bcca98f3d27da2b525ba98df16fa34651cf8254cc425"
+    },
+    "docs/governance/fixtures/PHASE31_4_4_ROW_LEVEL_EXECUTION_CONTRACT_V2.json": {
+      "expected": "962ec0b393b49c3c0a2894e32bb9a3246cbf7793cfd600391248634bee56f70b",
+      "observed": "962ec0b393b49c3c0a2894e32bb9a3246cbf7793cfd600391248634bee56f70b"
+    },
+    "docs/governance/fixtures/PHASE31_4_4_TRANSITIVE_RETENTION_SEMANTIC_REGISTRY_V2.json": {
+      "expected": "58b8278cbe05b0b5056e058bb3db1eecfc4d576cbef3dc5383c5e894900730fb",
+      "observed": "58b8278cbe05b0b5056e058bb3db1eecfc4d576cbef3dc5383c5e894900730fb"
+    },
+    "docs/governance/fixtures/PHASE31_4_5B_ROW_LEVEL_EXECUTION_CONTRACT_V2_4.json": {
+      "expected": "a102d278bf2e5ca6e9b8bf282f5402a54f52d4690beed2ecbed5145c56539387",
+      "observed": "a102d278bf2e5ca6e9b8bf282f5402a54f52d4690beed2ecbed5145c56539387"
+    }
+  },
+  "raw_output": "System check identified no issues (0 silenced).\nNo changes detected\nFound 265 test(s).\n................................................................................................................................................................................................................................E........................................\n======================================================================\nERROR: test_authoritative_manifest_and_external_hash (foundation.test_phase31_4_retry5_operational_manifest.Retry5ManifestTests.test_authoritative_manifest_and_external_hash)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/test_phase31_4_retry5_operational_manifest.py\", line 40, in test_authoritative_manifest_and_external_hash\n    document = verify_operational_manifest(expected)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_operational_manifest.py\", line 123, in verify_operational_manifest\n    raise ManifestVerificationError(f\"member byte integrity failure: {member['path']}\")\nfoundation.phase31_4_operational_manifest.ManifestVerificationError: member byte integrity failure: backend/foundation/phase31_4_postgres18_environment.py\n\n----------------------------------------------------------------------\nRan 265 tests in 24.914s\n\nFAILED (errors=1)\n",
+  "reason": "Frozen business material contradicts native validation; diagnostic successes are not lifecycle passes",
+  "schema": "phase31.4-frozen-runtime-semantic-reproduction/v1",
+  "semantic_blockers": [
+    "P1-FROZEN-ACTION-PLAN-PRECONDITIONS",
+    "P1-FROZEN-CONTROLLED-OPPORTUNITY-GOVERNANCE"
+  ],
+  "semantic_reproduction_tests_passed": 4,
+  "skipped": 0,
+  "stage": "A",
+  "stage_b_executed": false,
+  "successor_manifest_created": false,
+  "system_check": "PASS",
+  "tests_run": 265,
+  "verdict": "NOT_PROMOTED"
+}

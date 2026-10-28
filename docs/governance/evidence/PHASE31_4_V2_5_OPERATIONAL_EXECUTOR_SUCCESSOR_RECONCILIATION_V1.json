@@ -1,0 +1,254 @@
+{
+  "schema": "phase31.4-v2.5-operational-executor-successor-reconciliation/v1",
+  "verdict": "OPERATIONAL_EXECUTOR_SUCCESSOR_RECONCILIATION_PASS",
+  "generation_id": "PHASE31_4_V2_5_OPERATIONAL_EXECUTOR_SUCCESSOR_RECONCILIATION_V1",
+  "scope": "Current-source integrity reconciliation only; no operational-live validation.",
+  "allowed_statement": "V7 is a verified source-integrity successor of V6 for the reviewed operational live-executor and authorization-supersession source evolution. Operational live capability remains unproven.",
+  "v6": {
+    "path": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V6.json",
+    "sha256": "6f1a4499d993de3813a12ed0f8b79d392251a82dbcfae1fdaa53c892ec3b6b23",
+    "preserved": true,
+    "protected_source_count": 26
+  },
+  "v7": {
+    "path": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V7.json",
+    "sha256": "44b161084700ae3892cb3e49d054de35ef1403409c69eeae9d370b46565d2ca8",
+    "protected_source_count": 28,
+    "predecessor": "V6"
+  },
+  "historical_preservation": {
+    "v2_4": true,
+    "v1": true,
+    "v2": true,
+    "v3": true,
+    "v4": true,
+    "v5": true,
+    "v6": true,
+    "provenance_discontinuity": "PRESERVED",
+    "retries_16_19": "PRESERVED",
+    "old_retry20_authorization": "PRESERVED",
+    "diagnostic_attempt_evidence": "PRESERVED"
+  },
+  "b1_b2_b3": {
+    "B1": {
+      "status": "SOURCE_REMEDIATED_STATIC_TEST_BACKED",
+      "claim": "CLI evidence command reaches live executor, CaptureBundle, runtime handoff; no live PASS claimed."
+    },
+    "B2": {
+      "status": "SOURCE_REMEDIATED_STATIC_TEST_BACKED",
+      "claim": "Operational modes reject test adapters and require real PID/readiness, command results and independent readbacks."
+    },
+    "B3": {
+      "status": "SOURCE_REMEDIATED_STATIC_TEST_BACKED",
+      "claim": "Exact authorization selection, additive supersession index, AUTHORIZATION_SUPERSEDED and one-shot consumption are separated from execution-start markers."
+    }
+  },
+  "inventory": {
+    "v6_count": 26,
+    "v7_count": 28,
+    "unchanged_count": 23,
+    "modified_count": 3,
+    "new_count": 2,
+    "removed": [],
+    "missing": [],
+    "unexpected": [],
+    "modified_sources": [
+      {
+        "path": "backend/foundation/phase31_4_integrity_generations.py",
+        "predecessor_sha256": "7b5ff1025b082480fb513edd77daa27ef5ae6ad229a0e4c1555bb2156ece24d8",
+        "sha256": "c8ec3af921a13a02fcd983762623a29652a0898923f3add82b2b1a51c334c15b",
+        "classification": "LEGITIMATE_OPERATIONAL_EXECUTOR_EVOLUTION",
+        "reason": "Integrity-generation guard promoted to make V7 current while preserving V1-V6 historical verification."
+      },
+      {
+        "path": "backend/foundation/phase31_4_v2_5_disposable_runner.py",
+        "predecessor_sha256": "fb54ae34d5df2ecad692601a253224c6083f293fc2f640052a97d98e86c1f487",
+        "sha256": "5d9a9cb42a28db33bc2df8c70652a98682eac90cc2b68c5c36d14b1e7dff40d9",
+        "classification": "LEGITIMATE_AUTHORIZATION_SUPERSESSION_EVOLUTION",
+        "reason": "Operational CLI evidence path and exact authorization supersession/one-shot semantics."
+      },
+      {
+        "path": "backend/foundation/phase31_4_v2_5_live_executor.py",
+        "predecessor_sha256": "2c75929b9cef131ac4486899de5604dc1369203421fbad0f69d276ecd4930146",
+        "sha256": "19b1a187949813d52cf8b94f56c45a6d8a7dda5954c637541e6ac97fb510d1f0",
+        "classification": "LEGITIMATE_OPERATIONAL_EXECUTOR_EVOLUTION",
+        "reason": "Fail-closed operational bridge for bootstrap, services, event delivery, six independent Stage EXT readbacks, CaptureBundle, runtime handoff, and cleanup."
+      }
+    ],
+    "new_material_sources": [
+      {
+        "path": "backend/foundation/phase31_4_v2_5_operational_adapters.py",
+        "sha256": "442c74eb180e6e9788d42f82c5861c91433f396cc84ad660443afe5bdbe05453",
+        "new_in_generation": true,
+        "classification": "NEW_MATERIAL_EXECUTION_SOURCE",
+        "semantic_role": "Real subprocess/HTTP operational adapter with retained logs, positive PID/readiness requirements, and no automatic fake fallback."
+      },
+      {
+        "path": "docs/governance/tools/phase31_4_v2_5_operational_actions.py",
+        "sha256": "fad970765a7e589d0a5f55df68d06618f912c7fdf241cccbd4296446a1959973",
+        "new_in_generation": true,
+        "classification": "NEW_MATERIAL_EXECUTION_SOURCE",
+        "semantic_role": "Repository operational actions for database bootstrap, migrations, PostgreSQL roles, process startup, event delivery, independent readbacks, and cleanup handoff."
+      }
+    ]
+  },
+  "operational_remediation_cycle_forensics": {
+    "material_execution_source": [
+      "backend/foundation/phase31_4_v2_5_live_executor.py",
+      "backend/foundation/phase31_4_v2_5_operational_adapters.py",
+      "backend/foundation/phase31_4_v2_5_disposable_runner.py",
+      "docs/governance/tools/phase31_4_v2_5_operational_actions.py"
+    ],
+    "test_only": [
+      "backend/foundation/test_phase31_4_v2_5_live_executor.py",
+      "backend/foundation/test_phase31_4_v2_5_disposable_runner.py",
+      "backend/foundation/test_phase31_4_v2_5_operational_adapters.py"
+    ],
+    "governance_tool": [
+      "docs/governance/tools/run_phase31_4_v2_5_operational_diagnostic.py"
+    ],
+    "governance_artifact": [
+      "docs/governance/evidence/runs/Phase_31.4_V2.5_Live_Executor_Operational_Diagnostic_20260924_Attempt_1/authorization_diagnostic_v1.json",
+      "docs/governance/evidence/runs/Phase_31.4_V2.5_Live_Executor_Operational_Diagnostic_20260924_Attempt_2/authorization_diagnostic_v1.json",
+      "docs/governance/evidence/runs/Phase_31.4_V2.5_Live_Executor_Operational_Diagnostic_20260924_Attempt_3/authorization_diagnostic_v1.json",
+      "docs/governance/evidence/runs/Phase_31.4_V2.5_Clean_Retry_20/AUTHORIZATION_INDEX.json",
+      "docs/governance/evidence/PHASE31_4_V2_5_OPERATIONAL_LIVE_EXECUTOR_REMEDIATION_V1.json"
+    ],
+    "documentation": [
+      "docs/governance/evidence/PHASE31_4_V2_5_OPERATIONAL_LIVE_EXECUTOR_REMEDIATION_REPORT.md"
+    ],
+    "unrelated": []
+  },
+  "reconciliation_changes": {
+    "material_execution_source": [
+      "backend/foundation/phase31_4_integrity_generations.py"
+    ],
+    "test_only": [
+      "backend/foundation/test_phase31_4_integrity_generations.py",
+      "backend/foundation/test_phase31_4_v2_5_precreation_integrity.py",
+      "backend/foundation/test_phase31_4_v2_5_operational_adapters.py"
+    ],
+    "governance_artifact": [
+      "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V7.json",
+      "docs/governance/evidence/PHASE31_4_V2_5_OPERATIONAL_EXECUTOR_SUCCESSOR_RECONCILIATION_V1.json"
+    ],
+    "documentation": [
+      "docs/transformation/PHASE31_4_V2_5_OPERATIONAL_EXECUTOR_SUCCESSOR_RECONCILIATION_V1_REPORT.md"
+    ]
+  },
+  "protected_source_sha256": {
+    "backend/foundation/phase31_4_v2_5_disposable_runner.py": "5d9a9cb42a28db33bc2df8c70652a98682eac90cc2b68c5c36d14b1e7dff40d9",
+    "docs/governance/tools/phase31_4_v2_5_disposable_runner.py": "1182854657d4165eb6b095906e161317d9bf84ece07caf439760ea69231fa8b9",
+    "backend/foundation/phase31_4_v2_5_live_executor.py": "19b1a187949813d52cf8b94f56c45a6d8a7dda5954c637541e6ac97fb510d1f0",
+    "backend/foundation/phase31_4_v2_5_operational_adapters.py": "442c74eb180e6e9788d42f82c5861c91433f396cc84ad660443afe5bdbe05453",
+    "docs/governance/tools/phase31_4_v2_5_operational_actions.py": "fad970765a7e589d0a5f55df68d06618f912c7fdf241cccbd4296446a1959973",
+    "backend/foundation/phase31_4_v2_5_precreation_integrity.py": "9fc0efcc14fee9587a041b8c81dffde2d447f82e16d4df495571b7358cb854eb",
+    "backend/foundation/phase31_4_v2_5_runtime.py": "70997fb33eb22c9576cb7def0cd5ccdff9d61deebad4621072920b5acf5efb19",
+    "backend/foundation/phase31_4_v2_5_verifier_remediation.py": "61a6fa21f01c27bd6713154512045926c4d3d65d410d0d572922ea1ef21dc639",
+    "backend/integration/client.py": "9edceb9510fd70e1c2c5e7c1c7040a8c16d74a26f8c143abce62b976f4e6639a",
+    "backend/backend/settings.py": "eeede9b7588f2d5c88ec717dcec1a5f3ed46e97cf183125dcaadfdfe1d6be613",
+    "backend/foundation/phase31_4_integrity_generations.py": "c8ec3af921a13a02fcd983762623a29652a0898923f3add82b2b1a51c334c15b"
+  },
+  "authorization_index_materiality": {
+    "classification": "GOVERNANCE_INDEX_METADATA",
+    "protected_as_execution_source": false,
+    "mutable_runtime_evidence_protected_as_source": false,
+    "semantics_implementation": "backend/foundation/phase31_4_v2_5_disposable_runner.py"
+  },
+  "authorization_supersession_semantics": {
+    "multiple_immutable_generations": "STATIC_AND_TEST_BACKED_PASS",
+    "exact_authorization_selection": "STATIC_AND_TEST_BACKED_PASS",
+    "explicit_supersedes_linkage": "STATIC_AND_TEST_BACKED_PASS",
+    "authorization_superseded": "STATIC_AND_TEST_BACKED_PASS",
+    "one_shot_consumption": "STATIC_AND_TEST_BACKED_PASS",
+    "authorization_material_not_execution_collision": "STATIC_AND_TEST_BACKED_PASS",
+    "execution_start_markers_separate": "STATIC_AND_TEST_BACKED_PASS"
+  },
+  "synthetic_default_operational_scan": {
+    "result": "PASS",
+    "operational_defects": [],
+    "test_only_occurrences": [
+      "FakeAdapter fixed UUIDs and PASS payloads",
+      "pid: 0 negative test",
+      "synthetic runner command executor/logs"
+    ],
+    "notes": [
+      "Operational status PASS values are derived from completed commands, database reads, process PID/readiness, and explicit equality checks; no automatic fake adapter selection exists.",
+      "SYNTHETIC_TEST_AUTHORITY labels newly created disposable diagnostic records, not fixed identity evidence."
+    ]
+  },
+  "diagnostic": {
+    "classification": "LIVE_EXECUTOR_OPERATIONAL_DIAGNOSTIC",
+    "result": "FAIL",
+    "attempts": "3/3 exhausted",
+    "additional_attempts": 0,
+    "stage_ext": "0/6",
+    "database_allocation_reached": false,
+    "capture_bundle_created": false,
+    "attempt_blockers": [
+      "import path defect",
+      "Django setup ordering defect",
+      "Python package-name collision"
+    ],
+    "third_attempt_package_collision": {
+      "attempt_result": "FAIL_BEFORE_ALLOCATION",
+      "current_code_status": "FIXED_BUT_NOT_LIVE_REVALIDATED",
+      "basis": "The current runner bytes were modified after the attempt-3 diagnostic/report and the current launcher/action import ordering is statically importable; no fourth live diagnostic was executed."
+    }
+  },
+  "migrations": {
+    "v2_4": "23/23 PASS",
+    "v2_5": "24/24 PASS",
+    "pending": 0,
+    "new_migrations": 0,
+    "fake": 0,
+    "manual_patches": 0,
+    "makemigrations_check_dry_run": "PASS"
+  },
+  "tests": {
+    "focused": {
+      "status": "PASS",
+      "total": 89,
+      "passed": 89,
+      "failures": 0,
+      "errors": 0,
+      "scope": [
+        "authorization/supersession",
+        "live executor",
+        "operational adapters",
+        "disposable runner",
+        "PRECREATION",
+        "Stage EXT offline",
+        "verifier/runtime",
+        "executable graph",
+        "integrity guards"
+      ]
+    },
+    "backend_regression": {
+      "status": "PASS",
+      "total": 552,
+      "passed": 552,
+      "failures": 0,
+      "errors": 0
+    }
+  },
+  "runtime_truth": {
+    "operational_live_executor_diagnostic": "FAIL",
+    "operational_readiness": "NOT_READY",
+    "stage_ext": "LIVE_REVALIDATION_PENDING / last diagnostic 0/6",
+    "live_capability": "UNPROVEN"
+  },
+  "source_checkpoint": {
+    "p0": 0,
+    "p1": 0
+  },
+  "v5_authorization": {
+    "status": "SUPERSEDED / UNCONSUMED / DO_NOT_CONSUME",
+    "sha256": "0ca3036204c9821e17663d41e31a5734f10cd6a4c8b9f8d4d7f6585db5c1135b"
+  },
+  "formal_retry20_authorization": "NONE",
+  "retry20_executed": "NO",
+  "phase31_5": "EXECUTION_HELD",
+  "next_state": "READY_FOR_NEW_OPERATIONAL_DIAGNOSTIC_REMEDIATION",
+  "exact_next_step": "Begin a new bounded operational-diagnostic remediation cycle against V7; do not authorize Retry 20 yet."
+}

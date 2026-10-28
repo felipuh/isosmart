@@ -1,0 +1,19 @@
+{
+  "artifact_schema": "phase31.5-sha256-manifest/v1",
+  "phase": "Phase 31.5 — Production Readiness / Operational Hardening",
+  "scope": "Entry Gate + Environment Reproducibility Audit",
+  "generated_at": "2026-09-23T00:32:43Z",
+  "self_excluded": true,
+  "files": {
+    "docs/governance/evidence/phase31_5/00_entry_gate.json": "25f06a1c5fb3d959db5aeac1945ed0f333dae6f9dc0cdfe541dcae24b75d4ef1",
+    "docs/governance/evidence/phase31_5/01_environment.json": "423f815f1ad0a966ff999b4ce9df637353beff1b4a179526ada97ae2503d94da",
+    "docs/transformation/PHASE31_5_PRODUCTION_READINESS_OPERATIONAL_HARDENING_PLAN.md": "499becd85b2d7944603b6f5ee547ca7546fa5584be46d8b8f0151beed2c7f4fc",
+    "docs/governance/evidence/PHASE31_5_PRODUCTION_READINESS_OPERATIONAL_HARDENING_PLAN.json": "e43b071c717e763872e2f467e9e5be086255cd4b331097662a8f514139c96931",
+    "docs/governance/PHASE31_4_V2_5_PROMOTED_BASELINE.md": "e8a06413ccddd132697b8a35cda315ed02150e431e7a90c95bb281a36fbef547",
+    "docs/governance/evidence/PHASE31_4_V2_5_PROMOTED_BASELINE.json": "d9231dc59a35ebb862ee9ba1097ed4557be699e1abcd66f05ab16d75b7462b3a",
+    "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_16_PROMOTION_CLOSURE.json": "08b8af8c9911963844759808adbef5c2b3b663a26c34df494fbaca0cf985f328",
+    "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_16_SHA256.json": "d6e514f439e9b03fc9afa0d1bda47e9ff5c198ad9417d6244ce13f2bf1e62cb3"
+  },
+  "file_count": 8,
+  "verification": "PASS"
+}

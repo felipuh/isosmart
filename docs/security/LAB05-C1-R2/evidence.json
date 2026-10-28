@@ -1,0 +1,6800 @@
+{
+  "HTTP_E2E": false,
+  "NO_DEPLOYMENT": true,
+  "NO_SHARED_DB_MUTATION": true,
+  "PHASE31_5": "EXECUTION_HELD",
+  "PRODUCTION_READY": false,
+  "S3_DECISION_02A": "NOT_CLOSED",
+  "cleanup": {
+    "cluster_stopped": true,
+    "root_removed": true
+  },
+  "column_grants": [
+    [
+      "iso_runtime_a",
+      "audit_logs",
+      "action",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "audit_logs",
+      "action",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "audit_logs",
+      "created_at",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "audit_logs",
+      "created_at",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "audit_logs",
+      "description",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "audit_logs",
+      "description",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "audit_logs",
+      "id",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "audit_logs",
+      "id",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "audit_logs",
+      "ip_address",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "audit_logs",
+      "ip_address",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "audit_logs",
+      "module",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "audit_logs",
+      "module",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "audit_logs",
+      "new_values",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "audit_logs",
+      "new_values",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "audit_logs",
+      "old_values",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "audit_logs",
+      "old_values",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "audit_logs",
+      "organization_id",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "audit_logs",
+      "organization_id",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "audit_logs",
+      "user_agent",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "audit_logs",
+      "user_agent",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "audit_logs",
+      "user_id",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "audit_logs",
+      "user_id",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "auth_user",
+      "account_locked_until",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "auth_user",
+      "account_locked_until",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "auth_user",
+      "account_locked_until",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_a",
+      "auth_user",
+      "date_joined",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "auth_user",
+      "date_joined",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "auth_user",
+      "email",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "auth_user",
+      "email",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "auth_user",
+      "failed_login_attempts",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "auth_user",
+      "failed_login_attempts",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "auth_user",
+      "failed_login_attempts",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_a",
+      "auth_user",
+      "first_name",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "auth_user",
+      "first_name",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "auth_user",
+      "id",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "auth_user",
+      "id",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "auth_user",
+      "is_active",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "auth_user",
+      "is_active",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "auth_user",
+      "is_staff",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "auth_user",
+      "is_staff",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "auth_user",
+      "is_superuser",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "auth_user",
+      "is_superuser",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "auth_user",
+      "last_login",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "auth_user",
+      "last_login",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "auth_user",
+      "last_login",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_a",
+      "auth_user",
+      "last_name",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "auth_user",
+      "last_name",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "auth_user",
+      "must_change_password",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "auth_user",
+      "must_change_password",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "auth_user",
+      "must_change_password",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_a",
+      "auth_user",
+      "password",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "auth_user",
+      "password",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "auth_user",
+      "password",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_a",
+      "auth_user",
+      "password_history",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "auth_user",
+      "password_history",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "auth_user",
+      "password_history",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_a",
+      "auth_user",
+      "temporary_password_set_at",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "auth_user",
+      "temporary_password_set_at",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "auth_user",
+      "temporary_password_set_at",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_a",
+      "auth_user",
+      "username",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "auth_user",
+      "username",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "organizations",
+      "address",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "organizations",
+      "address",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "organizations",
+      "created_at",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "organizations",
+      "created_at",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "organizations",
+      "email",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "organizations",
+      "email",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "organizations",
+      "external_id",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "organizations",
+      "external_id",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "organizations",
+      "id",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "organizations",
+      "id",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "organizations",
+      "is_active",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "organizations",
+      "is_active",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "organizations",
+      "legal_name",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "organizations",
+      "legal_name",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "organizations",
+      "logo",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "organizations",
+      "logo",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "organizations",
+      "max_users",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "organizations",
+      "max_users",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "organizations",
+      "name",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "organizations",
+      "name",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "organizations",
+      "phone",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "organizations",
+      "phone",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "organizations",
+      "plan_type",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "organizations",
+      "plan_type",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "organizations",
+      "slug",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "organizations",
+      "slug",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "organizations",
+      "tax_id",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "organizations",
+      "tax_id",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "organizations",
+      "updated_at",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "organizations",
+      "updated_at",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "organizations",
+      "website",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "organizations",
+      "website",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "password_reset_tokens",
+      "email",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "password_reset_tokens",
+      "email",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "password_reset_tokens",
+      "email",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_a",
+      "password_reset_tokens",
+      "expires_at",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "password_reset_tokens",
+      "expires_at",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "password_reset_tokens",
+      "expires_at",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_a",
+      "password_reset_tokens",
+      "id",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "password_reset_tokens",
+      "id",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "password_reset_tokens",
+      "id",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_a",
+      "password_reset_tokens",
+      "ip_address",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "password_reset_tokens",
+      "ip_address",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "password_reset_tokens",
+      "ip_address",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_a",
+      "password_reset_tokens",
+      "requested_at",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "password_reset_tokens",
+      "requested_at",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "password_reset_tokens",
+      "requested_at",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_a",
+      "password_reset_tokens",
+      "selector",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "password_reset_tokens",
+      "selector",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "password_reset_tokens",
+      "selector",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_a",
+      "password_reset_tokens",
+      "token_hash",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "password_reset_tokens",
+      "token_hash",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "password_reset_tokens",
+      "token_hash",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_a",
+      "password_reset_tokens",
+      "used_at",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "password_reset_tokens",
+      "used_at",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "password_reset_tokens",
+      "used_at",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_a",
+      "password_reset_tokens",
+      "user_agent",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "password_reset_tokens",
+      "user_agent",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "password_reset_tokens",
+      "user_agent",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_a",
+      "password_reset_tokens",
+      "user_id",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "password_reset_tokens",
+      "user_id",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "password_reset_tokens",
+      "user_id",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_a",
+      "refresh_token_blacklist",
+      "blacklisted_at",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "refresh_token_blacklist",
+      "blacklisted_at",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "refresh_token_blacklist",
+      "id",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "refresh_token_blacklist",
+      "id",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "refresh_token_blacklist",
+      "token",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "refresh_token_blacklist",
+      "token",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "refresh_token_blacklist",
+      "token_hash",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "refresh_token_blacklist",
+      "token_hash",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "refresh_token_blacklist",
+      "user_id",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "refresh_token_blacklist",
+      "user_id",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "avatar",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "avatar",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "avatar",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "created_at",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "created_at",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "created_at",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "department",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "department",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "department",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "email_notifications",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "email_notifications",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "email_notifications",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "id",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "id",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "id",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "is_active",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "is_active",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "is_active",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "job_title",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "job_title",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "job_title",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "language",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "language",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "language",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "notifications_enabled",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "notifications_enabled",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "notifications_enabled",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "organization_id",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "organization_id",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "organization_id",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "phone",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "phone",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "phone",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "role",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "role",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "role",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "theme",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "theme",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "theme",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "updated_at",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "updated_at",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "updated_at",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "user_id",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "user_id",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "user_id",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_b",
+      "audit_logs",
+      "action",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "audit_logs",
+      "action",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "audit_logs",
+      "created_at",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "audit_logs",
+      "created_at",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "audit_logs",
+      "description",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "audit_logs",
+      "description",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "audit_logs",
+      "id",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "audit_logs",
+      "id",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "audit_logs",
+      "ip_address",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "audit_logs",
+      "ip_address",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "audit_logs",
+      "module",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "audit_logs",
+      "module",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "audit_logs",
+      "new_values",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "audit_logs",
+      "new_values",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "audit_logs",
+      "old_values",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "audit_logs",
+      "old_values",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "audit_logs",
+      "organization_id",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "audit_logs",
+      "organization_id",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "audit_logs",
+      "user_agent",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "audit_logs",
+      "user_agent",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "audit_logs",
+      "user_id",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "audit_logs",
+      "user_id",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "auth_user",
+      "account_locked_until",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "auth_user",
+      "account_locked_until",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "auth_user",
+      "account_locked_until",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_b",
+      "auth_user",
+      "date_joined",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "auth_user",
+      "date_joined",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "auth_user",
+      "email",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "auth_user",
+      "email",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "auth_user",
+      "failed_login_attempts",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "auth_user",
+      "failed_login_attempts",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "auth_user",
+      "failed_login_attempts",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_b",
+      "auth_user",
+      "first_name",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "auth_user",
+      "first_name",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "auth_user",
+      "id",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "auth_user",
+      "id",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "auth_user",
+      "is_active",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "auth_user",
+      "is_active",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "auth_user",
+      "is_staff",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "auth_user",
+      "is_staff",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "auth_user",
+      "is_superuser",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "auth_user",
+      "is_superuser",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "auth_user",
+      "last_login",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "auth_user",
+      "last_login",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "auth_user",
+      "last_login",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_b",
+      "auth_user",
+      "last_name",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "auth_user",
+      "last_name",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "auth_user",
+      "must_change_password",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "auth_user",
+      "must_change_password",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "auth_user",
+      "must_change_password",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_b",
+      "auth_user",
+      "password",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "auth_user",
+      "password",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "auth_user",
+      "password",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_b",
+      "auth_user",
+      "password_history",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "auth_user",
+      "password_history",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "auth_user",
+      "password_history",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_b",
+      "auth_user",
+      "temporary_password_set_at",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "auth_user",
+      "temporary_password_set_at",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "auth_user",
+      "temporary_password_set_at",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_b",
+      "auth_user",
+      "username",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "auth_user",
+      "username",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "organizations",
+      "address",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "organizations",
+      "address",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "organizations",
+      "created_at",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "organizations",
+      "created_at",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "organizations",
+      "email",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "organizations",
+      "email",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "organizations",
+      "external_id",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "organizations",
+      "external_id",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "organizations",
+      "id",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "organizations",
+      "id",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "organizations",
+      "is_active",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "organizations",
+      "is_active",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "organizations",
+      "legal_name",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "organizations",
+      "legal_name",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "organizations",
+      "logo",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "organizations",
+      "logo",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "organizations",
+      "max_users",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "organizations",
+      "max_users",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "organizations",
+      "name",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "organizations",
+      "name",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "organizations",
+      "phone",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "organizations",
+      "phone",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "organizations",
+      "plan_type",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "organizations",
+      "plan_type",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "organizations",
+      "slug",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "organizations",
+      "slug",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "organizations",
+      "tax_id",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "organizations",
+      "tax_id",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "organizations",
+      "updated_at",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "organizations",
+      "updated_at",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "organizations",
+      "website",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "organizations",
+      "website",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "password_reset_tokens",
+      "email",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "password_reset_tokens",
+      "email",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "password_reset_tokens",
+      "email",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_b",
+      "password_reset_tokens",
+      "expires_at",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "password_reset_tokens",
+      "expires_at",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "password_reset_tokens",
+      "expires_at",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_b",
+      "password_reset_tokens",
+      "id",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "password_reset_tokens",
+      "id",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "password_reset_tokens",
+      "id",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_b",
+      "password_reset_tokens",
+      "ip_address",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "password_reset_tokens",
+      "ip_address",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "password_reset_tokens",
+      "ip_address",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_b",
+      "password_reset_tokens",
+      "requested_at",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "password_reset_tokens",
+      "requested_at",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "password_reset_tokens",
+      "requested_at",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_b",
+      "password_reset_tokens",
+      "selector",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "password_reset_tokens",
+      "selector",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "password_reset_tokens",
+      "selector",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_b",
+      "password_reset_tokens",
+      "token_hash",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "password_reset_tokens",
+      "token_hash",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "password_reset_tokens",
+      "token_hash",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_b",
+      "password_reset_tokens",
+      "used_at",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "password_reset_tokens",
+      "used_at",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "password_reset_tokens",
+      "used_at",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_b",
+      "password_reset_tokens",
+      "user_agent",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "password_reset_tokens",
+      "user_agent",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "password_reset_tokens",
+      "user_agent",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_b",
+      "password_reset_tokens",
+      "user_id",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "password_reset_tokens",
+      "user_id",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "password_reset_tokens",
+      "user_id",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_b",
+      "refresh_token_blacklist",
+      "blacklisted_at",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "refresh_token_blacklist",
+      "blacklisted_at",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "refresh_token_blacklist",
+      "id",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "refresh_token_blacklist",
+      "id",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "refresh_token_blacklist",
+      "token",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "refresh_token_blacklist",
+      "token",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "refresh_token_blacklist",
+      "token_hash",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "refresh_token_blacklist",
+      "token_hash",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "refresh_token_blacklist",
+      "user_id",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "refresh_token_blacklist",
+      "user_id",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "avatar",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "avatar",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "avatar",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "created_at",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "created_at",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "created_at",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "department",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "department",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "department",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "email_notifications",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "email_notifications",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "email_notifications",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "id",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "id",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "id",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "is_active",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "is_active",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "is_active",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "job_title",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "job_title",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "job_title",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "language",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "language",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "language",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "notifications_enabled",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "notifications_enabled",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "notifications_enabled",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "organization_id",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "organization_id",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "organization_id",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "phone",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "phone",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "phone",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "role",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "role",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "role",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "theme",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "theme",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "theme",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "updated_at",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "updated_at",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "updated_at",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "user_id",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "user_id",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "user_id",
+      "UPDATE"
+    ]
+  ],
+  "django_check": "System check identified no issues (0 silenced).",
+  "executed_migrations": [],
+  "expected_tables": [
+    "audit_logs",
+    "auth_group",
+    "auth_group_permissions",
+    "auth_permission",
+    "auth_user",
+    "auth_user_groups",
+    "auth_user_user_permissions",
+    "django_content_type",
+    "organizations",
+    "password_reset_tokens",
+    "refresh_token_blacklist",
+    "user_profiles"
+  ],
+  "financial_tables": [],
+  "global_tables": [
+    "auth_user",
+    "auth_user_groups",
+    "auth_user_user_permissions",
+    "auth_group",
+    "auth_group_permissions",
+    "auth_permission",
+    "django_content_type"
+  ],
+  "grants": [
+    [
+      "iso_runtime_a",
+      "audit_logs",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "audit_logs",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "auth_user",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "auth_user",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "organizations",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "organizations",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "password_reset_tokens",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "password_reset_tokens",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "password_reset_tokens",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_a",
+      "refresh_token_blacklist",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "refresh_token_blacklist",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_a",
+      "user_profiles",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_b",
+      "audit_logs",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "audit_logs",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "auth_user",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "auth_user",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "organizations",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "organizations",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "password_reset_tokens",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "password_reset_tokens",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "password_reset_tokens",
+      "UPDATE"
+    ],
+    [
+      "iso_runtime_b",
+      "refresh_token_blacklist",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "refresh_token_blacklist",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "INSERT"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "SELECT"
+    ],
+    [
+      "iso_runtime_b",
+      "user_profiles",
+      "UPDATE"
+    ]
+  ],
+  "graph": {
+    "edges": {
+      "auth.0001_initial": [
+        [
+          "contenttypes",
+          "0001_initial"
+        ]
+      ],
+      "auth.0002_alter_permission_name_max_length": [
+        [
+          "auth",
+          "0001_initial"
+        ]
+      ],
+      "auth.0003_alter_user_email_max_length": [
+        [
+          "auth",
+          "0002_alter_permission_name_max_length"
+        ]
+      ],
+      "auth.0004_alter_user_username_opts": [
+        [
+          "auth",
+          "0003_alter_user_email_max_length"
+        ]
+      ],
+      "auth.0005_alter_user_last_login_null": [
+        [
+          "auth",
+          "0004_alter_user_username_opts"
+        ]
+      ],
+      "auth.0006_require_contenttypes_0002": [
+        [
+          "auth",
+          "0005_alter_user_last_login_null"
+        ],
+        [
+          "contenttypes",
+          "0002_remove_content_type_name"
+        ]
+      ],
+      "auth.0007_alter_validators_add_error_messages": [
+        [
+          "auth",
+          "0006_require_contenttypes_0002"
+        ]
+      ],
+      "auth.0008_alter_user_username_max_length": [
+        [
+          "auth",
+          "0007_alter_validators_add_error_messages"
+        ]
+      ],
+      "auth.0009_alter_user_last_name_max_length": [
+        [
+          "auth",
+          "0008_alter_user_username_max_length"
+        ]
+      ],
+      "auth.0010_alter_group_name_max_length": [
+        [
+          "auth",
+          "0009_alter_user_last_name_max_length"
+        ]
+      ],
+      "auth.0011_update_proxy_permissions": [
+        [
+          "auth",
+          "0010_alter_group_name_max_length"
+        ],
+        [
+          "contenttypes",
+          "0002_remove_content_type_name"
+        ]
+      ],
+      "auth.0012_alter_user_first_name_max_length": [
+        [
+          "auth",
+          "0011_update_proxy_permissions"
+        ]
+      ],
+      "authentication.0001_initial": [
+        [
+          "auth",
+          "0012_alter_user_first_name_max_length"
+        ]
+      ],
+      "authentication.0002_userprofile": [
+        [
+          "authentication",
+          "0001_initial"
+        ],
+        [
+          "core",
+          "0003_organization_userprofile_organizationsettings_and_more"
+        ]
+      ],
+      "authentication.0003_alter_user_first_name_alter_user_is_active_and_more": [
+        [
+          "authentication",
+          "0002_userprofile"
+        ]
+      ],
+      "authentication.0004_refresh_token_hash": [
+        [
+          "authentication",
+          "0003_alter_user_first_name_alter_user_is_active_and_more"
+        ]
+      ],
+      "authentication.0005_password_reset_token": [
+        [
+          "authentication",
+          "0004_refresh_token_hash"
+        ]
+      ],
+      "authentication.0006_user_login_lockout": [
+        [
+          "authentication",
+          "0005_password_reset_token"
+        ]
+      ],
+      "authentication.0007_user_must_change_password": [
+        [
+          "authentication",
+          "0006_user_login_lockout"
+        ]
+      ],
+      "authentication.0008_user_password_history": [
+        [
+          "authentication",
+          "0007_user_must_change_password"
+        ]
+      ],
+      "authentication.0009_user_temporary_password_set_at": [
+        [
+          "authentication",
+          "0008_user_password_history"
+        ]
+      ],
+      "authentication.0010_alter_refreshtokenblacklist_token_hash": [
+        [
+          "authentication",
+          "0009_user_temporary_password_set_at"
+        ]
+      ],
+      "authentication.0011_application_auth_runtime_privileges": [
+        [
+          "authentication",
+          "0010_alter_refreshtokenblacklist_token_hash"
+        ],
+        [
+          "core",
+          "0019_featureflag"
+        ],
+        [
+          "foundation",
+          "0037_qms_audit_capa_foundation"
+        ]
+      ],
+      "contenttypes.0001_initial": [],
+      "contenttypes.0002_remove_content_type_name": [
+        [
+          "contenttypes",
+          "0001_initial"
+        ]
+      ],
+      "core.0001_initial": [
+        [
+          "authentication",
+          "0001_initial"
+        ]
+      ],
+      "core.0002_alter_document_file_path": [
+        [
+          "core",
+          "0001_initial"
+        ]
+      ],
+      "core.0003_organization_userprofile_organizationsettings_and_more": [
+        [
+          "authentication",
+          "0001_initial"
+        ],
+        [
+          "core",
+          "0002_alter_document_file_path"
+        ]
+      ],
+      "core.0004_delete_userprofile": [
+        [
+          "authentication",
+          "0002_userprofile"
+        ],
+        [
+          "core",
+          "0003_organization_userprofile_organizationsettings_and_more"
+        ]
+      ],
+      "core.0005_organization_external_id": [
+        [
+          "core",
+          "0004_delete_userprofile"
+        ]
+      ],
+      "core.0006_onboarding_and_multi_standard": [
+        [
+          "authentication",
+          "0001_initial"
+        ],
+        [
+          "core",
+          "0005_organization_external_id"
+        ]
+      ],
+      "core.0007_add_preferred_language_to_settings": [
+        [
+          "core",
+          "0006_onboarding_and_multi_standard"
+        ]
+      ],
+      "core.0008_organizationsettings_preferred_language": [
+        [
+          "core",
+          "0007_add_preferred_language_to_settings"
+        ]
+      ],
+      "core.0009_organizationsettings_onboarding_profile_and_tone": [
+        [
+          "core",
+          "0008_organizationsettings_preferred_language"
+        ]
+      ],
+      "core.0010_onboardinginsightsnapshot": [
+        [
+          "authentication",
+          "0001_initial"
+        ],
+        [
+          "core",
+          "0009_organizationsettings_onboarding_profile_and_tone"
+        ]
+      ],
+      "core.0011_billing_models": [
+        [
+          "authentication",
+          "0001_initial"
+        ],
+        [
+          "core",
+          "0010_onboardinginsightsnapshot"
+        ]
+      ],
+      "core.0012_billingpayment_evidence_fields": [
+        [
+          "core",
+          "0011_billing_models"
+        ]
+      ],
+      "core.0013_contextanalysis_organization_document_organization_and_more": [
+        [
+          "core",
+          "0012_billingpayment_evidence_fields"
+        ]
+      ],
+      "core.0014_backfill_and_enforce_organization_not_null": [
+        [
+          "authentication",
+          "0004_refresh_token_hash"
+        ],
+        [
+          "core",
+          "0013_contextanalysis_organization_document_organization_and_more"
+        ]
+      ],
+      "core.0015_notificationdelivery": [
+        [
+          "core",
+          "0014_backfill_and_enforce_organization_not_null"
+        ]
+      ],
+      "core.0016_contextanalysis_climate_fields": [
+        [
+          "core",
+          "0015_notificationdelivery"
+        ]
+      ],
+      "core.0017_rename_notificatio_organiz_6e1f3f_idx_notificatio_organiz_a85fc0_idx_and_more": [
+        [
+          "core",
+          "0016_contextanalysis_climate_fields"
+        ]
+      ],
+      "core.0018_externalcontextsignal_environmentalriskalert_and_more": [
+        [
+          "authentication",
+          "0001_initial"
+        ],
+        [
+          "core",
+          "0017_rename_notificatio_organiz_6e1f3f_idx_notificatio_organiz_a85fc0_idx_and_more"
+        ]
+      ],
+      "core.0019_featureflag": [
+        [
+          "core",
+          "0018_externalcontextsignal_environmentalriskalert_and_more"
+        ]
+      ],
+      "foundation.0001_foundation_tenant_projection": [],
+      "foundation.0002_projection_organization_user_foundation": [
+        [
+          "foundation",
+          "0001_foundation_tenant_projection"
+        ]
+      ],
+      "foundation.0003_eventing_immutable_audit_foundation": [
+        [
+          "foundation",
+          "0002_projection_organization_user_foundation"
+        ]
+      ],
+      "foundation.0004_qms_harmonized_context_foundation": [
+        [
+          "foundation",
+          "0003_eventing_immutable_audit_foundation"
+        ]
+      ],
+      "foundation.0005_risk_opportunity_objective_foundation": [
+        [
+          "foundation",
+          "0004_qms_harmonized_context_foundation"
+        ]
+      ],
+      "foundation.0006_change_performance_measurement_foundation": [
+        [
+          "foundation",
+          "0005_risk_opportunity_objective_foundation"
+        ]
+      ],
+      "foundation.0007_document_evidence_foundation": [
+        [
+          "foundation",
+          "0006_change_performance_measurement_foundation"
+        ]
+      ],
+      "foundation.0008_evidence_coverage_normative_core_foundation": [
+        [
+          "foundation",
+          "0007_document_evidence_foundation"
+        ]
+      ],
+      "foundation.0009_knowledge_layer_foundation": [
+        [
+          "foundation",
+          "0008_evidence_coverage_normative_core_foundation"
+        ]
+      ],
+      "foundation.0010_governed_recommendation_foundation": [
+        [
+          "foundation",
+          "0009_knowledge_layer_foundation"
+        ]
+      ],
+      "foundation.0011_agent_definition_run_provenance_foundation": [
+        [
+          "foundation",
+          "0010_governed_recommendation_foundation"
+        ]
+      ],
+      "foundation.0012_agent_decision_human_decision_gate_foundation": [
+        [
+          "foundation",
+          "0011_agent_definition_run_provenance_foundation"
+        ]
+      ],
+      "foundation.0013_action_execution_preparation_authorization_foundation": [
+        [
+          "foundation",
+          "0012_agent_decision_human_decision_gate_foundation"
+        ]
+      ],
+      "foundation.0014_action_execution_synthetic_foundation": [
+        [
+          "foundation",
+          "0013_action_execution_preparation_authorization_foundation"
+        ]
+      ],
+      "foundation.0015_first_controlled_qms_mutation_poc": [
+        [
+          "foundation",
+          "0014_action_execution_synthetic_foundation"
+        ]
+      ],
+      "foundation.0016_controlled_execution_recovery_hardening": [
+        [
+          "foundation",
+          "0015_first_controlled_qms_mutation_poc"
+        ]
+      ],
+      "foundation.0017_effectiveness_check_foundation": [
+        [
+          "foundation",
+          "0016_controlled_execution_recovery_hardening"
+        ]
+      ],
+      "foundation.0018_governed_learning_foundation": [
+        [
+          "foundation",
+          "0017_effectiveness_check_foundation"
+        ]
+      ],
+      "foundation.0019_learning_proposal_review_application_authorization_foundation": [
+        [
+          "foundation",
+          "0018_governed_learning_foundation"
+        ]
+      ],
+      "foundation.0020_exact_learning_delta_target_operation_contract": [
+        [
+          "foundation",
+          "0019_learning_proposal_review_application_authorization_foundation"
+        ]
+      ],
+      "foundation.0021_first_governed_knowledge_rule_application_poc": [
+        [
+          "foundation",
+          "0020_exact_learning_delta_target_operation_contract"
+        ]
+      ],
+      "foundation.0022_inert_rule_publication_activation_runtime_adoption": [
+        [
+          "foundation",
+          "0021_first_governed_knowledge_rule_application_poc"
+        ]
+      ],
+      "foundation.0023_retained_synthetic_source_reference_application": [
+        [
+          "foundation",
+          "0022_inert_rule_publication_activation_runtime_adoption"
+        ]
+      ],
+      "foundation.0024_adminapps_ingress_receipt": [
+        [
+          "foundation",
+          "0023_retained_synthetic_source_reference_application"
+        ]
+      ],
+      "foundation.0025_iso9000_foundation_gate": [
+        [
+          "foundation",
+          "0024_adminapps_ingress_receipt"
+        ]
+      ],
+      "foundation.0026_question_bank_versioning": [
+        [
+          "foundation",
+          "0025_iso9000_foundation_gate"
+        ]
+      ],
+      "foundation.0027_onboarding_workflow": [
+        [
+          "foundation",
+          "0026_question_bank_versioning"
+        ]
+      ],
+      "foundation.0028_capability_activation": [
+        [
+          "foundation",
+          "0027_onboarding_workflow"
+        ]
+      ],
+      "foundation.0029_context_twin_result_completion": [
+        [
+          "foundation",
+          "0028_capability_activation"
+        ]
+      ],
+      "foundation.0030_qms_site": [
+        [
+          "foundation",
+          "0029_context_twin_result_completion"
+        ]
+      ],
+      "foundation.0031_tenant_standard_pack": [
+        [
+          "foundation",
+          "0030_qms_site"
+        ]
+      ],
+      "foundation.0032_global_industry_profile": [
+        [
+          "foundation",
+          "0031_tenant_standard_pack"
+        ]
+      ],
+      "foundation.0033_tenant_projection_profile_fields": [
+        [
+          "foundation",
+          "0032_global_industry_profile"
+        ]
+      ],
+      "foundation.0034_organization_source_profile_fields": [
+        [
+          "foundation",
+          "0033_tenant_projection_profile_fields"
+        ]
+      ],
+      "foundation.0035_user_projection_profile_fields": [
+        [
+          "foundation",
+          "0034_organization_source_profile_fields"
+        ]
+      ],
+      "foundation.0036_action_execution_rollback_lineage": [
+        [
+          "foundation",
+          "0035_user_projection_profile_fields"
+        ]
+      ],
+      "foundation.0037_qms_audit_capa_foundation": [
+        [
+          "foundation",
+          "0036_action_execution_rollback_lineage"
+        ]
+      ]
+    },
+    "financial_free_authentication_targets": [
+      [
+        "authentication",
+        "0006_user_login_lockout"
+      ],
+      [
+        "authentication",
+        "0010_alter_refreshtokenblacklist_token_hash"
+      ],
+      [
+        "authentication",
+        "0007_user_must_change_password"
+      ],
+      [
+        "authentication",
+        "0009_user_temporary_password_set_at"
+      ],
+      [
+        "authentication",
+        "0001_initial"
+      ],
+      [
+        "authentication",
+        "0004_refresh_token_hash"
+      ],
+      [
+        "authentication",
+        "0008_user_password_history"
+      ],
+      [
+        "authentication",
+        "0005_password_reset_token"
+      ],
+      [
+        "authentication",
+        "0002_userprofile"
+      ],
+      [
+        "authentication",
+        "0003_alter_user_first_name_alter_user_is_active_and_more"
+      ]
+    ],
+    "plan": [
+      [
+        "foundation",
+        "0001_foundation_tenant_projection"
+      ],
+      [
+        "foundation",
+        "0002_projection_organization_user_foundation"
+      ],
+      [
+        "foundation",
+        "0003_eventing_immutable_audit_foundation"
+      ],
+      [
+        "foundation",
+        "0004_qms_harmonized_context_foundation"
+      ],
+      [
+        "foundation",
+        "0005_risk_opportunity_objective_foundation"
+      ],
+      [
+        "foundation",
+        "0006_change_performance_measurement_foundation"
+      ],
+      [
+        "foundation",
+        "0007_document_evidence_foundation"
+      ],
+      [
+        "foundation",
+        "0008_evidence_coverage_normative_core_foundation"
+      ],
+      [
+        "foundation",
+        "0009_knowledge_layer_foundation"
+      ],
+      [
+        "foundation",
+        "0010_governed_recommendation_foundation"
+      ],
+      [
+        "foundation",
+        "0011_agent_definition_run_provenance_foundation"
+      ],
+      [
+        "foundation",
+        "0012_agent_decision_human_decision_gate_foundation"
+      ],
+      [
+        "foundation",
+        "0013_action_execution_preparation_authorization_foundation"
+      ],
+      [
+        "foundation",
+        "0014_action_execution_synthetic_foundation"
+      ],
+      [
+        "foundation",
+        "0015_first_controlled_qms_mutation_poc"
+      ],
+      [
+        "foundation",
+        "0016_controlled_execution_recovery_hardening"
+      ],
+      [
+        "foundation",
+        "0017_effectiveness_check_foundation"
+      ],
+      [
+        "foundation",
+        "0018_governed_learning_foundation"
+      ],
+      [
+        "foundation",
+        "0019_learning_proposal_review_application_authorization_foundation"
+      ],
+      [
+        "foundation",
+        "0020_exact_learning_delta_target_operation_contract"
+      ],
+      [
+        "foundation",
+        "0021_first_governed_knowledge_rule_application_poc"
+      ],
+      [
+        "foundation",
+        "0022_inert_rule_publication_activation_runtime_adoption"
+      ],
+      [
+        "foundation",
+        "0023_retained_synthetic_source_reference_application"
+      ],
+      [
+        "foundation",
+        "0024_adminapps_ingress_receipt"
+      ],
+      [
+        "foundation",
+        "0025_iso9000_foundation_gate"
+      ],
+      [
+        "foundation",
+        "0026_question_bank_versioning"
+      ],
+      [
+        "foundation",
+        "0027_onboarding_workflow"
+      ],
+      [
+        "foundation",
+        "0028_capability_activation"
+      ],
+      [
+        "foundation",
+        "0029_context_twin_result_completion"
+      ],
+      [
+        "foundation",
+        "0030_qms_site"
+      ],
+      [
+        "foundation",
+        "0031_tenant_standard_pack"
+      ],
+      [
+        "foundation",
+        "0032_global_industry_profile"
+      ],
+      [
+        "foundation",
+        "0033_tenant_projection_profile_fields"
+      ],
+      [
+        "foundation",
+        "0034_organization_source_profile_fields"
+      ],
+      [
+        "foundation",
+        "0035_user_projection_profile_fields"
+      ],
+      [
+        "foundation",
+        "0036_action_execution_rollback_lineage"
+      ],
+      [
+        "foundation",
+        "0037_qms_audit_capa_foundation"
+      ],
+      [
+        "contenttypes",
+        "0001_initial"
+      ],
+      [
+        "contenttypes",
+        "0002_remove_content_type_name"
+      ],
+      [
+        "auth",
+        "0001_initial"
+      ],
+      [
+        "auth",
+        "0002_alter_permission_name_max_length"
+      ],
+      [
+        "auth",
+        "0003_alter_user_email_max_length"
+      ],
+      [
+        "auth",
+        "0004_alter_user_username_opts"
+      ],
+      [
+        "auth",
+        "0005_alter_user_last_login_null"
+      ],
+      [
+        "auth",
+        "0006_require_contenttypes_0002"
+      ],
+      [
+        "auth",
+        "0007_alter_validators_add_error_messages"
+      ],
+      [
+        "auth",
+        "0008_alter_user_username_max_length"
+      ],
+      [
+        "auth",
+        "0009_alter_user_last_name_max_length"
+      ],
+      [
+        "auth",
+        "0010_alter_group_name_max_length"
+      ],
+      [
+        "auth",
+        "0011_update_proxy_permissions"
+      ],
+      [
+        "auth",
+        "0012_alter_user_first_name_max_length"
+      ],
+      [
+        "authentication",
+        "0001_initial"
+      ],
+      [
+        "core",
+        "0001_initial"
+      ],
+      [
+        "core",
+        "0002_alter_document_file_path"
+      ],
+      [
+        "core",
+        "0003_organization_userprofile_organizationsettings_and_more"
+      ],
+      [
+        "authentication",
+        "0002_userprofile"
+      ],
+      [
+        "core",
+        "0004_delete_userprofile"
+      ],
+      [
+        "core",
+        "0005_organization_external_id"
+      ],
+      [
+        "core",
+        "0006_onboarding_and_multi_standard"
+      ],
+      [
+        "core",
+        "0007_add_preferred_language_to_settings"
+      ],
+      [
+        "core",
+        "0008_organizationsettings_preferred_language"
+      ],
+      [
+        "core",
+        "0009_organizationsettings_onboarding_profile_and_tone"
+      ],
+      [
+        "core",
+        "0010_onboardinginsightsnapshot"
+      ],
+      [
+        "core",
+        "0011_billing_models"
+      ],
+      [
+        "core",
+        "0012_billingpayment_evidence_fields"
+      ],
+      [
+        "core",
+        "0013_contextanalysis_organization_document_organization_and_more"
+      ],
+      [
+        "authentication",
+        "0003_alter_user_first_name_alter_user_is_active_and_more"
+      ],
+      [
+        "authentication",
+        "0004_refresh_token_hash"
+      ],
+      [
+        "core",
+        "0014_backfill_and_enforce_organization_not_null"
+      ],
+      [
+        "core",
+        "0015_notificationdelivery"
+      ],
+      [
+        "core",
+        "0016_contextanalysis_climate_fields"
+      ],
+      [
+        "core",
+        "0017_rename_notificatio_organiz_6e1f3f_idx_notificatio_organiz_a85fc0_idx_and_more"
+      ],
+      [
+        "core",
+        "0018_externalcontextsignal_environmentalriskalert_and_more"
+      ],
+      [
+        "core",
+        "0019_featureflag"
+      ],
+      [
+        "authentication",
+        "0005_password_reset_token"
+      ],
+      [
+        "authentication",
+        "0006_user_login_lockout"
+      ],
+      [
+        "authentication",
+        "0007_user_must_change_password"
+      ],
+      [
+        "authentication",
+        "0008_user_password_history"
+      ],
+      [
+        "authentication",
+        "0009_user_temporary_password_set_at"
+      ],
+      [
+        "authentication",
+        "0010_alter_refreshtokenblacklist_token_hash"
+      ],
+      [
+        "authentication",
+        "0011_application_auth_runtime_privileges"
+      ]
+    ],
+    "resolved_state_models": 102,
+    "target": [
+      "authentication",
+      "0011_application_auth_runtime_privileges"
+    ]
+  },
+  "inventory": {
+    "audit_logs": {
+      "columns": [
+        [
+          "id",
+          "bigint",
+          "NO",
+          null,
+          "YES"
+        ],
+        [
+          "organization_id",
+          "integer",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "user_id",
+          "bigint",
+          "YES",
+          null,
+          "NO"
+        ],
+        [
+          "action",
+          "character varying",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "module",
+          "character varying",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "description",
+          "text",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "ip_address",
+          "inet",
+          "YES",
+          null,
+          "NO"
+        ],
+        [
+          "user_agent",
+          "text",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "old_values",
+          "jsonb",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "new_values",
+          "jsonb",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "created_at",
+          "timestamp with time zone",
+          "NO",
+          null,
+          "NO"
+        ]
+      ],
+      "constraints": {
+        "audit_logs_action_not_null": {
+          "check": false,
+          "columns": [
+            "action"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "audit_logs_created_at_not_null": {
+          "check": false,
+          "columns": [
+            "created_at"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "audit_logs_description_not_null": {
+          "check": false,
+          "columns": [
+            "description"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "audit_logs_id_not_null": {
+          "check": false,
+          "columns": [
+            "id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "audit_logs_module_not_null": {
+          "check": false,
+          "columns": [
+            "module"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "audit_logs_new_values_not_null": {
+          "check": false,
+          "columns": [
+            "new_values"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "audit_logs_old_values_not_null": {
+          "check": false,
+          "columns": [
+            "old_values"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "audit_logs_organization_id_5333c1ef": {
+          "check": false,
+          "columns": [
+            "organization_id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": true,
+          "options": null,
+          "orders": [
+            "ASC"
+          ],
+          "primary_key": false,
+          "type": "idx",
+          "unique": false
+        },
+        "audit_logs_organization_id_5333c1ef_fk_organizations_id": {
+          "check": false,
+          "columns": [
+            "organization_id"
+          ],
+          "definition": null,
+          "foreign_key": [
+            "organizations",
+            "id"
+          ],
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "audit_logs_organization_id_not_null": {
+          "check": false,
+          "columns": [
+            "organization_id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "audit_logs_pkey": {
+          "check": false,
+          "columns": [
+            "id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": true,
+          "unique": true
+        },
+        "audit_logs_user_agent_not_null": {
+          "check": false,
+          "columns": [
+            "user_agent"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "audit_logs_user_id_752b0e2b": {
+          "check": false,
+          "columns": [
+            "user_id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": true,
+          "options": null,
+          "orders": [
+            "ASC"
+          ],
+          "primary_key": false,
+          "type": "idx",
+          "unique": false
+        },
+        "audit_logs_user_id_752b0e2b_fk_auth_user_id": {
+          "check": false,
+          "columns": [
+            "user_id"
+          ],
+          "definition": null,
+          "foreign_key": [
+            "auth_user",
+            "id"
+          ],
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        }
+      },
+      "definitions": [
+        [
+          "audit_logs_action_not_null",
+          "NOT NULL action"
+        ],
+        [
+          "audit_logs_created_at_not_null",
+          "NOT NULL created_at"
+        ],
+        [
+          "audit_logs_description_not_null",
+          "NOT NULL description"
+        ],
+        [
+          "audit_logs_id_not_null",
+          "NOT NULL id"
+        ],
+        [
+          "audit_logs_module_not_null",
+          "NOT NULL module"
+        ],
+        [
+          "audit_logs_new_values_not_null",
+          "NOT NULL new_values"
+        ],
+        [
+          "audit_logs_old_values_not_null",
+          "NOT NULL old_values"
+        ],
+        [
+          "audit_logs_organization_id_5333c1ef_fk_organizations_id",
+          "FOREIGN KEY (organization_id) REFERENCES organizations(id) DEFERRABLE INITIALLY DEFERRED"
+        ],
+        [
+          "audit_logs_organization_id_not_null",
+          "NOT NULL organization_id"
+        ],
+        [
+          "audit_logs_pkey",
+          "PRIMARY KEY (id)"
+        ],
+        [
+          "audit_logs_user_agent_not_null",
+          "NOT NULL user_agent"
+        ],
+        [
+          "audit_logs_user_id_752b0e2b_fk_auth_user_id",
+          "FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED"
+        ]
+      ],
+      "indexes": [
+        [
+          "audit_logs_organization_id_5333c1ef",
+          "CREATE INDEX audit_logs_organization_id_5333c1ef ON public.audit_logs USING btree (organization_id)"
+        ],
+        [
+          "audit_logs_pkey",
+          "CREATE UNIQUE INDEX audit_logs_pkey ON public.audit_logs USING btree (id)"
+        ],
+        [
+          "audit_logs_user_id_752b0e2b",
+          "CREATE INDEX audit_logs_user_id_752b0e2b ON public.audit_logs USING btree (user_id)"
+        ]
+      ],
+      "rls": [
+        true,
+        true
+      ]
+    },
+    "auth_group": {
+      "columns": [
+        [
+          "id",
+          "integer",
+          "NO",
+          null,
+          "YES"
+        ],
+        [
+          "name",
+          "character varying",
+          "NO",
+          null,
+          "NO"
+        ]
+      ],
+      "constraints": {
+        "auth_group_id_not_null": {
+          "check": false,
+          "columns": [
+            "id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "auth_group_name_a6ea08ec_like": {
+          "check": false,
+          "columns": [
+            "name"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": true,
+          "options": null,
+          "orders": [
+            "ASC"
+          ],
+          "primary_key": false,
+          "type": "idx",
+          "unique": false
+        },
+        "auth_group_name_key": {
+          "check": false,
+          "columns": [
+            "name"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": true
+        },
+        "auth_group_name_not_null": {
+          "check": false,
+          "columns": [
+            "name"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "auth_group_pkey": {
+          "check": false,
+          "columns": [
+            "id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": true,
+          "unique": true
+        }
+      },
+      "definitions": [
+        [
+          "auth_group_id_not_null",
+          "NOT NULL id"
+        ],
+        [
+          "auth_group_name_key",
+          "UNIQUE (name)"
+        ],
+        [
+          "auth_group_name_not_null",
+          "NOT NULL name"
+        ],
+        [
+          "auth_group_pkey",
+          "PRIMARY KEY (id)"
+        ]
+      ],
+      "indexes": [
+        [
+          "auth_group_name_a6ea08ec_like",
+          "CREATE INDEX auth_group_name_a6ea08ec_like ON public.auth_group USING btree (name varchar_pattern_ops)"
+        ],
+        [
+          "auth_group_name_key",
+          "CREATE UNIQUE INDEX auth_group_name_key ON public.auth_group USING btree (name)"
+        ],
+        [
+          "auth_group_pkey",
+          "CREATE UNIQUE INDEX auth_group_pkey ON public.auth_group USING btree (id)"
+        ]
+      ],
+      "rls": [
+        false,
+        false
+      ]
+    },
+    "auth_group_permissions": {
+      "columns": [
+        [
+          "id",
+          "integer",
+          "NO",
+          null,
+          "YES"
+        ],
+        [
+          "group_id",
+          "integer",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "permission_id",
+          "integer",
+          "NO",
+          null,
+          "NO"
+        ]
+      ],
+      "constraints": {
+        "auth_group_permissio_permission_id_84c5c92e_fk_auth_perm": {
+          "check": false,
+          "columns": [
+            "permission_id"
+          ],
+          "definition": null,
+          "foreign_key": [
+            "auth_permission",
+            "id"
+          ],
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "auth_group_permissions_group_id_b120cbf9": {
+          "check": false,
+          "columns": [
+            "group_id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": true,
+          "options": null,
+          "orders": [
+            "ASC"
+          ],
+          "primary_key": false,
+          "type": "idx",
+          "unique": false
+        },
+        "auth_group_permissions_group_id_b120cbf9_fk_auth_group_id": {
+          "check": false,
+          "columns": [
+            "group_id"
+          ],
+          "definition": null,
+          "foreign_key": [
+            "auth_group",
+            "id"
+          ],
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "auth_group_permissions_group_id_not_null": {
+          "check": false,
+          "columns": [
+            "group_id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "auth_group_permissions_group_id_permission_id_0cd325b0_uniq": {
+          "check": false,
+          "columns": [
+            "group_id",
+            "permission_id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": true
+        },
+        "auth_group_permissions_id_not_null": {
+          "check": false,
+          "columns": [
+            "id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "auth_group_permissions_permission_id_84c5c92e": {
+          "check": false,
+          "columns": [
+            "permission_id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": true,
+          "options": null,
+          "orders": [
+            "ASC"
+          ],
+          "primary_key": false,
+          "type": "idx",
+          "unique": false
+        },
+        "auth_group_permissions_permission_id_not_null": {
+          "check": false,
+          "columns": [
+            "permission_id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "auth_group_permissions_pkey": {
+          "check": false,
+          "columns": [
+            "id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": true,
+          "unique": true
+        }
+      },
+      "definitions": [
+        [
+          "auth_group_permissio_permission_id_84c5c92e_fk_auth_perm",
+          "FOREIGN KEY (permission_id) REFERENCES auth_permission(id) DEFERRABLE INITIALLY DEFERRED"
+        ],
+        [
+          "auth_group_permissions_group_id_b120cbf9_fk_auth_group_id",
+          "FOREIGN KEY (group_id) REFERENCES auth_group(id) DEFERRABLE INITIALLY DEFERRED"
+        ],
+        [
+          "auth_group_permissions_group_id_not_null",
+          "NOT NULL group_id"
+        ],
+        [
+          "auth_group_permissions_group_id_permission_id_0cd325b0_uniq",
+          "UNIQUE (group_id, permission_id)"
+        ],
+        [
+          "auth_group_permissions_id_not_null",
+          "NOT NULL id"
+        ],
+        [
+          "auth_group_permissions_permission_id_not_null",
+          "NOT NULL permission_id"
+        ],
+        [
+          "auth_group_permissions_pkey",
+          "PRIMARY KEY (id)"
+        ]
+      ],
+      "indexes": [
+        [
+          "auth_group_permissions_group_id_b120cbf9",
+          "CREATE INDEX auth_group_permissions_group_id_b120cbf9 ON public.auth_group_permissions USING btree (group_id)"
+        ],
+        [
+          "auth_group_permissions_group_id_permission_id_0cd325b0_uniq",
+          "CREATE UNIQUE INDEX auth_group_permissions_group_id_permission_id_0cd325b0_uniq ON public.auth_group_permissions USING btree (group_id, permission_id)"
+        ],
+        [
+          "auth_group_permissions_permission_id_84c5c92e",
+          "CREATE INDEX auth_group_permissions_permission_id_84c5c92e ON public.auth_group_permissions USING btree (permission_id)"
+        ],
+        [
+          "auth_group_permissions_pkey",
+          "CREATE UNIQUE INDEX auth_group_permissions_pkey ON public.auth_group_permissions USING btree (id)"
+        ]
+      ],
+      "rls": [
+        false,
+        false
+      ]
+    },
+    "auth_permission": {
+      "columns": [
+        [
+          "id",
+          "integer",
+          "NO",
+          null,
+          "YES"
+        ],
+        [
+          "name",
+          "character varying",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "content_type_id",
+          "integer",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "codename",
+          "character varying",
+          "NO",
+          null,
+          "NO"
+        ]
+      ],
+      "constraints": {
+        "auth_permission_codename_not_null": {
+          "check": false,
+          "columns": [
+            "codename"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "auth_permission_content_type_id_2f476e4b": {
+          "check": false,
+          "columns": [
+            "content_type_id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": true,
+          "options": null,
+          "orders": [
+            "ASC"
+          ],
+          "primary_key": false,
+          "type": "idx",
+          "unique": false
+        },
+        "auth_permission_content_type_id_2f476e4b_fk_django_co": {
+          "check": false,
+          "columns": [
+            "content_type_id"
+          ],
+          "definition": null,
+          "foreign_key": [
+            "django_content_type",
+            "id"
+          ],
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "auth_permission_content_type_id_codename_01ab375a_uniq": {
+          "check": false,
+          "columns": [
+            "content_type_id",
+            "codename"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": true
+        },
+        "auth_permission_content_type_id_not_null": {
+          "check": false,
+          "columns": [
+            "content_type_id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "auth_permission_id_not_null": {
+          "check": false,
+          "columns": [
+            "id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "auth_permission_name_not_null": {
+          "check": false,
+          "columns": [
+            "name"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "auth_permission_pkey": {
+          "check": false,
+          "columns": [
+            "id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": true,
+          "unique": true
+        }
+      },
+      "definitions": [
+        [
+          "auth_permission_codename_not_null",
+          "NOT NULL codename"
+        ],
+        [
+          "auth_permission_content_type_id_2f476e4b_fk_django_co",
+          "FOREIGN KEY (content_type_id) REFERENCES django_content_type(id) DEFERRABLE INITIALLY DEFERRED"
+        ],
+        [
+          "auth_permission_content_type_id_codename_01ab375a_uniq",
+          "UNIQUE (content_type_id, codename)"
+        ],
+        [
+          "auth_permission_content_type_id_not_null",
+          "NOT NULL content_type_id"
+        ],
+        [
+          "auth_permission_id_not_null",
+          "NOT NULL id"
+        ],
+        [
+          "auth_permission_name_not_null",
+          "NOT NULL name"
+        ],
+        [
+          "auth_permission_pkey",
+          "PRIMARY KEY (id)"
+        ]
+      ],
+      "indexes": [
+        [
+          "auth_permission_content_type_id_2f476e4b",
+          "CREATE INDEX auth_permission_content_type_id_2f476e4b ON public.auth_permission USING btree (content_type_id)"
+        ],
+        [
+          "auth_permission_content_type_id_codename_01ab375a_uniq",
+          "CREATE UNIQUE INDEX auth_permission_content_type_id_codename_01ab375a_uniq ON public.auth_permission USING btree (content_type_id, codename)"
+        ],
+        [
+          "auth_permission_pkey",
+          "CREATE UNIQUE INDEX auth_permission_pkey ON public.auth_permission USING btree (id)"
+        ]
+      ],
+      "rls": [
+        false,
+        false
+      ]
+    },
+    "auth_user": {
+      "columns": [
+        [
+          "id",
+          "bigint",
+          "NO",
+          null,
+          "YES"
+        ],
+        [
+          "password",
+          "character varying",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "last_login",
+          "timestamp with time zone",
+          "YES",
+          null,
+          "NO"
+        ],
+        [
+          "is_superuser",
+          "boolean",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "username",
+          "character varying",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "first_name",
+          "character varying",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "last_name",
+          "character varying",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "is_staff",
+          "boolean",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "is_active",
+          "boolean",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "date_joined",
+          "timestamp with time zone",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "email",
+          "character varying",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "failed_login_attempts",
+          "smallint",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "account_locked_until",
+          "timestamp with time zone",
+          "YES",
+          null,
+          "NO"
+        ],
+        [
+          "must_change_password",
+          "boolean",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "password_history",
+          "jsonb",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "temporary_password_set_at",
+          "timestamp with time zone",
+          "YES",
+          null,
+          "NO"
+        ]
+      ],
+      "constraints": {
+        "auth_user_date_joined_not_null": {
+          "check": false,
+          "columns": [
+            "date_joined"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "auth_user_email_1c89df09_like": {
+          "check": false,
+          "columns": [
+            "email"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": true,
+          "options": null,
+          "orders": [
+            "ASC"
+          ],
+          "primary_key": false,
+          "type": "idx",
+          "unique": false
+        },
+        "auth_user_email_key": {
+          "check": false,
+          "columns": [
+            "email"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": true
+        },
+        "auth_user_email_not_null": {
+          "check": false,
+          "columns": [
+            "email"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "auth_user_failed_login_attempts_check": {
+          "check": true,
+          "columns": [
+            "failed_login_attempts"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "auth_user_failed_login_attempts_not_null": {
+          "check": false,
+          "columns": [
+            "failed_login_attempts"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "auth_user_first_name_not_null": {
+          "check": false,
+          "columns": [
+            "first_name"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "auth_user_id_not_null": {
+          "check": false,
+          "columns": [
+            "id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "auth_user_is_active_not_null": {
+          "check": false,
+          "columns": [
+            "is_active"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "auth_user_is_staff_not_null": {
+          "check": false,
+          "columns": [
+            "is_staff"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "auth_user_is_superuser_not_null": {
+          "check": false,
+          "columns": [
+            "is_superuser"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "auth_user_last_name_not_null": {
+          "check": false,
+          "columns": [
+            "last_name"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "auth_user_must_change_password_not_null": {
+          "check": false,
+          "columns": [
+            "must_change_password"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "auth_user_password_history_not_null": {
+          "check": false,
+          "columns": [
+            "password_history"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "auth_user_password_not_null": {
+          "check": false,
+          "columns": [
+            "password"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "auth_user_pkey": {
+          "check": false,
+          "columns": [
+            "id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": true,
+          "unique": true
+        },
+        "auth_user_username_6821ab7c_like": {
+          "check": false,
+          "columns": [
+            "username"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": true,
+          "options": null,
+          "orders": [
+            "ASC"
+          ],
+          "primary_key": false,
+          "type": "idx",
+          "unique": false
+        },
+        "auth_user_username_key": {
+          "check": false,
+          "columns": [
+            "username"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": true
+        },
+        "auth_user_username_not_null": {
+          "check": false,
+          "columns": [
+            "username"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "lab_no_privileged_users": {
+          "check": true,
+          "columns": [
+            "is_superuser",
+            "is_staff"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        }
+      },
+      "definitions": [
+        [
+          "auth_user_date_joined_not_null",
+          "NOT NULL date_joined"
+        ],
+        [
+          "auth_user_email_key",
+          "UNIQUE (email)"
+        ],
+        [
+          "auth_user_email_not_null",
+          "NOT NULL email"
+        ],
+        [
+          "auth_user_failed_login_attempts_check",
+          "CHECK ((failed_login_attempts >= 0))"
+        ],
+        [
+          "auth_user_failed_login_attempts_not_null",
+          "NOT NULL failed_login_attempts"
+        ],
+        [
+          "auth_user_first_name_not_null",
+          "NOT NULL first_name"
+        ],
+        [
+          "auth_user_id_not_null",
+          "NOT NULL id"
+        ],
+        [
+          "auth_user_is_active_not_null",
+          "NOT NULL is_active"
+        ],
+        [
+          "auth_user_is_staff_not_null",
+          "NOT NULL is_staff"
+        ],
+        [
+          "auth_user_is_superuser_not_null",
+          "NOT NULL is_superuser"
+        ],
+        [
+          "auth_user_last_name_not_null",
+          "NOT NULL last_name"
+        ],
+        [
+          "auth_user_must_change_password_not_null",
+          "NOT NULL must_change_password"
+        ],
+        [
+          "auth_user_password_history_not_null",
+          "NOT NULL password_history"
+        ],
+        [
+          "auth_user_password_not_null",
+          "NOT NULL password"
+        ],
+        [
+          "auth_user_pkey",
+          "PRIMARY KEY (id)"
+        ],
+        [
+          "auth_user_username_key",
+          "UNIQUE (username)"
+        ],
+        [
+          "auth_user_username_not_null",
+          "NOT NULL username"
+        ],
+        [
+          "lab_no_privileged_users",
+          "CHECK (((NOT is_superuser) AND (NOT is_staff)))"
+        ]
+      ],
+      "indexes": [
+        [
+          "auth_user_email_1c89df09_like",
+          "CREATE INDEX auth_user_email_1c89df09_like ON public.auth_user USING btree (email varchar_pattern_ops)"
+        ],
+        [
+          "auth_user_email_key",
+          "CREATE UNIQUE INDEX auth_user_email_key ON public.auth_user USING btree (email)"
+        ],
+        [
+          "auth_user_pkey",
+          "CREATE UNIQUE INDEX auth_user_pkey ON public.auth_user USING btree (id)"
+        ],
+        [
+          "auth_user_username_6821ab7c_like",
+          "CREATE INDEX auth_user_username_6821ab7c_like ON public.auth_user USING btree (username varchar_pattern_ops)"
+        ],
+        [
+          "auth_user_username_key",
+          "CREATE UNIQUE INDEX auth_user_username_key ON public.auth_user USING btree (username)"
+        ]
+      ],
+      "rls": [
+        false,
+        false
+      ]
+    },
+    "auth_user_groups": {
+      "columns": [
+        [
+          "id",
+          "bigint",
+          "NO",
+          null,
+          "YES"
+        ],
+        [
+          "user_id",
+          "bigint",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "group_id",
+          "integer",
+          "NO",
+          null,
+          "NO"
+        ]
+      ],
+      "constraints": {
+        "auth_user_groups_group_id_97559544": {
+          "check": false,
+          "columns": [
+            "group_id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": true,
+          "options": null,
+          "orders": [
+            "ASC"
+          ],
+          "primary_key": false,
+          "type": "idx",
+          "unique": false
+        },
+        "auth_user_groups_group_id_97559544_fk_auth_group_id": {
+          "check": false,
+          "columns": [
+            "group_id"
+          ],
+          "definition": null,
+          "foreign_key": [
+            "auth_group",
+            "id"
+          ],
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "auth_user_groups_group_id_not_null": {
+          "check": false,
+          "columns": [
+            "group_id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "auth_user_groups_id_not_null": {
+          "check": false,
+          "columns": [
+            "id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "auth_user_groups_pkey": {
+          "check": false,
+          "columns": [
+            "id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": true,
+          "unique": true
+        },
+        "auth_user_groups_user_id_6a12ed8b": {
+          "check": false,
+          "columns": [
+            "user_id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": true,
+          "options": null,
+          "orders": [
+            "ASC"
+          ],
+          "primary_key": false,
+          "type": "idx",
+          "unique": false
+        },
+        "auth_user_groups_user_id_6a12ed8b_fk_auth_user_id": {
+          "check": false,
+          "columns": [
+            "user_id"
+          ],
+          "definition": null,
+          "foreign_key": [
+            "auth_user",
+            "id"
+          ],
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "auth_user_groups_user_id_group_id_94350c0c_uniq": {
+          "check": false,
+          "columns": [
+            "user_id",
+            "group_id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": true
+        },
+        "auth_user_groups_user_id_not_null": {
+          "check": false,
+          "columns": [
+            "user_id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        }
+      },
+      "definitions": [
+        [
+          "auth_user_groups_group_id_97559544_fk_auth_group_id",
+          "FOREIGN KEY (group_id) REFERENCES auth_group(id) DEFERRABLE INITIALLY DEFERRED"
+        ],
+        [
+          "auth_user_groups_group_id_not_null",
+          "NOT NULL group_id"
+        ],
+        [
+          "auth_user_groups_id_not_null",
+          "NOT NULL id"
+        ],
+        [
+          "auth_user_groups_pkey",
+          "PRIMARY KEY (id)"
+        ],
+        [
+          "auth_user_groups_user_id_6a12ed8b_fk_auth_user_id",
+          "FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED"
+        ],
+        [
+          "auth_user_groups_user_id_group_id_94350c0c_uniq",
+          "UNIQUE (user_id, group_id)"
+        ],
+        [
+          "auth_user_groups_user_id_not_null",
+          "NOT NULL user_id"
+        ]
+      ],
+      "indexes": [
+        [
+          "auth_user_groups_group_id_97559544",
+          "CREATE INDEX auth_user_groups_group_id_97559544 ON public.auth_user_groups USING btree (group_id)"
+        ],
+        [
+          "auth_user_groups_pkey",
+          "CREATE UNIQUE INDEX auth_user_groups_pkey ON public.auth_user_groups USING btree (id)"
+        ],
+        [
+          "auth_user_groups_user_id_6a12ed8b",
+          "CREATE INDEX auth_user_groups_user_id_6a12ed8b ON public.auth_user_groups USING btree (user_id)"
+        ],
+        [
+          "auth_user_groups_user_id_group_id_94350c0c_uniq",
+          "CREATE UNIQUE INDEX auth_user_groups_user_id_group_id_94350c0c_uniq ON public.auth_user_groups USING btree (user_id, group_id)"
+        ]
+      ],
+      "rls": [
+        false,
+        false
+      ]
+    },
+    "auth_user_user_permissions": {
+      "columns": [
+        [
+          "id",
+          "bigint",
+          "NO",
+          null,
+          "YES"
+        ],
+        [
+          "user_id",
+          "bigint",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "permission_id",
+          "integer",
+          "NO",
+          null,
+          "NO"
+        ]
+      ],
+      "constraints": {
+        "auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm": {
+          "check": false,
+          "columns": [
+            "permission_id"
+          ],
+          "definition": null,
+          "foreign_key": [
+            "auth_permission",
+            "id"
+          ],
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "auth_user_user_permissions_id_not_null": {
+          "check": false,
+          "columns": [
+            "id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "auth_user_user_permissions_permission_id_1fbb5f2c": {
+          "check": false,
+          "columns": [
+            "permission_id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": true,
+          "options": null,
+          "orders": [
+            "ASC"
+          ],
+          "primary_key": false,
+          "type": "idx",
+          "unique": false
+        },
+        "auth_user_user_permissions_permission_id_not_null": {
+          "check": false,
+          "columns": [
+            "permission_id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "auth_user_user_permissions_pkey": {
+          "check": false,
+          "columns": [
+            "id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": true,
+          "unique": true
+        },
+        "auth_user_user_permissions_user_id_a95ead1b": {
+          "check": false,
+          "columns": [
+            "user_id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": true,
+          "options": null,
+          "orders": [
+            "ASC"
+          ],
+          "primary_key": false,
+          "type": "idx",
+          "unique": false
+        },
+        "auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id": {
+          "check": false,
+          "columns": [
+            "user_id"
+          ],
+          "definition": null,
+          "foreign_key": [
+            "auth_user",
+            "id"
+          ],
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "auth_user_user_permissions_user_id_not_null": {
+          "check": false,
+          "columns": [
+            "user_id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "auth_user_user_permissions_user_id_permission_id_14a6b632_uniq": {
+          "check": false,
+          "columns": [
+            "user_id",
+            "permission_id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": true
+        }
+      },
+      "definitions": [
+        [
+          "auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm",
+          "FOREIGN KEY (permission_id) REFERENCES auth_permission(id) DEFERRABLE INITIALLY DEFERRED"
+        ],
+        [
+          "auth_user_user_permissions_id_not_null",
+          "NOT NULL id"
+        ],
+        [
+          "auth_user_user_permissions_permission_id_not_null",
+          "NOT NULL permission_id"
+        ],
+        [
+          "auth_user_user_permissions_pkey",
+          "PRIMARY KEY (id)"
+        ],
+        [
+          "auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id",
+          "FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED"
+        ],
+        [
+          "auth_user_user_permissions_user_id_not_null",
+          "NOT NULL user_id"
+        ],
+        [
+          "auth_user_user_permissions_user_id_permission_id_14a6b632_uniq",
+          "UNIQUE (user_id, permission_id)"
+        ]
+      ],
+      "indexes": [
+        [
+          "auth_user_user_permissions_permission_id_1fbb5f2c",
+          "CREATE INDEX auth_user_user_permissions_permission_id_1fbb5f2c ON public.auth_user_user_permissions USING btree (permission_id)"
+        ],
+        [
+          "auth_user_user_permissions_pkey",
+          "CREATE UNIQUE INDEX auth_user_user_permissions_pkey ON public.auth_user_user_permissions USING btree (id)"
+        ],
+        [
+          "auth_user_user_permissions_user_id_a95ead1b",
+          "CREATE INDEX auth_user_user_permissions_user_id_a95ead1b ON public.auth_user_user_permissions USING btree (user_id)"
+        ],
+        [
+          "auth_user_user_permissions_user_id_permission_id_14a6b632_uniq",
+          "CREATE UNIQUE INDEX auth_user_user_permissions_user_id_permission_id_14a6b632_uniq ON public.auth_user_user_permissions USING btree (user_id, permission_id)"
+        ]
+      ],
+      "rls": [
+        false,
+        false
+      ]
+    },
+    "django_content_type": {
+      "columns": [
+        [
+          "id",
+          "integer",
+          "NO",
+          null,
+          "YES"
+        ],
+        [
+          "app_label",
+          "character varying",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "model",
+          "character varying",
+          "NO",
+          null,
+          "NO"
+        ]
+      ],
+      "constraints": {
+        "django_content_type_app_label_model_76bd3d3b_uniq": {
+          "check": false,
+          "columns": [
+            "app_label",
+            "model"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": true
+        },
+        "django_content_type_app_label_not_null": {
+          "check": false,
+          "columns": [
+            "app_label"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "django_content_type_id_not_null": {
+          "check": false,
+          "columns": [
+            "id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "django_content_type_model_not_null": {
+          "check": false,
+          "columns": [
+            "model"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "django_content_type_pkey": {
+          "check": false,
+          "columns": [
+            "id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": true,
+          "unique": true
+        }
+      },
+      "definitions": [
+        [
+          "django_content_type_app_label_model_76bd3d3b_uniq",
+          "UNIQUE (app_label, model)"
+        ],
+        [
+          "django_content_type_app_label_not_null",
+          "NOT NULL app_label"
+        ],
+        [
+          "django_content_type_id_not_null",
+          "NOT NULL id"
+        ],
+        [
+          "django_content_type_model_not_null",
+          "NOT NULL model"
+        ],
+        [
+          "django_content_type_pkey",
+          "PRIMARY KEY (id)"
+        ]
+      ],
+      "indexes": [
+        [
+          "django_content_type_app_label_model_76bd3d3b_uniq",
+          "CREATE UNIQUE INDEX django_content_type_app_label_model_76bd3d3b_uniq ON public.django_content_type USING btree (app_label, model)"
+        ],
+        [
+          "django_content_type_pkey",
+          "CREATE UNIQUE INDEX django_content_type_pkey ON public.django_content_type USING btree (id)"
+        ]
+      ],
+      "rls": [
+        false,
+        false
+      ]
+    },
+    "organizations": {
+      "columns": [
+        [
+          "id",
+          "integer",
+          "NO",
+          null,
+          "YES"
+        ],
+        [
+          "external_id",
+          "character varying",
+          "YES",
+          null,
+          "NO"
+        ],
+        [
+          "name",
+          "character varying",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "slug",
+          "character varying",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "logo",
+          "character varying",
+          "YES",
+          null,
+          "NO"
+        ],
+        [
+          "email",
+          "character varying",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "phone",
+          "character varying",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "address",
+          "text",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "website",
+          "character varying",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "tax_id",
+          "character varying",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "legal_name",
+          "character varying",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "is_active",
+          "boolean",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "created_at",
+          "timestamp with time zone",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "updated_at",
+          "timestamp with time zone",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "plan_type",
+          "character varying",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "max_users",
+          "integer",
+          "NO",
+          null,
+          "NO"
+        ]
+      ],
+      "constraints": {
+        "organizations_address_not_null": {
+          "check": false,
+          "columns": [
+            "address"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "organizations_created_at_not_null": {
+          "check": false,
+          "columns": [
+            "created_at"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "organizations_email_not_null": {
+          "check": false,
+          "columns": [
+            "email"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "organizations_external_id_bfd16146_like": {
+          "check": false,
+          "columns": [
+            "external_id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": true,
+          "options": null,
+          "orders": [
+            "ASC"
+          ],
+          "primary_key": false,
+          "type": "idx",
+          "unique": false
+        },
+        "organizations_external_id_key": {
+          "check": false,
+          "columns": [
+            "external_id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": true
+        },
+        "organizations_id_not_null": {
+          "check": false,
+          "columns": [
+            "id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "organizations_is_active_not_null": {
+          "check": false,
+          "columns": [
+            "is_active"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "organizations_legal_name_not_null": {
+          "check": false,
+          "columns": [
+            "legal_name"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "organizations_max_users_not_null": {
+          "check": false,
+          "columns": [
+            "max_users"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "organizations_name_not_null": {
+          "check": false,
+          "columns": [
+            "name"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "organizations_phone_not_null": {
+          "check": false,
+          "columns": [
+            "phone"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "organizations_pkey": {
+          "check": false,
+          "columns": [
+            "id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": true,
+          "unique": true
+        },
+        "organizations_plan_type_not_null": {
+          "check": false,
+          "columns": [
+            "plan_type"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "organizations_slug_aaafa6fa_like": {
+          "check": false,
+          "columns": [
+            "slug"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": true,
+          "options": null,
+          "orders": [
+            "ASC"
+          ],
+          "primary_key": false,
+          "type": "idx",
+          "unique": false
+        },
+        "organizations_slug_key": {
+          "check": false,
+          "columns": [
+            "slug"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": true
+        },
+        "organizations_slug_not_null": {
+          "check": false,
+          "columns": [
+            "slug"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "organizations_tax_id_not_null": {
+          "check": false,
+          "columns": [
+            "tax_id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "organizations_updated_at_not_null": {
+          "check": false,
+          "columns": [
+            "updated_at"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "organizations_website_not_null": {
+          "check": false,
+          "columns": [
+            "website"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        }
+      },
+      "definitions": [
+        [
+          "organizations_address_not_null",
+          "NOT NULL address"
+        ],
+        [
+          "organizations_created_at_not_null",
+          "NOT NULL created_at"
+        ],
+        [
+          "organizations_email_not_null",
+          "NOT NULL email"
+        ],
+        [
+          "organizations_external_id_key",
+          "UNIQUE (external_id)"
+        ],
+        [
+          "organizations_id_not_null",
+          "NOT NULL id"
+        ],
+        [
+          "organizations_is_active_not_null",
+          "NOT NULL is_active"
+        ],
+        [
+          "organizations_legal_name_not_null",
+          "NOT NULL legal_name"
+        ],
+        [
+          "organizations_max_users_not_null",
+          "NOT NULL max_users"
+        ],
+        [
+          "organizations_name_not_null",
+          "NOT NULL name"
+        ],
+        [
+          "organizations_phone_not_null",
+          "NOT NULL phone"
+        ],
+        [
+          "organizations_pkey",
+          "PRIMARY KEY (id)"
+        ],
+        [
+          "organizations_plan_type_not_null",
+          "NOT NULL plan_type"
+        ],
+        [
+          "organizations_slug_key",
+          "UNIQUE (slug)"
+        ],
+        [
+          "organizations_slug_not_null",
+          "NOT NULL slug"
+        ],
+        [
+          "organizations_tax_id_not_null",
+          "NOT NULL tax_id"
+        ],
+        [
+          "organizations_updated_at_not_null",
+          "NOT NULL updated_at"
+        ],
+        [
+          "organizations_website_not_null",
+          "NOT NULL website"
+        ]
+      ],
+      "indexes": [
+        [
+          "organizations_external_id_bfd16146_like",
+          "CREATE INDEX organizations_external_id_bfd16146_like ON public.organizations USING btree (external_id varchar_pattern_ops)"
+        ],
+        [
+          "organizations_external_id_key",
+          "CREATE UNIQUE INDEX organizations_external_id_key ON public.organizations USING btree (external_id)"
+        ],
+        [
+          "organizations_pkey",
+          "CREATE UNIQUE INDEX organizations_pkey ON public.organizations USING btree (id)"
+        ],
+        [
+          "organizations_slug_aaafa6fa_like",
+          "CREATE INDEX organizations_slug_aaafa6fa_like ON public.organizations USING btree (slug varchar_pattern_ops)"
+        ],
+        [
+          "organizations_slug_key",
+          "CREATE UNIQUE INDEX organizations_slug_key ON public.organizations USING btree (slug)"
+        ]
+      ],
+      "rls": [
+        true,
+        true
+      ]
+    },
+    "password_reset_tokens": {
+      "columns": [
+        [
+          "id",
+          "bigint",
+          "NO",
+          null,
+          "YES"
+        ],
+        [
+          "user_id",
+          "bigint",
+          "YES",
+          null,
+          "NO"
+        ],
+        [
+          "email",
+          "character varying",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "selector",
+          "character varying",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "token_hash",
+          "character varying",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "ip_address",
+          "inet",
+          "YES",
+          null,
+          "NO"
+        ],
+        [
+          "user_agent",
+          "text",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "requested_at",
+          "timestamp with time zone",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "expires_at",
+          "timestamp with time zone",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "used_at",
+          "timestamp with time zone",
+          "YES",
+          null,
+          "NO"
+        ]
+      ],
+      "constraints": {
+        "password_reset_tokens_email_b3a98c9c": {
+          "check": false,
+          "columns": [
+            "email"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": true,
+          "options": null,
+          "orders": [
+            "ASC"
+          ],
+          "primary_key": false,
+          "type": "idx",
+          "unique": false
+        },
+        "password_reset_tokens_email_b3a98c9c_like": {
+          "check": false,
+          "columns": [
+            "email"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": true,
+          "options": null,
+          "orders": [
+            "ASC"
+          ],
+          "primary_key": false,
+          "type": "idx",
+          "unique": false
+        },
+        "password_reset_tokens_email_not_null": {
+          "check": false,
+          "columns": [
+            "email"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "password_reset_tokens_expires_at_f7ae145c": {
+          "check": false,
+          "columns": [
+            "expires_at"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": true,
+          "options": null,
+          "orders": [
+            "ASC"
+          ],
+          "primary_key": false,
+          "type": "idx",
+          "unique": false
+        },
+        "password_reset_tokens_expires_at_not_null": {
+          "check": false,
+          "columns": [
+            "expires_at"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "password_reset_tokens_id_not_null": {
+          "check": false,
+          "columns": [
+            "id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "password_reset_tokens_pkey": {
+          "check": false,
+          "columns": [
+            "id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": true,
+          "unique": true
+        },
+        "password_reset_tokens_requested_at_not_null": {
+          "check": false,
+          "columns": [
+            "requested_at"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "password_reset_tokens_selector_17947cb9_like": {
+          "check": false,
+          "columns": [
+            "selector"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": true,
+          "options": null,
+          "orders": [
+            "ASC"
+          ],
+          "primary_key": false,
+          "type": "idx",
+          "unique": false
+        },
+        "password_reset_tokens_selector_key": {
+          "check": false,
+          "columns": [
+            "selector"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": true
+        },
+        "password_reset_tokens_selector_not_null": {
+          "check": false,
+          "columns": [
+            "selector"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "password_reset_tokens_token_hash_not_null": {
+          "check": false,
+          "columns": [
+            "token_hash"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "password_reset_tokens_user_agent_not_null": {
+          "check": false,
+          "columns": [
+            "user_agent"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "password_reset_tokens_user_id_0aeaaad3": {
+          "check": false,
+          "columns": [
+            "user_id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": true,
+          "options": null,
+          "orders": [
+            "ASC"
+          ],
+          "primary_key": false,
+          "type": "idx",
+          "unique": false
+        },
+        "password_reset_tokens_user_id_0aeaaad3_fk_auth_user_id": {
+          "check": false,
+          "columns": [
+            "user_id"
+          ],
+          "definition": null,
+          "foreign_key": [
+            "auth_user",
+            "id"
+          ],
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        }
+      },
+      "definitions": [
+        [
+          "password_reset_tokens_email_not_null",
+          "NOT NULL email"
+        ],
+        [
+          "password_reset_tokens_expires_at_not_null",
+          "NOT NULL expires_at"
+        ],
+        [
+          "password_reset_tokens_id_not_null",
+          "NOT NULL id"
+        ],
+        [
+          "password_reset_tokens_pkey",
+          "PRIMARY KEY (id)"
+        ],
+        [
+          "password_reset_tokens_requested_at_not_null",
+          "NOT NULL requested_at"
+        ],
+        [
+          "password_reset_tokens_selector_key",
+          "UNIQUE (selector)"
+        ],
+        [
+          "password_reset_tokens_selector_not_null",
+          "NOT NULL selector"
+        ],
+        [
+          "password_reset_tokens_token_hash_not_null",
+          "NOT NULL token_hash"
+        ],
+        [
+          "password_reset_tokens_user_agent_not_null",
+          "NOT NULL user_agent"
+        ],
+        [
+          "password_reset_tokens_user_id_0aeaaad3_fk_auth_user_id",
+          "FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED"
+        ]
+      ],
+      "indexes": [
+        [
+          "password_reset_tokens_email_b3a98c9c",
+          "CREATE INDEX password_reset_tokens_email_b3a98c9c ON public.password_reset_tokens USING btree (email)"
+        ],
+        [
+          "password_reset_tokens_email_b3a98c9c_like",
+          "CREATE INDEX password_reset_tokens_email_b3a98c9c_like ON public.password_reset_tokens USING btree (email varchar_pattern_ops)"
+        ],
+        [
+          "password_reset_tokens_expires_at_f7ae145c",
+          "CREATE INDEX password_reset_tokens_expires_at_f7ae145c ON public.password_reset_tokens USING btree (expires_at)"
+        ],
+        [
+          "password_reset_tokens_pkey",
+          "CREATE UNIQUE INDEX password_reset_tokens_pkey ON public.password_reset_tokens USING btree (id)"
+        ],
+        [
+          "password_reset_tokens_selector_17947cb9_like",
+          "CREATE INDEX password_reset_tokens_selector_17947cb9_like ON public.password_reset_tokens USING btree (selector varchar_pattern_ops)"
+        ],
+        [
+          "password_reset_tokens_selector_key",
+          "CREATE UNIQUE INDEX password_reset_tokens_selector_key ON public.password_reset_tokens USING btree (selector)"
+        ],
+        [
+          "password_reset_tokens_user_id_0aeaaad3",
+          "CREATE INDEX password_reset_tokens_user_id_0aeaaad3 ON public.password_reset_tokens USING btree (user_id)"
+        ]
+      ],
+      "rls": [
+        true,
+        true
+      ]
+    },
+    "refresh_token_blacklist": {
+      "columns": [
+        [
+          "id",
+          "bigint",
+          "NO",
+          null,
+          "YES"
+        ],
+        [
+          "token",
+          "text",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "token_hash",
+          "character varying",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "user_id",
+          "bigint",
+          "YES",
+          null,
+          "NO"
+        ],
+        [
+          "blacklisted_at",
+          "timestamp with time zone",
+          "NO",
+          null,
+          "NO"
+        ]
+      ],
+      "constraints": {
+        "refresh_token_blacklist_blacklisted_at_not_null": {
+          "check": false,
+          "columns": [
+            "blacklisted_at"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "refresh_token_blacklist_id_not_null": {
+          "check": false,
+          "columns": [
+            "id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "refresh_token_blacklist_pkey": {
+          "check": false,
+          "columns": [
+            "id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": true,
+          "unique": true
+        },
+        "refresh_token_blacklist_token_hash_ee3fb075_like": {
+          "check": false,
+          "columns": [
+            "token_hash"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": true,
+          "options": null,
+          "orders": [
+            "ASC"
+          ],
+          "primary_key": false,
+          "type": "idx",
+          "unique": false
+        },
+        "refresh_token_blacklist_token_hash_key": {
+          "check": false,
+          "columns": [
+            "token_hash"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": true
+        },
+        "refresh_token_blacklist_token_hash_not_null": {
+          "check": false,
+          "columns": [
+            "token_hash"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "refresh_token_blacklist_token_not_null": {
+          "check": false,
+          "columns": [
+            "token"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "refresh_token_blacklist_user_id_bb11f933": {
+          "check": false,
+          "columns": [
+            "user_id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": true,
+          "options": null,
+          "orders": [
+            "ASC"
+          ],
+          "primary_key": false,
+          "type": "idx",
+          "unique": false
+        },
+        "refresh_token_blacklist_user_id_bb11f933_fk_auth_user_id": {
+          "check": false,
+          "columns": [
+            "user_id"
+          ],
+          "definition": null,
+          "foreign_key": [
+            "auth_user",
+            "id"
+          ],
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        }
+      },
+      "definitions": [
+        [
+          "refresh_token_blacklist_blacklisted_at_not_null",
+          "NOT NULL blacklisted_at"
+        ],
+        [
+          "refresh_token_blacklist_id_not_null",
+          "NOT NULL id"
+        ],
+        [
+          "refresh_token_blacklist_pkey",
+          "PRIMARY KEY (id)"
+        ],
+        [
+          "refresh_token_blacklist_token_hash_key",
+          "UNIQUE (token_hash)"
+        ],
+        [
+          "refresh_token_blacklist_token_hash_not_null",
+          "NOT NULL token_hash"
+        ],
+        [
+          "refresh_token_blacklist_token_not_null",
+          "NOT NULL token"
+        ],
+        [
+          "refresh_token_blacklist_user_id_bb11f933_fk_auth_user_id",
+          "FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED"
+        ]
+      ],
+      "indexes": [
+        [
+          "refresh_token_blacklist_pkey",
+          "CREATE UNIQUE INDEX refresh_token_blacklist_pkey ON public.refresh_token_blacklist USING btree (id)"
+        ],
+        [
+          "refresh_token_blacklist_token_hash_ee3fb075_like",
+          "CREATE INDEX refresh_token_blacklist_token_hash_ee3fb075_like ON public.refresh_token_blacklist USING btree (token_hash varchar_pattern_ops)"
+        ],
+        [
+          "refresh_token_blacklist_token_hash_key",
+          "CREATE UNIQUE INDEX refresh_token_blacklist_token_hash_key ON public.refresh_token_blacklist USING btree (token_hash)"
+        ],
+        [
+          "refresh_token_blacklist_user_id_bb11f933",
+          "CREATE INDEX refresh_token_blacklist_user_id_bb11f933 ON public.refresh_token_blacklist USING btree (user_id)"
+        ]
+      ],
+      "rls": [
+        true,
+        true
+      ]
+    },
+    "user_profiles": {
+      "columns": [
+        [
+          "id",
+          "bigint",
+          "NO",
+          null,
+          "YES"
+        ],
+        [
+          "user_id",
+          "bigint",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "organization_id",
+          "integer",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "role",
+          "character varying",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "job_title",
+          "character varying",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "department",
+          "character varying",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "phone",
+          "character varying",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "avatar",
+          "character varying",
+          "YES",
+          null,
+          "NO"
+        ],
+        [
+          "theme",
+          "character varying",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "language",
+          "character varying",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "notifications_enabled",
+          "boolean",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "email_notifications",
+          "boolean",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "is_active",
+          "boolean",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "created_at",
+          "timestamp with time zone",
+          "NO",
+          null,
+          "NO"
+        ],
+        [
+          "updated_at",
+          "timestamp with time zone",
+          "NO",
+          null,
+          "NO"
+        ]
+      ],
+      "constraints": {
+        "user_profiles_created_at_not_null": {
+          "check": false,
+          "columns": [
+            "created_at"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "user_profiles_department_not_null": {
+          "check": false,
+          "columns": [
+            "department"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "user_profiles_email_notifications_not_null": {
+          "check": false,
+          "columns": [
+            "email_notifications"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "user_profiles_id_not_null": {
+          "check": false,
+          "columns": [
+            "id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "user_profiles_is_active_not_null": {
+          "check": false,
+          "columns": [
+            "is_active"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "user_profiles_job_title_not_null": {
+          "check": false,
+          "columns": [
+            "job_title"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "user_profiles_language_not_null": {
+          "check": false,
+          "columns": [
+            "language"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "user_profiles_notifications_enabled_not_null": {
+          "check": false,
+          "columns": [
+            "notifications_enabled"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "user_profiles_organization_id_fb340562": {
+          "check": false,
+          "columns": [
+            "organization_id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": true,
+          "options": null,
+          "orders": [
+            "ASC"
+          ],
+          "primary_key": false,
+          "type": "idx",
+          "unique": false
+        },
+        "user_profiles_organization_id_fb340562_fk_organizations_id": {
+          "check": false,
+          "columns": [
+            "organization_id"
+          ],
+          "definition": null,
+          "foreign_key": [
+            "organizations",
+            "id"
+          ],
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "user_profiles_organization_id_not_null": {
+          "check": false,
+          "columns": [
+            "organization_id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "user_profiles_phone_not_null": {
+          "check": false,
+          "columns": [
+            "phone"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "user_profiles_pkey": {
+          "check": false,
+          "columns": [
+            "id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": true,
+          "unique": true
+        },
+        "user_profiles_role_not_null": {
+          "check": false,
+          "columns": [
+            "role"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "user_profiles_theme_not_null": {
+          "check": false,
+          "columns": [
+            "theme"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "user_profiles_updated_at_not_null": {
+          "check": false,
+          "columns": [
+            "updated_at"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "user_profiles_user_id_8c5ab5fe": {
+          "check": false,
+          "columns": [
+            "user_id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": true,
+          "options": null,
+          "orders": [
+            "ASC"
+          ],
+          "primary_key": false,
+          "type": "idx",
+          "unique": false
+        },
+        "user_profiles_user_id_8c5ab5fe_fk_auth_user_id": {
+          "check": false,
+          "columns": [
+            "user_id"
+          ],
+          "definition": null,
+          "foreign_key": [
+            "auth_user",
+            "id"
+          ],
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "user_profiles_user_id_not_null": {
+          "check": false,
+          "columns": [
+            "user_id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": false
+        },
+        "user_profiles_user_id_organization_id_18652384_uniq": {
+          "check": false,
+          "columns": [
+            "user_id",
+            "organization_id"
+          ],
+          "definition": null,
+          "foreign_key": null,
+          "index": false,
+          "options": null,
+          "primary_key": false,
+          "unique": true
+        }
+      },
+      "definitions": [
+        [
+          "user_profiles_created_at_not_null",
+          "NOT NULL created_at"
+        ],
+        [
+          "user_profiles_department_not_null",
+          "NOT NULL department"
+        ],
+        [
+          "user_profiles_email_notifications_not_null",
+          "NOT NULL email_notifications"
+        ],
+        [
+          "user_profiles_id_not_null",
+          "NOT NULL id"
+        ],
+        [
+          "user_profiles_is_active_not_null",
+          "NOT NULL is_active"
+        ],
+        [
+          "user_profiles_job_title_not_null",
+          "NOT NULL job_title"
+        ],
+        [
+          "user_profiles_language_not_null",
+          "NOT NULL language"
+        ],
+        [
+          "user_profiles_notifications_enabled_not_null",
+          "NOT NULL notifications_enabled"
+        ],
+        [
+          "user_profiles_organization_id_fb340562_fk_organizations_id",
+          "FOREIGN KEY (organization_id) REFERENCES organizations(id) DEFERRABLE INITIALLY DEFERRED"
+        ],
+        [
+          "user_profiles_organization_id_not_null",
+          "NOT NULL organization_id"
+        ],
+        [
+          "user_profiles_phone_not_null",
+          "NOT NULL phone"
+        ],
+        [
+          "user_profiles_pkey",
+          "PRIMARY KEY (id)"
+        ],
+        [
+          "user_profiles_role_not_null",
+          "NOT NULL role"
+        ],
+        [
+          "user_profiles_theme_not_null",
+          "NOT NULL theme"
+        ],
+        [
+          "user_profiles_updated_at_not_null",
+          "NOT NULL updated_at"
+        ],
+        [
+          "user_profiles_user_id_8c5ab5fe_fk_auth_user_id",
+          "FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED"
+        ],
+        [
+          "user_profiles_user_id_not_null",
+          "NOT NULL user_id"
+        ],
+        [
+          "user_profiles_user_id_organization_id_18652384_uniq",
+          "UNIQUE (user_id, organization_id)"
+        ]
+      ],
+      "indexes": [
+        [
+          "user_profiles_organization_id_fb340562",
+          "CREATE INDEX user_profiles_organization_id_fb340562 ON public.user_profiles USING btree (organization_id)"
+        ],
+        [
+          "user_profiles_pkey",
+          "CREATE UNIQUE INDEX user_profiles_pkey ON public.user_profiles USING btree (id)"
+        ],
+        [
+          "user_profiles_user_id_8c5ab5fe",
+          "CREATE INDEX user_profiles_user_id_8c5ab5fe ON public.user_profiles USING btree (user_id)"
+        ],
+        [
+          "user_profiles_user_id_organization_id_18652384_uniq",
+          "CREATE UNIQUE INDEX user_profiles_user_id_organization_id_18652384_uniq ON public.user_profiles USING btree (user_id, organization_id)"
+        ]
+      ],
+      "rls": [
+        true,
+        true
+      ]
+    }
+  },
+  "iso_runtime_a": {
+    "orm_checks": "PASS",
+    "principal": "iso_runtime_a",
+    "prohibited_operations": [
+      {
+        "denied": "CREATE TABLE public.forbidden (id integer)",
+        "sqlstate": "42501"
+      },
+      {
+        "denied": "CREATE TEMP TABLE forbidden (id integer)",
+        "sqlstate": "42501"
+      },
+      {
+        "denied": "CREATE ROLE forbidden",
+        "sqlstate": "42501"
+      },
+      {
+        "denied": "SET ROLE iso_owner",
+        "sqlstate": "42501"
+      },
+      {
+        "denied": "ALTER TABLE user_profiles DISABLE ROW LEVEL SECURITY",
+        "sqlstate": "42501"
+      },
+      {
+        "denied": "DELETE FROM user_profiles",
+        "sqlstate": "42501"
+      },
+      {
+        "denied": "TRUNCATE organizations",
+        "sqlstate": "42501"
+      },
+      {
+        "denied": "UPDATE auth_user SET is_superuser=true WHERE id=%s",
+        "sqlstate": "42501"
+      },
+      {
+        "denied": "SELECT * FROM auth_user_groups",
+        "sqlstate": "42501"
+      },
+      {
+        "denied": "SELECT setval('auth_user_id_seq', 999)",
+        "sqlstate": "42501"
+      },
+      {
+        "denied": "UPDATE organizations SET name=%s",
+        "sqlstate": "42501"
+      },
+      {
+        "denied": "UPDATE user_profiles SET organization_id=%s WHERE id=%s",
+        "sqlstate": "42501"
+      },
+      {
+        "denied": "UPDATE user_profiles SET user_id=99999 WHERE id=%s",
+        "sqlstate": "23503"
+      },
+      {
+        "denied": "UPDATE user_profiles SET user_id=NULL WHERE id=%s",
+        "sqlstate": "23502"
+      },
+      {
+        "denied": "INSERT INTO user_profiles SELECT * FROM user_profiles WHERE id=%s",
+        "sqlstate": "23505"
+      }
+    ],
+    "query_count": 42,
+    "reconnect_persistence": true,
+    "tenant_isolation": "fixed session_user policy; cross-tenant GUC spoof ineffective"
+  },
+  "iso_runtime_a_isolation_after_both_seeds": "PASS",
+  "iso_runtime_b": {
+    "orm_checks": "PASS",
+    "principal": "iso_runtime_b",
+    "prohibited_operations": [
+      {
+        "denied": "CREATE TABLE public.forbidden (id integer)",
+        "sqlstate": "42501"
+      },
+      {
+        "denied": "CREATE TEMP TABLE forbidden (id integer)",
+        "sqlstate": "42501"
+      },
+      {
+        "denied": "CREATE ROLE forbidden",
+        "sqlstate": "42501"
+      },
+      {
+        "denied": "SET ROLE iso_owner",
+        "sqlstate": "42501"
+      },
+      {
+        "denied": "ALTER TABLE user_profiles DISABLE ROW LEVEL SECURITY",
+        "sqlstate": "42501"
+      },
+      {
+        "denied": "DELETE FROM user_profiles",
+        "sqlstate": "42501"
+      },
+      {
+        "denied": "TRUNCATE organizations",
+        "sqlstate": "42501"
+      },
+      {
+        "denied": "UPDATE auth_user SET is_superuser=true WHERE id=%s",
+        "sqlstate": "42501"
+      },
+      {
+        "denied": "SELECT * FROM auth_user_groups",
+        "sqlstate": "42501"
+      },
+      {
+        "denied": "SELECT setval('auth_user_id_seq', 999)",
+        "sqlstate": "42501"
+      },
+      {
+        "denied": "UPDATE organizations SET name=%s",
+        "sqlstate": "42501"
+      },
+      {
+        "denied": "UPDATE user_profiles SET organization_id=%s WHERE id=%s",
+        "sqlstate": "42501"
+      },
+      {
+        "denied": "UPDATE user_profiles SET user_id=99999 WHERE id=%s",
+        "sqlstate": "23503"
+      },
+      {
+        "denied": "UPDATE user_profiles SET user_id=NULL WHERE id=%s",
+        "sqlstate": "23502"
+      },
+      {
+        "denied": "INSERT INTO user_profiles SELECT * FROM user_profiles WHERE id=%s",
+        "sqlstate": "23505"
+      },
+      {
+        "denied": "UPDATE user_profiles SET organization_id=1 WHERE id=%s",
+        "sqlstate": "42501"
+      },
+      {
+        "denied": "INSERT INTO refresh_token_blacklist (token,token_hash,user_id,blacklisted_at) VALUES (%s,%s,%s,now())",
+        "sqlstate": "42501"
+      }
+    ],
+    "query_count": 42,
+    "reconnect_persistence": true,
+    "tenant_isolation": "fixed session_user policy; cross-tenant GUC spoof ineffective"
+  },
+  "iso_runtime_b_isolation_after_both_seeds": "PASS",
+  "models": [
+    "contenttypes.ContentType",
+    "auth.Permission",
+    "auth.Group",
+    "authentication.User",
+    "core.Organization",
+    "authentication.UserProfile",
+    "authentication.RefreshTokenBlacklist",
+    "authentication.PasswordResetToken",
+    "core.AuditLog"
+  ],
+  "policies": [
+    [
+      "audit_logs",
+      "lab_tenant",
+      [
+        "iso_runtime_a",
+        "iso_runtime_b"
+      ],
+      "((organization_id IN ( SELECT organizations.id\n   FROM organizations)) AND ((user_id IS NULL) OR (user_id IN ( SELECT user_profiles.user_id\n   FROM user_profiles\n  WHERE (user_profiles.organization_id = audit_logs.organization_id)))))",
+      "((organization_id IN ( SELECT organizations.id\n   FROM organizations)) AND ((user_id IS NULL) OR (user_id IN ( SELECT user_profiles.user_id\n   FROM user_profiles\n  WHERE (user_profiles.organization_id = audit_logs.organization_id)))))"
+    ],
+    [
+      "organizations",
+      "lab_tenant",
+      [
+        "iso_runtime_a",
+        "iso_runtime_b"
+      ],
+      "((external_id)::text =\nCASE SESSION_USER\n    WHEN 'iso_runtime_a'::name THEN '00000000-0000-0000-0000-000000000065'::text\n    WHEN 'iso_runtime_b'::name THEN '00000000-0000-0000-0000-000000000066'::text\n    ELSE NULL::text\nEND)",
+      "((external_id)::text =\nCASE SESSION_USER\n    WHEN 'iso_runtime_a'::name THEN '00000000-0000-0000-0000-000000000065'::text\n    WHEN 'iso_runtime_b'::name THEN '00000000-0000-0000-0000-000000000066'::text\n    ELSE NULL::text\nEND)"
+    ],
+    [
+      "password_reset_tokens",
+      "lab_tenant",
+      [
+        "iso_runtime_a",
+        "iso_runtime_b"
+      ],
+      "(user_id IN ( SELECT user_profiles.user_id\n   FROM user_profiles))",
+      "(user_id IN ( SELECT user_profiles.user_id\n   FROM user_profiles))"
+    ],
+    [
+      "refresh_token_blacklist",
+      "lab_tenant",
+      [
+        "iso_runtime_a",
+        "iso_runtime_b"
+      ],
+      "(user_id IN ( SELECT user_profiles.user_id\n   FROM user_profiles))",
+      "(user_id IN ( SELECT user_profiles.user_id\n   FROM user_profiles))"
+    ],
+    [
+      "user_profiles",
+      "lab_tenant",
+      [
+        "iso_runtime_a",
+        "iso_runtime_b"
+      ],
+      "(organization_id IN ( SELECT organizations.id\n   FROM organizations))",
+      "(organization_id IN ( SELECT organizations.id\n   FROM organizations))"
+    ]
+  ],
+  "projection": "schema_editor on actual models; no migrations executed or recorded",
+  "recorded_migrations": [],
+  "sequences": [
+    [
+      "audit_logs_id_seq",
+      "{iso_owner=rwU/iso_owner,iso_runtime_a=U/iso_owner,iso_runtime_b=U/iso_owner}"
+    ],
+    [
+      "auth_group_id_seq",
+      null
+    ],
+    [
+      "auth_group_permissions_id_seq",
+      null
+    ],
+    [
+      "auth_permission_id_seq",
+      null
+    ],
+    [
+      "auth_user_groups_id_seq",
+      null
+    ],
+    [
+      "auth_user_id_seq",
+      "{iso_owner=rwU/iso_owner,iso_runtime_a=U/iso_owner,iso_runtime_b=U/iso_owner}"
+    ],
+    [
+      "auth_user_user_permissions_id_seq",
+      null
+    ],
+    [
+      "django_content_type_id_seq",
+      null
+    ],
+    [
+      "organizations_id_seq",
+      "{iso_owner=rwU/iso_owner,iso_runtime_a=U/iso_owner,iso_runtime_b=U/iso_owner}"
+    ],
+    [
+      "password_reset_tokens_id_seq",
+      "{iso_owner=rwU/iso_owner,iso_runtime_a=U/iso_owner,iso_runtime_b=U/iso_owner}"
+    ],
+    [
+      "refresh_token_blacklist_id_seq",
+      "{iso_owner=rwU/iso_owner,iso_runtime_a=U/iso_owner,iso_runtime_b=U/iso_owner}"
+    ],
+    [
+      "user_profiles_id_seq",
+      "{iso_owner=rwU/iso_owner,iso_runtime_a=U/iso_owner,iso_runtime_b=U/iso_owner}"
+    ]
+  ],
+  "verdict": "LAB05_C1_R2_NONFINANCIAL_SCHEMA_PASS"
+}

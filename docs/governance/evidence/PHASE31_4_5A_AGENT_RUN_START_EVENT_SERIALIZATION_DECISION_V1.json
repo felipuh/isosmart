@@ -1,0 +1,123 @@
+{
+  "artifact_schema": "phase31.4.5a-agent-run-start-event-serialization-decision/v1",
+  "status": "NOT_PROMOTED_CONTRACT_SUCCESSOR_REQUIRED",
+  "blocking_event": {
+    "qualified_table": "eventing.domain_event",
+    "row_id": "90e2d38f-9600-5701-a34c-c9827eafc88c",
+    "contract_event_type": "phase31.4.4a.synthetic",
+    "contract_aggregate_type": "PHASE31.4.4A TEST ONLY — DomainEvent:agent-run-start — aggregate_type",
+    "contract_aggregate_id": "51c9bad4-88fb-5608-b3c9-edd578efeeb9",
+    "contract_event_id": "1af3e9a8-65f7-5952-a991-1133872659f9",
+    "contract_source": "PHASE31.4.4A TEST ONLY — DomainEvent:agent-run-start — source",
+    "selected_producer": "AgentRunCommandService._event_outbox_audit",
+    "contract_producer": "phase31.4.4-agent-provenance-producer/v1"
+  },
+  "agent_run_identity": {
+    "contract_row_id": "b87bdcde-c623-522f-a0ac-ff81f61df8e8",
+    "contract_identity_mode": "UUIDV5_FIXTURE_ASSIGNED",
+    "native_identity_mode": "uuid4 generated before transaction entry",
+    "start_service_accepts_run_id": false,
+    "blocking_event_aggregate_id_equals_contract_agent_run_id": false
+  },
+  "transaction_timeline": [
+    "outside transaction: normalize trace, capture started_at, allocate native uuid4 run_id, validate autonomy and nonempty inputs",
+    "BEGIN owned by trusted_tenant_context",
+    "set and verify transaction-local tenant, actor, and trace settings",
+    "read Organization, published AgentDefinition, and published ModelPolicy; validate capability, model, and autonomy",
+    "INSERT qms.agent_run",
+    "read each prerequisite Edition, Requirement, Rule, and Evidence; INSERT qms.agent_run_input rows",
+    "render AgentRun state",
+    "read MAX(eventing.domain_event.aggregate_version) for native key (agent_run, run.id), then add one",
+    "INSERT eventing.domain_event",
+    "INSERT eventing.transactional_outbox",
+    "acquire immutable-audit stream advisory transaction lock and INSERT audit.immutable_audit_log",
+    "optional deliberate precommit failure hook",
+    "run deferred AgentRun-input completeness constraint",
+    "COMMIT"
+  ],
+  "all_same_aggregate_writers": [
+    {
+      "producer": "AgentRunCommandService.start_agent_run -> _event_outbox_audit",
+      "event_type": "agent_run.started",
+      "transaction_owner": "trusted_tenant_context",
+      "version_formula": "COALESCE(MAX(aggregate_version),0)+1",
+      "lock_strategy": "parent creation uniqueness before allocation for a coherent (agent_run, run.id) key",
+      "same_aggregate_key": true
+    },
+    {
+      "producer": "AgentRunCommandService.complete_agent_run_with_recommendation -> _event_outbox_audit",
+      "event_type": "agent_run.completed",
+      "transaction_owner": "trusted_tenant_context",
+      "version_formula": "COALESCE(MAX(aggregate_version),0)+1",
+      "lock_strategy": "SELECT FOR UPDATE on qms.agent_run before allocation",
+      "same_aggregate_key": true
+    },
+    {
+      "producer": "AgentRunCommandService.fail_agent_run -> _event_outbox_audit",
+      "event_type": "agent_run.failed",
+      "transaction_owner": "trusted_tenant_context",
+      "version_formula": "COALESCE(MAX(aggregate_version),0)+1",
+      "lock_strategy": "SELECT FOR UPDATE on qms.agent_run before allocation",
+      "same_aggregate_key": true
+    }
+  ],
+  "same_run_concurrency_analysis": {
+    "native_random_identity": "two calls create different run IDs and therefore different aggregate streams",
+    "deterministic_same_parent_identity": "the qms.agent_run primary-key uniqueness check waits on an uncommitted competing insertion; after winner commit the loser fails before event allocation, and after winner rollback the waiter may proceed",
+    "later_writer_overlap": "a later writer cannot observe an uncommitted new AgentRun under the configured/default READ COMMITTED operation; after visibility it must lock the parent row before allocation",
+    "allocation_window_mutual_exclusion_for_coherent_native_key": true,
+    "allocation_window_mutual_exclusion_for_exact_blocking_contract_row": false,
+    "reason": "V2.2 does not bind the blocking event to the AgentRun parent identity or native aggregate type"
+  },
+  "replay_analysis": {
+    "native_start_idempotency_or_claim": false,
+    "native_exact_replay_returns_existing_result": false,
+    "deterministic_duplicate_parent_behavior": "primary-key violation before _event_outbox_audit",
+    "reenters_event_allocation": false,
+    "ambiguous_commit_rule": "read-only retrieval or reconciliation is required; a duplicate deterministic create is rejected"
+  },
+  "failure_window_analysis": {
+    "before_parent_insert": "transaction has no persistent effect; retry may attempt the full operation",
+    "parent_inserted_before_event": "transaction rollback removes parent and inputs; retry may attempt the full operation",
+    "event_inserted_before_outbox_or_audit": "transaction rollback removes parent, inputs, event, outbox if present, and audit if present; retry may attempt the full operation",
+    "ambiguous_after_commit": "committed graph remains; deterministic duplicate parent creation is rejected before event allocation"
+  },
+  "existing_invariants": {
+    "parent_primary_key": "qms.agent_run(id)",
+    "redundant_parent_composite_unique": "qms.agent_run(tenant_id,organization_id,id)",
+    "natural_business_key": null,
+    "start_idempotency_key": null,
+    "start_claim": null,
+    "domain_event_aggregate_version_unique_constraint": null,
+    "completion_and_failure_parent_lock": "SELECT FOR UPDATE",
+    "audit_lock_is_event_allocation_lock": false
+  },
+  "serialization_conclusion": {
+    "coherent_native_invariant_name": "AGGREGATE_CREATION_SERIALIZED_BY_PARENT_IDENTITY",
+    "coherent_native_invariant_proven": true,
+    "applicable_to_exact_blocking_event": false,
+    "existing_serialization_sufficient": false,
+    "new_narrow_serialization_semantic_authorized": false,
+    "broader_eventing_decision_required": false,
+    "contract_successor_required": true,
+    "exact_blocker": "V2.2 AgentRun.id and the DomainEvent event_id, aggregate_type, aggregate_id, event_type, and source bindings contradict the selected native producer's identity allocation and hardcoded values"
+  },
+  "reread_decision": {
+    "orm_insert_argument_is_authoritative_for_allocation": true,
+    "native_helper_retains_created_event_object": false,
+    "v2_2_requires_persisted_reread": true,
+    "future_read_only_reread_changes_event_semantics": false
+  },
+  "architecture_changed": false,
+  "ADR_required": false,
+  "implementation_change_required": false,
+  "continuation_scope": "append-only V2.2 successor gate must bind the start and completion DomainEvent stream keys and native event types to the exact AgentRun identity before serialization can be promoted",
+  "live_status": {
+    "PostgreSQL concurrency": "NOT EXECUTED",
+    "event write": "NOT EXECUTED",
+    "lock acquisition": "NOT EXECUTED",
+    "race test": "NOT EXECUTED"
+  },
+  "P0": 0,
+  "P1": 3
+}

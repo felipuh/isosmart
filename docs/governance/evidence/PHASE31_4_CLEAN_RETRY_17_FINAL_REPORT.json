@@ -1,0 +1,254 @@
+{
+  "artifact_schema": "phase31.4-v2.5-disposable-evidence-final-report/v1",
+  "authority": {
+    "real_vs_synthetic": {
+      "actor_identity": {
+        "classification": "REAL_ISOLATED_ADMINAPPS_TEST_IDENTITY",
+        "id": "597130f2-9e2a-45af-9a17-a83298de0206",
+        "source": "AdminApps User"
+      },
+      "approval_authority_source": {
+        "classification": "NOT_EXECUTED_BECAUSE_PRECREATION_PHASE_FAILED",
+        "value": null
+      },
+      "artifact_schema": "phase31.4-v2.5-disposable-evidence-authority/v1",
+      "entitlement_source": {
+        "classification": "REAL_ISOLATED_ADMINAPPS_TEST_ENTITLEMENT",
+        "source": "AdminApps OrganizationProductEntitlement",
+        "value": {
+          "enabled": true,
+          "id": "17c0f862-908e-41f2-9e41-1d83749d077e",
+          "product": "ISO_SMART",
+          "readback": "17c0f862-908e-41f2-9e41-1d83749d077e",
+          "scopes": [
+            "qms"
+          ],
+          "status": "active"
+        }
+      },
+      "full_real_authority_proof": false,
+      "role_source": {
+        "classification": "SYNTHETIC_TEST_AUTHORITY",
+        "source": "AdminApps UserOrganization.role",
+        "value": "superadmin"
+      },
+      "run_id": "Phase 31.4 V2.5 Clean Retry 17",
+      "status": "ACCURATELY_CLASSIFIED"
+    },
+    "status": "ACCURATELY_CLASSIFIED"
+  },
+  "blocker": "mandatory PRECREATION_INTEGRITY phase has no registered operation/assertions/evidence contract",
+  "current_baseline_modified": "NONE; evidence-only Retry 17 artifacts added",
+  "current_integrity": {
+    "manifest_sha256": "3897da9ed8b2538924e527af3d79e5ef56c35c6178fe0330613187b5e70aa7c5",
+    "runtime_sha256": "7ed7430abe798d6fd31b2bc27344abde35a7ab7df9e2ef13b51f1ddb7b03fd00",
+    "verifier_helper_sha256": "a716e139f15d4b3f247ec4db56b339bad0e8a29ef06030a00aa9542e7195a35f"
+  },
+  "environment": "PASS \u2014 two isolated PostgreSQL 18.6 containers, networks, volumes, databases, and dedicated ports",
+  "event_outbox_audit": {
+    "material_native_chain": {
+      "domain_event": 0,
+      "immutable_audit_log": 0,
+      "status": "NOT_EXECUTED",
+      "transactional_outbox": 0
+    },
+    "stage_ext": "PASS",
+    "status": "FAIL"
+  },
+  "exact_comparison": {
+    "extra_fields": null,
+    "extra_members": null,
+    "invariant_mismatches": null,
+    "missing_fields": null,
+    "missing_members": null,
+    "reference_mismatches": null,
+    "status": "NOT_RUN",
+    "total_mismatches": null,
+    "type_mismatches": null,
+    "value_mismatches": null
+  },
+  "exact_next_step": "Convene one governance remediation review to approve a concrete PRECREATION_INTEGRITY executor, operation, assertions, and retained-evidence contract before authorizing another disposable run.",
+  "external_upstream_captures": {
+    "adminapps_entitlement": {
+      "capture": {
+        "enabled": true,
+        "id": "17c0f862-908e-41f2-9e41-1d83749d077e",
+        "product": "ISO_SMART",
+        "readback": "17c0f862-908e-41f2-9e41-1d83749d077e",
+        "scopes": [
+          "qms"
+        ],
+        "status": "active"
+      },
+      "expected": 1,
+      "resolved": 1
+    },
+    "adminapps_external_actor": {
+      "capture": {
+        "equality": true,
+        "identity": "external_adminapps_actor_user_id",
+        "provenance": "ADMINAPPS_EXTERNAL_ACTOR",
+        "readback": "597130f2-9e2a-45af-9a17-a83298de0206",
+        "run_id": "Phase 31.4 V2.5 Clean Retry 17",
+        "source": "AdminApps User",
+        "source_service": "AdminApps",
+        "timestamp": "2026-09-23T19:55:20.327284+00:00",
+        "type": "uuid",
+        "value": "597130f2-9e2a-45af-9a17-a83298de0206"
+      },
+      "expected": 1,
+      "resolved": 1
+    },
+    "adminapps_external_tenant": {
+      "capture": {
+        "equality": true,
+        "identity": "external_adminapps_tenant_id",
+        "provenance": "ADMINAPPS_EXTERNAL_TENANT",
+        "readback": "ac312d29-2f3e-4a12-9094-5838b9484780",
+        "run_id": "Phase 31.4 V2.5 Clean Retry 17",
+        "source": "AdminApps Organization",
+        "source_service": "AdminApps",
+        "timestamp": "2026-09-23T19:55:20.327263+00:00",
+        "type": "uuid",
+        "value": "ac312d29-2f3e-4a12-9094-5838b9484780"
+      },
+      "expected": 1,
+      "resolved": 1
+    }
+  },
+  "generated_at": "2026-09-23T19:59:09.614011+00:00",
+  "historical_artifacts_modified": "NONE",
+  "historical_provenance_continuity": "NOT_PROVEN",
+  "live_graph": {
+    "fields": 0,
+    "hash": null,
+    "members": 0,
+    "status": "NOT_MATERIALIZED",
+    "unresolved": 1664
+  },
+  "migrations": {
+    "fake": 0,
+    "foundation": "24/24",
+    "manual_schema_patches": 0,
+    "pending": 0,
+    "status": "PASS"
+  },
+  "native_captures": {
+    "expected": 565,
+    "resolved": 0,
+    "unresolved": 565
+  },
+  "p0_p1": {
+    "open_p0": "P0-RETRY17-PRECREATION-PHASE-CONTRACT-INCOMPLETE",
+    "pre_run": {
+      "p0": 0,
+      "p1": 0
+    },
+    "run_findings": {
+      "p0": 1,
+      "p1": 0
+    }
+  },
+  "phase31_5": "EXECUTION_HELD",
+  "phases": {
+    "executed": 1,
+    "fail": 1,
+    "not_executed": 32,
+    "pass": 0,
+    "required": 33
+  },
+  "post_teardown_verification": "PASS",
+  "promotion_status": "NOT_DECIDED_IN_THIS_TASK",
+  "run_id": "Phase 31.4 V2.5 Clean Retry 17",
+  "security": {
+    "executed": 0,
+    "expected": 8,
+    "status": "FAIL"
+  },
+  "sha_manifest": "PASS after report serialization and independent readback",
+  "source_alignment_label": "118/1664 exact contract verification is POC/runtime evidence only.",
+  "stage_ext": {
+    "six_identities": [
+      {
+        "equality": true,
+        "identity": "external_adminapps_tenant_id",
+        "provenance": "ADMINAPPS_EXTERNAL_TENANT",
+        "readback": "ac312d29-2f3e-4a12-9094-5838b9484780",
+        "run_id": "Phase 31.4 V2.5 Clean Retry 17",
+        "source": "AdminApps Organization",
+        "source_service": "AdminApps",
+        "timestamp": "2026-09-23T19:55:20.327263+00:00",
+        "type": "uuid",
+        "value": "ac312d29-2f3e-4a12-9094-5838b9484780"
+      },
+      {
+        "equality": true,
+        "identity": "external_adminapps_actor_user_id",
+        "provenance": "ADMINAPPS_EXTERNAL_ACTOR",
+        "readback": "597130f2-9e2a-45af-9a17-a83298de0206",
+        "run_id": "Phase 31.4 V2.5 Clean Retry 17",
+        "source": "AdminApps User",
+        "source_service": "AdminApps",
+        "timestamp": "2026-09-23T19:55:20.327284+00:00",
+        "type": "uuid",
+        "value": "597130f2-9e2a-45af-9a17-a83298de0206"
+      },
+      {
+        "equality": true,
+        "identity": "iso_smart_tenant_projection_id",
+        "provenance": "TENANT_PROJECTION_READBACK",
+        "readback": "c6b0937f-05c1-492a-9546-65c469fa4ea4",
+        "run_id": "Phase 31.4 V2.5 Clean Retry 17",
+        "source": "ISO Smart TenantProjection",
+        "source_service": "ProjectionWriterService",
+        "timestamp": "2026-09-23T19:55:20.327288+00:00",
+        "type": "uuid",
+        "value": "c6b0937f-05c1-492a-9546-65c469fa4ea4"
+      },
+      {
+        "equality": true,
+        "identity": "iso_smart_user_projection_id",
+        "projection_event_authority": "SYNTHETIC_HARNESS_USER_PROJECTION_EVENT",
+        "provenance": "USER_PROJECTION_READBACK",
+        "readback": "205aa6c9-6b46-45ef-9dc4-c7ea308dcb55",
+        "run_id": "Phase 31.4 V2.5 Clean Retry 17",
+        "source": "ISO Smart UserProjection",
+        "source_service": "ProjectionWriterService",
+        "timestamp": "2026-09-23T19:55:20.327292+00:00",
+        "type": "uuid",
+        "value": "205aa6c9-6b46-45ef-9dc4-c7ea308dcb55"
+      },
+      {
+        "equality": true,
+        "identity": "qms_organization_id",
+        "provenance": "QMS_NATIVE_ORGANIZATION",
+        "readback": "c6cf6b88-9a2d-4920-ae90-d971ee4585fb",
+        "run_id": "Phase 31.4 V2.5 Clean Retry 17",
+        "source": "ISO Smart QMS Organization",
+        "source_service": "QmsOrganizationCommandService",
+        "timestamp": "2026-09-23T19:55:20.327296+00:00",
+        "type": "uuid",
+        "value": "c6cf6b88-9a2d-4920-ae90-d971ee4585fb"
+      },
+      {
+        "equality": true,
+        "identity": "process_id",
+        "provenance": "QMS_NATIVE_PROCESS",
+        "readback": "7018612e-58dc-4a91-b163-9005dc413bba",
+        "run_id": "Phase 31.4 V2.5 Clean Retry 17",
+        "source": "ISO Smart QMS Process",
+        "source_service": "QmsContextCommandService",
+        "timestamp": "2026-09-23T19:55:20.327309+00:00",
+        "type": "uuid",
+        "value": "7018612e-58dc-4a91-b163-9005dc413bba"
+      }
+    ],
+    "status": "PASS"
+  },
+  "teardown": "PASS",
+  "transactions": {
+    "executed": 0,
+    "status": "FAIL"
+  },
+  "verdict": "EVIDENCE_RUN_FAIL"
+}

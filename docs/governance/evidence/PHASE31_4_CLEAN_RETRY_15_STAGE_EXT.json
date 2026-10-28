@@ -1,0 +1,23 @@
+{
+  "actor_id": "93ed46f4-2df9-4527-a04f-af702019c03c",
+  "artifact_schema": "phase31.4-retry15-stage-ext/v1",
+  "checks": {
+    "organization": true,
+    "process": true,
+    "tenant_external": true,
+    "tenant_projection": true,
+    "user_projection": true
+  },
+  "organization_id": "38307bb6-b4e3-4f59-b9d0-c3fea5d7fcef",
+  "process_id": "09eff70d-fc5b-4b0a-9454-34885c5b5dc5",
+  "result": "PASS",
+  "retry_id": "Phase 31.4 V2.5 Clean Retry 15",
+  "tenant_id": "70e335f0-4ca5-4d73-b77c-f9f3eaefa064",
+  "tenant_projection_id": "c5ead261-6563-466d-aabd-e08d22617cd7",
+  "upstream_captures": {
+    "expected": 5,
+    "resolved": 5,
+    "unresolved": 0
+  },
+  "user_projection_id": "513ffc19-eca7-4e93-adbd-6f2876faff3c"
+}

@@ -1,0 +1,110 @@
+{
+  "artifact_schema": "phase31.4-retry13-legacy-failure-inventory/v1",
+  "baseline": {"executed": 244, "passed": 221, "failed": 23},
+  "classified": 23,
+  "categories": {"A": 0, "B": 22, "C": 1, "D": 0, "E": 0},
+  "failures": [
+    {
+      "test": "foundation.test_phase31_4_3_supporting_contract_audit.SupportingContractAuditTests.test_protected_sources_match",
+      "assertion": "current SHA-256 equals the V2.4-era protected hash",
+      "expected": "1da64d5f1c8248a2c2e2e9cc586424bde185c85efd467923be28d5c1f2d170ba",
+      "actual": "f2630ca38b5ab0eedc2dcbb1fbcea32a23aa4a5c0b671a961182435ecf87ccc8",
+      "artifact": "backend/backend/settings.py",
+      "guard_generation": "V2.4 historical supporting audit",
+      "historical_scope": "retain the historical protected hash",
+      "current_scope": "PostgreSQL DB_SESSION_OPTIONS bootstrap approved by ADR-0020 and Retry 10 evidence",
+      "probable_cause": "approved successor source was compared directly with a historical hash",
+      "classification": "C_VERSIONED_SOURCE_HASH_EVOLUTION",
+      "disposition": "preserve the old hash and link it as predecessor_sha256 in the V2.5 current manifest",
+      "post_fix_result": "PASS"
+    },
+    {
+      "test": "foundation.test_phase31_4_4a_field_bindings.Phase3144AFieldBindingTests.test_positive_complete_contract",
+      "assertion": "validate(V2.1) == []", "expected": "[]", "actual": "['migration 0024 appeared']", "artifact": "V2.1 migration boundary", "guard_generation": "V2.1", "historical_scope": "migrations 0001-0023", "current_scope": "V2.5 includes approved migration 0024", "probable_cause": "repository immobility check", "classification": "B_LEGACY_SCOPE_OVERREACH", "disposition": "validate the frozen historical manifest only", "post_fix_result": "PASS"
+    },
+    {
+      "test": "foundation.test_phase31_4_4b_strict_types.Phase3144BStrictPhysicalTypeTests.test_positive_full_contract",
+      "assertion": "validate(V2.2) == []", "expected": "[]", "actual": "['migration 0024 appeared']", "artifact": "V2.2 migration boundary", "guard_generation": "V2.2", "historical_scope": "migrations 0001-0023", "current_scope": "V2.5 includes approved migration 0024", "probable_cause": "repository immobility check", "classification": "B_LEGACY_SCOPE_OVERREACH", "disposition": "validate the frozen historical manifest only", "post_fix_result": "PASS"
+    },
+    {
+      "test": "foundation.test_phase31_4_5a_agent_run_start_serialization.AgentRunStartSerializationDecisionTests.test_frozen_contract_and_migration_boundary",
+      "assertion": "no 0024_* exists at repository HEAD", "expected": "False", "actual": "True", "artifact": "V2.3 contract and repository migration directory", "guard_generation": "V2.3", "historical_scope": "exact contract SHA and historical migration membership", "current_scope": "V2.5 successor migration 0024", "probable_cause": "historical immutability conflated with repository immobility", "classification": "B_LEGACY_SCOPE_OVERREACH", "disposition": "assert 23 historical manifest members and exclude 0024 from that manifest, not from HEAD", "post_fix_result": "PASS"
+    },
+    {
+      "test": "foundation.test_phase31_4_5a_retry1_source_reachability.Phase3145ARetry1SourceReachabilityTests.test_positive_full_contract_and_invariant_artifacts",
+      "assertion": "validate(V2.3) == []", "expected": "[]", "actual": "['migration 0024 appeared']", "artifact": "V2.3 migration boundary", "guard_generation": "V2.3", "historical_scope": "migrations 0001-0023", "current_scope": "V2.5 includes approved migration 0024", "probable_cause": "repository immobility check", "classification": "B_LEGACY_SCOPE_OVERREACH", "disposition": "validate historical members and hashes", "post_fix_result": "PASS"
+    },
+    {
+      "test": "foundation.test_phase31_4_5b_source_reachability.Phase3145BSourceReachabilityTests.test_complete_positive_matrix",
+      "assertion": "validate(V2.4) == []", "expected": "[]", "actual": "['migration 0024 appeared']", "artifact": "V2.4 migration boundary", "guard_generation": "V2.4", "historical_scope": "migrations 0001-0023", "current_scope": "V2.5 includes approved migration 0024", "probable_cause": "repository immobility check", "classification": "B_LEGACY_SCOPE_OVERREACH", "disposition": "validate historical members and hashes", "post_fix_result": "PASS"
+    },
+    {
+      "test": "foundation.test_phase31_4_retry5_operational_manifest.Retry5ManifestTests.test_authoritative_manifest_and_external_hash",
+      "assertion": "historical Retry 5 manifest valid at current HEAD", "expected": "valid", "actual": "migration 0024 exists in repository", "artifact": "Retry 5 operational manifest", "guard_generation": "V2.4 Retry 5", "historical_scope": "signed Retry 5 member hashes and frozen V2.4 artifacts", "current_scope": "V2.5 successor files", "probable_cause": "historical manifest inspected later repository membership", "classification": "B_LEGACY_SCOPE_OVERREACH", "disposition": "retain signed historical manifest; byte-check frozen V2.4 members and approve versioned successors", "post_fix_result": "PASS"
+    },
+    {
+      "test": "foundation.test_phase31_4_frozen_runtime_semantics.FrozenRuntimeSemanticContradictionTests.test_every_native_accepted_precondition_is_an_object_not_frozen_text",
+      "assertion": "load V2.4 contract", "expected": "contract loaded", "actual": "ContractIntegrityError: migration 0024 appeared", "artifact": "V2.4 support producer", "guard_generation": "V2.4", "historical_scope": "exact V2.4 contract", "current_scope": "V2.5 successor migration", "probable_cause": "shared overreaching V2.4 validator", "classification": "B_LEGACY_SCOPE_OVERREACH", "disposition": "generation-scoped migration validation", "post_fix_result": "PASS"
+    },
+    {
+      "test": "foundation.test_phase31_4_frozen_runtime_semantics.FrozenRuntimeSemanticContradictionTests.test_fixed_target_text_cannot_be_the_sql_uuid_target",
+      "assertion": "load V2.4 contract", "expected": "contract loaded", "actual": "ContractIntegrityError: migration 0024 appeared", "artifact": "V2.4 support producer", "guard_generation": "V2.4", "historical_scope": "exact V2.4 contract", "current_scope": "V2.5 successor migration", "probable_cause": "shared overreaching V2.4 validator", "classification": "B_LEGACY_SCOPE_OVERREACH", "disposition": "generation-scoped migration validation", "post_fix_result": "PASS"
+    },
+    {
+      "test": "foundation.test_phase31_4_frozen_runtime_semantics.FrozenRuntimeSemanticContradictionTests.test_frozen_a0_and_target_type_contradict_unchanged_sql_guard",
+      "assertion": "load V2.4 contract", "expected": "contract loaded", "actual": "ContractIntegrityError: migration 0024 appeared", "artifact": "V2.4 support producer", "guard_generation": "V2.4", "historical_scope": "exact V2.4 contract", "current_scope": "V2.5 successor migration", "probable_cause": "shared overreaching V2.4 validator", "classification": "B_LEGACY_SCOPE_OVERREACH", "disposition": "generation-scoped migration validation", "post_fix_result": "PASS"
+    },
+    {
+      "test": "foundation.test_phase31_4_frozen_runtime_semantics.FrozenRuntimeSemanticContradictionTests.test_real_prepare_rejects_exact_preconditions_before_transaction",
+      "assertion": "load V2.4 contract", "expected": "contract loaded", "actual": "ContractIntegrityError: migration 0024 appeared", "artifact": "V2.4 support producer", "guard_generation": "V2.4", "historical_scope": "exact V2.4 contract", "current_scope": "V2.5 successor migration", "probable_cause": "shared overreaching V2.4 validator", "classification": "B_LEGACY_SCOPE_OVERREACH", "disposition": "generation-scoped migration validation", "post_fix_result": "PASS"
+    },
+    {
+      "test": "foundation.test_phase31_4_synthetic_authority.AuthorityTests.test_precommit_toctou_rolls_back",
+      "assertion": "construct V2.4 execution session", "expected": "session constructed", "actual": "ContractIntegrityError: migration 0024 appeared", "artifact": "V2.4 support producer", "guard_generation": "V2.4", "historical_scope": "exact V2.4 contract", "current_scope": "V2.5 successor migration", "probable_cause": "shared overreaching V2.4 validator", "classification": "B_LEGACY_SCOPE_OVERREACH", "disposition": "generation-scoped migration validation", "post_fix_result": "PASS"
+    },
+    {
+      "test": "foundation.test_phase31_4_v2_4_support_package.ExecutableWiringTests.test_adr0017_parity_allows_only_seven_identities",
+      "assertion": "build V2.4 identity exception inventory", "expected": "7 identities", "actual": "ContractIntegrityError: migration 0024 appeared", "artifact": "V2.4 support producer", "guard_generation": "V2.4", "historical_scope": "exact V2.4 contract", "current_scope": "V2.5 successor migration", "probable_cause": "shared overreaching validator", "classification": "B_LEGACY_SCOPE_OVERREACH", "disposition": "generation-scoped migration validation", "post_fix_result": "PASS"
+    },
+    {
+      "test": "foundation.test_phase31_4_v2_4_support_package.ExecutableWiringTests.test_all_1664_fields_have_concrete_execution_classification",
+      "assertion": "build V2.4 field inventory", "expected": "1664 fields", "actual": "ContractIntegrityError: migration 0024 appeared", "artifact": "V2.4 support producer", "guard_generation": "V2.4", "historical_scope": "exact V2.4 contract", "current_scope": "V2.5 successor migration", "probable_cause": "shared overreaching validator", "classification": "B_LEGACY_SCOPE_OVERREACH", "disposition": "generation-scoped migration validation", "post_fix_result": "PASS"
+    },
+    {
+      "test": "foundation.test_phase31_4_v2_4_support_package.ExecutableWiringTests.test_every_operation_reaches_declared_source_with_fresh_precommit_authority",
+      "assertion": "construct V2.4 execution session", "expected": "29 operations reachable", "actual": "ContractIntegrityError: migration 0024 appeared", "artifact": "V2.4 support producer", "guard_generation": "V2.4", "historical_scope": "exact V2.4 contract", "current_scope": "V2.5 successor migration", "probable_cause": "shared overreaching validator", "classification": "B_LEGACY_SCOPE_OVERREACH", "disposition": "generation-scoped migration validation", "post_fix_result": "PASS"
+    },
+    {
+      "test": "foundation.test_phase31_4_v2_4_support_package.HarnessTests.test_application_activation_and_teardown_are_guarded",
+      "assertion": "advance historical phase harness", "expected": "guarded phases", "actual": "ContractIntegrityError: migration 0024 appeared", "artifact": "V2.4 harness", "guard_generation": "V2.4", "historical_scope": "exact V2.4 plan", "current_scope": "V2.5 successor migration", "probable_cause": "shared overreaching validator", "classification": "B_LEGACY_SCOPE_OVERREACH", "disposition": "generation-scoped migration validation", "post_fix_result": "PASS"
+    },
+    {
+      "test": "foundation.test_phase31_4_v2_4_support_package.ProducerTests.test_all_members_have_closed_native_phase_wiring",
+      "assertion": "validate V2.4 wiring", "expected": "closed wiring", "actual": "ContractIntegrityError: migration 0024 appeared", "artifact": "V2.4 support producer", "guard_generation": "V2.4", "historical_scope": "exact V2.4 plan", "current_scope": "V2.5 successor migration", "probable_cause": "shared overreaching validator", "classification": "B_LEGACY_SCOPE_OVERREACH", "disposition": "generation-scoped migration validation", "post_fix_result": "PASS"
+    },
+    {
+      "test": "foundation.test_phase31_4_v2_4_support_package.ProducerTests.test_event_outbox_audit_and_serialization_matrix",
+      "assertion": "build V2.4 event matrix", "expected": "matrix built", "actual": "ContractIntegrityError: migration 0024 appeared", "artifact": "V2.4 support producer", "guard_generation": "V2.4", "historical_scope": "exact V2.4 plan", "current_scope": "V2.5 successor migration", "probable_cause": "shared overreaching validator", "classification": "B_LEGACY_SCOPE_OVERREACH", "disposition": "generation-scoped migration validation", "post_fix_result": "PASS"
+    },
+    {
+      "test": "foundation.test_phase31_4_v2_4_support_package.ProducerTests.test_identifier_parameterlessness_and_exact_coverage",
+      "assertion": "build V2.4 support plan", "expected": "118 members", "actual": "ContractIntegrityError: migration 0024 appeared", "artifact": "V2.4 support producer", "guard_generation": "V2.4", "historical_scope": "exact V2.4 plan", "current_scope": "V2.5 successor migration", "probable_cause": "shared overreaching validator", "classification": "B_LEGACY_SCOPE_OVERREACH", "disposition": "generation-scoped migration validation", "post_fix_result": "PASS"
+    },
+    {
+      "test": "foundation.test_phase31_4_v2_4_support_package.ProducerTests.test_transaction_retention_runtime_and_phase29_prohibitions",
+      "assertion": "build V2.4 transaction contract", "expected": "transaction contract built", "actual": "ContractIntegrityError: migration 0024 appeared", "artifact": "V2.4 support producer", "guard_generation": "V2.4", "historical_scope": "exact V2.4 plan", "current_scope": "V2.5 successor migration", "probable_cause": "shared overreaching validator", "classification": "B_LEGACY_SCOPE_OVERREACH", "disposition": "generation-scoped migration validation", "post_fix_result": "PASS"
+    },
+    {
+      "test": "foundation.test_phase31_4_v2_4_support_package.ProducerTests.test_v24_only_and_all_binding_kinds_are_closed",
+      "assertion": "build V2.4 support plan", "expected": "closed V2.4 binding kinds", "actual": "ContractIntegrityError: migration 0024 appeared", "artifact": "V2.4 support producer", "guard_generation": "V2.4", "historical_scope": "exact V2.4 plan", "current_scope": "V2.5 successor migration", "probable_cause": "shared overreaching validator", "classification": "B_LEGACY_SCOPE_OVERREACH", "disposition": "generation-scoped migration validation", "post_fix_result": "PASS"
+    },
+    {
+      "test": "foundation.test_phase31_4_v2_4_support_package.SecurityInstallerTests.test_roles_policies_privileges_and_function_envelope",
+      "assertion": "build V2.4 security plan", "expected": "security plan built", "actual": "ContractIntegrityError: migration 0024 appeared", "artifact": "V2.4 security installer", "guard_generation": "V2.4", "historical_scope": "exact V2.4 plan", "current_scope": "V2.5 successor migration", "probable_cause": "shared overreaching validator", "classification": "B_LEGACY_SCOPE_OVERREACH", "disposition": "generation-scoped migration validation", "post_fix_result": "PASS"
+    },
+    {
+      "test": "foundation.test_phase31_4_v2_4_support_package.SecurityInstallerTests.test_teardown_is_complete_and_fail_closed",
+      "assertion": "build V2.4 teardown plan", "expected": "complete fail-closed teardown", "actual": "ContractIntegrityError: migration 0024 appeared", "artifact": "V2.4 security installer", "guard_generation": "V2.4", "historical_scope": "exact V2.4 plan", "current_scope": "V2.5 successor migration", "probable_cause": "shared overreaching validator", "classification": "B_LEGACY_SCOPE_OVERREACH", "disposition": "generation-scoped migration validation", "post_fix_result": "PASS"
+    }
+  ]
+}

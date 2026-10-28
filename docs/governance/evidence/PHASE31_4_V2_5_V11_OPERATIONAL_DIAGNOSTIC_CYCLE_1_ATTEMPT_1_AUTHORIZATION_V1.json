@@ -1,0 +1,100 @@
+{
+  "schema": "phase31.4-v2.5-v11-operational-diagnostic-attempt-authorization/v1",
+  "authorization_id": "PHASE31_4_V2_5_V11_OPERATIONAL_DIAGNOSTIC_CYCLE_1_ATTEMPT_1_AUTHORIZATION_V1",
+  "issued_at": "2026-09-29T20:01:00Z",
+  "cycle_id": "Phase 31.4 V2.5 V11 Operational Diagnostic Cycle 1",
+  "attempt": 1,
+  "validation_attempt": 1,
+  "authorization_mode": "DIAGNOSTIC_ONLY",
+  "authorization_scope": "DIAGNOSTIC_ONLY_AUTHORIZATION",
+  "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+  "authorization_status": "RUNNER_ENVIRONMENT_DIAGNOSTIC_AUTHORIZED",
+  "one_shot": true,
+  "consumed": false,
+  "run_executed": false,
+  "run_id": "Phase 31.4 V2.5 V11 Operational Diagnostic Cycle 1 Attempt 1",
+  "canonical_run_slug": "Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1",
+  "evidence_root": "docs/governance/evidence/runs/Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1",
+  "workspace": "/home/felipe/proyectos/isosmart",
+  "git_state": {
+    "commit": "c43817edc61e46309f9216933257017ae0757e03",
+    "source_worktree_clean_before_cycle_authorization": true,
+    "authorized_governance_artifacts_created_after_commit": true
+  },
+  "integrity": {
+    "artifact_path": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V11.json",
+    "sha256": "69a0eec27e96e050411e1cabf8f61aa2ca8182a736e16c3b84f67089bb4e716b",
+    "generation": "PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V11",
+    "predecessor": "PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V10.json",
+    "predecessor_sha256": "4d40636266ce88a8b7f63130c8f2730566f578dfa827e9320f47ef67710c1008"
+  },
+  "parent_cycle_authorization": {
+    "artifact_path": "docs/governance/evidence/PHASE31_4_V2_5_V11_OPERATIONAL_DIAGNOSTIC_CYCLE_1_AUTHORIZATION_V1.json",
+    "sha256": "d5508dc362fc93b653c5c316c5259103da63b7b520d7ccbf05a6f0be8096a72f"
+  },
+  "bearer_contract": {
+    "artifact_path": "docs/governance/authorizations/PHASE31_4_V2_5_OPERATIONAL_BEARER_IDENTITY_CONTRACT_AUTHORIZATION_V1.json",
+    "sha256": "2c59226ee86328d695e23e28c08615d5b522a55e0b6a9bf32e8098ab44e4f4bf",
+    "commit": "c43817edc61e46309f9216933257017ae0757e03",
+    "identity": "existing fresh run-scoped AdminApps viewer",
+    "acquisition": "AdminApps SimpleJWT AccessToken.for_user via anonymous pipe",
+    "lifetime_seconds": 900,
+    "persistence": "none"
+  },
+  "readiness": {
+    "adminapps": {
+      "path": "/api/integration/health/",
+      "credential_acquisition": "persist IntegrationAPIKey during authority bootstrap",
+      "header": "X-API-Key <redacted>"
+    },
+    "isosmart": {
+      "path": "/health",
+      "credential_acquisition": "issue approved runtime access token for existing identity",
+      "header": "Authorization Bearer <redacted>"
+    }
+  },
+  "redaction": {
+    "raw_token_in_stdout_stderr_traceback_manifest_json_report_argv": "PROHIBITED",
+    "allowed_token_evidence": [
+      "token_present",
+      "token_type",
+      "identity_id",
+      "token_fingerprint",
+      "token_source",
+      "token_lifetime_seconds"
+    ],
+    "signing_key_output": "PROHIBITED",
+    "refresh_token": "PROHIBITED"
+  },
+  "maximum_target": "STAGE_EXT_6_OF_6 + CAPTURE_BUNDLE_READY",
+  "runner_method": "DisposableEvidenceRunner.run_evidence",
+  "executor_mode": "diagnostic",
+  "allow_runtime_execution": false,
+  "stop_boundary": "CAPTURE_BUNDLE_READY; STOP before Retry 20; mandatory teardown",
+  "fresh_required": [
+    "AdminApps PostgreSQL 18.6",
+    "ISO Smart PostgreSQL 18.6",
+    "databases",
+    "networks",
+    "volumes",
+    "dynamic loopback database and service ports",
+    "service process identities",
+    "evidence directory",
+    "manifest"
+  ],
+  "consumption_registry": "docs/governance/evidence/diagnostic_authorization_consumptions",
+  "cleanup_requirement": "ZERO RESIDUAL RESOURCES",
+  "failure_policy": "SUCCESSOR_CYCLE_ATTEMPT_1_FAIL; capture evidence; teardown; no fix and no Attempt 2",
+  "prohibited": [
+    "V8 Attempt 4",
+    "Retry 20",
+    "full 33-phase execution",
+    "Phase 31.5",
+    "Attempt 2",
+    "historical resource or credential reuse",
+    "opportunistic remediation"
+  ],
+  "retry_20_authorization": "NONE",
+  "retry_20_executed": false,
+  "phase_31_5": "EXECUTION_HELD"
+}

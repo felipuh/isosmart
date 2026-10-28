@@ -1,0 +1,283 @@
+{
+  "index": "https://pypi.org/simple",
+  "download_host": "files.pythonhosted.org",
+  "manifest_sha256": "cf804dcb0092c3daaa97831806e1eefa2c91edcabdb1a7e4f9ca21dea7bfb29f",
+  "artifacts": [
+    {
+      "name": "Django",
+      "version": "4.2.22",
+      "direct_requirement": true,
+      "artifact_sha256": "0a32773b5b7f4e774a155ee253ab24a841fed7e9e9061db08bf2ce9711da404d"
+    },
+    {
+      "name": "djangorestframework",
+      "version": "3.15.2",
+      "direct_requirement": true,
+      "artifact_sha256": "2b8871b062ba1aefc2de01f773875441a961fefbf79f5eed1e32b2f096944b20"
+    },
+    {
+      "name": "django-cors-headers",
+      "version": "4.3.1",
+      "direct_requirement": true,
+      "artifact_sha256": "0b1fd19297e37417fc9f835d39e45c8c642938ddba1acce0c1753d3edef04f36"
+    },
+    {
+      "name": "django-filter",
+      "version": "23.5",
+      "direct_requirement": true,
+      "artifact_sha256": "99122a201d83860aef4fe77758b69dda913e874cc5e0eaa50a86b0b18d708400"
+    },
+    {
+      "name": "psycopg2-binary",
+      "version": "2.9.10",
+      "direct_requirement": true,
+      "artifact_sha256": "8cd9b4f2cfab88ed4a9106192de509464b75a906462fb846b936eabe45c2063e"
+    },
+    {
+      "name": "djangorestframework_simplejwt",
+      "version": "5.4.0",
+      "direct_requirement": true,
+      "artifact_sha256": "7aec953db9ed4163430c16d086eecb0f028f814ce6bba62b06c25919261e9077"
+    },
+    {
+      "name": "PyJWT",
+      "version": "2.8.0",
+      "direct_requirement": true,
+      "artifact_sha256": "59127c392cc44c2da5bb3192169a91f429924e17aff6534d70fdc02ab3e04320"
+    },
+    {
+      "name": "pyotp",
+      "version": "2.8.0",
+      "direct_requirement": true,
+      "artifact_sha256": "889d037fdde6accad28531fc62a790f089e5dfd5b638773e9ee004cce074a2e5"
+    },
+    {
+      "name": "qrcode",
+      "version": "7.4.2",
+      "direct_requirement": true,
+      "artifact_sha256": "581dca7a029bcb2deef5d01068e39093e80ef00b4a61098a2182eac59d01643a"
+    },
+    {
+      "name": "gunicorn",
+      "version": "22.0.0",
+      "direct_requirement": true,
+      "artifact_sha256": "350679f91b24062c86e386e198a15438d53a7a8207235a78ba1b53df4c4378d9"
+    },
+    {
+      "name": "django-apscheduler",
+      "version": "0.7.0",
+      "direct_requirement": true,
+      "artifact_sha256": "869d489775420245c9455d55e35f663c856a33ebfc996d92938f786ffb8730ce"
+    },
+    {
+      "name": "requests",
+      "version": "2.32.3",
+      "direct_requirement": true,
+      "artifact_sha256": "70761cfe03c773ceb22aa2f671b4757976145175cdfca038c02654d061d6dcc6"
+    },
+    {
+      "name": "lxml",
+      "version": "5.2.2",
+      "direct_requirement": true,
+      "artifact_sha256": "d26a618ae1766279f2660aca0081b2220aca6bd1aa06b2cf73f07383faf48927"
+    },
+    {
+      "name": "signxml",
+      "version": "3.2.2",
+      "direct_requirement": true,
+      "artifact_sha256": "9201fefe0e6657d2b94a8d7682245a6397644fc6d71694c7b9420dbfc58be2e1"
+    },
+    {
+      "name": "cryptography",
+      "version": "46.0.3",
+      "direct_requirement": true,
+      "artifact_sha256": "10b01676fc208c3e6feeb25a8b83d81767e8059e1fe86e1dc62d10a3018fa926"
+    },
+    {
+      "name": "python-dotenv",
+      "version": "1.0.0",
+      "direct_requirement": true,
+      "artifact_sha256": "f5971a9226b701070a4bf2c38c89e5a3f0d64de8debda981d1db98583009122a"
+    },
+    {
+      "name": "pillow",
+      "version": "10.2.0",
+      "direct_requirement": true,
+      "artifact_sha256": "127cee571038f252a552760076407f9cff79761c3d436a12af6000cd182a9d04"
+    },
+    {
+      "name": "ipython",
+      "version": "8.18.1",
+      "direct_requirement": true,
+      "artifact_sha256": "e8267419d72d81955ec1177f8a29aaa90ac80ad647499201119e2f05e99aa397"
+    },
+    {
+      "name": "APScheduler",
+      "version": "3.11.3",
+      "direct_requirement": false,
+      "artifact_sha256": "bbeb2ec02d23d3c06a6c07ed7f0f3939ada6680eb121fae809a69bb42c537a30"
+    },
+    {
+      "name": "asgiref",
+      "version": "3.12.1",
+      "direct_requirement": false,
+      "artifact_sha256": "fe386d1c2bff7259ea95929266d12a8cf9a8b5a1c2598402967d8792e7a7c094"
+    },
+    {
+      "name": "certifi",
+      "version": "2026.7.22",
+      "direct_requirement": false,
+      "artifact_sha256": "62f22742b58a1a33014a2b6b706588a8d7e2a88ae7bd1a6ebe8c992928483775"
+    },
+    {
+      "name": "cffi",
+      "version": "2.1.1",
+      "direct_requirement": false,
+      "artifact_sha256": "c1453022f490d2459a11819d83ad1d586e9ff65a12ac3e705ffebd46d3685dcf"
+    },
+    {
+      "name": "charset-normalizer",
+      "version": "3.5.1",
+      "direct_requirement": false,
+      "artifact_sha256": "b9af956078716df40d985fb0dfeb2c2120c5ca92ba4ff4b388acfd01cdc14d08"
+    },
+    {
+      "name": "idna",
+      "version": "3.20",
+      "direct_requirement": false,
+      "artifact_sha256": "ab7ae7122974553370f0bdb919e1a960b2cd1bc1ef0276416d896db81c14582c"
+    },
+    {
+      "name": "jedi",
+      "version": "0.20.0",
+      "direct_requirement": false,
+      "artifact_sha256": "7bdd9c2634f56713299976f4cbd59cb3fa92165cc5e05ea811fb253480728b67"
+    },
+    {
+      "name": "pexpect",
+      "version": "4.9.0",
+      "direct_requirement": false,
+      "artifact_sha256": "7236d1e080e4936be2dc3e326cec0af72acf9212a7e1d060210e70a47e253523"
+    },
+    {
+      "name": "prompt_toolkit",
+      "version": "3.0.53",
+      "direct_requirement": false,
+      "artifact_sha256": "01c0891d7f9237d5e339f7d3e42cdae80b7534abb1c7c0e3352efba6231492f2"
+    },
+    {
+      "name": "Pygments",
+      "version": "2.21.0",
+      "direct_requirement": false,
+      "artifact_sha256": "2363c69b61c4a97c838da3b130dcd6468f4848992b21a82f2a63ec34377137d9"
+    },
+    {
+      "name": "pyOpenSSL",
+      "version": "26.2.0",
+      "direct_requirement": false,
+      "artifact_sha256": "4f9d971bc5298b8bc1fab282803da04bf000c755d4ad9d99b52de2569ca19a70"
+    },
+    {
+      "name": "sqlparse",
+      "version": "0.6.0",
+      "direct_requirement": false,
+      "artifact_sha256": "b861c0288ce2fa56209a9a6412d2e066ac664b3873b89c26c9d8415e8e32996f"
+    },
+    {
+      "name": "traitlets",
+      "version": "5.16.1",
+      "direct_requirement": false,
+      "artifact_sha256": "f775618166caa0396c8e337099240f2bd3e5e917d203b2e6fbe21a58d3cb1f6b"
+    },
+    {
+      "name": "typing_extensions",
+      "version": "4.16.0",
+      "direct_requirement": false,
+      "artifact_sha256": "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8"
+    },
+    {
+      "name": "urllib3",
+      "version": "2.8.0",
+      "direct_requirement": false,
+      "artifact_sha256": "0cf3cae568d36aa9576b28dfb35f11328f1cb974ca7647d9475ebb86c75ac6e3"
+    },
+    {
+      "name": "decorator",
+      "version": "5.3.1",
+      "direct_requirement": false,
+      "artifact_sha256": "f47fe6fdbd2edd623ecfe36875d37aba411624e2670dd395dddae1358689bb3c"
+    },
+    {
+      "name": "matplotlib-inline",
+      "version": "0.2.2",
+      "direct_requirement": false,
+      "artifact_sha256": "3c821cf1c209f59fb2d2d64abbf5b23b67bcb2210d663f9918dd851c6da1fcf6"
+    },
+    {
+      "name": "packaging",
+      "version": "26.3",
+      "direct_requirement": false,
+      "artifact_sha256": "d7193f7c8e4e93f444fde0262bf90af30e16fa0ad0ad44cb553c87339b23cd1c"
+    },
+    {
+      "name": "pypng",
+      "version": "0.20220715.0",
+      "direct_requirement": false,
+      "artifact_sha256": "4a43e969b8f5aaafb2a415536c1a8ec7e341cd6a3f957fd5b5f32a4cfeed902c"
+    },
+    {
+      "name": "stack-data",
+      "version": "0.6.3",
+      "direct_requirement": false,
+      "artifact_sha256": "d5558e0c25a4cb0853cddad3d77da9891a08cb85dd9f9f91b9f8cd66e511e695"
+    },
+    {
+      "name": "asttokens",
+      "version": "3.0.2",
+      "direct_requirement": false,
+      "artifact_sha256": "9da13157f5b28becde0bd374fc677dcd3c290614264eff096f167c469cd9f933"
+    },
+    {
+      "name": "executing",
+      "version": "2.2.1",
+      "direct_requirement": false,
+      "artifact_sha256": "760643d3452b4d777d295bb167ccc74c64a81df23fb5e08eff250c425a4b2017"
+    },
+    {
+      "name": "parso",
+      "version": "0.8.7",
+      "direct_requirement": false,
+      "artifact_sha256": "a8926eb2a1b915486941fdbd31e86a4baf88fe8c210f25f2f35ecec5b574ca1c"
+    },
+    {
+      "name": "ptyprocess",
+      "version": "0.7.0",
+      "direct_requirement": false,
+      "artifact_sha256": "4b41f3967fce3af57cc7e94b888626c18bf37a083e3651ca8feeb66d492fef35"
+    },
+    {
+      "name": "tzlocal",
+      "version": "5.4.4",
+      "direct_requirement": false,
+      "artifact_sha256": "aae09f0126a8a86fa736be266eb4a471380d26a0de3bc14844e7821fee3e2a15"
+    },
+    {
+      "name": "wcwidth",
+      "version": "0.9.1",
+      "direct_requirement": false,
+      "artifact_sha256": "747fb724223f417a17541a95a17c1dac3a8ef9a0cf41684950f0eab191a35f65"
+    },
+    {
+      "name": "pure_eval",
+      "version": "0.2.4",
+      "direct_requirement": false,
+      "artifact_sha256": "96cae060a313cfaad51bb761278bfb0e62dc0248d9315a81173752dc546cd37a"
+    },
+    {
+      "name": "pycparser",
+      "version": "3.0",
+      "direct_requirement": false,
+      "artifact_sha256": "b727414169a36b7d524c1c3e31839a521725078d7b2ff038656844266160a992"
+    }
+  ]
+}

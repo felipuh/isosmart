@@ -1,0 +1,122 @@
+{
+  "evidence_id": "37",
+  "artifact_schema": "phase31.5-e07-adminapps-development-profile-correction/v1",
+  "date": "2026-10-05",
+  "purpose": "Record the separately authorized, minimum persistent correction that aligns the declared AdminApps local development target with the repository-defined development settings profile.",
+  "predecessor": "docs/governance/evidence/phase31_5/36_e07_adminapps_development_environment_classification_resolution_2026-10-05.json",
+  "governance_integrity": {
+    "adminapps_repository": "/home/felipe/proyectos/adminapps",
+    "adminapps_branch": "hardening/p0-p1-enterprise-readiness",
+    "adminapps_head": "8b9c5684997baaa590b34af241a173e1a9c41143",
+    "isosmart_repository": "/home/felipe/proyectos/isosmart",
+    "isosmart_branch": "hardening/p0-p1-enterprise-readiness",
+    "isosmart_head_at_inspection": "9c1d3557597f9b52d2247d8d5a728a41044deb66",
+    "evidence_36_present": true,
+    "evidence_36_classification_confirmed": "ADMINAPPS_ENVIRONMENT_CLASSIFICATION_CONTRADICTORY",
+    "evidence_36_eligibility_confirmed": "DEVELOPMENT_CONFIGURATION_CORRECTION_ELIGIBLE",
+    "evidence_36_binding_consequence_confirmed": "DEV_BINDING_REQUIRES_SEPARATE_CONFIG_CORRECTION",
+    "preexisting_unrelated_worktree_changes_preserved": true,
+    "network_access": false,
+    "runtime_started": false,
+    "database_access": false,
+    "deployment_access": false
+  },
+  "starting_state": {
+    "e07": "BLOCKED_BY_EXTERNAL_AUTHORITY",
+    "e08": "CLOSED_LOCAL_TECHNICAL_EVIDENCE",
+    "e08_baseline_preserved": "YES",
+    "phase31_5": "EXECUTION_HELD",
+    "declared_adminapps_target": {
+      "environment_id": "ADMINAPPS-DEV-LOCAL",
+      "path": "/home/felipe/proyectos/adminapps",
+      "declared_class": "development"
+    },
+    "observed_profile_state": "CONTRADICTORY_CONFIGURATION_PROFILE"
+  },
+  "resolver_semantics_verification": {
+    "active_settings_module": "config.settings",
+    "precedence": "DJANGO_ENV, then ENVIRONMENT, then development default",
+    "canonical_development_value": "development",
+    "development_predicate": "ENVIRONMENT in development/dev/local/test",
+    "production_predicate": "ENVIRONMENT in production/prod",
+    "separate_required_environment_classifier_found": false,
+    "precondition_drift": false
+  },
+  "authorized_configuration_correction": {
+    "action_classification": "ALIGN_BOTH_ENVIRONMENT_MARKERS",
+    "authorized_markers_changed": [
+      "DJANGO_ENV",
+      "ENVIRONMENT"
+    ],
+    "canonical_marker_postcondition": "DJANGO_ENV=development",
+    "fallback_marker_postcondition": "ENVIRONMENT=development",
+    "reason": "The canonical selector is set to the repository-defined development value and the fallback is aligned so it cannot reintroduce an ambiguous production interpretation.",
+    "other_dotenv_keys_changed": false,
+    "dotenv_staged": false,
+    "dotenv_committed": false,
+    "dotenv_protection_preserved": "TRACKED_SKIP_WORKTREE"
+  },
+  "static_resolution_verification": {
+    "method": "Narrow marker inspection plus static evaluation of the committed config.settings resolver; Django was not initialized.",
+    "resolved_environment": "development",
+    "is_development": true,
+    "is_production": false,
+    "runtime_started": false,
+    "database_access": false,
+    "credential_or_secret_output": false
+  },
+  "production_safeguard_regression": {
+    "method": "Repository-local static source inspection; no database-writing test was run.",
+    "production_secret_validation_preserved": true,
+    "production_debug_validation_preserved": true,
+    "production_allowed_hosts_validation_preserved": true,
+    "production_secure_transport_defaults_preserved": true,
+    "production_secure_cookie_defaults_preserved": true,
+    "development_test_integration_fallback_denied_when_production_selected": true,
+    "status": "PASS"
+  },
+  "development_workflow_alignment": {
+    "expected_development_marker": "DJANGO_ENV=development",
+    "expected_development_settings": "IS_DEVELOPMENT behavior",
+    "alignment": "PASS",
+    "result": "ADMINAPPS_DEVELOPMENT_PROFILE_ALIGNMENT = PASS"
+  },
+  "development_target_rebinding": {
+    "environment_id": "ADMINAPPS-DEV-LOCAL",
+    "environment_class": "development",
+    "configuration_binding_result": "ADMINAPPS_DEVELOPMENT_BINDING_CONFIGURATION_PASS",
+    "scope_limit": "Configuration binding only; no runtime, database, migration, integration record, operator, receiver, restart, or recovery claim is made."
+  },
+  "secret_safety": {
+    "dotenv_contents_displayed": false,
+    "dotenv_inspection_scope": "Only DJANGO_ENV and ENVIRONMENT were inspected or changed.",
+    "unrelated_dotenv_values_recorded": false,
+    "credentials_or_connection_strings_recorded": false,
+    "unexpected_secret_exposure": "NO"
+  },
+  "e08_preservation": {
+    "e08_baseline_preserved": "YES",
+    "e08": "CLOSED_LOCAL_TECHNICAL_EVIDENCE",
+    "e08_retested_or_reopened": false
+  },
+  "mutation_audit": {
+    "authorized_local_adminapps_configuration_mutation": "backend/.env classification markers only: DJANGO_ENV and ENVIRONMENT",
+    "adminapps_source_artifacts_changed": false,
+    "runtime_or_service_changed": false,
+    "database_or_migration_changed": false,
+    "credential_or_operator_changed": false,
+    "governance_artifacts_created": [
+      "docs/governance/evidence/phase31_5/37_e07_adminapps_development_profile_correction_2026-10-05.json",
+      "docs/transformation/PHASE31_5_E07_ADMINAPPS_DEVELOPMENT_PROFILE_CORRECTION_2026-10-05.md"
+    ],
+    "evidence_28_to_36_modified": false
+  },
+  "remaining_development_gates": [
+    "Bounded read-only development metadata inspection for the exact migration ledger and selected integration record.",
+    "Active staff operator attestation and target-bound receiver/injector plus restart authority.",
+    "Development test-window, recovery, leakage-control, and external authority decisions required for any later rotation or runtime action."
+  ],
+  "configuration_correction_verdict": "DEVELOPMENT_CONFIGURATION_CORRECTION_COMPLETE",
+  "next_stage_eligibility": "DEVELOPMENT_METADATA_REINSPECTION_ELIGIBLE",
+  "phase31_5_status": "EXECUTION_HELD"
+}

@@ -1,0 +1,158 @@
+{
+  "evidence_id": "30",
+  "artifact_schema": "phase31.5-e07-external-authority-preflight/v1",
+  "date": "2026-10-05",
+  "scope": "Read-only, repository-local external-authority preflight. No authentic system was contacted.",
+  "governance_boundary": {
+    "phase31_5": "EXECUTION_HELD",
+    "authorization": "PREFLIGHT_VERIFICATION_ONLY",
+    "authentic_rotation_authorized": false,
+    "authentic_rotation_performed": false,
+    "environment_or_secret_receiver_changed": false,
+    "service_restart_performed": false,
+    "database_or_migration_changed": false,
+    "customer_workflow_executed": false,
+    "push_performed": false
+  },
+  "baseline_integrity": {
+    "repository": "/home/felipe/proyectos/isosmart",
+    "branch": "hardening/p0-p1-enterprise-readiness",
+    "required_commits": {
+      "1882596f": "PRESENT",
+      "e874b324": "PRESENT_AND_HEAD"
+    },
+    "evidence_28": {
+      "inspected": true,
+      "e07": "FAIL_AUTHENTIC_ROTATION_EVIDENCE_REQUIRED",
+      "e08": "CLOSED_LOCAL_TECHNICAL_EVIDENCE",
+      "phase31_5": "EXECUTION_HELD"
+    },
+    "evidence_29": {
+      "inspected": true,
+      "readiness_verdict": "BLOCKED_BY_EXTERNAL_AUTHORITY",
+      "e08": "CLOSED_LOCAL_TECHNICAL_EVIDENCE",
+      "phase31_5": "EXECUTION_HELD"
+    },
+    "result": "PASS"
+  },
+  "starting_git_state": {
+    "head": "e874b3240ecbdec687b20dab29d64e74afcbc19f",
+    "preexisting_worktree_changes": "PRESERVED",
+    "task_owned_paths_at_start": 0
+  },
+  "publication": {
+    "upstream": "origin/hardening/p0-p1-enterprise-readiness",
+    "commit_1882596f_ancestor_of_upstream": false,
+    "commit_e874b324_ancestor_of_upstream": false,
+    "classification": "GOVERNANCE_BASELINE_LOCAL_ONLY",
+    "publication_requirement_for_rotation": "NOT_DEFINED_BY_INSPECTED_GOVERNANCE_ARTIFACTS",
+    "push_attempted": false
+  },
+  "gate_1_authentic_adminapps_target": {
+    "classification": "TARGET_IDENTITY_UNAVAILABLE",
+    "source_contract": "apps.integration.models.IntegrationAPIKey is selected by database primary key and rotate_integration_api_key requires an active record.",
+    "authentic_environment_identified": false,
+    "authentic_record_identifier_observed": false,
+    "active_state_observed": false,
+    "unique_isosmart_attribution_observed": false,
+    "duplicate_candidate_check_observed": false,
+    "nonsecret_metadata_accessed": false,
+    "reason": "No authentic AdminApps authority or approved metadata-only inspection target was identified. Repository source cannot identify an authentic record."
+  },
+  "gate_2_adminapps_runtime_readiness": {
+    "classification": "ADMINAPPS_RUNTIME_PROOF_UNAVAILABLE",
+    "source_contract": {
+      "required_migration": "integration.0006_integration_api_key_lifecycle",
+      "model_and_lifecycle_source_present": true,
+      "rotation_function_source_present": true,
+      "deployed_revision_compatible": "UNOBSERVED",
+      "migration_applied_to_authentic_environment": "UNOBSERVED"
+    },
+    "reason": "The local AdminApps source contains the lifecycle contract, but no authentic runtime, schema, migration ledger, or deployed revision was available for authorized inspection."
+  },
+  "gate_3_authorized_active_staff_operator": {
+    "classification": "AUTHORIZED_OPERATOR_NOT_IDENTIFIED",
+    "source_contract": "rotate_integration_api_key requires an authenticated, active, staff operator and writes a secret-free lifecycle audit event attributed to that operator.",
+    "operator_identity_observed": false,
+    "active_state_observed": false,
+    "staff_authorization_observed": false,
+    "rotation_specific_approval_observed": false,
+    "initial_admin_password_dependency": "ADMIN_PASSWORD_NOT_REQUIRED_FOR_ROTATION",
+    "reason": "No authentic operator identity or rotation-specific authorization was provided for safe metadata-only verification."
+  },
+  "gate_4_secret_receiver_and_transfer_path": {
+    "classification": "SECRET_RECEIVER_UNRESOLVED",
+    "source_contract": "ISO Smart web declares an external environment-file input; the repository does not define the authentic receiver or its operator.",
+    "authentic_receiver_category_identified": false,
+    "authorized_injector_identified": false,
+    "non_recording_transfer_path_approved": false,
+    "receiver_persistence_and_audit_verified": false,
+    "rollback_or_forward_recovery_receiver_handling_defined": false,
+    "command_output_constraint": "The source-defined rotation command emits the replacement once on stdout; absent an approved non-recording handoff, it must not be used for authentic transfer.",
+    "reason": "The named Compose input is not proof of the authentic receiver, secure update path, or approved transfer mechanism."
+  },
+  "gate_5_web_cutover_path": {
+    "classification": "WEB_RECEIVER_TARGET_UNRESOLVED",
+    "source_contract": {
+      "web_consumes_admin_apps_api_key": true,
+      "web_client_is_process_lifetime_singleton": true,
+      "web_restart_or_recreation_required_after_replacement": true,
+      "outbox_worker_direct_dependency_proved": false,
+      "management_commands_are_fresh_processes": true,
+      "source_defined_authentic_restart_command": "UNRESOLVED"
+    },
+    "authentic_web_deployment_identified": false,
+    "authorized_receiver_update_operator_identified": false,
+    "authorized_restart_operator_identified": false,
+    "bounded_interruption_approval_observed": false,
+    "narrow_nonsecret_health_validation_contract": "SOURCE_DEFINED_ONLY_NOT_EXECUTED",
+    "reason": "Source establishes a web reload requirement, but not the authentic web receiver, approved restart procedure, interruption acceptance, or recovery authority."
+  },
+  "no_dual_key_and_forward_recovery": {
+    "dual_key_grace_period": "NO_DUAL_KEY_GRACE_PERIOD",
+    "adminapps_transaction_scope": "ADMINAPPS_DATABASE_ONLY",
+    "cross_system_cutover_atomic": false,
+    "bounded_interruption_possible": true,
+    "interruption_approved": false,
+    "future_recovery_strategy": "FORWARD_RECOVERY_UNRESOLVED",
+    "reason": "After a committed rotation, the previous credential must not be assumed valid. No approved receiver reinjection/restart retry procedure or other deterministic recovery was established."
+  },
+  "authentic_inspection_audit": {
+    "principle": "MINIMUM_NECESSARY_AUTHENTIC_INSPECTION",
+    "external_systems_contacted": [],
+    "authentic_metadata_accessed": false,
+    "reason": "No authentic target and no explicit inspection authority were available; no substitute assumptions were made."
+  },
+  "secret_handling": {
+    "secret_material_displayed": false,
+    "secret_material_persisted": false,
+    "secret_material_logged": false,
+    "secret_material_staged": false,
+    "secret_material_committed": false,
+    "secret_material_exposure_avoided": true
+  },
+  "e08_preservation": {
+    "e08_baseline_preserved": "YES",
+    "e08": "CLOSED_LOCAL_TECHNICAL_EVIDENCE",
+    "e08_inspected_or_retested": false,
+    "contradictory_evidence_discovered": false
+  },
+  "repository_mutation_audit": {
+    "allowed_artifacts_created": [
+      "docs/governance/evidence/phase31_5/30_e07_external_authority_preflight_2026-10-05.json",
+      "docs/transformation/PHASE31_5_E07_EXTERNAL_AUTHORITY_PREFLIGHT_2026-10-05.md"
+    ],
+    "runtime_or_product_code_changed": false,
+    "authentication_or_deployment_changed": false,
+    "unrelated_worktree_changes_preserved": true
+  },
+  "readiness_verdict": "BLOCKED_BY_EXTERNAL_AUTHORITY",
+  "remaining_blockers": [
+    "Authentic AdminApps target and metadata-only inspection authority are unavailable.",
+    "Authentic AdminApps migration/runtime readiness is unproven.",
+    "An authorized active staff operator and rotation-specific approval are unidentified.",
+    "The ISO Smart web secret receiver, authorized injector, and non-recording transfer path are unresolved.",
+    "The authentic web restart procedure, interruption approval, and forward-recovery procedure are unresolved."
+  ],
+  "phase31_5": "EXECUTION_HELD"
+}

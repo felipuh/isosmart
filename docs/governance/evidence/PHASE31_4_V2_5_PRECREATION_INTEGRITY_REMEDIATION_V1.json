@@ -1,0 +1,106 @@
+{
+  "artifact_schema": "phase31.4-v2.5-precreation-integrity-remediation/v1",
+  "timestamp": "2026-09-23T14:16:33-06:00",
+  "verdict": "PRECREATION_INTEGRITY_REMEDIATION_FAIL",
+  "state": "CODE_REMEDIATED / CURRENT_INTEGRITY_SUCCESSOR_RECONCILIATION_REQUIRED",
+  "retry_17_blocker": "P0 — PRECREATION_INTEGRITY has no registered operation/assertions/evidence contract",
+  "blocker_addressed_in_code": true,
+  "claimed_guarantee": "Pre-creation source, contract, authority and protected-material integrity are verified before any runtime domain effect is allowed.",
+  "executor": "PrecreationIntegrityExecutor",
+  "operation": "verify_precreation_integrity",
+  "operation_mode": "FILESYSTEM_READ_ONLY_WITH_APPEND_ONLY_GOVERNANCE_EVIDENCE",
+  "assertions": [
+    "current_source_integrity",
+    "historical_v2_4_integrity",
+    "protected_source_set",
+    "migration_material_integrity",
+    "contract_integrity",
+    "verifier_integrity",
+    "run_identity_uniqueness",
+    "authority_configuration",
+    "evidence_serialized"
+  ],
+  "evidence_contract": {
+    "schema": "phase31.4-v2.5-precreation-integrity-evidence/v1",
+    "required_fields": [
+      "phase_id",
+      "executor",
+      "operation",
+      "status",
+      "current_integrity_artifact",
+      "historical_integrity_result",
+      "protected_source_count",
+      "protected_source_mismatches",
+      "migration_integrity_result",
+      "contract_integrity_result",
+      "verifier_integrity_result",
+      "run_id",
+      "assertions",
+      "evidence_paths",
+      "evidence_hashes",
+      "error",
+      "timestamp"
+    ],
+    "retention_path": "docs/governance/evidence/runs/<run-id>/PRECREATION_INTEGRITY/precreation_integrity.json",
+    "overwrite_policy": "CREATE_DIRECTORY_EXCLUSIVE_FAIL_CLOSED"
+  },
+  "read_only_guarantee": {
+    "business_data_reads": false,
+    "business_data_writes": false,
+    "database_connections": false,
+    "domain_services_invoked": false,
+    "migrations_executed": false,
+    "network_calls": false,
+    "allowed_write": "new retained governance evidence only"
+  },
+  "tests": {
+    "focused_precreation_runtime_verifier": {
+      "command": ".venv/bin/python manage.py test foundation.test_phase31_4_v2_5_precreation_integrity foundation.test_phase31_4_v2_5_runtime foundation.test_phase31_4_v2_5_verifier_remediation -v 1",
+      "result": "PASS",
+      "tests": 39
+    },
+    "historical_integrity": {
+      "command": ".venv/bin/python manage.py test foundation.test_phase31_4_integrity_generations.V24HistoricalIntegrityTests -v 1",
+      "result": "PASS",
+      "tests": 3,
+      "v2_4_sha256": "a102d278bf2e5ca6e9b8bf282f5402a54f52d4690beed2ecbed5145c56539387"
+    },
+    "current_integrity": {
+      "result": "FAIL_EXPECTED_PENDING_SUCCESSOR_RECONCILIATION",
+      "reason": "Protected runtime/verifier bytes changed and the new verifier helper is not present in the untouched V2 current baseline."
+    },
+    "full_backend_regression": {
+      "command": ".venv/bin/python manage.py test -v 1",
+      "result": "FAIL",
+      "tests": 509,
+      "errors": 4,
+      "failures": 0,
+      "error_classification": "All four errors are current-integrity successor enforcement; no functional test failed."
+    }
+  },
+  "changed_files": [
+    "backend/foundation/phase31_4_v2_5_precreation_integrity.py",
+    "backend/foundation/phase31_4_v2_5_runtime.py",
+    "backend/foundation/phase31_4_v2_5_verifier_remediation.py",
+    "backend/foundation/test_phase31_4_v2_5_precreation_integrity.py",
+    "backend/foundation/test_phase31_4_v2_5_runtime.py",
+    "docs/governance/evidence/PHASE31_4_V2_5_PRECREATION_INTEGRITY_REMEDIATION_V1.json",
+    "docs/transformation/PHASE31_4_V2_5_PRECREATION_INTEGRITY_REMEDIATION_REPORT.md"
+  ],
+  "integrity_impact": {
+    "baseline_current_v2_modified": false,
+    "historical_artifacts_modified": false,
+    "runtime_sha256_before": "7ed7430abe798d6fd31b2bc27344abde35a7ab7df9e2ef13b51f1ddb7b03fd00",
+    "runtime_sha256_after": "70997fb33eb22c9576cb7def0cd5ccdff9d61deebad4621072920b5acf5efb19",
+    "verifier_sha256_before": "a716e139f15d4b3f247ec4db56b339bad0e8a29ef06030a00aa9542e7195a35f",
+    "verifier_sha256_after": "61a6fa21f01c27bd6713154512045926c4d3d65d410d0d572922ea1ef21dc639",
+    "precreation_helper_sha256": "9fc0efcc14fee9587a041b8c81dffde2d447f82e16d4df495571b7358cb854eb",
+    "successor_reconciliation_required": true
+  },
+  "remaining_blockers": [
+    "A separate legitimate current-integrity successor must protect the changed runtime/verifier and new precreation helper before any disposable run is reviewed."
+  ],
+  "phase_31_5": "EXECUTION_HELD",
+  "live_retry_executed": false,
+  "next_exact_step": "Perform a separate V2-governed current-integrity successor reconciliation covering the runtime, verifier, and precreation helper."
+}

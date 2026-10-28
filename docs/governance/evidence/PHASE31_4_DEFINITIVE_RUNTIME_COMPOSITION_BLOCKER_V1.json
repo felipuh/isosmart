@@ -1,0 +1,54 @@
+{
+  "schema": "phase31.4-definitive-runtime-composition-blocker/v1",
+  "verdict": "NOT_PROMOTED",
+  "stage": "A",
+  "blocker_id": "P1-SYNTHETIC-AUTHORITY-INPUT-ABSENT",
+  "failed_component": "production SyntheticAuthorityReader",
+  "failed_function": "V24ExecutionSession.execute_operation -> SyntheticAuthorityPort.read",
+  "failed_predicate": "an approved test-only control-plane fixture supplies fresh, operation-scoped authorization material for initial and immediate precommit reads",
+  "expected": "approved operation-scoped authorization state for all 29 named operations, with an observable revision or equivalent material that can change for the TOCTOU negative case",
+  "observed": {
+    "named_operations": 29,
+    "test_reader": "backend/foundation/test_phase31_4_v2_4_support_package.py:143-147 returns authorized=True for every operation",
+    "production_reader_count": 0,
+    "packaged_projection_fixture": "backend/foundation/fixtures/adminapps_projection_events.json",
+    "packaged_fixture_status": "phase2_internal_fixture_not_shared_final_contract",
+    "packaged_fixture_operation_id_matches": 0,
+    "packaged_fixture_authorized_fields": 0,
+    "v2_4_tenant_projection_fixture_boundary": "synthetic test-only tenant identity; adminapps_contact=false; no authorization decision or revision",
+    "v2_4_governed_admission_current_request_authority_provenance": "fresh retrieval/reconciliation request only"
+  },
+  "why_runtime_cannot_be_frozen": "The required reader cannot return an authorized decision from the supplied immutable inputs. Returning true would use the prohibited test-only stub; contacting real AdminApps or inventing an authorization fixture would violate the frozen POC boundary. Consequently the required 29-operation production graph and Stage A P1=0 gate cannot be established.",
+  "offline_counts": {
+    "named_operations": 29,
+    "support_members": 118,
+    "execution_inventory_fields": 1664,
+    "declared_domain_event_paths": 13,
+    "phases": 33,
+    "migration_0024_absent": true
+  },
+  "frozen_authority_sha256": {
+    "v2_4": "a102d278bf2e5ca6e9b8bf282f5402a54f52d4690beed2ecbed5145c56539387",
+    "v2_4_authorization": "4e83049a9928cd0a93c97228f33093e282c16e8e5e8969882ea21c8cd83e373b",
+    "v2_3_to_v2_4_changeset": "4204d022492de843d7f6763dfb05f3ce7ec5e166fc4c14de4b8b2c4cb80f27de",
+    "registry_v2": "58b8278cbe05b0b5056e058bb3db1eecfc4d576cbef3dc5383c5e894900730fb",
+    "closure_v2": "80eb1e7f8e857712aa49bcca98f3d27da2b525ba98df16fa34651cf8254cc425"
+  },
+  "inspected_source_sha256": {
+    "backend/foundation/fixtures/adminapps_projection_events.json": "fcffee24c42814618001d40af4c35da491ed485273809ad604590e5f2e521cbf",
+    "backend/foundation/phase31_4_v2_4_execution_backend.py": "39fd21aaf3805f166a220d55bcf0ddcfa51b007f390db20a0f7c8348dd2100b1",
+    "backend/foundation/test_phase31_4_v2_4_support_package.py": "f0aaeed0e89a01fc7fe5155ec23c7454135cd5e4546c9ecdad51407cb45125d9",
+    "backend/foundation/postgres_phase31_4_clean_retry_3_harness.py": "4ad7f24ae8be60333097b2d2df49e571a183a963b3a0ecceddf96975ce07cabb"
+  },
+  "local_immutable_postgres_image_inspection": "available: exact required digest, image ID, linux/amd64; no pull",
+  "offline_focused_tests": "27 run, 26 passed, 1 failed because the historical Retry5 manifest rejects previously changed environment-backend bytes",
+  "database_attempts": 0,
+  "postgresql_start_attempts": 0,
+  "container_start_attempts": 0,
+  "lifecycle_attempts": 0,
+  "network_attempts": 0,
+  "environment_created": false,
+  "teardown_eligible": false,
+  "p0": 0,
+  "p1": 1
+}

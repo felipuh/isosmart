@@ -1,0 +1,17 @@
+{
+  "artifact_schema": "phase31.4-clean-retry-7-v2.5-migration-bootstrap/v1",
+  "execution_scope": "LIVE_NATIVE_EXECUTION",
+  "bootstrap": "PASS",
+  "required_migrations_applied": true,
+  "applied_migration_count": 91,
+  "pending_required_migrations": 0,
+  "fake_migrations": false,
+  "manual_schema_edits": false,
+  "application_boot": "PASS",
+  "cluster_role_bootstrap": "PASS",
+  "database_effect_counts_before_runtime": {
+    "qms.opportunity": 0,
+    "eventing.domain_event": 0,
+    "eventing.transactional_outbox": 0
+  }
+}

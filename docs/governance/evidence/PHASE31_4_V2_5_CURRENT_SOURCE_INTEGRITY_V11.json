@@ -1,0 +1,461 @@
+{
+  "schema": "phase31.4-v2.5-current-source-integrity/v11",
+  "generation": "V2.5_CURRENT_SOURCE_SUCCESSOR_V11",
+  "generation_id": "PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V11",
+  "generated_at": "2026-09-29T20:00:00Z",
+  "governance_predecessor": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V10.json",
+  "governance_predecessor_sha256": "4d40636266ce88a8b7f63130c8f2730566f578dfa827e9320f47ef67710c1008",
+  "successor_relation": "V11 is the authorized successor of V10 for the operational bearer identity contract; no health permission, provider authentication, global JWT lifetime, Retry 20, or Phase 31.5 change is included.",
+  "provenance_continuity": false,
+  "provenance_discontinuity_status": "PROVENANCE_DISCONTINUITY",
+  "provenance_discontinuity_artifact": "docs/governance/evidence/PHASE31_4_V2_5_RUNTIME_PROVENANCE_DISCONTINUITY_V1.json",
+  "predecessor_protected_source_count": 28,
+  "protected_source_count": 29,
+  "unchanged_source_count": 24,
+  "modified_source_count": 4,
+  "new_source_count": 1,
+  "removed_source_count": 0,
+  "missing_source_count": 0,
+  "unexpected_source_count": 0,
+  "unchanged_sources": [
+    "backend/backend/settings.py",
+    "backend/backend/urls.py",
+    "backend/foundation/projection_contract.py",
+    "backend/foundation/adminapps_ingress.py",
+    "backend/foundation/qms_organization.py",
+    "backend/foundation/migrations/0024_adminapps_ingress_receipt.py",
+    "backend/foundation/postgres_foundation_gate.py",
+    "backend/foundation/phase31_4_v2_5_runtime.py",
+    "backend/foundation/phase31_4_v2_5_structural_gate.py",
+    "backend/foundation/phase31_4_v2_5_executable_graph.py",
+    "backend/foundation/adminapps_adapter.py",
+    "backend/foundation/projection_writer.py",
+    "docs/governance/fixtures/PHASE31_4_5C_ROW_LEVEL_EXECUTION_CONTRACT_V2_5.json",
+    "backend/foundation/phase31_4_4a_field_binding_validator.py",
+    "backend/foundation/phase31_4_4b_strict_type_validator.py",
+    "backend/foundation/phase31_4_5a_retry1_source_reachability_validator.py",
+    "backend/foundation/phase31_4_5b_source_reachability_validator.py",
+    "backend/foundation/phase31_4_operational_manifest.py",
+    "backend/foundation/phase31_4_postgres18_environment.py",
+    "backend/foundation/phase31_4_v2_5_verifier_remediation.py",
+    "backend/foundation/phase31_4_v2_5_precreation_integrity.py",
+    "backend/integration/client.py",
+    "backend/foundation/phase31_4_v2_5_disposable_runner.py",
+    "docs/governance/tools/phase31_4_v2_5_disposable_runner.py"
+  ],
+  "changed_sources": [
+    {
+      "path": "backend/foundation/phase31_4_integrity_generations.py",
+      "predecessor_sha256": "5ca444b57582915eea774ba7bcaf3b94b5faeedc9131f19d3814fa9dac814541",
+      "sha256": "c1b728d030a88c853c3e5bb8ec17655f44c851c21fbff9a03e3094e1cc7e81ac",
+      "classification": "AUTHORIZED_OPERATIONAL_BEARER_IDENTITY_CONTRACT",
+      "reason": "Promote V11 while preserving V1-V10 historical verification."
+    },
+    {
+      "path": "backend/foundation/phase31_4_v2_5_live_executor.py",
+      "predecessor_sha256": "19b1a187949813d52cf8b94f56c45a6d8a7dda5954c637541e6ac97fb510d1f0",
+      "sha256": "76332ce1779a8d009c217907cf29015daae01540b123678aa9d82c61448c8a05",
+      "classification": "AUTHORIZED_OPERATIONAL_BEARER_IDENTITY_CONTRACT",
+      "reason": "Acquire the existing authority identity and bearer before authenticated service readiness."
+    },
+    {
+      "path": "backend/foundation/phase31_4_v2_5_operational_adapters.py",
+      "predecessor_sha256": "c3e1b2d6b27c187857bd5e08f8757b5960691b80a622d1835689e069783fd85a",
+      "sha256": "5e20c596c358c96b83dc184c937a40aea5312957d8b2787bdf39a85599c1d431",
+      "classification": "AUTHORIZED_OPERATIONAL_BEARER_IDENTITY_CONTRACT",
+      "reason": "Carry the bearer only through an anonymous pipe, authenticate both readiness requests, redact evidence, and destroy the runtime reference."
+    },
+    {
+      "path": "docs/governance/tools/phase31_4_v2_5_operational_actions.py",
+      "predecessor_sha256": "fe5d2b320de3db0bf9a5193da10d20cb4b9902ab522154a6f764ecdc9c36638f",
+      "sha256": "dfa9dc4beadb6afc55af96f92d7f26ca0dc2eb4c910b61e2ef05149cdfb337eb",
+      "classification": "AUTHORIZED_OPERATIONAL_BEARER_IDENTITY_CONTRACT",
+      "reason": "Create the existing run-scoped identity at minimum privilege and issue a 15-minute SimpleJWT access token without a password or refresh token."
+    }
+  ],
+  "new_sources": [
+    {
+      "path": "backend/foundation/operational_bearer_identity.py",
+      "sha256": "a8b792e8f9eae8b8e10d7937236e5fe5085e23161966485cd0099d905dd34599",
+      "classification": "AUTHORIZED_OPERATIONAL_BEARER_IDENTITY_CONTRACT",
+      "reason": "Dedicated minimal bearer acquisition and redaction boundary.",
+      "approval_evidence": [
+        "docs/governance/authorizations/PHASE31_4_V2_5_OPERATIONAL_BEARER_IDENTITY_CONTRACT_AUTHORIZATION_V1.json"
+      ]
+    }
+  ],
+  "removed_sources": [],
+  "missing_sources": [],
+  "unexpected_sources": [],
+  "sources": [
+    {
+      "path": "backend/backend/settings.py",
+      "sha256": "eeede9b7588f2d5c88ec717dcec1a5f3ed46e97cf183125dcaadfdfe1d6be613",
+      "semantic_role": "AdminApps endpoint authority",
+      "approval_evidence": [
+        "docs/governance/evidence/PHASE31_4_V2_5_ADMINAPPS_ENDPOINT_REMEDIATION_V1.json"
+      ]
+    },
+    {
+      "path": "backend/backend/urls.py",
+      "sha256": "197b5e354e6982905dfed1affc5fef14dd996ac7715e1705a71a16a3995737d5",
+      "semantic_role": "Ingress routing",
+      "approval_evidence": [
+        "docs/governance/evidence/PHASE31_4_V2_5_ADMINAPPS_ENDPOINT_REMEDIATION_V1.json"
+      ]
+    },
+    {
+      "path": "backend/foundation/projection_contract.py",
+      "sha256": "a58f227440dca739b7371631d81ee20ba0158de979868c948aed2c2523301e7f",
+      "semantic_role": "Projection contract",
+      "approval_evidence": [
+        "docs/governance/evidence/PHASE31_4_V2_5_ADMINAPPS_ENDPOINT_REMEDIATION_V1.json"
+      ]
+    },
+    {
+      "path": "backend/foundation/adminapps_ingress.py",
+      "sha256": "6985bb68d7a2d1327c507ea7d668e95dd722bf8fc172be2b81b0b1e8d6b9d5c4",
+      "semantic_role": "AdminApps ingress",
+      "approval_evidence": [
+        "docs/governance/evidence/PHASE31_4_V2_5_ADMINAPPS_ENDPOINT_REMEDIATION_V1.json"
+      ]
+    },
+    {
+      "path": "backend/foundation/qms_organization.py",
+      "sha256": "e157193b1e7b4e736fdb7d34a399f459e6954dd31d4fcb0fbb776371387d390f",
+      "semantic_role": "Organization command service",
+      "approval_evidence": [
+        "docs/governance/evidence/PHASE31_4_V2_5_ADMINAPPS_ENDPOINT_REMEDIATION_V1.json"
+      ]
+    },
+    {
+      "path": "backend/foundation/migrations/0024_adminapps_ingress_receipt.py",
+      "sha256": "3a3e4da38c4119f1d53cb96b4cb1ffc5d93a2df25f76eaa64aaef1cbf66b9ce1",
+      "semantic_role": "AdminApps ingress migration",
+      "approval_evidence": [
+        "docs/governance/evidence/PHASE31_4_V2_5_ADMINAPPS_ENDPOINT_REMEDIATION_V1.json"
+      ]
+    },
+    {
+      "path": "backend/foundation/postgres_foundation_gate.py",
+      "sha256": "081ae073ffe7f66721974c0ea88dbc954b473016b9ea888dae92e3509de10fe2",
+      "semantic_role": "PostgreSQL foundation gate",
+      "approval_evidence": [
+        "docs/governance/evidence/PHASE31_4_V2_5_ADMINAPPS_ENDPOINT_REMEDIATION_V1.json"
+      ]
+    },
+    {
+      "path": "backend/foundation/phase31_4_v2_5_runtime.py",
+      "sha256": "70997fb33eb22c9576cb7def0cd5ccdff9d61deebad4621072920b5acf5efb19",
+      "semantic_role": "Phase runtime",
+      "approval_evidence": [
+        "docs/governance/evidence/PHASE31_4_V2_5_ADMINAPPS_ENDPOINT_REMEDIATION_V1.json"
+      ]
+    },
+    {
+      "path": "backend/foundation/phase31_4_v2_5_structural_gate.py",
+      "sha256": "80f5608360647270233408c8c039afd460f026217973027050e26ee1b4da4234",
+      "semantic_role": "Structural gate",
+      "approval_evidence": [
+        "docs/governance/evidence/PHASE31_4_V2_5_ADMINAPPS_ENDPOINT_REMEDIATION_V1.json"
+      ]
+    },
+    {
+      "path": "backend/foundation/phase31_4_v2_5_executable_graph.py",
+      "sha256": "2b9dcd98c7fc749c5ebefc1b5edd30d8b3dcea21c84535dc397b240956f8d7c0",
+      "semantic_role": "Executable producer graph",
+      "approval_evidence": [
+        "docs/governance/evidence/PHASE31_4_V2_5_ADMINAPPS_ENDPOINT_REMEDIATION_V1.json"
+      ]
+    },
+    {
+      "path": "backend/foundation/adminapps_adapter.py",
+      "sha256": "3d1c3f8f8e2c3f4d6e73d6f8733d642aa3c407358e1794dbff0dc7ebbc27b102",
+      "semantic_role": "AdminApps adapter",
+      "approval_evidence": [
+        "docs/governance/evidence/PHASE31_4_V2_5_ADMINAPPS_ENDPOINT_REMEDIATION_V1.json"
+      ]
+    },
+    {
+      "path": "backend/foundation/projection_writer.py",
+      "sha256": "1881740fe0c3bcc182c63d4466ac6aba003450c62364158a6ef70a71c7216bae",
+      "semantic_role": "Projection writer",
+      "approval_evidence": [
+        "docs/governance/evidence/PHASE31_4_V2_5_ADMINAPPS_ENDPOINT_REMEDIATION_V1.json"
+      ]
+    },
+    {
+      "path": "docs/governance/fixtures/PHASE31_4_5C_ROW_LEVEL_EXECUTION_CONTRACT_V2_5.json",
+      "sha256": "51f57160131a831c1fa180b7c5de5fdcb15a8fd895a53a077149c9a5955eca9c",
+      "semantic_role": "Execution contract fixture",
+      "approval_evidence": [
+        "docs/governance/evidence/PHASE31_4_V2_5_ADMINAPPS_ENDPOINT_REMEDIATION_V1.json"
+      ]
+    },
+    {
+      "path": "backend/foundation/phase31_4_4a_field_binding_validator.py",
+      "sha256": "971eaac142159b251ca5741b6c45356c25ccc11c575578bc5aeb609834cd7378",
+      "semantic_role": "Field binding validator",
+      "approval_evidence": [
+        "docs/governance/evidence/PHASE31_4_V2_5_ADMINAPPS_ENDPOINT_REMEDIATION_V1.json"
+      ]
+    },
+    {
+      "path": "backend/foundation/phase31_4_4b_strict_type_validator.py",
+      "sha256": "a9d01519ef196a987609b2f980ef2ca68b2f3bff5317d49b44286aca25a6d1db",
+      "semantic_role": "Strict type validator",
+      "approval_evidence": [
+        "docs/governance/evidence/PHASE31_4_V2_5_ADMINAPPS_ENDPOINT_REMEDIATION_V1.json"
+      ]
+    },
+    {
+      "path": "backend/foundation/phase31_4_5a_retry1_source_reachability_validator.py",
+      "sha256": "cb894354cdb6a8709d81f3a1832a3eadb193c66c63d0c10da981ccc13f85e14a",
+      "semantic_role": "Source reachability validator",
+      "approval_evidence": [
+        "docs/governance/evidence/PHASE31_4_V2_5_ADMINAPPS_ENDPOINT_REMEDIATION_V1.json"
+      ]
+    },
+    {
+      "path": "backend/foundation/phase31_4_5b_source_reachability_validator.py",
+      "sha256": "6beede5a72f8fc552811eec9d76f35047254630be2a6838958e5ea539968c67a",
+      "semantic_role": "Source reachability validator",
+      "approval_evidence": [
+        "docs/governance/evidence/PHASE31_4_V2_5_ADMINAPPS_ENDPOINT_REMEDIATION_V1.json"
+      ]
+    },
+    {
+      "path": "backend/foundation/phase31_4_operational_manifest.py",
+      "sha256": "5f7956c6159e48750b0da1811ae6df0d4bcc51666757ff354d78ae20aa3d7902",
+      "semantic_role": "Operational manifest",
+      "approval_evidence": [
+        "docs/governance/evidence/PHASE31_4_V2_5_ADMINAPPS_ENDPOINT_REMEDIATION_V1.json"
+      ]
+    },
+    {
+      "path": "backend/foundation/phase31_4_integrity_generations.py",
+      "sha256": "c1b728d030a88c853c3e5bb8ec17655f44c851c21fbff9a03e3094e1cc7e81ac",
+      "predecessor_sha256": "5ca444b57582915eea774ba7bcaf3b94b5faeedc9131f19d3814fa9dac814541",
+      "semantic_role": "Promote V11 while preserving V1-V10 historical verification.",
+      "approval_evidence": [
+        "docs/governance/authorizations/PHASE31_4_V2_5_OPERATIONAL_BEARER_IDENTITY_CONTRACT_AUTHORIZATION_V1.json"
+      ]
+    },
+    {
+      "path": "backend/foundation/phase31_4_postgres18_environment.py",
+      "sha256": "5f58ec95a377ffb07b13930d8a1be7101bb2375bb55f81afd0bd8f3a4387339e",
+      "semantic_role": "Approved PostgreSQL environment",
+      "approval_evidence": [
+        "docs/governance/evidence/PHASE31_4_V2_5_ADMINAPPS_ENDPOINT_REMEDIATION_V1.json"
+      ]
+    },
+    {
+      "path": "backend/foundation/phase31_4_v2_5_verifier_remediation.py",
+      "sha256": "61a6fa21f01c27bd6713154512045926c4d3d65d410d0d572922ea1ef21dc639",
+      "semantic_role": "Verifier remediation",
+      "approval_evidence": [
+        "docs/governance/evidence/PHASE31_4_V2_5_VERIFIER_REMEDIATION_V1.json"
+      ]
+    },
+    {
+      "path": "backend/foundation/phase31_4_v2_5_precreation_integrity.py",
+      "sha256": "9fc0efcc14fee9587a041b8c81dffde2d447f82e16d4df495571b7358cb854eb",
+      "semantic_role": "PRECREATION integrity",
+      "approval_evidence": [
+        "docs/governance/evidence/PHASE31_4_V2_5_PRECREATION_INTEGRITY_REMEDIATION_V1.json"
+      ]
+    },
+    {
+      "path": "backend/integration/client.py",
+      "sha256": "9edceb9510fd70e1c2c5e7c1c7040a8c16d74a26f8c143abce62b976f4e6639a",
+      "semantic_role": "AdminApps endpoint and entitlement client",
+      "approval_evidence": [
+        "docs/governance/evidence/PHASE31_4_V2_5_ADMINAPPS_ENDPOINT_REMEDIATION_V1.json"
+      ]
+    },
+    {
+      "path": "backend/foundation/phase31_4_v2_5_disposable_runner.py",
+      "sha256": "376626b5a06d066f2c1f82f5b22dea136071fdd9a5f37fb732daa39101874fc5",
+      "predecessor_sha256": "5d9a9cb42a28db33bc2df8c70652a98682eac90cc2b68c5c36d14b1e7dff40d9",
+      "semantic_role": "Strict diagnostic and formal state machine with READY invariants and atomic transition history.",
+      "approval_evidence": [
+        "PHASE31_4_V2_5_DIAGNOSTIC_STATE_MACHINE_REMEDIATION_V1.json",
+        "PHASE31_4_V2_5_DIAGNOSTIC_STATE_MACHINE_REMEDIATION_REPORT.md"
+      ]
+    },
+    {
+      "path": "docs/governance/tools/phase31_4_v2_5_disposable_runner.py",
+      "sha256": "1182854657d4165eb6b095906e161317d9bf84ece07caf439760ea69231fa8b9",
+      "semantic_role": "Disposable runner wrapper and entrypoint",
+      "approval_evidence": [
+        "docs/adr/0022-phase31-4-disposable-evidence-runner.md"
+      ]
+    },
+    {
+      "path": "backend/foundation/phase31_4_v2_5_live_executor.py",
+      "sha256": "76332ce1779a8d009c217907cf29015daae01540b123678aa9d82c61448c8a05",
+      "semantic_role": "Acquire the existing authority identity and bearer before authenticated service readiness.",
+      "approval_evidence": [
+        "docs/governance/authorizations/PHASE31_4_V2_5_OPERATIONAL_BEARER_IDENTITY_CONTRACT_AUTHORIZATION_V1.json"
+      ],
+      "predecessor_sha256": "19b1a187949813d52cf8b94f56c45a6d8a7dda5954c637541e6ac97fb510d1f0"
+    },
+    {
+      "path": "backend/foundation/phase31_4_v2_5_operational_adapters.py",
+      "sha256": "5e20c596c358c96b83dc184c937a40aea5312957d8b2787bdf39a85599c1d431",
+      "semantic_role": "Carry the bearer only through an anonymous pipe, authenticate both readiness requests, redact evidence, and destroy the runtime reference.",
+      "approval_evidence": [
+        "docs/governance/authorizations/PHASE31_4_V2_5_OPERATIONAL_BEARER_IDENTITY_CONTRACT_AUTHORIZATION_V1.json"
+      ],
+      "predecessor_sha256": "c3e1b2d6b27c187857bd5e08f8757b5960691b80a622d1835689e069783fd85a"
+    },
+    {
+      "path": "docs/governance/tools/phase31_4_v2_5_operational_actions.py",
+      "sha256": "dfa9dc4beadb6afc55af96f92d7f26ca0dc2eb4c910b61e2ef05149cdfb337eb",
+      "semantic_role": "Create the existing run-scoped identity at minimum privilege and issue a 15-minute SimpleJWT access token without a password or refresh token.",
+      "approval_evidence": [
+        "docs/governance/authorizations/PHASE31_4_V2_5_OPERATIONAL_BEARER_IDENTITY_CONTRACT_AUTHORIZATION_V1.json"
+      ],
+      "predecessor_sha256": "fe5d2b320de3db0bf9a5193da10d20cb4b9902ab522154a6f764ecdc9c36638f"
+    },
+    {
+      "path": "backend/foundation/operational_bearer_identity.py",
+      "sha256": "a8b792e8f9eae8b8e10d7937236e5fe5085e23161966485cd0099d905dd34599",
+      "semantic_role": "Fail-closed eligibility, minimum-claim access-token issuance, fingerprint-only evidence, and in-memory credential destruction.",
+      "approval_evidence": [
+        "docs/governance/authorizations/PHASE31_4_V2_5_OPERATIONAL_BEARER_IDENTITY_CONTRACT_AUTHORIZATION_V1.json"
+      ],
+      "new_in_generation": true
+    }
+  ],
+  "migration_file_sha256": {
+    "backend/foundation/migrations/0001_foundation_tenant_projection.py": "0d72f26245c3637b579e5289b1ee99b87667a1061a245e950992724cb7d2dc51",
+    "backend/foundation/migrations/0002_projection_organization_user_foundation.py": "1f538ca4c72309fa670af773f91fd8a62be2732a3222ce3067dbd79fd5e9b537",
+    "backend/foundation/migrations/0003_eventing_immutable_audit_foundation.py": "dadfad2c14468352f9f8fc37463f5d689029b98c40e026270223dac5e79613fc",
+    "backend/foundation/migrations/0004_qms_harmonized_context_foundation.py": "045043275245e5d8068a8e03d122f5fe34b8f9f60b020336e61881550ecea125",
+    "backend/foundation/migrations/0005_risk_opportunity_objective_foundation.py": "96ab33a18252dc0c2e6142f7afdc02a165349d15d50b290b4092c844a1996e86",
+    "backend/foundation/migrations/0006_change_performance_measurement_foundation.py": "033242bd6fe801da0b090a332b9f6d1b07dba77027a0334d1830e845cd51aa95",
+    "backend/foundation/migrations/0007_document_evidence_foundation.py": "c7f6a2030c9155714093a21fadb571a1cdeb8a121be5598540d4807af62283ec",
+    "backend/foundation/migrations/0008_evidence_coverage_normative_core_foundation.py": "285aecb34d5f7e8c1a1273c9622cde7933809949ac7bdbfca04e577e9e762032",
+    "backend/foundation/migrations/0009_knowledge_layer_foundation.py": "412c645974635959c74a446f64dc0a9b6dfd2a1a50a6a2e346698850e998effc",
+    "backend/foundation/migrations/0010_governed_recommendation_foundation.py": "c4f37a9a3a8d0d20a049e4e1cc9c0e04feb947cbeec9cea18fa89b7964f57b79",
+    "backend/foundation/migrations/0011_agent_definition_run_provenance_foundation.py": "cdb23edcad75e8a8781815dac847359a368b64d8ea4b607a40d01d5296c863a2",
+    "backend/foundation/migrations/0012_agent_decision_human_decision_gate_foundation.py": "7f280e24a8e95858b8144aa6a85fc645245aa2c2d3c2ad5700dfbe19ac0f0fdc",
+    "backend/foundation/migrations/0013_action_execution_preparation_authorization_foundation.py": "06177fde1c25d884602a41d03df6d2625e8d15df18d7c66bffdb047348abf34b",
+    "backend/foundation/migrations/0014_action_execution_synthetic_foundation.py": "ee0e42a7d45803f633ca40d9b0ca20987a20acfdaf3452ee81d721cec29ada33",
+    "backend/foundation/migrations/0015_first_controlled_qms_mutation_poc.py": "5e297591c8096938c90b6748d0d3ed22a8099cf8f4537e7f65f8bc6fa5beaba3",
+    "backend/foundation/migrations/0016_controlled_execution_recovery_hardening.py": "e922ff20285751193382a17d9fe7e71726511bff659f4e66b97748e6ad43cdd5",
+    "backend/foundation/migrations/0017_effectiveness_check_foundation.py": "580f16d1cdb10c30bae8f3e3c1667c3c4d2552b895fc9dea053d2c9b6adfaa38",
+    "backend/foundation/migrations/0018_governed_learning_foundation.py": "703a85885a67df953f38ef35302205caeddea249104683f4f751ab20ece0696b",
+    "backend/foundation/migrations/0019_learning_proposal_review_application_authorization_foundation.py": "c188b638124404bba10cae4c94a678053d49d7a1d07c6e455a48e46524064b50",
+    "backend/foundation/migrations/0020_exact_learning_delta_target_operation_contract.py": "491f21d3422c9c9a5866520f6623d3b9c9bea2139083f0128495dd7207d19894",
+    "backend/foundation/migrations/0021_first_governed_knowledge_rule_application_poc.py": "e796910c1660f701c3457b020792a158c06d3e58135a7ebba1728bd8b33c7a97",
+    "backend/foundation/migrations/0022_inert_rule_publication_activation_runtime_adoption.py": "afefd7100a18e5c7324efaeb1af656225b309fd86f08673a8742f7f9f6c2e618",
+    "backend/foundation/migrations/0023_retained_synthetic_source_reference_application.py": "bb9889af836ae1e92ccf75b868c4c6a8c1ab9ba1e7d63464a2cbd749a872e642",
+    "backend/foundation/migrations/0024_adminapps_ingress_receipt.py": "3a3e4da38c4119f1d53cb96b4cb1ffc5d93a2df25f76eaa64aaef1cbf66b9ce1"
+  },
+  "migration_integrity": {
+    "v2_4": "23/23 PASS",
+    "v2_5": "24/24 PASS",
+    "pending": 0,
+    "new_migrations": 0,
+    "fake": 0,
+    "manual_patches": 0,
+    "makemigrations_check_dry_run": "PASS"
+  },
+  "remediation_artifacts": [
+    "PHASE31_4_V2_5_V8_OPERATIONAL_DIAGNOSTIC_ATTEMPT_2_READINESS_BLOCKER_V1.json"
+  ],
+  "transition_audit": {
+    "historical_defect": "Diagnostic READY successors were narrowed to COMPLETED and FAILED despite the formal graph permitting PRECREATION_RUNNING.",
+    "corrected_diagnostic_ready_successors": [
+      "PRECREATION_RUNNING",
+      "COMPLETED",
+      "FAILED"
+    ],
+    "formal_ready_successors": [
+      "PRECREATION_RUNNING",
+      "FAILED"
+    ],
+    "operational_order": [
+      "READY",
+      "PRECREATION_RUNNING",
+      "PRECREATION_PASS",
+      "STAGE_EXT_RUNNING"
+    ],
+    "global_relaxation": false,
+    "terminal_replay": false,
+    "cleanup_bypass": false
+  },
+  "ready_invariants": [
+    "allocation_state == SUCCEEDED",
+    "adminapps and isosmart resources are present",
+    "host ports and database names are complete, persisted, and unique",
+    "volumes and networks are CREATED and containers are RUNNING",
+    "PostgreSQL version is 18.6, status is READY, connection is PASS, and SELECT 1 equals 1",
+    "the atomic on-disk manifest matches the in-memory READY revision and resources"
+  ],
+  "manifest_history": {
+    "fields": [
+      "from",
+      "to",
+      "at",
+      "reason",
+      "run_id",
+      "run_slug",
+      "execution_kind",
+      "validation_attempt"
+    ],
+    "atomic_crash_safe": true
+  },
+  "tests": {
+    "focused_operational_adapters": {
+      "status": "PASS",
+      "tests": 3
+    },
+    "previous_focused_service_tests": {
+      "status": "PASS",
+      "tests": 2
+    }
+  },
+  "diagnostic_history": {
+    "attempt_1": "FAIL",
+    "attempt_2": "FAIL",
+    "attempt_3": "AUTHORIZED_AFTER_V10_RECONCILIATION",
+    "attempt_2_blocker": "ADMINAPPS_START_FAILURE_HTTP_401"
+  },
+  "live_execution": {
+    "stage_ext_live_revalidation": "PENDING_SUCCESSOR_DIAGNOSTIC",
+    "operational_readiness": "CONTRACT_IMPLEMENTED_OFFLINE_NOT_LIVE_VALIDATED",
+    "capture_bundle": "NOT_CREATED"
+  },
+  "existing_retry20_authorization": {
+    "status": "SUPERSEDED / UNCONSUMED / DO_NOT_CONSUME",
+    "formal_current_usable_authorization": "NONE"
+  },
+  "authorization_consumed": false,
+  "retry_20_executed": false,
+  "phase31_5": "EXECUTION_HELD",
+  "readiness": "READY_FOR_NEW_V8_OPERATIONAL_DIAGNOSTIC_CYCLE",
+  "checkpoint": {
+    "source_integrity": "PASS",
+    "p0": 0,
+    "p1": 0
+  },
+  "authorization": {
+    "path": "docs/governance/authorizations/PHASE31_4_V2_5_OPERATIONAL_BEARER_IDENTITY_CONTRACT_AUTHORIZATION_V1.json",
+    "decision": "SAFE_PROGRAMMATIC_BEARER_ISSUANCE_AVAILABLE",
+    "live_execution_authorized": false
+  },
+  "identity_contract": {
+    "subject": "existing run-scoped AdminApps user",
+    "privilege": "viewer/non-staff/non-superuser",
+    "password": "unusable",
+    "token": "15-minute access only",
+    "persistence": "none",
+    "handoff": "anonymous pipe",
+    "evidence": "SHA-256 fingerprint only"
+  },
+  "retry_20_authorization": "NONE",
+  "phase_31_5": "EXECUTION_HELD"
+}

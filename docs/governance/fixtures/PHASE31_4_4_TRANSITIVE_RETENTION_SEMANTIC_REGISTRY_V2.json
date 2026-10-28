@@ -1,0 +1,1177 @@
+{
+  "artifact_schema": "phase31.4.4-transitive-retention-semantic-registry/v2",
+  "edge_count": 117,
+  "edges": [
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze0",
+      "source": "qms.tenant_projection::daa6bb22-660c-56f5-aadf-c63f06b01731",
+      "target": "qms.organization::ac638304-fdd6-5ce8-96d7-62014117af94",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze0",
+      "source": "qms.organization::ac638304-fdd6-5ce8-96d7-62014117af94",
+      "target": "qms.user_projection::1e878efa-2d1e-50b4-b3e4-481a3c6ff229",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze0",
+      "source": "qms.user_projection::1e878efa-2d1e-50b4-b3e4-481a3c6ff229",
+      "target": "qms.process::506d920c-fe62-53c0-aac8-9c1ca8ca78ed",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze0",
+      "source": "qms.process::506d920c-fe62-53c0-aac8-9c1ca8ca78ed",
+      "target": "normative.standard::9b9a75f6-f3dc-5089-9b27-6aff45ca0556",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze0",
+      "source": "normative.standard::9b9a75f6-f3dc-5089-9b27-6aff45ca0556",
+      "target": "normative.standard_edition::98939c5e-1a06-53c9-bbf9-07b21d81feb1",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze0",
+      "source": "normative.standard_edition::98939c5e-1a06-53c9-bbf9-07b21d81feb1",
+      "target": "normative.clause::cd11a240-2f3a-5239-9906-a5217b0979c4",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze0",
+      "source": "normative.clause::cd11a240-2f3a-5239-9906-a5217b0979c4",
+      "target": "normative.requirement_control::c56a413e-00f1-5a20-81c4-dfeda4681dc7",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze0",
+      "source": "normative.requirement_control::c56a413e-00f1-5a20-81c4-dfeda4681dc7",
+      "target": "normative.knowledge_layer::ca734de0-7bfe-51e4-acce-639cc5f26f1d",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze0",
+      "source": "normative.knowledge_layer::ca734de0-7bfe-51e4-acce-639cc5f26f1d",
+      "target": "normative.knowledge_layer_rule::eb900d83-deed-5493-bad8-e8abc7d3f932",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze0",
+      "source": "normative.knowledge_layer_rule::eb900d83-deed-5493-bad8-e8abc7d3f932",
+      "target": "normative.curation_audit::5873aa8a-a727-5814-a932-14e85f33cba0",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze0",
+      "source": "normative.curation_audit::5873aa8a-a727-5814-a932-14e85f33cba0",
+      "target": "normative.curation_audit::7fb528b2-c7a6-5def-be6c-edbe50679cd2",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze0",
+      "source": "normative.curation_audit::7fb528b2-c7a6-5def-be6c-edbe50679cd2",
+      "target": "normative.curation_audit::e968156c-cee8-5f54-96be-8c7462e40023",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze0",
+      "source": "normative.curation_audit::e968156c-cee8-5f54-96be-8c7462e40023",
+      "target": "qms.evidence::a5308071-20ad-5872-956a-8d8eb07e5103",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze0",
+      "source": "qms.evidence::a5308071-20ad-5872-956a-8d8eb07e5103",
+      "target": "governance.model_policy::2ace6d78-322e-54f1-b45e-c6ceeb6fbbdf",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze0",
+      "source": "governance.model_policy::2ace6d78-322e-54f1-b45e-c6ceeb6fbbdf",
+      "target": "governance.agent_definition::d8d5730c-d390-5be6-af6a-e4ab9d4cf155",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze0",
+      "source": "governance.agent_definition::d8d5730c-d390-5be6-af6a-e4ab9d4cf155",
+      "target": "governance.curation_audit::db7ac009-3d7f-50b0-9cff-ab1f72c2ede8",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze0",
+      "source": "governance.curation_audit::db7ac009-3d7f-50b0-9cff-ab1f72c2ede8",
+      "target": "governance.curation_audit::c9e83da2-f1bc-5218-9c03-c4a0391f73cb",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze0",
+      "source": "governance.curation_audit::c9e83da2-f1bc-5218-9c03-c4a0391f73cb",
+      "target": "governance.curation_audit::3c42a4e6-7eca-51ea-8063-e0461ad24fa6",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze0",
+      "source": "governance.curation_audit::3c42a4e6-7eca-51ea-8063-e0461ad24fa6",
+      "target": "governance.curation_audit::22ca2229-0ffd-5a26-b178-38c976701cee",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze0",
+      "source": "governance.curation_audit::22ca2229-0ffd-5a26-b178-38c976701cee",
+      "target": "qms.opportunity::6497b073-b3cb-5159-b64f-90700f2f5f85",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "qms.opportunity::6497b073-b3cb-5159-b64f-90700f2f5f85",
+      "target": "qms.agent_run::b87bdcde-c623-522f-a0ac-ff81f61df8e8",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "qms.agent_run::b87bdcde-c623-522f-a0ac-ff81f61df8e8",
+      "target": "qms.agent_run_input::ff0841b9-0b28-5a33-8a74-88d5c23575ac",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "qms.agent_run_input::ff0841b9-0b28-5a33-8a74-88d5c23575ac",
+      "target": "qms.recommendation::5a6e7f68-5d80-5c1d-a40e-76f3240e0d6d",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "qms.recommendation::5a6e7f68-5d80-5c1d-a40e-76f3240e0d6d",
+      "target": "qms.recommendation_basis::27eb05f3-1a75-5a4a-a03d-521c777f4ea7",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "qms.recommendation_basis::27eb05f3-1a75-5a4a-a03d-521c777f4ea7",
+      "target": "qms.agent_run_recommendation::fc6aea7a-491e-5dd9-860e-b3527264416b",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "qms.agent_run_recommendation::fc6aea7a-491e-5dd9-860e-b3527264416b",
+      "target": "qms.agent_decision::2a100aee-ebdd-5807-aab0-f8c4265e8e63",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "qms.agent_decision::2a100aee-ebdd-5807-aab0-f8c4265e8e63",
+      "target": "qms.action_plan::ae682a8f-d782-5b27-a148-aa10a940e03a",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "qms.action_plan::ae682a8f-d782-5b27-a148-aa10a940e03a",
+      "target": "qms.action_plan_dry_run::770bab9c-928d-5967-87d8-e882aab09c68",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "qms.action_plan_dry_run::770bab9c-928d-5967-87d8-e882aab09c68",
+      "target": "qms.approval::8dece4ae-1d50-5e95-8a78-893ca3c4c231",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "qms.approval::8dece4ae-1d50-5e95-8a78-893ca3c4c231",
+      "target": "qms.execution_authorization::040b78af-e99d-5154-bb8f-246a87819be5",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "qms.execution_authorization::040b78af-e99d-5154-bb8f-246a87819be5",
+      "target": "qms.action_execution::b64bbd57-1207-51f3-b4ef-b14b1f2d24cf",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "qms.action_execution::b64bbd57-1207-51f3-b4ef-b14b1f2d24cf",
+      "target": "qms.opportunity::a5dcbca8-872e-5826-9d3c-c05108db002d",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "qms.opportunity::a5dcbca8-872e-5826-9d3c-c05108db002d",
+      "target": "qms.action_execution_receipt::b2bd43b1-6dea-5bda-91c3-081172f40f57",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "qms.action_execution_receipt::b2bd43b1-6dea-5bda-91c3-081172f40f57",
+      "target": "qms.evidence::0d913a9a-0c98-5c7c-8911-a52cb9138010",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "qms.evidence::0d913a9a-0c98-5c7c-8911-a52cb9138010",
+      "target": "qms.effectiveness_check::868bccec-28d5-51fe-aa05-5bf621a97ed2",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "qms.effectiveness_check::868bccec-28d5-51fe-aa05-5bf621a97ed2",
+      "target": "qms.effectiveness_evidence::75255780-47e7-5116-ad66-3549b533463d",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "qms.effectiveness_evidence::75255780-47e7-5116-ad66-3549b533463d",
+      "target": "qms.learning_signal::fb57055c-cbfa-5f1b-b336-a7bc530a5895",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "qms.learning_signal::fb57055c-cbfa-5f1b-b336-a7bc530a5895",
+      "target": "qms.learning_signal_effectiveness::c3b335cb-2776-585f-a05e-8f9a00906069",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "qms.learning_signal_effectiveness::c3b335cb-2776-585f-a05e-8f9a00906069",
+      "target": "eventing.domain_event::90e2d38f-9600-5701-a34c-c9827eafc88c",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "eventing.domain_event::90e2d38f-9600-5701-a34c-c9827eafc88c",
+      "target": "eventing.transactional_outbox::078ed021-9eb9-5258-96b9-3b74e2951e77",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "eventing.transactional_outbox::078ed021-9eb9-5258-96b9-3b74e2951e77",
+      "target": "audit.immutable_audit_log::OUTPUT:agent-run-start:audit_id",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "audit.immutable_audit_log::OUTPUT:agent-run-start:audit_id",
+      "target": "eventing.domain_event::47be0b7e-10d0-5e96-94fd-fcaa8ad14cfd",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "eventing.domain_event::47be0b7e-10d0-5e96-94fd-fcaa8ad14cfd",
+      "target": "eventing.transactional_outbox::51dd5c7a-52d3-5779-ad95-ea6910747874",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "eventing.transactional_outbox::51dd5c7a-52d3-5779-ad95-ea6910747874",
+      "target": "audit.immutable_audit_log::OUTPUT:agent-run-complete:audit_id",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "audit.immutable_audit_log::OUTPUT:agent-run-complete:audit_id",
+      "target": "eventing.domain_event::b043e2e7-7210-5c11-a718-c22aa97574db",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "eventing.domain_event::b043e2e7-7210-5c11-a718-c22aa97574db",
+      "target": "eventing.transactional_outbox::aef69cfe-2e84-58ae-9f37-89e45640f400",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "eventing.transactional_outbox::aef69cfe-2e84-58ae-9f37-89e45640f400",
+      "target": "audit.immutable_audit_log::OUTPUT:agent-decision:audit_id",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "audit.immutable_audit_log::OUTPUT:agent-decision:audit_id",
+      "target": "eventing.domain_event::d087529c-6a0e-5386-ad10-39992d4f5405",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "eventing.domain_event::d087529c-6a0e-5386-ad10-39992d4f5405",
+      "target": "eventing.transactional_outbox::d10bbec9-3fde-5d9b-87f3-4856d3a7116d",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "eventing.transactional_outbox::d10bbec9-3fde-5d9b-87f3-4856d3a7116d",
+      "target": "audit.immutable_audit_log::OUTPUT:action-plan-prepared:audit_id",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "audit.immutable_audit_log::OUTPUT:action-plan-prepared:audit_id",
+      "target": "eventing.domain_event::bc7bdbed-f01c-50f1-9ad9-8dea8106f586",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "eventing.domain_event::bc7bdbed-f01c-50f1-9ad9-8dea8106f586",
+      "target": "eventing.transactional_outbox::e0145d7c-945f-5702-b535-e4651ed4c629",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "eventing.transactional_outbox::e0145d7c-945f-5702-b535-e4651ed4c629",
+      "target": "audit.immutable_audit_log::OUTPUT:human-approval:audit_id",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "audit.immutable_audit_log::OUTPUT:human-approval:audit_id",
+      "target": "eventing.domain_event::87e477b2-b854-55e2-95a5-2ed0785d6f39",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "eventing.domain_event::87e477b2-b854-55e2-95a5-2ed0785d6f39",
+      "target": "eventing.transactional_outbox::d9138ae4-37a2-52a6-bbdb-02a6f523b42c",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "eventing.transactional_outbox::d9138ae4-37a2-52a6-bbdb-02a6f523b42c",
+      "target": "audit.immutable_audit_log::OUTPUT:execution-authorization:audit_id",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "audit.immutable_audit_log::OUTPUT:execution-authorization:audit_id",
+      "target": "eventing.domain_event::77465ad0-559f-5317-9c26-c029e0cb16f6",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "eventing.domain_event::77465ad0-559f-5317-9c26-c029e0cb16f6",
+      "target": "eventing.transactional_outbox::552e26a9-233b-5df9-9361-2cd8e05ecc5d",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "eventing.transactional_outbox::552e26a9-233b-5df9-9361-2cd8e05ecc5d",
+      "target": "audit.immutable_audit_log::OUTPUT:controlled-opportunity-execution:audit_id",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "audit.immutable_audit_log::OUTPUT:controlled-opportunity-execution:audit_id",
+      "target": "eventing.domain_event::39b7cc2f-00ff-589d-b0c4-812cb35595e8",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "eventing.domain_event::39b7cc2f-00ff-589d-b0c4-812cb35595e8",
+      "target": "eventing.transactional_outbox::58d06fb9-deba-5d1f-9161-44fbc3152c03",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "eventing.transactional_outbox::58d06fb9-deba-5d1f-9161-44fbc3152c03",
+      "target": "audit.immutable_audit_log::OUTPUT:effectiveness-check:audit_id",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "audit.immutable_audit_log::OUTPUT:effectiveness-check:audit_id",
+      "target": "eventing.domain_event::8f2146ff-48c5-5095-b034-73bb2f0b5894",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "eventing.domain_event::8f2146ff-48c5-5095-b034-73bb2f0b5894",
+      "target": "eventing.transactional_outbox::114a4b5d-6dd0-5128-b6f7-a9d08fe64ced",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1.5",
+      "source": "eventing.transactional_outbox::114a4b5d-6dd0-5128-b6f7-a9d08fe64ced",
+      "target": "audit.immutable_audit_log::OUTPUT:learning-signal:audit_id",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1",
+      "source": "audit.immutable_audit_log::OUTPUT:learning-signal:audit_id",
+      "target": "normative.knowledge_layer_rule::bc5f4f17-294d-5abd-b27b-2d296921ffdf",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1",
+      "source": "normative.knowledge_layer_rule::bc5f4f17-294d-5abd-b27b-2d296921ffdf",
+      "target": "normative.curation_audit::805875c2-6505-5b82-ad41-40c2519293d2",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1",
+      "source": "normative.curation_audit::805875c2-6505-5b82-ad41-40c2519293d2",
+      "target": "normative.knowledge_layer_rule_publication::4649111b-a555-5368-ac91-9a47d48ef3b1",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1",
+      "source": "normative.knowledge_layer_rule_publication::4649111b-a555-5368-ac91-9a47d48ef3b1",
+      "target": "normative.knowledge_layer_rule_governance_claim::4649111b-a555-5368-ac91-9a47d48ef3b1",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1",
+      "source": "normative.knowledge_layer_rule_governance_claim::4649111b-a555-5368-ac91-9a47d48ef3b1",
+      "target": "normative.knowledge_layer_rule_governance_event::4e0deea0-f061-4dc9-87ab-e70fd33a8674",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1",
+      "source": "normative.knowledge_layer_rule_governance_event::4e0deea0-f061-4dc9-87ab-e70fd33a8674",
+      "target": "eventing.knowledge_layer_rule_governance_outbox::195bb0d3-da71-4f78-8a71-1c69ff12bfa1",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1",
+      "source": "eventing.knowledge_layer_rule_governance_outbox::195bb0d3-da71-4f78-8a71-1c69ff12bfa1",
+      "target": "audit.knowledge_layer_rule_governance_audit::e2e922a4-5baa-4df2-8b1e-689c25d13f62",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1",
+      "source": "audit.knowledge_layer_rule_governance_audit::e2e922a4-5baa-4df2-8b1e-689c25d13f62",
+      "target": "normative.curation_audit::89a67b29-cf98-4a37-8724-6e641bb4bef3",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze2",
+      "source": "normative.curation_audit::89a67b29-cf98-4a37-8724-6e641bb4bef3",
+      "target": "qms.learning_proposal::5d1d1c61-1bdb-5550-8605-2c9a54d51340",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze2",
+      "source": "qms.learning_proposal::5d1d1c61-1bdb-5550-8605-2c9a54d51340",
+      "target": "qms.learning_proposal_signal::0b4e8100-4862-5de2-a595-8d8d9f901e22",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze2",
+      "source": "qms.learning_proposal_signal::0b4e8100-4862-5de2-a595-8d8d9f901e22",
+      "target": "qms.learning_proposal_canonical_delta::82486439-2035-5153-9851-c4fc0e5d5184",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze3",
+      "source": "qms.learning_proposal_canonical_delta::82486439-2035-5153-9851-c4fc0e5d5184",
+      "target": "qms.learning_proposal_review::6c267f9c-705f-5e7b-9aa2-149acc9f8fab",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze4",
+      "source": "qms.learning_proposal_review::6c267f9c-705f-5e7b-9aa2-149acc9f8fab",
+      "target": "qms.learning_proposal_decision::6610b249-87f3-543e-b096-0aac01ffc404",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze5",
+      "source": "qms.learning_proposal_decision::6610b249-87f3-543e-b096-0aac01ffc404",
+      "target": "qms.learning_application_authorization::d67a9e62-7f96-546c-b053-55ff4db91f72",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze2",
+      "source": "qms.learning_application_authorization::d67a9e62-7f96-546c-b053-55ff4db91f72",
+      "target": "eventing.domain_event::005da83c-7a57-5fc5-8162-fa657a75304b",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze2",
+      "source": "eventing.domain_event::005da83c-7a57-5fc5-8162-fa657a75304b",
+      "target": "eventing.transactional_outbox::c4ec5480-f91d-5779-9c93-bceaa2a165e0",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze2",
+      "source": "eventing.transactional_outbox::c4ec5480-f91d-5779-9c93-bceaa2a165e0",
+      "target": "audit.immutable_audit_log::OUTPUT:learning-proposal:audit_id",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze3",
+      "source": "audit.immutable_audit_log::OUTPUT:learning-proposal:audit_id",
+      "target": "eventing.domain_event::7fc5b06e-b3ca-5a98-a250-d96ee3307b4c",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze3",
+      "source": "eventing.domain_event::7fc5b06e-b3ca-5a98-a250-d96ee3307b4c",
+      "target": "eventing.transactional_outbox::5f2fc242-cf86-5308-b46f-1a5bd260fa24",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze3",
+      "source": "eventing.transactional_outbox::5f2fc242-cf86-5308-b46f-1a5bd260fa24",
+      "target": "audit.immutable_audit_log::OUTPUT:learning-review:audit_id",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze4",
+      "source": "audit.immutable_audit_log::OUTPUT:learning-review:audit_id",
+      "target": "eventing.domain_event::82dd0d51-fc95-50c4-8047-d31b0acc1ea4",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze4",
+      "source": "eventing.domain_event::82dd0d51-fc95-50c4-8047-d31b0acc1ea4",
+      "target": "eventing.transactional_outbox::e1858a0f-bb75-5f79-b29c-05fad2a9f2e6",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze4",
+      "source": "eventing.transactional_outbox::e1858a0f-bb75-5f79-b29c-05fad2a9f2e6",
+      "target": "audit.immutable_audit_log::OUTPUT:learning-decision:audit_id",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze5",
+      "source": "audit.immutable_audit_log::OUTPUT:learning-decision:audit_id",
+      "target": "eventing.domain_event::8bf2bb5b-4cea-5aa0-9a05-18fec0cf049c",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze5",
+      "source": "eventing.domain_event::8bf2bb5b-4cea-5aa0-9a05-18fec0cf049c",
+      "target": "eventing.transactional_outbox::2913dd61-f579-50f7-a38a-23772f2cbcfb",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze5",
+      "source": "eventing.transactional_outbox::2913dd61-f579-50f7-a38a-23772f2cbcfb",
+      "target": "audit.immutable_audit_log::OUTPUT:learning-authorization:audit_id",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze6",
+      "source": "audit.immutable_audit_log::OUTPUT:learning-authorization:audit_id",
+      "target": "qms.learning_target_application_claim::29c6f7d5-989b-5bf0-a494-7d22d83a6a18",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze6",
+      "source": "qms.learning_target_application_claim::29c6f7d5-989b-5bf0-a494-7d22d83a6a18",
+      "target": "normative.knowledge_layer_rule::a55716fa-63c7-54eb-bda2-9c9666613b1a",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze6",
+      "source": "normative.knowledge_layer_rule::a55716fa-63c7-54eb-bda2-9c9666613b1a",
+      "target": "normative.knowledge_layer_rule_event::e01768a1-8e00-5fbc-a73f-cc1cf80af542",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze6",
+      "source": "normative.knowledge_layer_rule_event::e01768a1-8e00-5fbc-a73f-cc1cf80af542",
+      "target": "eventing.platform_transactional_outbox::8827890a-0465-5906-8125-716081bfae74",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze6",
+      "source": "eventing.platform_transactional_outbox::8827890a-0465-5906-8125-716081bfae74",
+      "target": "normative.curation_audit::ff75b1d0-a2ea-5eae-9064-b9114496047a",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze6",
+      "source": "normative.curation_audit::ff75b1d0-a2ea-5eae-9064-b9114496047a",
+      "target": "qms.learning_target_application_receipt::b35d11e1-6848-50b2-b760-dd09d38f0acb",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze6",
+      "source": "qms.learning_target_application_receipt::b35d11e1-6848-50b2-b760-dd09d38f0acb",
+      "target": "qms.learning_target_application_audit::c71bd788-df60-5d1a-895e-8a8274624886",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze7a",
+      "source": "qms.learning_target_application_audit::c71bd788-df60-5d1a-895e-8a8274624886",
+      "target": "normative.knowledge_layer_rule_publication::cf4db0d2-a312-5a44-91cf-6e14f5cd600e",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze7a",
+      "source": "normative.knowledge_layer_rule_publication::cf4db0d2-a312-5a44-91cf-6e14f5cd600e",
+      "target": "normative.knowledge_layer_rule_governance_claim::cf4db0d2-a312-5a44-91cf-6e14f5cd600e",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze7a",
+      "source": "normative.knowledge_layer_rule_governance_claim::cf4db0d2-a312-5a44-91cf-6e14f5cd600e",
+      "target": "normative.knowledge_layer_rule_governance_event::0ff9868e-a847-4624-862c-d93ddb9c11e2",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze7a",
+      "source": "normative.knowledge_layer_rule_governance_event::0ff9868e-a847-4624-862c-d93ddb9c11e2",
+      "target": "eventing.knowledge_layer_rule_governance_outbox::37816380-7022-43b2-8d4a-c57346e5f7f6",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze7a",
+      "source": "eventing.knowledge_layer_rule_governance_outbox::37816380-7022-43b2-8d4a-c57346e5f7f6",
+      "target": "audit.knowledge_layer_rule_governance_audit::5f33e3ba-abba-4b0e-8a43-bb60cc67a5cc",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze7a",
+      "source": "audit.knowledge_layer_rule_governance_audit::5f33e3ba-abba-4b0e-8a43-bb60cc67a5cc",
+      "target": "normative.curation_audit::5fa5038d-3042-481f-8162-e1144eebc815",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze8",
+      "source": "normative.curation_audit::5fa5038d-3042-481f-8162-e1144eebc815",
+      "target": "normative.knowledge_layer_rule_activation::676ad5e4-e167-5336-93ae-5a9f1d4388d3",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze8",
+      "source": "normative.knowledge_layer_rule_activation::676ad5e4-e167-5336-93ae-5a9f1d4388d3",
+      "target": "normative.knowledge_layer_rule_governance_claim::676ad5e4-e167-5336-93ae-5a9f1d4388d3",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze8",
+      "source": "normative.knowledge_layer_rule_governance_claim::676ad5e4-e167-5336-93ae-5a9f1d4388d3",
+      "target": "normative.knowledge_layer_rule_governance_event::237fd48c-59bd-4b25-8521-4876fe9fc1a1",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze8",
+      "source": "normative.knowledge_layer_rule_governance_event::237fd48c-59bd-4b25-8521-4876fe9fc1a1",
+      "target": "eventing.knowledge_layer_rule_governance_outbox::68df6cc0-e04a-4693-80ab-07182c81bec1",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze8",
+      "source": "eventing.knowledge_layer_rule_governance_outbox::68df6cc0-e04a-4693-80ab-07182c81bec1",
+      "target": "audit.knowledge_layer_rule_governance_audit::b51984ce-3391-4597-8592-6539737b2ee9",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze1",
+      "source": "audit.knowledge_layer_rule_governance_audit::b51984ce-3391-4597-8592-6539737b2ee9",
+      "target": "retained.phase31_4_4_artifact::997da22f-b507-56cb-b0ac-505fd9393137",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze7b",
+      "source": "retained.phase31_4_4_artifact::997da22f-b507-56cb-b0ac-505fd9393137",
+      "target": "retained.phase31_4_4_artifact::9db63a1b-c760-5096-b12b-4d59dbdf817a",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze7c",
+      "source": "retained.phase31_4_4_artifact::9db63a1b-c760-5096-b12b-4d59dbdf817a",
+      "target": "retained.phase31_4_4_artifact::37d3d0bc-4387-581a-a627-f02a011250d1",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze7d",
+      "source": "retained.phase31_4_4_artifact::37d3d0bc-4387-581a-a627-f02a011250d1",
+      "target": "retained.phase31_4_4_artifact::981e1753-dcd1-5f8d-8b10-49bfaed5eafb",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze7e",
+      "source": "retained.phase31_4_4_artifact::981e1753-dcd1-5f8d-8b10-49bfaed5eafb",
+      "target": "retained.phase31_4_4_artifact::22f2ac2f-5c77-577d-81e8-9fe60221e3bf",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze7e",
+      "source": "retained.phase31_4_4_artifact::22f2ac2f-5c77-577d-81e8-9fe60221e3bf",
+      "target": "retained.phase31_4_4_artifact::592afe5d-2f7e-5400-8c2b-e0ed0daba0d7",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze9",
+      "source": "retained.phase31_4_4_artifact::592afe5d-2f7e-5400-8c2b-e0ed0daba0d7",
+      "target": "retained.phase31_4_4_artifact::948f065f-e9eb-5136-9bfd-2b050b253e72",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    },
+    {
+      "canonicalization": "postgresql-jsonb-canonical-v1",
+      "cardinality": "1:1",
+      "disposition": "RETAIN_FULL_CANONICAL_MATERIAL",
+      "edge": "precedes_or_supplies",
+      "freeze": "Freeze9",
+      "source": "retained.phase31_4_4_artifact::948f065f-e9eb-5136-9bfd-2b050b253e72",
+      "target": "retained.phase31_4_4_artifact::221cfa8f-6844-535e-a647-50ad16539a26",
+      "verifier": "phase31.4.4-registry-edge-verifier/v1"
+    }
+  ],
+  "experiment_id": "a3f8fd64-af24-5b31-977a-bcaf8146c563"
+}

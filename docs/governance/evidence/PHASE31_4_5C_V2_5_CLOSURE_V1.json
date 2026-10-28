@@ -1,0 +1,8 @@
+{
+  "P0": 0,
+  "P1": 0,
+  "artifact_schema": "phase31.4-v2.5-closure/v1",
+  "next_authorized_step": "execute native PostgreSQL Clean Retry 4",
+  "offline_contract_closure": true,
+  "runtime_closure": false
+}

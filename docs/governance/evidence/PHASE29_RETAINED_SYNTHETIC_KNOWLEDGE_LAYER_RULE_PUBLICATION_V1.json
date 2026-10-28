@@ -1,0 +1,223 @@
+{
+  "application_receipt_id": "01a0682b-dfa3-779c-89cd-1814e9209527",
+  "candidate_id": "01a0682b-dfc8-7b49-a601-f9bda29a70a5",
+  "candidate_material_hash": "caa24592b509334af4cd60fd7d3f3c43989d864d3f1c6e6d0d3bf83a81871f81",
+  "candidate_version": "sN+1",
+  "creation_disposition_hash": "964b632537323764de35f9132bf7e63966df29dc89d70c1166e432d4e6436b5c",
+  "creation_manifest_hash": "9ab80f4b0208e7dac971a0759df0bdb5c28392aa423ae11cbc0d483abb739a75",
+  "curator_evidence": {
+    "id": "471971df-986f-5a99-ad15-1838f5772e34",
+    "material": {
+      "actor_external_id": "1dab9ba5-5c8a-504c-81b8-0ac70f15af14",
+      "authority_decision_hash": "a3ae3476b4ebf8ca121e5ca569fbff38880f34ebc188ef0c82be30db056a0f47",
+      "authority_decision_id": "355f6a0f-ef95-56de-9416-0a68bbf09d49",
+      "candidate_id": "01a0682b-dfc8-7b49-a601-f9bda29a70a5",
+      "candidate_material_hash": "caa24592b509334af4cd60fd7d3f3c43989d864d3f1c6e6d0d3bf83a81871f81",
+      "decision": "VALIDATED_FOR_LATER_PUBLICATION_GATE_ONLY",
+      "id": "471971df-986f-5a99-ad15-1838f5772e34",
+      "semantic_fingerprint": "8465956c1daf27a9838bc1bfb468af3f518ae255b4662b2df40e7b8648516192",
+      "server_resolved": true,
+      "source_manifest_hash": "cf92c267439f94f302e67888665dbf99392592341a808f5fc00f4c32ef23dc24",
+      "source_reference_hash": "0ad437944a111b3593ba29f52466416eed9b4f0b8e7e9247c082575df0d659b6",
+      "valid_at": "2026-09-03T16:48:21.033281+00:00"
+    },
+    "material_hash": "7f4defd4a2104c2801024a6e57a7749d0db288922d384af09662ee13f972ed5d"
+  },
+  "evidence_state": "PUBLISHED_AND_RETAINED",
+  "exported_at": "2026-09-03T20:18:53.978397+00:00",
+  "idempotency_key_hash": "65f9f83dd4f3df2f591835bbe2a26fbefa12779e6101b8f3ad0697b30ef6b252",
+  "import_state_history": [
+    "RETAINED_EVIDENCE_ONLY",
+    "IMPORTED_UNPUBLISHED",
+    "PUBLICATION_PRECOMMIT_ELIGIBLE",
+    "PUBLISHED"
+  ],
+  "integrity_verified": true,
+  "lifecycle_hash": "0adfd8075cc720140c6e1f0393d286799edac8f352efd9f1969816be83c51e52",
+  "lineage_id": "da72872a-3f3c-5fcd-86f7-0ed33e453522",
+  "live_graph": {
+    "artifact": {
+      "material": {
+        "actor_external_id": "8069fbeb-0ef6-582c-8f3b-ff88e606c869",
+        "audit_id": "6a3ed87d-a992-4406-8ac8-233017301d35",
+        "authority_context_version": "adminapps-phase29-publication/v1",
+        "authority_decision_reference": "bbb38a07-fa45-5e1a-b8cc-74c9b1edbda8",
+        "authorized_at": "2026-09-03T20:18:53.895599+00:00",
+        "claim_id": "e97576de-d4ef-520d-8592-d376ed401221",
+        "created_at": "2026-09-03T20:18:53.895599+00:00",
+        "curation_audit_id": "12d811ab-c3b4-4615-8972-75008a36e327",
+        "event_id": "b19e4861-219d-4a07-8faf-656e02dbf9b4",
+        "evidence_imported_at": null,
+        "evidence_kind": "NATIVE",
+        "evidence_reference": null,
+        "governance_policy_version": "v1",
+        "historical_published_at": "2026-09-03T20:18:53.895599+00:00",
+        "id": "e97576de-d4ef-520d-8592-d376ed401221",
+        "idempotency_key_hash": "65f9f83dd4f3df2f591835bbe2a26fbefa12779e6101b8f3ad0697b30ef6b252",
+        "knowledge_layer_id": "43329c0b-5aaf-5bee-b944-41746fcededb",
+        "knowledge_layer_rule_id": "01a0682b-dfc8-7b49-a601-f9bda29a70a5",
+        "lineage_id": "da72872a-3f3c-5fcd-86f7-0ed33e453522",
+        "operation_material_hash": "374e2bd31492bdf0a93ea190795f404e18e5e7c5c48c7342ad385a88a90e111d",
+        "outbox_id": "4e78cfe6-8afa-400b-85f5-e5fe72b59e04",
+        "reason": "Exact retained synthetic Phase 29 publication POC.",
+        "rule_material_hash": "caa24592b509334af4cd60fd7d3f3c43989d864d3f1c6e6d0d3bf83a81871f81",
+        "rule_version": "sN+1",
+        "semantic_fingerprint": "8465956c1daf27a9838bc1bfb468af3f518ae255b4662b2df40e7b8648516192",
+        "trace_id": "ffd16da6-94a4-588d-b922-2fefd9bd8a01",
+        "workflow_approved": true
+      },
+      "material_hash": "b962792fe31c19d9819566680365063194c84ce2e8ab9c39fa08dba69c279c8b"
+    },
+    "audit": {
+      "material": {
+        "actor_external_id": "8069fbeb-0ef6-582c-8f3b-ff88e606c869",
+        "artifact_id": "e97576de-d4ef-520d-8592-d376ed401221",
+        "authority_context_version": "adminapps-phase29-publication/v1",
+        "authority_decision_reference": "bbb38a07-fa45-5e1a-b8cc-74c9b1edbda8",
+        "governance_policy_version": "v1",
+        "id": "6a3ed87d-a992-4406-8ac8-233017301d35",
+        "occurred_at": "2026-09-03T20:18:53.895599+00:00",
+        "operation_kind": "PUBLICATION",
+        "operation_material_hash": "374e2bd31492bdf0a93ea190795f404e18e5e7c5c48c7342ad385a88a90e111d",
+        "payload_hash": "6d3e4ab35da1cfd484c297bb89584eb25577fb9e1de1ff328e4340c87f48ca8c",
+        "target_rule_id": "01a0682b-dfc8-7b49-a601-f9bda29a70a5",
+        "trace_id": "ffd16da6-94a4-588d-b922-2fefd9bd8a01"
+      },
+      "material_hash": "829949aa513636e453ad6f0b838928a2256676c69d803a63895b2b066d06ef82"
+    },
+    "claim": {
+      "material": {
+        "actor_external_id": "8069fbeb-0ef6-582c-8f3b-ff88e606c869",
+        "admitted_at": "2026-09-03T20:18:53.895599+00:00",
+        "artifact_id": "e97576de-d4ef-520d-8592-d376ed401221",
+        "audit_id": "6a3ed87d-a992-4406-8ac8-233017301d35",
+        "authority_context_version": "adminapps-phase29-publication/v1",
+        "authority_decision_reference": "bbb38a07-fa45-5e1a-b8cc-74c9b1edbda8",
+        "event_id": "b19e4861-219d-4a07-8faf-656e02dbf9b4",
+        "governance_policy_version": "v1",
+        "id": "e97576de-d4ef-520d-8592-d376ed401221",
+        "idempotency_key_hash": "65f9f83dd4f3df2f591835bbe2a26fbefa12779e6101b8f3ad0697b30ef6b252",
+        "operation_kind": "PUBLICATION",
+        "operation_material_hash": "374e2bd31492bdf0a93ea190795f404e18e5e7c5c48c7342ad385a88a90e111d",
+        "outbox_id": "4e78cfe6-8afa-400b-85f5-e5fe72b59e04",
+        "target_rule_id": "01a0682b-dfc8-7b49-a601-f9bda29a70a5",
+        "trace_id": "ffd16da6-94a4-588d-b922-2fefd9bd8a01"
+      },
+      "material_hash": "ad6aca4f7b50ab33b9d2855333ed1993f9a6951168103e50a5ae3e62f2580b94"
+    },
+    "event": {
+      "material": {
+        "artifact_id": "e97576de-d4ef-520d-8592-d376ed401221",
+        "event_type": "knowledge_layer_rule.published",
+        "id": "b19e4861-219d-4a07-8faf-656e02dbf9b4",
+        "occurred_at": "2026-09-03T20:18:53.895599+00:00",
+        "operation_kind": "PUBLICATION",
+        "payload": {
+          "activated": false,
+          "application_receipt_id": "01a0682b-dfa3-779c-89cd-1814e9209527",
+          "candidate_id": "01a0682b-dfc8-7b49-a601-f9bda29a70a5",
+          "candidate_material_hash": "caa24592b509334af4cd60fd7d3f3c43989d864d3f1c6e6d0d3bf83a81871f81",
+          "creation_disposition_hash": "964b632537323764de35f9132bf7e63966df29dc89d70c1166e432d4e6436b5c",
+          "creation_manifest_hash": "9ab80f4b0208e7dac971a0759df0bdb5c28392aa423ae11cbc0d483abb739a75",
+          "curator_evidence_id": "471971df-986f-5a99-ad15-1838f5772e34",
+          "licensed_content_present": false,
+          "lifecycle_hash": "0adfd8075cc720140c6e1f0393d286799edac8f352efd9f1969816be83c51e52",
+          "lineage_id": "da72872a-3f3c-5fcd-86f7-0ed33e453522",
+          "occurred_at": "2026-09-03T20:18:53.895599+00:00",
+          "publication_id": "e97576de-d4ef-520d-8592-d376ed401221",
+          "publication_policy_hash": "fde8534bbedaf89c509162f8dcaabe8cf211b6e4c5c106f40e508744f9fbfd13",
+          "publication_policy_id": "first-retained-synthetic-klr-publication-poc-policy/v1",
+          "publisher_actor_id": "8069fbeb-0ef6-582c-8f3b-ff88e606c869",
+          "publisher_authority_decision_hash": "8fef83a121eba045bc659c82bde715b56dc78490068e03d3d92d93e93b860069",
+          "publisher_authority_decision_id": "bbb38a07-fa45-5e1a-b8cc-74c9b1edbda8",
+          "runtime_adopted": false,
+          "runtime_effect_changed": false,
+          "semantic_fingerprint": "8465956c1daf27a9838bc1bfb468af3f518ae255b4662b2df40e7b8648516192",
+          "source_manifest_hash": "cf92c267439f94f302e67888665dbf99392592341a808f5fc00f4c32ef23dc24",
+          "source_reference_hash": "0ad437944a111b3593ba29f52466416eed9b4f0b8e7e9247c082575df0d659b6",
+          "trace_id": "ffd16da6-94a4-588d-b922-2fefd9bd8a01",
+          "version": "sN+1"
+        },
+        "payload_hash": "6d3e4ab35da1cfd484c297bb89584eb25577fb9e1de1ff328e4340c87f48ca8c",
+        "schema_version": 1,
+        "target_rule_id": "01a0682b-dfc8-7b49-a601-f9bda29a70a5",
+        "trace_id": "ffd16da6-94a4-588d-b922-2fefd9bd8a01"
+      },
+      "material_hash": "212f1b0d66623171322e429b0818bcfcec52d4307ffa3a3ddbe5ac17b22fda42"
+    },
+    "outbox": {
+      "material": {
+        "available_at": "2026-09-03T20:18:53.895599+00:00",
+        "created_at": "2026-09-03T20:18:53.895599+00:00",
+        "destination": "platform.knowledge-layer-rule-governance",
+        "event_id": "b19e4861-219d-4a07-8faf-656e02dbf9b4",
+        "id": "4e78cfe6-8afa-400b-85f5-e5fe72b59e04",
+        "status": "pending"
+      },
+      "material_hash": "3011dee19f51cdc7c3b67bf618a6353d82b3fd87e0c46031607994d9e8f51fbd"
+    }
+  },
+  "live_graph_verified": true,
+  "manifest_material_hash": "51f0b207c790e6ab0c3d67985e161ba0d0cc7b2feb888f545c1ff5eedacf5366",
+  "manifest_schema": "governed-target-publication-evidence-manifest/v1",
+  "publication": {
+    "audit_id": "6a3ed87d-a992-4406-8ac8-233017301d35",
+    "candidate_status_after": "published",
+    "candidate_status_before": "draft",
+    "claim_id": "e97576de-d4ef-520d-8592-d376ed401221",
+    "event_id": "b19e4861-219d-4a07-8faf-656e02dbf9b4",
+    "event_schema_version": 1,
+    "event_type": "knowledge_layer_rule.published",
+    "id": "e97576de-d4ef-520d-8592-d376ed401221",
+    "outbox_id": "4e78cfe6-8afa-400b-85f5-e5fe72b59e04",
+    "published_at": "2026-09-03T20:18:53.895599+00:00",
+    "trace_id": "ffd16da6-94a4-588d-b922-2fefd9bd8a01"
+  },
+  "publication_policy": {
+    "activation_authorized": false,
+    "candidate_id": "01a0682b-dfc8-7b49-a601-f9bda29a70a5",
+    "file": "docs/governance/FIRST_RETAINED_SYNTHETIC_KNOWLEDGE_LAYER_RULE_PUBLICATION_POC_POLICY_V1.md",
+    "file_sha256": "0dfa36804827f272ac7e289beab6e876d27af78b8ae06d3b8a5b5d46b9db8289",
+    "material_hash": "fde8534bbedaf89c509162f8dcaabe8cf211b6e4c5c106f40e508744f9fbfd13",
+    "policy_id": "first-retained-synthetic-klr-publication-poc-policy/v1",
+    "publication_only": true,
+    "runtime_adoption_authorized": false,
+    "version": "v1"
+  },
+  "publisher_authority": {
+    "access_active": true,
+    "actor_external_id": "8069fbeb-0ef6-582c-8f3b-ff88e606c869",
+    "authority_decision_hash": "8fef83a121eba045bc659c82bde715b56dc78490068e03d3d92d93e93b860069",
+    "authority_decision_id": "bbb38a07-fa45-5e1a-b8cc-74c9b1edbda8",
+    "evaluated_at": "2026-09-03T20:18:53.869292+00:00",
+    "expires_at": "2026-09-03T20:28:53.869292+00:00",
+    "global_governance": true,
+    "mfa_verified": true,
+    "permission": "qms.knowledge_layer_rule.publish",
+    "server_resolved": true
+  },
+  "role_actor_ids": {
+    "activator": "49132b9d-93ae-510a-8de0-ad36ef508f8f",
+    "adopter": "0757c393-8c83-52be-ae2a-25385901f232",
+    "application_authorizer": "b71e6996-1e15-5aef-b73b-db331b01305f",
+    "application_executor": "d91b730d-5d5b-5a64-a25c-a0318385a6eb",
+    "curator": "1dab9ba5-5c8a-504c-81b8-0ac70f15af14",
+    "proposal_approver": "02d02d75-1d97-5dc3-b494-50e83335492e",
+    "proposer": "24d89409-dbb2-5771-9296-166afd4039b6",
+    "publisher": "8069fbeb-0ef6-582c-8f3b-ff88e606c869",
+    "reviewer": "f8853b40-ef90-53b4-bd1b-17f85bcd5d79"
+  },
+  "runtime_effect_changed": false,
+  "semantic_fingerprint": "8465956c1daf27a9838bc1bfb468af3f518ae255b4662b2df40e7b8648516192",
+  "source_manifest_hash": "cf92c267439f94f302e67888665dbf99392592341a808f5fc00f4c32ef23dc24",
+  "zero_effects": {
+    "activation_events": 0,
+    "activation_rows": 0,
+    "automatic_learning_delta": 0,
+    "external_business_effects": 0,
+    "normative_delta": 0,
+    "runtime_adoption_events": 0,
+    "runtime_adoption_rows": 0,
+    "runtime_behavior_delta": 0
+  }
+}

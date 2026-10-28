@@ -1,0 +1,12 @@
+{
+  "artifact_schema": "phase31.4-retry12-allocation/v1",
+  "retry_id": "Phase 31.4 V2.5 Clean Retry 12",
+  "retry_tag": "CLEAN_RETRY_12",
+  "allocated_at": "2026-09-18T00:00:00+00:00",
+  "repository_wide_scan": {"result": "UNUSED", "scope": ["adminapps", "isosmart"]},
+  "resource_manifest": "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_12_ATTEMPT_2_RESOURCE_MANIFEST.json",
+  "prior_attempt_manifest": "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_12_RESOURCE_MANIFEST.json",
+  "prior_attempt_teardown": "PASS",
+  "current_attempt_manifest": "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_12_ATTEMPT_3_RESOURCE_MANIFEST.json",
+  "prior_attempt_2_manifest": "docs/governance/evidence/PHASE31_4_CLEAN_RETRY_12_ATTEMPT_2_RESOURCE_MANIFEST.json"
+}

@@ -1,0 +1,21 @@
+{
+  "artifact_schema": "phase31.4-retry12-live-blocker/v1",
+  "id": "P1-RETRY12-V25-ACTIONPLAN-AGENT-DECISION-LIVE-BINDING-MISSING",
+  "severity": "P1",
+  "status": "OPEN",
+  "phase": "ACTION_PLAN_PREPARATION",
+  "operation": "prepare_action_plan",
+  "binding_classification": "REFERENCE_RESOLVED_BINDING",
+  "defect_layer": "contract_or_upstream_runtime_composition",
+  "historical_source_member": "qms.agent_decision::2a100aee-ebdd-5807-aab0-f8c4265e8e63",
+  "historical_uuid_used_as_fallback": true,
+  "live_agent_decision_capture": false,
+  "error": "AgentDecision matching query does not exist.",
+  "initial_opportunity": "PASS",
+  "evidence": [
+    "PHASE31_4_CLEAN_RETRY_12_INITIAL_OPPORTUNITY.json",
+    "PHASE31_4_CLEAN_RETRY_12_NATIVE_RUNTIME.json",
+    "PHASE31_4_CLEAN_RETRY_12_IDENTITY_AUDIT.json"
+  ],
+  "policy": "Do not inject the historical AgentDecision or Recommendation UUID; create/capture the native upstream governance chain before ActionPlan."
+}

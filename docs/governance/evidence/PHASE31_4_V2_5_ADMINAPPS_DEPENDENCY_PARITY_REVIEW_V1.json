@@ -1,0 +1,77 @@
+{
+  "classification": "DISPOSABLE_DEPENDENCY_INSTALLATION_GAP_CONFIRMED",
+  "IS_DJANGO_APSCHEDULER_CANONICAL_DEPENDENCY": true,
+  "remediation_count": 1,
+  "authorization": "User supplied Disposable Environment Dependency Parity Review request, case A",
+  "canonical_manifest": "/home/felipe/proyectos/adminapps/backend/requirements.txt",
+  "manifest_sha256": "cf804dcb0092c3daaa97831806e1eefa2c91edcabdb1a7e4f9ca21dea7bfb29f",
+  "package": "django-apscheduler",
+  "constraint": "==0.7.0",
+  "module": "django_apscheduler",
+  "group": "runtime; no extras",
+  "lockfile": null,
+  "startup_registration": "config.settings.INSTALLED_APPS, unconditional; scheduler job enablement is separate",
+  "host": {
+    "python": "3.9.25",
+    "pip": "26.0.1",
+    "Django": "4.2.22",
+    "django-apscheduler": "0.7.0",
+    "APScheduler": "3.11.3",
+    "modified": false
+  },
+  "attempt_1_runtime": {
+    "interpreter": "/home/felipe/proyectos/isosmart/backend/.venv/bin/python",
+    "python": "3.12.13",
+    "creates_venv": false,
+    "reuses_adminapps_venv_for_authority": false,
+    "reuses_adminapps_venv_for_migrations_and_service": true,
+    "installs_dependencies": false,
+    "manifest_used": null,
+    "cwd": "/home/felipe/proyectos/isosmart",
+    "django_apscheduler": "ABSENT",
+    "package_cache": "not used; no install step",
+    "reason": "Authority used ISO Smart interpreter while AdminApps migrations used AdminApps interpreter."
+  },
+  "supply_chain": {
+    "index": "https://pypi.org/simple",
+    "config_overrides_detected": false,
+    "download_hosts": [
+      "files.pythonhosted.org"
+    ],
+    "artifact_hashes": "all downloaded artifacts have SHA-256 in install report",
+    "direct_requirements": "all 18 canonical pins verified",
+    "transitive_lock": "absent in project",
+    "ipython": "included because canonical manifest has no split runtime/development install groups"
+  },
+  "startup_validation": {
+    "import_django": "PASS",
+    "DJANGO_SETTINGS_MODULE_load": "PASS",
+    "django_setup": "PASS",
+    "django_apscheduler_import": "PASS",
+    "canonical_manifest": "/home/felipe/proyectos/adminapps/backend/requirements.txt",
+    "manifest_sha256": "cf804dcb0092c3daaa97831806e1eefa2c91edcabdb1a7e4f9ca21dea7bfb29f",
+    "python": "3.12.13 (main, Jun 11 2026, 04:03:26) [Clang 22.1.3 ]",
+    "interpreter": "/tmp/phase31-adminapps-parity-validation/bin/python",
+    "prefix": "/tmp/phase31-adminapps-parity-validation",
+    "package": "django-apscheduler",
+    "installed_version": "0.7.0",
+    "environment_type": "isolated_temporary_venv"
+  },
+  "focused_tests": "50/50 PASS (7 parity + 43 bearer/readiness/integrity)",
+  "bearer_contract": "unchanged",
+  "attempt_1": "CONSUMED / FAIL; historical bytes preserved",
+  "attempt_2": "NOT_STARTED",
+  "attempt_3": "NOT_STARTED",
+  "retry_20_authorization": "NONE",
+  "retry_20_executed": false,
+  "historical_retry20": "SUPERSEDED_UNCONSUMED",
+  "phase_31_5": "EXECUTION_HELD",
+  "regression": {
+    "isosmart": "575/575 PASS",
+    "adminapps": "180/180 PASS",
+    "adminapps_ci_subset": "160/160 PASS"
+  },
+  "operational_boundary": "2/2 PASS",
+  "raw_credential_leaks": 0,
+  "historical_files_preserved": 15
+}

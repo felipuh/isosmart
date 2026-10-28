@@ -1,0 +1,23 @@
+{
+  "artifact_schema": "phase31.4-clean-retry-7-v2.5-live-evidence-bundle/v1",
+  "execution_scope": "LIVE_NATIVE_EXECUTION",
+  "structural_composition_gate": "PASS",
+  "postgresql_environment": "PASS",
+  "migrations_bootstrap": "PASS",
+  "native_phase_execution": "BLOCKED_BEFORE_PHASE_1",
+  "native_captures": "NOT_EXECUTED",
+  "authority_a3": "NOT_EXECUTED",
+  "references": "NOT_EXECUTED",
+  "invariants": "NOT_EXECUTED",
+  "transactions": "NOT_EXECUTED",
+  "event_outbox": "NOT_EXECUTED",
+  "resolved_live_graph": "NOT_MATERIALIZED",
+  "exact_comparison": "NOT_EXECUTED",
+  "closure": "NOT_PROMOTED",
+  "teardown": "PASS",
+  "teardown_verification": {
+    "container_absent": true,
+    "temporary_volumes_removed": true,
+    "shared_systems_touched": false
+  }
+}

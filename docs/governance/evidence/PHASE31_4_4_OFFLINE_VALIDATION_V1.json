@@ -1,0 +1,19 @@
+{
+  "artifact_schema": "phase31.4.4-offline-validation/v1",
+  "attempts": {
+    "database_attempts": 0,
+    "lifecycle_attempts": 0,
+    "network_attempts": 0,
+    "resolver_invocations": 0,
+    "subprocess_attempts": 0
+  },
+  "compiled_count": 357,
+  "django_version": "4.2.22",
+  "errors": 0,
+  "failures": 0,
+  "makemigrations_check_dry_run": "PASS",
+  "operational_tests": "NOT EXECUTED",
+  "selected_foundation_and_successor_tests": 155,
+  "skipped": 0,
+  "system_check": "PASS"
+}

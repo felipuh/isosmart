@@ -1,0 +1,150 @@
+{
+  "run_id": "Phase 31.4 V2.5 V11 Operational Diagnostic Cycle 1 Attempt 1",
+  "attempt": 1,
+  "started_at": "2026-09-29T20:06:02.169506+00:00",
+  "verdict": "SUCCESSOR_CYCLE_ATTEMPT_1_FAIL",
+  "raw_credentials_recorded": false,
+  "exception_type": "LiveExecutorError",
+  "exception": "OPERATIONAL_COMMAND_FAILURE: authority exited 1; log=/home/felipe/proyectos/isosmart/docs/governance/evidence/runs/Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1/authority.log",
+  "traceback": "Traceback (most recent call last):\n  File \"/home/felipe/proyectos/isosmart/docs/governance/evidence/PHASE31_4_V2_5_V11_OPERATIONAL_DIAGNOSTIC_CYCLE_1_ATTEMPT_1_CONTROL_V1/attempt_driver.py\", line 158, in run\n    runner.run_evidence(precreation=lambda manifest: live().precreation(manifest), stage_ext=stage)\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_disposable_runner.py\", line 1424, in run_evidence\n    stage_result = dict(stage_ext(self.manifest))\n                        ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/docs/governance/evidence/PHASE31_4_V2_5_V11_OPERATIONAL_DIAGNOSTIC_CYCLE_1_ATTEMPT_1_CONTROL_V1/attempt_driver.py\", line 149, in stage\n    result = dict(live().stage_ext(manifest))\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_live_executor.py\", line 206, in stage_ext\n    self.bootstrap_runtime(); self.start_services(); return self.resolve_stage_ext_identities()\n                              ^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_live_executor.py\", line 146, in start_services\n    self.adapter.create_adminapps_authority(self.context),\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_operational_adapters.py\", line 189, in create_adminapps_authority\n    return self._run(\"authority\", context, credential_name=\"isosmart_bearer\")\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_operational_adapters.py\", line 116, in _run\n    raise LiveExecutorError(\"OPERATIONAL_COMMAND_FAILURE\", f\"{operation} exited {completed.returncode}; log={log_path}\", step=operation)\nfoundation.phase31_4_v2_5_live_executor.LiveExecutorError: OPERATIONAL_COMMAND_FAILURE: authority exited 1; log=/home/felipe/proyectos/isosmart/docs/governance/evidence/runs/Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1/authority.log\n",
+  "service_endpoints": {},
+  "service_cleanup": {
+    "status": "PASS",
+    "services": {},
+    "credential_references_destroyed": {}
+  },
+  "manifest_path": "/home/felipe/proyectos/isosmart/docs/governance/evidence/runs/Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1/RESOURCE_MANIFEST.json",
+  "manifest_sha256": "8178a29a28345689e574e70c1d166114761d82aa9b6acfe4799eea89a230a4a4",
+  "state_machine_trace": [
+    {
+      "sequence": 1,
+      "from": null,
+      "to": "AUTHORIZED",
+      "reason": "authorization verified and atomically consumed",
+      "at": "2026-09-29T20:06:02.189863+00:00",
+      "run_id": "Phase 31.4 V2.5 V11 Operational Diagnostic Cycle 1 Attempt 1",
+      "run_slug": "Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1",
+      "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+      "validation_attempt": 1
+    },
+    {
+      "sequence": 2,
+      "from": "AUTHORIZED",
+      "to": "ALLOCATING",
+      "reason": "resource allocation started",
+      "at": "2026-09-29T20:06:02.231716+00:00",
+      "run_id": "Phase 31.4 V2.5 V11 Operational Diagnostic Cycle 1 Attempt 1",
+      "run_slug": "Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1",
+      "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+      "validation_attempt": 1
+    },
+    {
+      "sequence": 3,
+      "from": "ALLOCATING",
+      "to": "RESOURCES_ALLOCATED",
+      "reason": "containers, networks, volumes, and host ports persisted",
+      "at": "2026-09-29T20:06:05.291828+00:00",
+      "run_id": "Phase 31.4 V2.5 V11 Operational Diagnostic Cycle 1 Attempt 1",
+      "run_slug": "Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1",
+      "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+      "validation_attempt": 1
+    },
+    {
+      "sequence": 4,
+      "from": "RESOURCES_ALLOCATED",
+      "to": "BOOTSTRAPPING",
+      "reason": "PostgreSQL startup/readiness started",
+      "at": "2026-09-29T20:06:05.312905+00:00",
+      "run_id": "Phase 31.4 V2.5 V11 Operational Diagnostic Cycle 1 Attempt 1",
+      "run_slug": "Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1",
+      "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+      "validation_attempt": 1
+    },
+    {
+      "sequence": 5,
+      "from": "BOOTSTRAPPING",
+      "to": "READY",
+      "reason": "all PostgreSQL resources accept SELECT 1",
+      "at": "2026-09-29T20:06:23.090833+00:00",
+      "run_id": "Phase 31.4 V2.5 V11 Operational Diagnostic Cycle 1 Attempt 1",
+      "run_slug": "Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1",
+      "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+      "validation_attempt": 1
+    },
+    {
+      "sequence": 6,
+      "from": "READY",
+      "to": "PRECREATION_RUNNING",
+      "reason": "PRECREATION callback started",
+      "at": "2026-09-29T20:06:23.108129+00:00",
+      "run_id": "Phase 31.4 V2.5 V11 Operational Diagnostic Cycle 1 Attempt 1",
+      "run_slug": "Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1",
+      "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+      "validation_attempt": 1
+    },
+    {
+      "sequence": 7,
+      "from": "PRECREATION_RUNNING",
+      "to": "PRECREATION_PASS",
+      "reason": "PRECREATION evidence persisted",
+      "at": "2026-09-29T20:06:23.224357+00:00",
+      "run_id": "Phase 31.4 V2.5 V11 Operational Diagnostic Cycle 1 Attempt 1",
+      "run_slug": "Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1",
+      "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+      "validation_attempt": 1
+    },
+    {
+      "sequence": 8,
+      "from": "PRECREATION_PASS",
+      "to": "STAGE_EXT_RUNNING",
+      "reason": "Stage EXT callback started",
+      "at": "2026-09-29T20:06:23.244651+00:00",
+      "run_id": "Phase 31.4 V2.5 V11 Operational Diagnostic Cycle 1 Attempt 1",
+      "run_slug": "Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1",
+      "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+      "validation_attempt": 1
+    },
+    {
+      "sequence": 9,
+      "from": "STAGE_EXT_RUNNING",
+      "to": "FAILED",
+      "reason": "UNCLASSIFIED_RUNNER_FAILURE",
+      "at": "2026-09-29T20:07:06.348008+00:00",
+      "run_id": "Phase 31.4 V2.5 V11 Operational Diagnostic Cycle 1 Attempt 1",
+      "run_slug": "Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1",
+      "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+      "validation_attempt": 1
+    },
+    {
+      "sequence": 10,
+      "from": "FAILED",
+      "to": "TEARDOWN_COMPLETE",
+      "reason": "run-scoped resource absence verified",
+      "at": "2026-09-29T20:07:19.686295+00:00",
+      "run_id": "Phase 31.4 V2.5 V11 Operational Diagnostic Cycle 1 Attempt 1",
+      "run_slug": "Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1",
+      "execution_kind": "RUNNER_ENVIRONMENT_DIAGNOSTIC",
+      "validation_attempt": 1
+    }
+  ],
+  "cleanup": {
+    "status": "PASS",
+    "remaining_resources": [],
+    "errors": [],
+    "started_at": "2026-09-29T20:07:06.373902+00:00",
+    "completed_at": "2026-09-29T20:07:19.661761+00:00",
+    "post_teardown_absence_verified": true
+  },
+  "failure": {
+    "domain": "DISPOSABLE_EXECUTION_TOOLING_BLOCKER",
+    "code": "UNCLASSIFIED_RUNNER_FAILURE",
+    "runner_step": "verify_isosmart_postgres_version",
+    "exception_type": "LiveExecutorError",
+    "exception": "OPERATIONAL_COMMAND_FAILURE: authority exited 1; log=/home/felipe/proyectos/isosmart/docs/governance/evidence/runs/Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1/authority.log",
+    "traceback": "Traceback (most recent call last):\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_disposable_runner.py\", line 1424, in run_evidence\n    stage_result = dict(stage_ext(self.manifest))\n                        ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/docs/governance/evidence/PHASE31_4_V2_5_V11_OPERATIONAL_DIAGNOSTIC_CYCLE_1_ATTEMPT_1_CONTROL_V1/attempt_driver.py\", line 149, in stage\n    result = dict(live().stage_ext(manifest))\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_live_executor.py\", line 206, in stage_ext\n    self.bootstrap_runtime(); self.start_services(); return self.resolve_stage_ext_identities()\n                              ^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_live_executor.py\", line 146, in start_services\n    self.adapter.create_adminapps_authority(self.context),\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_operational_adapters.py\", line 189, in create_adminapps_authority\n    return self._run(\"authority\", context, credential_name=\"isosmart_bearer\")\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_operational_adapters.py\", line 116, in _run\n    raise LiveExecutorError(\"OPERATIONAL_COMMAND_FAILURE\", f\"{operation} exited {completed.returncode}; log={log_path}\", step=operation)\nfoundation.phase31_4_v2_5_live_executor.LiveExecutorError: OPERATIONAL_COMMAND_FAILURE: authority exited 1; log=/home/felipe/proyectos/isosmart/docs/governance/evidence/runs/Phase_31.4_V2.5_V11_Operational_Diagnostic_Cycle_1_Attempt_1/authority.log\n",
+    "command": null,
+    "state_at_failure": "STAGE_EXT_RUNNING",
+    "at": "2026-09-29T20:07:06.347969+00:00"
+  },
+  "completed_at": "2026-09-29T20:07:19.710194+00:00"
+}

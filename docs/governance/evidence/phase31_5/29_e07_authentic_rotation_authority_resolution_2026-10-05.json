@@ -1,0 +1,137 @@
+{
+  "evidence_id": "29",
+  "date": "2026-10-05",
+  "scope": "Repository-local, non-secret authority-resolution analysis only. No credential value, deployed environment, database, AdminApps runtime, external service, deployment, restart, or customer workflow was accessed or changed.",
+  "governance": {
+    "phase31_5": "EXECUTION_HELD",
+    "e07_prior_state": "FAIL_AUTHENTIC_ROTATION_EVIDENCE_REQUIRED",
+    "e08": "CLOSED_LOCAL_TECHNICAL_EVIDENCE",
+    "authentic_rotation_authorized": false,
+    "external_publication_authorized": false
+  },
+  "starting_git_state": {
+    "repository": "/home/felipe/proyectos/isosmart",
+    "branch": "hardening/p0-p1-enterprise-readiness",
+    "head": "1882596f25d7dcd70ad8a3ce9f285f8075b8c717",
+    "required_commit_1882596f_exists_and_is_head": true,
+    "working_tree_changed_paths_at_start": 21,
+    "unrelated_changes_preserved": true,
+    "evidence_28": "Inspected and not modified: docs/governance/evidence/phase31_5/28_e07_authentic_rotation_closure_2026-10-05.json",
+    "prior_closure": "Inspected and not modified: docs/transformation/PHASE31_5_E07_AUTHENTIC_ROTATION_FINAL_CLOSURE_2026-10-05.md"
+  },
+  "secret_contract": {
+    "variable_name": "ADMIN_APPS_API_KEY",
+    "settings_source": "backend/backend/settings.py:107-113",
+    "transport": "AdminAppsClient emits the configured value as X-API-Key (backend/integration/client.py:39-53)",
+    "value_access": "NOT_PERFORMED"
+  },
+  "consumer_matrix": [
+    {
+      "consumer": "web",
+      "variable_or_source": "deploy/compose.production.yml:25-36 selects ../backend/.env.production.web; settings and module singleton read the configuration",
+      "startup_dependency": "YES",
+      "restart_required": "YES; recreate/restart web after an authorized receiver update",
+      "evidence": "backend/backend/settings.py:107-113; backend/integration/client.py:39-53,529-530; backend/backend/urls.py:1-44; deploy/Dockerfile:14"
+    },
+    {
+      "consumer": "outbox-worker",
+      "variable_or_source": "deploy/compose.production.yml:37-43 names a distinct worker env_file, but run_outbox_worker has no AdminAppsClient import or call",
+      "startup_dependency": "NO direct API-key dependency proved; settings reads the variable only if supplied",
+      "restart_required": "NO for this secret from source",
+      "evidence": "backend/foundation/management/commands/run_outbox_worker.py:1-64; repository-local import trace"
+    },
+    {
+      "consumer": "foundation-bootstrap and migrate jobs",
+      "variable_or_source": "Separate uninspected env_file inputs; Django settings evaluates the variable name if supplied",
+      "startup_dependency": "NO direct AdminAppsClient use found in these entry paths",
+      "restart_required": "NOT_APPLICABLE for one-shot jobs",
+      "evidence": "deploy/compose.production.yml:13-24; foundation bootstrap/migration entry points"
+    },
+    {
+      "consumer": "check_isosmart_adminapps and sync_organizations commands",
+      "variable_or_source": "Both import integration.client.admin_apps_client",
+      "startup_dependency": "YES when invoked; each command is a fresh process",
+      "restart_required": "NOT_APPLICABLE",
+      "evidence": "backend/integration/management/commands/check_isosmart_adminapps.py; backend/integration/management/commands/sync_organizations.py"
+    },
+    {
+      "consumer": "web-resident authentication, integration, middleware, and QMS organization flows",
+      "variable_or_source": "Shared client imported by their source modules",
+      "startup_dependency": "Covered by web singleton; no separate store or dynamic refresh found",
+      "restart_required": "YES, through web restart",
+      "evidence": "repository-local import trace; backend/integration/client.py:529-530"
+    }
+  ],
+  "secret_injection_authority_matrix": [
+    {"item": "Authoritative secret source", "classification": "PARTIAL", "finding": "AdminApps defines a lifecycle authority, but authentic deployment/database and migration 0006 are unverified."},
+    {"item": "Authorized changer", "classification": "PARTIAL", "finding": "Source requires an authenticated active staff AdminApps operator; actual authority is external."},
+    {"item": "ISO Smart receiver/location", "classification": "PARTIAL", "finding": "Compose names the web environment-file input, not the authentic injector or deployed receiver."},
+    {"item": "Secure transfer", "classification": "NOT_DEFINED", "finding": "No approved non-recording one-time transfer path is repository-defined."},
+    {"item": "Persistence", "classification": "PARTIAL", "finding": "AdminApps hashes new credentials; authentic secret-manager and persistence owner are unspecified."},
+    {"item": "Deployment/restart", "classification": "PARTIAL", "finding": "Web must reload, but no authentic-environment command or authorized operator is defined."},
+    {"item": "Rollback", "classification": "PARTIAL", "finding": "The AdminApps transaction rolls back before commit only; no post-commit receiver rollback or old-key reactivation protocol exists."},
+    {"item": "Audit/evidence", "classification": "PARTIAL", "finding": "AdminApps writes a secret-free lifecycle event; injection and restart audit are not defined locally."}
+  ],
+  "adminapps_authority_boundary": {
+    "active_source": "AdminApps backend/apps/integration selected by backend/manage.py -> config.settings -> config.urls",
+    "target_entity": "apps.integration.models.IntegrationAPIKey, selected by database primary key after authorized metadata lookup",
+    "target_identity": "AUTHENTIC_ADMINAPPS_TARGET_UNRESOLVED",
+    "storage": "New and rotated credentials retain credential_id, password-hash verifier, and safe fingerprint; new raw values are not stored.",
+    "rotation_mechanism": "rotate_integration_api_key uses transaction.atomic and select_for_update, creates replacement, deactivates/rotates old row, links replacement, and writes IntegrationAPIKeyAuditEvent.",
+    "operator_contract": "Authenticated, active staff AdminApps operator; management command accepts record ID and actor ID and writes replacement once to stdout.",
+    "endpoint": "No repository-defined HTTP rotation endpoint",
+    "direct_database_mutation": "NOT_REQUIRED by source",
+    "migration_requirement": "integration.0006_integration_api_key_lifecycle; authentic application unverified",
+    "fallback_boundary": "Configured INTEGRATION_API_KEYS hash fallback is an acceptance path. Source rejects a value matching any rotated/revoked stored verifier after fallback match; authentic fallback configuration was not read."
+  },
+  "administrator_password_dependency": {
+    "classification": "ADMIN_PASSWORD_NOT_REQUIRED_FOR_ROTATION",
+    "bootstrap_scope": "ADMIN_PASSWORD_BOOTSTRAP_ONLY",
+    "justification": "ISO Smart authentication/scripts/create_initial_user.py uses INITIAL_ADMIN_EMAIL and INITIAL_ADMIN_PASSWORD only for bootstrap. The AdminApps rotation service takes an active staff operator and the command takes record/actor IDs; neither reads INITIAL_ADMIN_PASSWORD.",
+    "supported_reset_paths": "Email-token recovery and authenticated password-management paths exist in ISO Smart source but are irrelevant to rotation.",
+    "materialization": "Authentic bootstrap-account existence/history remains unobserved.",
+    "password_material_handling": "No password material was read, reconstructed, tested, reset, or recorded."
+  },
+  "restart_and_cutover_contract": {
+    "configuration_evaluation": "Django settings reads os.getenv at initialization; AdminAppsClient copies the value when the module singleton is constructed. No dynamic reload mechanism found.",
+    "symbolic_non_executing_sequence": [
+      "Obtain separate authorization naming authentic target ID, active staff operator, web receiver, non-recording transfer channel, restart operator, and interruption policy.",
+      "Perform metadata-only preflight for migration 0006, target active state, and every authentic acceptance path including hash fallback.",
+      "Use source-defined rotation through approved operator context; transfer the one-time replacement directly into the approved receiver without recording it.",
+      "Update authoritative web receiver for ADMIN_APPS_API_KEY and recreate/restart web.",
+      "Under separate authorization, evidence symbolic old rejection and replacement acceptance through the narrow AdminApps health route; account for its usage-metadata side effect.",
+      "Collect secret-free lifecycle audit event and external receiver/restart evidence."
+    ],
+    "source_defined_restart_command": "RESTART_REQUIREMENT_SOURCE_INSUFFICIENT"
+  },
+  "dual_key_and_atomicity": {
+    "dual_key_grace_period": "NOT_SUPPORTED_BY_SOURCE",
+    "adminapps_transaction": "ATOMIC within AdminApps database only",
+    "cross_system_cutover": "NOT_ATOMIC",
+    "effect": "Old key is revoked as replacement becomes active before ISO Smart receives/reloads the replacement. Bounded web authentication interruption is possible and requires explicit future acceptance.",
+    "design_defect": "NOT_ESTABLISHED; source defines a security-preserving forward rotation but not zero-downtime or post-commit rollback."
+  },
+  "external_dependencies": [
+    "Authentic AdminApps deployment/database identity and migration-0006 proof",
+    "Authorized metadata-only selection of target key record",
+    "Authorized active staff operator identity",
+    "Secret receiver, non-recording handoff, and persistence owner",
+    "Web restart/recreate authority and environment-specific procedure",
+    "Fallback verification and service-interruption/forward-recovery approval"
+  ],
+  "tests_and_validation": {
+    "repository_local_test": "AdminApps: backend/.venv/bin/python manage.py test apps.integration.tests.SecureIntegrationAPIKeyLifecycleTests --verbosity 1",
+    "result": "PASS (exit status 0)",
+    "test_scope": "Synthetic Django test database only; lifecycle transaction, revocation, fallback rejection, audit event, read-only admin, and one-time command semantics.",
+    "authentic_infrastructure_access": false
+  },
+  "mutation_audit": {
+    "runtime_or_product_code_changed": false,
+    "environment_files_opened": false,
+    "credentials_generated_or_tested": false,
+    "external_calls": false,
+    "unrelated_changes_preserved": true
+  },
+  "readiness_verdict": "BLOCKED_BY_EXTERNAL_AUTHORITY",
+  "readiness_reason": "Source defines lifecycle, role class, web consumer, password non-dependency, and cutover constraints, but not authentic target/operator, secret receiver, safe handoff, restart, fallback verification, or interruption acceptance."
+}

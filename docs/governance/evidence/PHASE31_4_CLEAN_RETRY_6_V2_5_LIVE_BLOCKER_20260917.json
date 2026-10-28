@@ -1,0 +1,66 @@
+{
+  "artifact_schema": "phase31.4-clean-retry-6-v2.5-live-blocker/v1",
+  "execution_label": "LIVE_NATIVE_EXECUTION",
+  "retry": "Phase 31.4 V2.5 Clean Retry 6",
+  "verdict": "NOT_PROMOTED",
+  "p0": 0,
+  "p1": 1,
+  "pre_live_gates": {
+    "v24_sha256": "PASS:a102d278bf2e5ca6e9b8bf282f5402a54f52d4690beed2ecbed5145c56539387",
+    "stage_a": "PASS",
+    "contract_members": 118,
+    "contract_fields": 1664,
+    "runtime_tests": "PASS",
+    "runtime_test_count": 6,
+    "native_registry_required": 16,
+    "native_registry_registered": 16,
+    "native_registry_unresolved": 0,
+    "native_registry_duplicates": 0,
+    "foundation_readiness": "PASS per retained Retry 5 gate; no new PostgreSQL instance created"
+  },
+  "blockers": [
+    {
+      "id": "P1-V25-LIVE-PHASE-CALLBACKS-ABSENT-20260917",
+      "severity": "P1",
+      "exact_phase": "PRE-LIVE / before phase 1",
+      "classification": "runtime_harness_implementation_gap",
+      "native_source": "backend/foundation/phase31_4_v2_5_runtime.py:430-466",
+      "contract_member_or_field": "33-phase execution contract; 509 CAPTURE_NATIVE_OUTPUT fields",
+      "actual_state": "CleanRetry4Harness.run() validates registry coverage, then invokes externally supplied handlers. No production entrypoint supplies handlers that call the native services, persist/re-read outputs, execute NativeAuthorityReader, resolve bindings, materialize the graph, compare it, or perform teardown.",
+      "expected_state": "A parameterless authorized V2.5 Clean Retry 6 runner must supply concrete native callbacks for all 33 phases and produce PostgreSQL-backed live evidence.",
+      "diagnostic": "The only passing V2.5 phase test supplies lambdas that append phase names; the only execute_phase implementation found is backend/foundation/phase31_4_v2_4_execution_backend.py:265, which is historical V2.4 infrastructure and is not a V2.5 live runner.",
+      "required_remediation": "Provide and authorize the existing-project V2.5 live phase composition that invokes the native services and evidence registries directly, without synthetic callbacks, offline capture values, direct fixture inserts, or reuse of the V2.4 backend.",
+      "source_references": [
+        "backend/foundation/phase31_4_v2_5_runtime.py",
+        "backend/foundation/test_phase31_4_v2_5_runtime.py",
+        "backend/foundation/phase31_4_v2_4_execution_backend.py"
+      ]
+    }
+  ],
+  "execution": {
+    "postgresql_18_6_fresh_environment": "NOT_CREATED_FAIL_CLOSED",
+    "database_initialization": "NOT_EXECUTED",
+    "phases_executed": 0,
+    "phases_passed": 0,
+    "phases_failed": 0,
+    "native_authority": "NOT_EXECUTED",
+    "a3": "NOT_EXECUTED",
+    "captures_expected": 509,
+    "captures_resolved": 0,
+    "captures_unresolved": 509,
+    "references_unresolved": "NOT_EXECUTED",
+    "runtime_invariant_failures": "NOT_EXECUTED",
+    "transactions": "NOT_EXECUTED",
+    "event_outbox": "NOT_EXECUTED",
+    "resolved_graph": "NOT_MATERIALIZED",
+    "exact_comparison": "NOT_EXECUTED",
+    "teardown": "NOT_APPLICABLE_NO_ENVIRONMENT_CREATED"
+  },
+  "preservation": {
+    "historical_v24_sha256": "PASS",
+    "v24_sha256": "a102d278bf2e5ca6e9b8bf282f5402a54f52d4690beed2ecbed5145c56539387",
+    "shared_systems_touched": false,
+    "passwords_persisted": false,
+    "previous_retries_overwritten": false
+  }
+}

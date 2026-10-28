@@ -1,0 +1,82 @@
+{
+  "artifact_schema": "phase31.4-clean-retry-authorization/v1",
+  "authorization_status": "RETRY15_AUTHORIZED",
+  "authorization_scope": "CREATE_ISOLATED_RESOURCES_AND_EXECUTE_CONTROLLED_LIVE_RETRY",
+  "retry_candidate": "Phase 31.4 V2.5 Clean Retry 15",
+  "validator_result": "PASS",
+  "stage_a": {
+    "P0": 0,
+    "P1": 0,
+    "current_v25_P0": 0,
+    "current_v25_P1": 0
+  },
+  "python_version": "3.12.13",
+  "django_version": "4.2.22",
+  "targeted_runtime_tests": {
+    "executed": 42,
+    "passed": 42,
+    "failures": 0,
+    "errors": 0
+  },
+  "full_regression": {
+    "executed": 487,
+    "passed": 487,
+    "failures": 0,
+    "errors": 0
+  },
+  "native_source_coverage": {
+    "expected": 16,
+    "covered": 16,
+    "unresolved": 0
+  },
+  "phase_coverage": {
+    "expected": 33,
+    "covered": 33,
+    "missing": 0
+  },
+  "native_capture_producer_coverage": {
+    "expected": 565,
+    "covered": 565,
+    "uncovered": 0,
+    "ambiguous": 0
+  },
+  "upstream_mapping_coverage": {
+    "expected": 5,
+    "covered": 5,
+    "unresolved": 0
+  },
+  "user_projection_producer_result": "USERPROJECTION_PRODUCER_PASS",
+  "dependency_graph_result": "PASS",
+  "v2_4_sha_result": {
+    "status": "PASS",
+    "sha256": "a102d278bf2e5ca6e9b8bf282f5402a54f52d4690beed2ecbed5145c56539387"
+  },
+  "historical_integrity_result": "PASS",
+  "current_integrity_result": "PASS",
+  "frozen_blocker_disposition_artifact": "PHASE31_4_V25_FROZEN_BLOCKER_DISPOSITION_V1.json",
+  "frozen_blocker_dispositions": [
+    {
+      "historical_blocker_id": "P1-FROZEN-ACTION-PLAN-PRECONDITIONS",
+      "historical_status": "OPEN",
+      "historical_blocker_preserved": true,
+      "v25_successor_disposition": "SUPERSEDED_BY_V2_5",
+      "blocks_retry15": false
+    },
+    {
+      "historical_blocker_id": "P1-FROZEN-CONTROLLED-OPPORTUNITY-GOVERNANCE",
+      "historical_status": "OPEN",
+      "historical_blocker_preserved": true,
+      "v25_successor_disposition": "SUPERSEDED_BY_V2_5",
+      "blocks_retry15": false
+    }
+  ],
+  "additional_frozen_blockers": 0,
+  "authorization_timestamp": "2026-09-21T00:00:00Z",
+  "promotion_granted": false,
+  "promotion_reason": "Authorization is granted for a fresh PostgreSQL 18.6 live Retry 15, but live success and teardown are still required before any promotion is awarded.",
+  "live_retry_requirements": {
+    "ActionPlan": "prove valid native preconditions and live AgentDecision→ActionPlan chain",
+    "ControlledOpportunity": "prove actual native controlled revision and governance behavior",
+    "live_result_expected": "PASS and evidence retained without rewriting V2.4 history"
+  }
+}

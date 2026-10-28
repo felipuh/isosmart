@@ -1,0 +1,62 @@
+{
+  "schema": "phase31.4-v2.5-adminapps-dependency-parity-successor-reconciliation/v1",
+  "status": "PASS",
+  "predecessor": "V11",
+  "predecessor_sha256": "69a0eec27e96e050411e1cabf8f61aa2ca8182a736e16c3b84f67089bb4e716b",
+  "successor": "V12",
+  "successor_manifest": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V12.json",
+  "successor_manifest_sha256": "685e04fa2e94513c357bbd6d333c2fe785e967b172234cd93faae777e25f79c2",
+  "changed_sources": [
+    {
+      "path": "backend/foundation/phase31_4_integrity_generations.py",
+      "predecessor_sha256": "c1b728d030a88c853c3e5bb8ec17655f44c851c21fbff9a03e3094e1cc7e81ac",
+      "sha256": "158ea28f01ab71e52ec4c47a1fca157b3b366d9789752f88ddc1b49d7bd4962d",
+      "reason": "Canonical disposable AdminApps runtime provisioning and integrity reconciliation"
+    },
+    {
+      "path": "backend/foundation/phase31_4_v2_5_operational_adapters.py",
+      "predecessor_sha256": "5e20c596c358c96b83dc184c937a40aea5312957d8b2787bdf39a85599c1d431",
+      "sha256": "1aa3b5a7cd37094369c6842b8a2deae55b5eba018f4dcf2a1ec6406f1322216b",
+      "reason": "Canonical disposable AdminApps runtime provisioning and integrity reconciliation"
+    },
+    {
+      "path": "docs/governance/tools/phase31_4_v2_5_operational_actions.py",
+      "predecessor_sha256": "dfa9dc4beadb6afc55af96f92d7f26ca0dc2eb4c910b61e2ef05149cdfb337eb",
+      "sha256": "bd196d8b9890706b7a02401fab7ae508058245eda69a1137e62c5278f76497e2",
+      "reason": "Canonical disposable AdminApps runtime provisioning and integrity reconciliation"
+    }
+  ],
+  "new_sources": [
+    {
+      "path": "backend/foundation/phase31_4_adminapps_runtime.py",
+      "sha256": "e19c90f5ca91a3262146dd463ffe80df7805a0c2b556a02d017315262c43692f",
+      "semantic_role": "Canonical temporary AdminApps runtime provisioning and cleanup",
+      "approval_evidence": [
+        "docs/governance/evidence/PHASE31_4_V2_5_ADMINAPPS_DEPENDENCY_PARITY_REVIEW_V1.json"
+      ],
+      "new_in_generation": true
+    }
+  ],
+  "remediation_count": 1,
+  "blocker": "ModuleNotFoundError: No module named 'django_apscheduler'",
+  "classification": "DISPOSABLE_DEPENDENCY_INSTALLATION_GAP_CONFIRMED",
+  "remediation": "Provision isolated temporary AdminApps venv from its canonical manifest and use it consistently for AdminApps bootstrap, authority and service",
+  "dependency_parity_proof": "docs/governance/evidence/PHASE31_4_V2_5_ADMINAPPS_DEPENDENCY_PARITY_VALIDATION_V1",
+  "tests": {
+    "focused": "50/50 PASS",
+    "operational_boundary": "2/2 PASS",
+    "isosmart_regression": "575/575 PASS",
+    "adminapps_regression": "180/180 PASS"
+  },
+  "migrations": "NO CHANGES; inherited 24 migration hashes; V2.4 historical integrity verified",
+  "historical_evidence": "15 pre-existing files byte-identical; Attempt 1 consumed and failed",
+  "bearer_contract": "PRESERVED; operational_bearer_identity.py unchanged; regression PASS; raw credential leaks 0",
+  "retry20": {
+    "current_authorization": "NONE",
+    "executed": false,
+    "historical_authorization": "SUPERSEDED_UNCONSUMED"
+  },
+  "phase31_5": "EXECUTION_HELD",
+  "attempt_2": "NOT_STARTED",
+  "attempt_3": "NOT_STARTED"
+}

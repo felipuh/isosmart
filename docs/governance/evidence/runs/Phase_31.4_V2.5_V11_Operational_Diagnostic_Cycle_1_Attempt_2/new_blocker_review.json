@@ -1,0 +1,39 @@
+{
+  "classification": "OPERATIONAL_EVENT_DELIVERY_PROJECTION_BLOCKER",
+  "recorded_runner_domain": "DISPOSABLE_EXECUTION_TOOLING_BLOCKER",
+  "recorded_runner_code": "UNCLASSIFIED_RUNNER_FAILURE",
+  "actual_operation": "delivery",
+  "actual_exception": "foundation.models.TenantProjection.DoesNotExist: TenantProjection matching query does not exist.",
+  "expected": "Canonical tenant event delivered and matching TenantProjection persisted before readback",
+  "observed": "Management command returned successfully; subsequent tenant projection lookup raised DoesNotExist; no ingress POST is present in retained ISO Smart service log",
+  "last_demonstrated_boundary": "Both HTTP services ready, runtime Bearer accepted, AdminApps authority persisted and read back",
+  "limitations": [
+    "The delivery helper retained a stdout hash rather than its full management-command output.",
+    "No direct outbox query was retained before mandatory teardown.",
+    "Tenant and actor authority readbacks exist, but the aggregate Stage EXT resolver did not certify its six controls."
+  ],
+  "candidate_count": 1,
+  "candidate": "Review and align the disposable authority producer with the canonical transactional tenant-outbox contract before invoking delivery; retain real event IDs and persisted evidence. No remediation applied.",
+  "candidate_basis": "authority uses Organization.objects.create/save; canonical serializer explicitly invokes record_tenant_event in transaction.atomic; delivery iterates existing TenantIntegrationOutbox rows and exits normally when none are pending. This supports an omitted-outbox hypothesis, not a measured outbox row count.",
+  "source_evidence": [
+    {
+      "path": "docs/governance/tools/phase31_4_v2_5_operational_actions.py",
+      "sha256": "bd196d8b9890706b7a02401fab7ae508058245eda69a1137e62c5278f76497e2"
+    },
+    {
+      "path": "../adminapps/backend/apps/organizations/serializers.py",
+      "sha256": "073740f5147e9dce003a4ce03c173071067a72ab6f1b23cecaf46bcf7fde68c5"
+    },
+    {
+      "path": "../adminapps/backend/apps/organizations/tenant_events.py",
+      "sha256": "bff220496ac6259b9808bf138405430739ba1e9256c2aa65a517bb911be35c37"
+    },
+    {
+      "path": "../adminapps/backend/apps/organizations/management/commands/deliver_tenant_events.py",
+      "sha256": "05a22073e8a9c37945090a413057899ff3dfc54510f8ff07d8709c8ba5440f15"
+    }
+  ],
+  "attempt_3": "NOT_STARTED",
+  "retry20_authorization": "NONE",
+  "phase31_5": "EXECUTION_HELD"
+}

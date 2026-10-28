@@ -1,0 +1,14 @@
+{
+  "argv": [
+    "/tmp/phase31-adminapps-runtime-3w7lk3sg/bin/python",
+    "/home/felipe/proyectos/isosmart/docs/governance/tools/phase31_4_v2_5_operational_actions.py",
+    "authority"
+  ],
+  "interpreter": "/tmp/phase31-adminapps-runtime-3w7lk3sg/bin/python",
+  "pid": 16468,
+  "cwd": "/home/felipe/proyectos/isosmart",
+  "started_at": "2026-09-29T20:39:15.281134+00:00",
+  "package_environment": "/tmp/phase31-adminapps-runtime-3w7lk3sg/bin/python",
+  "exit_status": 0,
+  "completed_at": "2026-09-29T20:39:16.418389+00:00"
+}

@@ -1,0 +1,96 @@
+{
+  "artifact_schema": "phase31.4-v2.5-disposable-evidence-event-outbox-audit/v1",
+  "material_native_chain": {
+    "domain_event": 0,
+    "immutable_audit_log": 0,
+    "status": "NOT_EXECUTED",
+    "transactional_outbox": 0
+  },
+  "reason": "mandatory PRECREATION_INTEGRITY phase has no registered operation/assertions/evidence contract",
+  "run_id": "Phase 31.4 V2.5 Clean Retry 17",
+  "stage_ext_adminapps_outbox": [
+    {
+      "attempts": 1,
+      "created_at": "2026-09-23T19:55:17.107983+00:00",
+      "delivered_at": "2026-09-23T19:55:18.393978+00:00",
+      "envelope": {
+        "actor_id": "597130f2-9e2a-45af-9a17-a83298de0206",
+        "adminapps_tenant_id": "ac312d29-2f3e-4a12-9094-5838b9484780",
+        "aggregate_id": "ac312d29-2f3e-4a12-9094-5838b9484780",
+        "aggregate_type": "tenant",
+        "correlation_id": null,
+        "event_id": "98a82759-5f06-49a2-b8d9-238bbfe6783c",
+        "event_type": "tenant.provisioned",
+        "occurred_at": "2026-09-23T19:55:17.107130+00:00",
+        "payload": {
+          "adminapps_status": "trial",
+          "display_name": "Retry 17 Evidence Tenant",
+          "lifecycle_status": "active"
+        },
+        "schema_version": 1,
+        "source": "adminapps",
+        "source_version": 1,
+        "trace_id": "45b13cbe-9be8-418d-943b-8d4463d9eb1f"
+      },
+      "id": "98a82759-5f06-49a2-b8d9-238bbfe6783c",
+      "last_error": "",
+      "source_version": 1,
+      "status": "delivered"
+    },
+    {
+      "attempts": 1,
+      "created_at": "2026-09-23T19:55:17.180348+00:00",
+      "delivered_at": "2026-09-23T19:55:18.444640+00:00",
+      "envelope": {
+        "actor_id": "597130f2-9e2a-45af-9a17-a83298de0206",
+        "adminapps_tenant_id": "ac312d29-2f3e-4a12-9094-5838b9484780",
+        "aggregate_id": "ac312d29-2f3e-4a12-9094-5838b9484780",
+        "aggregate_type": "tenant",
+        "correlation_id": null,
+        "event_id": "813f55b8-40cf-49df-bf69-ae28985c5a73",
+        "event_type": "tenant.updated",
+        "occurred_at": "2026-09-23T19:55:17.179811+00:00",
+        "payload": {
+          "adminapps_status": "active",
+          "display_name": "Retry 17 Evidence Tenant",
+          "lifecycle_status": "active"
+        },
+        "schema_version": 1,
+        "source": "adminapps",
+        "source_version": 2,
+        "trace_id": "55003698-c71a-4de5-811c-403d890193ba"
+      },
+      "id": "813f55b8-40cf-49df-bf69-ae28985c5a73",
+      "last_error": "",
+      "source_version": 2,
+      "status": "delivered"
+    }
+  ],
+  "stage_ext_ingress_receipt": [
+    {
+      "adminapps_tenant_id": "ac312d29-2f3e-4a12-9094-5838b9484780",
+      "authenticated": true,
+      "event_id": "98a82759-5f06-49a2-b8d9-238bbfe6783c",
+      "payload_hash": "d46524313e4a95da2cf6d72b14cf82145128d7ada41f2d24d4f3c053dc540856",
+      "processed_at": "2026-09-23 19:55:18.387054+00",
+      "projection_id": "c6b0937f-05c1-492a-9546-65c469fa4ea4",
+      "received_at": "2026-09-23 19:55:18.373283+00",
+      "source_version": 1,
+      "status": "processed",
+      "trace_id": "45b13cbe-9be8-418d-943b-8d4463d9eb1f"
+    },
+    {
+      "adminapps_tenant_id": "ac312d29-2f3e-4a12-9094-5838b9484780",
+      "authenticated": true,
+      "event_id": "813f55b8-40cf-49df-bf69-ae28985c5a73",
+      "payload_hash": "c3b5f48cbcfd166adc79cbb45b2cfad7a54a797d7a639f24bf7d794d7558f4a3",
+      "processed_at": "2026-09-23 19:55:18.440821+00",
+      "projection_id": "c6b0937f-05c1-492a-9546-65c469fa4ea4",
+      "received_at": "2026-09-23 19:55:18.43331+00",
+      "source_version": 2,
+      "status": "processed",
+      "trace_id": "55003698-c71a-4de5-811c-403d890193ba"
+    }
+  ],
+  "status": "FAIL"
+}

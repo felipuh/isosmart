@@ -1,0 +1,2 @@
+bootstrap_exit=1
+first_genuine_blocker=see bootstrap_stdout_stderr.log

@@ -1,0 +1,23 @@
+{
+  "adminapps": {
+    "fake": 0,
+    "full_chain_executed": true,
+    "log_sha256": "642e4f1806409323b31941157e06e779a9736881ef7240fc9e47087992f308cf",
+    "manual_schema_patch": 0,
+    "result": "PASS"
+  },
+  "artifact_schema": "phase31.4-retry9-migrations/v1",
+  "checked_at": "2026-09-18T14:15:39.084491+00:00",
+  "execution_mode": "LIVE_NATIVE_EXECUTION",
+  "isosmart": {
+    "error": "foundation runtime roles were not supplied by cluster bootstrap",
+    "failed_migration": "foundation.0001_foundation_tenant_projection",
+    "fake": 0,
+    "full_chain_executed": false,
+    "log_sha256": "7d2d0f79551347bc69f1543eb8932a20a0e846d21cb5b9534e5840bebb73e3ce",
+    "manual_schema_patch": 0,
+    "result": "FAIL"
+  },
+  "promotion_gate": "FAIL",
+  "retry_tag": "CLEAN_RETRY_9"
+}

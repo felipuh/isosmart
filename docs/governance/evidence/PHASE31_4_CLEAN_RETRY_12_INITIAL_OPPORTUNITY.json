@@ -1,0 +1,17 @@
+{
+  "artifact_schema": "phase31.4-retry12-initial-opportunity-live-proof/v1",
+  "retry_id": "Phase 31.4 V2.5 Clean Retry 12",
+  "phase": "INITIAL_OPPORTUNITY",
+  "status": "PASS",
+  "adminapps_tenant_id": "d3ab78a2-f32a-4ca2-a2fc-a20714423abb",
+  "tenant_projection_id": "27b3a066-b7fc-449c-9cdc-977faa87658e",
+  "qms_organization_id": "20c445b2-0c22-41d8-bda0-8371a9b1f28d",
+  "live_process_id": "dee0b48c-ae65-45d7-88e8-ac2577c2ed71",
+  "input_process_id": "dee0b48c-ae65-45d7-88e8-ac2577c2ed71",
+  "native_opportunity_id": "5ac513c5-d7ef-49e7-8469-44bc36f1a22f",
+  "persisted_opportunity_process_id": "dee0b48c-ae65-45d7-88e8-ac2577c2ed71",
+  "process_fk_equality": true,
+  "tenant_projection_equality": true,
+  "historical_process_fixture_used": false,
+  "provenance": "LIVE_UPSTREAM_NATIVE_CAPTURE"
+}

@@ -1,0 +1,50 @@
+{
+  "artifact_schema": "phase31.4-v2.5-runtime-environment-recovery/v1",
+  "repository": "/home/felipe/proyectos/isosmart",
+  "captured_at": "2026-09-21",
+  "interpreter": {
+    "path": "/home/felipe/proyectos/isosmart/backend/.venv/bin/python",
+    "version": "3.12.13",
+    "environment": "/home/felipe/proyectos/isosmart/backend/.venv",
+    "django": "4.2.22",
+    "torch": "not installed"
+  },
+  "system_interpreter": {
+    "path": "/usr/bin/python",
+    "version": "3.9.25",
+    "pip": "not installed",
+    "django": "not installed"
+  },
+  "alternate_environment": {
+    "path": "/home/felipe/proyectos/isosmart/backend/.venv312",
+    "version": "3.12.13",
+    "django": "installed",
+    "torch": "installed"
+  },
+  "supported_bootstrap": {
+    "package_manager": "pip",
+    "ci_python": "3.9",
+    "requirements": ["requirements.txt", "backend/requirements.txt"],
+    "extra_indexes_documented": false,
+    "torch_policy": "requirements.txt declares torch==2.8.0+cpu, torchaudio==2.8.0+cpu, torchvision==0.23.0+cpu; no extra PyTorch index is documented in the inspected CI or bootstrap files"
+  },
+  "bootstrap_result": {
+    "method": "reused existing backend/.venv; no dependency installation performed",
+    "reason": "Django runtime was already healthy; backend/.venv does not contain Torch and the Django gates do not import it",
+    "secrets_excluded": true
+  },
+  "smoke": {
+    "django_import": "PASS",
+    "manage_py_check": "PASS",
+    "focused_validator": "PASS",
+    "targeted_runtime_tests": {"tests": 23, "passed": 23, "failures": 0, "errors": 0},
+    "full_regression": {"tests": 487, "passed": 487, "failures": 0, "errors": 0}
+  },
+  "authorization_boundary": {
+    "offline_environment_recovered": true,
+    "postgresql_live_resources_created": false,
+    "stage_ext_live_executed": false,
+    "retry_14_authorized": false,
+    "reason": "Structural/offline coverage is complete, but live native PostgreSQL capture and exact post-capture comparison were not executed and are outside this recovery task"
+  }
+}

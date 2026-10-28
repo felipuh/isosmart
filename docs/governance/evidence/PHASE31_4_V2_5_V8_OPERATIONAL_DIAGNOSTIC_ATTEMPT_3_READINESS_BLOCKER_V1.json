@@ -1,0 +1,35 @@
+{
+  "schema": "phase31.4-v2.5-v8-operational-diagnostic-attempt-readiness-blocker/v1",
+  "verdict": "ATTEMPT_3_FAIL",
+  "cycle_id": "Phase 31.4 V2.5 V8 Operational Diagnostic Cycle 1",
+  "attempt": 3,
+  "previous_blocker": "ADMINAPPS_START_FAILURE: readiness HTTP 401 Unauthorized",
+  "current_blocker": "ISOSMART_START_FAILURE: readiness HTTP 401 Unauthorized",
+  "component": "SubprocessOperationalAdapter._start readiness probe for ISO Smart",
+  "expected": {"endpoint": "/health", "http_status": "2xx"},
+  "observed": {"endpoint": "/health", "http_status": 401, "log": "docs/governance/evidence/runs/Phase_31.4_V2.5_V8_Operational_Diagnostic_Cycle_1_Attempt_3/isosmart_service.log"},
+  "root_cause_evidence": {
+    "configured_path": "backend/foundation/phase31_4_v2_5_operational_adapters.py:repository_operational_environment",
+    "health_view": "backend/core/views.py:health_check",
+    "health_permission": "no explicit AllowAny; global DRF authentication applies",
+    "public_readiness_view": "backend/core/views.py:readiness_check",
+    "public_readiness_route": "backend/core/urls.py:ready/",
+    "resolved_public_path": "/api/ready/",
+    "adminapps_startup": "PASS with public /api/health/"
+  },
+  "single_remediation_candidate": {
+    "status": "CANDIDATE_ONLY_NOT_APPLIED",
+    "change": "Use ISO Smart public /api/ready/ as the readiness path in repository_operational_environment().",
+    "file": "backend/foundation/phase31_4_v2_5_operational_adapters.py",
+    "not_combined_with": ["health view permission changes", "middleware changes", "authentication bypasses"]
+  },
+  "execution_boundary": {
+    "teardown": "PASS",
+    "zero_residual_resources": true,
+    "stage_ext": "0/6",
+    "capture_bundle": "NOT_REACHED",
+    "retry20": "NOT_AUTHORIZED",
+    "phase31_5": "EXECUTION_HELD",
+    "attempt_4": "NOT_AUTHORIZED; parent cycle maximum attempts reached"
+  }
+}

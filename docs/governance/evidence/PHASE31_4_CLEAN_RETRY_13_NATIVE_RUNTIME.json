@@ -1,0 +1,89 @@
+{
+  "artifact_schema": "phase31.4-retry12-native-runtime/v1",
+  "captures_resolved": 5,
+  "error": "missing capture: qms.agent_decision::2a100aee-ebdd-5807-aab0-f8c4265e8e63.id",
+  "error_type": "MissingCaptureError",
+  "executed": 14,
+  "expected_phases": 33,
+  "factory": "build_v25_runtime",
+  "finished_at": "2026-09-21T22:35:23.036561+00:00",
+  "live_identity_handoff": "PASS",
+  "live_process_id": "f03b65eb-c6f9-4aee-832b-af3b78eb1f23",
+  "passed": 14,
+  "phases": [
+    {
+      "error": null,
+      "phase_id": "PRECREATION_INTEGRITY",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "ENVIRONMENT_CREATE",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "RENDER_PROFILE",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "MIGRATIONS",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "CATALOG_ASSERTIONS",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "NATIVE_BINDING_ASSERTIONS",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "AUTHORITY_ASSERTIONS",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "CAPTURE_REGISTRY_ASSERTIONS",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "REFERENCE_BINDING_ASSERTIONS",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "INVARIANT_ASSERTIONS",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "TRANSACTION_ASSERTIONS",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "SOURCE_TO_RUNTIME_PROOF",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "OPERATION_PRECONDITIONS",
+      "status": "PASS"
+    },
+    {
+      "error": null,
+      "phase_id": "INITIAL_OPPORTUNITY",
+      "status": "PASS"
+    }
+  ],
+  "result": "FAIL",
+  "retry_id": "Phase 31.4 V2.5 Clean Retry 13",
+  "stack": "Traceback (most recent call last):\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_runtime.py\", line 121, in get\n    return self._records[key]\n           ~~~~~~~~~~~~~^^^^^\nKeyError: ('qms.agent_decision::2a100aee-ebdd-5807-aab0-f8c4265e8e63', 'id')\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/home/felipe/proyectos/isosmart/docs/governance/tools/retry11_runtime.py\", line 29, in <module>\n    runtime.run_clean_retry(); report[\"result\"]=\"PASS\"\n    ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_runtime.py\", line 644, in run_clean_retry\n    result = self.phase_registry.execute(phase_id, self.session, context)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_runtime.py\", line 554, in execute\n    return self.get(phase_id).execute(session, context)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_runtime.py\", line 449, in execute\n    metadata = context.contract.native_phase_inputs(\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_runtime.py\", line 773, in native_phase_inputs\n    \"agent_decision_id\": action_value(\"agent_decision_id\"),\n                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_runtime.py\", line 770, in action_value\n    return value(action_plan, field_name)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_runtime.py\", line 764, in value\n    return resolver.resolve(member_key, field_name, session.captures)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_runtime.py\", line 196, in resolve\n    return visit(token)\n           ^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_runtime.py\", line 178, in visit\n    value = visit(source)\n            ^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_runtime.py\", line 159, in visit\n    value = captures.get(*current).returned_value\n            ^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/felipe/proyectos/isosmart/backend/foundation/phase31_4_v2_5_runtime.py\", line 124, in get\n    raise MissingCaptureError(f\"{label}: {logical_member}.{logical_field}\") from exc\nfoundation.phase31_4_v2_5_runtime.MissingCaptureError: missing capture: qms.agent_decision::2a100aee-ebdd-5807-aab0-f8c4265e8e63.id\n",
+  "started_at": "2026-09-21T22:35:22.893492+00:00"
+}

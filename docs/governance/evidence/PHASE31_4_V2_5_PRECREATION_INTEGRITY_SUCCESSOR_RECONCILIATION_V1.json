@@ -1,0 +1,206 @@
+{
+  "artifact_schema": "phase31.4-v2.5-precreation-integrity-successor-reconciliation/v1",
+  "timestamp": "2026-09-23T14:48:30-06:00",
+  "verdict": "PRECREATION_INTEGRITY_SUCCESSOR_RECONCILIATION_PASS",
+  "state": "CODE_REMEDIATED / INTEGRITY_RECONCILED / LIVE_EXECUTION_PENDING",
+  "scope": "V2-governed Current Integrity Successor Reconciliation",
+  "original_four_integrity_errors": [
+    {
+      "test_name": "foundation.test_phase31_4_3_supporting_contract_audit.SupportingContractAuditTests.test_protected_sources_match",
+      "observed_error": "IntegrityGenerationError: V2.5 protected source drift: backend/foundation/phase31_4_v2_5_runtime.py",
+      "expected_generation": "PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V2",
+      "protected_path": "backend/foundation/phase31_4_v2_5_runtime.py",
+      "expected_sha256": "7ed7430abe798d6fd31b2bc27344abde35a7ab7df9e2ef13b51f1ddb7b03fd00",
+      "observed_sha256": "70997fb33eb22c9576cb7def0cd5ccdff9d61deebad4621072920b5acf5efb19",
+      "path_is_new": false,
+      "explained_by_precreation_remediation": true,
+      "classification": "LEGITIMATE_PRECREATION_CURRENT_SOURCE_EVOLUTION"
+    },
+    {
+      "test_name": "foundation.test_phase31_4_integrity_generations.V25CurrentOperationalIntegrityTests.test_current_manifest_passes",
+      "observed_error": "IntegrityGenerationError: V2.5 protected source drift: backend/foundation/phase31_4_v2_5_runtime.py",
+      "expected_generation": "PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V2",
+      "protected_path": "backend/foundation/phase31_4_v2_5_runtime.py",
+      "expected_sha256": "7ed7430abe798d6fd31b2bc27344abde35a7ab7df9e2ef13b51f1ddb7b03fd00",
+      "observed_sha256": "70997fb33eb22c9576cb7def0cd5ccdff9d61deebad4621072920b5acf5efb19",
+      "path_is_new": false,
+      "explained_by_precreation_remediation": true,
+      "classification": "LEGITIMATE_PRECREATION_CURRENT_SOURCE_EVOLUTION"
+    },
+    {
+      "test_name": "foundation.test_phase31_4_integrity_generations.V25CurrentOperationalIntegrityTests.test_discontinuity_artifact_is_explicit",
+      "observed_error": "IntegrityGenerationError: V2.5 protected source drift: backend/foundation/phase31_4_v2_5_runtime.py",
+      "expected_generation": "PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V2",
+      "protected_path": "backend/foundation/phase31_4_v2_5_runtime.py",
+      "expected_sha256": "7ed7430abe798d6fd31b2bc27344abde35a7ab7df9e2ef13b51f1ddb7b03fd00",
+      "observed_sha256": "70997fb33eb22c9576cb7def0cd5ccdff9d61deebad4621072920b5acf5efb19",
+      "path_is_new": false,
+      "explained_by_precreation_remediation": true,
+      "classification": "LEGITIMATE_PRECREATION_CURRENT_SOURCE_EVOLUTION"
+    },
+    {
+      "test_name": "foundation.test_phase31_4_retry5_operational_manifest.Retry5ManifestTests.test_authoritative_manifest_and_external_hash",
+      "observed_error": "ManifestVerificationError: unapproved successor: backend/backend/settings.py; chained cause: IntegrityGenerationError on backend/foundation/phase31_4_v2_5_runtime.py",
+      "expected_generation": "PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V2",
+      "protected_path": "backend/foundation/phase31_4_v2_5_runtime.py",
+      "surfaced_historical_member": "backend/backend/settings.py",
+      "expected_sha256": "7ed7430abe798d6fd31b2bc27344abde35a7ab7df9e2ef13b51f1ddb7b03fd00",
+      "observed_sha256": "70997fb33eb22c9576cb7def0cd5ccdff9d61deebad4621072920b5acf5efb19",
+      "path_is_new": false,
+      "explained_by_precreation_remediation": true,
+      "classification": "LEGITIMATE_PRECREATION_CURRENT_SOURCE_EVOLUTION"
+    }
+  ],
+  "latent_integrity_findings_after_first_fail_closed_mismatch": [
+    {
+      "protected_path": "backend/foundation/phase31_4_v2_5_verifier_remediation.py",
+      "expected_sha256": "a716e139f15d4b3f247ec4db56b339bad0e8a29ef06030a00aa9542e7195a35f",
+      "observed_sha256": "61a6fa21f01c27bd6713154512045926c4d3d65d410d0d572922ea1ef21dc639",
+      "path_is_new": false,
+      "classification": "LEGITIMATE_PRECREATION_CURRENT_SOURCE_EVOLUTION"
+    },
+    {
+      "protected_path": "backend/foundation/phase31_4_v2_5_precreation_integrity.py",
+      "expected_sha256": null,
+      "observed_sha256": "9fc0efcc14fee9587a041b8c81dffde2d447f82e16d4df495571b7358cb854eb",
+      "path_is_new": true,
+      "classification": "LEGITIMATE_NEW_AUTHORITATIVE_RUNTIME_SOURCE"
+    }
+  ],
+  "drift_classification": {
+    "result": "NO_UNRELATED_DRIFT",
+    "unexpected_current_source_drift": [],
+    "rationale": "Every predecessor-to-current protected-byte change is bound either to PRECREATION_INTEGRITY remediation or to the required version-aware V3 integrity guard update."
+  },
+  "v2_predecessor": {
+    "path": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V2.json",
+    "sha256": "3897da9ed8b2538924e527af3d79e5ef56c35c6178fe0330613187b5e70aa7c5",
+    "protected_source_count": 21,
+    "preserved": true
+  },
+  "v3_successor": {
+    "path": "docs/governance/evidence/PHASE31_4_V2_5_CURRENT_SOURCE_INTEGRITY_V3.json",
+    "sha256": "c47c62a52af65cab5b13f830b048017b101425d29c8c80501f9669d2647d7def",
+    "protected_source_count": 22,
+    "successor_statement": "Current V3 is a verified successor of current V2 for the explicitly reviewed PRECREATION_INTEGRITY remediation changes."
+  },
+  "protected_source_inventory": {
+    "predecessor_count": 21,
+    "current_count": 22,
+    "unchanged_count": 18,
+    "changed_sources": [
+      {
+        "path": "backend/foundation/phase31_4_v2_5_runtime.py",
+        "sha256": "70997fb33eb22c9576cb7def0cd5ccdff9d61deebad4621072920b5acf5efb19"
+      },
+      {
+        "path": "backend/foundation/phase31_4_v2_5_verifier_remediation.py",
+        "sha256": "61a6fa21f01c27bd6713154512045926c4d3d65d410d0d572922ea1ef21dc639"
+      },
+      {
+        "path": "backend/foundation/phase31_4_integrity_generations.py",
+        "sha256": "1856e074553da7de3713c4bf11dea5b4dc6c3e6c8b7884fddac81b866199d9c2"
+      }
+    ],
+    "new_sources": [
+      {
+        "path": "backend/foundation/phase31_4_v2_5_precreation_integrity.py",
+        "sha256": "9fc0efcc14fee9587a041b8c81dffde2d447f82e16d4df495571b7358cb854eb"
+      }
+    ],
+    "removed_sources": [],
+    "missing_sources": [],
+    "unexpected_sources": []
+  },
+  "precreation_remediation_artifacts": [
+    {
+      "path": "docs/governance/evidence/PHASE31_4_V2_5_PRECREATION_INTEGRITY_REMEDIATION_V1.json",
+      "sha256": "9118d49e9d2c459382e4bb75581f4b19c0f644e0cf5e3a3d87676bd3daa9fe8d",
+      "relation": "authoritative FAIL disposition and protected before/after hashes"
+    },
+    {
+      "path": "docs/transformation/PHASE31_4_V2_5_PRECREATION_INTEGRITY_REMEDIATION_REPORT.md",
+      "sha256": "68afdb1a71f779730a851e34206b3f720ea26204cdddfc16dc23e8647f8b0702",
+      "relation": "implementation and scope report"
+    }
+  ],
+  "migration_integrity": {
+    "v2_4": "23/23 PASS",
+    "v2_5": "24/24 PASS",
+    "local_applied_foundation_migrations": "24/24",
+    "pending_migrations": 0,
+    "fake_migrations": 0,
+    "manual_schema_patches": 0,
+    "makemigrations_check_dry_run": "PASS",
+    "new_migrations": 0,
+    "evidence_note": "Current file hashes and local applied plan were revalidated; fake/manual counts remain bound to preserved Retry 17 migration evidence because no live infrastructure was executed."
+  },
+  "tests": {
+    "precreation_focused": {
+      "tests": 10,
+      "result": "PASS"
+    },
+    "verifier_focused": {
+      "tests": 4,
+      "result": "PASS"
+    },
+    "runtime_focused": {
+      "tests": 25,
+      "result": "PASS"
+    },
+    "precreation_runtime_verifier_total": {
+      "tests": 39,
+      "result": "PASS"
+    },
+    "integrity_generation": {
+      "tests": 9,
+      "result": "PASS",
+      "historical_v2_4": "3/3 PASS"
+    },
+    "integrity_guard_integration": {
+      "tests": 2,
+      "result": "PASS"
+    },
+    "full_backend_regression": {
+      "tests": 511,
+      "failures": 0,
+      "errors": 0,
+      "result": "PASS"
+    }
+  },
+  "historical_integrity": {
+    "v2_4": "PASS",
+    "v2_5_current_v1": {
+      "sha256": "8e77d62e1cccc42d0dbeaf7c00e9007c7120201b97af2f46484bbf81893a1db0",
+      "preserved": true
+    },
+    "v2_5_current_v2": {
+      "sha256": "3897da9ed8b2538924e527af3d79e5ef56c35c6178fe0330613187b5e70aa7c5",
+      "preserved": true
+    },
+    "provenance_discontinuity": {
+      "sha256": "c6e852af3bd378e61683ff0516c21564874db424414d8af630a3fd32a3a175e5",
+      "preserved": true
+    },
+    "retry_16_promotion_closure": {
+      "sha256": "08b8af8c9911963844759808adbef5c2b3b663a26c34df494fbaca0cf985f328",
+      "preserved": true
+    },
+    "retry_17_final_report": {
+      "sha256": "298fb8edabfc63a642723c9036b08b2267eb57ef9bb3aba88793ab32d9b0bf09",
+      "preserved": true
+    },
+    "historical_artifacts_modified": []
+  },
+  "disposition": {
+    "previous_status": "PRECREATION_INTEGRITY_REMEDIATION_FAIL",
+    "successor_status": "PRECREATION_INTEGRITY_REMEDIATION_PASS",
+    "p0": 0,
+    "p1": 0,
+    "p0_closure": "P0_CLOSED_BY_VERSIONED_CURRENT_INTEGRITY_SUCCESSOR_RECONCILIATION",
+    "phase_31_5": "EXECUTION_HELD",
+    "live_retry_executed": false,
+    "readiness": "READY_FOR_SEPARATE_DISPOSABLE_EVIDENCE_RUN_REVIEW"
+  },
+  "exact_next_step": "Conduct a separate governance review for a disposable evidence run."
+}

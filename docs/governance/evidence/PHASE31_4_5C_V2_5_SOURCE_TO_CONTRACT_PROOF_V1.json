@@ -1,0 +1,16 @@
+{
+  "artifact_schema": "phase31.4-v2.5-source-to-contract-proof/v1",
+  "mappings": [
+    "create_opportunity->_create.entity_id => initial Opportunity.id CAPTURE_NATIVE_OUTPUT",
+    "create_opportunity->_create.lineage_id=entity_id => initial Opportunity.lineage_id REFERENCE_RESOLVED_BINDING",
+    "prepare_action_plan.plan.id => ActionPlan.id CAPTURE_NATIVE_OUTPUT",
+    "controlled transition.created.id => successor Opportunity.id CAPTURE_NATIVE_OUTPUT",
+    "controlled transition prior.lineage_id/prior.id/prior.revision+1 => successor invariant bindings"
+  ],
+  "native_api_changed": false,
+  "sources": {
+    "backend/foundation/action_authorization.py": "04fffd84058da2166a4843e92f04b5bc5d6c3c84035e379a60722b56ffcc38d3",
+    "backend/foundation/migrations/0015_first_controlled_qms_mutation_poc.py": "5e297591c8096938c90b6748d0d3ed22a8099cf8f4537e7f65f8bc6fa5beaba3",
+    "backend/foundation/risk_objective.py": "5add81332fc89b2b9f6cf6389ef3fdb3c391f82c256da005183c656e9f583fcd"
+  }
+}

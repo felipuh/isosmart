@@ -1,0 +1,684 @@
+@import "../../../design-system/styles/platform.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ================================================
+   NIVELES DE ACCESIBILIDAD DE FUENTE
+   Controlados por data-font-size en <html>
+   ================================================ */
+html[data-font-size="small"]  { font-size: 14px; }
+html[data-font-size="normal"] { font-size: 16px; }
+html[data-font-size="large"]  { font-size: 18px; }
+html[data-font-size="xlarge"] { font-size: 20px; }
+
+:root {
+  --brand-50: var(--s3-color-brand-50);
+  --brand-100: var(--s3-color-brand-100);
+  --brand-200: var(--s3-color-brand-200);
+  --brand-300: var(--s3-color-brand-300);
+  --brand-400: var(--s3-color-brand-400);
+  --brand-500: var(--s3-color-brand-500);
+  --brand-600: var(--s3-color-brand-600);
+  --brand-700: var(--s3-color-brand-700);
+  --brand-800: var(--s3-color-brand-800);
+  --brand-900: var(--s3-color-brand-900);
+  --surface-soft: var(--s3-color-surface-muted);
+  --enterprise-bg: var(--s3-color-bg);
+  --enterprise-bg-strong: var(--s3-color-bg-soft);
+  --enterprise-surface: var(--s3-color-surface);
+  --enterprise-surface-muted: var(--s3-color-surface-muted);
+  --enterprise-border: var(--s3-color-border);
+  --enterprise-border-strong: var(--s3-color-border-strong);
+  --enterprise-text: var(--s3-color-text);
+  --enterprise-text-muted: var(--s3-color-text-muted);
+  --enterprise-success: var(--s3-color-success);
+  --enterprise-warning: var(--s3-color-warning);
+  --enterprise-danger: var(--s3-color-danger);
+  --enterprise-info: var(--s3-color-info);
+  --enterprise-radius-sm: var(--s3-radius-sm);
+  --enterprise-radius-md: var(--s3-radius-md);
+  --enterprise-radius-lg: var(--s3-radius-lg);
+  --enterprise-shadow-xs: var(--s3-shadow-xs);
+  --enterprise-shadow-sm: var(--s3-shadow-sm);
+  --enterprise-shadow-md: var(--s3-shadow-md);
+}
+
+/* ================================================
+   ISO SMART - ESTILOS GLOBALES
+   ================================================ */
+
+/* Aplicar tema oscuro a nivel de documentos */
+html.dark {
+  color-scheme: dark;
+}
+
+/* Transiciones suaves para el cambio de tema */
+html,
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body {
+  min-height: 100vh;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92) 0%, rgba(245, 247, 251, 0.96) 42%, #f8fafc 100%),
+    linear-gradient(90deg, rgba(0, 73, 144, 0.035) 1px, transparent 1px),
+    linear-gradient(rgba(0, 73, 144, 0.035) 1px, transparent 1px);
+  background-size: auto, 48px 48px, 48px 48px;
+}
+
+body::before {
+  display: none;
+}
+
+#root {
+  position: relative;
+  isolation: isolate;
+}
+
+#root > :not(.immersive-canvas) {
+  position: relative;
+  z-index: 1;
+}
+
+.dark body {
+  background:
+    linear-gradient(180deg, #101827 0%, #0f172a 46%, #111827 100%),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.045) 1px, transparent 1px),
+    linear-gradient(rgba(148, 163, 184, 0.045) 1px, transparent 1px);
+  background-size: auto, 48px 48px, 48px 48px;
+}
+
+.immersive-canvas {
+  display: none !important;
+}
+
+html.immersive-ready .ui-reveal-target {
+  opacity: 0;
+  transform: translate3d(0, 14px, 0) scale(0.995);
+  transition: opacity 520ms ease, transform 520ms ease;
+  transition-delay: var(--stagger, 0ms);
+}
+
+html.immersive-ready .ui-reveal-target.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+.ui-reveal-target.btn-primary,
+button[class*='bg-gradient'],
+a[class*='bg-gradient'] {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.ui-reveal-target.btn-primary::before,
+button[class*='bg-gradient']::before,
+a[class*='bg-gradient']::before {
+  content: '';
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  left: calc(var(--mx, 50%) - 90px);
+  top: calc(var(--my, 50%) - 90px);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.36), rgba(255, 255, 255, 0));
+  opacity: 0;
+  transition: opacity 180ms ease;
+  z-index: -1;
+}
+
+.ui-reveal-target.btn-primary:hover::before,
+button[class*='bg-gradient']:hover::before,
+a[class*='bg-gradient']:hover::before {
+  opacity: 1;
+}
+
+main [class*='rounded-2xl'][class*='border'][class*='p-'],
+main [class*='rounded-3xl'][class*='border'][class*='p-'] {
+  transition: box-shadow 160ms ease, border-color 160ms ease;
+}
+
+main [class*='rounded-2xl'][class*='border'][class*='p-']:hover,
+main [class*='rounded-3xl'][class*='border'][class*='p-']:hover {
+  box-shadow: 0 18px 40px -30px rgba(15, 23, 42, 0.32);
+  border-color: rgba(148, 163, 184, 0.55);
+}
+
+main [class*='rounded'][class*='border']:hover {
+  border-color: rgba(56, 189, 248, 0.42);
+}
+
+/* ================================================
+   SCROLLBAR PERSONALIZADO
+   ================================================ */
+
+/* Scrollbar Light Mode */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Scrollbar Dark Mode */
+.dark ::-webkit-scrollbar-track {
+  background: #1e293b;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* ================================================
+   ANIMACIONES PERSONALIZADAS
+   ================================================ */
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slide-up {
+  from { 
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-down {
+  from { 
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scale-in {
+  from { 
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to { 
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse-slow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes data-drift {
+  from { transform: translate3d(-2%, 0, 0); }
+  to { transform: translate3d(2%, 0, 0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-in-out;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s ease-out;
+}
+
+.animate-slide-down {
+  animation: slide-down 0.3s ease-out;
+}
+
+.animate-scale-in {
+  animation: scale-in 0.2s ease-out;
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 2s ease-in-out infinite;
+}
+
+/* ================================================
+   UTILIDADES ADICIONALES
+   ================================================ */
+
+/* Glassmorphism */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.dark .glass {
+  background: rgba(30, 41, 59, 0.7);
+}
+
+/* Cards con hover effect */
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+.dark .card-hover:hover {
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, var(--brand-500) 0%, var(--brand-700) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Focus visible para accesibilidad */
+.focus-ring:focus-visible {
+  outline: 2px solid var(--brand-500);
+  outline-offset: 2px;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--brand-500);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .immersive-canvas,
+  body::before,
+  body::after {
+    display: none;
+  }
+}
+
+/* ================================================
+   COMPONENTES REUTILIZABLES
+   ================================================ */
+
+/* Botón primario */
+.btn-primary {
+  @apply inline-flex items-center justify-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-semibold text-white transition disabled:cursor-not-allowed disabled:opacity-50;
+  background: linear-gradient(180deg, var(--brand-500), var(--brand-700));
+  border-color: rgba(0, 53, 106, 0.82);
+  box-shadow: 0 1px 1px rgba(15, 23, 42, 0.08), 0 12px 24px -18px rgba(0, 73, 144, 0.86);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(180deg, var(--brand-600), var(--brand-800));
+  box-shadow: 0 16px 30px -20px rgba(0, 73, 144, 0.9);
+}
+
+/* Botón secundario */
+.btn-secondary {
+  @apply inline-flex items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-400 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+/* Input estilizado */
+.input-styled {
+  @apply w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm transition placeholder-slate-400 focus:border-blue-600 focus:ring-4 focus:ring-blue-100 dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:focus:ring-blue-900/30;
+}
+
+/* ================================================
+   ESTANDAR AZUL GLOBAL (#004990)
+   Unifica blue/indigo/purple/violet/cyan a la marca.
+   ================================================ */
+
+.text-blue-300, .text-indigo-300, .text-purple-300, .text-violet-300, .text-cyan-300, .text-teal-300, .text-fuchsia-300,
+.dark .dark\:text-blue-300, .dark .dark\:text-indigo-300, .dark .dark\:text-purple-300, .dark .dark\:text-violet-300, .dark .dark\:text-cyan-300, .dark .dark\:text-teal-300, .dark .dark\:text-fuchsia-300 {
+  color: var(--brand-300) !important;
+}
+
+.text-blue-400, .text-indigo-400, .text-purple-400, .text-violet-400, .text-cyan-400, .text-teal-400, .text-fuchsia-400,
+.dark .dark\:text-blue-400, .dark .dark\:text-indigo-400, .dark .dark\:text-purple-400, .dark .dark\:text-violet-400, .dark .dark\:text-cyan-400, .dark .dark\:text-teal-400, .dark .dark\:text-fuchsia-400 {
+  color: var(--brand-400) !important;
+}
+
+.text-blue-500, .text-indigo-500, .text-purple-500, .text-violet-500, .text-cyan-500, .text-teal-500, .text-fuchsia-500,
+.dark .dark\:text-blue-500, .dark .dark\:text-indigo-500, .dark .dark\:text-purple-500, .dark .dark\:text-violet-500, .dark .dark\:text-cyan-500, .dark .dark\:text-teal-500, .dark .dark\:text-fuchsia-500 {
+  color: var(--brand-500) !important;
+}
+
+.text-blue-600, .text-indigo-600, .text-purple-600, .text-violet-600, .text-cyan-600, .text-teal-600, .text-fuchsia-600,
+.dark .dark\:text-blue-600, .dark .dark\:text-indigo-600, .dark .dark\:text-purple-600, .dark .dark\:text-violet-600, .dark .dark\:text-cyan-600, .dark .dark\:text-teal-600, .dark .dark\:text-fuchsia-600 {
+  color: var(--brand-600) !important;
+}
+
+.text-blue-700, .text-indigo-700, .text-purple-700, .text-violet-700, .text-cyan-700, .text-teal-700, .text-fuchsia-700,
+.dark .dark\:text-blue-700, .dark .dark\:text-indigo-700, .dark .dark\:text-purple-700, .dark .dark\:text-violet-700, .dark .dark\:text-cyan-700, .dark .dark\:text-teal-700, .dark .dark\:text-fuchsia-700 {
+  color: var(--brand-700) !important;
+}
+
+.text-blue-600\/70, .text-indigo-600\/70, .text-purple-600\/70, .text-violet-600\/70, .text-cyan-600\/70, .text-teal-600\/70, .text-fuchsia-600\/70,
+.dark .dark\:text-blue-400\/70, .dark .dark\:text-indigo-400\/70, .dark .dark\:text-purple-400\/70, .dark .dark\:text-violet-400\/70, .dark .dark\:text-cyan-400\/70, .dark .dark\:text-teal-400\/70, .dark .dark\:text-fuchsia-400\/70 {
+  color: rgba(0, 73, 144, 0.7) !important;
+}
+
+.bg-blue-50, .bg-indigo-50, .bg-purple-50, .bg-violet-50, .bg-cyan-50, .bg-teal-50, .bg-fuchsia-50,
+.dark .dark\:bg-blue-50, .dark .dark\:bg-indigo-50, .dark .dark\:bg-purple-50, .dark .dark\:bg-violet-50, .dark .dark\:bg-cyan-50, .dark .dark\:bg-teal-50, .dark .dark\:bg-fuchsia-50 {
+  background-color: var(--brand-50) !important;
+}
+
+.bg-blue-100, .bg-indigo-100, .bg-purple-100, .bg-violet-100, .bg-cyan-100, .bg-teal-100, .bg-fuchsia-100,
+.dark .dark\:bg-blue-100, .dark .dark\:bg-indigo-100, .dark .dark\:bg-purple-100, .dark .dark\:bg-violet-100, .dark .dark\:bg-cyan-100, .dark .dark\:bg-teal-100, .dark .dark\:bg-fuchsia-100 {
+  background-color: var(--brand-100) !important;
+}
+
+.bg-blue-500, .bg-indigo-500, .bg-purple-500, .bg-violet-500, .bg-cyan-500, .bg-teal-500, .bg-fuchsia-500,
+.dark .dark\:bg-blue-500, .dark .dark\:bg-indigo-500, .dark .dark\:bg-purple-500, .dark .dark\:bg-violet-500, .dark .dark\:bg-cyan-500, .dark .dark\:bg-teal-500, .dark .dark\:bg-fuchsia-500 {
+  background-color: var(--brand-500) !important;
+}
+
+.bg-blue-600, .bg-indigo-600, .bg-purple-600, .bg-violet-600, .bg-cyan-600, .bg-teal-600, .bg-fuchsia-600,
+.dark .dark\:bg-blue-600, .dark .dark\:bg-indigo-600, .dark .dark\:bg-purple-600, .dark .dark\:bg-violet-600, .dark .dark\:bg-cyan-600, .dark .dark\:bg-teal-600, .dark .dark\:bg-fuchsia-600 {
+  background-color: var(--brand-600) !important;
+}
+
+.bg-blue-700, .bg-indigo-700, .bg-purple-700, .bg-violet-700, .bg-cyan-700, .bg-teal-700, .bg-fuchsia-700,
+.dark .dark\:bg-blue-700, .dark .dark\:bg-indigo-700, .dark .dark\:bg-purple-700, .dark .dark\:bg-violet-700, .dark .dark\:bg-cyan-700, .dark .dark\:bg-teal-700, .dark .dark\:bg-fuchsia-700 {
+  background-color: var(--brand-700) !important;
+}
+
+.bg-blue-500\/10, .bg-indigo-500\/10, .bg-purple-500\/10, .bg-violet-500\/10, .bg-cyan-500\/10, .bg-teal-500\/10, .bg-fuchsia-500\/10,
+.dark .dark\:bg-blue-500\/10, .dark .dark\:bg-indigo-500\/10, .dark .dark\:bg-purple-500\/10, .dark .dark\:bg-violet-500\/10, .dark .dark\:bg-cyan-500\/10, .dark .dark\:bg-teal-500\/10, .dark .dark\:bg-fuchsia-500\/10,
+.dark .dark\:bg-blue-900\/10, .dark .dark\:bg-indigo-900\/10, .dark .dark\:bg-purple-900\/10, .dark .dark\:bg-violet-900\/10, .dark .dark\:bg-cyan-900\/10, .dark .dark\:bg-teal-900\/10, .dark .dark\:bg-fuchsia-900\/10 {
+  background-color: rgba(0, 73, 144, 0.1) !important;
+}
+
+.bg-blue-500\/20, .bg-indigo-500\/20, .bg-purple-500\/20, .bg-violet-500\/20, .bg-cyan-500\/20, .bg-teal-500\/20, .bg-fuchsia-500\/20,
+.dark .dark\:bg-blue-500\/20, .dark .dark\:bg-indigo-500\/20, .dark .dark\:bg-purple-500\/20, .dark .dark\:bg-violet-500\/20, .dark .dark\:bg-cyan-500\/20, .dark .dark\:bg-teal-500\/20, .dark .dark\:bg-fuchsia-500\/20,
+.dark .dark\:bg-blue-900\/20, .dark .dark\:bg-indigo-900\/20, .dark .dark\:bg-purple-900\/20, .dark .dark\:bg-violet-900\/20, .dark .dark\:bg-cyan-900\/20, .dark .dark\:bg-teal-900\/20, .dark .dark\:bg-fuchsia-900\/20,
+.dark .dark\:bg-blue-900\/30, .dark .dark\:bg-indigo-900\/30, .dark .dark\:bg-purple-900\/30, .dark .dark\:bg-violet-900\/30, .dark .dark\:bg-cyan-900\/30, .dark .dark\:bg-teal-900\/30, .dark .dark\:bg-fuchsia-900\/30,
+.dark .dark\:bg-blue-900\/40, .dark .dark\:bg-indigo-900\/40, .dark .dark\:bg-purple-900\/40, .dark .dark\:bg-violet-900\/40, .dark .dark\:bg-cyan-900\/40, .dark .dark\:bg-teal-900\/40, .dark .dark\:bg-fuchsia-900\/40,
+.dark .dark\:bg-blue-900\/50, .dark .dark\:bg-indigo-900\/50, .dark .dark\:bg-purple-900\/50, .dark .dark\:bg-violet-900\/50, .dark .dark\:bg-cyan-900\/50, .dark .dark\:bg-teal-900\/50, .dark .dark\:bg-fuchsia-900\/50 {
+  background-color: rgba(0, 73, 144, 0.2) !important;
+}
+
+.border-blue-100, .border-indigo-100, .border-purple-100, .border-violet-100, .border-cyan-100, .border-teal-100, .border-fuchsia-100,
+.border-blue-200, .border-indigo-200, .border-purple-200, .border-violet-200, .border-cyan-200, .border-teal-200, .border-fuchsia-200,
+.border-blue-400, .border-indigo-400, .border-purple-400, .border-violet-400, .border-cyan-400, .border-teal-400, .border-fuchsia-400,
+.border-blue-500, .border-indigo-500, .border-purple-500, .border-violet-500, .border-cyan-500, .border-teal-500, .border-fuchsia-500,
+.dark .dark\:border-blue-500, .dark .dark\:border-indigo-500, .dark .dark\:border-purple-500, .dark .dark\:border-violet-500, .dark .dark\:border-cyan-500, .dark .dark\:border-teal-500, .dark .dark\:border-fuchsia-500,
+.dark .dark\:border-blue-700, .dark .dark\:border-indigo-700, .dark .dark\:border-purple-700, .dark .dark\:border-violet-700, .dark .dark\:border-cyan-700, .dark .dark\:border-teal-700, .dark .dark\:border-fuchsia-700,
+.dark .dark\:border-blue-800\/50, .dark .dark\:border-indigo-800\/50, .dark .dark\:border-purple-800\/50, .dark .dark\:border-violet-800\/50, .dark .dark\:border-cyan-800\/50, .dark .dark\:border-teal-800\/50, .dark .dark\:border-fuchsia-800\/50 {
+  border-color: var(--brand-500) !important;
+}
+
+.border-blue-500\/20, .border-indigo-500\/20, .border-purple-500\/20, .border-violet-500\/20, .border-cyan-500\/20, .border-teal-500\/20, .border-fuchsia-500\/20 {
+  border-color: rgba(0, 73, 144, 0.2) !important;
+}
+
+.from-blue-400, .from-indigo-400, .from-purple-400, .from-violet-400, .from-cyan-400, .from-teal-400, .from-fuchsia-400 {
+  --tw-gradient-from: var(--brand-400) var(--tw-gradient-from-position) !important;
+  --tw-gradient-to: rgb(92 145 200 / 0) var(--tw-gradient-to-position) !important;
+}
+
+.from-blue-500, .from-indigo-500, .from-purple-500, .from-violet-500, .from-cyan-500, .from-teal-500, .from-fuchsia-500,
+.from-blue-600, .from-indigo-600, .from-purple-600, .from-violet-600, .from-cyan-600, .from-teal-600, .from-fuchsia-600 {
+  --tw-gradient-from: var(--brand-500) var(--tw-gradient-from-position) !important;
+  --tw-gradient-to: rgb(0 73 144 / 0) var(--tw-gradient-to-position) !important;
+}
+
+.to-blue-500, .to-indigo-500, .to-purple-500, .to-violet-500, .to-cyan-500, .to-teal-500, .to-fuchsia-500,
+.to-blue-600, .to-indigo-600, .to-purple-600, .to-violet-600, .to-cyan-600, .to-teal-600, .to-fuchsia-600,
+.to-blue-700, .to-indigo-700, .to-purple-700, .to-violet-700, .to-cyan-700, .to-teal-700, .to-fuchsia-700 {
+  --tw-gradient-to: var(--brand-700) var(--tw-gradient-to-position) !important;
+}
+
+.via-blue-50, .via-indigo-50, .via-purple-50, .via-violet-50, .via-cyan-50, .via-teal-50, .via-fuchsia-50 {
+  --tw-gradient-via-position: var(--tw-gradient-via-position);
+  --tw-gradient-from: var(--brand-50) var(--tw-gradient-from-position) !important;
+  --tw-gradient-to: rgb(235 242 248 / 0) var(--tw-gradient-to-position) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--brand-100) var(--tw-gradient-via-position), var(--tw-gradient-to) !important;
+}
+
+.hover\:from-blue-600:hover, .hover\:from-indigo-600:hover, .hover\:from-purple-600:hover, .hover\:from-violet-600:hover, .hover\:from-teal-600:hover, .hover\:from-fuchsia-600:hover,
+.hover\:from-blue-700:hover, .hover\:from-indigo-700:hover, .hover\:from-purple-700:hover, .hover\:from-violet-700:hover, .hover\:from-teal-700:hover, .hover\:from-fuchsia-700:hover {
+  --tw-gradient-from: var(--brand-600) var(--tw-gradient-from-position) !important;
+}
+
+.hover\:to-blue-700:hover, .hover\:to-indigo-700:hover, .hover\:to-purple-700:hover, .hover\:to-violet-700:hover, .hover\:to-teal-700:hover, .hover\:to-fuchsia-700:hover,
+.hover\:to-blue-800:hover, .hover\:to-indigo-800:hover, .hover\:to-purple-800:hover, .hover\:to-violet-800:hover, .hover\:to-teal-800:hover, .hover\:to-fuchsia-800:hover {
+  --tw-gradient-to: var(--brand-800) var(--tw-gradient-to-position) !important;
+}
+
+.ring-blue-500, .ring-indigo-500, .ring-purple-500, .ring-violet-500, .ring-teal-500, .ring-fuchsia-500,
+.focus\:ring-blue-500:focus, .focus\:ring-indigo-500:focus, .focus\:ring-purple-500:focus, .focus\:ring-violet-500:focus, .focus\:ring-teal-500:focus, .focus\:ring-fuchsia-500:focus {
+  --tw-ring-color: var(--brand-500) !important;
+}
+
+.focus\:border-blue-500:focus, .focus\:border-indigo-500:focus, .focus\:border-purple-500:focus, .focus\:border-violet-500:focus, .focus\:border-teal-500:focus, .focus\:border-fuchsia-500:focus {
+  border-color: var(--brand-500) !important;
+}
+
+.shadow-blue-500\/10, .shadow-indigo-500\/10, .shadow-purple-500\/10, .shadow-violet-500\/10, .shadow-teal-500\/10, .shadow-fuchsia-500\/10 { --tw-shadow-color: rgba(0, 73, 144, 0.1) !important; }
+.shadow-blue-500\/20, .shadow-indigo-500\/20, .shadow-purple-500\/20, .shadow-violet-500\/20, .shadow-teal-500\/20, .shadow-fuchsia-500\/20 { --tw-shadow-color: rgba(0, 73, 144, 0.2) !important; }
+.shadow-blue-500\/25, .shadow-indigo-500\/25, .shadow-purple-500\/25, .shadow-violet-500\/25, .shadow-teal-500\/25, .shadow-fuchsia-500\/25 { --tw-shadow-color: rgba(0, 73, 144, 0.25) !important; }
+.shadow-blue-500\/30, .shadow-indigo-500\/30, .shadow-purple-500\/30, .shadow-violet-500\/30, .shadow-teal-500\/30, .shadow-fuchsia-500\/30 { --tw-shadow-color: rgba(0, 73, 144, 0.3) !important; }
+.shadow-blue-500\/40, .shadow-indigo-500\/40, .shadow-purple-500\/40, .shadow-violet-500\/40, .shadow-teal-500\/40, .shadow-fuchsia-500\/40 { --tw-shadow-color: rgba(0, 73, 144, 0.4) !important; }
+
+.file\:bg-blue-100::file-selector-button,
+.file\:bg-indigo-100::file-selector-button,
+.file\:bg-purple-100::file-selector-button,
+.file\:bg-violet-100::file-selector-button,
+.file\:bg-teal-100::file-selector-button,
+.file\:bg-fuchsia-100::file-selector-button {
+  background-color: var(--brand-100) !important;
+}
+
+.file\:text-blue-700::file-selector-button,
+.file\:text-indigo-700::file-selector-button,
+.file\:text-purple-700::file-selector-button,
+.file\:text-violet-700::file-selector-button,
+.file\:text-teal-700::file-selector-button,
+.file\:text-fuchsia-700::file-selector-button {
+  color: var(--brand-700) !important;
+}
+
+/* Card estilizada */
+.card {
+  @apply rounded-lg border border-slate-200 bg-white shadow-sm transition dark:border-slate-800 dark:bg-slate-900;
+}
+
+/* Badge de estado */
+.status-badge {
+  @apply px-3 py-1 rounded-full text-xs font-medium;
+}
+
+.badge-base {
+  @apply inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-semibold leading-none;
+}
+
+.badge-neutral {
+  @apply bg-slate-100 text-slate-700 dark:bg-slate-500/20 dark:text-slate-300;
+}
+
+.badge-info {
+  @apply bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300;
+}
+
+.badge-success {
+  @apply bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-300;
+}
+
+.badge-warning {
+  @apply bg-amber-100 text-amber-800 dark:bg-yellow-500/20 dark:text-yellow-300;
+}
+
+.badge-danger {
+  @apply bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-300;
+}
+
+.badge-caution {
+  @apply bg-orange-100 text-orange-700 dark:bg-orange-500/20 dark:text-orange-300;
+}
+
+.badge-accent {
+  @apply bg-purple-100 text-purple-700 dark:bg-purple-500/20 dark:text-purple-300;
+}
+
+.badge-cyan {
+  @apply bg-cyan-100 text-cyan-700 dark:bg-cyan-500/20 dark:text-cyan-300;
+}
+
+.table-code {
+  @apply text-sm font-mono text-blue-700 dark:text-blue-300;
+}
+
+.table-secondary-text {
+  @apply text-sm text-slate-700 dark:text-slate-300;
+}
+
+.table-tertiary-text {
+  @apply text-xs text-slate-600 dark:text-slate-400;
+}
+
+.muted-text {
+  @apply text-slate-600 dark:text-slate-400;
+}
+
+.muted-caption {
+  @apply text-xs text-slate-600 dark:text-slate-400;
+}
+
+.table-head-muted {
+  @apply text-xs uppercase text-slate-600 dark:text-slate-400;
+}
+
+.form-label-muted {
+  @apply block text-sm font-medium text-slate-700 dark:text-slate-300;
+}
+
+.field-control {
+  @apply mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm outline-none transition focus:border-blue-600 focus:ring-4 focus:ring-blue-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:ring-blue-900/30;
+}
+
+.enterprise-panel {
+  @apply rounded-lg border border-slate-200 bg-white shadow-sm transition dark:border-slate-800 dark:bg-slate-900;
+  box-shadow: var(--enterprise-shadow-xs);
+}
+
+.enterprise-panel:hover {
+  border-color: var(--enterprise-border-strong);
+  box-shadow: var(--enterprise-shadow-sm);
+}
+
+.enterprise-panel-header {
+  @apply border-b border-slate-200 bg-slate-50/80 px-5 py-4 dark:border-slate-800 dark:bg-slate-800/70;
+}
+
+.enterprise-table {
+  @apply w-full min-w-[760px] border-collapse text-left;
+}
+
+.enterprise-table thead {
+  @apply sticky top-0 z-10 bg-slate-50 dark:bg-slate-800/90;
+}
+
+.enterprise-table th {
+  @apply whitespace-nowrap border-b border-slate-200 px-5 py-3 text-left text-xs font-semibold uppercase text-slate-500 dark:border-slate-800 dark:text-slate-400;
+  letter-spacing: 0.06em;
+}
+
+.enterprise-table td {
+  @apply px-5 py-3.5 text-sm text-slate-700 dark:text-slate-200;
+}
+
+.enterprise-table tbody {
+  @apply divide-y divide-slate-200 dark:divide-slate-800;
+}
+
+.enterprise-table tbody tr:hover {
+  @apply bg-blue-50/60 dark:bg-slate-800/70;
+}
+
+.progress-track {
+  @apply w-20 h-2 rounded-full bg-slate-200 dark:bg-slate-700;
+}
+
+.progress-fill-success {
+  @apply h-2 rounded-full bg-green-500;
+}
+
+.progress-fill-info {
+  @apply h-2 rounded-full bg-blue-500;
+}
+
+.status-badge-success {
+  @apply bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300;
+}
+
+.status-badge-warning {
+  @apply bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300;
+}
+
+.status-badge-danger {
+  @apply bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300;
+}
+
+.status-badge-info {
+  @apply bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300;
+}
+
+/* SweetAlert2 visual baseline */
+.smart3ai-swal-popup {
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  border-radius: 16px;
+  box-shadow: 0 20px 48px rgba(2, 6, 23, 0.5);
+}
+
+.smart3ai-swal-confirm,
+.smart3ai-swal-cancel {
+  border: 0;
+  border-radius: 10px;
+  color: #f8fafc;
+  cursor: pointer;
+  font-weight: 600;
+  margin: 0 6px;
+  min-width: 122px;
+  padding: 10px 16px;
+}
+
+.smart3ai-swal-confirm {
+  background: linear-gradient(135deg, #0055a9, #003f7d);
+}
+
+.smart3ai-swal-cancel {
+  background: #334155;
+}

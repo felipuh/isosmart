@@ -1,0 +1,628 @@
+{
+  "architecture_changed": false,
+  "artifact_schema": "phase31.4.5a-retry1-source-identity-changeset/v1",
+  "business_semantics_changed": false,
+  "change_scope": "AGENTRUN_DOMAIN_EVENT_SOURCE_IDENTITY_CORRECTION",
+  "correction_count": 32,
+  "corrections": [
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "downstream_consumers": [
+        "TransactionalOutbox domain_event_id",
+        "ImmutableAuditLog metadata event_id",
+        "Registry V2 semantic edges",
+        "Closure V2 membership",
+        "retained evidence"
+      ],
+      "field": "event_type",
+      "member": "eventing.domain_event::90e2d38f-9600-5701-a34c-c9827eafc88c",
+      "native_source_location": "backend/foundation/agent_runtime.py:19-23,326-328,383-385",
+      "new_binding_kind": "EXACT_LITERAL",
+      "new_value/source": "agent_run.started",
+      "old_binding_kind": "EXACT_LITERAL",
+      "old_value/source": "phase31.4.4a.synthetic",
+      "reason": "Replace synthetic protocol label with native event type"
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "downstream_consumers": [
+        "TransactionalOutbox domain_event_id",
+        "ImmutableAuditLog metadata event_id",
+        "Registry V2 semantic edges",
+        "Closure V2 membership",
+        "retained evidence"
+      ],
+      "field": "aggregate_type",
+      "member": "eventing.domain_event::90e2d38f-9600-5701-a34c-c9827eafc88c",
+      "native_source_location": "backend/foundation/agent_runtime.py:221-230",
+      "new_binding_kind": "EXACT_LITERAL",
+      "new_value/source": "agent_run",
+      "old_binding_kind": "EXACT_LITERAL",
+      "old_value/source": "PHASE31.4.4A TEST ONLY \u2014 DomainEvent:agent-run-start \u2014 aggregate_type",
+      "reason": "Replace descriptive fixture label with native aggregate type"
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "downstream_consumers": [
+        "TransactionalOutbox domain_event_id",
+        "ImmutableAuditLog metadata event_id",
+        "Registry V2 semantic edges",
+        "Closure V2 membership",
+        "retained evidence"
+      ],
+      "field": "aggregate_id",
+      "member": "eventing.domain_event::90e2d38f-9600-5701-a34c-c9827eafc88c",
+      "native_source_location": "backend/foundation/agent_runtime.py:223,230",
+      "new_binding_kind": "REFERENCE_TO_BOUND_FIELD",
+      "new_value/source": "qms.agent_run::b87bdcde-c623-522f-a0ac-ff81f61df8e8",
+      "old_binding_kind": "DETERMINISTIC_DERIVATION",
+      "old_value/source": "51c9bad4-88fb-5608-b3c9-edd578efeeb9",
+      "reason": "Bind the event stream to the exact AgentRun parent identity"
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "downstream_consumers": [
+        "TransactionalOutbox domain_event_id",
+        "ImmutableAuditLog metadata event_id",
+        "Registry V2 semantic edges",
+        "Closure V2 membership",
+        "retained evidence"
+      ],
+      "field": "source",
+      "member": "eventing.domain_event::90e2d38f-9600-5701-a34c-c9827eafc88c",
+      "native_source_location": "backend/foundation/agent_runtime.py:233",
+      "new_binding_kind": "EXACT_LITERAL",
+      "new_value/source": "iso-smart-agent-runtime",
+      "old_binding_kind": "EXACT_LITERAL",
+      "old_value/source": "PHASE31.4.4A TEST ONLY \u2014 DomainEvent:agent-run-start \u2014 source",
+      "reason": "Replace descriptive fixture source with native source"
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "downstream_consumers": [
+        "TransactionalOutbox domain_event_id",
+        "ImmutableAuditLog metadata event_id",
+        "Registry V2 semantic edges",
+        "Closure V2 membership",
+        "retained evidence"
+      ],
+      "field": "trace_id",
+      "member": "eventing.domain_event::90e2d38f-9600-5701-a34c-c9827eafc88c",
+      "native_source_location": "backend/foundation/agent_runtime.py:231",
+      "new_binding_kind": "REFERENCE_TO_BOUND_FIELD",
+      "new_value/source": "qms.agent_run::b87bdcde-c623-522f-a0ac-ff81f61df8e8",
+      "old_binding_kind": "DETERMINISTIC_DERIVATION",
+      "old_value/source": "c7286e22-954f-5ac0-ad2c-394fa31ac572",
+      "reason": "Native event copies AgentRun.trace_id"
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "downstream_consumers": [
+        "TransactionalOutbox domain_event_id",
+        "ImmutableAuditLog metadata event_id",
+        "Registry V2 semantic edges",
+        "Closure V2 membership",
+        "retained evidence"
+      ],
+      "field": "payload",
+      "member": "eventing.domain_event::90e2d38f-9600-5701-a34c-c9827eafc88c",
+      "native_source_location": "backend/foundation/agent_runtime.py:226,325-328,381-385,410-435",
+      "new_binding_kind": "EXECUTION_DERIVED_PERSISTED",
+      "new_value/source": "native AgentRun AgentRunCommandService._state(run, inputs, recommendation_id) for agent_run.started, then canonical_json for eventing.domain_event::90e2d38f-9600-5701-a34c-c9827eafc88c.payload",
+      "old_binding_kind": "EXACT_LITERAL",
+      "old_value/source": {
+        "field": "payload",
+        "fixture": "phase31.4.4a",
+        "synthetic": true
+      },
+      "reason": "Synthetic closed JSON was not emitted by the selected producer"
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "downstream_consumers": [
+        "TransactionalOutbox domain_event_id",
+        "ImmutableAuditLog metadata event_id",
+        "Registry V2 semantic edges",
+        "Closure V2 membership",
+        "retained evidence"
+      ],
+      "field": "event_type",
+      "member": "eventing.domain_event::47be0b7e-10d0-5e96-94fd-fcaa8ad14cfd",
+      "native_source_location": "backend/foundation/agent_runtime.py:19-23,326-328,383-385",
+      "new_binding_kind": "EXACT_LITERAL",
+      "new_value/source": "agent_run.completed",
+      "old_binding_kind": "EXACT_LITERAL",
+      "old_value/source": "phase31.4.4a.synthetic",
+      "reason": "Replace synthetic protocol label with native event type"
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "downstream_consumers": [
+        "TransactionalOutbox domain_event_id",
+        "ImmutableAuditLog metadata event_id",
+        "Registry V2 semantic edges",
+        "Closure V2 membership",
+        "retained evidence"
+      ],
+      "field": "aggregate_type",
+      "member": "eventing.domain_event::47be0b7e-10d0-5e96-94fd-fcaa8ad14cfd",
+      "native_source_location": "backend/foundation/agent_runtime.py:221-230",
+      "new_binding_kind": "EXACT_LITERAL",
+      "new_value/source": "agent_run",
+      "old_binding_kind": "EXACT_LITERAL",
+      "old_value/source": "PHASE31.4.4A TEST ONLY \u2014 DomainEvent:agent-run-complete \u2014 aggregate_type",
+      "reason": "Replace descriptive fixture label with native aggregate type"
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "downstream_consumers": [
+        "TransactionalOutbox domain_event_id",
+        "ImmutableAuditLog metadata event_id",
+        "Registry V2 semantic edges",
+        "Closure V2 membership",
+        "retained evidence"
+      ],
+      "field": "aggregate_id",
+      "member": "eventing.domain_event::47be0b7e-10d0-5e96-94fd-fcaa8ad14cfd",
+      "native_source_location": "backend/foundation/agent_runtime.py:223,230",
+      "new_binding_kind": "REFERENCE_TO_BOUND_FIELD",
+      "new_value/source": "qms.agent_run::b87bdcde-c623-522f-a0ac-ff81f61df8e8",
+      "old_binding_kind": "DETERMINISTIC_DERIVATION",
+      "old_value/source": "91792d67-eb35-5e1d-9c62-c285f7b97057",
+      "reason": "Bind the event stream to the exact AgentRun parent identity"
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "downstream_consumers": [
+        "TransactionalOutbox domain_event_id",
+        "ImmutableAuditLog metadata event_id",
+        "Registry V2 semantic edges",
+        "Closure V2 membership",
+        "retained evidence"
+      ],
+      "field": "source",
+      "member": "eventing.domain_event::47be0b7e-10d0-5e96-94fd-fcaa8ad14cfd",
+      "native_source_location": "backend/foundation/agent_runtime.py:233",
+      "new_binding_kind": "EXACT_LITERAL",
+      "new_value/source": "iso-smart-agent-runtime",
+      "old_binding_kind": "EXACT_LITERAL",
+      "old_value/source": "PHASE31.4.4A TEST ONLY \u2014 DomainEvent:agent-run-complete \u2014 source",
+      "reason": "Replace descriptive fixture source with native source"
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "downstream_consumers": [
+        "TransactionalOutbox domain_event_id",
+        "ImmutableAuditLog metadata event_id",
+        "Registry V2 semantic edges",
+        "Closure V2 membership",
+        "retained evidence"
+      ],
+      "field": "trace_id",
+      "member": "eventing.domain_event::47be0b7e-10d0-5e96-94fd-fcaa8ad14cfd",
+      "native_source_location": "backend/foundation/agent_runtime.py:231",
+      "new_binding_kind": "REFERENCE_TO_BOUND_FIELD",
+      "new_value/source": "qms.agent_run::b87bdcde-c623-522f-a0ac-ff81f61df8e8",
+      "old_binding_kind": "DETERMINISTIC_DERIVATION",
+      "old_value/source": "ba865423-35a7-5a04-8a01-e5c0e5046de8",
+      "reason": "Native event copies AgentRun.trace_id"
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "downstream_consumers": [
+        "TransactionalOutbox domain_event_id",
+        "ImmutableAuditLog metadata event_id",
+        "Registry V2 semantic edges",
+        "Closure V2 membership",
+        "retained evidence"
+      ],
+      "field": "payload",
+      "member": "eventing.domain_event::47be0b7e-10d0-5e96-94fd-fcaa8ad14cfd",
+      "native_source_location": "backend/foundation/agent_runtime.py:226,325-328,381-385,410-435",
+      "new_binding_kind": "EXECUTION_DERIVED_PERSISTED",
+      "new_value/source": "native AgentRun AgentRunCommandService._state(run, inputs, recommendation_id) for agent_run.completed, then canonical_json for eventing.domain_event::47be0b7e-10d0-5e96-94fd-fcaa8ad14cfd.payload",
+      "old_binding_kind": "EXACT_LITERAL",
+      "old_value/source": {
+        "field": "payload",
+        "fixture": "phase31.4.4a",
+        "synthetic": true
+      },
+      "reason": "Synthetic closed JSON was not emitted by the selected producer"
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "downstream_consumers": [
+        "TransactionalOutbox domain_event_id",
+        "ImmutableAuditLog metadata event_id",
+        "Registry V2 semantic edges",
+        "Closure V2 membership",
+        "retained evidence"
+      ],
+      "field": "publish_attempts",
+      "member": "eventing.transactional_outbox::078ed021-9eb9-5258-96b9-3b74e2951e77",
+      "native_source_location": "backend/foundation/agent_runtime.py:236-240",
+      "new_binding_kind": "EXACT_LITERAL",
+      "new_value/source": 0,
+      "old_binding_kind": "EXACT_LITERAL",
+      "old_value/source": 1,
+      "reason": "Correct linked Outbox initial state to native creation semantics"
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "downstream_consumers": [
+        "TransactionalOutbox domain_event_id",
+        "ImmutableAuditLog metadata event_id",
+        "Registry V2 semantic edges",
+        "Closure V2 membership",
+        "retained evidence"
+      ],
+      "field": "publish_attempts",
+      "member": "eventing.transactional_outbox::51dd5c7a-52d3-5779-ad95-ea6910747874",
+      "native_source_location": "backend/foundation/agent_runtime.py:236-240",
+      "new_binding_kind": "EXACT_LITERAL",
+      "new_value/source": 0,
+      "old_binding_kind": "EXACT_LITERAL",
+      "old_value/source": 1,
+      "reason": "Correct linked Outbox initial state to native creation semantics"
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "downstream_consumers": [
+        "TransactionalOutbox domain_event_id",
+        "ImmutableAuditLog metadata event_id",
+        "Registry V2 semantic edges",
+        "Closure V2 membership",
+        "retained evidence"
+      ],
+      "field": "action",
+      "member": "audit.immutable_audit_log::OUTPUT:agent-run-start:audit_id",
+      "native_source_location": "backend/foundation/agent_runtime.py:241-247",
+      "new_binding_kind": "EXACT_LITERAL",
+      "new_value/source": "agent_run.started",
+      "old_binding_kind": "EXACT_LITERAL",
+      "old_value/source": "PHASE31.4.4A TEST ONLY \u2014 ImmutableAuditLog:agent-run-start \u2014 action",
+      "reason": "Bind audit action to native AgentRun operation"
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "downstream_consumers": [
+        "TransactionalOutbox domain_event_id",
+        "ImmutableAuditLog metadata event_id",
+        "Registry V2 semantic edges",
+        "Closure V2 membership",
+        "retained evidence"
+      ],
+      "field": "actor_id",
+      "member": "audit.immutable_audit_log::OUTPUT:agent-run-start:audit_id",
+      "native_source_location": "backend/foundation/agent_runtime.py:243",
+      "new_binding_kind": "EXACT_LITERAL",
+      "new_value/source": "PHASE31.4.5A TEST ONLY \u2014 AGENTRUN FIXTURE ACTOR",
+      "old_binding_kind": "EXACT_LITERAL",
+      "old_value/source": null,
+      "reason": "NULL cannot be emitted because the helper stringifies actor_id"
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "downstream_consumers": [
+        "TransactionalOutbox domain_event_id",
+        "ImmutableAuditLog metadata event_id",
+        "Registry V2 semantic edges",
+        "Closure V2 membership",
+        "retained evidence"
+      ],
+      "field": "actor_type",
+      "member": "audit.immutable_audit_log::OUTPUT:agent-run-start:audit_id",
+      "native_source_location": "backend/foundation/agent_runtime.py:243",
+      "new_binding_kind": "EXACT_LITERAL",
+      "new_value/source": "worker",
+      "old_binding_kind": "EXACT_LITERAL",
+      "old_value/source": "PHASE31.4.4A TEST ONLY \u2014 ImmutableAuditLog:agent-run-start \u2014 actor_type",
+      "reason": "Replace descriptive label with native actor type"
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "downstream_consumers": [
+        "TransactionalOutbox domain_event_id",
+        "ImmutableAuditLog metadata event_id",
+        "Registry V2 semantic edges",
+        "Closure V2 membership",
+        "retained evidence"
+      ],
+      "field": "entity_id",
+      "member": "audit.immutable_audit_log::OUTPUT:agent-run-start:audit_id",
+      "native_source_location": "backend/foundation/agent_runtime.py:244",
+      "new_binding_kind": "REFERENCE_TO_BOUND_FIELD",
+      "new_value/source": "qms.agent_run::b87bdcde-c623-522f-a0ac-ff81f61df8e8",
+      "old_binding_kind": "DETERMINISTIC_DERIVATION",
+      "old_value/source": "774a88db-abc6-5ab6-a782-ce4aee995d24",
+      "reason": "Audit entity is the same AgentRun"
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "downstream_consumers": [
+        "TransactionalOutbox domain_event_id",
+        "ImmutableAuditLog metadata event_id",
+        "Registry V2 semantic edges",
+        "Closure V2 membership",
+        "retained evidence"
+      ],
+      "field": "entity_type",
+      "member": "audit.immutable_audit_log::OUTPUT:agent-run-start:audit_id",
+      "native_source_location": "backend/foundation/agent_runtime.py:244",
+      "new_binding_kind": "EXACT_LITERAL",
+      "new_value/source": "agent_run",
+      "old_binding_kind": "EXACT_LITERAL",
+      "old_value/source": "PHASE31.4.4A TEST ONLY \u2014 ImmutableAuditLog:agent-run-start \u2014 entity_type",
+      "reason": "Replace descriptive label with native entity type"
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "downstream_consumers": [
+        "TransactionalOutbox domain_event_id",
+        "ImmutableAuditLog metadata event_id",
+        "Registry V2 semantic edges",
+        "Closure V2 membership",
+        "retained evidence"
+      ],
+      "field": "metadata_canonical",
+      "member": "audit.immutable_audit_log::OUTPUT:agent-run-start:audit_id",
+      "native_source_location": "backend/foundation/agent_runtime.py:246-247; backend/foundation/audit.py:56-73",
+      "new_binding_kind": "EXECUTION_DERIVED_PERSISTED",
+      "new_value/source": "native AgentRun canonical_json of event_id, schema_version=1, status and provenance_hash for agent_run.started for audit.immutable_audit_log::OUTPUT:agent-run-start:audit_id.metadata_canonical",
+      "old_binding_kind": "EXACT_LITERAL",
+      "old_value/source": "PHASE31.4.4A TEST ONLY \u2014 ImmutableAuditLog:agent-run-start \u2014 metadata_canonical",
+      "reason": "Native audit metadata is constructed from the event and AgentRun state"
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "downstream_consumers": [
+        "TransactionalOutbox domain_event_id",
+        "ImmutableAuditLog metadata event_id",
+        "Registry V2 semantic edges",
+        "Closure V2 membership",
+        "retained evidence"
+      ],
+      "field": "stream_id",
+      "member": "audit.immutable_audit_log::OUTPUT:agent-run-start:audit_id",
+      "native_source_location": "backend/foundation/agent_runtime.py:242",
+      "new_binding_kind": "REFERENCE_TO_BOUND_FIELD",
+      "new_value/source": "qms.agent_run::b87bdcde-c623-522f-a0ac-ff81f61df8e8",
+      "old_binding_kind": "DETERMINISTIC_DERIVATION",
+      "old_value/source": "dce652e3-fe05-5243-8b23-71fa622b1019",
+      "reason": "Audit stream shares the AgentRun identity"
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "downstream_consumers": [
+        "TransactionalOutbox domain_event_id",
+        "ImmutableAuditLog metadata event_id",
+        "Registry V2 semantic edges",
+        "Closure V2 membership",
+        "retained evidence"
+      ],
+      "field": "stream_type",
+      "member": "audit.immutable_audit_log::OUTPUT:agent-run-start:audit_id",
+      "native_source_location": "backend/foundation/agent_runtime.py:242",
+      "new_binding_kind": "EXACT_LITERAL",
+      "new_value/source": "agent_run",
+      "old_binding_kind": "EXACT_LITERAL",
+      "old_value/source": "PHASE31.4.4A TEST ONLY \u2014 ImmutableAuditLog:agent-run-start \u2014 stream_type",
+      "reason": "Replace descriptive label with native audit stream type"
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "downstream_consumers": [
+        "TransactionalOutbox domain_event_id",
+        "ImmutableAuditLog metadata event_id",
+        "Registry V2 semantic edges",
+        "Closure V2 membership",
+        "retained evidence"
+      ],
+      "field": "trace_id",
+      "member": "audit.immutable_audit_log::OUTPUT:agent-run-start:audit_id",
+      "native_source_location": "backend/foundation/agent_runtime.py:244",
+      "new_binding_kind": "REFERENCE_TO_BOUND_FIELD",
+      "new_value/source": "qms.agent_run::b87bdcde-c623-522f-a0ac-ff81f61df8e8",
+      "old_binding_kind": "DETERMINISTIC_DERIVATION",
+      "old_value/source": "3dfca167-7ed5-54a2-8603-7ba03d16a375",
+      "reason": "Native audit copies AgentRun.trace_id"
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "downstream_consumers": [
+        "TransactionalOutbox domain_event_id",
+        "ImmutableAuditLog metadata event_id",
+        "Registry V2 semantic edges",
+        "Closure V2 membership",
+        "retained evidence"
+      ],
+      "field": "action",
+      "member": "audit.immutable_audit_log::OUTPUT:agent-run-complete:audit_id",
+      "native_source_location": "backend/foundation/agent_runtime.py:241-247",
+      "new_binding_kind": "EXACT_LITERAL",
+      "new_value/source": "agent_run.completed",
+      "old_binding_kind": "EXACT_LITERAL",
+      "old_value/source": "PHASE31.4.4A TEST ONLY \u2014 ImmutableAuditLog:agent-run-complete \u2014 action",
+      "reason": "Bind audit action to native AgentRun operation"
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "downstream_consumers": [
+        "TransactionalOutbox domain_event_id",
+        "ImmutableAuditLog metadata event_id",
+        "Registry V2 semantic edges",
+        "Closure V2 membership",
+        "retained evidence"
+      ],
+      "field": "actor_id",
+      "member": "audit.immutable_audit_log::OUTPUT:agent-run-complete:audit_id",
+      "native_source_location": "backend/foundation/agent_runtime.py:243",
+      "new_binding_kind": "EXACT_LITERAL",
+      "new_value/source": "PHASE31.4.5A TEST ONLY \u2014 AGENTRUN FIXTURE ACTOR",
+      "old_binding_kind": "EXACT_LITERAL",
+      "old_value/source": null,
+      "reason": "NULL cannot be emitted because the helper stringifies actor_id"
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "downstream_consumers": [
+        "TransactionalOutbox domain_event_id",
+        "ImmutableAuditLog metadata event_id",
+        "Registry V2 semantic edges",
+        "Closure V2 membership",
+        "retained evidence"
+      ],
+      "field": "actor_type",
+      "member": "audit.immutable_audit_log::OUTPUT:agent-run-complete:audit_id",
+      "native_source_location": "backend/foundation/agent_runtime.py:243",
+      "new_binding_kind": "EXACT_LITERAL",
+      "new_value/source": "worker",
+      "old_binding_kind": "EXACT_LITERAL",
+      "old_value/source": "PHASE31.4.4A TEST ONLY \u2014 ImmutableAuditLog:agent-run-complete \u2014 actor_type",
+      "reason": "Replace descriptive label with native actor type"
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "downstream_consumers": [
+        "TransactionalOutbox domain_event_id",
+        "ImmutableAuditLog metadata event_id",
+        "Registry V2 semantic edges",
+        "Closure V2 membership",
+        "retained evidence"
+      ],
+      "field": "entity_id",
+      "member": "audit.immutable_audit_log::OUTPUT:agent-run-complete:audit_id",
+      "native_source_location": "backend/foundation/agent_runtime.py:244",
+      "new_binding_kind": "REFERENCE_TO_BOUND_FIELD",
+      "new_value/source": "qms.agent_run::b87bdcde-c623-522f-a0ac-ff81f61df8e8",
+      "old_binding_kind": "DETERMINISTIC_DERIVATION",
+      "old_value/source": "f5836fd9-d24c-516b-bfc0-b02e00806104",
+      "reason": "Audit entity is the same AgentRun"
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "downstream_consumers": [
+        "TransactionalOutbox domain_event_id",
+        "ImmutableAuditLog metadata event_id",
+        "Registry V2 semantic edges",
+        "Closure V2 membership",
+        "retained evidence"
+      ],
+      "field": "entity_type",
+      "member": "audit.immutable_audit_log::OUTPUT:agent-run-complete:audit_id",
+      "native_source_location": "backend/foundation/agent_runtime.py:244",
+      "new_binding_kind": "EXACT_LITERAL",
+      "new_value/source": "agent_run",
+      "old_binding_kind": "EXACT_LITERAL",
+      "old_value/source": "PHASE31.4.4A TEST ONLY \u2014 ImmutableAuditLog:agent-run-complete \u2014 entity_type",
+      "reason": "Replace descriptive label with native entity type"
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "downstream_consumers": [
+        "TransactionalOutbox domain_event_id",
+        "ImmutableAuditLog metadata event_id",
+        "Registry V2 semantic edges",
+        "Closure V2 membership",
+        "retained evidence"
+      ],
+      "field": "metadata_canonical",
+      "member": "audit.immutable_audit_log::OUTPUT:agent-run-complete:audit_id",
+      "native_source_location": "backend/foundation/agent_runtime.py:246-247; backend/foundation/audit.py:56-73",
+      "new_binding_kind": "EXECUTION_DERIVED_PERSISTED",
+      "new_value/source": "native AgentRun canonical_json of event_id, schema_version=1, status and provenance_hash for agent_run.completed for audit.immutable_audit_log::OUTPUT:agent-run-complete:audit_id.metadata_canonical",
+      "old_binding_kind": "EXACT_LITERAL",
+      "old_value/source": "PHASE31.4.4A TEST ONLY \u2014 ImmutableAuditLog:agent-run-complete \u2014 metadata_canonical",
+      "reason": "Native audit metadata is constructed from the event and AgentRun state"
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "downstream_consumers": [
+        "TransactionalOutbox domain_event_id",
+        "ImmutableAuditLog metadata event_id",
+        "Registry V2 semantic edges",
+        "Closure V2 membership",
+        "retained evidence"
+      ],
+      "field": "stream_id",
+      "member": "audit.immutable_audit_log::OUTPUT:agent-run-complete:audit_id",
+      "native_source_location": "backend/foundation/agent_runtime.py:242",
+      "new_binding_kind": "REFERENCE_TO_BOUND_FIELD",
+      "new_value/source": "qms.agent_run::b87bdcde-c623-522f-a0ac-ff81f61df8e8",
+      "old_binding_kind": "DETERMINISTIC_DERIVATION",
+      "old_value/source": "2b57be40-30fb-572e-b3dd-4c64289ba2cb",
+      "reason": "Audit stream shares the AgentRun identity"
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "downstream_consumers": [
+        "TransactionalOutbox domain_event_id",
+        "ImmutableAuditLog metadata event_id",
+        "Registry V2 semantic edges",
+        "Closure V2 membership",
+        "retained evidence"
+      ],
+      "field": "stream_type",
+      "member": "audit.immutable_audit_log::OUTPUT:agent-run-complete:audit_id",
+      "native_source_location": "backend/foundation/agent_runtime.py:242",
+      "new_binding_kind": "EXACT_LITERAL",
+      "new_value/source": "agent_run",
+      "old_binding_kind": "EXACT_LITERAL",
+      "old_value/source": "PHASE31.4.4A TEST ONLY \u2014 ImmutableAuditLog:agent-run-complete \u2014 stream_type",
+      "reason": "Replace descriptive label with native audit stream type"
+    },
+    {
+      "architecture_changed": false,
+      "business_semantics_changed": false,
+      "downstream_consumers": [
+        "TransactionalOutbox domain_event_id",
+        "ImmutableAuditLog metadata event_id",
+        "Registry V2 semantic edges",
+        "Closure V2 membership",
+        "retained evidence"
+      ],
+      "field": "trace_id",
+      "member": "audit.immutable_audit_log::OUTPUT:agent-run-complete:audit_id",
+      "native_source_location": "backend/foundation/agent_runtime.py:244",
+      "new_binding_kind": "REFERENCE_TO_BOUND_FIELD",
+      "new_value/source": "qms.agent_run::b87bdcde-c623-522f-a0ac-ff81f61df8e8",
+      "old_binding_kind": "DETERMINISTIC_DERIVATION",
+      "old_value/source": "162ac260-6de7-59f1-b761-83010938f503",
+      "reason": "Native audit copies AgentRun.trace_id"
+    }
+  ],
+  "predecessor_contract_sha256": "a4a36025ac8873508ce5ba840d5c2920d18ba4d430d18c2353ca53a2bf597f8d",
+  "row_universe_changed": false,
+  "successor_contract_version": "2.3"
+}

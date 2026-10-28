@@ -1,0 +1,109 @@
+{
+  "evidence_id": "26",
+  "date": "2026-10-05",
+  "phase31_5_state": "EXECUTION_HELD",
+  "starting_commit": "15f250fadc567b158d7dcfa3f9c9cabb40e7ce1a",
+  "branch": "hardening/p0-p1-enterprise-readiness",
+  "e08": "CLOSED_LOCAL_TECHNICAL_EVIDENCE",
+  "e07": "FAIL_AUTHENTIC_ROTATION_EVIDENCE_REQUIRED",
+  "deployment": {
+    "compose_healthcheck_target": "/livez",
+    "compose_graph_source_review": "PASS",
+    "compose_provider_invocation": "UNAVAILABLE",
+    "application_image": {
+      "reference": "localhost/isosmart-e08:phase315-final",
+      "result": "PASS",
+      "image_id": "31e5e1da3636063fad3f1a0f7e677ad386e96ae45e9c23cbfe6467acff18e95d",
+      "runtime_user": "isosmart"
+    },
+    "loopback_http_probe": {
+      "liveness": 204,
+      "authenticated_readiness_without_credentials": 401,
+      "auth_me_without_credentials": 401,
+      "csrf_cookie": 200,
+      "refresh_without_csrf": 403,
+      "refresh_with_invalid_csrf": 403,
+      "refresh_with_valid_csrf_and_invalid_synthetic_jwt": 401,
+      "canonical_proxy_origin": "https://isosmart.smart3ai.local",
+      "container_cleanup": "PASS"
+    }
+  },
+  "postgresql_authentication": {
+    "engine": "PostgreSQL 18.6",
+    "run_id": "20261005T013341Z_f4733c",
+    "result": "PASS",
+    "assertions": 28,
+    "full_application_migrations": "PASS",
+    "application_role": {
+      "superuser": false,
+      "bypassrls": false,
+      "targeted_auth_table_and_sequence_grants": "PASS"
+    },
+    "coverage": [
+      "invalid and valid login",
+      "new user, organization, and profile creation under the application role",
+      "different-tenant login denial",
+      "production cookie attributes and token omission from response body",
+      "authenticated and unauthenticated /me",
+      "malformed and expired access-cookie rejection",
+      "foreign-profile claim binding and invisibility",
+      "missing and invalid refresh CSRF rejection",
+      "refresh rotation and old-token replay denial",
+      "logout cookie clearing and refresh revocation",
+      "no raw refresh token stored in blacklist rows"
+    ],
+    "external_application_api_calls": 0,
+    "container_database_role_and_fixture_teardown": "PASS"
+  },
+  "postgresql_foundation_and_worker": {
+    "engine": "PostgreSQL 18.6",
+    "run_id": "20261005T013421Z_2ed261",
+    "selected_tests": {
+      "passed": 32,
+      "failed": 0
+    },
+    "action_execution_rollback_acceptance": {
+      "passed": 18,
+      "failed": 0
+    },
+    "worker_process_coverage": [
+      "empty queue",
+      "configured tenant mismatch",
+      "process failure and retry",
+      "two-process overlapping claims with SKIP LOCKED",
+      "restricted worker role flags",
+      "SIGTERM shutdown",
+      "SIGINT shutdown"
+    ],
+    "container_volume_and_temporary_directory_teardown": "PASS"
+  },
+  "backup_restore": {
+    "command": "scripts/test_backup_restore_postgres.sh",
+    "result": "PASS",
+    "production_encryption_guard": "PASS",
+    "synthetic_dump_checksum_restore_and_marker": "PASS",
+    "modified_manifest_rejected": "PASS",
+    "disposable_resource_cleanup": "PASS"
+  },
+  "regressions": {
+    "django_system_check_test_settings": "PASS",
+    "changed_python_compilation": "PASS",
+    "changed_python_syntax": "PASS",
+    "frontend_build": "PASS",
+    "frontend_lint": "PASS",
+    "persistent_auth_token_storage_hits": 0,
+    "persistent_bearer_header_hits": 0
+  },
+  "external_effects": {
+    "production": 0,
+    "staging": 0,
+    "adminapps": 0,
+    "external_application_apis": 0,
+    "customer_data": 0,
+    "external_event_delivery": 0
+  },
+  "publication": {
+    "method": "normal non-force commit and push",
+    "unrelated_worktree_changes_staged": false
+  }
+}

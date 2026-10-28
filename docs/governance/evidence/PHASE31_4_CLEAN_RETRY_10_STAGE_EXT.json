@@ -1,0 +1,37 @@
+{
+  "adminapps_native_api": {
+    "actor_id": "4f7e20ae-c979-41cb-86f0-956043e48739",
+    "aggregate_id": "777b253d-547c-4985-8498-accb971f6906",
+    "created_now": false,
+    "entitlement_id": "6ce56f20-12a8-4742-85d4-ccaa693ba988",
+    "event_id": "b9cf4580-2ffc-49d9-a804-94b9075e2d39",
+    "product_billing_enabled": false,
+    "result": "PASS",
+    "schema_version": 1,
+    "source_version": 2,
+    "tenant_id": "777b253d-547c-4985-8498-accb971f6906"
+  },
+  "authenticated_delivery": {
+    "dispatched_this_invocation": false,
+    "event_id": "b9cf4580-2ffc-49d9-a804-94b9075e2d39",
+    "result": "PASS"
+  },
+  "iso_smart_native": {
+    "audit_count": 4,
+    "event_count": 4,
+    "ingress_receipt": "b9cf4580-2ffc-49d9-a804-94b9075e2d39",
+    "opportunity_id": "3235b5da-e369-4101-98db-39a8ce2ac2ec",
+    "organization_audit_id": "01a0b4f7-dc59-7c4a-9ad7-832d7ea22856",
+    "organization_event_id": "647f956a-9ad8-443e-8da9-35c102a7e877",
+    "organization_id": "614ec79c-0e7b-4dbc-aa6f-90b346eef3aa",
+    "outbox_count": 4,
+    "process_id": "35ae9e96-478d-40d9-8cdd-be52a0c7048d",
+    "projection_id": "1282fd82-bd4d-48dc-824d-eb45bc9fca78",
+    "result": "PASS",
+    "revision": 2,
+    "successor_id": "20f8265f-fae7-4b51-ade6-824109ff4657",
+    "tenant_id": "777b253d-547c-4985-8498-accb971f6906"
+  },
+  "result": "PASS",
+  "retry_id": "Phase 31.4 V2.5 Clean Retry 10"
+}

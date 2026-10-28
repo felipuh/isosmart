@@ -1,0 +1,63 @@
+{
+  "artifact_schema": "phase31.4.5-implementation-feasibility-blocker/v1",
+  "experiment_id": "a3f8fd64-af24-5b31-977a-bcaf8146c563",
+  "status": "NOT_PROMOTED_OFFLINE_IMPLEMENTATION_BLOCKED",
+  "support_producer_identifier": "phase31.4.4-exact-support-producer/v1",
+  "attempted_boundary": "first declared support row",
+  "row": {
+    "qualified_table": "qms.tenant_projection",
+    "primary_key": "daa6bb22-660c-56f5-aadf-c63f06b01731",
+    "producer": "phase31.4.4-exact-support-producer/v1",
+    "identity_mode": "UUIDV5_FIXTURE_ASSIGNED",
+    "field_contract_ref": "field-contract:qms.tenant_projection"
+  },
+  "required_non_time_business_fields_without_exact_values": [
+    "adminapps_tenant_id",
+    "display_name_snapshot",
+    "lifecycle_status",
+    "provisioning_status",
+    "reconciliation_status",
+    "source_version"
+  ],
+  "execution_derived_time_fields_without_a_problem": [
+    "created_at",
+    "last_synced_at",
+    "updated_at"
+  ],
+  "finding": "The V2 field taxonomy classifies all remaining fields as PREBOUND_STATIC, but neither static_material nor an exact upstream row nor a named schema constant supplies the six required values. The Phase31.3 predecessor fixture supplies only the local tenant id. An implementation would have to invent caller-independent business material, so it could not satisfy exact-static-material-equality/v1.",
+  "contract_conflict": {
+    "required": "Every non-time business field is fixed at Freeze0 and the producer accepts no business parameters.",
+    "observed": "At least six NOT NULL business fields of the first produced row have no exact authorized value.",
+    "unsafe_alternatives_rejected": [
+      "guess values from field defaults",
+      "derive values from the row UUID without contract authority",
+      "reuse unrelated Phase31.3 values that are not present there",
+      "accept caller-supplied business values",
+      "add a generic JSON or SQL input",
+      "silently amend ADR-0018 or the V2 contract"
+    ]
+  },
+  "consequence": "No exact producer SQL can be rendered; therefore no exact role/function/RLS installer, complete Clean Retry 3 harness, or complete operational input manifest containing those required implementation members can be truthfully frozen.",
+  "blockers": [
+    {
+      "id": "P1-CR2-INPUT-HASH-INVENTORY",
+      "status": "OPEN",
+      "reason": "The required producer, installer, harness and admission tests do not exist and cannot be included as required manifest members."
+    },
+    {
+      "id": "P1-CR2-SUPPORT-PRODUCER-ABSENT",
+      "status": "OPEN_IMPLEMENTATION_VS_CONTRACT",
+      "reason": "The approved V2 package does not bind required Freeze0 business values needed by the first exact support row."
+    }
+  ],
+  "migration_0024_absent": true,
+  "protected_runtime_changes": 0,
+  "database_created": false,
+  "PostgreSQL_created": false,
+  "lifecycle_writes": 0,
+  "RuntimeAdoption": false,
+  "resolver_invocations": 0,
+  "external_effects": 0,
+  "P0": 0,
+  "P1": 2
+}
