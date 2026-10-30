@@ -1,9 +1,9 @@
 name: November development baseline
 on:
   push:
-    branches: [development/2026-11-product-completion]
+    branches: [development-2026-11-product-completion]
   pull_request:
-    branches: [development/2026-11-product-completion]
+    branches: [development-2026-11-product-completion]
   workflow_dispatch:
 permissions:
   contents: read
@@ -21,7 +21,8 @@ jobs:
         with:
           node-version: '24'
       - name: Install independent locked candidate
-        run: python -m pip install --require-hashes --only-binary=:all: -r backend/requirements-staging.lock
+        run: |
+          python -m pip install --require-hashes --only-binary=:all: -r backend/requirements-staging.lock
       - name: Offline product and policy regressions
         run: python -B scripts/verify_november.py
       - name: Django check with database and network denied
