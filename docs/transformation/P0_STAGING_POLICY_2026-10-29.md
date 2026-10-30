@@ -1,0 +1,11 @@
+# Staging authorization policy — 2026-10-29
+
+The startup policy validates actual environment inputs before boolean masking. Staging/production require explicit false values for DEBUG, local bypass, session authentication and the consumer's fallback flag. Unknown/conflicting environment names, test settings, malformed booleans, non-HTTPS authorities, absent/default integration credentials and wrong ISO product codes are rejected. MedSupplier cannot disable AdminApps identity authority. Error messages contain configuration names, never values.
+
+Runtime fallback guards allow only literal True in explicit test/demo environments, with production false. A per-call override can narrow permission but cannot enable fallback against policy. Live central product denial never falls back; organization/product entitlement reads bypass cache. Login, refresh and product authorization continue through the existing central signed proof and live introspection. Local identity/profiles remain projections; they do not authorize login. Test settings no longer silently enable bypass/fallback.
+
+MedSupplier also disables automatic SessionAuthentication outside explicit development opt-in, rejects authenticated Django sessions without a central JWT, removes the default integration API key and restricts local password fixture management to test/demo even with --confirm-local.
+
+Validation: standalone integration/tests_staging_p0_offline.py runs real clients/settings with dotenv mocked, synthetic credentials, database/network guards. Baseline commit functions reproduce staging fallback exposure; corrected guards deny staging, production, unknown environments and per-call overrides. Central allow/deny and unavailable transport cases are tested. Existing B, D and D-session suites separately cover legitimate SSO, grants, revocation and tenant isolation. No HTTP service or database is used.
+
+This is code readiness only. Base settings still lack the later central SSO/trust deployment configuration; missing configuration fails closed at runtime. Preflight must additionally establish the destination belongs to staging, DB/role/network isolation, secret provenance and supported locked dependencies. A syntactically valid URL is not isolation evidence.

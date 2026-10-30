@@ -49,7 +49,7 @@ class PasswordResetFlowTests(TestCase):
         self.assertEqual(len(mail.outbox[0].alternatives), 1)
         self.assertEqual(mail.outbox[0].alternatives[0][1], 'text/html')
 
-    def test_password_reset_request_returns_debug_url_only_in_debug_mode(self):
+    def test_password_reset_request_never_returns_debug_url(self):
         response = self.client.post(
             reverse('authentication:password-reset-request'),
             {'email': self.user.email},
@@ -58,8 +58,8 @@ class PasswordResetFlowTests(TestCase):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertIn('debug_reset_url', response.data)
-        self.assertIn('/reset-password?selector=', response.data['debug_reset_url'])
+        self.assertNotIn('debug_reset_url', response.data)
+        self.assertIn('/reset-password?selector=', mail.outbox[-1].body)
 
     def test_password_reset_request_does_not_reveal_missing_email(self):
         response = self.client.post(

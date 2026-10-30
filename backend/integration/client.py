@@ -7,6 +7,7 @@ Permite a ISO Smart comunicarse con Admin Apps para:
 
 Fallback local: solo si ALLOW_LOCAL_AUTH_FALLBACK=true en desarrollo.
 """
+from backend.security_policy import local_fallback_allowed
 import requests
 from django.conf import settings
 from django.core.cache import cache
@@ -141,12 +142,11 @@ class AdminAppsClient:
             return {'error': 'AdminApps request failed', 'code': 'http_error'}
         
         except Exception as e:
-            logger.exception(f"Error inesperado con Admin Apps: {e}")
-            return {'error': str(e), 'code': 'unknown_error'}
+            logger.error('Unexpected AdminApps transport failure')
+            return {'error': 'AdminApps request failed', 'code': 'unknown_error'}
 
     def _local_fallback_allowed(self):
-        return (bool(getattr(settings, 'ALLOW_LOCAL_AUTH_FALLBACK', False))
-                and not getattr(settings, 'IS_PRODUCTION', False))
+        return local_fallback_allowed(settings, getattr(settings, 'ALLOW_LOCAL_AUTH_FALLBACK', False))
 
     def _fallback_disabled_response(self, result):
         logger.error(
@@ -449,7 +449,7 @@ class AdminAppsClient:
         fallback_allowed = (
             self._local_fallback_allowed()
             if allow_local_fallback is None
-            else bool(allow_local_fallback) and not getattr(settings, 'IS_PRODUCTION', False)
+            else allow_local_fallback is True and self._local_fallback_allowed()
         )
         if 'error' in result and fallback_allowed:
             logger.warning(

@@ -19,6 +19,7 @@ from django.utils.decorators import method_decorator
 from datetime import timedelta
 import logging
 import secrets
+from ipaddress import ip_address
 
 from .models import PasswordResetToken, User, UserProfile, RefreshTokenBlacklist
 from core.models import AuditLog, Organization
@@ -80,39 +81,12 @@ def _build_password_history(user):
 
 
 def _request_ip_address(request):
-    forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR', '')
-    if forwarded_for:
-        return forwarded_for.split(',')[0].strip()
-    return request.META.get('REMOTE_ADDR')
-
-
-def _local_debug_recovery_allowed(request):
-    if not getattr(settings, 'ALLOW_LOCAL_AUTH_BYPASS_FOR_TESTS', False):
-        return False
-
-    def normalize_host(value):
-        return str(value or '').split(':')[0].strip().lower()
-
+    # Proxy headers are untrusted. The socket peer is used only for throttling
+    # and audit, never as an authentication or recovery authorization factor.
     try:
-        request_host = normalize_host(request.get_host())
-    except Exception:
-        request_host = ''
-
-    meta_hosts = {
-        normalize_host(request.META.get('HTTP_HOST')),
-        normalize_host(request.META.get('SERVER_NAME')),
-    }
-    remote_addr = normalize_host(_request_ip_address(request))
-    local_hosts = {
-        str(item).strip().lower()
-        for item in getattr(settings, 'LOCAL_AUTH_BYPASS_HOSTS', set())
-        if str(item).strip()
-    }
-    return bool(
-        request_host in local_hosts
-        or meta_hosts.intersection(local_hosts)
-        or remote_addr in {'127.0.0.1', '::1', 'localhost'}
-    )
+        return str(ip_address(request.META.get('REMOTE_ADDR', '')))
+    except ValueError:
+        return None
 
 
 def _audit_password_reset(user, action, request, description, details=None):
@@ -256,8 +230,8 @@ class MeView(APIView):
     def get(self, request):
         user = request.user
         
-        # Cookie authentication already validated this exact central-bound profile.
-        # UserProfile has no is_primary field; never select an arbitrary membership.
+        # Preserve the reviewed e212a5ed SSO fix: use the exact centrally bound
+        # profile. Never select another membership or the nonexistent is_primary.
         from rest_framework.exceptions import AuthenticationFailed
         if not request.auth:
             raise AuthenticationFailed('Se requiere sesión central.')
@@ -404,13 +378,6 @@ class PasswordResetRequestView(APIView):
         ip_address = _request_ip_address(request)
         user_agent = request.META.get('HTTP_USER_AGENT', '')
         now = timezone.now()
-        explicit_debug_recovery = (
-            request.META.get('HTTP_X_DEBUG_RECOVERY') == '1'
-            or request.query_params.get('debug_recovery') == '1'
-        )
-        debug_recovery_mode = explicit_debug_recovery and (
-            settings.DEBUG or _local_debug_recovery_allowed(request)
-        )
         window_minutes = getattr(settings, 'PASSWORD_RESET_WINDOW_MINUTES', 60)
         max_requests = getattr(settings, 'PASSWORD_RESET_MAX_REQUESTS_PER_HOUR', 5)
         window_start = now - timedelta(minutes=window_minutes)
@@ -420,7 +387,7 @@ class PasswordResetRequestView(APIView):
         email_count = PasswordResetToken.objects.filter(email=email, requested_at__gte=window_start).count()
         ip_count = PasswordResetToken.objects.filter(ip_address=ip_address, requested_at__gte=window_start).count() if ip_address else 0
 
-        if debug_recovery_mode or (email_count < max_requests and ip_count < max_requests):
+        if email_count < max_requests and ip_count < max_requests:
             user = User.objects.filter(email=email, is_active=True).first()
             if user:
                 expiry_minutes = getattr(settings, 'PASSWORD_RESET_TOKEN_EXPIRY_MINUTES', 30)
@@ -438,19 +405,16 @@ class PasswordResetRequestView(APIView):
                     'reset_url': reset_url,
                     'expiry_minutes': expiry_minutes,
                 }
-                if debug_recovery_mode:
+                message = render_to_string('authentication/emails/password_reset_email.txt', context)
+                html_message = render_to_string('authentication/emails/password_reset_email.html', context)
+                try:
+                    email_message = EmailMultiAlternatives(subject, message, from_email, [user.email])
+                    email_message.attach_alternative(html_message, 'text/html')
+                    email_message.send(fail_silently=False)
                     _audit_password_reset(user, 'password_reset_request', request, 'Solicitud de recuperacion de contrasena enviada')
-                else:
-                    message = render_to_string('authentication/emails/password_reset_email.txt', context)
-                    html_message = render_to_string('authentication/emails/password_reset_email.html', context)
-                    try:
-                        email_message = EmailMultiAlternatives(subject, message, from_email, [user.email])
-                        email_message.attach_alternative(html_message, 'text/html')
-                        email_message.send(fail_silently=False)
-                        _audit_password_reset(user, 'password_reset_request', request, 'Solicitud de recuperacion de contrasena enviada')
-                    except Exception:
-                        logger.exception('Fallo enviando correo de recuperacion para %s', user.email)
-                        reset_token.mark_used()
+                except Exception:
+                    logger.warning('Password recovery delivery failed')
+                    reset_token.mark_used()
             else:
                 PasswordResetToken.objects.create(
                     user=None,
@@ -466,9 +430,6 @@ class PasswordResetRequestView(APIView):
         response_payload = {
             'detail': 'Si el correo existe, recibirás instrucciones para restablecer tu contraseña.'
         }
-        if debug_recovery_mode and user and reset_url:
-            response_payload['debug_reset_url'] = reset_url
-
         return Response(response_payload, status=status.HTTP_200_OK)
 
 

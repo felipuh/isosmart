@@ -32,7 +32,9 @@ def _env_list(name, default=''):
     return [item.strip() for item in value.split(',') if item.strip()]
 
 
-ENVIRONMENT = os.getenv('DJANGO_ENV', os.getenv('ENVIRONMENT', 'development')).strip().lower()
+from .security_policy import validate_startup_environment
+
+ENVIRONMENT = validate_startup_environment(os.environ, 'ISO_SMART')
 IS_PRODUCTION = ENVIRONMENT in ('production', 'prod')
 IS_DEVELOPMENT = ENVIRONMENT in ('development', 'dev', 'local')
 
@@ -127,7 +129,7 @@ AI_USAGE_ADMINAPPS_MAX_ATTEMPTS = int(os.getenv('AI_USAGE_ADMINAPPS_MAX_ATTEMPTS
 AI_REAL_INFERENCE_AUTHORIZED = _env_bool('AI_REAL_INFERENCE_AUTHORIZED', default=False)
 ISO_SMART_PRODUCT_CODE = os.getenv('ISO_SMART_PRODUCT_CODE', 'ISO_SMART').strip().upper()
 ALLOW_LOCAL_AUTH_FALLBACK = (
-    IS_DEVELOPMENT
+    ENVIRONMENT in ('test', 'demo')
     and _env_bool('ALLOW_LOCAL_AUTH_FALLBACK', default=False)
 )
 

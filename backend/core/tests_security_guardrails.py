@@ -71,12 +71,12 @@ class LocalBypassGuardrailTests(SimpleTestCase):
         local_fallback.assert_not_called()
 
     @override_settings(
-        ENVIRONMENT='development',
-        IS_DEVELOPMENT=True,
+        ENVIRONMENT='demo',
+        IS_DEVELOPMENT=False,
         ALLOW_LOCAL_AUTH_FALLBACK=True,
         ADMIN_APPS_INTEGRATION={'BASE_URL': 'http://adminapps.test/api/integration', 'API_KEY': 'dev', 'TIMEOUT': 1},
     )
-    def test_adminapps_local_fallback_is_allowed_with_development_flag(self):
+    def test_adminapps_local_fallback_is_allowed_with_explicit_demo_flag(self):
         from integration.client import AdminAppsClient
 
         client = AdminAppsClient()

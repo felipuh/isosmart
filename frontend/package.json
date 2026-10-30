@@ -4,10 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host 127.0.0.1",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
+    "preview": "vite preview --host 127.0.0.1",
     "test:e2e:install": "playwright install chromium",
     "test:e2e": "playwright test --config=playwright.config.cjs",
     "test:e2e:smoke": "playwright test tests/e2e/password-recovery-runtime.spec.js tests/e2e/settings-backup-runtime.spec.js tests/e2e/scope-process-runtime.spec.js tests/e2e/reports-runtime.spec.js tests/e2e/role-permissions-runtime.spec.js tests/e2e/assistant-runtime.spec.js --config=playwright.config.cjs --reporter=line",
@@ -21,7 +21,8 @@
     "react-dom": "^19.2.0",
     "react-router-dom": "^7.10.0",
     "recharts": "^3.5.1",
-    "sweetalert2": "^11.26.24"
+    "sweetalert2": "^11.26.24",
+    "@smart3ai/design-system": "file:vendor/smart3ai-design-system-1.0.0-beta.1.tgz"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",

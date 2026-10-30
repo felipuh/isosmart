@@ -10,7 +10,6 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@smart3ai/design-system': path.resolve(__dirname, '../../design-system/src/index.js'),
       react: path.resolve(__dirname, 'node_modules/react'),
       'react-dom': path.resolve(__dirname, 'node_modules/react-dom'),
       'lucide-react': path.resolve(__dirname, 'node_modules/lucide-react/dist/esm/lucide-react.js'),
@@ -93,13 +92,13 @@ export default defineConfig({
     },
   },
   server: {
-    host: '0.0.0.0',
+    host: '127.0.0.1',
     port: 3001,
     strictPort: false,  // Si 3001 está ocupado, usa el siguiente puerto disponible
     hmr: {
       protocol: 'ws',
-      host: process.env.VITE_HMR_HOST || 'isosmart.smart3ai.local',
-      clientPort: Number(process.env.VITE_HMR_CLIENT_PORT || 80),
+      ...(process.env.VITE_HMR_HOST ? { host: process.env.VITE_HMR_HOST } : {}),
+      ...(process.env.VITE_HMR_CLIENT_PORT ? { clientPort: Number(process.env.VITE_HMR_CLIENT_PORT) } : {}),
     },
     allowedHosts: [
       'isosmart.local',

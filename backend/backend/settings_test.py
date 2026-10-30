@@ -32,8 +32,8 @@ PASSWORD_HASHERS = [
 
 EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
 
-# Allow login without AdminApps during automated tests (no external service available).
-ALLOW_LOCAL_AUTH_BYPASS_FOR_TESTS = True
+# Central login remains mandatory; test suites mock the central transport.
+ALLOW_LOCAL_AUTH_BYPASS_FOR_TESTS = False
 
 # Disable owner-only restriction so test users can authenticate freely.
 OWNER_ORGANIZATION_ONLY_ACCESS = False
