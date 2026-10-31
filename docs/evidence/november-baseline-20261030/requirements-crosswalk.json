@@ -1,0 +1,561 @@
+[
+  {
+    "requirement": "Tenant",
+    "description": "Cliente/organización SaaS",
+    "source_fields": "tenant_id UUID PK; name; plan; status; locale; industry_profile_id",
+    "code": [
+      {
+        "class": "TenantProjection",
+        "path": "backend/foundation/models.py",
+        "line": 6
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  },
+  {
+    "requirement": "Organization",
+    "description": "Organización gestionada",
+    "source_fields": "organization_id; tenant_id; legal_name; sector; size; maturity",
+    "code": [
+      {
+        "class": "Organization",
+        "path": "backend/foundation/models.py",
+        "line": 93
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  },
+  {
+    "requirement": "Site",
+    "description": "Sede/planta",
+    "source_fields": "site_id; organization_id; country; timezone; criticality",
+    "code": [
+      {
+        "class": "Site",
+        "path": "backend/foundation/models.py",
+        "line": 116
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  },
+  {
+    "requirement": "User",
+    "description": "Usuario",
+    "source_fields": "user_id; tenant_id; email; role; mfa_status",
+    "code": [
+      {
+        "class": "UserProjection",
+        "path": "backend/foundation/models.py",
+        "line": 1689
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  },
+  {
+    "requirement": "Standard",
+    "description": "Norma ISO",
+    "source_fields": "standard_id; code; title; publisher",
+    "code": [
+      {
+        "class": "Standard",
+        "path": "backend/foundation/models.py",
+        "line": 391
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  },
+  {
+    "requirement": "StandardEdition",
+    "description": "Edición/versionado",
+    "source_fields": "edition_id; standard_id; edition; status; effective_from; effective_to; source_hash",
+    "code": [
+      {
+        "class": "StandardEdition",
+        "path": "backend/foundation/models.py",
+        "line": 404
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  },
+  {
+    "requirement": "Clause",
+    "description": "Cláusula",
+    "source_fields": "clause_id; edition_id; code; title; parent_id",
+    "code": [
+      {
+        "class": "Clause",
+        "path": "backend/foundation/models.py",
+        "line": 455
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  },
+  {
+    "requirement": "RequirementControl",
+    "description": "Requisito atómico",
+    "source_fields": "requirement_id; clause_id; paraphrase; applicability_rule; control_type",
+    "code": [
+      {
+        "class": "RequirementControl",
+        "path": "backend/foundation/models.py",
+        "line": 474
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  },
+  {
+    "requirement": "KnowledgeLayer",
+    "description": "Capa metodológica",
+    "source_fields": "knowledge_layer_id; standard_edition_id; layer_type; certifiable_if_pack_active",
+    "code": [
+      {
+        "class": "KnowledgeLayer",
+        "path": "backend/foundation/models.py",
+        "line": 500
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  },
+  {
+    "requirement": "KnowledgeLayerRule",
+    "description": "Regla/metodología",
+    "source_fields": "rule_id; knowledge_layer_id; rule_key; version; logic_json; evidence_expectation",
+    "code": [
+      {
+        "class": "KnowledgeLayerRule",
+        "path": "backend/foundation/models.py",
+        "line": 523
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  },
+  {
+    "requirement": "KnowledgeLayerBinding",
+    "description": "Relación requisito-capa",
+    "source_fields": "binding_id; requirement_id; rule_id; priority; rationale",
+    "code": [
+      {
+        "class": "KnowledgeLayerBinding",
+        "path": "backend/foundation/models.py",
+        "line": 561
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  },
+  {
+    "requirement": "StandardPack",
+    "description": "Pack activable",
+    "source_fields": "pack_id; tenant_id; standard_edition_id; status",
+    "code": [
+      {
+        "class": "StandardPack",
+        "path": "backend/foundation/models.py",
+        "line": 439
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  },
+  {
+    "requirement": "Process",
+    "description": "Proceso único",
+    "source_fields": "process_id; tenant_id; name; owner_id; type; status",
+    "code": [
+      {
+        "class": "Process",
+        "path": "backend/foundation/models.py",
+        "line": 147
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  },
+  {
+    "requirement": "Stakeholder",
+    "description": "Parte interesada única",
+    "source_fields": "stakeholder_id; tenant_id; type; name; relevance_score",
+    "code": [
+      {
+        "class": "Stakeholder",
+        "path": "backend/foundation/models.py",
+        "line": 132
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  },
+  {
+    "requirement": "StakeholderRequirement",
+    "description": "Requisito empresarial",
+    "source_fields": "stakeholder_requirement_id; stakeholder_id; text; qms_addressed; owner_process_id",
+    "code": [
+      {
+        "class": "StakeholderRequirement",
+        "path": "backend/foundation/models.py",
+        "line": 163
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  },
+  {
+    "requirement": "Risk",
+    "description": "Riesgo único",
+    "source_fields": "risk_id; tenant_id; process_id; cause; event; consequence; likelihood; impact; residual",
+    "code": [
+      {
+        "class": "Risk",
+        "path": "backend/foundation/models.py",
+        "line": 243
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  },
+  {
+    "requirement": "Opportunity",
+    "description": "Oportunidad única",
+    "source_fields": "opportunity_id; tenant_id; process_id; hypothesis; benefit; feasibility; status",
+    "code": [
+      {
+        "class": "Opportunity",
+        "path": "backend/foundation/models.py",
+        "line": 270
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  },
+  {
+    "requirement": "Objective",
+    "description": "Objetivo único",
+    "source_fields": "objective_id; tenant_id; owner_id; metric_id; target; due_date; status",
+    "code": [
+      {
+        "class": "Objective",
+        "path": "backend/foundation/models.py",
+        "line": 295
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  },
+  {
+    "requirement": "Change",
+    "description": "Cambio",
+    "source_fields": "change_id; tenant_id; type; purpose; impact; status; approval_id",
+    "code": [
+      {
+        "class": "Change",
+        "path": "backend/foundation/models.py",
+        "line": 351
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  },
+  {
+    "requirement": "Document",
+    "description": "Documento",
+    "source_fields": "document_id; tenant_id; doc_type; current_version_id; owner_id",
+    "code": [
+      {
+        "class": "Document",
+        "path": "backend/foundation/models.py",
+        "line": 621
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  },
+  {
+    "requirement": "DocumentVersion",
+    "description": "Versión documental",
+    "source_fields": "document_version_id; document_id; version; content_hash; approved_by; effective_at",
+    "code": [
+      {
+        "class": "DocumentVersion",
+        "path": "backend/foundation/models.py",
+        "line": 643
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  },
+  {
+    "requirement": "Evidence",
+    "description": "Evidencia",
+    "source_fields": "evidence_id; tenant_id; source_type; source_uri; content_hash; captured_at; trust_score",
+    "code": [
+      {
+        "class": "Evidence",
+        "path": "backend/foundation/models.py",
+        "line": 669
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  },
+  {
+    "requirement": "EvidenceCoverage",
+    "description": "Cobertura normativa",
+    "source_fields": "coverage_id; evidence_id; requirement_id; confidence; validated_by; validation_status",
+    "code": [
+      {
+        "class": "EvidenceCoverage",
+        "path": "backend/foundation/models.py",
+        "line": 698
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  },
+  {
+    "requirement": "Recommendation",
+    "description": "Recomendación IA",
+    "source_fields": "recommendation_id; tenant_id; agent_run_id; title; body; confidence; impact; status",
+    "code": [
+      {
+        "class": "Recommendation",
+        "path": "backend/foundation/models.py",
+        "line": 725
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  },
+  {
+    "requirement": "RecommendationBasis",
+    "description": "Fundamento de recomendación",
+    "source_fields": "basis_id; recommendation_id; requirement_id; rule_id; evidence_id; rationale",
+    "code": [
+      {
+        "class": "RecommendationBasis",
+        "path": "backend/foundation/models.py",
+        "line": 748
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  },
+  {
+    "requirement": "AgentDefinition",
+    "description": "Definición de agente",
+    "source_fields": "agent_id; name; purpose; model_policy_id; autonomy_max",
+    "code": [
+      {
+        "class": "AgentDefinition",
+        "path": "backend/foundation/models.py",
+        "line": 812
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  },
+  {
+    "requirement": "AgentRun",
+    "description": "Ejecución de agente",
+    "source_fields": "agent_run_id; tenant_id; agent_id; event_id; model_version; prompt_version; started_at; completed_at; trace_id",
+    "code": [
+      {
+        "class": "AgentRun",
+        "path": "backend/foundation/models.py",
+        "line": 860
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  },
+  {
+    "requirement": "AgentDecision",
+    "description": "Decisión intermedia/final",
+    "source_fields": "decision_id; agent_run_id; decision_type; payload_json; confidence; explainability_json",
+    "code": [
+      {
+        "class": "AgentDecision",
+        "path": "backend/foundation/models.py",
+        "line": 946
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  },
+  {
+    "requirement": "DomainEvent",
+    "description": "Evento de dominio",
+    "source_fields": "event_id; tenant_id; event_type; aggregate_type; aggregate_id; payload_json; occurred_at",
+    "code": [
+      {
+        "class": "DomainEvent",
+        "path": "backend/foundation/models.py",
+        "line": 1725
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  },
+  {
+    "requirement": "Approval",
+    "description": "Human Decision Gate",
+    "source_fields": "approval_id; tenant_id; subject_type; subject_id; required_role; decision; decided_by; decided_at",
+    "code": [
+      {
+        "class": "Approval",
+        "path": "backend/foundation/models.py",
+        "line": 973
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  },
+  {
+    "requirement": "ActionExecution",
+    "description": "Ejecución de acción",
+    "source_fields": "execution_id; recommendation_id; executor_type; started_at; completed_at; reversible; rollback_ref",
+    "code": [
+      {
+        "class": "ActionExecution",
+        "path": "backend/foundation/models.py",
+        "line": 1100
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  },
+  {
+    "requirement": "EffectivenessCheck",
+    "description": "Verificación de eficacia",
+    "source_fields": "check_id; subject_type; subject_id; method; due_at; result; evidence_id",
+    "code": [
+      {
+        "class": "EffectivenessCheck",
+        "path": "backend/foundation/models.py",
+        "line": 1271
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  },
+  {
+    "requirement": "Audit",
+    "description": "Auditoría",
+    "source_fields": "audit_id; tenant_id; scope; criteria; status; lead_auditor",
+    "code": [
+      {
+        "class": "QmsAudit",
+        "path": "backend/foundation/models.py",
+        "line": 1202
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  },
+  {
+    "requirement": "Finding",
+    "description": "Hallazgo",
+    "source_fields": "finding_id; audit_id; requirement_id; type; statement; evidence_id",
+    "code": [
+      {
+        "class": "Finding",
+        "path": "backend/foundation/models.py",
+        "line": 1219
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  },
+  {
+    "requirement": "Nonconformity",
+    "description": "No conformidad",
+    "source_fields": "nc_id; tenant_id; source_type; source_id; description; severity; status",
+    "code": [
+      {
+        "class": "QmsNonconformity",
+        "path": "backend/foundation/models.py",
+        "line": 1235
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  },
+  {
+    "requirement": "CorrectiveAction",
+    "description": "Acción correctiva",
+    "source_fields": "capa_id; nc_id; cause_id; action; owner_id; due_date; effectiveness_check_id",
+    "code": [
+      {
+        "class": "QmsCorrectiveAction",
+        "path": "backend/foundation/models.py",
+        "line": 1251
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  },
+  {
+    "requirement": "IndustryProfile",
+    "description": "Perfil sectorial",
+    "source_fields": "industry_profile_id; code; name; manufacturing_service_route; terminology_pack",
+    "code": [
+      {
+        "class": "IndustryProfile",
+        "path": "backend/foundation/models.py",
+        "line": 424
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  },
+  {
+    "requirement": "LearningPath",
+    "description": "Ruta aprendizaje",
+    "source_fields": "learning_path_id; edition_id; role; industry_profile_id; required_score",
+    "code": [
+      {
+        "class": "LearningPath",
+        "path": "backend/foundation/models.py",
+        "line": 1751
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  },
+  {
+    "requirement": "QuestionBank",
+    "description": "Banco de preguntas",
+    "source_fields": "question_id; concept_id; industry_profile_id; difficulty; scenario; options_json; answer_key",
+    "code": [
+      {
+        "class": "QuestionBank",
+        "path": "backend/foundation/models.py",
+        "line": 1767
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  },
+  {
+    "requirement": "QuizAttempt",
+    "description": "Intento de quiz",
+    "source_fields": "attempt_id; user_id; learning_path_id; score; passed; started_at; completed_at",
+    "code": [
+      {
+        "class": "QuizAttempt",
+        "path": "backend/foundation/models.py",
+        "line": 1801
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  },
+  {
+    "requirement": "ConceptMastery",
+    "description": "Dominio conceptual",
+    "source_fields": "mastery_id; user_id; concept_id; score; last_assessed_at; retraining_due_at",
+    "code": [
+      {
+        "class": "ConceptMastery",
+        "path": "backend/foundation/models.py",
+        "line": 1822
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  },
+  {
+    "requirement": "ModelPolicy",
+    "description": "Política de IA",
+    "source_fields": "model_policy_id; approved_models; data_classes; guardrails_json; human_gate_rules_json",
+    "code": [
+      {
+        "class": "ModelPolicy",
+        "path": "backend/foundation/models.py",
+        "line": 784
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  },
+  {
+    "requirement": "ImmutableAuditLog",
+    "description": "Log inmutable",
+    "source_fields": "log_id; tenant_id; actor_type; actor_id; action; entity_type; entity_id; before_hash; after_hash; occurred_at",
+    "code": [
+      {
+        "class": "ImmutableAuditLog",
+        "path": "backend/foundation/models.py",
+        "line": 2117
+      }
+    ],
+    "status": "PARTIAL: canonical model present; full user-flow acceptance pending"
+  }
+]
